@@ -5,8 +5,7 @@
  */
 package Persistencia;
 
-import Entidad.TipoEvaluacion;
-import Interfaz.InTipoEvaluacion;
+import Entidad.Curso;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,10 +17,10 @@ import org.hibernate.Transaction;
  *
  * @author alvar
  */
-public class PerTipoEvaluacion implements InTipoEvaluacion{
+public class PerCurso implements Interfaz.InCurso{
     
-    private Session sesion;
-    private Transaction tx;
+   private Session sesion;
+   private Transaction tx;
     
    private void iniciaOperacion() throws HibernateException {
         try {
@@ -39,15 +38,14 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
     }
 
     @Override
-    public int guardar(TipoEvaluacion objeto) {
-
+    public int guardar(Curso pCurso) {
         int id = 0;
-        objeto = this.DevolverNuevoID(objeto);
-        objeto.setObjFchMod(new Date());
+        pCurso = this.DevolverNuevoID(pCurso);
+        pCurso.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            id = (int) sesion.save(objeto);
+            id = (int) sesion.save(pCurso);
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -58,13 +56,13 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
         
         return id;
     }
-    
+
     @Override
-    public void actualizar(TipoEvaluacion objeto) {
-        try {
-            objeto.setObjFchMod(new Date());
+    public void actualizar(Curso pCurso) {
+         try {
+            pCurso.setObjFchMod(new Date());
             iniciaOperacion();
-            sesion.update(objeto);
+            sesion.update(pCurso);
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -75,10 +73,10 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
     }
 
     @Override
-    public void eliminar(TipoEvaluacion objeto) {
+    public void eliminar(Curso pCurso) {
         try {
             iniciaOperacion();
-            sesion.delete(objeto);
+            sesion.delete(pCurso);
             tx.commit();
             
             //Agregar objeto eliminado a la tabla de sincronización
@@ -93,26 +91,26 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
     }
 
     @Override
-    public TipoEvaluacion obtener(int codigo) {
-        TipoEvaluacion objetoRetorno = new TipoEvaluacion();
+    public Curso obtener(int pCurCod) {
+       Curso objetoRetorno = new Curso();
         try {
             iniciaOperacion();
-                objetoRetorno = (TipoEvaluacion) sesion.get(TipoEvaluacion.class, codigo);
+                objetoRetorno = (Curso) sesion.get(Curso.class, pCurCod);
             
         } finally {
             sesion.close();
         }
         return objetoRetorno;
     }
-    
+
     @Override
-    public List<TipoEvaluacion> obtenerLista() {
-        List<TipoEvaluacion> listaRetorno = null;
+    public List<Curso> obtenerLista() {
+        List<Curso> listaRetorno = null;
 
         try {
             iniciaOperacion();
             
-                listaRetorno = sesion.getNamedQuery("TipoEvaluacion.findAll").list();
+                listaRetorno = sesion.getNamedQuery("Curso.findAll").list();
             
         } finally {
             sesion.close();
@@ -121,29 +119,28 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
         return listaRetorno;
     }
     
-    private TipoEvaluacion DevolverNuevoID(TipoEvaluacion objeto){
+    private Curso DevolverNuevoID(Curso objeto){
 
-        objeto.setTpoEvlCod(this.DevolverUltimoID());
+        objeto.setCurCod(this.DevolverUltimoID());
         
         return objeto;
     }
     
     private int DevolverUltimoID(){
         int retorno = 1;
-        List<TipoEvaluacion> listaTpoEvaluacion = new ArrayList<TipoEvaluacion>(); 
+        List<Curso> listaObjeto = new ArrayList<Curso>(); 
         try {
             iniciaOperacion();
-            listaTpoEvaluacion = sesion.getNamedQuery("TipoEvaluacion.findLastTpoEvl").setMaxResults(1).list();
+            listaObjeto = sesion.getNamedQuery("Curso.findLastCurso").setMaxResults(1).list();
         } finally {
             sesion.close();
         }
-        if (!listaTpoEvaluacion.isEmpty()){
-            TipoEvaluacion tpoEvaluacion = listaTpoEvaluacion.get(0);
-            retorno = tpoEvaluacion.getTpoEvlCod() + 1;
+        if (!listaObjeto.isEmpty()){
+            Curso objeto = listaObjeto.get(0);
+            retorno = objeto.getCurCod() + 1;
         }
         
         return retorno;
     }
-    
     
 }

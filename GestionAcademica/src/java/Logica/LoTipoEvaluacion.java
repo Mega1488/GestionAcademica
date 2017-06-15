@@ -14,19 +14,19 @@ import java.util.List;
  *
  * @author alvar
  */
-public class LogTipoEvaluacion implements InTipoEvaluacion{
+public class LoTipoEvaluacion implements InTipoEvaluacion{
 
-    private static LogTipoEvaluacion instancia;
-    private static PerTipoEvaluacion perTpoEval;
+    private static LoTipoEvaluacion instancia;
+    private PerTipoEvaluacion perTpoEval;
 
-    private LogTipoEvaluacion() {
+    private LoTipoEvaluacion() {
+        perTpoEval  = new PerTipoEvaluacion();
     }
     
-    public static LogTipoEvaluacion GetInstancia(){
+    public static LoTipoEvaluacion GetInstancia(){
         if (instancia==null)
         {
-            instancia   = new LogTipoEvaluacion();
-            perTpoEval  = new PerTipoEvaluacion();
+            instancia   = new LoTipoEvaluacion();
         }
 
         return instancia;

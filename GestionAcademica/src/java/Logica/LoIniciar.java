@@ -5,6 +5,7 @@
  */
 package Logica;
 
+import Entidad.Curso;
 import Entidad.TipoEvaluacion;
 import Utiles.Utilidades;
 import java.util.Date;
@@ -33,14 +34,24 @@ public class LoIniciar {
     }
     
     private void CargarDatosIniciales(){
-        TipoEvaluacion tpoEval = new TipoEvaluacion();
+        
+        CargarTipoEvaluacion();
+        CargarCurso();
+        
+        
 
+    }
+    
+    private void CargarTipoEvaluacion(){
+        LoTipoEvaluacion lTpoEval = LoTipoEvaluacion.GetInstancia();
+        
+        TipoEvaluacion tpoEval = new TipoEvaluacion();
+/*
         tpoEval.setTpoEvlNom("Parcial");
         tpoEval.setObjFchMod(new Date());
         tpoEval.setTpoEvlExm(Boolean.FALSE);
         tpoEval.setTpoEvlInsAut(Boolean.FALSE);
 
-        LogTipoEvaluacion lTpoEval = LogTipoEvaluacion.GetInstancia();
         tpoEval.setTpoEvlCod(lTpoEval.guardar(tpoEval));
         utilidades.MostrarMensajeConsola(this.getClass().getSimpleName(), tpoEval.toString());
         
@@ -78,6 +89,22 @@ public class LoIniciar {
 
         lTpoEval.eliminar(tpoEval);
         utilidades.MostrarMensajeConsola(this.getClass().getSimpleName(), tpoEval.toString());
-
+  */      
     }
+    
+    private void CargarCurso(){
+        LoCurso lCurso = LoCurso.GetInstancia();
+        
+        Curso curso = new Curso();
+        
+        curso.setCurCatCod(1);
+        curso.setCurCrt("CTC");
+        curso.setCurDsc("Este es un curso creado dinamicamente para testeo");
+        curso.setCurFac("Ingenieria");
+        curso.setCurNom("Soporte IT");
+        
+        lCurso.guardar(curso);
+        
+    }
+    
 }

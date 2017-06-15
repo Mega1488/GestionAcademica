@@ -9,5 +9,6 @@
     <property name="hibernate.connection.password">admin</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping class="Entidad.TipoEvaluacion"/>
+    <mapping class="Entidad.Curso"/>
   </session-factory>
 </hibernate-configuration>

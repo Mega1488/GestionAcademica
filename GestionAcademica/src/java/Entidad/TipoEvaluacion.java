@@ -38,7 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @Basic(optional = false)
     @Column(name = "TpoEvlCod", nullable = false)
     private Integer TpoEvlCod;
-    @Column(name = "TpoEvlNom")
+    @Column(name = "TpoEvlNom", length = 100)
     private String TpoEvlNom;
     @Column(name = "TpoEvlExm")
     private Boolean TpoEvlExm;
