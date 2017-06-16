@@ -43,7 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Modulo.findAll", query = "SELECT m FROM Modulo m"),
     @NamedQuery(name = "Modulo.findByPK", query = "SELECT m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod and m.modPK.ModCod = :ModCod"),
     @NamedQuery(name = "Modulo.findByCurso", query = "SELECT m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod"),
-    @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod ORDER BY m.modPK.ModCod")})
+    @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod ORDER BY m.modPK.ModCod desc")})
 
 public class Modulo implements Serializable {
 
