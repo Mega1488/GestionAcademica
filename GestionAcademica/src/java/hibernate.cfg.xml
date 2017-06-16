@@ -10,5 +10,6 @@
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping class="Entidad.TipoEvaluacion"/>
     <mapping class="Entidad.Curso"/>
+    <mapping class="Entidad.Modulo"/>
   </session-factory>
 </hibernate-configuration>

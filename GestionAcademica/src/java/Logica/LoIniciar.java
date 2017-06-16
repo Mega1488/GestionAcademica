@@ -6,7 +6,9 @@
 package Logica;
 
 import Entidad.Curso;
+import Entidad.Modulo;
 import Entidad.TipoEvaluacion;
+import Enumerado.TipoPeriodo;
 import Utiles.Utilidades;
 import java.util.Date;
 
@@ -37,6 +39,8 @@ public class LoIniciar {
         
         CargarTipoEvaluacion();
         CargarCurso();
+        
+        CargarModulo();
         
         
 
@@ -94,7 +98,7 @@ public class LoIniciar {
     
     private void CargarCurso(){
         LoCurso lCurso = LoCurso.GetInstancia();
-        
+       
         Curso curso = new Curso();
         
         curso.setCurCatCod(1);
@@ -106,5 +110,27 @@ public class LoIniciar {
         lCurso.guardar(curso);
         
     }
+    
+    private void CargarModulo(){
+        LoCurso lCurso = LoCurso.GetInstancia();
+        LoModulo lModulo = LoModulo.GetInstancia();
+        
+        Curso curso = lCurso.obtener(1);
+        
+        Modulo modulo = new Modulo();
+                
+        //modulo.setCurCod(1);
+        modulo.setCurso(curso);
+        modulo.setModCntHor(Double.MIN_NORMAL);
+        modulo.setModDsc("tyest");
+        modulo.setModNom("aaaa");
+        modulo.setModPerVal(Double.MIN_NORMAL);
+        modulo.setModTpoPer(TipoPeriodo.MODULAR);
+        
+        lModulo.guardar(modulo);
+        
+        
+    }
+    
     
 }
