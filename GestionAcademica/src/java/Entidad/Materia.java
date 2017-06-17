@@ -17,8 +17,11 @@ import javax.persistence.ManyToOne;
 import Enumerado.TipoAprobacion;
 import Enumerado.TipoPeriodo;
 import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -61,6 +64,14 @@ public class Materia implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name="MatEvlCarCod", referencedColumnName="CarCod"),
+            @JoinColumn(name="MatEvlPlaEstCod", referencedColumnName="PlaEstCod"),
+            @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
+        })
+    private List<Evaluacion> lstEvaluacion;
+    
     
    
     //-CONSTRUCTOR
@@ -130,6 +141,15 @@ public class Materia implements Serializable {
         this.PreMateria = PreMateria;
     }
 
+    public List<Evaluacion> getLstEvaluacion() {
+        return lstEvaluacion;
+    }
+
+    public void setLstEvaluacion(List<Evaluacion> lstEvaluacion) {
+        this.lstEvaluacion = lstEvaluacion;
+    }
+
+    
     
     
     

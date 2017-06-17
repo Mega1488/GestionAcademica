@@ -8,7 +8,9 @@ package Entidad;
 import Enumerado.TipoPeriodo;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -71,6 +73,13 @@ public class Modulo implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
+    @JoinColumns({
+            @JoinColumn(name="ModEvlCurCod", referencedColumnName="CurCod"),
+            @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod"),
+        })
+    private List<Evaluacion> lstEvaluacion;
 
     
     public Modulo() {
