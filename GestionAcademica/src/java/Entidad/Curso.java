@@ -128,6 +128,22 @@ public class Curso implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+
+    public List<Modulo> getLstModulos() {
+        return lstModulos;
+    }
+
+    public void setLstModulos(List<Modulo> lstModulos) {
+        this.lstModulos = lstModulos;
+    }
+
+    public List<Evaluacion> getLstEvaluacion() {
+        return lstEvaluacion;
+    }
+
+    public void setLstEvaluacion(List<Evaluacion> lstEvaluacion) {
+        this.lstEvaluacion = lstEvaluacion;
+    }
     
     
     
