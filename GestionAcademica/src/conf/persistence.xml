@@ -4,6 +4,10 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <class>Entidad.Curso</class>
     <class>Entidad.Modulo</class>
+    <class>Entidad.Persona</class>
+    <class>Entidad.Carrera</class>
+    <class>Entidad.PlanEstudio</class>
+    <class>Entidad.Materia</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull"/>

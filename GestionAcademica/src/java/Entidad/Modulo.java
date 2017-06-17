@@ -48,10 +48,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Modulo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   // @Id
-   // @Basic(optional = false)
-   // @Column(name = "ModCod")
-   // private Integer ModCod;
     
     @EmbeddedId
     private final ModuloPK modPK;
@@ -66,10 +62,10 @@ public class Modulo implements Serializable {
     @Column(name = "ModTpoPer")
     private TipoPeriodo ModTpoPer;
     
-    @Column(name = "ModPerVal")
+    @Column(name = "ModPerVal",precision=10, scale=2)
     private Double ModPerVal;
     
-    @Column(name = "ModCntHor")
+    @Column(name = "ModCntHor",precision=10, scale=2)
     private Double ModCntHor;
     
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
@@ -85,25 +81,9 @@ public class Modulo implements Serializable {
         this.ModPerVal = Double.MIN_NORMAL;
         this.ModCntHor = Double.MIN_NORMAL;
         
-       // this.modPK = new ModuloPK();
     }
     
     
-  /*  
-    @ManyToOne
-    @JoinColumn(name="CurCod")
-    private Curso curso;
-*/
-/*    @MapsId("CurCod")
-    @JoinColumns({
-      @JoinColumn(name="CurCod_fk", referencedColumnName="CurCod")
-    })
-    @OneToMany Curso curso;
-    
-  */  
-
-    
-//    private Curso curso;
 
     public Integer getModCod() {
         return modPK.getModCod();
@@ -209,21 +189,16 @@ public class Modulo implements Serializable {
 
 
 
-    @Embeddable
-     class ModuloPK implements Serializable {
-        private Integer ModCod;
-        //private Integer CurCod;
+@Embeddable
+class ModuloPK implements Serializable {
+    private Integer ModCod;
+    //private Integer CurCod;
 
-        
 
-        @ManyToOne(targetEntity = Curso.class, optional=false)
-        @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
-        private Curso curso;
-    
-        
-        
-        
-    // getters and setters
+
+    @ManyToOne(targetEntity = Curso.class, optional=false)
+    @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
+    private Curso curso;
 
     public Integer getModCod() {
         return ModCod;
@@ -240,4 +215,4 @@ public class Modulo implements Serializable {
     public void setCurso(Curso curso) {
         this.curso = curso;
     }
-    }
+}

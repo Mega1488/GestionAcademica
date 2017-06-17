@@ -11,5 +11,9 @@
     <mapping class="Entidad.TipoEvaluacion"/>
     <mapping class="Entidad.Curso"/>
     <mapping class="Entidad.Modulo"/>
+    <mapping class="Entidad.Persona"/>
+    <mapping class="Entidad.Carrera"/>
+    <mapping class="Entidad.PlanEstudio"/>
+    <mapping class="Entidad.Materia"/>
   </session-factory>
 </hibernate-configuration>
