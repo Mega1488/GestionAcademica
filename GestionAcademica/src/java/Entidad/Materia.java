@@ -59,8 +59,12 @@ public class Materia implements Serializable {
     @Column(name = "MatPerVal", precision=10, scale=2)
     private Double MatPerVal;
     @ManyToOne(targetEntity = Materia.class, optional=true)
-    @PrimaryKeyJoinColumn(name="PreMatCod", referencedColumnName="MatCod")
-    private Materia PreMateria;
+    @JoinColumns({
+        @JoinColumn(name="PreCarCod", referencedColumnName="CarCod"),
+        @JoinColumn(name="PrePlaEstCod", referencedColumnName="PlaEstCod"),
+        @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
+    })
+    private Materia materiaPrevia;
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
@@ -133,12 +137,12 @@ public class Materia implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    public Materia getPreMateria() {
-        return PreMateria;
+    public Materia getmateriaPrevia() {
+        return materiaPrevia;
     }
 
-    public void setPreMateria(Materia PreMateria) {
-        this.PreMateria = PreMateria;
+    public void setmateriaPrevia(Materia materiaPrevia) {
+        this.materiaPrevia = materiaPrevia;
     }
 
     public List<Evaluacion> getLstEvaluacion() {

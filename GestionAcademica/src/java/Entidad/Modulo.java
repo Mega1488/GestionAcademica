@@ -201,7 +201,6 @@ public class Modulo implements Serializable {
 @Embeddable
 class ModuloPK implements Serializable {
     private Integer ModCod;
-    //private Integer CurCod;
 
 
 

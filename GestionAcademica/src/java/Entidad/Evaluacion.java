@@ -73,8 +73,8 @@ public class Evaluacion implements Serializable {
     @Column(name = "EvlNotTot", precision=10, scale=2)
     private Double EvlNotTot;
     @ManyToOne(targetEntity = TipoEvaluacion.class, optional=true)
-    @PrimaryKeyJoinColumn(name="TpoEvlCod", referencedColumnName="TpoEvlCod")
-    private TipoEvaluacion TpoEvl;
+    @JoinColumn(name="TpoEvlCod", referencedColumnName="TpoEvlCod")
+    private TipoEvaluacion tipoEvaluacion;
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
@@ -136,11 +136,11 @@ public class Evaluacion implements Serializable {
     }
 
     public TipoEvaluacion getTpoEvl() {
-        return TpoEvl;
+        return tipoEvaluacion;
     }
 
     public void setTpoEvl(TipoEvaluacion TpoEvl) {
-        this.TpoEvl = TpoEvl;
+        this.tipoEvaluacion = TpoEvl;
     }
 
     public Date getObjFchMod() {

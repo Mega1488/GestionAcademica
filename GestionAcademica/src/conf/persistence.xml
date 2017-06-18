@@ -9,6 +9,16 @@
     <class>Entidad.PlanEstudio</class>
     <class>Entidad.Materia</class>
     <class>Entidad.Evaluacion</class>
+    <class>Entidad.Inscripcion</class>
+    <class>Entidad.MateriaRevalida</class>
+    <class>Entidad.Periodo</class>
+    <class>Entidad.PeriodoEstudio</class>
+    <class>Entidad.PeriodoEstudioDocente</class>
+    <class>Entidad.PeriodoEstudioAlumno</class>
+    <class>Entidad.Calendario</class>
+    <class>Entidad.CalendarioDocente</class>
+    <class>Entidad.Escolaridad</class>
+    <class>Entidad.Solicitud</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull"/>
