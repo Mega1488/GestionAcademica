@@ -19,6 +19,9 @@
     <class>Entidad.CalendarioDocente</class>
     <class>Entidad.Escolaridad</class>
     <class>Entidad.Solicitud</class>
+    <class>Entidad.Notificacion</class>
+    <class>Entidad.NotificacionDestinatario</class>
+    <class>Entidad.NotificacionConsulta</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull"/>

@@ -28,5 +28,9 @@
     <mapping class="Entidad.CalendarioAlumno"/>
     <mapping class="Entidad.Escolaridad"/>
     <mapping class="Entidad.Solicitud"/>
+    <mapping class="Entidad.Notificacion"/>
+    <mapping class="Entidad.NotificacionDestinatario"/>
+    <mapping class="Entidad.NotificacionConsulta"/>
+    <mapping class="Entidad.NotificacionBitacora"/>
   </session-factory>
 </hibernate-configuration>
