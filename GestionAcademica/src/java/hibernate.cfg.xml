@@ -16,5 +16,17 @@
     <mapping class="Entidad.PlanEstudio"/>
     <mapping class="Entidad.Materia"/>
     <mapping class="Entidad.Evaluacion"/>
+    <mapping class="Entidad.Inscripcion"/>
+    <mapping class="Entidad.MateriaRevalida"/>
+    <mapping class="Entidad.Periodo"/>
+    <mapping class="Entidad.PeriodoEstudio"/>
+    <mapping class="Entidad.PeriodoEstudioDocente"/>
+    <mapping class="Entidad.PeriodoEstudioAlumno"/>
+    <mapping class="Entidad.PeriodoEstudioDocumento"/>
+    <mapping class="Entidad.Calendario"/>
+    <mapping class="Entidad.CalendarioDocente"/>
+    <mapping class="Entidad.CalendarioAlumno"/>
+    <mapping class="Entidad.Escolaridad"/>
+    <mapping class="Entidad.Solicitud"/>
   </session-factory>
 </hibernate-configuration>
