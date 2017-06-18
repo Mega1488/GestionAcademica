@@ -32,5 +32,17 @@
     <mapping class="Entidad.NotificacionDestinatario"/>
     <mapping class="Entidad.NotificacionConsulta"/>
     <mapping class="Entidad.NotificacionBitacora"/>
+    <mapping class="Entidad.Sincronizacion"/>
+    <mapping class="Entidad.Objeto"/>
+    <mapping class="Entidad.ObjetoCampo"/>
+    <mapping class="Entidad.SincInconsistenciaDatos"/>
+    <mapping class="Entidad.SincRegistroELiminado"/>
+    <mapping class="Entidad.ParametroEmail"/>
+    <mapping class="Entidad.Parametro"/>
+    <mapping class="Entidad.SincronizacionInconsistencia"/>
+    <mapping class="Entidad.Version"/>
+    <mapping class="Entidad.WS_User"/>
+    <mapping class="Entidad.WS_UserServicio"/>
+    <mapping class="Entidad.WS_Bit"/>
   </session-factory>
 </hibernate-configuration>

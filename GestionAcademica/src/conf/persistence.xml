@@ -22,6 +22,18 @@
     <class>Entidad.Notificacion</class>
     <class>Entidad.NotificacionDestinatario</class>
     <class>Entidad.NotificacionConsulta</class>
+    <class>Entidad.Sincronizacion</class>
+    <class>Entidad.SincronizacionInconsistencia</class>
+    <class>Entidad.Objeto</class>
+    <class>Entidad.ObjetoCampo</class>
+    <class>Entidad.SincInconsistenciaDatos</class>
+    <class>Entidad.SincRegistroELiminado</class>
+    <class>Entidad.Parametro</class>
+    <class>Entidad.ParametroEmail</class>
+    <class>Entidad.WS_User</class>
+    <class>Entidad.WS_UserServicio</class>
+    <class>Entidad.WS_Bit</class>
+    <class>Entidad.Version</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull"/>
