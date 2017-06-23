@@ -4,7 +4,11 @@
     Author     : alvar
 --%>
 
+<%@page import="Entidad.Persona"%>
+<%@page import="Logica.LoPersona"%>
+<%@page import="java.security.SecureRandom"%>
 <%@page import="java.io.InputStreamReader"%>
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="java.io.BufferedReader"%>
 <%@page import="java.io.OutputStreamWriter"%>
 <%@page import="java.net.HttpURLConnection"%>
@@ -19,6 +23,8 @@
     </head>
     <body>
         <%
+            LoPersona loPersona = LoPersona.GetInstancia();
+            
             String urlstring    = "http://192.168.0.106/login/index.php";
             String usuario      = request.getParameter("username");
             String passwrd      = request.getParameter("password");
@@ -34,16 +40,38 @@
             //{
                 if(usuario != null && passwrd != null)
                 {
-                    
-                       out.println("<form id='myForm' action='" + urlstring + "' method='post'>");
-                       
-                       out.println("<input type='hidden' name='username' value='"+usuario+"'>");
-                       out.println("<input type='hidden' name='password' value='"+passwrd+"'>");
+                        Persona persona = loPersona.obtenerByMdlUsr(usuario);
+                        if(persona.getPerCod() == null)
+                        {
+                            out.println("<p>Error al iniciar sesion: Usuario o contraseña incorrecto</p>");
+                        }
+                        else
+                        {
+
+                                SecureRandom random = new SecureRandom();
+                                byte bytes[] = new byte[20];
+                                random.nextBytes(bytes);
+                                String token = bytes.toString();
+
+                               session.setAttribute(NombreSesiones.USUARIO.getValor(), usuario);
+                               session.setAttribute(NombreSesiones.TOKEN.getValor(), token);
+                               
+                               System.err.println("token: " + token);
+
+                               loPersona.IniciarSesion(usuario, token);
+
+                               out.println("<form id='myForm' action='" + urlstring + "' method='post'>");
+
+                               out.println("<input type='hidden' name='username' value='"+usuario+"'>");
+                               out.println("<input type='hidden' name='password' value='"+passwrd+"'>");
+
+                               out.println("</form>");
+                               out.println("<script type='text/javascript'>");
+                               out.println("     document.getElementById('myForm').submit();");
+                               out.println("</script>");
+                            
+                        }
                         
-                       out.println("</form>");
-                       out.println("<script type='text/javascript'>");
-                       out.println("     document.getElementById('myForm').submit();");
-                       out.println("</script>");
                 }
                 else                    
                 {

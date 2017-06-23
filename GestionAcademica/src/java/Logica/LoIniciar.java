@@ -7,10 +7,20 @@ package Logica;
 
 import Entidad.Curso;
 import Entidad.Modulo;
+import Entidad.Parametro;
 import Entidad.TipoEvaluacion;
+import Enumerado.Constantes;
 import Enumerado.TipoPeriodo;
+import Moodle.Criteria;
+import Moodle.MoodleCallRestWebService;
+import Moodle.MoodleRestException;
+import Moodle.MoodleRestUser;
+import Moodle.MoodleUser;
+import Moodle.MoodleUserRoleException;
 import Utiles.Utilidades;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,11 +47,13 @@ public class LoIniciar {
     
     private void CargarDatosIniciales(){
         
-        CargarTipoEvaluacion();
-        CargarCurso();
+       // CargarTipoEvaluacion();
+       // CargarCurso();
+       // CargarModulo();
         
-        CargarModulo();
+        //CargarParametros();
         
+        ObtenerUsuarios();
         
 
     }
@@ -131,6 +143,72 @@ public class LoIniciar {
         
         
     }
+    
+    private void CargarParametros(){
+        Parametro parametro = new Parametro();
+        
+        parametro.setParDiaEvlPrv(7);
+        parametro.setParFchUltSinc(new Date());
+        parametro.setParMdlTkn("ce19d614e5a749b22d89d010a5396249");
+        parametro.setParSisLocal(Boolean.FALSE);
+        parametro.setParSncAct(Boolean.FALSE);
+        parametro.setParTieIna(12);
+        parametro.setParUrlMdl("http://192.168.0.106");
+        parametro.setParUrlSrvSnc("");
+        
+        LoParametro loParam = LoParametro.GetInstancia();
+        loParam.guardar(parametro);
+    }
+    
+    private void ObtenerUsuarios(){
+        LoPersona persona = LoPersona.GetInstancia();
+        
+        persona.SincronizarUsuariosMoodleSistema();
+        
+        
+        //LoConsumirServicioMdl lmd = LoConsumirServicioMdl.GetInstancia();
+        //lmd.ProbarServicio();
+        
+        /*
+       // persona.IniciarSesion("admin", "este_es_un_token");
+       
+       LoParametro loParam = LoParametro.GetInstancia();
+       Parametro param = loParam.obtener(1);
+       
+       MoodleRestUser mdlRestUsr = new MoodleRestUser();
+       
+       //MoodleRestUser.getUsers(criteria)
+       
+       
+       Criteria criteria = new Criteria();
+       
+       criteria.setKey("name");
+       criteria.setValue("");
+       
+       Criteria[] lstCriteria   = new Criteria[1];
+       lstCriteria[0]           = criteria;
+       
+       
+        try {
+            MoodleUser[] lstUser = mdlRestUsr.__getUsers(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), lstCriteria);
+            
+                        
+            //MoodleUser[] lstUser = MoodleRestUser.getUsers(lstCriteria);
+            
+            System.err.println("Cantidad con coso nuevo: " + lstUser.length);
+
+        } catch (MoodleRestException ex) {
+            Logger.getLogger(LoIniciar.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MoodleUserRoleException ex) {
+            Logger.getLogger(LoIniciar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+       */
+       
+       
+    }
+    
     
     
 }

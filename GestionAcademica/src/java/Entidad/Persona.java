@@ -28,8 +28,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll",           query = "SELECT p FROM Persona p"),
-    @NamedQuery(name = "Persona.findByPerCod",      query = "SELECT p FROM Persona p WHERE p.PerCod = :PerCod"),
-    @NamedQuery(name = "Persona.findByPerNom",      query = "SELECT p FROM Persona p WHERE p.PerNom = :PerNom"),
+    @NamedQuery(name = "Persona.findByPerCod",      query = "SELECT p FROM Persona p WHERE p.PerCod     = :PerCod"),
+    @NamedQuery(name = "Persona.findLast",          query = "SELECT p FROM Persona p order by p.PerCod     desc"),
+    @NamedQuery(name = "Persona.findByMdlUsr",      query = "SELECT p FROM Persona p WHERE p.PerUsrMod  = :MdlUsr"),
+    @NamedQuery(name = "Persona.findByPerNom",      query = "SELECT p FROM Persona p WHERE p.PerNom     = :PerNom"),
     @NamedQuery(name = "Persona.findLastPersona",   query = "SELECT p FROM Persona p ORDER BY p.PerCod DESC")})
 
 public class Persona implements Serializable {
@@ -46,8 +48,11 @@ public class Persona implements Serializable {
     @Column(name = "PerApe", length = 100)
     private String PerApe;
     
-    @Column(name = "PerUsrMod", length = 255)
+    @Column(name = "PerUsrMod", length = 255, unique = true)
     private String PerUsrMod;
+    
+    @Column(name = "PerUsrModID")
+    private Long PerUsrModID;
     
     @Column(name = "PerEsDoc")
     private Boolean PerEsDoc;
@@ -75,6 +80,9 @@ public class Persona implements Serializable {
     
     @Column(name = "PerNotApp")
     private Boolean PerNotApp;
+    
+    @Column(name = "PerToken", length = 500)
+    private String PerToken;
     
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -217,7 +225,25 @@ public class Persona implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+
+    public String getPerToken() {
+        return PerToken;
+    }
+
+    public void setPerToken(String PerToken) {
+        this.PerToken = PerToken;
+    }
+
+    public Long getPerUsrModID() {
+        return PerUsrModID;
+    }
+
+    public void setPerUsrModID(Long PerUsrModID) {
+        this.PerUsrModID = PerUsrModID;
+    }
  
+    
+    
     
     
     

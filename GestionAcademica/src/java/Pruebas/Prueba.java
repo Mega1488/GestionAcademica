@@ -5,6 +5,7 @@
  */
 package Pruebas;
 
+import Logica.LoConsumirServicioMdl;
 import Logica.LoIniciar;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -50,6 +51,10 @@ public class Prueba extends HttpServlet {
     public void Probar(){
         LoIniciar inicio = new LoIniciar();
         inicio.Iniciar();
+        
+     //   LoConsumirServicioMdl srv = LoConsumirServicioMdl.GetInstancia();
+        
+     //   srv.ProbarServicio();
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

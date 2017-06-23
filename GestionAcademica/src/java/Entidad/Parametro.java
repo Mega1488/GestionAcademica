@@ -54,10 +54,13 @@ public class Parametro implements Serializable {
     private Boolean ParSisLocal;
     
     @Column(name = "ParUrlMdl", length = 500)
-    private Integer ParUrlMdl;
+    private String ParUrlMdl;
+    
+    @Column(name = "ParMdlTkn", length = 500)
+    private String ParMdlTkn;
     
     @Column(name = "ParUrlSrvSnc", length = 500)
-    private Integer ParUrlSrvSnc;
+    private String ParUrlSrvSnc;
     
     @Column(name = "ParDiaEvlPrv")
     private Integer ParDiaEvlPrv;
@@ -108,11 +111,11 @@ public class Parametro implements Serializable {
         this.ParSisLocal = ParSisLocal;
     }
 
-    public Integer getParUrlSrvSnc() {
+    public String getParUrlSrvSnc() {
         return ParUrlSrvSnc;
     }
 
-    public void setParUrlSrvSnc(Integer ParUrlSrvSnc) {
+    public void setParUrlSrvSnc(String ParUrlSrvSnc) {
         this.ParUrlSrvSnc = ParUrlSrvSnc;
     }
 
@@ -140,12 +143,20 @@ public class Parametro implements Serializable {
         this.ParSncAct = ParSncAct;
     }
 
-    public Integer getParUrlMdl() {
+    public String getParUrlMdl() {
         return ParUrlMdl;
     }
 
-    public void setParUrlMdl(Integer ParUrlMdl) {
+    public void setParUrlMdl(String ParUrlMdl) {
         this.ParUrlMdl = ParUrlMdl;
+    }
+
+    public String getParMdlTkn() {
+        return ParMdlTkn;
+    }
+
+    public void setParMdlTkn(String ParMdlTkn) {
+        this.ParMdlTkn = ParMdlTkn;
     }
 
     

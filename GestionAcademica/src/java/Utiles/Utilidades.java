@@ -5,6 +5,11 @@
  */
 package Utiles;
 
+import Enumerado.NombreSesiones;
+import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 /**
  *
  * @author alvar
@@ -28,4 +33,5 @@ public class Utilidades {
         System.err.println(TAG + " ---> " + Msg);
     }
     
+
 }

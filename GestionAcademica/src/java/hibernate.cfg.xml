@@ -7,6 +7,7 @@
     <property name="hibernate.connection.url">jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">admin</property>
+    <property name="hibernate.connection.pool_size">10</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping class="Entidad.TipoEvaluacion"/>
     <mapping class="Entidad.Curso"/>
