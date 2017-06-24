@@ -12,6 +12,18 @@
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>Login</servlet-name>
+        <servlet-class>UserInterface.Login</servlet-class>
+        <init-param>
+            <param-name>pUser</param-name>
+            <param-value>""</param-value>
+        </init-param>
+        <init-param>
+            <param-name>pPass</param-name>
+            <param-value>""</param-value>
+        </init-param>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
         <url-pattern>/Prueba</url-pattern>
@@ -19,6 +31,10 @@
     <servlet-mapping>
         <servlet-name>ws_login</servlet-name>
         <url-pattern>/ws_login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Login</servlet-name>
+        <url-pattern>/Login</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

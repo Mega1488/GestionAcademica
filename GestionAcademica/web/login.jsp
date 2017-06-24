@@ -20,9 +20,57 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        
+        <script src="JavaScript/jquery-3.2.1.js" type="text/javascript"></script>
+        
+        <script>
+                $(document).ready(function() {
+                    
+                        document.getElementById("msgError").style.visibility='hidden';
+                    
+                        $('#submit').click(function(event) {
+                                
+                                document.getElementById("msgError").style.visibility='hidden';
+                    
+                                var userVar   = $('#username').val();
+                                var passVar = $('#password').val();
+                                
+                                if(userVar == '' || passVar == '')
+                                {
+                                    $('#txtError').text("Completa los datos papa");
+                                    document.getElementById("msgError").style.visibility='visible'; 
+                                }
+                                else
+                                {
+                                
+                                // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                                $.post('Login', {
+                                        pUser : userVar,
+                                        pPass : passVar
+                                }, function(responseText) {
+                                        var obj = JSON.parse(responseText);
+                                
+                                        if(obj.tipoMensaje == 'ERROR')
+                                        {
+                                            $('#txtError').text(obj.mensaje);
+                                            document.getElementById("msgError").style.visibility='visible';
+                                        }
+                                        else
+                                        {
+                                            $('#txtError').text("Login correcto");
+                                            document.getElementById("msgError").style.visibility='visible';   
+                                        }
+                                });
+                            }
+                        });
+                    
+                });
+        </script>
+
     </head>
     <body>
         <%
+            /*
             LoPersona loPersona = LoPersona.GetInstancia();
             
             String urlstring    = "http://192.168.0.106/login/index.php";
@@ -105,29 +153,33 @@
                     }
                     
                 }
-
+*/
             
         %>
 
         <h1>Hello World!</h1>
         
-        <form class="loginform" name="login" method="post" action="#">
+        <div id="msgError" name="msgError"> 
+            <label id="txtError" name="txtError">Error</label>
+        </div>
+        
+        <form name="login">
 
             <p>Username :
 
-            <input size="10" name="username" />
+            <input size="10" name="username" id="username" />
 
             </p>
 
             <p>Password :
 
-            <input size="10" name="password" type="password" />
+            <input size="10" name="password" id="password" type="password" />
 
             </p>
 
             <p>
 
-            <input name="Submit" value="Login" type="submit" />
+            <input name="submit" id="submit" value="Login" type="button" />
 
             </p>
 
