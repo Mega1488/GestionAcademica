@@ -62,6 +62,12 @@ public class Parametro implements Serializable {
     @Column(name = "ParUrlSrvSnc", length = 500)
     private String ParUrlSrvSnc;
     
+    @Column(name = "ParPswValExp", length = 500)
+    private String ParPswValExp;
+    
+    @Column(name = "ParPswValMsg", length = 500)
+    private String ParPswValMsg;
+    
     @Column(name = "ParDiaEvlPrv")
     private Integer ParDiaEvlPrv;
     
@@ -157,6 +163,22 @@ public class Parametro implements Serializable {
 
     public void setParMdlTkn(String ParMdlTkn) {
         this.ParMdlTkn = ParMdlTkn;
+    }
+
+    public String getParPswValExp() {
+        return ParPswValExp;
+    }
+
+    public void setParPswValExp(String ParPswValExp) {
+        this.ParPswValExp = ParPswValExp;
+    }
+
+    public String getParPswValMsg() {
+        return ParPswValMsg;
+    }
+
+    public void setParPswValMsg(String ParPswValMsg) {
+        this.ParPswValMsg = ParPswValMsg;
     }
 
     
