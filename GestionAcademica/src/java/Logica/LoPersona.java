@@ -14,6 +14,7 @@ import Moodle.MoodleUser;
 import Moodle.UserCustomField;
 import Persistencia.PerPersona;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,12 +27,14 @@ public class LoPersona implements Interfaz.InPersona{
     private PerPersona          perPersona;
     private MoodleRestUser      mdlRestUser;
     private Parametro           param;
+    private Seguridad           seguridad;
 
     private LoPersona() {
         perPersona          = new PerPersona();
         LoParametro loParam = LoParametro.GetInstancia();
         param               = loParam.obtener(1);
-        mdlRestUser          = new MoodleRestUser();
+        mdlRestUser         = new MoodleRestUser();
+        seguridad           = Seguridad.GetInstancia();
     }
     
     public static LoPersona GetInstancia(){
@@ -74,28 +77,48 @@ public class LoPersona implements Interfaz.InPersona{
         return perPersona.obtenerLista();
     }
     
-    public Persona IniciarSesion(String usuario, String token){
+    public Boolean IniciarSesion(String usuario, String password){
+        boolean resultado = false;
         
-        Persona persona = this.obtenerByMdlUsr(usuario);
+        try
+        {
+            System.err.println("Usuario: " + usuario);
 
-        System.err.println("Iniciando login 1 : " + persona.getPerUsrModID());
-        
-        persona.setPerToken(token);
-        this.actualizar(persona);
-        
-        MoodleUser usr =  this.Mdl_ObtenerUsuarioByID(persona.getPerUsrModID());
+            Persona persona = this.obtenerByMdlUsr(usuario);
 
-        System.err.println("Iniciando login: " + usr.getId());
-        
-        usr.setIdNumber(token);
+            System.err.println("Persona: " + persona.toString());
+            
+            if(persona.getPerCod() != null)
+            {
+                
+                resultado = persona.getPerPass().equals(password);
 
-        this.Mdl_ActualizarUsuario(usr);
+                if(resultado)
+                {
+                    persona.setPerFchLog(new Date());
+                }
+                else
+                {
+                    if(persona.getPerCntIntLgn() != null)
+                    {
+                        persona.setPerCntIntLgn(persona.getPerCntIntLgn() + 1);
+                    }
+                    else
+                    {
+                        persona.setPerCntIntLgn(1);
+                    }
+                }
+
+                this.actualizar(persona);
+            }
+            
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
         
-        usr = this.Mdl_ObtenerUsuarioByID(persona.getPerUsrModID());
-        
-        System.err.println("Custom fields luego de guardar: " + usr.getIdNumber());
-        
-        return persona;
+        return resultado;
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -117,6 +140,7 @@ public class LoPersona implements Interfaz.InPersona{
                 }
                 else
                 {
+                    persona.setPerPass(seguridad.cryptWithMD5("admin"));
                     this.actualizar(persona);
                 }
             }

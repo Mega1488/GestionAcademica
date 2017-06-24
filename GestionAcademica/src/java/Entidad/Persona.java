@@ -81,8 +81,15 @@ public class Persona implements Serializable {
     @Column(name = "PerNotApp")
     private Boolean PerNotApp;
     
-    @Column(name = "PerToken", length = 500)
-    private String PerToken;
+    @Column(name = "PerPass", length = 500)
+    private String PerPass;
+    
+    @Column(name = "PerCntIntLgn")
+    private Integer PerCntIntLgn;
+    
+    @Column(name = "PerFchLog", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date PerFchLog;
     
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -90,6 +97,7 @@ public class Persona implements Serializable {
 
 
     public Persona() {
+        this.setPerCntIntLgn(0);
     }
 
     public Persona(Integer PerCod, String PerNom, String PerApe, String PerUsrMod, Boolean PerEsDoc, Boolean PerEsAdm, Boolean PerEsAlu, Integer PerNroLib, Integer PerNroEstOrt, Filial PerFil, String PerEml, Boolean PerNotEml, Boolean PerNotApp, Date ObjFchMod) {
@@ -226,12 +234,12 @@ public class Persona implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    public String getPerToken() {
-        return PerToken;
+    public String getPerPass() {
+        return PerPass;
     }
 
-    public void setPerToken(String PerToken) {
-        this.PerToken = PerToken;
+    public void setPerPass(String PerPass) {
+        this.PerPass = PerPass;
     }
 
     public Long getPerUsrModID() {
@@ -240,6 +248,22 @@ public class Persona implements Serializable {
 
     public void setPerUsrModID(Long PerUsrModID) {
         this.PerUsrModID = PerUsrModID;
+    }
+
+    public Date getPerFchLog() {
+        return PerFchLog;
+    }
+
+    public void setPerFchLog(Date PerFchLog) {
+        this.PerFchLog = PerFchLog;
+    }
+
+    public Integer getPerCntIntLgn() {
+        return PerCntIntLgn;
+    }
+
+    public void setPerCntIntLgn(Integer PerCntIntLgn) {
+        this.PerCntIntLgn = PerCntIntLgn;
     }
  
     

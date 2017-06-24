@@ -11,8 +11,9 @@ package Enumerado;
  */
 public enum Constantes {
     URL_FOLDER_SERVICIO_MDL("/webservice/rest/server.php"), 
-    OTRO("OTRO");
-    
+    ENCRYPT_VECTOR_INICIO("a#!?d./*@@^^''_a"),
+    ENCRYPT_SEMILLA("-KeY!!AD#AM!!KeY");
+
     Constantes(){
         
     }
