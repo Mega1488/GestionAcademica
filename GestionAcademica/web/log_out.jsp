@@ -15,7 +15,7 @@
             <label id="txtError" name="txtError">Error</label>
 </div>
 
-<div><label>Esta es la persona que inicio sesion</label></div>
+<div><label>Esta es la persona que inicio sesion: <% out.print(session.getAttribute(NombreSesiones.USUARIO.getValor())); %></label></div>
 <div><a href="#" id="cerrar_sesion" name="cerrar_sesion">Cerrar sesion</a></div>
 
 <script>
