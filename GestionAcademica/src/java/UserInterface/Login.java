@@ -5,10 +5,12 @@
  */
 package UserInterface;
 
+import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoPersona;
 import Logica.Seguridad;
 import Utiles.Mensajes;
+import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -26,6 +29,8 @@ import org.codehaus.jackson.map.ObjectMapper;
  * @author alvar
  */
 public class Login extends HttpServlet {
+    
+    private Utilidades utiles = Utilidades.GetInstancia();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -43,55 +48,88 @@ public class Login extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
 
             String retorno  = "";
-            String usr      = request.getParameter("pUser");
-            String psw      = request.getParameter("pPass"); 
             
-            Mensajes mensaje    = new Mensajes();
-            LoPersona loPersona = LoPersona.GetInstancia();
-            Seguridad seguridad = Seguridad.GetInstancia();
+            String action      = request.getParameter("pAction");
             
-            System.err.println("B");
-            
-            
-            if(loPersona.IniciarSesion(usr, seguridad.cryptWithMD5(psw)))
+            if(action.equals("INICIAR"))
             {
-                System.err.println("C");
-            
-                //Inicio correctamente
-                mensaje = new Mensajes("OK", TipoMensaje.MENSAJE);
+                retorno = this.IniciarSesion(request);
             }
-            else
+            
+            if(action.equals("FINALIZAR"))
             {
-                System.err.println("D");
-            
-                //No inicio correctamente
-                mensaje = new Mensajes("Usuario o contraseña incorrectos", TipoMensaje.ERROR);
+                retorno = this.CerrarSesion(request);
             }
             
-            System.err.println("F");
-            
-           ObjectMapper mapper = new ObjectMapper();
-
-            try {
-                // convert user object to json string and return it 
-                retorno = mapper.writeValueAsString(mensaje);
-            }
-
-              // catch various errors
-              catch (JsonGenerationException e) {
-                e.printStackTrace();
-            } 
-              catch (JsonMappingException e) {
-                e.printStackTrace();
-            }
-        
-            System.err.println("G");
-            
-            System.err.println("Este es el retorno " + retorno);
             out.println(retorno);
             
         }
     }
+    
+    
+    private String IniciarSesion(HttpServletRequest request){
+        String retorno  = "";
+        String usr      = request.getParameter("pUser");
+        String psw      = request.getParameter("pPass"); 
+
+        Mensajes mensaje    = new Mensajes("Error al iniciar sesión", TipoMensaje.ERROR);
+        LoPersona loPersona = LoPersona.GetInstancia();
+        Seguridad seguridad = Seguridad.GetInstancia();
+
+        System.err.println("B");
+
+
+        if(loPersona.IniciarSesion(usr, seguridad.cryptWithMD5(psw)))
+        {
+            //Inicio correctamente
+            HttpSession session=request.getSession(); 
+            session.setAttribute(NombreSesiones.USUARIO.getValor(), usr);
+
+            mensaje = new Mensajes("OK", TipoMensaje.MENSAJE);
+        }
+        else
+        {
+            System.err.println("D");
+
+            //No inicio correctamente
+            mensaje = new Mensajes("Usuario o contraseña incorrectos", TipoMensaje.ERROR);
+        }
+
+        System.err.println("F");
+
+        retorno = utiles.ObjetoToJson(mensaje);
+
+        System.err.println("Este es el retorno " + retorno);
+        return retorno;
+    }
+    
+    private String CerrarSesion(HttpServletRequest request){
+        String retorno  = "";
+        
+        HttpSession session = request.getSession(); 
+        String usuario      = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+        Mensajes mensaje    = new Mensajes("Error al cerrar sesión", TipoMensaje.ERROR);
+        boolean resultado   = false;
+        if(usuario != null)
+        {
+            if(!usuario.isEmpty())
+            {
+                session.removeAttribute(NombreSesiones.USUARIO.getValor());
+                mensaje     = new Mensajes("OK", TipoMensaje.MENSAJE);
+                resultado   = true;
+            }
+        }
+        
+        if(!resultado)
+        {
+            mensaje = new Mensajes("No se encontro una sesión iniciada", TipoMensaje.ERROR);
+        }
+        
+        retorno = utiles.ObjetoToJson(mensaje);
+        
+        return retorno;
+    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -8,19 +8,9 @@ package Logica;
 import Entidad.Curso;
 import Entidad.Modulo;
 import Entidad.Parametro;
-import Entidad.TipoEvaluacion;
-import Enumerado.Constantes;
 import Enumerado.TipoPeriodo;
-import Moodle.Criteria;
-import Moodle.MoodleCallRestWebService;
-import Moodle.MoodleRestException;
-import Moodle.MoodleRestUser;
-import Moodle.MoodleUser;
-import Moodle.MoodleUserRoleException;
 import Utiles.Utilidades;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -58,10 +48,10 @@ public class LoIniciar {
 
     }
     
-    private void CargarTipoEvaluacion(){
-        LoTipoEvaluacion lTpoEval = LoTipoEvaluacion.GetInstancia();
+  //  private void CargarTipoEvaluacion(){
+  //      LoTipoEvaluacion lTpoEval = LoTipoEvaluacion.GetInstancia();
         
-        TipoEvaluacion tpoEval = new TipoEvaluacion();
+  //      TipoEvaluacion tpoEval = new TipoEvaluacion();
 /*
         tpoEval.setTpoEvlNom("Parcial");
         tpoEval.setObjFchMod(new Date());
@@ -106,7 +96,7 @@ public class LoIniciar {
         lTpoEval.eliminar(tpoEval);
         utilidades.MostrarMensajeConsola(this.getClass().getSimpleName(), tpoEval.toString());
   */      
-    }
+   // }
     
     private void CargarCurso(){
         LoCurso lCurso = LoCurso.GetInstancia();

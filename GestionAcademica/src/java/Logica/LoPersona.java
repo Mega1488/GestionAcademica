@@ -96,6 +96,7 @@ public class LoPersona implements Interfaz.InPersona{
                 if(resultado)
                 {
                     persona.setPerFchLog(new Date());
+                    persona.setPerCntIntLgn(0);
                 }
                 else
                 {

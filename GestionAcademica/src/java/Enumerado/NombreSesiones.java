@@ -10,7 +10,9 @@ package Enumerado;
  * @author Alvaro
  */
 public enum NombreSesiones {
-    USUARIO("SGA_USUARIO"), TOKEN("SGA_TOKEN");
+    USUARIO("SGA_USUARIO"), 
+    TOKEN("SGA_TOKEN"), 
+    URL_SISTEMA("URL_SISTEMA");
     
     NombreSesiones(){
         

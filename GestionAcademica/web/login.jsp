@@ -16,20 +16,24 @@
 <%@page import="javax.sound.midi.SysexMessage"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        
-        <script src="JavaScript/jquery-3.2.1.js" type="text/javascript"></script>
-        
+
+<%
+    String url_sistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String js_redirect = "window.location.replace('" + url_sistema +  "');";
+    
+%>
+
         <script>
                 $(document).ready(function() {
                     
                         document.getElementById("msgError").style.visibility='hidden';
-                    
+                        document.getElementById("div_cargando").className  = 'div_cargando';
+                        
+                        
+                       
+                        
                         $('#submit').click(function(event) {
-                                
+                                document.getElementById("div_cargando").className  = 'div_cargando_load';
                                 document.getElementById("msgError").style.visibility='hidden';
                     
                                 var userVar   = $('#username').val();
@@ -45,8 +49,9 @@
                                 
                                 // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                                 $.post('Login', {
-                                        pUser : userVar,
-                                        pPass : passVar
+                                        pUser   : userVar,
+                                        pPass   : passVar,
+                                        pAction : "INICIAR"
                                 }, function(responseText) {
                                         var obj = JSON.parse(responseText);
                                 
@@ -54,11 +59,13 @@
                                         {
                                             $('#txtError').text(obj.mensaje);
                                             document.getElementById("msgError").style.visibility='visible';
+                                            document.getElementById("div_cargando").className  = 'div_cargando';
                                         }
                                         else
                                         {
-                                            $('#txtError').text("Login correcto");
-                                            document.getElementById("msgError").style.visibility='visible';   
+                                            <%
+                                                out.print(js_redirect);
+                                            %>     
                                         }
                                 });
                             }
@@ -67,98 +74,7 @@
                 });
         </script>
 
-    </head>
-    <body>
-        <%
-            /*
-            LoPersona loPersona = LoPersona.GetInstancia();
-            
-            String urlstring    = "http://192.168.0.106/login/index.php";
-            String usuario      = request.getParameter("username");
-            String passwrd      = request.getParameter("password");
-            String errorcode    = request.getParameter("errorcode");
-            int error           = 0;
-
-                    
-            System.err.println("usuario" + usuario);
-            System.err.println("passwrd" + passwrd);
-            System.err.println("errorcode" + errorcode);
-            
-            //if(errorcode == null || errorcode.isEmpty())
-            //{
-                if(usuario != null && passwrd != null)
-                {
-                        Persona persona = loPersona.obtenerByMdlUsr(usuario);
-                        if(persona.getPerCod() == null)
-                        {
-                            out.println("<p>Error al iniciar sesion: Usuario o contraseña incorrecto</p>");
-                        }
-                        else
-                        {
-
-                                SecureRandom random = new SecureRandom();
-                                byte bytes[] = new byte[20];
-                                random.nextBytes(bytes);
-                                String token = bytes.toString();
-
-                               session.setAttribute(NombreSesiones.USUARIO.getValor(), usuario);
-                               session.setAttribute(NombreSesiones.TOKEN.getValor(), token);
-                               
-                               System.err.println("token: " + token);
-
-                               loPersona.IniciarSesion(usuario, token);
-
-                               out.println("<form id='myForm' action='" + urlstring + "' method='post'>");
-
-                               out.println("<input type='hidden' name='username' value='"+usuario+"'>");
-                               out.println("<input type='hidden' name='password' value='"+passwrd+"'>");
-
-                               out.println("</form>");
-                               out.println("<script type='text/javascript'>");
-                               out.println("     document.getElementById('myForm').submit();");
-                               out.println("</script>");
-                            
-                        }
-                        
-                }
-                else                    
-                {
-                    if(errorcode != null && !errorcode.isEmpty())
-                    {
-                    
-                         try{
-                                System.err.println("Error en texto: " + errorcode);
-                                error = Integer.parseInt(errorcode.trim().toString());
-                            }
-                            catch(Exception ex)
-                            {
-                                ex.printStackTrace();
-                            }
-           
-                        System.err.println("Error numerico: " + error);
-                        
-                        switch(error){
-                            case 1: 
-                                    out.println("<p>Error al iniciar sesion</p>");
-                                    break;
-                            case 2: 
-                                    out.println("<p>Error al iniciar sesion</p>");
-                                    break;
-                            case 3: 
-                                    out.println("<p>Error al iniciar sesion: Usuario o contraseña incorrecto</p>");
-                                    break;
-                            default: out.println("<p>Error al iniciar sesion: No se recibio parametro</p>");
-                                    break;
-                        }
-                    }
-                    
-                }
-*/
-            
-        %>
-
-        <h1>Hello World!</h1>
-        
+    
         <div id="msgError" name="msgError"> 
             <label id="txtError" name="txtError">Error</label>
         </div>
@@ -184,5 +100,8 @@
             </p>
 
         </form>
-    </body>
-</html>
+        
+        
+        <div id="div_cargando" name="div_cargando">
+            
+        </div>

@@ -15,14 +15,6 @@
     <servlet>
         <servlet-name>Login</servlet-name>
         <servlet-class>UserInterface.Login</servlet-class>
-        <init-param>
-            <param-name>pUser</param-name>
-            <param-value>""</param-value>
-        </init-param>
-        <init-param>
-            <param-name>pPass</param-name>
-            <param-value>""</param-value>
-        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
@@ -42,6 +34,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
