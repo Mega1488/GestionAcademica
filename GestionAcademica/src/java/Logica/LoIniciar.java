@@ -10,7 +10,10 @@ import Entidad.Modulo;
 import Entidad.Parametro;
 import Enumerado.TipoPeriodo;
 import Utiles.Utilidades;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Date;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -19,30 +22,32 @@ import java.util.Date;
 public class LoIniciar {
 
     private Utilidades utilidades;
+    private LoParametro loParam = LoParametro.GetInstancia();
+        
     
     public LoIniciar() {
         utilidades = Utilidades.GetInstancia();
     }
     
-    public void Iniciar(){
+    public void Iniciar(HttpServletRequest request){
         //Validar si se debe hacer carga inicial
         //boolean cargarDatos = this.ValidarVersion();
         
         boolean cargarDatos = true;
         if (cargarDatos)
         {
-            this.CargarDatosIniciales();
+            this.CargarDatosIniciales(request);
         }
     }
     
-    private void CargarDatosIniciales(){
+    private void CargarDatosIniciales(HttpServletRequest request){
         
        // CargarTipoEvaluacion();
        // CargarCurso();
        // CargarModulo();
         
-        //CargarParametros();
-        
+        CargarParametros();
+        CargarUrlSistema(request);
         ObtenerUsuarios();
         
 
@@ -135,19 +140,46 @@ public class LoIniciar {
     }
     
     private void CargarParametros(){
-        Parametro parametro = new Parametro();
         
-        parametro.setParDiaEvlPrv(7);
-        parametro.setParFchUltSinc(new Date());
-        parametro.setParMdlTkn("ce19d614e5a749b22d89d010a5396249");
-        parametro.setParSisLocal(Boolean.FALSE);
-        parametro.setParSncAct(Boolean.FALSE);
-        parametro.setParTieIna(12);
-        parametro.setParUrlMdl("http://192.168.0.106");
-        parametro.setParUrlSrvSnc("");
+        Parametro parametro = loParam.obtener(1);
         
-        LoParametro loParam = LoParametro.GetInstancia();
-        loParam.guardar(parametro);
+        if(parametro.getParCod() == null)
+        {
+            parametro.setParDiaEvlPrv(7);
+            parametro.setParFchUltSinc(new Date());
+            parametro.setParMdlTkn("ce19d614e5a749b22d89d010a5396249");
+            parametro.setParSisLocal(Boolean.FALSE);
+            parametro.setParSncAct(Boolean.FALSE);
+            parametro.setParTieIna(12);
+            parametro.setParUrlMdl("http://192.168.0.106");
+            parametro.setParUrlSrvSnc("");
+        
+            loParam.guardar(parametro);
+        }
+        
+    }
+    
+    private void CargarUrlSistema(HttpServletRequest request)
+    {
+        String urlSistema = "";
+
+        try
+        {
+            URL reconstructedURL = new URL(request.getScheme(),
+                                       request.getServerName(),
+                                       request.getServerPort(),
+                                       request.getRequestURI());
+            urlSistema = reconstructedURL.toString();
+        }
+        catch(MalformedURLException ex)
+        {
+            ex.printStackTrace();
+        }
+        
+        Parametro param = loParam.obtener(1);
+        param.setParUrlSis(urlSistema);
+        loParam.actualizar(param);
+        
     }
     
     private void ObtenerUsuarios(){

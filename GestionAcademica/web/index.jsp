@@ -5,6 +5,16 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="Utiles.Utilidades"%>
+<%@page import="Logica.LoIniciar"%>
+
+<%
+    
+    LoIniciar iniciar_sistema   = new LoIniciar();
+    iniciar_sistema.Iniciar(request);
+    
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,7 +29,7 @@
             </div>
 
             <div style="float:left; width: 10%; height: 100%;">
-                <jsp:include page="masterPage/menu_derecho.jsp" />
+                <jsp:include page="masterPage/menu_izquierdo.jsp" />
             </div>
 
             <div id="contenido" name="contenido" style="float: right; width: 90%;">

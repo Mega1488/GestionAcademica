@@ -5,16 +5,14 @@
  */
 package Utiles;
 
-import Enumerado.NombreSesiones;
-import static com.sun.corba.se.spi.presentation.rmi.StubAdapter.request;
+import Entidad.Parametro;
+import Logica.LoParametro;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+
 
 /**
  *
@@ -22,8 +20,10 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class Utilidades {
     private static Utilidades instancia;
+    private LoParametro loParam;
 
     private Utilidades() {
+        loParam = LoParametro.GetInstancia();
     }
     
     public static Utilidades GetInstancia(){
@@ -53,9 +53,6 @@ public class Utilidades {
           // catch various errors
           catch (JsonGenerationException e) {
             e.printStackTrace();
-        } 
-          catch (JsonMappingException e) {
-            e.printStackTrace();
         } catch (IOException ex) {
             Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -63,4 +60,10 @@ public class Utilidades {
         return retorno;
     }
 
+    public String GetUrlSistema(){
+        Parametro param = loParam.obtener(1);
+        
+        return param.getParUrlSis();
+    }
+            
 }

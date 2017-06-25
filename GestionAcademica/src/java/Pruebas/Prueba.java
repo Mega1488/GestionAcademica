@@ -49,8 +49,6 @@ public class Prueba extends HttpServlet {
     }
     
     public void Probar(){
-        LoIniciar inicio = new LoIniciar();
-        inicio.Iniciar();
         
      //   LoConsumirServicioMdl srv = LoConsumirServicioMdl.GetInstancia();
         

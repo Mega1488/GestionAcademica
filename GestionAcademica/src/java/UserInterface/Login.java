@@ -13,16 +13,11 @@ import Utiles.Mensajes;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
@@ -30,7 +25,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class Login extends HttpServlet {
     
-    private Utilidades utiles = Utilidades.GetInstancia();
+    private Utilidades utiles;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -46,6 +41,8 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
+            
+            utiles = Utilidades.GetInstancia();
 
             String retorno  = "";
             

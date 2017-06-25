@@ -77,6 +77,9 @@ public class Parametro implements Serializable {
     @Column(name = "ParSncAct")
     private Boolean ParSncAct;
     
+    @Column(name = "ParUrlSis", length = 500)
+    private String ParUrlSis;
+    
     
     //-CONSTRUCTOR
     public Parametro() {
@@ -179,6 +182,14 @@ public class Parametro implements Serializable {
 
     public void setParPswValMsg(String ParPswValMsg) {
         this.ParPswValMsg = ParPswValMsg;
+    }
+
+    public String getParUrlSis() {
+        return ParUrlSis;
+    }
+
+    public void setParUrlSis(String ParUrlSis) {
+        this.ParUrlSis = ParUrlSis;
     }
 
     
