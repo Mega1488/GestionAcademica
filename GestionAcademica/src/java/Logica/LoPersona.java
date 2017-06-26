@@ -24,10 +24,10 @@ import java.util.List;
 public class LoPersona implements Interfaz.InPersona{
     
     private static LoPersona    instancia;
-    private PerPersona          perPersona;
-    private MoodleRestUser      mdlRestUser;
-    private Parametro           param;
-    private Seguridad           seguridad;
+    private final PerPersona          perPersona;
+    private final MoodleRestUser      mdlRestUser;
+    private final Parametro           param;
+    private final Seguridad           seguridad;
 
     private LoPersona() {
         perPersona          = new PerPersona();
@@ -82,11 +82,8 @@ public class LoPersona implements Interfaz.InPersona{
         
         try
         {
-            System.err.println("Usuario: " + usuario);
 
             Persona persona = this.obtenerByMdlUsr(usuario);
-
-            System.err.println("Persona: " + persona.toString());
             
             if(persona.getPerCod() != null)
             {
@@ -161,14 +158,13 @@ public class LoPersona implements Interfaz.InPersona{
 
             Criteria[] lstCriteria   = new Criteria[1];
             lstCriteria[0]           = criteria;
-            System.err.println("url: " + param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor());
-             MoodleUser[] lstUsr = mdlRestUser.__getUsers(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), lstCriteria);
+            MoodleUser[] lstUsr = mdlRestUser.__getUsers(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), lstCriteria);
 
 
              for(MoodleUser usr: lstUsr)
              {
-                 Persona persona = Mdl_UsuarioToPersona(usr);
-                 lstPersonas.add(persona);
+                Persona persona = Mdl_UsuarioToPersona(usr);
+                lstPersonas.add(persona);
              }
         }
         catch(Exception ex)

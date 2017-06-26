@@ -9,6 +9,7 @@
 <%@page import="java.security.SecureRandom"%>
 <%@page import="java.io.InputStreamReader"%>
 <%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Utiles.Utilidades"%>
 <%@page import="java.io.BufferedReader"%>
 <%@page import="java.io.OutputStreamWriter"%>
 <%@page import="java.net.HttpURLConnection"%>
@@ -18,66 +19,60 @@
 <!DOCTYPE html>
 
 <%
-    String url_sistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
-    String js_redirect = "window.location.replace('" + url_sistema +  "');";
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema   = utilidad.GetUrlSistema();
+    
+    String js_redirect = "window.location.replace('" + urlSistema +  "');";
     
 %>
 
         <script>
                 $(document).ready(function() {
                     
-                        document.getElementById("msgError").style.visibility='hidden';
-                        document.getElementById("div_cargando").className  = 'div_cargando';
-                        
-                        
-                       
+                    MostrarCargando(false);
                         
                         $('#submit').click(function(event) {
-                                document.getElementById("div_cargando").className  = 'div_cargando_load';
-                                document.getElementById("msgError").style.visibility='hidden';
+                            MostrarCargando(true);                       
                     
-                                var userVar   = $('#username').val();
+                                var userVar = $('#username').val();
                                 var passVar = $('#password').val();
                                 
                                 if(userVar == '' || passVar == '')
                                 {
-                                    $('#txtError').text("Completa los datos papa");
-                                    document.getElementById("msgError").style.visibility='visible'; 
+                                    MostrarMensaje("ERROR", "Completa los datos papa");
+                                    MostrarCargando(false);
                                 }
                                 else
                                 {
                                 
-                                // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                                $.post('Login', {
-                                        pUser   : userVar,
-                                        pPass   : passVar,
-                                        pAction : "INICIAR"
-                                }, function(responseText) {
-                                        var obj = JSON.parse(responseText);
-                                
-                                        if(obj.tipoMensaje == 'ERROR')
-                                        {
-                                            $('#txtError').text(obj.mensaje);
-                                            document.getElementById("msgError").style.visibility='visible';
-                                            document.getElementById("div_cargando").className  = 'div_cargando';
-                                        }
-                                        else
-                                        {
-                                            <%
-                                                out.print(js_redirect);
-                                            %>     
-                                        }
-                                });
-                            }
+                                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                                        $.post('Login', {
+                                                pUser   : userVar,
+                                                pPass   : passVar,
+                                                pAction : "INICIAR"
+                                        }, function(responseText) {
+                                                var obj = JSON.parse(responseText);
+
+                                                if(obj.tipoMensaje == 'ERROR')
+                                                {
+                                                    MostrarMensaje("ERROR", obj.mensaje);
+                                                    MostrarCargando(false);
+                                                }
+                                                else
+                                                {
+                                                    <%
+                                                        out.print(js_redirect);
+                                                    %>     
+                                                }
+                                        });
+                                }
                         });
                     
                 });
         </script>
 
     
-        <div id="msgError" name="msgError"> 
-            <label id="txtError" name="txtError">Error</label>
-        </div>
+
         
         <form name="login">
 
@@ -102,6 +97,4 @@
         </form>
         
         
-        <div id="div_cargando" name="div_cargando">
-            
-        </div>
+       

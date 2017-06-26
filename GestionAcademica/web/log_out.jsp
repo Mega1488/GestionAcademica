@@ -3,12 +3,15 @@
     Created on : 24-jun-2017, 11:58:10
     Author     : alvar
 --%>
+<%@page import="Utiles.Utilidades"%>
 <%@page import="Enumerado.NombreSesiones"%>
 
 <%
-    String url_sistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
-    String js_redirect = "window.location.replace('" + url_sistema +  "');";
     
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema   = utilidad.GetUrlSistema();
+    
+    String js_redirect = "window.location.replace('" + urlSistema +  "');";
 %>
 
 <div id="msgError" name="msgError"> 
@@ -25,7 +28,7 @@
                     
                         $('#cerrar_sesion').click(function(event) {
                                 
-                                document.getElementById("msgError").style.visibility='hidden';
+                                MostrarCargando(true);
                                 
                                 // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                                 $.post('Login', {
@@ -35,8 +38,8 @@
                                 
                                         if(obj.tipoMensaje == 'ERROR')
                                         {
-                                            $('#txtError').text(obj.mensaje);
-                                            document.getElementById("msgError").style.visibility='visible';
+                                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                            MostrarCargando(false);
                                         }
                                         else
                                         {

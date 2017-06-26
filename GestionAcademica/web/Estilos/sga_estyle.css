@@ -21,3 +21,9 @@ and open the template in the editor.
     display: none;
 }
 
+.div_msg{
+    visibility: visible;
+    width: 279px;
+    position: fixed;
+    left: 50%;
+}

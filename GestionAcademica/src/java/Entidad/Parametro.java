@@ -53,6 +53,9 @@ public class Parametro implements Serializable {
     @Column(name = "ParSisLocal")
     private Boolean ParSisLocal;
     
+    @Column(name = "ParUtlMdl")
+    private Boolean ParUtlMdl;
+    
     @Column(name = "ParUrlMdl", length = 500)
     private String ParUrlMdl;
     
@@ -190,6 +193,14 @@ public class Parametro implements Serializable {
 
     public void setParUrlSis(String ParUrlSis) {
         this.ParUrlSis = ParUrlSis;
+    }
+
+    public Boolean getParUtlMdl() {
+        return ParUtlMdl;
+    }
+
+    public void setParUtlMdl(Boolean ParUtlMdl) {
+        this.ParUtlMdl = ParUtlMdl;
     }
 
     

@@ -4,12 +4,20 @@
     Author     : alvar
 --%>
 
+<%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema   = utilidad.GetUrlSistema();
+    
+    String version = "'" + urlSistema + "Definiciones/DefVersion.jsp'";
+%>
+    
 <div >
 <list>
 <ul>
     <li>
-        <a href="#"> Menu uno </a>
+        <a href=<% out.print(version); %>>Versión</a>
     </li>
     <li>
         <a href="#"> Menu dos </a>

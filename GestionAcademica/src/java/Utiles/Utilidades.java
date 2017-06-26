@@ -6,7 +6,9 @@
 package Utiles;
 
 import Entidad.Parametro;
+import Entidad.Version;
 import Logica.LoParametro;
+import Logica.LoVersion;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,10 +22,12 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class Utilidades {
     private static Utilidades instancia;
-    private LoParametro loParam;
+    private final LoParametro loParam;
+    private final LoVersion loVersion;
 
     private Utilidades() {
-        loParam = LoParametro.GetInstancia();
+        loParam     = LoParametro.GetInstancia();
+        loVersion   = LoVersion.GetInstancia();
     }
     
     public static Utilidades GetInstancia(){
@@ -65,5 +69,6 @@ public class Utilidades {
         
         return param.getParUrlSis();
     }
+   
             
 }
