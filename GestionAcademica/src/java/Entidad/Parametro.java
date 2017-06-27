@@ -5,13 +5,12 @@
  */
 package Entidad;
 
+import Utiles.JSonDateTimeSerializer;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,11 +20,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonAutoDetect;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
  *
  * @author alvar
  */
+@JsonAutoDetect
 @Entity
 @Table(name = "PARAMETRO")
 @XmlRootElement
@@ -107,6 +109,7 @@ public class Parametro implements Serializable {
         this.parametroEmail = parametroEmail;
     }
 
+    @JsonSerialize(using=JSonDateTimeSerializer.class)
     public Date getParFchUltSinc() {
         return ParFchUltSinc;
     }

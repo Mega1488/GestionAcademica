@@ -7,6 +7,8 @@ package Utiles;
 
 import Entidad.Parametro;
 import Entidad.Version;
+import Enumerado.ExpresionesRegulares;
+import Enumerado.TipoDato;
 import Logica.LoParametro;
 import Logica.LoVersion;
 import java.io.IOException;
@@ -68,6 +70,26 @@ public class Utilidades {
         Parametro param = loParam.obtener(1);
         
         return param.getParUrlSis();
+    }
+    
+    public Boolean ValidarTipoDato(TipoDato tipoDato, String valor)
+    {
+        
+        boolean resultado = false;
+        
+        switch(tipoDato)
+        {
+            case BOOLEAN:
+                resultado = valor.matches(ExpresionesRegulares.BOOLEAN.getValor());
+                break;
+            
+            case NUMERO_ENTERO:
+                resultado = valor.matches(ExpresionesRegulares.NUMERO_ENTERO.getValor());
+                break;
+                
+        }
+
+        return resultado;
     }
    
             

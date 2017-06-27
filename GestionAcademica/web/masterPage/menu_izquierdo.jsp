@@ -10,7 +10,8 @@
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
     
-    String version = "'" + urlSistema + "Definiciones/DefVersion.jsp'";
+    String version      = "'" + urlSistema + "Definiciones/DefVersion.jsp'";
+    String parametro    = "'" + urlSistema + "Definiciones/DefParametro.jsp'";
 %>
     
 <div >
@@ -20,7 +21,7 @@
         <a href=<% out.print(version); %>>Versión</a>
     </li>
     <li>
-        <a href="#"> Menu dos </a>
+        <a href=<% out.print(parametro); %>>Parametros</a>
     </li>
     <li>
         <a href="#"> Menu tres </a>

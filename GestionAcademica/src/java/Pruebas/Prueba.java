@@ -9,6 +9,10 @@ import Logica.LoConsumirServicioMdl;
 import Logica.LoIniciar;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -41,10 +45,18 @@ public class Prueba extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
+            
+
+            Date fecha = new Date();
+            DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+            String today = formatter.format(fecha);
+            out.println(today);
+
+            
             out.println("</body>");
             out.println("</html>");
             
-            this.Probar();
+            //this.Probar();
         }
     }
     
