@@ -12,6 +12,7 @@
     
     String version      = "'" + urlSistema + "Definiciones/DefVersion.jsp'";
     String parametro    = "'" + urlSistema + "Definiciones/DefParametro.jsp'";
+    String parametroEml = "'" + urlSistema + "Definiciones/DefParametroEmailWW.jsp'";
 %>
     
 <div >
@@ -22,6 +23,9 @@
     </li>
     <li>
         <a href=<% out.print(parametro); %>>Parametros</a>
+    </li>
+    <li>
+        <a href=<% out.print(parametroEml); %>>Parametros Email</a>
     </li>
     <li>
         <a href="#"> Menu tres </a>

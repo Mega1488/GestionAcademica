@@ -10,7 +10,8 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoSSL {
-    SSL(1), STAR_SSL(2);
+    SSL(1), 
+    STAR_SSL(2);
     
     TipoSSL(){
         

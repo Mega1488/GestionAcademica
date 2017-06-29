@@ -5,7 +5,7 @@
  */
 package Persistencia;
 
-import Entidad.ParametroEmail;
+import Entidad.Carrera;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,14 +15,14 @@ import org.hibernate.Transaction;
 
 /**
  *
- * @author alvar
+ * @author aa
  */
-public class PerParametroEmail implements Interfaz.InParametroEmail{
+public class PerCarrera implements Interfaz.InCarrera{
     
-   private Session sesion;
-   private Transaction tx;
+    private Session sesion;
+    private Transaction tx;
     
-   private void iniciaOperacion() throws HibernateException {
+    private void iniciaOperacion() throws HibernateException {
         try {
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
@@ -38,12 +38,14 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
     }
 
     @Override
-    public Object guardar(ParametroEmail pObjeto) {
-        
-        pObjeto = this.DevolverNuevoID(pObjeto);
+    public Object guardar(Carrera pCarrera) {
+        int id = 0;
+        pCarrera = this.DevolverNuevoID(pCarrera);
+        pCarrera.setObjFchMod(new Date());
+
         try {
             iniciaOperacion();
-            sesion.save(pObjeto);
+            id = (int) sesion.save(pCarrera);
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -51,27 +53,17 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
         } finally {
             sesion.close();
         }
-        
-        return pObjeto;
-        
+
+        return id;
+    }
+    
+    @Override
+    public void actualizar(Carrera pObjeto) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void actualizar(ParametroEmail pObjeto) {
-        try {
-            iniciaOperacion();
-            sesion.update(pObjeto);
-            tx.commit();
-        } catch (HibernateException he) {
-            manejaExcepcion(he);
-            throw he;
-        } finally {
-            sesion.close();
-        }
-    }
-
-    @Override
-    public void eliminar(ParametroEmail pObjeto) {
+    public void eliminar(Carrera pObjeto) {
         try {
             iniciaOperacion();
             sesion.delete(pObjeto);
@@ -89,28 +81,44 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
     }
 
     @Override
-    public ParametroEmail obtener(Object pCodigo) {
-        int  codigo                     = (int) pCodigo;
-        ParametroEmail objetoRetorno    = new ParametroEmail();
+    public Carrera obtener(Carrera pCodigo) {
+        Carrera  codigo          = (Carrera) pCodigo;
+        Carrera objetoRetorno    = new Carrera();
         try {
                 iniciaOperacion();
-                objetoRetorno = (ParametroEmail) sesion.get(ParametroEmail.class, codigo);            
+                objetoRetorno = (Carrera) sesion.get(Carrera.class, codigo);            
         } finally {
             sesion.close();
         }
-
         return objetoRetorno;
     }
 
-    
     @Override
-    public List<ParametroEmail> obtenerLista() {
-        List<ParametroEmail> listaRetorno = null;
+    public Carrera obtenerByMdlUsr(String pMdlUsr) {
+        List<Carrera> listaObjeto = new ArrayList<Carrera>(); 
+        Carrera retorno = new Carrera();
+        
+        try {
+            iniciaOperacion();
+            listaObjeto = sesion.getNamedQuery("Carrera.findByMdlUsr").setParameter("MdlUsr", pMdlUsr).setMaxResults(1).list();
+        } finally {
+            sesion.close();
+        }
+        if (!listaObjeto.isEmpty()){
+            retorno = listaObjeto.get(0);
+        }
+        
+        return retorno;
+    }
+
+    @Override
+    public List<Carrera> obtenerLista() {
+        List<Carrera> listaRetorno = null;
 
         try {
             iniciaOperacion();
             
-                listaRetorno = sesion.getNamedQuery("ParametroEmail.findAll").list();
+                listaRetorno = sesion.getNamedQuery("Carrera.findAll").list();
             
         } finally {
             sesion.close();
@@ -119,28 +127,27 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
         return listaRetorno;
     }
     
-    
-     private ParametroEmail DevolverNuevoID(ParametroEmail objeto){
+    private Carrera DevolverNuevoID(Carrera objeto){
 
-        objeto.setParEmlCod(this.DevolverUltimoID());
-        
+        objeto.setCarCod(this.DevolverUltimoID());
+
         return objeto;
     }
-    
+
     private int DevolverUltimoID(){
         int retorno = 1;
-        List<ParametroEmail> listaObjeto = new ArrayList<ParametroEmail>(); 
+        List<Carrera> listaObjeto = new ArrayList<Carrera>(); 
         try {
             iniciaOperacion();
-            listaObjeto = sesion.getNamedQuery("ParametroEmail.findLast").setMaxResults(1).list();
+            listaObjeto = sesion.getNamedQuery("Carrera.findLastCarrera").setMaxResults(1).list();
         } finally {
             sesion.close();
         }
         if (!listaObjeto.isEmpty()){
-            ParametroEmail objeto = listaObjeto.get(0);
-            retorno = objeto.getParEmlCod() + 1;
+            Carrera objeto = listaObjeto.get(0);
+            retorno = objeto.getCarCod()+ 1;
         }
-        
+
         return retorno;
     }
 }

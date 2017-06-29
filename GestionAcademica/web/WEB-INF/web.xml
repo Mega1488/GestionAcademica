@@ -49,8 +49,8 @@
         <url-pattern>/AM_Parametro</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ABM_ParametroEmail</servlet-name>
-        <url-pattern>/ABM_ParametroEmail</url-pattern>
+        <servlet-name>ABM_Carrera</servlet-name>
+        <url-pattern>/ABM_Carrera</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
