@@ -80,6 +80,8 @@ public class ParametroEmail implements Serializable {
 
     //-CONSTRUCTOR
     public ParametroEmail() {
+        this.ParEmlTpoAut   = TipoAutenticacion.NORMAL;
+        this.ParEmlSSL      = TipoSSL.SSL;
     }
 
     //-GETTERS Y SETTERS
