@@ -5,9 +5,8 @@
  */
 package UserInterface;
 
-import Entidad.Parametro;
 import Entidad.ParametroEmail;
-import Entidad.Version;
+import Enumerado.ProtocoloEmail;
 import Enumerado.TipoAutenticacion;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
@@ -17,7 +16,6 @@ import Utiles.Mensajes;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +29,8 @@ public class ABM_ParametroEmail extends HttpServlet {
 
     private final LoParametroEmail loParamEmail = LoParametroEmail.GetInstancia();;
     private final Utilidades utilidades         = Utilidades.GetInstancia();
+    private Mensajes mensaje                    = new Mensajes("Error", TipoMensaje.ERROR);
+    private Boolean error                       = false;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -98,89 +98,14 @@ public class ABM_ParametroEmail extends HttpServlet {
      
     private String AgregarDatos(HttpServletRequest request)
     {
-        Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         
         try
         {
 
-            Boolean error                   = false;
-            ParametroEmail parametroEmail   = new ParametroEmail();
+            error                           = false;
+            ParametroEmail parametroEmail   = this.ValidarObjeto(request);
 
-            //String ParEmlCod    = request.getParameter("pParEmlCod");
-            String ParEmlNom    = request.getParameter("pParEmlNom");
-            String ParEmlPro    = request.getParameter("pParEmlPro");
-            String ParEmlSrv    = request.getParameter("pParEmlSrv");
-            String ParEmlPrt    = request.getParameter("pParEmlPrt");
-            String ParEmlDeNom  = request.getParameter("pParEmlDeNom");
-            String ParEmlDeEml  = request.getParameter("pParEmlDeEml");
-            String ParEmlUtlAut = request.getParameter("pParEmlUtlAut");
-            String ParEmlTpoAut = request.getParameter("pParEmlTpoAut");
-            String ParEmlDom    = request.getParameter("pParEmlDom");
-            String ParEmlUsr    = request.getParameter("pParEmlUsr");
-            String ParEmlPsw    = request.getParameter("pParEmlPsw");
-            String ParEmlSSL    = request.getParameter("pParEmlSSL");
-            String ParEmlTmpEsp = request.getParameter("pParEmlTmpEsp");
-            
-            //------------------------------------------------------------------------------------------
-            //Validaciones
-            //------------------------------------------------------------------------------------------
-            
-            //TIPO DE DATO
-            
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlPro))
-            {parametroEmail.setParEmlPro(Integer.valueOf(ParEmlPro)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlPro", TipoMensaje.ERROR); error   = true; }
-            
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlPrt))
-            {parametroEmail.setParEmlPrt(Integer.valueOf(ParEmlPrt)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlPrt", TipoMensaje.ERROR); error   = true; }
-            
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlTmpEsp))
-            {parametroEmail.setParEmlTmpEsp(Integer.valueOf(ParEmlTmpEsp)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlTmpEsp", TipoMensaje.ERROR); error   = true; }
-            
-            
-            if(utilidades.ValidarTipoDato(TipoDato.BOOLEAN, ParEmlUtlAut))
-            {parametroEmail.setParEmlUtlAut(Boolean.valueOf(ParEmlUtlAut)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlUtlAut", TipoMensaje.ERROR); error   = true; }
-            
-            if(!ParEmlTpoAut.isEmpty()) 
-            {
-                if(utilidades.ValidarTipoDato(TipoDato.TIPO_AUTENTICACION, ParEmlTpoAut))
-                { 
-                    parametroEmail.setParEmlTpoAut(utilidades.StringToTipoAutenticacion(ParEmlTpoAut)); 
-                }
-                else 
-                { 
-                    mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlUtlAut", TipoMensaje.ERROR); 
-                    error   = true; 
-                }
-            }
-            
-            if(!ParEmlSSL.isEmpty())
-            {
-                if(utilidades.ValidarTipoDato(TipoDato.TIPO_SSL, ParEmlSSL))
-                { 
-                    parametroEmail.setParEmlSSL(utilidades.StringToTipoSSL(ParEmlSSL)); 
-                }
-                else 
-                { 
-                    System.err.println("C");
-                    mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlSSL", TipoMensaje.ERROR); 
-                    error   = true; 
-                }
-            }
-            
-            
-            
-            //Sin validacion
-            parametroEmail.setParEmlNom(ParEmlNom);
-            parametroEmail.setParEmlSrv(ParEmlSrv);
-            parametroEmail.setParEmlDeNom(ParEmlDeNom);
-            parametroEmail.setParEmlDeEml(ParEmlDeEml);
-            parametroEmail.setParEmlDom(ParEmlDom);
-            parametroEmail.setParEmlUsr(ParEmlUsr);
-            parametroEmail.setParEmlPsw(ParEmlPsw);
             
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -204,101 +129,26 @@ public class ABM_ParametroEmail extends HttpServlet {
     
     private String ActualizarDatos(HttpServletRequest request)
     {
-        Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         
         try
         {
 
-            Boolean error                   = false;
-            ParametroEmail parametroEmail   = new ParametroEmail();
-
-            String ParEmlCod    = request.getParameter("pParEmlCod");
-            String ParEmlNom    = request.getParameter("pParEmlNom");
-            String ParEmlPro    = request.getParameter("pParEmlPro");
-            String ParEmlSrv    = request.getParameter("pParEmlSrv");
-            String ParEmlPrt    = request.getParameter("pParEmlPrt");
-            String ParEmlDeNom  = request.getParameter("pParEmlDeNom");
-            String ParEmlDeEml  = request.getParameter("pParEmlDeEml");
-            String ParEmlUtlAut = request.getParameter("pParEmlUtlAut");
-            String ParEmlTpoAut = request.getParameter("pParEmlTpoAut");
-            String ParEmlDom    = request.getParameter("pParEmlDom");
-            String ParEmlUsr    = request.getParameter("pParEmlUsr");
-            String ParEmlPsw    = request.getParameter("pParEmlPsw");
-            String ParEmlSSL    = request.getParameter("pParEmlSSL");
-            String ParEmlTmpEsp = request.getParameter("pParEmlTmpEsp");
-            
-            //------------------------------------------------------------------------------------------
-            //Validaciones
-            //------------------------------------------------------------------------------------------
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlCod))
-            {
-                parametroEmail = loParamEmail.obtener(Integer.valueOf(ParEmlCod)); 
+            error                   = false;
+            String ParEmlCod   = request.getParameter("pParEmlCod");
                 
-                if(parametroEmail == null)
-                {
-                    mensaje = new Mensajes("El parametro que quiere actualizar, no existe", TipoMensaje.ERROR); 
-                    error   = true;
-                }
-            }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlCod", TipoMensaje.ERROR); error   = true; }
-            
-            
-            //TIPO DE DATO
-            
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlPro))
-            {parametroEmail.setParEmlPro(Integer.valueOf(ParEmlPro)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlPro", TipoMensaje.ERROR); error   = true; }
-            
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlPrt))
-            {parametroEmail.setParEmlPrt(Integer.valueOf(ParEmlPrt)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlPrt", TipoMensaje.ERROR); error   = true; }
-            
-            if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlTmpEsp))
-            {parametroEmail.setParEmlTmpEsp(Integer.valueOf(ParEmlTmpEsp)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlTmpEsp", TipoMensaje.ERROR); error   = true; }
-            
-            
-            if(utilidades.ValidarTipoDato(TipoDato.BOOLEAN, ParEmlUtlAut))
-            {parametroEmail.setParEmlUtlAut(Boolean.valueOf(ParEmlUtlAut)); }
-            else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlUtlAut", TipoMensaje.ERROR); error   = true; }
-            
-            if(!ParEmlTpoAut.isEmpty()) 
+            ParametroEmail parametroEmail = loParamEmail.obtener(Integer.valueOf(ParEmlCod));
+
+            if(parametroEmail != null)
             {
-                if(utilidades.ValidarTipoDato(TipoDato.TIPO_AUTENTICACION, ParEmlTpoAut))
-                { 
-                    parametroEmail.setParEmlTpoAut(utilidades.StringToTipoAutenticacion(ParEmlTpoAut)); 
-                }
-                else 
-                { 
-                    mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlUtlAut", TipoMensaje.ERROR); 
-                    error   = true; 
-                }
+                parametroEmail = this.ValidarObjeto(request);
+                parametroEmail.setParEmlCod(Integer.valueOf(ParEmlCod));
             }
-            
-            if(!ParEmlSSL.isEmpty())
+           else
             {
-                if(utilidades.ValidarTipoDato(TipoDato.TIPO_SSL, ParEmlSSL))
-                { 
-                    parametroEmail.setParEmlSSL(utilidades.StringToTipoSSL(ParEmlSSL)); 
-                }
-                else 
-                { 
-                    System.err.println("C");
-                    mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlSSL", TipoMensaje.ERROR); 
-                    error   = true; 
-                }
+                mensaje = new Mensajes("El parametro que quiere actualizar, no existe", TipoMensaje.ERROR); 
+                error   = true;
             }
-            
-            
-            
-            //Sin validacion
-            parametroEmail.setParEmlNom(ParEmlNom);
-            parametroEmail.setParEmlSrv(ParEmlSrv);
-            parametroEmail.setParEmlDeNom(ParEmlDeNom);
-            parametroEmail.setParEmlDeEml(ParEmlDeEml);
-            parametroEmail.setParEmlDom(ParEmlDom);
-            parametroEmail.setParEmlUsr(ParEmlUsr);
-            parametroEmail.setParEmlPsw(ParEmlPsw);
             
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -358,7 +208,71 @@ public class ABM_ParametroEmail extends HttpServlet {
                     
         return utilidades.ObjetoToJson(mensaje);
     }
-                
+     
+    
+    private ParametroEmail ValidarObjeto(HttpServletRequest request)
+    {
+        ParametroEmail parametroEmail   = new ParametroEmail();
+
+        String ParEmlNom    = request.getParameter("pParEmlNom");
+        String ParEmlPro    = request.getParameter("pParEmlPro");
+        String ParEmlSrv    = request.getParameter("pParEmlSrv");
+        String ParEmlPrt    = request.getParameter("pParEmlPrt");
+        String ParEmlDeNom  = request.getParameter("pParEmlDeNom");
+        String ParEmlDeEml  = request.getParameter("pParEmlDeEml");
+        String ParEmlUtlAut = request.getParameter("pParEmlUtlAut");
+        String ParEmlTpoAut = request.getParameter("pParEmlTpoAut");
+        String ParEmlDom    = request.getParameter("pParEmlDom");
+        String ParEmlUsr    = request.getParameter("pParEmlUsr");
+        String ParEmlPsw    = request.getParameter("pParEmlPsw");
+        String ParEmlSSL    = request.getParameter("pParEmlSSL");
+        String ParEmlTmpEsp = request.getParameter("pParEmlTmpEsp");
+
+        //------------------------------------------------------------------------------------------
+        //Validaciones
+        //------------------------------------------------------------------------------------------
+
+        //TIPO DE DATO
+
+        if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlPro))
+        {parametroEmail.setParEmlPro(ProtocoloEmail.fromCode(Integer.valueOf(ParEmlPro))); }
+        else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlPro", TipoMensaje.ERROR); error   = true; }
+
+        if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlPrt))
+        {parametroEmail.setParEmlPrt(Integer.valueOf(ParEmlPrt)); }
+        else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlPrt", TipoMensaje.ERROR); error   = true; }
+
+        if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlTmpEsp))
+        {parametroEmail.setParEmlTmpEsp(Integer.valueOf(ParEmlTmpEsp)); }
+        else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlTmpEsp", TipoMensaje.ERROR); error   = true; }
+
+
+        if(utilidades.ValidarTipoDato(TipoDato.BOOLEAN, ParEmlUtlAut))
+        {parametroEmail.setParEmlUtlAut(Boolean.valueOf(ParEmlUtlAut)); }
+        else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlUtlAut", TipoMensaje.ERROR); error   = true; }
+        
+        
+        if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlTpoAut))
+        {parametroEmail.setParEmlTpoAut(TipoAutenticacion.fromCode(Integer.valueOf(ParEmlTpoAut))); }
+        else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlTpoAut", TipoMensaje.ERROR); error   = true; }
+        
+        if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlSSL))
+        {parametroEmail.setParEmlSSL(TipoSSL.fromCode(Integer.valueOf(ParEmlSSL))); }
+        else { mensaje = new Mensajes("Tipo de dato incorrecto: ParEmlSSL", TipoMensaje.ERROR); error   = true; }
+        
+        
+        //Sin validacion
+        parametroEmail.setParEmlNom(ParEmlNom);
+        parametroEmail.setParEmlSrv(ParEmlSrv);
+        parametroEmail.setParEmlDeNom(ParEmlDeNom);
+        parametroEmail.setParEmlDeEml(ParEmlDeEml);
+        parametroEmail.setParEmlDom(ParEmlDom);
+        parametroEmail.setParEmlUsr(ParEmlUsr);
+        parametroEmail.setParEmlPsw(ParEmlPsw);
+            
+        return parametroEmail;
+    }
+
 
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

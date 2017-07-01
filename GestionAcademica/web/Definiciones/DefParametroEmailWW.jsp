@@ -10,11 +10,10 @@
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    Utilidades utilidad = Utilidades.GetInstancia();
-    LoParametroEmail  loParamEml  = LoParametroEmail.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
+    Utilidades utilidad              = Utilidades.GetInstancia();
+    LoParametroEmail  loParamEml     = LoParametroEmail.GetInstancia();
+    String urlSistema                = utilidad.GetUrlSistema();
     List<ParametroEmail> lstParamEml = loParamEml.obtenerLista();
-    System.err.println("Lista: " + lstParamEml.size());
 %>
 
 <!DOCTYPE html>
@@ -23,17 +22,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Versión</title>
         <jsp:include page="/masterPage/head.jsp"/>
-        
-        <script>
-                $(document).ready(function() {
-                        
-                       
-                    
-                       
-                    
-                });
-        </script>
-        
     </head>
     <body>
      
@@ -54,15 +42,15 @@
                 <div> <a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a> </div>
                 
                 <table>
-                    <th>
-                        <td></td>
-                        <td></td>
-                        <td>Código</td>
-                        <td>Nombre</td>
-                        <td>Servidor de correo</td>
-                        <td>Nombre del remitente</td>
-                        <td>Email del remitente</td>
-                    </th>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Servidor de correo</th>
+                        <th>Nombre del remitente</th>
+                        <th>Email del remitente</th>
+                    </tr>
                 <% for(ParametroEmail prmEml : lstParamEml)
                     {
                      
@@ -70,11 +58,11 @@
                     <tr>
                         <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
                         <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
-                        <td><% out.print(prmEml.getParEmlCod()); %></td>
-                        <td><% out.print(prmEml.getParEmlNom()); %></td>
-                        <td><% out.print(prmEml.getParEmlSrv()); %></td>
-                        <td><% out.print(prmEml.getParEmlDeNom()); %></td>
-                        <td><% out.print(prmEml.getParEmlDeEml()); %></td>
+                        <td><% out.print(utilidad.NuloToCero(prmEml.getParEmlCod())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlNom())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlSrv())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlDeNom())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlDeEml())); %></td>
                     </tr>
                     
                 <%

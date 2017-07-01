@@ -12,9 +12,7 @@ package Enumerado;
 public enum TipoDato {
     NUMERO_ENTERO(1), 
     BOOLEAN(2), 
-    URL(3),
-    TIPO_AUTENTICACION(4),
-    TIPO_SSL(5);
+    URL(3);
     
     TipoDato(){
         

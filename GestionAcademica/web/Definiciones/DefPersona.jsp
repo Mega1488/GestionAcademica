@@ -217,7 +217,7 @@
                     <div><label>Número estudiante:</label><input type="number" class="form-control" id="PerNroEstOrt" name="PerNroEstOrt" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToCero(persona.getPerNroEstOrt())); %>" ></div>
                     <div>
                             <label>Filial:</label>
-                            <select class="form-control" id="PerFil" name="PerFil">
+                            <select class="form-control" id="PerFil" name="PerFil" <% out.print(CamposActivos); %>>
                                 <%
                                     for (Filial filial :Filial.values()){
                                         if(filial == persona.getPerFil()){

@@ -108,68 +108,11 @@ public class Utilidades {
             case NUMERO_ENTERO:
                 resultado = valor.matches(ExpresionesRegulares.NUMERO_ENTERO.getValor());
                 break;
-            
-            case TIPO_AUTENTICACION:
-                resultado = ValidarTipoAutenticacion(valor);
-                break;
-                
-            case TIPO_SSL:
-                resultado = ValidarTipoSSL(valor);
-                break;
         }
 
         return resultado;
     }
    
-    private Boolean ValidarTipoAutenticacion(String valor){
-        
-        System.err.println("Valor: " + valor);
-        for(TipoAutenticacion tpoAut : TipoAutenticacion.values())
-        {
-            if(tpoAut.getValor() == Integer.valueOf(valor))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    private Boolean ValidarTipoSSL(String valor){
-  
-        for(TipoSSL tpoSSL : TipoSSL.values())
-        {
-            if(tpoSSL.getValor() == Integer.valueOf(valor))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-    
-    public TipoSSL StringToTipoSSL(String valor)
-    {
-        for(TipoSSL tpoSSL : TipoSSL.values())
-        {
-            if(tpoSSL.getValor() == Integer.valueOf(valor))
-            {
-                return tpoSSL;
-            }
-        }
-        return null;
-    }
-    
-     public TipoAutenticacion StringToTipoAutenticacion(String valor)
-    {
-        for(TipoAutenticacion tpoAut : TipoAutenticacion.values())
-        {
-            if(tpoAut.getValor() == Integer.valueOf(valor))
-            {
-                return tpoAut;
-            }
-        }
-        return null;
-    }
-     
      public Object NuloToVacio(Object objeto)
      {
          return (objeto == null ? "" : objeto);

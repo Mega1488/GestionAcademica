@@ -5,12 +5,15 @@
  */
 package Entidad;
 
+import Enumerado.ProtocoloEmail;
 import Enumerado.TipoAutenticacion;
 import Enumerado.TipoSSL;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -41,8 +44,9 @@ public class ParametroEmail implements Serializable {
     @Column(name = "ParEmlNom", length = 100)
     private String ParEmlNom;
     
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "ParEmlPro")
-    private Integer ParEmlPro;
+    private ProtocoloEmail ParEmlPro;
     
     @Column(name = "ParEmlSrv", length = 255)
     private String ParEmlSrv;
@@ -59,6 +63,7 @@ public class ParametroEmail implements Serializable {
     @Column(name = "ParEmlUtlAut")
     private Boolean ParEmlUtlAut;
     
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "ParEmlTpoAut")
     private TipoAutenticacion ParEmlTpoAut;  
 
@@ -71,6 +76,7 @@ public class ParametroEmail implements Serializable {
     @Column(name = "ParEmlPsw", length = 500)
     private String ParEmlPsw;
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "ParEmlSSL")
     private TipoSSL ParEmlSSL;  
 
@@ -102,13 +108,15 @@ public class ParametroEmail implements Serializable {
         this.ParEmlNom = ParEmlNom;
     }
 
-    public Integer getParEmlPro() {
+    public ProtocoloEmail getParEmlPro() {
         return ParEmlPro;
     }
 
-    public void setParEmlPro(Integer ParEmlPro) {
+    public void setParEmlPro(ProtocoloEmail ParEmlPro) {
         this.ParEmlPro = ParEmlPro;
     }
+
+    
 
     public String getParEmlSrv() {
         return ParEmlSrv;

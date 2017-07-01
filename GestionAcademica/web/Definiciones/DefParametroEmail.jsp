@@ -4,6 +4,9 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.TipoSSL"%>
+<%@page import="Enumerado.TipoAutenticacion"%>
+<%@page import="Enumerado.ProtocoloEmail"%>
 <%@page import="Entidad.ParametroEmail"%>
 <%@page import="Enumerado.Modo"%>
 <%@page import="Logica.LoParametroEmail"%>
@@ -57,17 +60,17 @@
                                 
                                 var ParEmlCod       = $('#ParEmlCod').val();
                                 var ParEmlNom       = $('#ParEmlNom').val();
-                                var ParEmlPro       = $('#ParEmlPro').val();
+                                var ParEmlPro       = $('select[name=ParEmlPro]').val();
                                 var ParEmlSrv       = $('#ParEmlSrv').val();
                                 var ParEmlPrt       = $('#ParEmlPrt').val();
                                 var ParEmlDeNom     = $('#ParEmlDeNom').val();
                                 var ParEmlDeEml     = $('#ParEmlDeEml').val();
                                 var ParEmlUtlAut    = document.getElementById('ParEmlUtlAut').checked;
-                                var ParEmlTpoAut    = $('#ParEmlTpoAut').val();  
+                                var ParEmlTpoAut    = $('select[name=ParEmlTpoAut]').val();
                                 var ParEmlDom       = $('#ParEmlDom').val();
                                 var ParEmlUsr       = $('#ParEmlUsr').val();
                                 var ParEmlPsw       = $('#ParEmlPsw').val();
-                                var ParEmlSSL       = $('#ParEmlSSL').val();  
+                                var ParEmlSSL       = $('select[name=ParEmlSSL]').val(); 
                                 var ParEmlTmpEsp    = $('#ParEmlTmpEsp').val(); 
                                 
                                 if(ParEmlNom == '')
@@ -193,7 +196,7 @@
             </div>
 
             <div id="contenido" name="contenido" style="float: right; width: 90%;">
-                <h1>Versión</h1>
+                <h1>Parametro email</h1>
                 <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                     <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
                 </div>
@@ -214,7 +217,19 @@
                     
                     <div>
                         <label>Protocolo</label>
-                        <input type="text" class="form-control" id="ParEmlPro" name="ParEmlPro" placeholder="ParEmlPro" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlPro())); %>">
+                        <select class="form-control" id="ParEmlPro" name="ParEmlPro" <% out.print(CamposActivos); %>>
+                            <%
+                                for (ProtocoloEmail protocolo : ProtocoloEmail.values()){
+                                    if(protocolo == paramEml.getParEmlPro()){
+                                        out.println("<option selected value='" + protocolo.getCod() + "'>" + protocolo.getNom() + "</option>");
+                                    }
+                                    else
+                                    {
+                                        out.println("<option value='" + protocolo.getCod() + "'>" + protocolo.getNom() + "</option>");
+                                    }
+                                }
+                            %>
+                        </select>
                     </div>
                     
                     <div>
@@ -224,7 +239,7 @@
                     
                     <div>
                         <label>Puerto</label>
-                        <input type="text" class="form-control" id="ParEmlPrt" name="ParEmlPrt" placeholder="ParEmlPrt" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlPrt())); %>">
+                        <input type="number" class="form-control" id="ParEmlPrt" name="ParEmlPrt" placeholder="ParEmlPrt" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlPrt())); %>">
                     </div>
                     
                     <div>
@@ -234,12 +249,24 @@
                     
                     <div>
                         <label>De email:</label>
-                        <input type="text" class="form-control" id="ParEmlDeEml" name="ParEmlDeEml" placeholder="ParEmlDeEml"  <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlDeEml())); %>">
+                        <input type="email" class="form-control" id="ParEmlDeEml" name="ParEmlDeEml" placeholder="ParEmlDeEml"  <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlDeEml())); %>">
                     </div>
                     
                     <div>
                         <label>Tipo autenticación</label>
-                        <input type="text" class="form-control" id="ParEmlTpoAut" name="ParEmlTpoAut" placeholder="ParEmlTpoAut"  <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlTpoAut().getValor())); %>">
+                        <select class="form-control" id="ParEmlTpoAut" name="ParEmlTpoAut" <% out.print(CamposActivos); %>>
+                            <%
+                                for (TipoAutenticacion tpoAut : TipoAutenticacion.values()){
+                                    if(tpoAut == paramEml.getParEmlTpoAut()){
+                                        out.println("<option selected value='" + tpoAut.getCod() + "'>" + tpoAut.getNom() + "</option>");
+                                    }
+                                    else
+                                    {
+                                        out.println("<option value='" + tpoAut.getCod() + "'>" + tpoAut.getNom() + "</option>");
+                                    }
+                                }
+                            %>
+                        </select>
                     </div>
                     
                     <div>
@@ -259,12 +286,24 @@
                     
                     <div>
                         <label>SSL</label>
-                        <input type="text" class="form-control" id="ParEmlSSL" name="ParEmlSSL" placeholder="ParEmlSSL" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlSSL().getValor())); %>">
+                        <select class="form-control" id="ParEmlSSL" name="ParEmlSSL" <% out.print(CamposActivos); %>>
+                            <%
+                                for (TipoSSL tpoSSL : TipoSSL.values()){
+                                    if(tpoSSL == paramEml.getParEmlSSL()){
+                                        out.println("<option selected value='" + tpoSSL.getCod() + "'>" + tpoSSL.getNom() + "</option>");
+                                    }
+                                    else
+                                    {
+                                        out.println("<option value='" + tpoSSL.getCod() + "'>" + tpoSSL.getNom() + "</option>");
+                                    }
+                                }
+                            %>
+                        </select>
                     </div>
                     
                     <div>
                         <label>Tiempo de espera en segundos</label>
-                        <input type="text" class="form-control" id="ParEmlTmpEsp" name="ParEmlTmpEsp" placeholder="ParEmlTmpEsp" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlTmpEsp())); %>">
+                        <input type="number" class="form-control" id="ParEmlTmpEsp" name="ParEmlTmpEsp" placeholder="ParEmlTmpEsp" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(paramEml.getParEmlTmpEsp())); %>">
                     </div>
 
                     <div>
