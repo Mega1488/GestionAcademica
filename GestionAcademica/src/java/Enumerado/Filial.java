@@ -10,20 +10,37 @@ package Enumerado;
  * @author Alvaro
  */
 public enum Filial {
-    COLONIA(1), ROSARIO(2);
+    COLONIA("Colonia", 1), ROSARIO("Rosario",2);
     
     Filial(){
         
     }
     
-    private int vFilial;
+    private String vFilialNom;
+    private int vFilialCod;
 
-    Filial(int pFil) {
-        this.vFilial = pFil;
-    }
+    Filial(String pFilNom, int pFil) {
+        this.vFilialNom = pFilNom;
+        this.vFilialCod = pFil;
+   }
 
     public int getFilial() {
-        return vFilial;
+        return vFilialCod;
+    }
+    
+    public String getFilialNom()
+    {
+        return this.vFilialNom;
+    }
+    
+    public static Filial fromCode(int filCod) {
+        for (Filial filial :Filial.values()){
+            if (filial.getFilial() == filCod){
+                return filial;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "La filial " + filCod + " is not supported!");
     }
     
 }

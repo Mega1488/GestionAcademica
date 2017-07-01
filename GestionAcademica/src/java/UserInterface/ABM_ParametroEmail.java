@@ -48,7 +48,6 @@ public class ABM_ParametroEmail extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            System.err.println("Servlet");
             String action   = request.getParameter("pAction");
             String retorno  = "";
 

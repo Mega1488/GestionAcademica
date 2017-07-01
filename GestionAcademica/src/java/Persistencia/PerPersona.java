@@ -44,6 +44,7 @@ public class PerPersona implements Interfaz.InPersona{
 
         pObjeto.setObjFchMod(new Date());
         
+        System.err.println("Persona filial_ " + pObjeto.getPerFil());
         try {
             iniciaOperacion();
             sesion.save(pObjeto);
@@ -94,8 +95,8 @@ public class PerPersona implements Interfaz.InPersona{
 
     @Override
     public Persona obtener(Object pCodigo) {
-        Persona  codigo          = (Persona) pCodigo;
-        Persona objetoRetorno    = new Persona();
+        Persona  objetoRetorno  = (Persona) pCodigo;
+        int codigo              = objetoRetorno.getPerCod();
         try {
                 iniciaOperacion();
                 objetoRetorno = (Persona) sesion.get(Persona.class, codigo);            
@@ -158,11 +159,13 @@ public class PerPersona implements Interfaz.InPersona{
         } finally {
             sesion.close();
         }
+        
         if (!listaObjeto.isEmpty()){
             Persona objeto = listaObjeto.get(0);
             retorno = objeto.getPerCod() + 1;
         }
         
+        System.err.println("ID: " + retorno);
         return retorno;
     }
 }

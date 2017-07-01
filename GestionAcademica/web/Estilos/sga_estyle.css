@@ -27,3 +27,8 @@ and open the template in the editor.
     position: fixed;
     left: 50%;
 }
+
+.div_tabs
+{
+    display: inline;
+}

@@ -185,5 +185,10 @@ public class Utilidades {
          return (objeto == null ? "" : (objeto == true ? "checked" : ""));
      }
      
+     public Object BooleanToSiNo(Boolean objeto)
+     {
+         return (objeto == null ? "No" : (objeto == true ? "Si" : "No"));
+     }
+     
             
 }

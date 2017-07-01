@@ -51,7 +51,7 @@
                 </div>
                 
                 <h1>Parámetro email</h1>
-                <div> <a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Agregar nuevo parametro email</a> </div>
+                <div> <a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a> </div>
                 
                 <table>
                     <th>

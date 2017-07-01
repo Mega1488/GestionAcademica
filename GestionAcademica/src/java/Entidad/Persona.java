@@ -11,6 +11,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -69,6 +71,7 @@ public class Persona implements Serializable {
     @Column(name = "PerNroEstOrt")
     private Integer PerNroEstOrt;
     
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "PerFil")
     private Filial PerFil;
     
@@ -97,7 +100,14 @@ public class Persona implements Serializable {
 
 
     public Persona() {
-        this.setPerCntIntLgn(0);
+        PerCntIntLgn    = 0;
+        PerFil          = Filial.COLONIA;
+        PerEsAdm        = Boolean.FALSE;
+        PerEsAlu        = Boolean.FALSE;
+        PerEsDoc        = Boolean.FALSE;
+        PerNotApp       = Boolean.TRUE;
+        PerNotEml       = Boolean.TRUE;
+        PerPass         = "";
     }
 
     public Persona(Integer PerCod, String PerNom, String PerApe, String PerUsrMod, Boolean PerEsDoc, Boolean PerEsAdm, Boolean PerEsAlu, Integer PerNroLib, Integer PerNroEstOrt, Filial PerFil, String PerEml, Boolean PerNotEml, Boolean PerNotApp, Date ObjFchMod) {

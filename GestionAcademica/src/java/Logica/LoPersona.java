@@ -8,6 +8,7 @@ package Logica;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
+import Enumerado.Filial;
 import Moodle.Criteria;
 import Moodle.MoodleRestUser;
 import Moodle.MoodleUser;

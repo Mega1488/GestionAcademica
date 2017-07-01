@@ -53,178 +53,137 @@
                     
                     $('#btn_guardar').click(function(event) {
                                 
+                                MostrarCargando(true);
                                 
-                               if($('#MODO').val() == "INSERT")
-                                {
-                                    Guardar();
-                                }
+                                var ParEmlCod       = $('#ParEmlCod').val();
+                                var ParEmlNom       = $('#ParEmlNom').val();
+                                var ParEmlPro       = $('#ParEmlPro').val();
+                                var ParEmlSrv       = $('#ParEmlSrv').val();
+                                var ParEmlPrt       = $('#ParEmlPrt').val();
+                                var ParEmlDeNom     = $('#ParEmlDeNom').val();
+                                var ParEmlDeEml     = $('#ParEmlDeEml').val();
+                                var ParEmlUtlAut    = document.getElementById('ParEmlUtlAut').checked;
+                                var ParEmlTpoAut    = $('#ParEmlTpoAut').val();  
+                                var ParEmlDom       = $('#ParEmlDom').val();
+                                var ParEmlUsr       = $('#ParEmlUsr').val();
+                                var ParEmlPsw       = $('#ParEmlPsw').val();
+                                var ParEmlSSL       = $('#ParEmlSSL').val();  
+                                var ParEmlTmpEsp    = $('#ParEmlTmpEsp').val(); 
+                                
+                                if(ParEmlNom == '')
+                                    {
+                                        MostrarMensaje("ERROR", "Completa los datos papa");
+                                        MostrarCargando(false);
+                                    }
+                                    else
+                                    {
+                                        
+                                        if($('#MODO').val() == "INSERT")
+                                         {
 
-                                if($('#MODO').val() == "UPDATE")
-                                {
-                                    Actualizar();
-                                }
+                                                     // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                                                     $.post('<% out.print(urlSistema); %>ABM_ParametroEmail', {
+                                                             pParEmlNom       : ParEmlNom,   
+                                                             pParEmlPro       : ParEmlPro,   
+                                                             pParEmlSrv       : ParEmlSrv,   
+                                                             pParEmlPrt       : ParEmlPrt,   
+                                                             pParEmlDeNom     : ParEmlDeNom,   
+                                                             pParEmlDeEml     : ParEmlDeEml,   
+                                                             pParEmlUtlAut    : ParEmlUtlAut,   
+                                                             pParEmlTpoAut    : ParEmlTpoAut,   
+                                                             pParEmlDom       : ParEmlDom,   
+                                                             pParEmlUsr       : ParEmlUsr,   
+                                                             pParEmlPsw       : ParEmlPsw,   
+                                                             pParEmlSSL       : ParEmlSSL,   
+                                                             pParEmlTmpEsp    : ParEmlTmpEsp,   
+                                                             pAction          : "INSERTAR"
+                                                     }, function(responseText) {
+                                                         var obj = JSON.parse(responseText);
+                                                         MostrarCargando(false);
 
-                                if($('#MODO').val() == "DELETE")
-                                {
-                                    Eliminar();
-                                }
+                                                         if(obj.tipoMensaje != 'ERROR')
+                                                         {
+                                                             <%
+                                                                 out.print(js_redirect);
+                                                             %>     
+                                                         }
+                                                         else
+                                                         {
+                                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                                         }
+
+                                                     });
+                                            }
+                                         
+
+                                            if($('#MODO').val() == "UPDATE")
+                                            {
+                                                // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                                                $.post('<% out.print(urlSistema); %>ABM_ParametroEmail', {
+                                                        pParEmlCod       : ParEmlCod,   
+                                                        pParEmlNom       : ParEmlNom,   
+                                                        pParEmlPro       : ParEmlPro,   
+                                                        pParEmlSrv       : ParEmlSrv,   
+                                                        pParEmlPrt       : ParEmlPrt,   
+                                                        pParEmlDeNom     : ParEmlDeNom,   
+                                                        pParEmlDeEml     : ParEmlDeEml,   
+                                                        pParEmlUtlAut    : ParEmlUtlAut,   
+                                                        pParEmlTpoAut    : ParEmlTpoAut,   
+                                                        pParEmlDom       : ParEmlDom,   
+                                                        pParEmlUsr       : ParEmlUsr,   
+                                                        pParEmlPsw       : ParEmlPsw,   
+                                                        pParEmlSSL       : ParEmlSSL,   
+                                                        pParEmlTmpEsp    : ParEmlTmpEsp,   
+                                                        pAction          : "ACTUALIZAR"
+                                                }, function(responseText) {
+                                                    var obj = JSON.parse(responseText);
+                                                    MostrarCargando(false);
+
+                                                    if(obj.tipoMensaje != 'ERROR')
+                                                    {
+                                                        <%
+                                                            out.print(js_redirect);
+                                                        %>     
+                                                    }
+                                                    else
+                                                    {
+                                                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                                    }
+
+                                                });
+                                            }
+
+                                            if($('#MODO').val() == "DELETE")
+                                            {
+                                                $.post('<% out.print(urlSistema); %>ABM_ParametroEmail', {
+                                                        pParEmlCod       : ParEmlCod,   
+                                                        pAction          : "ELIMINAR"
+                                                }, function(responseText) {
+                                                    var obj = JSON.parse(responseText);
+                                                    MostrarCargando(false);
+
+                                                    if(obj.tipoMensaje != 'ERROR')
+                                                    {
+                                                        <%
+                                                            out.print(js_redirect);
+                                                        %>     
+                                                    }
+                                                    else
+                                                    {
+                                                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                                    }
+
+                                                });
+                                            }
+                                    }
                         });
                 
                 });
-                
-                function Guardar(){
-                     MostrarCargando(true);
-                                
-                    //var ParEmlCod   = $('#SisVerCod').val();
-                    var ParEmlNom       = $('#ParEmlNom').val();
-                    var ParEmlPro       = $('#ParEmlPro').val();
-                    var ParEmlSrv       = $('#ParEmlSrv').val();
-                    var ParEmlPrt       = $('#ParEmlPrt').val();
-                    var ParEmlDeNom     = $('#ParEmlDeNom').val();
-                    var ParEmlDeEml     = $('#ParEmlDeEml').val();
-                    var ParEmlUtlAut    = document.getElementById('ParEmlUtlAut').checked;
-                    var ParEmlTpoAut    = $('#ParEmlTpoAut').val();  
-                    var ParEmlDom       = $('#ParEmlDom').val();
-                    var ParEmlUsr       = $('#ParEmlUsr').val();
-                    var ParEmlPsw       = $('#ParEmlPsw').val();
-                    var ParEmlSSL       = $('#ParEmlSSL').val();  
-                    var ParEmlTmpEsp    = $('#ParEmlTmpEsp').val();  
-
-
-                    if(ParEmlNom == '')
-                    {
-                        MostrarMensaje("ERROR", "Completa los datos papa");
-                        MostrarCargando(false);
-                    }
-                    else
-                    {
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_ParametroEmail', {
-                                    pParEmlNom       : ParEmlNom,   
-                                    pParEmlPro       : ParEmlPro,   
-                                    pParEmlSrv       : ParEmlSrv,   
-                                    pParEmlPrt       : ParEmlPrt,   
-                                    pParEmlDeNom     : ParEmlDeNom,   
-                                    pParEmlDeEml     : ParEmlDeEml,   
-                                    pParEmlUtlAut    : ParEmlUtlAut,   
-                                    pParEmlTpoAut    : ParEmlTpoAut,   
-                                    pParEmlDom       : ParEmlDom,   
-                                    pParEmlUsr       : ParEmlUsr,   
-                                    pParEmlPsw       : ParEmlPsw,   
-                                    pParEmlSSL       : ParEmlSSL,   
-                                    pParEmlTmpEsp    : ParEmlTmpEsp,   
-                                    pAction          : "INSERTAR"
-                            }, function(responseText) {
-                                var obj = JSON.parse(responseText);
-                                MostrarCargando(false);
-                                
-                                if(obj.tipoMensaje != 'ERROR')
-                                {
-                                    <%
-                                        out.print(js_redirect);
-                                    %>     
-                                }
-                                else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-
-                            });
-                    }
-                }
-                
-                function Actualizar(){
-                MostrarCargando(true);
-                                
-                    var ParEmlCod       = $('#ParEmlCod').val();
-                    var ParEmlNom       = $('#ParEmlNom').val();
-                    var ParEmlPro       = $('#ParEmlPro').val();
-                    var ParEmlSrv       = $('#ParEmlSrv').val();
-                    var ParEmlPrt       = $('#ParEmlPrt').val();
-                    var ParEmlDeNom     = $('#ParEmlDeNom').val();
-                    var ParEmlDeEml     = $('#ParEmlDeEml').val();
-                    var ParEmlUtlAut    = document.getElementById('ParEmlUtlAut').checked;
-                    var ParEmlTpoAut    = $('#ParEmlTpoAut').val();  
-                    var ParEmlDom       = $('#ParEmlDom').val();
-                    var ParEmlUsr       = $('#ParEmlUsr').val();
-                    var ParEmlPsw       = $('#ParEmlPsw').val();
-                    var ParEmlSSL       = $('#ParEmlSSL').val();  
-                    var ParEmlTmpEsp    = $('#ParEmlTmpEsp').val();  
-
-
-                    if(ParEmlNom == '')
-                    {
-                        MostrarMensaje("ERROR", "Completa los datos papa");
-                        MostrarCargando(false);
-                    }
-                    else
-                    {
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_ParametroEmail', {
-                                    pParEmlCod       : ParEmlCod,   
-                                    pParEmlNom       : ParEmlNom,   
-                                    pParEmlPro       : ParEmlPro,   
-                                    pParEmlSrv       : ParEmlSrv,   
-                                    pParEmlPrt       : ParEmlPrt,   
-                                    pParEmlDeNom     : ParEmlDeNom,   
-                                    pParEmlDeEml     : ParEmlDeEml,   
-                                    pParEmlUtlAut    : ParEmlUtlAut,   
-                                    pParEmlTpoAut    : ParEmlTpoAut,   
-                                    pParEmlDom       : ParEmlDom,   
-                                    pParEmlUsr       : ParEmlUsr,   
-                                    pParEmlPsw       : ParEmlPsw,   
-                                    pParEmlSSL       : ParEmlSSL,   
-                                    pParEmlTmpEsp    : ParEmlTmpEsp,   
-                                    pAction          : "ACTUALIZAR"
-                            }, function(responseText) {
-                                var obj = JSON.parse(responseText);
-                                MostrarCargando(false);
-                                
-                                if(obj.tipoMensaje != 'ERROR')
-                                {
-                                    <%
-                                        out.print(js_redirect);
-                                    %>     
-                                }
-                                else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-
-                            });
-                    }
-                }
-                
-                function Eliminar(){
-                
-                    var ParEmlCod       = $('#ParEmlCod').val();
-                
-                    $.post('<% out.print(urlSistema); %>ABM_ParametroEmail', {
-                                    pParEmlCod       : ParEmlCod,   
-                                    pAction          : "ELIMINAR"
-                            }, function(responseText) {
-                                var obj = JSON.parse(responseText);
-                                MostrarCargando(false);
-                                
-                                if(obj.tipoMensaje != 'ERROR')
-                                {
-                                    <%
-                                        out.print(js_redirect);
-                                    %>     
-                                }
-                                else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-
-                            });
-                }
                 
         </script>
         
     </head>
     <body>
-        <div>
             <div id="cabezal" name="cabezal">
                 <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
@@ -321,7 +280,6 @@
                 </form>
             </div>
             
-            <div id="div_cargando" name="div_cargando"></div>
             
     </body>
 </html>
