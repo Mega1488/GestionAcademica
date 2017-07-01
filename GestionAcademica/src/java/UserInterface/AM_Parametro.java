@@ -105,10 +105,12 @@ public class AM_Parametro extends HttpServlet {
             String ParUrlMdl      = request.getParameter("pParUrlMdl");
             String ParMdlTkn      = request.getParameter("pParMdlTkn");
             String ParUrlSrvSnc   = request.getParameter("pParUrlSrvSnc");
+            String ParPswValExp   = request.getParameter("pParPswValExp");
             String ParPswValMsg   = request.getParameter("pParPswValMsg");
             String ParDiaEvlPrv   = request.getParameter("pParDiaEvlPrv");
             String ParTieIna      = request.getParameter("pParTieIna");
             String ParSncAct      = request.getParameter("pParSncAct");
+            
             
             //------------------------------------------------------------------------------------------
             //Validaciones
@@ -169,6 +171,7 @@ public class AM_Parametro extends HttpServlet {
             
             //Sin validacion
             parametro.setParMdlTkn(ParMdlTkn);
+            parametro.setParPswValExp(ParPswValExp);
             parametro.setParPswValMsg(ParPswValMsg);
             parametro.setParUrlMdl(ParUrlMdl);
             parametro.setParUrlSrvSnc(ParUrlSrvSnc);

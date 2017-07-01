@@ -6,11 +6,14 @@
 package UserInterface;
 
 
+import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Filial;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
+import Logica.LoParametro;
 import Logica.LoPersona;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Utilidades;
 import java.io.IOException;
@@ -25,7 +28,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author alvar
  */
 public class ABM_Persona extends HttpServlet {
-
+    private final LoParametro loParametro   = LoParametro.GetInstancia();
+    private final Parametro parametro       = loParametro.obtener(1);
+    private final Seguridad seguridad       = Seguridad.GetInstancia();
     private final LoPersona loPersona       = LoPersona.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
@@ -82,7 +87,7 @@ public class ABM_Persona extends HttpServlet {
 
                 error           = false;
                 
-                Persona persona = this.ValidarPersona(request);
+                Persona persona = this.ValidarPersona(request, null);
 
                 //------------------------------------------------------------------------------------------
                 //Guardar cambios
@@ -121,7 +126,7 @@ public class ABM_Persona extends HttpServlet {
                 
                 if(persona != null)
                 {
-                    persona = this.ValidarPersona(request);
+                    persona = this.ValidarPersona(request, persona);
                     persona.setPerCod(Integer.valueOf(PerCod));
                 }
                else
@@ -186,9 +191,12 @@ public class ABM_Persona extends HttpServlet {
             return utilidades.ObjetoToJson(mensaje);
         }
         
-        private Persona ValidarPersona(HttpServletRequest request)
+        private Persona ValidarPersona(HttpServletRequest request, Persona persona)
         {
-                Persona persona   = new Persona();
+            if(persona == null)
+            {
+                persona   = new Persona();
+            }
 
                 String PerNom= request.getParameter("pPerNom");
                 String PerApe= request.getParameter("pPerApe");
@@ -202,6 +210,7 @@ public class ABM_Persona extends HttpServlet {
                 String PerEml= request.getParameter("pPerEml");
                 String PerNotEml= request.getParameter("pPerNotEml");
                 String PerNotApp= request.getParameter("pPerNotApp");
+                String PerPass = request.getParameter("pPerPass");
 
                 //------------------------------------------------------------------------------------------
                 //Validaciones
@@ -225,6 +234,23 @@ public class ABM_Persona extends HttpServlet {
                 persona.setPerEml(PerEml);
                 persona.setPerNotEml(Boolean.valueOf(PerNotEml));
                 persona.setPerNotApp(Boolean.valueOf(PerNotApp));
+                
+                if(!PerPass.isEmpty())
+                {
+                    if(!parametro.getParPswValExp().isEmpty())
+                    {
+                        if(!PerPass.matches(parametro.getParPswValExp()))
+                        {
+                            error = true;
+                            mensaje = new Mensajes(parametro.getParPswValMsg(), TipoMensaje.ERROR);
+                        }
+                    }    
+                    
+                    if(!error)
+                    {
+                        persona.setPerPass(seguridad.cryptWithMD5(PerPass));
+                    }
+                }
                 
             return persona;
         }

@@ -40,7 +40,6 @@
                                 var ParTieIna     = $('#ParTieIna').val();
                                 var ParSncAct     = document.getElementById('ParSncAct').checked;
                                 
-                    
                                 
                                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                                         $.post('<% out.print(urlSistema); %>AM_Parametro', {
@@ -182,7 +181,7 @@
 
                         <div>
                             <label>Mensaje en caso de contraseña incorrecta:</label>
-                            <input type="text" class="form-control" id="ParPswValExp" name="ParPswValExp" placeholder="Mensaje">
+                            <input type="text" class="form-control" id="ParPswValMsg" name="ParPswValMsg" placeholder="Mensaje">
                         </div>
 
                         <!--------------------------------------------------------------------------------------------------------------->

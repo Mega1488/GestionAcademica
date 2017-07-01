@@ -104,7 +104,7 @@ public class ABM_ParametroEmail extends HttpServlet {
         {
 
             error                           = false;
-            ParametroEmail parametroEmail   = this.ValidarObjeto(request);
+            ParametroEmail parametroEmail   = this.ValidarObjeto(request, null);
 
             
             //------------------------------------------------------------------------------------------
@@ -141,7 +141,7 @@ public class ABM_ParametroEmail extends HttpServlet {
 
             if(parametroEmail != null)
             {
-                parametroEmail = this.ValidarObjeto(request);
+                parametroEmail = this.ValidarObjeto(request, parametroEmail);
                 parametroEmail.setParEmlCod(Integer.valueOf(ParEmlCod));
             }
            else
@@ -172,8 +172,8 @@ public class ABM_ParametroEmail extends HttpServlet {
     
     private String EliminarDatos(HttpServletRequest request)
     {
-        boolean error       = false;
-        Mensajes mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
+        error      = false;
+        mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         try
         {
             String ParEmlCod    = request.getParameter("pParEmlCod");
@@ -210,9 +210,12 @@ public class ABM_ParametroEmail extends HttpServlet {
     }
      
     
-    private ParametroEmail ValidarObjeto(HttpServletRequest request)
+    private ParametroEmail ValidarObjeto(HttpServletRequest request, ParametroEmail parametroEmail)
     {
-        ParametroEmail parametroEmail   = new ParametroEmail();
+        if(parametroEmail == null)
+        {
+            parametroEmail   = new ParametroEmail();
+        }
 
         String ParEmlNom    = request.getParameter("pParEmlNom");
         String ParEmlPro    = request.getParameter("pParEmlPro");

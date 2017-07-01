@@ -69,6 +69,7 @@
                                 var PerFil          = $('select[name=PerFil]').val();
                                 var PerEml          = $('#PerEml').val();
                                 var ObjFchMod       = $('#ObjFchMod').val();
+                                var PerPass         = $('#PerPass').val();
                                 var PerNotEml       = document.getElementById('PerNotEml').checked;
                                 var PerNotApp       = document.getElementById('PerNotApp').checked;
                                 
@@ -99,6 +100,7 @@
                                                             pObjFchMod	:	ObjFchMod,
                                                             pPerNotEml	:	PerNotEml,
                                                             pPerNotApp:	PerNotApp,   
+                                                            pPerPass:	PerPass,   
                                                             pAction          : "INSERTAR"
                                                      }, function(responseText) {
                                                          var obj = JSON.parse(responseText);
@@ -137,6 +139,7 @@
                                                         pObjFchMod	:	ObjFchMod,
                                                         pPerNotEml	:	PerNotEml,
                                                         pPerNotApp:	PerNotApp,   
+                                                        pPerPass:	PerPass, 
                                                         pAction          : "ACTUALIZAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
@@ -210,6 +213,7 @@
                     <div><label>Nombre:</label><input type="text" class="form-control" id="PerNom" name="PerNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerNom())); %>" ></div>
                     <div><label>Apellido:</label><input type="text" class="form-control" id="PerApe" name="PerApe" placeholder="Apellido" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerApe())); %>" ></div>
                     <div><label>Usuario en moodle:</label><input type="text" class="form-control" id="PerUsrMod" name="PerUsrMod" placeholder="Usuario" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerUsrMod())); %>" ></div>
+                    <div><label>Password:</label><input type="text" class="form-control" id="PerPass" name="PerPass"  <% out.print(CamposActivos); %> value="" ></div>
                     <div><label>Es docente:</label><input type="checkbox" class="form-control" id="PerEsDoc" name="PerEsDoc"  <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(persona.getPerEsDoc())); %> ></div>
                     <div><label>Es administrador:</label><input type="checkbox" class="form-control" id="PerEsAdm" name="PerEsAdm" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(persona.getPerEsAdm())); %>></div>
                     <div><label>Es alumno:</label><input type="checkbox" class="form-control" id="PerEsAlu" name="PerEsAlu"  <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(persona.getPerEsAlu())); %>></div>
