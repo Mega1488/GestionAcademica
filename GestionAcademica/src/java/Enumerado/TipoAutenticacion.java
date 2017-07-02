@@ -10,20 +10,36 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoAutenticacion {
-    NORMAL(1), OTRA(2);
+    NORMAL("Normal",1), OTRA("Otra",2);
     
     TipoAutenticacion(){
         
     }
     
-    private int valor;
+    private int vCod;
+    private String vNom;
 
-    TipoAutenticacion(int pValor) {
-        this.valor = pValor;
+    TipoAutenticacion(String pNom, int pCod) {
+        this.vCod = pCod;
+        this.vNom = pNom;
     }
 
-    public int getValor() {
-        return valor;
+    public int getCod() {
+        return vCod;
+    }
+
+    public String getNom() {
+        return vNom;
+    }
+     
+    public static TipoAutenticacion fromCode(int pCod) {
+        for (TipoAutenticacion tpoAut :TipoAutenticacion.values()){
+            if (tpoAut.getCod() == pCod){
+                return tpoAut;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El tipo de autenticacion " + pCod + " is not supported!");
     }
     
 }

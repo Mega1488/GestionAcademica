@@ -41,7 +41,6 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
     public Object guardar(ParametroEmail pObjeto) {
         
         pObjeto = this.DevolverNuevoID(pObjeto);
-
         try {
             iniciaOperacion();
             sesion.save(pObjeto);

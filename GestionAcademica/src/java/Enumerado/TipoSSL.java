@@ -10,20 +10,33 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoSSL {
-    SSL(1), STAR_SSL(2);
+    SSL("SSL",1), 
+    STAR_SSL("STAR SSL",2);
     
-    TipoSSL(){
-        
+    private int vCod;
+    private String vNom;
+
+    TipoSSL(String pNom, int pCod) {
+        this.vCod = pCod;
+        this.vNom = pNom;
+    }
+
+    public int getCod() {
+        return vCod;
     }
     
-    private int valor;
-
-    TipoSSL(int pValor) {
-        this.valor = pValor;
+    public String getNom() {
+        return vNom;
     }
-
-    public int getValor() {
-        return valor;
+    
+    public static TipoSSL fromCode(int pCod) {
+        for (TipoSSL tpoSSL :TipoSSL.values()){
+            if (tpoSSL.getCod() == pCod){
+                return tpoSSL;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El tipo de ssl " + pCod + " is not supported!");
     }
     
 }

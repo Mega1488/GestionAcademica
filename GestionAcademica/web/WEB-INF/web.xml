@@ -25,8 +25,17 @@
         <servlet-class>Servlets.AM_Parametro</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ABM_ParametroEmail</servlet-name>
+        <servlet-class>UserInterface.ABM_ParametroEmail</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ABM_Carrera</servlet-name>
         <servlet-class>Servlets.ABM_Carrera</servlet-class>
+        <servlet-class>UserInterface.ABM_Carrera</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ABM_Persona</servlet-name>
+        <servlet-class>UserInterface.ABM_Persona</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
@@ -51,6 +60,14 @@
     <servlet-mapping>
         <servlet-name>ABM_Carrera</servlet-name>
         <url-pattern>/ABM_Carrera</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ABM_ParametroEmail</servlet-name>
+        <url-pattern>/ABM_ParametroEmail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ABM_Persona</servlet-name>
+        <url-pattern>/ABM_Persona</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

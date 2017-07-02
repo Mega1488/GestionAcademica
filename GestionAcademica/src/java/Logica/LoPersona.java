@@ -11,7 +11,6 @@ import Enumerado.Constantes;
 import Moodle.Criteria;
 import Moodle.MoodleRestUser;
 import Moodle.MoodleUser;
-import Moodle.UserCustomField;
 import Persistencia.PerPersona;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,11 +22,11 @@ import java.util.List;
  */
 public class LoPersona implements Interfaz.InPersona{
     
-    private static LoPersona    instancia;
-    private final PerPersona          perPersona;
-    private final MoodleRestUser      mdlRestUser;
-    private final Parametro           param;
-    private final Seguridad           seguridad;
+    private static LoPersona        instancia;
+    private final PerPersona        perPersona;
+    private final MoodleRestUser    mdlRestUser;
+    private final Parametro         param;
+    private final Seguridad         seguridad;
 
     private LoPersona() {
         perPersona          = new PerPersona();
@@ -55,6 +54,10 @@ public class LoPersona implements Interfaz.InPersona{
     @Override
     public void actualizar(Persona pObjeto) {
         perPersona.actualizar(pObjeto);
+        if(param.getParUtlMdl())
+        {
+            this.Mdl_ActualizarUsuario(pObjeto);
+        }
     }
 
     @Override
@@ -189,8 +192,16 @@ public class LoPersona implements Interfaz.InPersona{
     }
     
 
-    private void Mdl_ActualizarUsuario(MoodleUser usr)
+    private void Mdl_ActualizarUsuario(Persona persona)
     {
+        MoodleUser usr = Mdl_ObtenerUsuarioByID(persona.getPerUsrModID());
+        
+        usr.setUsername(persona.getPerUsrMod());
+        usr.setEmail(persona.getPerEml());
+        usr.setFirstname(persona.getPerNom());
+        usr.setLastname(persona.getPerApe());
+        usr.setFirstname(persona.getPerNom());
+        
         try
         {
             mdlRestUser.__updateUser(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), usr);
@@ -208,6 +219,7 @@ public class LoPersona implements Interfaz.InPersona{
 
         try
         {
+
             usr = mdlRestUser.__getUserById(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), id);
         }
         catch (Exception ex)

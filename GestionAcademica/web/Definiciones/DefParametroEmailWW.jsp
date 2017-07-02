@@ -4,12 +4,16 @@
     Author     : alvar
 --%>
 
+<%@page import="Logica.LoParametroEmail"%>
+<%@page import="Entidad.ParametroEmail"%>
+<%@page import="java.util.List"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
-    
+    Utilidades utilidad              = Utilidades.GetInstancia();
+    LoParametroEmail  loParamEml     = LoParametroEmail.GetInstancia();
+    String urlSistema                = utilidad.GetUrlSistema();
+    List<ParametroEmail> lstParamEml = loParamEml.obtenerLista();
 %>
 
 <!DOCTYPE html>
@@ -18,63 +22,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Versión</title>
         <jsp:include page="/masterPage/head.jsp"/>
-        
-        <script>
-                $(document).ready(function() {
-                        MostrarCargando(false);
-                        
-                        $('#btn_guardar').click(function(event) {
-                                
-                                MostrarCargando(true);
-                                
-                    
-                                var SisVerCod   = $('#SisVerCod').val();
-                                var SisVer      = $('#SisVer').val();
-                                var SisCrgDat   = document.getElementById('SisCrgDat').checked;
-                                
-                                
-                                if(SisVerCod == '' || SisVer == '')
-                                {
-                                    MostrarMensaje("ERROR", "Completa los datos papa");
-                                    MostrarCargando(false);
-                                }
-                                else
-                                {
-                                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                                        $.post('<% out.print(urlSistema); %>AM_Version', {
-                                                pSisVerCod   : SisVerCod,
-                                                pSisCrgDat   : SisCrgDat,
-                                                pAction      : "ACTUALIZAR"
-                                        }, function(responseText) {
-                                            var obj = JSON.parse(responseText);
-                                            MostrarCargando(false);
-                                            
-                                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-
-                                        });
-                                }
-                        });
-                        
-                        $.post('<% out.print(urlSistema); %>AM_Version', {
-                            pSisVerCod : "1",        
-                            pAction : "OBTENER"
-                                }, function(responseText) {
-                                        var obj = JSON.parse(responseText);
-                                        
-                                        $('#SisVerCod').val(obj.sisVerCod);
-                                        $('#SisVer').val(obj.sisVer);
-                                        $('#SisCrgDat').prop('checked', obj.sisCrgDat);
-                                        
-                                });
-                                
-                    
-                    
-                });
-        </script>
-        
     </head>
     <body>
-        <div>
+     
             <div id="cabezal" name="cabezal">
                 <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
@@ -84,30 +34,44 @@
             </div>
 
             <div id="contenido" name="contenido" style="float: right; width: 90%;">
-                <h1>Versión</h1>
-                <form id="frm_Version" name="frm_Version">
-                    <div>
-                        <label>Código:</label>
-                        <input type="num" class="form-control" id="SisVerCod" name="SisVerCod" placeholder="Código" disabled>
-                    </div>
+                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                    <input type="hidden" name="LISTA" id="LISTA" value="">
+                </div>
+                
+                <h1>Parámetro email</h1>
+                <div> <a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a> </div>
+                
+                <table>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Servidor de correo</th>
+                        <th>Nombre del remitente</th>
+                        <th>Email del remitente</th>
+                    </tr>
+                <% for(ParametroEmail prmEml : lstParamEml)
+                    {
+                     
+                %>
+                    <tr>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
+                        <td><% out.print(utilidad.NuloToCero(prmEml.getParEmlCod())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlNom())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlSrv())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlDeNom())); %></td>
+                        <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlDeEml())); %></td>
+                    </tr>
                     
-                    <div>
-                        <label>Versión:</label>
-                        <input type="text" class="form-control" id="SisVer" name="SisVer" placeholder="Versión" disabled>
-                    </div>
-
-                    <div>
-                        <label>Datos iniciales cargados:</label>
-                        <input type="checkbox" id="SisCrgDat" name="SisCrgDat" >
-                    </div>
-
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" />
-                    </div>
-                </form>
+                <%
+                    }
+                %>
+                
+                </table>
             </div>
             
-            <div id="div_cargando" name="div_cargando"></div>
-            
+  
     </body>
 </html>
