@@ -4,8 +4,15 @@
     Author     : aa
 --%>
 
+<%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
+<%
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema   = utilidad.GetUrlSistema();
+%>
+
 <html>
   <head>
     <meta charset="utf-8">
@@ -13,23 +20,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Definición de Carreras</title>
+    <jsp:include page="/masterPage/head.jsp"/>
 
-    <!-- Bootstrap -->
-    <link href="../Bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../Estilos/EstGrid.css" rel="stylesheet">
-    <link href="../Estilos/EstBtn.css" rel="stylesheet">
+    <script>
+        $(document).ready(function() {
+            MostrarCargando(false);
 
+            $('#BtnIng').click(function() {
+                $.post('<% out.print(urlSistema); %>ABM_Carrera', {
+                        pMode: "I"
+                        
+                });
+            });
+            $('#btn_mod').click(function() {
+                $.post('<% out.print(urlSistema); %>ABM_Carrera', {
+                        pMode: "M"
+                        
+                });
+            });
+        });
+    </script> -->
+    
   </head>
   <body>
     
-    <h1></h1>
+    <div id="cabezal" name="cabezal">
+        <jsp:include page="/masterPage/cabezal.jsp"/>
+    </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../Bootstrap/js/bootstrap.min.js"></script>
+    <div style="float:left; width: 10%; height: 100%;">
+        <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+    </div>
 
-    <div class="row">
+    <div id="contenido" name="contenido" style="float: right; width: 90%;">
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default">
                 <div class="panel-heading"><h1>Definición de Carreras</h1></div>
@@ -45,7 +68,7 @@
                                 
                             </td>
                             <td style="text-align:right">
-                                <button type="submit" id="BtnIng" class="BtnAlta"></button>
+                                <button type="button" id="BtnIng" class="BtnAlta" onclick= "self.location.href ='DefCarrera.jsp'"></button>
                             </td>
                         </tr>
                         </table>
@@ -86,7 +109,7 @@
 
                                             </td>
                                             <td style="text-align:right">
-                                                <button type="submit" id="BtnBus" class="btn btn-default">Buscar</button>
+                                                <button id="BtnBus" class="btn btn-default">Buscar</button>
                                             </td>
                                         </tr>
                                     </table>
@@ -107,8 +130,8 @@
                                         </tr>
                                         <!-- Los tres registros no van, pero quedan de guía -->
                                         <tr>
-                                            <td style="text-align:center"><button type="submit" class="btn_eli"></button></td>
-                                            <td style="text-align:center"><button type="submit" class="btn_mod"></button></td>
+                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='DefCarrera.jsp'"></button></td>
+                                            <td style="text-align:center"><button type="button" class="btn_mod" onclick= "self.location.href ='DefCarrera.jsp'"></button></td>
                                             <td>1</td>
                                             <td>Analista Programador</td>
                                             <td>Ingeniería de Software</td>

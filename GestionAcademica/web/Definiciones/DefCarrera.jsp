@@ -18,6 +18,8 @@
     String urlSistema   = utilidad.GetUrlSistema();
    
     String DefCar       = "DefCarreraWW.jsp";
+    
+    String mode = (String)session.getAttribute("pModes");
 %>
 
 <html>
@@ -31,26 +33,34 @@
     <jsp:include page="/masterPage/head.jsp"/>
     
     <script>
+//            var mode = (Stsring)session.getAttribute("pModes");
             $(document).ready(function() {
                 MostrarCargando(false);
                 <%
                     Date fecha = new Date();
                     DateFormat f = new SimpleDateFormat("dd/mm/yyyy");
                     String today = f.format(fecha);
+                System.err.println("MODE ES: "+mode);
+                if (mode == "I")
+                {
                 %>
-                        
-                $('#msgFecha').hide();
+                    $('#msgFecha').hide();
+                <%
+                }
+                %>
 
-                $('#BtnAce').click(function() {
+
+                $('#BtnAceCar').click(function() {
                  MostrarCargando(true);
                     var nomVar          = $('#CarNom').val();
                     var dscVar          = $('#CarDsc').val();
                     var facVar          = $('#CarFac').val();
                     var crtVar          = $('#CarCrt').val();
-
+                    
                     if(nomVar == '')
                     {
                         MostrarMensaje("ERROR", "Deberá asignar un nombre a la Carrera");
+//                        $('#txtError').text("ESTA TIRANDO --> " + mode);
                         MostrarCargando(false);
                     }
                     else
@@ -65,6 +75,7 @@
                         }, function(responseText) {
                             var obj = JSON.parse(responseText);
                             MostrarCargando(false);
+
                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
                         });
                     }
@@ -156,7 +167,7 @@
                         <table>
                             <tr>
                                 <td style="text-align:right" class="margin">
-                                    <button type="button" id="BtnAce" class="btn btn-default">Aceptar</button>
+                                    <button type="button" id="BtnAceCar" class="btn btn-default">Aceptar</button>
                                 </td>
                                 <td>
                                 </td>

@@ -14,19 +14,19 @@
     </servlet>
     <servlet>
         <servlet-name>Login</servlet-name>
-        <servlet-class>UserInterface.Login</servlet-class>
+        <servlet-class>Servlets.Login</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AM_Version</servlet-name>
-        <servlet-class>UserInterface.AM_Version</servlet-class>
+        <servlet-class>Servlets.AM_Version</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AM_Parametro</servlet-name>
-        <servlet-class>UserInterface.AM_Parametro</servlet-class>
+        <servlet-class>Servlets.AM_Parametro</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ABM_Carrera</servlet-name>
-        <servlet-class>UserInterface.ABM_Carrera</servlet-class>
+        <servlet-class>Servlets.ABM_Carrera</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
