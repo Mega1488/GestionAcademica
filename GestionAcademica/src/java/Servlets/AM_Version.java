@@ -3,18 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UserInterface;
+package Servlets;
 
-import Entidad.Carrera;
+import Entidad.Version;
 import Enumerado.TipoMensaje;
-import Logica.LoCarrera;
+import Logica.LoVersion;
 import Utiles.Mensajes;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +19,13 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author aa
+ * @author alvar
  */
-public class ABM_Carrera extends HttpServlet {
-
-    private final Utilidades utiles = Utilidades.GetInstancia();
+public class AM_Version extends HttpServlet {
     
+    private final Utilidades utilidades = Utilidades.GetInstancia();
+    private final LoVersion loVersion   = LoVersion.GetInstancia();
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -41,77 +39,76 @@ public class ABM_Carrera extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+           
             
-            String action   = request.getParameter("pAccion");
+            String action   = request.getParameter("pAction");
             String retorno  = "";
+
             
             switch(action)
             {
-                case "INGRESAR":
-                    retorno = this.IngresarCarrera(request);
+                case "OBTENER":
+                    retorno = this.ObtnerDatos(request);
                 break;
                 
-                case "MODIFICAR":
-                    retorno = this.ModificarCarrera(request);
+                case "ACTUALIZAR":
+                    retorno = this.ActualizarDatos(request);
                 break;
-                
-                case "ELIMINAR":
-                    retorno = this.EliminarCarrera(request);
-                break;
+                        
             }
+
             out.println(retorno);
         }
     }
     
-    private String IngresarCarrera(HttpServletRequest request)
+    private String ObtnerDatos(HttpServletRequest request)
     {
-        
-        Date fecha = new Date();
-        
         String retorno = "";
-        String nom          = request.getParameter("pNom");
-        String Dsc          = request.getParameter("pDsc");
-        String Fac          = request.getParameter("pfac");
-        String Crt          = request.getParameter("pCrt");
         
-        Mensajes mensaje    = new Mensajes("...", TipoMensaje.ERROR);
-        LoCarrera loCarrera = LoCarrera.GetInstancia();
+        String SisVerCod    = request.getParameter("pSisVerCod");
+        Version version     = loVersion.obtener(Integer.valueOf(SisVerCod));
         
-        if (nom != "")
+        try
         {
-            Carrera pC = new Carrera();
-            pC.setCarNom(nom);
-            pC.setCarDsc(Dsc);
-            pC.setCarFac(Fac);
-            pC.setCarCrt(Crt);
-            pC.setObjFchMod(fecha);
-            
-            loCarrera.guardar(pC);
-            
-            mensaje = new Mensajes("Se ingresó correctametne la Carrera ", TipoMensaje.MENSAJE);
+            retorno = utilidades.ObjetoToJson(version);
         }
-        else
+        catch(Exception ex)
         {
-            mensaje = new Mensajes("Deberá ingresar un nombre a la Carrera", TipoMensaje.ERROR);
+            ex.printStackTrace();
         }
-        retorno = utiles.ObjetoToJson(mensaje);
-        
         return retorno;
-    } 
+    }
     
-    private String ModificarCarrera(HttpServletRequest request)
+    private String ActualizarDatos(HttpServletRequest request)
     {
+        Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+        
         String retorno = "";
         
-        return retorno;
-    } 
-    
-    private String EliminarCarrera(HttpServletRequest request)
-    {
-        String retorno = "";
+        String SisVerCod    = request.getParameter("pSisVerCod");
+        String SisCrgDat    = request.getParameter("pSisCrgDat");
         
+
+        Version version     = loVersion.obtener(Integer.valueOf(SisVerCod));
+        
+        
+        try
+        {
+            version.setSisCrgDat(Boolean.valueOf(SisCrgDat));
+            loVersion.actualizar(version);
+            
+            mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        
+        retorno = utilidades.ObjetoToJson(mensaje);
+
         return retorno;
-    } 
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -3,29 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package UserInterface;
+package Servlets;
 
-import Entidad.Version;
+import Entidad.Carrera;
 import Enumerado.TipoMensaje;
-import Logica.LoVersion;
+import Logica.LoCarrera;
 import Utiles.Mensajes;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author alvar
+ * @author aa
  */
-public class AM_Version extends HttpServlet {
-    
-    private final Utilidades utilidades = Utilidades.GetInstancia();
-    private final LoVersion loVersion   = LoVersion.GetInstancia();
+public class ABM_Carrera extends HttpServlet {
 
+    private final Utilidades utiles = Utilidades.GetInstancia();
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -39,75 +42,103 @@ public class AM_Version extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-           
             
-            String action   = request.getParameter("pAction");
+            String action   = request.getParameter("pAccion");
             String retorno  = "";
-
             
-            switch(action)
+            if (action != null)
             {
-                case "OBTENER":
-                    retorno = this.ObtnerDatos(request);
-                break;
-                
-                case "ACTUALIZAR":
-                    retorno = this.ActualizarDatos(request);
-                break;
-                        
+                switch(action)
+                {
+                    case "INGRESAR":
+                        retorno = this.IngresarCarrera(request);
+                    break;
+
+                    case "MODIFICAR":
+                        retorno = this.ModificarCarrera(request);
+                    break;
+
+                    case "ELIMINAR":
+                        retorno = this.EliminarCarrera(request);
+                    break;
+
+                    default:
+                        break;
+                }
+                out.println(retorno);
             }
-
-            out.println(retorno);
+            HttpSession session = request.getSession();
+            session.setAttribute("pModes", request.getParameter("pMode"));
         }
     }
     
-    private String ObtnerDatos(HttpServletRequest request)
+    private String IngresarCarrera(HttpServletRequest request)
     {
-        String retorno = "";
         
-        String SisVerCod    = request.getParameter("pSisVerCod");
-        Version version     = loVersion.obtener(Integer.valueOf(SisVerCod));
-        
-        try
-        {
-            retorno = utilidades.ObjetoToJson(version);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        return retorno;
-    }
-    
-    private String ActualizarDatos(HttpServletRequest request)
-    {
-        Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+        Date fecha = new Date();
         
         String retorno = "";
+        String nom          = request.getParameter("pNom");
+        String Dsc          = request.getParameter("pDsc");
+        String Fac          = request.getParameter("pfac");
+        String Crt          = request.getParameter("pCrt");
         
-        String SisVerCod    = request.getParameter("pSisVerCod");
-        String SisCrgDat    = request.getParameter("pSisCrgDat");
+        Mensajes mensaje    = new Mensajes("...", TipoMensaje.ERROR);
+        LoCarrera loCarrera = LoCarrera.GetInstancia();
         
-
-        Version version     = loVersion.obtener(Integer.valueOf(SisVerCod));
-        
-        
-        try
+        if (nom != "")
         {
-            version.setSisCrgDat(Boolean.valueOf(SisCrgDat));
-            loVersion.actualizar(version);
+            Carrera pC = new Carrera();
+            pC.setCarNom(nom);
+            pC.setCarDsc(Dsc);
+            pC.setCarFac(Fac);
+            pC.setCarCrt(Crt);
+            pC.setObjFchMod(fecha);
             
-            mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
+            loCarrera.guardar(pC);
+            
+            mensaje = new Mensajes("Se ingresó correctametne la Carrera ", TipoMensaje.MENSAJE);
         }
-        catch(Exception ex)
+        else
         {
-            ex.printStackTrace();
+            mensaje = new Mensajes("Deberá ingresar un nombre a la Carrera", TipoMensaje.ERROR);
         }
+        retorno = utiles.ObjetoToJson(mensaje);
         
-        retorno = utilidades.ObjetoToJson(mensaje);
-
         return retorno;
+    } 
+    
+    private String ModificarCarrera(HttpServletRequest request)
+    {
+        String retorno = "";
+        
+        return retorno;
+    } 
+    
+    private String EliminarCarrera(HttpServletRequest request)
+    {
+        String retorno = "";
+        
+        return retorno;
+    } 
+    
+    private String Mode(String md)
+    {
+        switch(md)
+        {
+            case "I":
+                md = "I";
+            break;
+                
+            case "M":
+                md = "M";
+            break;
+            
+            case "E":
+                md = "E";
+            break;
+        }
+        return md;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
