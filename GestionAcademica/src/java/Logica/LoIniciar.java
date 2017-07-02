@@ -6,11 +6,11 @@
 package Logica;
 
 import Entidad.Parametro;
+import Entidad.Persona;
 import Entidad.TipoEvaluacion;
 import Entidad.Version;
-import Logica.LoVersion;
 import Enumerado.Constantes;
-import Utiles.Utilidades;
+import Enumerado.Filial;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -62,6 +62,7 @@ public class LoIniciar {
         CargarTipoEvaluacion();
         CargarParametros();
         CargarUrlSistema(request);
+        CargarUsuarioAdministrador();
         
         version.setSisCrgDat(Boolean.TRUE);
         loVersion.actualizar(version);
@@ -149,4 +150,31 @@ public class LoIniciar {
         LoPersona persona = LoPersona.GetInstancia();
         persona.SincronizarUsuariosMoodleSistema();
     }    
+    
+    private void CargarUsuarioAdministrador(){
+        LoPersona loPersona   = LoPersona.GetInstancia();
+        Persona persona     = new Persona();
+        persona.setPerCod(1);
+        persona = loPersona.obtener(persona);
+        
+        if(persona == null)
+        {
+            persona     = new Persona();
+
+            persona.setPerApe("Administrador");
+            persona.setPerCntIntLgn(0);
+            persona.setPerEml("administrador@administrador.com");
+            persona.setPerEsAdm(Boolean.TRUE);
+            persona.setPerEsAlu(Boolean.FALSE);
+            persona.setPerEsDoc(Boolean.FALSE);
+            persona.setPerFil(Filial.COLONIA);
+            persona.setPerNom("Administrador");
+            persona.setPerNotApp(Boolean.TRUE);
+            persona.setPerNotEml(Boolean.TRUE);
+            persona.setPerUsrMod("sga_admin");
+            persona.setPerPass(Seguridad.GetInstancia().cryptWithMD5("admin"));
+            
+            loPersona.guardar(persona);
+        }
+    }
 }

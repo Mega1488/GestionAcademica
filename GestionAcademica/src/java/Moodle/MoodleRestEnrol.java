@@ -281,8 +281,10 @@ public class MoodleRestEnrol implements Serializable {
               user.setMoodleUserField(nodeName, content);
             } else {
               if (parent.equals("roles")) {
+                  System.err.println("---------------------------------------------");
                 if (nodeName.equals("roleid")) {
-                  role=new UserRole();
+                    
+                    role=new UserRole();
                   role.setRoleId(Long.parseLong(content));
                   user.addRole(role);
                 } else {
@@ -290,6 +292,7 @@ public class MoodleRestEnrol implements Serializable {
                 }
               } else {
                 if (parent.equals("enrolledcourses")) {
+                    System.err.println("--------------------------------------------->");
                   if (nodeName.equals("id")) {
                     course=new UserEnrolledCourse();
                     course.setId(Long.parseLong(content));

@@ -6,9 +6,6 @@
 package Persistencia;
 
 import Entidad.Parametro;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

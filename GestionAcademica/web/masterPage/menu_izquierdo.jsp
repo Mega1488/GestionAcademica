@@ -14,6 +14,8 @@
     String parametro    = "'" + urlSistema + "Definiciones/DefParametro.jsp'";
     String parametroEml = "'" + urlSistema + "Definiciones/DefParametroEmailWW.jsp'";
     String persona      = "'" + urlSistema + "Definiciones/DefPersonaWW.jsp'";
+    
+    String prueba      = "'" + urlSistema + "Prueba'";
 %>
     
 <div >
@@ -32,7 +34,7 @@
         <a href=<% out.print(persona); %>>Persona</a>
     </li>
     <li>
-        <a href="#"> Menu tres </a>
+        <a href=<% out.print(prueba); %>> Prueba </a>
     </li>
 </ul>
 
