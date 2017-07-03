@@ -15,6 +15,7 @@ import Logica.LoParametro;
 import Logica.LoPersona;
 import Logica.Seguridad;
 import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -95,8 +96,8 @@ public class ABM_Persona extends HttpServlet {
 
                 if(!error)
                 {
-                    loPersona.guardar(persona);
-                    mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPersona.guardar(persona);
+                    mensaje    = retornoObj.getMensaje();
                 }
             }
             catch(Exception ex)
@@ -141,8 +142,8 @@ public class ABM_Persona extends HttpServlet {
 
                 if(!error)
                 {
-                    loPersona.actualizar(persona);
-                    mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPersona.actualizar(persona);
+                    mensaje    = retornoObj.getMensaje();
                 }
             }
             catch(Exception ex)
@@ -175,8 +176,8 @@ public class ABM_Persona extends HttpServlet {
                 
                 if(!error)
                 {
-                    loPersona.eliminar(persona);
-                    mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPersona.eliminar(persona);
+                    mensaje    = retornoObj.getMensaje();
                 }
 
                 

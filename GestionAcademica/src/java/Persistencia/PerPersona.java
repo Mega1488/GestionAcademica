@@ -47,7 +47,7 @@ public class PerPersona implements Interfaz.InPersona{
         System.err.println("Persona filial_ " + pObjeto.getPerFil());
         try {
             iniciaOperacion();
-            sesion.save(pObjeto);
+            pObjeto.setPerCod((int) sesion.save(pObjeto));
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -61,36 +61,62 @@ public class PerPersona implements Interfaz.InPersona{
     }
 
     @Override
-    public void actualizar(Persona pObjeto) {
+    public Object actualizar(Persona pObjeto) {
+        boolean error = false;
         try {
             pObjeto.setObjFchMod(new Date());
             iniciaOperacion();
             sesion.update(pObjeto);
             tx.commit();
         } catch (HibernateException he) {
+            error = true;
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+        
+        return error;
     }
 
     @Override
-    public void eliminar(Persona pObjeto) {
+    public Object eliminar(Persona pObjeto) {
+       boolean error = false;
+           try {
+                iniciaOperacion();
+                sesion.delete(pObjeto);
+                tx.commit();
+
+                //Agregar objeto eliminado a la tabla de sincronización
+                //-
+
+            } catch (HibernateException he) {
+                error = true;
+                manejaExcepcion(he);
+                throw he;
+            } finally {
+                sesion.close();
+            }
+         return error;       
+    }
+    
+    public boolean ValidarEliminacion(Persona pObjeto)
+    {
+       boolean error = false;
         try {
             iniciaOperacion();
             sesion.delete(pObjeto);
-            tx.commit();
-            
-            //Agregar objeto eliminado a la tabla de sincronización
-            //-
+            tx.rollback();
             
         } catch (HibernateException he) {
+            error = true;
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+                
+         return error;       
     }
 
     @Override
@@ -167,5 +193,17 @@ public class PerPersona implements Interfaz.InPersona{
         
         System.err.println("ID: " + retorno);
         return retorno;
+    }
+    
+    public List<Persona> obtenerByEmail(String pEmail) {
+        List<Persona> listaObjeto = new ArrayList<Persona>(); 
+        try {
+            iniciaOperacion();
+            listaObjeto = sesion.getNamedQuery("Persona.findByEmail").setParameter("PerEml", pEmail).setMaxResults(1).list();
+        } finally {
+            sesion.close();
+        }
+        
+        return listaObjeto;
     }
 }

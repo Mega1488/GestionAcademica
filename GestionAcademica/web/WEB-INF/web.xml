@@ -26,7 +26,7 @@
     </servlet>
     <servlet>
         <servlet-name>ABM_ParametroEmail</servlet-name>
-        <servlet-class>UserInterface.ABM_ParametroEmail</servlet-class>
+        <servlet-class>Servlets.ABM_ParametroEmail</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ABM_Carrera</servlet-name>
@@ -34,7 +34,7 @@
     </servlet>
     <servlet>
         <servlet-name>ABM_Persona</servlet-name>
-        <servlet-class>UserInterface.ABM_Persona</servlet-class>
+        <servlet-class>Servlets.ABM_Persona</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>

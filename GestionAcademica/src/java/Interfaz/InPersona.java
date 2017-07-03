@@ -14,8 +14,8 @@ import java.util.List;
  */
 public interface InPersona {
     Object guardar(Persona pObjeto);
-    void actualizar(Persona pObjeto);
-    void eliminar(Persona pObjeto);
+    Object actualizar(Persona pObjeto);
+    Object eliminar(Persona pObjeto);
     Persona obtener(Object pCodigo);
     Persona obtenerByMdlUsr(String pMdlUsr);
     List<Persona> obtenerLista();
