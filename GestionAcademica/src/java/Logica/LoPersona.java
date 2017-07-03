@@ -70,7 +70,7 @@ public class LoPersona implements Interfaz.InPersona{
         Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
         Retorno_MsgObj retorno  = new Retorno_MsgObj();
         
-        if(perPersona.obtenerByEmail(pObjeto.getPerEml()).size() > 0)
+        if(perPersona.obtenerByEmail(pObjeto.getPerEml()).getPerCod() != null)
         {
             mensaje = new Mensajes("El email ya existe", TipoMensaje.ERROR);
             error   = true;
@@ -119,14 +119,13 @@ public class LoPersona implements Interfaz.InPersona{
         Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
         Retorno_MsgObj retorno  = new Retorno_MsgObj();
         
-        if(perPersona.obtenerByEmail(pObjeto.getPerEml()).size() > 0)
+        if(perPersona.obtenerByEmail(pObjeto.getPerEml()).getPerCod() != null && perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != pObjeto.getPerCod())
         {
             mensaje = new Mensajes("El email ya existe", TipoMensaje.ERROR);
             error   = true;
         }
         
-        System.err.println("Usuario " + perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod());
-        if(perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != null)
+        if(perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != null && perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != pObjeto.getPerCod())
         {
             mensaje = new Mensajes("El usuario ya existe", TipoMensaje.ERROR);
             error   = true;
@@ -135,7 +134,7 @@ public class LoPersona implements Interfaz.InPersona{
 
         if(!error)
         {
-            Persona sinModificar = perPersona.obtener(pObjeto.getPerCod());
+            Persona sinModificar = perPersona.obtener(pObjeto);
             
             error = (boolean) perPersona.actualizar(pObjeto);
             
@@ -169,18 +168,18 @@ public class LoPersona implements Interfaz.InPersona{
        Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
        Retorno_MsgObj retorno  = new Retorno_MsgObj();
        
-       if(perPersona.ValidarEliminacion(pObjeto))
+       if(!perPersona.ValidarEliminacion(pObjeto))
        {
            mensaje = this.Mdl_EliminarUsuario(pObjeto);
 
-        if(mensaje.getTipoMensaje() != TipoMensaje.ERROR)
-        {
-            error = (boolean) perPersona.eliminar(pObjeto);
-            if(error)
+            if(mensaje.getTipoMensaje() != TipoMensaje.ERROR)
             {
-                mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
+                error = (boolean) perPersona.eliminar(pObjeto);
+                if(error)
+                {
+                    mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
+                }
             }
-        }
        }
        else
        {

@@ -191,11 +191,11 @@ public class PerPersona implements Interfaz.InPersona{
             retorno = objeto.getPerCod() + 1;
         }
         
-        System.err.println("ID: " + retorno);
         return retorno;
     }
     
-    public List<Persona> obtenerByEmail(String pEmail) {
+    public Persona obtenerByEmail(String pEmail) {
+        Persona retorno = new Persona();
         List<Persona> listaObjeto = new ArrayList<Persona>(); 
         try {
             iniciaOperacion();
@@ -204,6 +204,9 @@ public class PerPersona implements Interfaz.InPersona{
             sesion.close();
         }
         
-        return listaObjeto;
+        if (!listaObjeto.isEmpty()){
+            retorno = listaObjeto.get(0);
+        }
+        return retorno;
     }
 }
