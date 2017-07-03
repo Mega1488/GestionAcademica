@@ -288,7 +288,6 @@ public class MoodleRestUser implements Serializable {
                 }
             }
             data.trimToSize();
-            System.err.println("-->" + data.toString());
             
             (new MoodleCallRestWebService()).__call(url,data.toString());
         }  catch (UnsupportedEncodingException ex) {

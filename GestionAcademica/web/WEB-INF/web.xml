@@ -31,7 +31,6 @@
     <servlet>
         <servlet-name>ABM_Carrera</servlet-name>
         <servlet-class>Servlets.ABM_Carrera</servlet-class>
-        <servlet-class>UserInterface.ABM_Carrera</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ABM_Persona</servlet-name>

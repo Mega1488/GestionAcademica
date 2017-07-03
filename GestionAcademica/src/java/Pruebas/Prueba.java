@@ -15,14 +15,21 @@ import Moodle.MoodleRestCourse;
 import Moodle.MoodleRestEnrol;
 import Moodle.MoodleRestEnrolException;
 import Moodle.MoodleRestException;
+import Moodle.MoodleRestUser;
+import Moodle.MoodleRestUserEnrolment;
+import Moodle.MoodleRestUserEnrolmentException;
 import Moodle.MoodleUser;
+import Moodle.MoodleUserEnrolment;
 import Moodle.MoodleUserRoleException;
 import Moodle.OptionParameter;
+import Moodle.Role;
+import Moodle.UserRole;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -68,36 +75,90 @@ public class Prueba extends HttpServlet {
     
     public void Probar(){
         
+        LoParametro loParam = LoParametro.GetInstancia();
+        Parametro parametro = loParam.obtener(1);
+        MoodleRestUser mdlUser = new MoodleRestUser();
+        
+        
         try {
-            LoParametro loParam = LoParametro.GetInstancia();
-            Parametro parametro = loParam.obtener(1);
             
-            MoodleRestEnrol mdlEnrol = new  MoodleRestEnrol();
-            MoodleRestCourse mdlCourse = new MoodleRestCourse();
+            
+            
+            
+            MoodleRestEnrol mdlEnrol    = new  MoodleRestEnrol();
+            MoodleRestCourse mdlCourse  = new MoodleRestCourse();
             
             MoodleCourse[] lstCurso = mdlCourse.__getAllCourses(parametro.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), parametro.getParMdlTkn());
+            
+            System.err.println("Cursos: " + lstCurso.length);
+            
             
             for(int i = 0; i<lstCurso.length; i++)
             {
                 MoodleCourse curso = lstCurso[i];
-                System.err.println("curso: " + curso.getIdNumber() + " - "  + curso.getId() + " - " + curso.getFullname());
                 
-                OptionParameter[] options = null;
-                
-                MoodleUser[] lstUser = mdlEnrol.__getEnrolledUsers(parametro.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), parametro.getParMdlTkn(), curso.getId(), options);
-                
-                for(int e = 0; e < lstUser.length; e++)
+                MoodleUser[] lstUser = mdlEnrol.__getEnrolledUsers(parametro.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), parametro.getParMdlTkn(), curso.getId(), null);
+               
+                if(lstUser != null)
                 {
-                    MoodleUser user = lstUser[e];
-                    System.err.println("Usuario " + user.getFullname());
-                    System.err.println("Tamaño: " + user.getRoles().size());
+                    System.err.println("Curso: " + curso.getFullname() + " ID: " + curso.getId() + " Usuarios: " + lstUser.length);
+                    
+                        for(int e = 0; e < lstUser.length; e++)
+                        {
+                            MoodleUser mdlUsr = lstUser[e];
+                            System.err.println("Usuario: " + mdlUsr.getFullname() + " Roles: " + mdlUsr.getRoles().size());
+                            
+                            ArrayList<UserRole> roles = mdlUsr.getRoles();
+                            
+                            for(UserRole userRole : roles)
+                            {
+                                System.err.println("Rol Nombre: " + userRole.getName());
+                                System.err.println("Rol ShortNombre: " + userRole.getShortName());
+                                System.err.println("Rol ID: " + userRole.getRoleId());
+                                System.err.println("Rol Role: " + userRole.getRole());
+                                System.err.println("Rol Role name: " + userRole.getRole().name());
+                            }
+                            
+                        }
                 }
                 
+            }   
+/*
+            OptionParameter[] options = null;
+            
+            MoodleUser[] lstUser = mdlEnrol.__getEnrolledUsers(parametro.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), parametro.getParMdlTkn(), curso.getId(), options);
+            
+            for(int e = 0; e < lstUser.length; e++)
+            {
+            MoodleUser user = lstUser[e];
+            System.err.println("Usuario " + user.getFullname());
+            System.err.println("Roles: " + user.getRoles().size());
+            
+            
+            MoodleUserEnrolment enrolUser = new MoodleUserEnrolment();
+            enrolUser.setCourseId(curso.getId());
+            enrolUser.setRoleId(1);
+            enrolUser.setSuspend(0);
+            enrolUser.setUserId(user.getId());
+            MoodleUserEnrolment[] usersEnrol = {enrolUser};
+            
+            
+            //MoodleRestUserEnrolment enrol = new MoodleRestUserEnrolment();
+            //enrol.__enrolUsers(parametro.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), parametro.getParMdlTkn(), usersEnrol);
+            
+            if(user.getEnrolledCourses().size()>0)
+            {
+            System.err.println("Course: " + user.getEnrolledCourses().get(0).getFullName());
+            System.err.println("Course: " + user.getEnrolledCourses().get(0).getShortName());
             }
             
-        } catch (MoodleRestException ex) {
-            Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            }
+            */
         } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MoodleRestException ex) {
             Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MoodleUserRoleException ex) {
             Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);

@@ -9,12 +9,22 @@ import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
 import Moodle.Criteria;
+import Moodle.MoodleCourse;
+import Moodle.MoodleRestCourse;
+import Moodle.MoodleRestEnrol;
+import Moodle.MoodleRestEnrolException;
+import Moodle.MoodleRestException;
 import Moodle.MoodleRestUser;
 import Moodle.MoodleUser;
+import Moodle.MoodleUserRoleException;
+import Moodle.UserRole;
 import Persistencia.PerPersona;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +35,8 @@ public class LoPersona implements Interfaz.InPersona{
     private static LoPersona        instancia;
     private final PerPersona        perPersona;
     private final MoodleRestUser    mdlRestUser;
+    private final MoodleRestEnrol   mdlEnrol;
+    private final MoodleRestCourse  mdlCourse;
     private final Parametro         param;
     private final Seguridad         seguridad;
 
@@ -34,6 +46,9 @@ public class LoPersona implements Interfaz.InPersona{
         param               = loParam.obtener(1);
         mdlRestUser         = new MoodleRestUser();
         seguridad           = Seguridad.GetInstancia();
+        mdlEnrol            = new  MoodleRestEnrol();
+        mdlCourse           = new MoodleRestCourse();
+    
     }
     
     public static LoPersona GetInstancia(){
@@ -137,15 +152,72 @@ public class LoPersona implements Interfaz.InPersona{
  
                 if(persona.getPerCod() == null)
                 {
+                    persona.setPerPass(seguridad.cryptWithMD5("admin"));
                     this.guardar(persona);
                 }
                 else
                 {
-                    persona.setPerPass(seguridad.cryptWithMD5("admin"));
                     this.actualizar(persona);
                 }
             }
         }
+        
+        ActualizarTipoUsuarioMdl();
+    }
+    
+    private void ActualizarTipoUsuarioMdl()
+    {
+        try {
+            MoodleCourse[] lstCurso = mdlCourse.__getAllCourses(param.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn());
+            
+            for(int i = 0; i<lstCurso.length; i++)
+            {
+                MoodleCourse curso      = lstCurso[i];
+                MoodleUser[] lstUser    = mdlEnrol.__getEnrolledUsers(param.getParUrlMdl()+ Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), curso.getId(), null);
+               
+                if(lstUser != null)
+                {
+                    for(int e = 0; e < lstUser.length; e++)
+                    {
+                        MoodleUser mdlUsr           = lstUser[e];
+                        ArrayList<UserRole> roles   = mdlUsr.getRoles();
+
+                        Persona persona = this.obtenerByMdlUsr(mdlUsr.getUsername());
+                        
+                        if(!persona.getPerEsAdm())
+                        {
+                            persona.setPerEsAdm(Boolean.FALSE);
+                            persona.setPerEsDoc(Boolean.FALSE);
+                        }
+
+                        for(UserRole userRole : roles)
+                        {
+                            switch(userRole.getRole())
+                            {
+                                case STUDENT:
+                                    persona.setPerEsAlu(Boolean.TRUE);
+                                    break;
+                                case TEACHER:
+                                    persona.setPerEsDoc(Boolean.TRUE);
+                                    break;
+                            }
+                        }
+                        
+                        perPersona.actualizar(persona);
+
+                    }
+                }
+                
+            }
+            
+        } catch (MoodleRestException ex) {
+            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MoodleUserRoleException ex) {
+            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
     private List<Persona> MdlObtenerUsuarios()
