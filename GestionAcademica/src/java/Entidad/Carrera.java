@@ -51,7 +51,7 @@ public class Carrera implements Serializable {
     @Column(name = "CarCrt", length = 255)
     private String CarCrt;
     @Column(name = "CarCatCod")
-    private Integer CarCatCod;
+    private Long CarCatCod;
     @Column(name = "ObjFchMod")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
@@ -64,7 +64,7 @@ public class Carrera implements Serializable {
     public Carrera() {
     }
 
-    public Carrera(Integer CarCod, String CarNom, String CarDsc, String CarFac, String CarCrt, Integer CarCatCod, Date ObjFchMod) {
+    public Carrera(Integer CarCod, String CarNom, String CarDsc, String CarFac, String CarCrt, Long CarCatCod, Date ObjFchMod) {
         this.CarCod = CarCod;
         this.CarNom = CarNom;
         this.CarDsc = CarDsc;
@@ -117,11 +117,11 @@ public class Carrera implements Serializable {
         this.CarCrt = CarCrt;
     }
 
-    public Integer getCarCatCod() {
+    public Long getCarCatCod() {
         return CarCatCod;
     }
 
-    public void setCarCatCod(Integer CarCatCod) {
+    public void setCarCatCod(Long CarCatCod) {
         this.CarCatCod = CarCatCod;
     }
 

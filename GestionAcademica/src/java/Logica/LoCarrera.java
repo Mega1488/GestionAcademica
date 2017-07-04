@@ -6,8 +6,14 @@
 package Logica;
 
 import Entidad.Carrera;
+import Utiles.Mensajes;
+import Entidad.Parametro;
+import Enumerado.Constantes;
+import Enumerado.TipoMensaje;
+import Moodle.MoodleRestCourse;
 import Moodle.MoodleCategory;
 import Persistencia.PerCarrera;
+import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,12 +24,15 @@ import java.util.List;
 public class LoCarrera implements Interfaz.InCarrera{
     private static LoCarrera        instancia;
     private final PerCarrera        perCarrera;
-    private final MoodleCategory    mdlCategory;
-    
+    private final MoodleRestCourse  mdlRestCourse;
+    private final Parametro         param;
+    private final LoCategoria       loCategoria;
     
     private LoCarrera(){
-        perCarrera  = new PerCarrera();
-        mdlCategory = new MoodleCategory();
+        perCarrera      = new PerCarrera();
+        mdlRestCourse   = new MoodleRestCourse();
+        param           = new Parametro();
+        loCategoria     = LoCategoria.GetInstancia();
     }
     
     public static LoCarrera GetInstancia(){
@@ -35,19 +44,86 @@ public class LoCarrera implements Interfaz.InCarrera{
     
     @Override
     public Object guardar(Carrera pCarrera) {
-        return perCarrera.guardar(pCarrera);
+        boolean error           = false;
+        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        Mensajes mensaje = new Mensajes("Error", TipoMensaje.ERROR);
+
+        Object objeto = null;
+
+        if(pCarrera.getCarCatCod() != null && param.getParUtlMdl())
+        {
+            if(!this.Mdl_ValidarCategoria(pCarrera.getCarCatCod()))
+            {
+                error = true;
+                mensaje = new Mensajes("Categoría no valida", TipoMensaje.ERROR);
+            }
+        }
+
+        if(!error)
+        {
+            objeto = perCarrera.guardar(pCarrera);
+
+            if(((Carrera) objeto).getCarCod() == null)
+            {
+                mensaje = new Mensajes("Error al guardar", TipoMensaje.ERROR);
+            }
+            else
+            {
+                mensaje = new Mensajes("La Carrera fue Ingresada", TipoMensaje.MENSAJE);
+
+                if(param.getParUtlMdl())
+                {
+                    mensaje = this.Mdl_AgregarCategoria(pCarrera);
+
+                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
+                    {
+                        this.eliminar((Carrera) objeto);
+                    }
+                }
+            }
+        }
+        retorno = new Retorno_MsgObj(mensaje, objeto);
+        return retorno;
     }
 
     @Override
     public Object actualizar(Carrera pCarrera) {
-        perCarrera.actualizar(pCarrera);
-        return null;
+        
+        boolean error       = false;
+        Carrera carr        = perCarrera.obtener(pCarrera);
+        Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
+        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        
+        error = (boolean) perCarrera.actualizar(pCarrera);
+
+        if(!error)
+        {
+            mensaje = new Mensajes("Cambios aplicados", TipoMensaje.MENSAJE);
+
+            if(param.getParUtlMdl())
+            {
+                mensaje = this.Mdl_ActualizarCarrera(pCarrera);
+
+                if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
+                {
+                    this.actualizar(carr);
+                }
+            }
+        }
+        else
+        {
+            mensaje = new Mensajes("Error al aplicar cambios", TipoMensaje.ERROR);
+        }
+        retorno = new Retorno_MsgObj(mensaje, null);
+        return retorno;
     }
 
     @Override
     public Object eliminar(Carrera pCarrera) {
+        boolean error = false;
         perCarrera.eliminar(pCarrera);
-        return null;
+        
+        return false;
     }
 
     @Override
@@ -69,67 +145,66 @@ public class LoCarrera implements Interfaz.InCarrera{
     //-Modle
     //----------------------------------------------------------------------------------------------------
     
-//    public void SincronizarUsuariosMoodleSistema()
-//    {
-//        List<Carrera> lstCarreras = this.MdlObtenerCarreras();
-//        
-//        for(Carrera carrera : lstCarreras)
-//        {
-//            if(!carrera.getCarCatCod().equals("") )
-//            {
-//                if(carrera.getCarCod() == null)
-//                {
-//                    this.guardar(carrera);
-//                }
-//                else
-//                {
-////                    persona.setPerPass(seguridad.cryptWithMD5("admin"));
-//                    this.actualizar(carrera);
-//                }
-//            }
-//        }
-//    }
+    //impacta la carrera como una categoría en moodle
+    public Mensajes Mdl_AgregarCategoria(Carrera pCarrera)
+    {
+        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Retorno_MsgObj retorno  = loCategoria.Mdl_AgregarCategoria(pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
+        
+        if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
+        {
+            mensaje = retorno.getMensaje();
+        }
+        else
+        {
+            MoodleCategory category = (MoodleCategory)retorno.getObjeto();
+            
+            pCarrera.setCarCatCod(category.getId());
+            
+            this.actualizar(pCarrera);
+            
+            mensaje = new Mensajes("Cambios Correctos", TipoMensaje.MENSAJE);
+        }
+        return mensaje;
+    }
     
-//    private List<Carrera> MdlObtenerCarreras()
-//    {
-//        List<Carrera> lstCarreras = new ArrayList<>();
-//        
+    public Boolean Mdl_ValidarCategoria(Long cod)
+    {
+        MoodleCategory category = loCategoria.Mdl_ObtenerCategoria(cod);
+        return (category != null);
+    }
+    
+    public Mensajes Mdl_ActualizarCarrera(Carrera pCarrera)
+    {
+        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        MoodleCategory category = Mdl_ObtenerCategoiaByID(pCarrera.getCarCatCod());
+        
+        category.setName(pCarrera.getCarNom());
+        category.setDescription(pCarrera.getCarDsc());
+ 
 //        try
 //        {
-//            Criteria criteria = new Criteria();
-//
-//            criteria.setKey("name");
-//            criteria.setValue("");
-//
-//            Criteria[] lstCriteria   = new Criteria[1];
-//            lstCriteria[0]           = criteria;
-//            MoodleUser[] lstUsr = mdlRestUser.__getUsers(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), lstCriteria);
-//
-//
-//             for(MoodleUser usr: lstUsr)
-//             {
-//                Persona persona = Mdl_UsuarioToPersona(usr);
-//                lstPersonas.add(persona);
-//             }
+//            
 //        }
 //        catch(Exception ex)
 //        {
 //            ex.printStackTrace();
 //        }
-//
-//
-//        return lstCarreras;
-//    }
-    
-    public void guardarCarreraCategoria()
-    {
-    
+        return mensaje;
     }
     
-    public void ObtenerIdCategoria()
+    private MoodleCategory Mdl_ObtenerCategoiaByID(Long id)
     {
-//        MoodleCategory Cat = new MoodleCategory();
+        MoodleCategory category = new MoodleCategory();
         
-        
+        try
+        {
+//            category = mdlRestCourse.__createCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), category);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return category;
     }
 }
