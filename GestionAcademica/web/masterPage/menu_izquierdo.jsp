@@ -20,6 +20,8 @@
     
     String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
     
+    String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
+    
     String prueba      = "'" + urlSistema + "Prueba'";
 %>
     
