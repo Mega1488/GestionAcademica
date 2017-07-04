@@ -47,9 +47,6 @@
     <li>
         <a href=<% out.print(prueba); %>> Futura Pag </a>
     </li>
-        <li>
-        <a href="#"> Prueba_Push_y_Pull </a>
-    </li>
 </ul>
 
 </div>
