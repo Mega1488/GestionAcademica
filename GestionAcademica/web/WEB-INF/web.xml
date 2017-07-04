@@ -17,6 +17,10 @@
         <servlet-class>Servlets.Login</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ABM_Curso</servlet-name>
+        <servlet-class>Servlets.ABM_Curso</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>AM_Version</servlet-name>
         <servlet-class>Servlets.AM_Version</servlet-class>
     </servlet>
@@ -67,6 +71,10 @@
     <servlet-mapping>
         <servlet-name>ABM_Persona</servlet-name>
         <url-pattern>/ABM_Persona</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ABM_Curso</servlet-name>
+        <url-pattern>/ABM_Curso</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

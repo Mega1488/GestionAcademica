@@ -16,6 +16,8 @@
     String persona      = "'" + urlSistema + "Definiciones/DefPersonaWW.jsp'";
     String carrera      = "'" + urlSistema + "Definiciones/DefCarreraWW.jsp'";
     
+    String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
+    
     String prueba      = "'" + urlSistema + "Prueba'";
 %>
     
@@ -36,6 +38,7 @@
     </li>
     <li>
         <a href=<% out.print(carrera); %>> Carrera </a>
+        <a href=<% out.print(curso); %>>Curso</a>
     </li>
     <li>
         <a href=<% out.print(prueba); %>> Prueba </a>

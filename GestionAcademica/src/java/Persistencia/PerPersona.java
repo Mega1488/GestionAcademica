@@ -44,7 +44,6 @@ public class PerPersona implements Interfaz.InPersona{
 
         pObjeto.setObjFchMod(new Date());
         
-        System.err.println("Persona filial_ " + pObjeto.getPerFil());
         try {
             iniciaOperacion();
             pObjeto.setPerCod((int) sesion.save(pObjeto));
