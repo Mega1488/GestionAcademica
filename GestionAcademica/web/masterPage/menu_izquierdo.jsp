@@ -15,11 +15,6 @@
     String parametroEml = "'" + urlSistema + "Definiciones/DefParametroEmailWW.jsp'";
     String persona      = "'" + urlSistema + "Definiciones/DefPersonaWW.jsp'";
     String carrera      = "'" + urlSistema + "Definiciones/DefCarreraWW.jsp'";
-    
-    String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
-    
-    String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
-    
     String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
     
     String prueba      = "'" + urlSistema + "Prueba'";
