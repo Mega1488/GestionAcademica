@@ -11,6 +11,8 @@
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
+    
+//    String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCarrera.jsp');";
 %>
 
 <html>
@@ -23,23 +25,9 @@
     <jsp:include page="/masterPage/head.jsp"/>
 
     <script>
-        $(document).ready(function() {
-            MostrarCargando(false);
-
-            $('#BtnIng').click(function() {
-                $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                        pMode: "I"
-                        
-                });
-            });
-            $('#btn_mod').click(function() {
-                $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                        pMode: "M"
-                        
-                });
-            });
-        });
-    </script> -->
+        //----------------------------------------
+        //----------------------------------------
+    </script>
     
   </head>
   <body>
@@ -68,7 +56,7 @@
                                 
                             </td>
                             <td style="text-align:right">
-                                <button type="button" id="BtnIng" class="BtnAlta" onclick= "self.location.href ='DefCarrera.jsp'"></button>
+                                <button type="button" id="BtnIng" class="BtnAlta" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>'"></button>
                             </td>
                         </tr>
                         </table>
@@ -130,8 +118,8 @@
                                         </tr>
                                         <!-- Los tres registros no van, pero quedan de guía -->
                                         <tr>
-                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='DefCarrera.jsp'"></button></td>
-                                            <td style="text-align:center"><button type="button" class="btn_mod" onclick= "self.location.href ='DefCarrera.jsp'"></button></td>
+                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>'"></button></td>
+                                            <td style="text-align:center"><button type="button" class="btn_mod" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>'"></button></td>
                                             <td>1</td>
                                             <td>Analista Programador</td>
                                             <td>Ingeniería de Software</td>

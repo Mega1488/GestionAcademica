@@ -14,8 +14,8 @@ import java.util.List;
  */
 public interface InCarrera {
     Object guardar(Carrera pObjeto);
-    void actualizar(Carrera pObjeto);
-    void eliminar(Carrera pObjeto);
+    Object actualizar(Carrera pObjeto);
+    Object eliminar(Carrera pObjeto);
     Carrera obtener(Carrera pCodigo);
     Carrera obtenerByMdlUsr(String pMdlUsr);
     List<Carrera> obtenerLista();

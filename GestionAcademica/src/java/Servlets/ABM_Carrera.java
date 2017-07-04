@@ -27,6 +27,11 @@ import javax.servlet.http.HttpSession;
  */
 public class ABM_Carrera extends HttpServlet {
 
+    Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
+    String retorno;
+    Date fecha = new Date();
+    LoCarrera loCarrera = LoCarrera.GetInstancia();
+    
     private final Utilidades utiles = Utilidades.GetInstancia();
     
     /**
@@ -45,46 +50,35 @@ public class ABM_Carrera extends HttpServlet {
             
             String action   = request.getParameter("pAccion");
             String retorno  = "";
-            
-            if (action != null)
+           
+            System.out.println("ACCION: "+ action);
+            switch(action)
             {
-                switch(action)
-                {
-                    case "INGRESAR":
-                        retorno = this.IngresarCarrera(request);
-                    break;
+                case "INGRESAR":
+                    retorno = this.IngresarCarrera(request);
+                break;
 
-                    case "MODIFICAR":
-                        retorno = this.ModificarCarrera(request);
-                    break;
+                case "MODIFICAR":
+                    retorno = this.ModificarCarrera(request);
+                break;
 
-                    case "ELIMINAR":
-                        retorno = this.EliminarCarrera(request);
-                    break;
+                case "ELIMINAR":
+                    retorno = this.EliminarCarrera(request);
+                break;
 
-                    default:
-                        break;
-                }
-                out.println(retorno);
+                default:
+                    break;
             }
-            HttpSession session = request.getSession();
-            session.setAttribute("pModes", request.getParameter("pMode"));
+            out.println(retorno);
         }
     }
     
     private String IngresarCarrera(HttpServletRequest request)
     {
-        
-        Date fecha = new Date();
-        
-        String retorno = "";
         String nom          = request.getParameter("pNom");
         String Dsc          = request.getParameter("pDsc");
         String Fac          = request.getParameter("pfac");
         String Crt          = request.getParameter("pCrt");
-        
-        Mensajes mensaje    = new Mensajes("...", TipoMensaje.ERROR);
-        LoCarrera loCarrera = LoCarrera.GetInstancia();
         
         if (nom != "")
         {
@@ -110,36 +104,50 @@ public class ABM_Carrera extends HttpServlet {
     
     private String ModificarCarrera(HttpServletRequest request)
     {
-        String retorno = "";
+        String nom          = request.getParameter("pNom");
+        String Dsc          = request.getParameter("pDsc");
+        String Fac          = request.getParameter("pfac");
+        String Crt          = request.getParameter("pCrt");
         
+        if (nom != "")
+        {
+            Carrera pC = new Carrera();
+            pC.setCarNom(nom);
+            pC.setCarDsc(Dsc);
+            pC.setCarFac(Fac);
+            pC.setCarCrt(Crt);
+            pC.setObjFchMod(fecha);
+            
+            loCarrera.actualizar(pC);
+            
+            mensaje = new Mensajes("Se ingresó correctametne la Carrera", TipoMensaje.MENSAJE);
+        }
+        else
+        {
+            mensaje = new Mensajes("La carrera debe tener un Nombre", TipoMensaje.ERROR);
+        }
         return retorno;
     } 
     
     private String EliminarCarrera(HttpServletRequest request)
-    {
-        String retorno = "";
+    {   
+        String cod  = request.getParameter("pCod");
         
+        if (cod != "")
+        {
+            Carrera pC = new Carrera();
+            pC.setCarCod(Integer.valueOf(cod));
+            
+            loCarrera.eliminar(pC);
+            
+            mensaje = new Mensajes("La carrera fue Eliminada", TipoMensaje.MENSAJE);
+        }
+        else
+        {
+            mensaje = new Mensajes("Hubieron problemas que impidieron eliminar la carrera", TipoMensaje.ERROR);
+        }
         return retorno;
     } 
-    
-    private String Mode(String md)
-    {
-        switch(md)
-        {
-            case "I":
-                md = "I";
-            break;
-                
-            case "M":
-                md = "M";
-            break;
-            
-            case "E":
-                md = "E";
-            break;
-        }
-        return md;
-    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

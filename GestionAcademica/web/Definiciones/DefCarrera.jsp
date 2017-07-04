@@ -4,6 +4,7 @@
     Author     : aa
 --%>
 
+<%@page import="Enumerado.Modo"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.text.DateFormat"%>
@@ -12,14 +13,43 @@
 
 <!DOCTYPE html>
 
-<%
-    
+<%    
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
    
     String DefCar       = "DefCarreraWW.jsp";
+    Modo mode           = Modo.valueOf(request.getParameter("MODO"));
+    String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCarreraWW.jsp');";
+    String CamposActivos = "disabled";
     
-    String mode = (String)session.getAttribute("pModes");
+    Date fecha          = new Date();
+    DateFormat f        = new SimpleDateFormat("dd/mm/yyyy");
+    String today        = "";
+    
+    if (mode.equals(Modo.DELETE) || mode.equals(Modo.UPDATE))
+    {
+        today = "Fecha de Modificación: " + "XX/XX/XXXX";
+    }
+    else
+    {
+        today = "Fecha de Modificación: " + f.format(fecha);
+    }
+    
+    switch(mode)
+    {
+        case INSERT:
+            CamposActivos = "enabled";
+            break;
+        case DELETE:
+            CamposActivos = "disabled";
+            break;
+        case DISPLAY:
+            CamposActivos = "disabled";
+            break;
+        case UPDATE:
+            CamposActivos = "enabled";
+            break;
+    }
 %>
 
 <html>
@@ -33,25 +63,12 @@
     <jsp:include page="/masterPage/head.jsp"/>
     
     <script>
-//            var mode = (Stsring)session.getAttribute("pModes");
             $(document).ready(function() {
                 MostrarCargando(false);
-                <%
-                    Date fecha = new Date();
-                    DateFormat f = new SimpleDateFormat("dd/mm/yyyy");
-                    String today = f.format(fecha);
-                System.err.println("MODE ES: "+mode);
-                if (mode == "I")
-                {
-                %>
-                    $('#msgFecha').hide();
-                <%
-                }
-                %>
-
-
+                
                 $('#BtnAceCar').click(function() {
                  MostrarCargando(true);
+                    var codVar          = $('#CarCod').val();
                     var nomVar          = $('#CarNom').val();
                     var dscVar          = $('#CarDsc').val();
                     var facVar          = $('#CarFac').val();
@@ -60,24 +77,76 @@
                     if(nomVar == '')
                     {
                         MostrarMensaje("ERROR", "Deberá asignar un nombre a la Carrera");
-//                        $('#txtError').text("ESTA TIRANDO --> " + mode);
                         MostrarCargando(false);
                     }
                     else
                     {
-                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                        $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                                pNom          : nomVar,
-                                pDsc          : dscVar,
-                                pfac          : facVar,
-                                pCrt          : crtVar,
-                                pAccion       : "INGRESAR"
-                        }, function(responseText) {
-                            var obj = JSON.parse(responseText);
-                            MostrarCargando(false);
+                        if ($('#MODO').val()== "INSERT")
+                        {
+                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
+                                    pNom          : nomVar,
+                                    pDsc          : dscVar,
+                                    pfac          : facVar,
+                                    pCrt          : crtVar,
+                                    pAccion       : "INGRESAR"
+                            }, function(responseText) {
+                                var obj = JSON.parse(responseText);
+                                MostrarCargando(false);
+                                if (obj.tipoMensaje != 'ERROR')
+                                {
+                                    <%out.print(js_redirect);%>
+                                }
+                                else
+                                {
+                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                }
+                            });
+                        }
+                        
+                        if ($('#MODO').val()== "UPDATE")
+                        {
+                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
+                                    pNom          : nomVar,
+                                    pDsc          : dscVar,
+                                    pfac          : facVar,
+                                    pCrt          : crtVar,
+                                    pAccion       : "MODIFICAR"
+                            }, function(responseText) {
+                                var obj = JSON.parse(responseText);
+                                MostrarCargando(false);
 
-                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                        });
+                                if(obj.tipoMensaje != 'ERROR')
+                                {
+                                    <%out.print(js_redirect);%>
+                                }
+                                else
+                                {
+                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                }
+                            });
+                        }
+                        
+                        if ($('#MODO').val()== "DELETE")
+                        {
+                            $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                                    pCod	: codVar,   
+                                    pAction     : "ELIMINAR"
+                            }, function(responseText) {
+                                var obj = JSON.parse(responseText);
+                                MostrarCargando(false);
+
+                                if(obj.tipoMensaje != 'ERROR')
+                                {
+                                    <%out.print(js_redirect);%>     
+                                }
+                                else
+                                {
+                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                }
+                            });
+                        }
                     }
                 });
             });
@@ -105,7 +174,7 @@
                                 <td>
                                     <!-- En "ejemplo" hay que poner el en lace de la pagina Inicio en este caso -->
                                     <a id="lnkIni" href="ejemplo"> Inicio </a> >
-                                    <a id="lnkIni" href="<% out.println(DefCar); %>"> Definición de Carrera </a> >
+                                    <a id="lnkDefCar" href="<%out.println(DefCar);%>"> Definición de Carrera </a> >
                                     Ingreso de Carrera
                                 </td>
                             </tr>
@@ -116,15 +185,13 @@
                             </tr>
                             <tr>
                                 <td>
-                                    <div id="msgError" name="msgError"> 
-                                        <label id="txtError" name="txtError"></label>
+                                    <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
                                     </div>
                                 </td>
                                 <td align="right">
                                     <div id="msgFecha" name="msgFecha"> 
-                                        <%
-                                            out.println("Fecha de modificación: " + today);
-                                        %>
+                                        <%out.println(today);%>
                                     </div>
                                 </td>
                             </tr>
@@ -136,14 +203,22 @@
                                         <tr>
                                             <td>
                                                 <div class="form-group">
+                                                <label>Código</label>
+                                                <imput type="text" class="form-control" id="CarCod" placeholder="Código" disabled/>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
                                                   <label for="InputNombre">Nombre</label>
-                                                  <input type="text" class="form-control" id="CarNom" placeholder="Nombre">
+                                                  <input type="text" class="form-control" id="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> >
                                                 </div>                                            
                                             </td>
                                             <td class="margin">
                                                 <div class="form-group">
                                                   <label for="InputDescripcion">Descripción</label>
-                                                  <input type="text" class="form-control" id="CarDsc" placeholder="Descripción">
+                                                  <input type="text" class="form-control" id="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> >
                                                 </div>                                                
                                             </td>
                                         </tr>
@@ -151,13 +226,13 @@
                                             <td>
                                                 <div class="form-group">
                                                   <label for="InputFacultad">Facultad</label>
-                                                  <input type="text" class="form-control" id="CarFac" placeholder="Facultad">
+                                                  <input type="text" class="form-control" id="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> >
                                                 </div>                                            
                                             </td>
                                             <td class="margin">
                                                 <div class="form-group">
                                                   <label for="InputCertificacion">Certificación</label>
-                                                  <input type="text" class="form-control" id="CarCrt" placeholder="Certificación">
+                                                  <input type="text" class="form-control" id="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> >
                                                 </div>                                                
                                             </td>
                                         </tr>
@@ -172,7 +247,7 @@
                                 <td>
                                 </td>
                                 <td style="text-align:right" class="margin">
-                                    <input type="button" class="btn btn-default" value="Volver" id="BtnVol" name="BtnVol" onclick= "self.location.href = 'DefCarreraWW.jsp'" />
+                                    <input type="button" class="btn btn-default" value="Volver" id="BtnVol" name="BtnVol" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp'" />
                                 </td>
                             </tr>
                         </table>

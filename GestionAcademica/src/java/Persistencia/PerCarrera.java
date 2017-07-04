@@ -58,12 +58,31 @@ public class PerCarrera implements Interfaz.InCarrera{
     }
     
     @Override
-    public void actualizar(Carrera pObjeto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Object actualizar(Carrera pCarrera) {
+        boolean error   = false;
+        try
+        {
+            pCarrera.setObjFchMod(new Date());
+            iniciaOperacion();
+            sesion.update(pCarrera);
+            tx.commit();
+        }
+        catch(HibernateException he)
+        {
+            error = true;
+            manejaExcepcion(he);
+            throw he;
+        }
+        finally
+        {
+            sesion.close();
+        }
+        return error;
     }
 
     @Override
-    public void eliminar(Carrera pObjeto) {
+    public Object eliminar(Carrera pObjeto) {
+        boolean error = false;
         try {
             iniciaOperacion();
             sesion.delete(pObjeto);
@@ -73,11 +92,13 @@ public class PerCarrera implements Interfaz.InCarrera{
             //-
             
         } catch (HibernateException he) {
+            error = true;
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+        return error;
     }
 
     @Override
@@ -150,4 +171,6 @@ public class PerCarrera implements Interfaz.InCarrera{
 
         return retorno;
     }
+
+    
 }
