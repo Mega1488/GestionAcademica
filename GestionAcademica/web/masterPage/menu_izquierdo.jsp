@@ -40,6 +40,8 @@
     </li>
     <li>
         <a href=<% out.print(carrera); %>> Carrera </a>
+    </li>
+    <li>
         <a href=<% out.print(curso); %>>Curso</a>
     </li>
     <li>
