@@ -39,17 +39,13 @@ public class LoCarrera implements Interfaz.InCarrera{
     }
 
     @Override
-    public Object actualizar(Carrera pCarrera) {
-        boolean error = false;
+    public void actualizar(Carrera pCarrera) {
         perCarrera.actualizar(pCarrera);
-        return error;
     }
 
     @Override
-    public Object eliminar(Carrera pCarrera) {
-        boolean error = false;
+    public void eliminar(Carrera pCarrera) {
         perCarrera.eliminar(pCarrera);
-        return error;
     }
 
     @Override
