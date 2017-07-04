@@ -59,7 +59,7 @@ public class Curso implements Serializable {
     private String CurCrt;
     
     @Column(name = "CurCatCod")
-    private Integer CurCatCod;
+    private Long CurCatCod;
     
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -113,11 +113,11 @@ public class Curso implements Serializable {
         this.CurCrt = CurCrt;
     }
 
-    public Integer getCurCatCod() {
+    public Long getCurCatCod() {
         return CurCatCod;
     }
 
-    public void setCurCatCod(Integer CurCatCod) {
+    public void setCurCatCod(Long CurCatCod) {
         this.CurCatCod = CurCatCod;
     }
 

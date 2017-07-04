@@ -1113,6 +1113,7 @@ public class MoodleRestUser implements Serializable {
                 data.append("&").append(URLEncoder.encode("criteria["+i+"][value]", MoodleServices.ENCODING.toString())).append("=").append(criteria[i].getValue());
             }
             data.trimToSize();
+            
             NodeList elements=(new MoodleCallRestWebService()).__call(url,data.toString());
             UserCustomField customField=null;
             UserGroup group=null;

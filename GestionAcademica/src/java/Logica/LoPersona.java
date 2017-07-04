@@ -13,7 +13,6 @@ import Moodle.Criteria;
 import Moodle.MoodleCourse;
 import Moodle.MoodleRestCourse;
 import Moodle.MoodleRestEnrol;
-import Moodle.MoodleRestEnrolException;
 import Moodle.MoodleRestException;
 import Moodle.MoodleRestUser;
 import Moodle.MoodleUser;

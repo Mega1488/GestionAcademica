@@ -13,9 +13,9 @@ import java.util.List;
  * @author alvar
  */
 public interface InCurso {
-    int guardar(Curso pCurso);
-    void actualizar(Curso pCurso);
-    void eliminar(Curso pCurso);
+    Object guardar(Curso pCurso);
+    Object actualizar(Curso pCurso);
+    Object eliminar(Curso pCurso);
     Curso obtener(int pCurCod);
     List<Curso> obtenerLista();
 }

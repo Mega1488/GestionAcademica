@@ -38,14 +38,13 @@ public class PerCurso implements Interfaz.InCurso{
     }
 
     @Override
-    public int guardar(Curso pCurso) {
-        int id = 0;
+    public Object guardar(Curso pCurso) {
         pCurso = this.DevolverNuevoID(pCurso);
         pCurso.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            id = (int) sesion.save(pCurso);
+            pCurso.setCurCod((int) sesion.save(pCurso));
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -54,26 +53,31 @@ public class PerCurso implements Interfaz.InCurso{
             sesion.close();
         }
         
-        return id;
+        return pCurso;
     }
 
     @Override
-    public void actualizar(Curso pCurso) {
-         try {
+    public Object actualizar(Curso pCurso) {
+        boolean error = false; 
+        try {
             pCurso.setObjFchMod(new Date());
             iniciaOperacion();
             sesion.update(pCurso);
             tx.commit();
         } catch (HibernateException he) {
+            error = true;
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+        
+        return error;
     }
 
     @Override
-    public void eliminar(Curso pCurso) {
+    public Object eliminar(Curso pCurso) {
+        boolean error = false;
         try {
             iniciaOperacion();
             sesion.delete(pCurso);
@@ -83,11 +87,32 @@ public class PerCurso implements Interfaz.InCurso{
             //-
             
         } catch (HibernateException he) {
+            error = true;
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+        return error;
+    }
+    
+    public boolean ValidarEliminacion(Curso pObjeto)
+    {
+       boolean error = false;
+        try {
+            iniciaOperacion();
+            sesion.delete(pObjeto);
+            tx.rollback();
+            
+        } catch (HibernateException he) {
+            error = true;
+            manejaExcepcion(he);
+            throw he;
+        } finally {
+            sesion.close();
+        }
+                
+         return error;       
     }
 
     @Override
