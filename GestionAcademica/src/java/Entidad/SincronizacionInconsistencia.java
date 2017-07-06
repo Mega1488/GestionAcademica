@@ -7,6 +7,7 @@ package Entidad;
 
 import Enumerado.EstadoInconsistencia;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -101,39 +102,71 @@ public class SincronizacionInconsistencia implements Serializable {
         return "Entidad.SincronizacionInconsistencia[ id=" + sincIncPK + " ]";
     }
     
+    
+    @Embeddable
+    public static class SincInconsistenciaPK implements Serializable {
+        @ManyToOne(targetEntity = Sincronizacion.class, optional=false)
+        @JoinColumn(name="SncCod", referencedColumnName="SncCod")
+        private Sincronizacion sincronizacion;
+
+        private Integer IncCod;
+
+        public SincInconsistenciaPK() {
+        }
+
+        public Sincronizacion getSincronizacion() {
+            return sincronizacion;
+        }
+
+        public void setSincronizacion(Sincronizacion sincronizacion) {
+            this.sincronizacion = sincronizacion;
+        }
+
+        public Integer getIncCod() {
+            return IncCod;
+        }
+
+        public void setIncCod(Integer IncCod) {
+            this.IncCod = IncCod;
+        }
+
+        @Override
+        public String toString() {
+            return "SincInconsistenciaPK{" + "sincronizacion=" + sincronizacion + ", IncCod=" + IncCod + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 29 * hash + Objects.hashCode(this.sincronizacion);
+            hash = 29 * hash + Objects.hashCode(this.IncCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final SincInconsistenciaPK other = (SincInconsistenciaPK) obj;
+            if (!Objects.equals(this.sincronizacion, other.sincronizacion)) {
+                return false;
+            }
+            if (!Objects.equals(this.IncCod, other.IncCod)) {
+                return false;
+            }
+            return true;
+        }
+
+
+    }
+
+    
 }
 
-@Embeddable
-class SincInconsistenciaPK implements Serializable {
-    @ManyToOne(targetEntity = Sincronizacion.class, optional=false)
-    @JoinColumn(name="SncCod", referencedColumnName="SncCod")
-    private Sincronizacion sincronizacion;
-    
-    private Integer IncCod;
-
-    public SincInconsistenciaPK() {
-    }
-
-    public Sincronizacion getSincronizacion() {
-        return sincronizacion;
-    }
-
-    public void setSincronizacion(Sincronizacion sincronizacion) {
-        this.sincronizacion = sincronizacion;
-    }
-
-    public Integer getIncCod() {
-        return IncCod;
-    }
-
-    public void setIncCod(Integer IncCod) {
-        this.IncCod = IncCod;
-    }
-
-    @Override
-    public String toString() {
-        return "SincInconsistenciaPK{" + "sincronizacion=" + sincronizacion + ", IncCod=" + IncCod + '}';
-    }
-    
-    
-}

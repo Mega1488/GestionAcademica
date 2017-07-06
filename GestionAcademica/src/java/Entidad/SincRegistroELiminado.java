@@ -7,13 +7,11 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -100,44 +98,76 @@ public class SincRegistroELiminado implements Serializable {
         return "Entidad.SincRegistroELiminado[ id=" + objEliminadoPK + " ]";
     }
     
+    
+    @Embeddable
+    public static class ObjEliminadoPK implements Serializable {
+        private Integer SncObjElimCod;
+
+        @ManyToOne(targetEntity = ObjetoCampo.class, optional=false)
+        @JoinColumns({
+           @JoinColumn(name="ObjCod", referencedColumnName="ObjCod"),
+           @JoinColumn(name="ObjCmpCod", referencedColumnName="ObjCmpCod")
+        }) 
+        private ObjetoCampo objetoCampo;
+
+        public ObjEliminadoPK() {
+        }
+
+        public Integer getSncObjElimCod() {
+            return SncObjElimCod;
+        }
+
+        public void setSncObjElimCod(Integer SncObjElimCod) {
+            this.SncObjElimCod = SncObjElimCod;
+        }
+
+        public ObjetoCampo getObjetoCampo() {
+            return objetoCampo;
+        }
+
+        public void setObjetoCampo(ObjetoCampo objetoCampo) {
+            this.objetoCampo = objetoCampo;
+        }
+
+        @Override
+        public String toString() {
+            return "ObjEliminadoPK{" + "SncObjElimCod=" + SncObjElimCod + ", objetoCampo=" + objetoCampo + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 53 * hash + Objects.hashCode(this.SncObjElimCod);
+            hash = 53 * hash + Objects.hashCode(this.objetoCampo);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ObjEliminadoPK other = (ObjEliminadoPK) obj;
+            if (!Objects.equals(this.SncObjElimCod, other.SncObjElimCod)) {
+                return false;
+            }
+            if (!Objects.equals(this.objetoCampo, other.objetoCampo)) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+    }
+
+    
 }
 
 
-@Embeddable
-class ObjEliminadoPK implements Serializable {
-    private Integer SncObjElimCod;
-    
-    @ManyToOne(targetEntity = ObjetoCampo.class, optional=false)
-    @JoinColumns({
-       @JoinColumn(name="ObjCod", referencedColumnName="ObjCod"),
-       @JoinColumn(name="ObjCmpCod", referencedColumnName="ObjCmpCod")
-    }) 
-    private ObjetoCampo objetoCampo;
-
-    public ObjEliminadoPK() {
-    }
-
-    public Integer getSncObjElimCod() {
-        return SncObjElimCod;
-    }
-
-    public void setSncObjElimCod(Integer SncObjElimCod) {
-        this.SncObjElimCod = SncObjElimCod;
-    }
-
-    public ObjetoCampo getObjetoCampo() {
-        return objetoCampo;
-    }
-
-    public void setObjetoCampo(ObjetoCampo objetoCampo) {
-        this.objetoCampo = objetoCampo;
-    }
-
-    @Override
-    public String toString() {
-        return "ObjEliminadoPK{" + "SncObjElimCod=" + SncObjElimCod + ", objetoCampo=" + objetoCampo + '}';
-    }
-    
-    
-    
-}

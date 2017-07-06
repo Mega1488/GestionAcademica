@@ -10,7 +10,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -18,11 +17,11 @@ import Enumerado.TipoAprobacion;
 import Enumerado.TipoPeriodo;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -185,34 +184,66 @@ public class Materia implements Serializable {
         return "Entidad.Materia[ id=" + materiaPK.MatCod() + " ]";
     }
     
+    
+    @Embeddable
+    public static class MateriaPK implements Serializable {
+           private Integer MatCod;
+
+           @ManyToOne(targetEntity = PlanEstudio.class, optional=false)
+           @JoinColumns({
+               @JoinColumn(name="CarCod", referencedColumnName="CarCod"),
+               @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
+           })
+           private PlanEstudio plan;
+
+
+           public Integer MatCod() {
+               return MatCod;
+           }
+
+           public void setMatCod(Integer MatCod) {
+               this.MatCod = MatCod;
+           }
+
+           public PlanEstudio getPlanEstudio() {
+               return plan;
+           }
+
+           public void setPlanEstudio(PlanEstudio plan) {
+               this.plan = plan;
+           }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 11 * hash + Objects.hashCode(this.MatCod);
+            hash = 11 * hash + Objects.hashCode(this.plan);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final MateriaPK other = (MateriaPK) obj;
+            if (!Objects.equals(this.MatCod, other.MatCod)) {
+                return false;
+            }
+            if (!Objects.equals(this.plan, other.plan)) {
+                return false;
+            }
+            return true;
+        }
+           
+           
+       }
 }
 
 
- @Embeddable
- class MateriaPK implements Serializable {
-        private Integer MatCod;
-
-        @ManyToOne(targetEntity = PlanEstudio.class, optional=false)
-        @JoinColumns({
-            @JoinColumn(name="CarCod", referencedColumnName="CarCod"),
-            @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
-        })
-        private PlanEstudio plan;
-    
-
-        public Integer MatCod() {
-            return MatCod;
-        }
-
-        public void setMatCod(Integer MatCod) {
-            this.MatCod = MatCod;
-        }
-
-        public PlanEstudio getPlanEstudio() {
-            return plan;
-        }
-
-        public void setPlanEstudio(PlanEstudio plan) {
-            this.plan = plan;
-        }
-    }

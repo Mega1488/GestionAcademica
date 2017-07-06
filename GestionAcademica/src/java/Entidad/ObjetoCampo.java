@@ -7,13 +7,11 @@ package Entidad;
 
 import Enumerado.TipoCampo;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -111,42 +109,74 @@ public class ObjetoCampo implements Serializable {
         return "Entidad.ObjetoCampo[ id=" + objCmpPK + " ]";
     }
     
+
+
+    @Embeddable
+    public static class ObjetoCampoPK implements Serializable {
+        @ManyToOne(targetEntity = Objeto.class, optional=false)
+        @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
+        private Objeto objeto;
+
+        private Integer ObjCmpCod;
+
+        public ObjetoCampoPK() {
+        }
+
+        public Objeto getObjeto() {
+            return objeto;
+        }
+
+        public void setObjeto(Objeto objeto) {
+            this.objeto = objeto;
+        }
+
+        public Integer getObjCmpCod() {
+            return ObjCmpCod;
+        }
+
+        public void setObjCmpCod(Integer ObjCmpCod) {
+            this.ObjCmpCod = ObjCmpCod;
+        }
+
+        @Override
+        public String toString() {
+            return "ObjetoCampoPK{" + "objeto=" + objeto + ", ObjCmpCod=" + ObjCmpCod + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 29 * hash + Objects.hashCode(this.objeto);
+            hash = 29 * hash + Objects.hashCode(this.ObjCmpCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ObjetoCampoPK other = (ObjetoCampoPK) obj;
+            if (!Objects.equals(this.objeto, other.objeto)) {
+                return false;
+            }
+            if (!Objects.equals(this.ObjCmpCod, other.ObjCmpCod)) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+    }
 }
 
 
-@Embeddable
-class ObjetoCampoPK implements Serializable {
-    @ManyToOne(targetEntity = Objeto.class, optional=false)
-    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
-    private Objeto objeto;
-    
-    private Integer ObjCmpCod;
 
-    public ObjetoCampoPK() {
-    }
-
-    public Objeto getObjeto() {
-        return objeto;
-    }
-
-    public void setObjeto(Objeto objeto) {
-        this.objeto = objeto;
-    }
-
-    public Integer getObjCmpCod() {
-        return ObjCmpCod;
-    }
-
-    public void setObjCmpCod(Integer ObjCmpCod) {
-        this.ObjCmpCod = ObjCmpCod;
-    }
-
-    @Override
-    public String toString() {
-        return "ObjetoCampoPK{" + "objeto=" + objeto + ", ObjCmpCod=" + ObjCmpCod + '}';
-    }
-    
-    
-    
-    
-}

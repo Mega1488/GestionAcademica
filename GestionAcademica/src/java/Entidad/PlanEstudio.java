@@ -8,14 +8,12 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -151,31 +149,67 @@ public class PlanEstudio implements Serializable {
         return "Entidad.PlanEstudio[ id=" + planPK.PlaEstCod() + " ]";
     }
     
+    
+    @Embeddable
+    public static class PlanEstudioPK implements Serializable {
+           private Integer PlaEstCod;
+
+           @ManyToOne(targetEntity = Carrera.class, optional=false)
+           @JoinColumn(name="CarCod", referencedColumnName = "CarCod")
+           private Carrera carrera;
+
+
+           public Integer PlaEstCod() {
+               return PlaEstCod;
+           }
+
+           public void setPlaEstCod(Integer PlaEstCod) {
+               this.PlaEstCod = PlaEstCod;
+           }
+
+           public Carrera getCarrera() {
+               return carrera;
+           }
+
+           public void setCarrera(Carrera carrera) {
+               this.carrera = carrera;
+           }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 19 * hash + Objects.hashCode(this.PlaEstCod);
+            hash = 19 * hash + Objects.hashCode(this.carrera);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final PlanEstudioPK other = (PlanEstudioPK) obj;
+            if (!Objects.equals(this.PlaEstCod, other.PlaEstCod)) {
+                return false;
+            }
+            if (!Objects.equals(this.carrera, other.carrera)) {
+                return false;
+            }
+            return true;
+        }
+           
+           
+       }
+    
+    
+
 }
 
 
- @Embeddable
- class PlanEstudioPK implements Serializable {
-        private Integer PlaEstCod;
-
-        @ManyToOne(targetEntity = Carrera.class, optional=false)
-        @JoinColumn(name="CarCod", referencedColumnName = "CarCod")
-        private Carrera carrera;
-    
-
-        public Integer PlaEstCod() {
-            return PlaEstCod;
-        }
-
-        public void setPlaEstCod(Integer PlaEstCod) {
-            this.PlaEstCod = PlaEstCod;
-        }
-
-        public Carrera getCarrera() {
-            return carrera;
-        }
-
-        public void setCarrera(Carrera carrera) {
-            this.carrera = carrera;
-        }
-    }
+ 

@@ -7,13 +7,11 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -121,43 +119,73 @@ public class PeriodoEstudio implements Serializable {
         return "Entidad.PeriodoEstudio[ id=" + periodoEstudioPK + " ]";
     }
     
+    
+    @Embeddable
+    public static class PeriodoEstudioPK implements Serializable {
+        @OneToOne(targetEntity = Periodo.class, optional=false)        
+        @JoinColumn(name="PeriCod", referencedColumnName="PeriCod")
+        private Periodo Periodo;
+
+        private Integer PeriEstCod;
+
+        public PeriodoEstudioPK() {
+        }
+
+        public Periodo getPeriodo() {
+            return Periodo;
+        }
+
+        public void setPeriodo(Periodo periodo) {
+            this.Periodo = periodo;
+        }
+
+        public Integer getPeriEstCod() {
+            return PeriEstCod;
+        }
+
+        public void setPeriEstCod(Integer PeriEstCod) {
+            this.PeriEstCod = PeriEstCod;
+        }
+
+        @Override
+        public String toString() {
+            return "PeriodoEstudioPK{" + "periodo=" + Periodo + ", PeriEstCod=" + PeriEstCod + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 71 * hash + Objects.hashCode(this.Periodo);
+            hash = 71 * hash + Objects.hashCode(this.PeriEstCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final PeriodoEstudioPK other = (PeriodoEstudioPK) obj;
+            if (!Objects.equals(this.Periodo, other.Periodo)) {
+                return false;
+            }
+            if (!Objects.equals(this.PeriEstCod, other.PeriEstCod)) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+
+    }
 }
 
 
-@Embeddable
-class PeriodoEstudioPK implements Serializable {
-    @OneToOne(targetEntity = Periodo.class, optional=false)        
-    @JoinColumn(name="PeriCod", referencedColumnName="PeriCod")
-    private Periodo Periodo;
-    
-    private Integer PeriEstCod;
-
-    public PeriodoEstudioPK() {
-    }
-
-    public Periodo getPeriodo() {
-        return Periodo;
-    }
-
-    public void setPeriodo(Periodo periodo) {
-        this.Periodo = periodo;
-    }
-
-    public Integer getPeriEstCod() {
-        return PeriEstCod;
-    }
-
-    public void setPeriEstCod(Integer PeriEstCod) {
-        this.PeriEstCod = PeriEstCod;
-    }
-
-    @Override
-    public String toString() {
-        return "PeriodoEstudioPK{" + "periodo=" + Periodo + ", PeriEstCod=" + PeriEstCod + '}';
-    }
-
- 
-    
-    
-    
-}

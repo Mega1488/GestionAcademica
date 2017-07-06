@@ -6,13 +6,11 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -99,43 +97,75 @@ public class SincInconsistenciaDatos implements Serializable {
         return "Entidad.SincInconsistenciaDatos[ id=" + incDatosPK + " ]";
     }
     
+    
+    
+    @Embeddable
+    public static class IncDatosPK implements Serializable {
+        @ManyToOne(targetEntity = SincronizacionInconsistencia.class, optional=false)
+        @JoinColumns({
+           @JoinColumn(name="SncCod", referencedColumnName="SncCod"),
+           @JoinColumn(name="IncCod", referencedColumnName="IncCod")
+        }) 
+        private SincronizacionInconsistencia inconsistencia;
+
+        private Integer IncObjCod;
+
+        public IncDatosPK() {
+        }
+
+        public SincronizacionInconsistencia getInconsistencia() {
+            return inconsistencia;
+        }
+
+        public void setInconsistencia(SincronizacionInconsistencia inconsistencia) {
+            this.inconsistencia = inconsistencia;
+        }
+
+        public Integer getIncObjCod() {
+            return IncObjCod;
+        }
+
+        public void setIncObjCod(Integer IncObjCod) {
+            this.IncObjCod = IncObjCod;
+        }
+
+        @Override
+        public String toString() {
+            return "IncDatosPK{" + "inconsistencia=" + inconsistencia + ", IncObjCod=" + IncObjCod + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 41 * hash + Objects.hashCode(this.inconsistencia);
+            hash = 41 * hash + Objects.hashCode(this.IncObjCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final IncDatosPK other = (IncDatosPK) obj;
+            if (!Objects.equals(this.inconsistencia, other.inconsistencia)) {
+                return false;
+            }
+            if (!Objects.equals(this.IncObjCod, other.IncObjCod)) {
+                return false;
+            }
+            return true;
+        }
+
+        
+
+    }
+    
 }
 
-@Embeddable
-class IncDatosPK implements Serializable {
-    @ManyToOne(targetEntity = SincronizacionInconsistencia.class, optional=false)
-    @JoinColumns({
-       @JoinColumn(name="SncCod", referencedColumnName="SncCod"),
-       @JoinColumn(name="IncCod", referencedColumnName="IncCod")
-    }) 
-    private SincronizacionInconsistencia inconsistencia;
-    
-    private Integer IncObjCod;
-
-    public IncDatosPK() {
-    }
-
-    public SincronizacionInconsistencia getInconsistencia() {
-        return inconsistencia;
-    }
-
-    public void setInconsistencia(SincronizacionInconsistencia inconsistencia) {
-        this.inconsistencia = inconsistencia;
-    }
-
-    public Integer getIncObjCod() {
-        return IncObjCod;
-    }
-
-    public void setIncObjCod(Integer IncObjCod) {
-        this.IncObjCod = IncObjCod;
-    }
-
-    @Override
-    public String toString() {
-        return "IncDatosPK{" + "inconsistencia=" + inconsistencia + ", IncObjCod=" + IncObjCod + '}';
-    }
-    
-    
-    
-}

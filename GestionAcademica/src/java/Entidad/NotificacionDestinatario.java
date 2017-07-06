@@ -6,15 +6,12 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -99,40 +96,72 @@ public class NotificacionDestinatario implements Serializable {
         return "Entidad.NotificacionDestinatario[ id=" + notDestPK + " ]";
     }
     
+    
+    
+    @Embeddable
+    public static class NotificacionDestinatarioPK implements Serializable {
+       @ManyToOne(targetEntity = Notificacion.class, optional=false)
+       @JoinColumn(name="NotCod", referencedColumnName="NotCod")
+       private Notificacion notificacion;
+
+       private Integer NotDstCod;
+
+       public NotificacionDestinatarioPK() {
+       }
+
+       public Notificacion getNotificacion() {
+           return notificacion;
+       }
+
+       public void setNotificacion(Notificacion notificacion) {
+           this.notificacion = notificacion;
+       }
+
+       public Integer getNotDstCod() {
+           return NotDstCod;
+       }
+
+       public void setNotDstCod(Integer NotDstCod) {
+           this.NotDstCod = NotDstCod;
+       }
+
+       @Override
+       public String toString() {
+           return "NotificacionDestinatarioPK{" + "notificacion=" + notificacion + ", NotDstCod=" + NotDstCod + '}';
+       }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 71 * hash + Objects.hashCode(this.notificacion);
+            hash = 71 * hash + Objects.hashCode(this.NotDstCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final NotificacionDestinatarioPK other = (NotificacionDestinatarioPK) obj;
+            if (!Objects.equals(this.notificacion, other.notificacion)) {
+                return false;
+            }
+            if (!Objects.equals(this.NotDstCod, other.NotDstCod)) {
+                return false;
+            }
+            return true;
+        }
+
+       
+
+    }
+
 }
 
-
- @Embeddable
- class NotificacionDestinatarioPK implements Serializable {
-    @ManyToOne(targetEntity = Notificacion.class, optional=false)
-    @JoinColumn(name="NotCod", referencedColumnName="NotCod")
-    private Notificacion notificacion;
-     
-    private Integer NotDstCod;
-
-    public NotificacionDestinatarioPK() {
-    }
-
-    public Notificacion getNotificacion() {
-        return notificacion;
-    }
-
-    public void setNotificacion(Notificacion notificacion) {
-        this.notificacion = notificacion;
-    }
-
-    public Integer getNotDstCod() {
-        return NotDstCod;
-    }
-
-    public void setNotDstCod(Integer NotDstCod) {
-        this.NotDstCod = NotDstCod;
-    }
-
-    @Override
-    public String toString() {
-        return "NotificacionDestinatarioPK{" + "notificacion=" + notificacion + ", NotDstCod=" + NotDstCod + '}';
-    }
-    
-    
- }

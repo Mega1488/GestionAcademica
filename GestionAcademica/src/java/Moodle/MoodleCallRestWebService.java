@@ -18,6 +18,8 @@
 
 package Moodle;
 
+import Entidad.Parametro;
+import Logica.LoParametro;
 import java.io.*;
 import java.net.*;
 import java.net.URL;
@@ -41,11 +43,12 @@ import java.io.Serializable;
  */
 public class MoodleCallRestWebService implements Serializable {
     
+    private static final Parametro parametro = LoParametro.GetInstancia().obtener(1);
     private static final String MOODLE_REST_VERSION="Version  0.1.6";
-    private static String token="ce19d614e5a749b22d89d010a5396249";
+    private static String token= parametro.getParMdlTkn();
     private static String username=null;
     private static String password=null;
-    private static String url="http://192.168.0.106/webservice/rest/server.php";
+    private static String url=parametro.getParUrlMdl();
     private static boolean legacy=false;
     private static boolean debug=false;
 

@@ -7,12 +7,10 @@ package Entidad;
 
 import Enumerado.ServicioWeb;
 import java.io.Serializable;
+import java.util.Objects;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -74,42 +72,73 @@ public class WS_UserServicio implements Serializable {
         return "Entidad.WS_UserServicio[ id=" + usrServPK + " ]";
     }
     
+    
+    @Embeddable
+    public static class UserServicioPK implements Serializable {
+       @ManyToOne(targetEntity = WS_User.class, optional=false)
+       @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
+       private WS_User usuario;
+
+       private ServicioWeb WsSrv;
+
+       public UserServicioPK() {
+       }
+
+       public WS_User getUsuario() {
+           return usuario;
+       }
+
+       public void setUsuario(WS_User usuario) {
+           this.usuario = usuario;
+       }
+
+       public ServicioWeb getWsSrv() {
+           return WsSrv;
+       }
+
+       public void setWsSrv(ServicioWeb WsSrv) {
+           this.WsSrv = WsSrv;
+       }
+
+       @Override
+       public String toString() {
+           return "UserServicioPK{" + "usuario=" + usuario + ", WsSrv=" + WsSrv + '}';
+       }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 53 * hash + Objects.hashCode(this.usuario);
+            hash = 53 * hash + Objects.hashCode(this.WsSrv);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final UserServicioPK other = (UserServicioPK) obj;
+            if (!Objects.equals(this.usuario, other.usuario)) {
+                return false;
+            }
+            if (this.WsSrv != other.WsSrv) {
+                return false;
+            }
+            return true;
+        }
+
+       
+
+
+   }
 }
 
 
-@Embeddable
- class UserServicioPK implements Serializable {
-    @ManyToOne(targetEntity = WS_User.class, optional=false)
-    @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
-    private WS_User usuario;
-    
-    private ServicioWeb WsSrv;
 
-    public UserServicioPK() {
-    }
-
-    public WS_User getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(WS_User usuario) {
-        this.usuario = usuario;
-    }
-
-    public ServicioWeb getWsSrv() {
-        return WsSrv;
-    }
-
-    public void setWsSrv(ServicioWeb WsSrv) {
-        this.WsSrv = WsSrv;
-    }
-
-    @Override
-    public String toString() {
-        return "UserServicioPK{" + "usuario=" + usuario + ", WsSrv=" + WsSrv + '}';
-    }
-    
-    
-    
-    
-}

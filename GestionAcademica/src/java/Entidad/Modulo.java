@@ -8,24 +8,15 @@ package Entidad;
 import Enumerado.TipoPeriodo;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -70,36 +61,42 @@ public class Modulo implements Serializable {
     @Column(name = "ModCntHor",precision=10, scale=2)
     private Double ModCntHor;
     
+    @Column(name = "ModEstCod")
+    private Long ModEstCod;
+    
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
-    
+   
+    /*
     @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
     @JoinColumns({
             @JoinColumn(name="ModEvlCurCod", referencedColumnName="CurCod"),
             @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod"),
         })
     private List<Evaluacion> lstEvaluacion;
-
+*/
     
     public Modulo() {
         this.modPK = new ModuloPK();
-        this.ModNom = "";
-        this.ModDsc = "";
-        this.ModTpoPer = TipoPeriodo.MODULAR;
-        this.ModPerVal = Double.MIN_NORMAL;
-        this.ModCntHor = Double.MIN_NORMAL;
-        
     }
     
     
-
+    
     public Integer getModCod() {
         return modPK.getModCod();
     }
 
     public void setModCod(Integer ModCod) {
         modPK.setModCod(ModCod);
+    }
+
+    public Long getModEstCod() {
+        return ModEstCod;
+    }
+
+    public void setModEstCod(Long ModEstCod) {
+        this.ModEstCod = ModEstCod;
     }
 
     
@@ -192,35 +189,79 @@ public class Modulo implements Serializable {
     }
     
     
+    @Embeddable
+    public static class ModuloPK implements Serializable {
+        private Integer ModCod;
+
+        
+        @ManyToOne(targetEntity = Curso.class, optional=false)
+        @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
+        private Curso curso;
+
+        public Integer getModCod() {
+            return ModCod;
+        }
+        
+
+        public void setModCod(Integer ModCod) {
+            this.ModCod = ModCod;
+        }
+
+        public Curso getCurso() {
+            return curso;
+        }
+
+        public void setCurso(Curso curso) {
+            this.curso = curso;
+        }
+
+        public ModuloPK(Integer ModCod, Curso curso) {
+            this.ModCod = ModCod;
+            this.curso = curso;
+        }
+
+        public ModuloPK() {
+        }
+
+        @Override
+        public String toString() {
+            return "ModuloPK{" + "ModCod=" + ModCod + ", curso=" + curso + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 79 * hash + Objects.hashCode(this.ModCod);
+            hash = 79 * hash + Objects.hashCode(this.curso);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final ModuloPK other = (ModuloPK) obj;
+            if (!Objects.equals(this.ModCod, other.ModCod)) {
+                return false;
+            }
+            if (!Objects.equals(this.curso, other.curso)) {
+                return false;
+            }
+            return true;
+        }
+
+        
+
+
+
+    }
     
 }
 
-
-
-
-@Embeddable
-class ModuloPK implements Serializable {
-    private Integer ModCod;
-
-
-
-    @ManyToOne(targetEntity = Curso.class, optional=false)
-    @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
-    private Curso curso;
-
-    public Integer getModCod() {
-        return ModCod;
-    }
-
-    public void setModCod(Integer ModCod) {
-        this.ModCod = ModCod;
-    }
-
-    public Curso getCurso() {
-        return curso;
-    }
-
-    public void setCurso(Curso curso) {
-        this.curso = curso;
-    }
-}

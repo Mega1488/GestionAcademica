@@ -7,13 +7,12 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -124,39 +123,72 @@ public class Calendario implements Serializable {
         return "Entidad.Calendario[ id=" + calPK.toString() + " ]";
     }
     
+    
+    @Embeddable
+    public static class CalendarioPK implements Serializable {
+        @ManyToOne(targetEntity = Evaluacion.class, optional=false)
+        @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
+        private Evaluacion Evl;
+
+        private Integer CalCod;
+
+        public CalendarioPK() {
+        }
+
+        public Evaluacion getEvl() {
+            return Evl;
+        }
+
+        public void setEvl(Evaluacion Evl) {
+            this.Evl = Evl;
+        }
+
+        public Integer getCalCod() {
+            return CalCod;
+        }
+
+        public void setCalCod(Integer CalCod) {
+            this.CalCod = CalCod;
+        }
+
+        @Override
+        public String toString() {
+            return "CalendarioPK{" + "Evl=" + Evl + ", CalCod=" + CalCod + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 59 * hash + Objects.hashCode(this.Evl);
+            hash = 59 * hash + Objects.hashCode(this.CalCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final CalendarioPK other = (CalendarioPK) obj;
+            if (!Objects.equals(this.Evl, other.Evl)) {
+                return false;
+            }
+            if (!Objects.equals(this.CalCod, other.CalCod)) {
+                return false;
+            }
+            return true;
+        }
+
+        
+
+    }
+
+    
 }
 
-@Embeddable
-class CalendarioPK implements Serializable {
-    @ManyToOne(targetEntity = Evaluacion.class, optional=false)
-    @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
-    private Evaluacion Evl;
-    
-    private Integer CalCod;
-
-    public CalendarioPK() {
-    }
-
-    public Evaluacion getEvl() {
-        return Evl;
-    }
-
-    public void setEvl(Evaluacion Evl) {
-        this.Evl = Evl;
-    }
-
-    public Integer getCalCod() {
-        return CalCod;
-    }
-
-    public void setCalCod(Integer CalCod) {
-        this.CalCod = CalCod;
-    }
-
-    @Override
-    public String toString() {
-        return "CalendarioPK{" + "Evl=" + Evl + ", CalCod=" + CalCod + '}';
-    }
-    
-    
-}

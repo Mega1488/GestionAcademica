@@ -8,15 +8,12 @@ package Entidad;
 import Enumerado.NotificacionEstado;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -161,40 +158,73 @@ public class NotificacionBitacora implements Serializable {
         return "Entidad.NotificacionDestinatario[ id=" + notBitPK + " ]";
     }
     
+    
+    @Embeddable
+    public static class NotificacionBitacoraPK implements Serializable {
+       @ManyToOne(targetEntity = Notificacion.class, optional=false)
+       @JoinColumn(name="NotCod", referencedColumnName="NotCod")
+       private Notificacion notificacion;
+
+       private Integer NotBitCod;
+
+       public NotificacionBitacoraPK() {
+       }
+
+       public Notificacion getNotificacion() {
+           return notificacion;
+       }
+
+       public void setNotificacion(Notificacion notificacion) {
+           this.notificacion = notificacion;
+       }
+
+       public Integer getNotBitCod() {
+           return NotBitCod;
+       }
+
+       public void setNotBitCod(Integer NotBitCod) {
+           this.NotBitCod = NotBitCod;
+       }
+
+       @Override
+       public String toString() {
+           return "NotificacionDestinatarioPK{" + "notificacion=" + notificacion + ", NotBitCod=" + NotBitCod + '}';
+       }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 79 * hash + Objects.hashCode(this.notificacion);
+            hash = 79 * hash + Objects.hashCode(this.NotBitCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final NotificacionBitacoraPK other = (NotificacionBitacoraPK) obj;
+            if (!Objects.equals(this.notificacion, other.notificacion)) {
+                return false;
+            }
+            if (!Objects.equals(this.NotBitCod, other.NotBitCod)) {
+                return false;
+            }
+            return true;
+        }
+
+       
+
+    }
+
 }
 
 
- @Embeddable
- class NotificacionBitacoraPK implements Serializable {
-    @ManyToOne(targetEntity = Notificacion.class, optional=false)
-    @JoinColumn(name="NotCod", referencedColumnName="NotCod")
-    private Notificacion notificacion;
-     
-    private Integer NotBitCod;
-
-    public NotificacionBitacoraPK() {
-    }
-
-    public Notificacion getNotificacion() {
-        return notificacion;
-    }
-
-    public void setNotificacion(Notificacion notificacion) {
-        this.notificacion = notificacion;
-    }
-
-    public Integer getNotBitCod() {
-        return NotBitCod;
-    }
-
-    public void setNotBitCod(Integer NotBitCod) {
-        this.NotBitCod = NotBitCod;
-    }
-
-    @Override
-    public String toString() {
-        return "NotificacionDestinatarioPK{" + "notificacion=" + notificacion + ", NotBitCod=" + NotBitCod + '}';
-    }
-    
-    
- }
+ 

@@ -43,7 +43,7 @@
                 <a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a>
             </div>
             
-            <div>
+            
                 <table style=' <% out.print(tblCursoVisible); %>'>
                     <tr>
                         <th></th>
@@ -72,5 +72,6 @@
                     <%
                     }
                     %>
+                </table>
     </body>
 </html>

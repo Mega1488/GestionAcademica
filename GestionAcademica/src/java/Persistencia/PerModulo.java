@@ -6,6 +6,7 @@
 package Persistencia;
 
 import Entidad.Modulo;
+import Entidad.Modulo.ModuloPK;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,14 +43,13 @@ public class PerModulo implements Interfaz.InModulo{
         
         pObjeto = this.DevolverNuevoID(pObjeto);
 
-        System.err.println("Curso: " + pObjeto.getCurso().getCurCod().toString());
-        System.err.println("Modulo: " + pObjeto.getModCod().toString());
-
         pObjeto.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            sesion.save(pObjeto);
+            ModuloPK pk = (ModuloPK) sesion.save(pObjeto);
+            pObjeto.setCurso(pk.getCurso());
+            pObjeto.setModCod(pk.getModCod());
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -58,29 +58,33 @@ public class PerModulo implements Interfaz.InModulo{
             sesion.close();
         }
         
-        System.err.println("ID del modulo " + pObjeto.toString());
         
         return pObjeto;
         
     }
 
     @Override
-    public void actualizar(Modulo pObjeto) {
+    public Object actualizar(Modulo pObjeto) {
+        boolean error = false; 
         try {
             pObjeto.setObjFchMod(new Date());
             iniciaOperacion();
             sesion.update(pObjeto);
             tx.commit();
         } catch (HibernateException he) {
+            error = true;
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+        
+        return error;
     }
 
     @Override
-    public void eliminar(Modulo pObjeto) {
+    public Object eliminar(Modulo pObjeto) {
+        boolean error = false; 
         try {
             iniciaOperacion();
             sesion.delete(pObjeto);
@@ -90,24 +94,40 @@ public class PerModulo implements Interfaz.InModulo{
             //-
             
         } catch (HibernateException he) {
+            error = true; 
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
+        
+        return error;
     }
 
     @Override
     public Modulo obtener(Object pCodigo) {
+        
         Modulo  codigo          = (Modulo) pCodigo;
         Modulo objetoRetorno    = new Modulo();
+       
+        List<Modulo> listaObjeto = null;
+
         try {
-                iniciaOperacion();
-                objetoRetorno = (Modulo) sesion.get(Modulo.class, codigo);            
+            iniciaOperacion();
+            
+                listaObjeto = sesion.getNamedQuery("Modulo.findByPK").setParameter("CurCod", codigo.getCurso().getCurCod()).setParameter("ModCod", codigo.getModCod()).setMaxResults(1).list();
+            
         } finally {
             sesion.close();
         }
+        
+        if (!listaObjeto.isEmpty()){
+            objetoRetorno = listaObjeto.get(0);
+        }
+
         return objetoRetorno;
+
+       
     }
 
     @Override
@@ -126,12 +146,48 @@ public class PerModulo implements Interfaz.InModulo{
         return listaRetorno;
     }
     
+    public List<Modulo> obtenerListaByCurso(Integer curCod) {
+        List<Modulo> listaRetorno = null;
+
+        try {
+            iniciaOperacion();
+            
+                listaRetorno = sesion.getNamedQuery("Modulo.findByCurso").setParameter("CurCod", curCod).list();
+            
+        } finally {
+            sesion.close();
+        }
+
+        return listaRetorno;
+    }
+    
     
      private Modulo DevolverNuevoID(Modulo objeto){
 
         objeto.setModCod(this.DevolverUltimoID(objeto.getCurso().getCurCod()));
         
         return objeto;
+    }
+     
+     public boolean ValidarEliminacion(Modulo pObjeto) {
+        boolean error = false; 
+        try {
+            iniciaOperacion();
+            sesion.delete(pObjeto);
+            tx.rollback();
+            
+            //Agregar objeto eliminado a la tabla de sincronización
+            //-
+            
+        } catch (HibernateException he) {
+            error = true; 
+            manejaExcepcion(he);
+            throw he;
+        } finally {
+            sesion.close();
+        }
+        
+        return error;
     }
     
     private int DevolverUltimoID(int pCurCod){

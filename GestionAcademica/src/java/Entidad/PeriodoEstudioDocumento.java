@@ -7,11 +7,11 @@ package Entidad;
 
 import Enumerado.RutaArchivos;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.util.Date;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Column;
@@ -154,40 +154,70 @@ public class PeriodoEstudioDocumento implements Serializable {
         return "Entidad.PeriodoEstudioDocumento[ id=" + periodoEstudioDocumentoPK.toString() + " ]";
     }
     
+    
+    @Embeddable
+    public static class PeriodoEstudioDocumentoPK implements Serializable {
+        @ManyToOne(targetEntity = PeriodoEstudio.class, optional=false)
+        @JoinColumns({
+                @JoinColumn(name="PeriCod", referencedColumnName="PeriCod"),
+                @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
+            })
+        private PeriodoEstudio Peri;
+
+        private Integer DocCod;
+
+        public PeriodoEstudioDocumentoPK() {
+        }
+
+        public PeriodoEstudio getPeri() {
+            return Peri;
+        }
+
+        public void setPeri(PeriodoEstudio Peri) {
+            this.Peri = Peri;
+        }
+
+        public Integer getDocCod() {
+            return DocCod;
+        }
+
+        public void setDocCod(Integer DocCod) {
+            this.DocCod = DocCod;
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 5;
+            hash = 79 * hash + Objects.hashCode(this.Peri);
+            hash = 79 * hash + Objects.hashCode(this.DocCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final PeriodoEstudioDocumentoPK other = (PeriodoEstudioDocumentoPK) obj;
+            if (!Objects.equals(this.Peri, other.Peri)) {
+                return false;
+            }
+            if (!Objects.equals(this.DocCod, other.DocCod)) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+
+    }
 }
 
 
-@Embeddable
-class PeriodoEstudioDocumentoPK implements Serializable {
-    @ManyToOne(targetEntity = PeriodoEstudio.class, optional=false)
-    @JoinColumns({
-            @JoinColumn(name="PeriCod", referencedColumnName="PeriCod"),
-            @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
-        })
-    private PeriodoEstudio Peri;
-    
-    private Integer DocCod;
-
-    public PeriodoEstudioDocumentoPK() {
-    }
-
-    public PeriodoEstudio getPeri() {
-        return Peri;
-    }
-
-    public void setPeri(PeriodoEstudio Peri) {
-        this.Peri = Peri;
-    }
-
-    public Integer getDocCod() {
-        return DocCod;
-    }
-
-    public void setDocCod(Integer DocCod) {
-        this.DocCod = DocCod;
-    }
-
-    
-    
-
-}

@@ -14,8 +14,8 @@ import java.util.List;
  */
 public interface InModulo {
     Object guardar(Modulo pObjeto);
-    void actualizar(Modulo pObjeto);
-    void eliminar(Modulo pObjeto);
+    Object actualizar(Modulo pObjeto);
+    Object eliminar(Modulo pObjeto);
     Modulo obtener(Object pCodigo);
     List<Modulo> obtenerLista();
 }

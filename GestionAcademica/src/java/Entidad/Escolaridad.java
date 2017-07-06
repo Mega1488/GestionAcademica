@@ -7,14 +7,11 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -157,43 +154,74 @@ public class Escolaridad implements Serializable {
         return "Entidad.Escolaridad[ id=" + escolaridadPK + " ]";
     }
     
+    
+    @Embeddable
+    public static class EscolaridadPK implements Serializable {
+        @ManyToOne(targetEntity = Inscripcion.class, optional=false)        
+        @JoinColumns({
+                @JoinColumn(name="InsCod", referencedColumnName="InsCod"),
+                @JoinColumn(name="AluPerCod", referencedColumnName="AluPerCod"),
+            })
+        private Inscripcion inscripcion;
+
+        private Integer EscCod;
+
+        public EscolaridadPK() {
+        }
+
+        public Inscripcion getInscripcion() {
+            return inscripcion;
+        }
+
+        public void setInscripcion(Inscripcion inscripcion) {
+            this.inscripcion = inscripcion;
+        }
+
+        public Integer getEscCod() {
+            return EscCod;
+        }
+
+        public void setEscCod(Integer EscCod) {
+            this.EscCod = EscCod;
+        }
+
+        @Override
+        public String toString() {
+            return "EscolaridadPK{" + "inscripcion=" + inscripcion + ", EscCod=" + EscCod + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 97 * hash + Objects.hashCode(this.inscripcion);
+            hash = 97 * hash + Objects.hashCode(this.EscCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final EscolaridadPK other = (EscolaridadPK) obj;
+            if (!Objects.equals(this.inscripcion, other.inscripcion)) {
+                return false;
+            }
+            if (!Objects.equals(this.EscCod, other.EscCod)) {
+                return false;
+            }
+            return true;
+        }
+
+
+
+    }
 }
 
-@Embeddable
-class EscolaridadPK implements Serializable {
-    @ManyToOne(targetEntity = Inscripcion.class, optional=false)        
-    @JoinColumns({
-            @JoinColumn(name="InsCod", referencedColumnName="InsCod"),
-            @JoinColumn(name="AluPerCod", referencedColumnName="AluPerCod"),
-        })
-    private Inscripcion inscripcion;
-    
-    private Integer EscCod;
 
-    public EscolaridadPK() {
-    }
-
-    public Inscripcion getInscripcion() {
-        return inscripcion;
-    }
-
-    public void setInscripcion(Inscripcion inscripcion) {
-        this.inscripcion = inscripcion;
-    }
-
-    public Integer getEscCod() {
-        return EscCod;
-    }
-
-    public void setEscCod(Integer EscCod) {
-        this.EscCod = EscCod;
-    }
-
-    @Override
-    public String toString() {
-        return "EscolaridadPK{" + "inscripcion=" + inscripcion + ", EscCod=" + EscCod + '}';
-    }
-    
-    
-    
-}

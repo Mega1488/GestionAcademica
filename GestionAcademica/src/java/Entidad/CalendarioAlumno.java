@@ -8,13 +8,11 @@ package Entidad;
 import Enumerado.EstadoCalendarioEvaluacion;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -184,45 +182,75 @@ public class CalendarioAlumno implements Serializable {
         return "Entidad.CalendarioAlumno[ id=" + calAluPK.toString() + " ]";
     }
     
+    @Embeddable
+    public static class CalendarioAlumnoPK implements Serializable {
+        @ManyToOne(targetEntity = Calendario.class, optional=false)
+        @JoinColumns({
+            @JoinColumn(name="CalCod", referencedColumnName = "CalCod"),
+            @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
+        })
+        private Calendario Cal;
+
+        @ManyToOne(targetEntity = Persona.class, optional=false)
+        @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
+        private Persona Alumno;
+
+        public Calendario getCal() {
+            return Cal;
+        }
+
+        public void setCal(Calendario Cal) {
+            this.Cal = Cal;
+        }
+
+        public Persona getAlumno() {
+            return Alumno;
+        }
+
+        public void setAlumno(Persona Alumno) {
+            this.Alumno = Alumno;
+        }
+
+        public CalendarioAlumnoPK() {
+        }
+
+        @Override
+        public String toString() {
+            return "CalendarioAlumnoPK{" + "Cal=" + Cal + ", Alumno=" + Alumno + '}';
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 7;
+            hash = 83 * hash + Objects.hashCode(this.Cal);
+            hash = 83 * hash + Objects.hashCode(this.Alumno);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final CalendarioAlumnoPK other = (CalendarioAlumnoPK) obj;
+            if (!Objects.equals(this.Cal, other.Cal)) {
+                return false;
+            }
+            if (!Objects.equals(this.Alumno, other.Alumno)) {
+                return false;
+            }
+            return true;
+        }
+
+
+    }
 }
 
-@Embeddable
-class CalendarioAlumnoPK implements Serializable {
-    @ManyToOne(targetEntity = Calendario.class, optional=false)
-    @JoinColumns({
-        @JoinColumn(name="CalCod", referencedColumnName = "CalCod"),
-        @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
-    })
-    private Calendario Cal;
-    
-    @ManyToOne(targetEntity = Persona.class, optional=false)
-    @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
-    private Persona Alumno;
 
-    public Calendario getCal() {
-        return Cal;
-    }
-
-    public void setCal(Calendario Cal) {
-        this.Cal = Cal;
-    }
-
-    public Persona getAlumno() {
-        return Alumno;
-    }
-
-    public void setAlumno(Persona Alumno) {
-        this.Alumno = Alumno;
-    }
-
-    public CalendarioAlumnoPK() {
-    }
-
-    @Override
-    public String toString() {
-        return "CalendarioAlumnoPK{" + "Cal=" + Cal + ", Alumno=" + Alumno + '}';
-    }
-    
-    
-}
 

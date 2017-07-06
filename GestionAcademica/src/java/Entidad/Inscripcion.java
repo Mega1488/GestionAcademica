@@ -7,14 +7,11 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -151,38 +148,71 @@ public class Inscripcion implements Serializable {
         return "Entidad.Inscripcion[ id=" + inscripcionPK.toString() + " ]";
     }
     
-}
-
-
-@Embeddable
- class InscripcionPK implements Serializable {
-    @OneToOne(targetEntity = Persona.class, optional=false)        
-    @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
-    private Persona Persona;
     
-    private Integer InsCod;    
+    @Embeddable
+    public static class InscripcionPK implements Serializable {
+       @OneToOne(targetEntity = Persona.class, optional=false)        
+       @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
+       private Persona Persona;
 
-    public InscripcionPK() {
-    }
+       private Integer InsCod;    
 
-    public Persona getPersona() {
-        return Persona;
-    }
+       public InscripcionPK() {
+       }
 
-    public void setPersona(Persona Persona) {
-        this.Persona = Persona;
-    }
+       public Persona getPersona() {
+           return Persona;
+       }
 
-    public Integer getInsCod() {
-        return InsCod;
-    }
+       public void setPersona(Persona Persona) {
+           this.Persona = Persona;
+       }
 
-    public void setInsCod(Integer InsCod) {
-        this.InsCod = InsCod;
-    }
+       public Integer getInsCod() {
+           return InsCod;
+       }
 
-    @Override
-    public String toString() {
-        return "InscripcionPK{" + "Persona=" + Persona + ", InsCod=" + InsCod + '}';
-    }
+       public void setInsCod(Integer InsCod) {
+           this.InsCod = InsCod;
+       }
+
+       @Override
+       public String toString() {
+           return "InscripcionPK{" + "Persona=" + Persona + ", InsCod=" + InsCod + '}';
+       }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 97 * hash + Objects.hashCode(this.Persona);
+            hash = 97 * hash + Objects.hashCode(this.InsCod);
+            return hash;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null) {
+                return false;
+            }
+            if (getClass() != obj.getClass()) {
+                return false;
+            }
+            final InscripcionPK other = (InscripcionPK) obj;
+            if (!Objects.equals(this.Persona, other.Persona)) {
+                return false;
+            }
+            if (!Objects.equals(this.InsCod, other.InsCod)) {
+                return false;
+            }
+            return true;
+        }
+       
+       
+   }
 }
+
+
+

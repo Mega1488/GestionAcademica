@@ -6,19 +6,15 @@
 package Logica;
 
 import Entidad.Curso;
+import Entidad.Modulo;
 import Entidad.Parametro;
-import Enumerado.Constantes;
 import Enumerado.TipoMensaje;
 import Moodle.MoodleCategory;
 import Moodle.MoodleRestCourse;
-import Moodle.MoodleRestException;
 import Persistencia.PerCurso;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +24,7 @@ public class LoCurso implements Interfaz.InCurso{
     private final Parametro         param;
     private final MoodleRestCourse  mdlCourse;
     private final LoCategoria       loCategoria;
+    private final LoModulo          loModulo;
     private static LoCurso instancia;
     private PerCurso perCurso;
 
@@ -37,6 +34,8 @@ public class LoCurso implements Interfaz.InCurso{
         param               = loParam.obtener(1);
         perCurso            = new PerCurso();
         loCategoria         = LoCategoria.GetInstancia();
+        loModulo            = LoModulo.GetInstancia();
+
     }
     
     public static LoCurso GetInstancia(){
@@ -142,8 +141,6 @@ public class LoCurso implements Interfaz.InCurso{
 
     @Override
     public Object eliminar(Curso pCurso) {
-        perCurso.eliminar(pCurso);
-        
        boolean error           = false;
        Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
        Retorno_MsgObj retorno  = new Retorno_MsgObj();
@@ -173,13 +170,20 @@ public class LoCurso implements Interfaz.InCurso{
 
     @Override
     public Curso obtener(int pCurCod) {
-        return perCurso.obtener(pCurCod);
+        Curso curso = perCurso.obtener(pCurCod);
+        curso.setLstModulos(this.ObtenerModulos(curso));
+        return curso;
     }
 
     @Override
     public List<Curso> obtenerLista() {
         return perCurso.obtenerLista();
     }
+    
+    private List<Modulo> ObtenerModulos(Curso curso){
+        return loModulo.obtenerListaByCurso(curso.getCurCod());
+    }
+    
     
     //--------------------------------------------------------------------------------------------------------
     //Moodle

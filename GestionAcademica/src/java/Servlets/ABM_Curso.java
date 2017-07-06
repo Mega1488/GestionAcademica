@@ -221,10 +221,14 @@ public class ABM_Curso extends HttpServlet {
                 curso.setCurFac(CurFac);
                 curso.setCurCrt(CurCrt);
                 
-                if(!CurCatCod.isEmpty())
+                if(parametro.getParUtlMdl())
                 {
-                    curso.setCurCatCod(Long.valueOf(CurCatCod));
+                    if(!CurCatCod.isEmpty())
+                    {
+                        curso.setCurCatCod(Long.valueOf(CurCatCod));
+                    }
                 }
+                
                 
                 
                 
