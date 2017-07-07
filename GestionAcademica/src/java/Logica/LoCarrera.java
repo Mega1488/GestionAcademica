@@ -148,7 +148,6 @@ public class LoCarrera implements Interfaz.InCarrera{
            
             if(mensaje.getTipoMensaje() != TipoMensaje.ERROR || pCarrera.getCarCatCod() == null)
             {
-                System.out.println("CODIGO CARRERA: " + pCarrera.getCarCod().toString());
                 error = (boolean) perCarrera.eliminar(pCarrera);
                 if(error)
                 {

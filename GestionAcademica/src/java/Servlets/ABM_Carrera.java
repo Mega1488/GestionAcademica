@@ -50,7 +50,7 @@ public class ABM_Carrera extends HttpServlet {
             
             String action   = request.getParameter("pAccion");
             String retorno  = "";
-           
+            
             switch(action)
             {
                 case "INGRESAR":
@@ -125,26 +125,32 @@ public class ABM_Carrera extends HttpServlet {
         {
             mensaje = new Mensajes("La carrera debe tener un Nombre", TipoMensaje.ERROR);
         }
+        retorno = utiles.ObjetoToJson(mensaje);
+        
         return retorno;
     } 
     
     private String EliminarCarrera(HttpServletRequest request)
     {   
         String cod  = request.getParameter("pCod");
-        System.out.println("CARRERA: "+ cod);
+        
         if (cod != "")
         {
             Carrera pC = new Carrera();
             pC.setCarCod(Integer.valueOf(cod));
             
-            loCarrera.eliminar(pC);
+            pC = loCarrera.obtener(pC);
             
+            loCarrera.eliminar(pC);
+
             mensaje = new Mensajes("La carrera fue Eliminada", TipoMensaje.MENSAJE);
         }
         else
         {
             mensaje = new Mensajes("Hubieron problemas que impidieron eliminar la carrera", TipoMensaje.ERROR);
         }
+        retorno = utiles.ObjetoToJson(mensaje);
+        
         return retorno;
     }
     

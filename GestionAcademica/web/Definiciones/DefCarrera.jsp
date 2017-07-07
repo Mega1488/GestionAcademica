@@ -142,9 +142,9 @@
                         
                         if ($('#MODO').val()== "DELETE")
                         {
-                            $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
                                     pCod	: codVar,   
-                                    pAction     : "ELIMINAR"
+                                    pAccion     : "ELIMINAR"
                             }, function(responseText) {
                                 var obj = JSON.parse(responseText);
                                 MostrarCargando(false);
