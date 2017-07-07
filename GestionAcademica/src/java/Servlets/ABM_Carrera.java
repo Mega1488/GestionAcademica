@@ -51,7 +51,6 @@ public class ABM_Carrera extends HttpServlet {
             String action   = request.getParameter("pAccion");
             String retorno  = "";
            
-            System.out.println("ACCION: "+ action);
             switch(action)
             {
                 case "INGRESAR":
@@ -87,7 +86,6 @@ public class ABM_Carrera extends HttpServlet {
             pC.setCarDsc(Dsc);
             pC.setCarFac(Fac);
             pC.setCarCrt(Crt);
-            pC.setObjFchMod(fecha);
             
             loCarrera.guardar(pC);
             
@@ -104,23 +102,24 @@ public class ABM_Carrera extends HttpServlet {
     
     private String ModificarCarrera(HttpServletRequest request)
     {
-        String nom          = request.getParameter("pNom");
-        String Dsc          = request.getParameter("pDsc");
-        String Fac          = request.getParameter("pfac");
-        String Crt          = request.getParameter("pCrt");
+        String cod  = request.getParameter("pCod");
+        String nom  = request.getParameter("pNom");
+        String Dsc  = request.getParameter("pDsc");
+        String Fac  = request.getParameter("pfac");
+        String Crt  = request.getParameter("pCrt");
         
         if (nom != "")
         {
             Carrera pC = new Carrera();
+            pC.setCarCod(Integer.valueOf(cod));
             pC.setCarNom(nom);
             pC.setCarDsc(Dsc);
             pC.setCarFac(Fac);
             pC.setCarCrt(Crt);
-            pC.setObjFchMod(fecha);
             
             loCarrera.actualizar(pC);
             
-            mensaje = new Mensajes("Se ingresó correctametne la Carrera", TipoMensaje.MENSAJE);
+            mensaje = new Mensajes("Los nuevos datos de la Carrera fueron guardados", TipoMensaje.MENSAJE);
         }
         else
         {
@@ -132,7 +131,7 @@ public class ABM_Carrera extends HttpServlet {
     private String EliminarCarrera(HttpServletRequest request)
     {   
         String cod  = request.getParameter("pCod");
-        
+        System.out.println("CARRERA: "+ cod);
         if (cod != "")
         {
             Carrera pC = new Carrera();
@@ -147,7 +146,20 @@ public class ABM_Carrera extends HttpServlet {
             mensaje = new Mensajes("Hubieron problemas que impidieron eliminar la carrera", TipoMensaje.ERROR);
         }
         return retorno;
-    } 
+    }
+    
+//    private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)
+//    {
+//        if(!car.getCarNom().isEmpty())
+//        {
+//            
+//        }
+//        else
+//        {
+//            
+//        }        
+//        return car;
+//    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
