@@ -48,8 +48,7 @@ public class LoCategoria {
     
     public Retorno_MsgObj Mdl_AgregarCategoria(String pDsc, String pNom, Boolean pVisible)
     {
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Mensajes mensaje;
         
         MoodleCategory mdlCategoria = new MoodleCategory();
 
@@ -61,13 +60,12 @@ public class LoCategoria {
         try {
             mdlCategoria    = mdlCourse.__createCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlCategoria);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleRestException ex) {
+        } catch (UnsupportedEncodingException | MoodleRestException ex) {
+            mensaje        = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
             Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, mdlCategoria);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(mensaje, mdlCategoria);
 
         return retorno;
 
@@ -76,8 +74,7 @@ public class LoCategoria {
     
     public Retorno_MsgObj Mdl_ActualizarCategoria(Long codigo, String pDsc, String pNom, Boolean pVisible)
     {
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Mensajes mensaje;
         
         MoodleCategory mdlCategoria = this.Mdl_ObtenerCategoria(codigo);
 
@@ -88,13 +85,12 @@ public class LoCategoria {
         try {
             mdlCourse.__updateCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlCategoria);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleRestException ex) {
+        } catch (UnsupportedEncodingException | MoodleRestException ex) {
+            mensaje        = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
             Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, mdlCategoria);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(mensaje, mdlCategoria);
 
         return retorno;
 
@@ -102,20 +98,18 @@ public class LoCategoria {
     
     public Retorno_MsgObj Mdl_EliminarCategoria(Long codigo)
     {
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Mensajes mensaje;
         MoodleCategory mdlCat   = this.Mdl_ObtenerCategoria(codigo);
         
         try {
             mdlCourse.__deleteCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlCat);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleRestException ex) {
+        } catch (UnsupportedEncodingException | MoodleRestException ex) {
+            mensaje        = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
             Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, null);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(mensaje, null);
 
         return retorno;
 
@@ -125,13 +119,10 @@ public class LoCategoria {
     public MoodleCategory[] Mdl_ObtenerListaCategorias(){
         
         try {
-            System.err.println("Token: " + param.getParMdlTkn());
             MoodleCategory[] lstCategorias = mdlCourse.__getCategories(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn());
             return lstCategorias;
             
-        } catch (MoodleRestException ex) {
-            Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
+        } catch(MoodleRestException | UnsupportedEncodingException ex) {
             Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -147,9 +138,7 @@ public class LoCategoria {
                 return lstCategorias[0];
             }
 
-        } catch (MoodleRestException ex) {
-            Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
+        } catch (MoodleRestException | UnsupportedEncodingException ex) {
             Logger.getLogger(LoCategoria.class.getName()).log(Level.SEVERE, null, ex);
         }
 

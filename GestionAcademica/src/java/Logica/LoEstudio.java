@@ -49,8 +49,7 @@ public class LoEstudio {
     
     public Retorno_MsgObj Mdl_AgregarEstudio(Long pCategory, String pFullName, String pShortName, String pDescripcion)
     {
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Mensajes mensaje;
         
         MoodleCourse mdlEstudio = new MoodleCourse();
 
@@ -59,17 +58,16 @@ public class LoEstudio {
         mdlEstudio.setShortname(pShortName);
         mdlEstudio.setSummary(pDescripcion);
         
-        
         try {
             mdlEstudio    = mdlCourse.__createCourse(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlEstudio);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleRestException ex) {
+
+        } catch (UnsupportedEncodingException | MoodleRestException ex) {
+            mensaje         = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
             Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, mdlEstudio);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(mensaje, mdlEstudio);
 
         return retorno;
 
@@ -78,8 +76,7 @@ public class LoEstudio {
     
     public Retorno_MsgObj Mdl_ActualizarEstudio(Long pCodigo, Long pCategory, String pFullName, String pShortName, String pDescripcion)
     {
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Mensajes mensaje;
         
         MoodleCourse mdlEstudio = this.Mdl_ObtenerEstudio(pCodigo);
 
@@ -93,13 +90,12 @@ public class LoEstudio {
             mdlCourse.__updateCourse(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlEstudio);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
     
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleRestException ex) {
+        } catch (UnsupportedEncodingException | MoodleRestException ex) {
+            mensaje         = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
             Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, mdlEstudio);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(mensaje, mdlEstudio);
 
         return retorno;
 
@@ -107,19 +103,17 @@ public class LoEstudio {
     
     public Retorno_MsgObj Mdl_EliminarEstudio(Long codigo)
     {
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Mensajes mensaje;
         
         try {
             mdlCourse.__deleteCourse(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), codigo);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleRestException ex) {
+        } catch (UnsupportedEncodingException | MoodleRestException ex) {
+            mensaje         = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
             Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, null);
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(mensaje, null);
 
         return retorno;
 
@@ -133,9 +127,7 @@ public class LoEstudio {
             
             return course;
 
-        } catch (MoodleRestException ex) {
-            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
+        } catch (MoodleRestException | UnsupportedEncodingException ex) {
             Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
         }
 
