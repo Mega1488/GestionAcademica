@@ -83,27 +83,32 @@ public class ABM_Evaluacion extends HttpServlet {
             error           = false;
 
             Evaluacion evaluacion = this.ValidarEvaluacion(request, null);
-
+            System.err.println("..");
             //------------------------------------------------------------------------------------------
             //Guardar cambios
             //------------------------------------------------------------------------------------------
 
             if(!error)
             {
+                System.err.println("x");
+                
                 if(evaluacion.getCurEvl() != null)
                 {
+                    System.err.println("b");
                     Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionAgregar(evaluacion);
                     
                     mensaje    = retornoObj.getMensaje();
                 }
                 
-                if(evaluacion.getMatEvl()!= null)
+                if(evaluacion.getModEvl()!= null)
                 {
-                    //Retorno_MsgObj retornoObj = (Retorno_MsgObj) loEvaluacion.guardar(evaluacion);
-                    //mensaje    = retornoObj.getMensaje();
+                    System.err.println("c");
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEvaluacionAgregar(evaluacion);
+                    
+                    mensaje    = retornoObj.getMensaje();
                 }
                 
-                if(evaluacion.getModEvl() != null)
+                if(evaluacion.getMatEvl() != null)
                 {
                     //Retorno_MsgObj retornoObj = (Retorno_MsgObj) loEvaluacion.guardar(evaluacion);
                     //mensaje    = retornoObj.getMensaje();
@@ -142,6 +147,13 @@ public class ABM_Evaluacion extends HttpServlet {
                     
                     mensaje    = retornoObj.getMensaje();
                 }
+                
+                if(evaluacion.getModEvl() != null)
+                {
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEvaluacionActualizar(evaluacion);
+                    
+                    mensaje    = retornoObj.getMensaje();
+                }
 
             }
             
@@ -173,6 +185,13 @@ public class ABM_Evaluacion extends HttpServlet {
                 if(evaluacion.getCurEvl() != null)
                 {
                     Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionEliminar(evaluacion);
+                    
+                    mensaje    = retornoObj.getMensaje();
+                }
+                
+                if(evaluacion.getModEvl() != null)
+                {
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEvaluacionEliminar(evaluacion);
                     
                     mensaje    = retornoObj.getMensaje();
                 }
@@ -223,19 +242,21 @@ public class ABM_Evaluacion extends HttpServlet {
 
 
                 //Sin validacion
-                if(!MatEvlMatCod.isEmpty())
+                if(!MatEvlMatCod.equals("null"))
                 {
                     //evaluacion.setMatEvl(MatEvlCarCod);
                 }
-                
-                if(!CurEvlCurCod.isEmpty())
+                     
+                if(!CurEvlCurCod.equals("null"))
                 {
                     evaluacion.setCurEvl((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurEvlCurCod)).getObjeto());
                 }
                 
-                if(!ModEvlCurCod.isEmpty())
+                
+                if(!ModEvlCurCod.equals("null"))
                 {
-                    //evaluacion.setModEvl(LoModulo.GetInstancia().obtener(new Modulo())ModEvlCurCod);
+                    Curso curso = (Curso) LoCurso.GetInstancia().obtener(Long.valueOf(ModEvlCurCod)).getObjeto();
+                    evaluacion.setModEvl(curso.getModuloById(Long.valueOf(ModEvlModCod)));
                 }
                 
                 evaluacion.setEvlNom(EvlNom);

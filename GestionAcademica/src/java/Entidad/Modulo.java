@@ -110,7 +110,21 @@ public class Modulo implements Serializable {
         this.lstEvaluacion = lstEvaluacion;
     }
     
-    
+    public Evaluacion getEvaluacionById(Long EvlCod){
+        
+        Evaluacion evaluacion = new Evaluacion();
+        
+        for(Evaluacion evl : this.lstEvaluacion)
+        {
+            if(evl.getEvlCod().equals(EvlCod))
+            {
+                evaluacion = evl;
+                break;
+            }
+        }
+        
+        return evaluacion;
+    }
     
     public Long getModCod() {
         return this.ModCod;

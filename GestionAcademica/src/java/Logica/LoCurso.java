@@ -219,7 +219,7 @@ public class LoCurso implements Interfaz.InCurso{
     }
     
     //------------------------------------------------------------------------------------
-    //-MANEJO DE EVALUACION
+    //-MANEJO DE EVALUACION CURSO
     //------------------------------------------------------------------------------------
     public Object CursoEvaluacionAgregar(Evaluacion evaluacion)
     {
@@ -255,6 +255,46 @@ public class LoCurso implements Interfaz.InCurso{
         curso.getLstEvaluacion().remove(indice);
 
         Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
+        
+        return retorno;
+    }
+    
+        //------------------------------------------------------------------------------------
+    //-MANEJO DE EVALUACION MODULO
+    //------------------------------------------------------------------------------------
+    public Object ModuloEvaluacionAgregar(Evaluacion evaluacion)
+    {
+        evaluacion.setObjFchMod(new Date());
+        
+        Modulo modulo = evaluacion.getModEvl();
+        modulo.getLstEvaluacion().add(evaluacion);
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.ModuloActualizar(modulo);
+        
+        return retorno;
+    }
+    
+    public Object ModuloEvaluacionActualizar(Evaluacion evaluacion)
+    {
+        evaluacion.setObjFchMod(new Date());
+        
+        Modulo modulo = evaluacion.getModEvl();
+        int indice  = modulo.getLstEvaluacion().indexOf(evaluacion);
+        
+        modulo.getLstEvaluacion().set(indice, evaluacion);
+
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.ModuloActualizar(modulo);
+        
+        return retorno;
+    }
+    
+    public Object ModuloEvaluacionEliminar(Evaluacion evaluacion)
+    {
+        Modulo modulo = evaluacion.getModEvl();
+        int indice  = modulo.getLstEvaluacion().indexOf(evaluacion);
+        
+        modulo.getLstEvaluacion().remove(indice);
+
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.ModuloActualizar(modulo);
         
         return retorno;
     }

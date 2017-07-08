@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Entidad.Modulo"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Entidad.TipoEvaluacion"%>
@@ -30,8 +31,8 @@
     Modo Mode                 = Modo.valueOf(request.getParameter("MODO"));
     String Relacion           = request.getParameter("pRelacion");
     String CurEvlCurCod       = request.getParameter("pCurEvlCurCod");
-    String ModEvlCurCod       = request.getParameter("pAASD");
-    String ModEvlModCod       = request.getParameter("pModCod");
+    String ModEvlCurCod       = request.getParameter("pModEvlCurCod");
+    String ModEvlModCod       = request.getParameter("pModEvlModCod");
     String MatEvlCarCod       = request.getParameter("pModCod");
     String MatEvlPlaEstCod    = request.getParameter("pModCod");
     String MatEvlMatCod       = request.getParameter("pModCod");
@@ -65,7 +66,25 @@
     }
     if(Relacion.equals("MODULO"))
     {
-        //js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + CurEvlCurCod + "');";
+        js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + ModEvlCurCod + "&pModCod=" + ModEvlModCod + "');";
+        
+        Curso curso     = new Curso();
+        Modulo modulo   = new Modulo();
+        Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(ModEvlCurCod));
+        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        {
+            curso = (Curso) retorno.getObjeto();
+            modulo = curso.getModuloById(Long.valueOf(ModEvlModCod));
+        }
+        else
+        {
+            out.print(retorno.getMensaje().toString());
+        }
+        
+        if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
+        {
+            evaluacion = modulo.getEvaluacionById(Long.valueOf(EvlCod));
+        }
     }
     if(Relacion.equals("MATERIA"))
     {
@@ -255,7 +274,7 @@
                 <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
             </div>
             
-            <h1>Curso</h1>
+            <h1>Evaluación</h1>
             
             <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                     <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
