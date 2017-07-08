@@ -60,11 +60,12 @@ public class Modulo implements Serializable {
     @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
     private Curso curso;    
     
-    @Column(name = "ModNom", length = 100)
+    @Column(name = "ModNom", length = 100, unique = true)
     private String ModNom;
     
     @Column(name = "ModDsc", length = 500)
     private String ModDsc;
+    
     
     @Column(name = "ModTpoPer")
     private TipoPeriodo ModTpoPer;
