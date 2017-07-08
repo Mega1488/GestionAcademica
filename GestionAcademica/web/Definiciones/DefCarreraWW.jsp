@@ -4,6 +4,9 @@
     Author     : aa
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="Logica.LoCarrera"%>
+<%@page import="Entidad.Carrera"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,7 +14,11 @@
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
+    LoCarrera loCar     = LoCarrera.GetInstancia();
+        
+    List<Carrera> lstCarrera = loCar.obtenerLista();
     
+//    String tblCarreraVisible = (lstCarrera.size() > 0 ? "" : "display: none;");
 //    String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCarrera.jsp');";
 %>
 
@@ -109,45 +116,40 @@
                                 <div class="panel-body">
                                     <table id="TblCar" class="table table-bordered">
                                         <tr>
-                                            <td></td>
-                                            <td></td>
-                                            <td>Código</td>
-                                            <td>Nombre</td>
-                                            <td>Facultad</td>
-                                            <td>Categoría</td>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                            <th>Facultad</th>
+                                            <th>Certificación</th>
                                         </tr>
-                                        <!-- Los tres registros no van, pero quedan de guía -->
+                                        <%
+                                        for(Carrera car : lstCarrera)
+                                        {
+                                        %>
                                         <tr>
-                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>'"></button></td>
-                                            <td style="text-align:center"><button type="button" class="btn_mod" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>'"></button></td>
-                                            <td>1</td>
-                                            <td>Analista Programador</td>
-                                            <td>Ingeniería de Software</td>
-                                            <td>AP</td>
+<!--                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>''&pCarCod='<% out.print(car.getCarCod()); %>"></button></td>
+                                            <td style="text-align:center"><button type="button" class="btn_mod" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>''&pCarCod='<% out.print(car.getCarCod()); %>"></button></td>-->
+                                            
+                                            <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
+                                            <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
+                                            <td><% out.print(utilidad.NuloToCero(car.getCarCod())); %></td>
+                                            <td><% out.print(utilidad.NuloToVacio(car.getCarNom())); %></td>
+                                            <td><% out.print(utilidad.NuloToVacio(car.getCarDsc())); %></td>
+                                            <td><% out.print(utilidad.NuloToVacio(car.getCarFac())); %></td>
+                                            <td><% out.print(utilidad.NuloToVacio(car.getCarCrt())); %></td>
                                         </tr>
-                                        <tr>
-                                            <td style="text-align:center"><button type="submit" class="btn_eli"></button></td>
-                                            <td style="text-align:center"><button type="submit" class="btn_mod"></button></td>
-                                            <td>2</td>
-                                            <td>Técnico en Gerencia</td>
-                                            <td>Gerencia</td>
-                                            <td>TG</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:center"><button type="submit" class="btn_eli"></button></td>
-                                            <td style="text-align:center"><button type="submit" class="btn_mod"></button></td>
-                                            <td>3</td>
-                                            <td>Diseño Web</td>
-                                            <td>Diseño</td>
-                                            <td>D</td>
-                                        </tr>
+                                        <%
+                                        }
+                                        %>
                                     </table>
                                 </div>
-                        </div>
-                  </form>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div> 
-  </body>
+        </div> 
+    </body>
 </html>

@@ -31,7 +31,8 @@ public class LoCarrera implements Interfaz.InCarrera{
     private LoCarrera(){
         perCarrera      = new PerCarrera();
         mdlRestCourse   = new MoodleRestCourse();
-        param           = new Parametro();
+        LoParametro loParam = LoParametro.GetInstancia();
+        param               = loParam.obtener(1);
         loCategoria     = LoCategoria.GetInstancia();
     }
     
@@ -62,7 +63,7 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             objeto = perCarrera.guardar(pCarrera);
-
+            
             if(((Carrera) objeto).getCarCod() == null)
             {
                 mensaje = new Mensajes("Error al guardar", TipoMensaje.ERROR);
@@ -70,8 +71,9 @@ public class LoCarrera implements Interfaz.InCarrera{
             else
             {
                 mensaje = new Mensajes("La Carrera fue Ingresada", TipoMensaje.MENSAJE);
+                System.out.println("Parametro: "+param.getParUtlMdl().toString());
 
-                if(param.getParUtlMdl())
+                if(param.getParUtlMdl() && pCarrera.getCarCatCod() == null)
                 {
                     mensaje = this.Mdl_AgregarCategoria(pCarrera);
 
@@ -88,31 +90,42 @@ public class LoCarrera implements Interfaz.InCarrera{
 
     @Override
     public Object actualizar(Carrera pCarrera) {
-        
         boolean error       = false;
-        Carrera carr        = perCarrera.obtener(pCarrera);
         Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
         Retorno_MsgObj retorno  = new Retorno_MsgObj();
         
-        error = (boolean) perCarrera.actualizar(pCarrera);
-
-        if(!error)
+        if(pCarrera.getCarCatCod() != null && param.getParUtlMdl())
         {
-            mensaje = new Mensajes("Cambios aplicados", TipoMensaje.MENSAJE);
-
-            if(param.getParUtlMdl())
+            if(!this.Mdl_ValidarCategoria(pCarrera.getCarCatCod()))
             {
-                mensaje = this.Mdl_ActualizarCarrera(pCarrera);
-
-                if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                {
-                    this.actualizar(carr);
-                }
+                error = true;
+                mensaje = new Mensajes("Categoría no valida", TipoMensaje.ERROR);
             }
         }
-        else
+        
+        if (!error)
         {
-            mensaje = new Mensajes("Error al aplicar cambios", TipoMensaje.ERROR);
+            Carrera carr = perCarrera.obtener(pCarrera);
+            error = (boolean) perCarrera.actualizar(pCarrera);
+
+            if(!error)
+            {
+                mensaje = new Mensajes("Cambios aplicados", TipoMensaje.MENSAJE);
+
+                if(param.getParUtlMdl())
+                {
+                    mensaje = this.Mdl_ActualizarCategoria(pCarrera);
+
+                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
+                    {
+                        this.actualizar(carr);
+                    }
+                }
+            }
+            else
+            {
+                mensaje = new Mensajes("Error al aplicar cambios", TipoMensaje.ERROR);
+            }
         }
         retorno = new Retorno_MsgObj(mensaje, null);
         return retorno;
@@ -120,10 +133,38 @@ public class LoCarrera implements Interfaz.InCarrera{
 
     @Override
     public Object eliminar(Carrera pCarrera) {
-        boolean error = false;
         perCarrera.eliminar(pCarrera);
         
-        return false;
+        boolean error       = false;
+        Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
+        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+       
+        if(!perCarrera.ValidarEliminacion(pCarrera))
+        {
+            if(pCarrera.getCarCatCod() != null)
+            {
+                mensaje = this.Mdl_EliminarCategoria(pCarrera);
+            }
+           
+            if(mensaje.getTipoMensaje() != TipoMensaje.ERROR || pCarrera.getCarCatCod() == null)
+            {
+                error = (boolean) perCarrera.eliminar(pCarrera);
+                if(error)
+                {
+                    mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
+                }
+                else
+                {
+                    mensaje = new Mensajes("Eliminación Correcta", TipoMensaje.MENSAJE);
+                }
+            }
+        }
+        else
+        {
+            mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
+        }
+        retorno = new Retorno_MsgObj(mensaje, null);
+        return retorno;
     }
 
     @Override
@@ -144,8 +185,7 @@ public class LoCarrera implements Interfaz.InCarrera{
     //----------------------------------------------------------------------------------------------------
     //-Modle
     //----------------------------------------------------------------------------------------------------
-    
-    //impacta la carrera como una categoría en moodle
+
     public Mensajes Mdl_AgregarCategoria(Carrera pCarrera)
     {
         Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
@@ -174,37 +214,20 @@ public class LoCarrera implements Interfaz.InCarrera{
         return (category != null);
     }
     
-    public Mensajes Mdl_ActualizarCarrera(Carrera pCarrera)
+    private Mensajes Mdl_ActualizarCategoria(Carrera pCarrera)
     {
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
-        MoodleCategory category = Mdl_ObtenerCategoiaByID(pCarrera.getCarCatCod());
-        
-        category.setName(pCarrera.getCarNom());
-        category.setDescription(pCarrera.getCarDsc());
- 
-//        try
-//        {
-//            
-//        }
-//        catch(Exception ex)
-//        {
-//            ex.printStackTrace();
-//        }
+        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pCarrera.getCarCatCod(), pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
+        mensaje = retorno.getMensaje();
         return mensaje;
     }
     
-    private MoodleCategory Mdl_ObtenerCategoiaByID(Long id)
+    private Mensajes Mdl_EliminarCategoria(Carrera pCarrera)
     {
-        MoodleCategory category = new MoodleCategory();
-        
-        try
-        {
-//            category = mdlRestCourse.__createCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), category);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        return category;
+        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Retorno_MsgObj retorno = loCategoria.Mdl_EliminarCategoria(pCarrera.getCarCatCod());
+        mensaje = retorno.getMensaje();
+        return mensaje;
     }
+    
 }

@@ -39,13 +39,13 @@ public class PerCarrera implements Interfaz.InCarrera{
 
     @Override
     public Object guardar(Carrera pCarrera) {
-        int id = 0;
+//        int id = 0;
         pCarrera = this.DevolverNuevoID(pCarrera);
         pCarrera.setObjFchMod(new Date());
 
         try {
             iniciaOperacion();
-            id = (int) sesion.save(pCarrera);
+            pCarrera.setCarCod((int) sesion.save(pCarrera));
             tx.commit();
         } catch (HibernateException he) {
             manejaExcepcion(he);
@@ -53,8 +53,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         } finally {
             sesion.close();
         }
-
-        return id;
+        return pCarrera;
     }
     
     @Override
@@ -100,11 +99,33 @@ public class PerCarrera implements Interfaz.InCarrera{
         }
         return error;
     }
+    
+    public boolean ValidarEliminacion(Carrera pCarrera)
+    {
+        boolean error   = false;
+        try
+        {
+            iniciaOperacion();
+            sesion.delete(pCarrera);
+            tx.rollback();
+        }
+        catch(HibernateException he)
+        {
+            error = true;
+            manejaExcepcion(he);
+            throw he;
+        }
+        finally
+        {
+            sesion.close();
+        }
+        return error;
+    }
 
     @Override
-    public Carrera obtener(Carrera pCodigo) {
-        Carrera  codigo          = (Carrera) pCodigo;
-        Carrera objetoRetorno    = new Carrera();
+    public Carrera obtener(Carrera pCarrera) {
+        int codigo              = pCarrera.getCarCod();
+        Carrera objetoRetorno   = new Carrera();
         try {
                 iniciaOperacion();
                 objetoRetorno = (Carrera) sesion.get(Carrera.class, codigo);            
@@ -168,7 +189,6 @@ public class PerCarrera implements Interfaz.InCarrera{
             Carrera objeto = listaObjeto.get(0);
             retorno = objeto.getCarCod()+ 1;
         }
-
         return retorno;
     }
 

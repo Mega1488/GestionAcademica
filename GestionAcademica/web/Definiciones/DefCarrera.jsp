@@ -4,6 +4,8 @@
     Author     : aa
 --%>
 
+<%@page import="Logica.LoCarrera"%>
+<%@page import="Entidad.Carrera"%>
 <%@page import="Enumerado.Modo"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -14,21 +16,30 @@
 <!DOCTYPE html>
 
 <%    
-    Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
-   
-    String DefCar       = "DefCarreraWW.jsp";
-    Modo mode           = Modo.valueOf(request.getParameter("MODO"));
-    String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCarreraWW.jsp');";
-    String CamposActivos = "disabled";
+    Utilidades utilidad     = Utilidades.GetInstancia();
+    String urlSistema       = utilidad.GetUrlSistema();
+    LoCarrera loCar         = LoCarrera.GetInstancia();
+    Carrera car             = new Carrera();
     
-    Date fecha          = new Date();
-    DateFormat f        = new SimpleDateFormat("dd/mm/yyyy");
-    String today        = "";
+    String DefCar           = "DefCarreraWW.jsp";
+    String CarCod           = request.getParameter("pCarCod");
+    Modo mode               = Modo.valueOf(request.getParameter("MODO"));
+    String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefCarreraWW.jsp');";
+    String CamposActivos    = "disabled";
+    
+    Date fecha              = new Date();
+    DateFormat f            = new SimpleDateFormat("dd/mm/yyyy");
+    String today            = "";
+    
+    if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
+    {
+        car.setCarCod(Integer.valueOf(CarCod));
+        car = loCar.obtener(car);
+    }
     
     if (mode.equals(Modo.DELETE) || mode.equals(Modo.UPDATE))
     {
-        today = "Fecha de Modificación: " + "XX/XX/XXXX";
+        today = "Fecha de Modificación: " + f.format(car.getObjFchMod());
     }
     else
     {
@@ -74,7 +85,7 @@
                     var facVar          = $('#CarFac').val();
                     var crtVar          = $('#CarCrt').val();
                     
-                    if(nomVar == '')
+                    if(nomVar == '' && $('#MODO').val()!= "DELETE")
                     {
                         MostrarMensaje("ERROR", "Deberá asignar un nombre a la Carrera");
                         MostrarCargando(false);
@@ -108,11 +119,12 @@
                         {
                             // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                             $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                                    pNom          : nomVar,
-                                    pDsc          : dscVar,
-                                    pfac          : facVar,
-                                    pCrt          : crtVar,
-                                    pAccion       : "MODIFICAR"
+                                    pCod        : codVar,
+                                    pNom        : nomVar,
+                                    pDsc        : dscVar,
+                                    pfac        : facVar,
+                                    pCrt        : crtVar,
+                                    pAccion     : "MODIFICAR"
                             }, function(responseText) {
                                 var obj = JSON.parse(responseText);
                                 MostrarCargando(false);
@@ -130,9 +142,9 @@
                         
                         if ($('#MODO').val()== "DELETE")
                         {
-                            $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
                                     pCod	: codVar,   
-                                    pAction     : "ELIMINAR"
+                                    pAccion     : "ELIMINAR"
                             }, function(responseText) {
                                 var obj = JSON.parse(responseText);
                                 MostrarCargando(false);
@@ -204,7 +216,8 @@
                                             <td>
                                                 <div class="form-group">
                                                 <label>Código</label>
-                                                <imput type="text" class="form-control" id="CarCod" placeholder="Código" disabled/>
+                                                <!--<imput type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">-->
+                                                <input type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">
                                                 </div>
                                             </td>
                                         </tr>
@@ -212,13 +225,13 @@
                                             <td>
                                                 <div class="form-group">
                                                   <label for="InputNombre">Nombre</label>
-                                                  <input type="text" class="form-control" id="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> >
+                                                  <input type="text" class="form-control" id="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarNom())); %>">
                                                 </div>                                            
                                             </td>
                                             <td class="margin">
                                                 <div class="form-group">
                                                   <label for="InputDescripcion">Descripción</label>
-                                                  <input type="text" class="form-control" id="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> >
+                                                  <input type="text" class="form-control" id="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarDsc())); %>">
                                                 </div>                                                
                                             </td>
                                         </tr>
@@ -226,13 +239,13 @@
                                             <td>
                                                 <div class="form-group">
                                                   <label for="InputFacultad">Facultad</label>
-                                                  <input type="text" class="form-control" id="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> >
+                                                  <input type="text" class="form-control" id="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarFac())); %>">
                                                 </div>                                            
                                             </td>
                                             <td class="margin">
                                                 <div class="form-group">
                                                   <label for="InputCertificacion">Certificación</label>
-                                                  <input type="text" class="form-control" id="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> >
+                                                  <input type="text" class="form-control" id="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarCrt())); %>">
                                                 </div>                                                
                                             </td>
                                         </tr>

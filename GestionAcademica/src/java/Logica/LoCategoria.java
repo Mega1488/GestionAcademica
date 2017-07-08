@@ -106,8 +106,6 @@ public class LoCategoria {
         Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
         MoodleCategory mdlCat   = this.Mdl_ObtenerCategoria(codigo);
         
-        System.err.println("Categoria padre: " + mdlCat.getParent());
-        
         try {
             mdlCourse.__deleteCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlCat);
             mensaje         = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
