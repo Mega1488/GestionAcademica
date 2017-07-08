@@ -6,6 +6,10 @@
 package Persistencia;
 
 import Entidad.Curso;
+import Entidad.Modulo;
+import Enumerado.TipoMensaje;
+import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -39,132 +43,115 @@ public class PerCurso implements Interfaz.InCurso{
 
     @Override
     public Object guardar(Curso pCurso) {
-        pCurso = this.DevolverNuevoID(pCurso);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar curso", TipoMensaje.ERROR), pCurso);
+        
         pCurso.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            pCurso.setCurCod((int) sesion.save(pCurso));
+            pCurso.setCurCod((Long) sesion.save(pCurso));
             tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Curso guardado correctamente", TipoMensaje.MENSAJE), pCurso);
         } catch (HibernateException he) {
+            retorno = new Retorno_MsgObj(new Mensajes("Error al guardar curso: " + he.getMessage(), TipoMensaje.ERROR), pCurso);
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
         
-        return pCurso;
+        return retorno;
     }
 
     @Override
     public Object actualizar(Curso pCurso) {
-        boolean error = false; 
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al actualizar curso", TipoMensaje.ERROR), pCurso);
+        
         try {
             pCurso.setObjFchMod(new Date());
+            System.err.println("Guardando curso: " + pCurso.getCurCod());
+           
             iniciaOperacion();
             sesion.update(pCurso);
             tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Curso actualizado correctamente", TipoMensaje.MENSAJE), pCurso);
         } catch (HibernateException he) {
-            error = true;
+            retorno = new Retorno_MsgObj(new Mensajes("Error al actualizar curso: " + he.getMessage(), TipoMensaje.ERROR), pCurso);
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
         
-        return error;
+        return retorno;
     }
 
     @Override
     public Object eliminar(Curso pCurso) {
-        boolean error = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR));
         try {
             iniciaOperacion();
             sesion.delete(pCurso);
             tx.commit();
             
-            //Agregar objeto eliminado a la tabla de sincronización
-            //-
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
             
         } catch (HibernateException he) {
-            error = true;
+            retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar: " + he.getMessage(), TipoMensaje.ERROR));
             manejaExcepcion(he);
             throw he;
         } finally {
             sesion.close();
         }
-        return error;
+        return retorno;
     }
-    
-    public boolean ValidarEliminacion(Curso pObjeto)
-    {
-       boolean error = false;
+
+    @Override
+    public Retorno_MsgObj obtener(Long pCurCod) {
+       
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
+       
         try {
-            iniciaOperacion();
-            sesion.delete(pObjeto);
-            tx.rollback();
             
+            iniciaOperacion();
+            Curso curso   = (Curso) sesion.get(Curso.class, pCurCod);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), curso);
+        
         } catch (HibernateException he) {
-            error = true;
+        
+            retorno = new Retorno_MsgObj(new Mensajes("Error al obtener: " + he.getMessage(), TipoMensaje.ERROR), null);
             manejaExcepcion(he);
             throw he;
-        } finally {
+        }  finally {
             sesion.close();
         }
-                
-         return error;       
+        return retorno;
     }
 
     @Override
-    public Curso obtener(int pCurCod) {
-       Curso objetoRetorno = new Curso();
-        try {
-            iniciaOperacion();
-                objetoRetorno = (Curso) sesion.get(Curso.class, pCurCod);
-            
-        } finally {
-            sesion.close();
-        }
-        return objetoRetorno;
-    }
-
-    @Override
-    public List<Curso> obtenerLista() {
-        List<Curso> listaRetorno = null;
-
-        try {
-            iniciaOperacion();
-            
-                listaRetorno = sesion.getNamedQuery("Curso.findAll").list();
-            
-        } finally {
-            sesion.close();
-        }
-
-        return listaRetorno;
-    }
-    
-    private Curso DevolverNuevoID(Curso objeto){
-
-        objeto.setCurCod(this.DevolverUltimoID());
+    public Retorno_MsgObj obtenerLista() {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
         
-        return objeto;
-    }
-    
-    private int DevolverUltimoID(){
-        int retorno = 1;
-        List<Curso> listaObjeto = new ArrayList<Curso>(); 
         try {
+            
             iniciaOperacion();
-            listaObjeto = sesion.getNamedQuery("Curso.findLastCurso").setMaxResults(1).list();
-        } finally {
+            
+            List<Object> listaRetorno =  sesion.getNamedQuery("Curso.findAll").list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+        
+        } catch (HibernateException he) {
+        
+            retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista: " + he.getMessage(), TipoMensaje.ERROR), null);
+            manejaExcepcion(he);
+            throw he;
+        }  finally {
             sesion.close();
         }
-        if (!listaObjeto.isEmpty()){
-            Curso objeto = listaObjeto.get(0);
-            retorno = objeto.getCurCod() + 1;
-        }
-        
+
         return retorno;
     }
     

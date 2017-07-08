@@ -4,6 +4,8 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.TipoMensaje"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Moodle.MoodleCategory"%>
 <%@page import="Entidad.Parametro"%>
 <%@page import="Logica.LoParametro"%>
@@ -30,8 +32,15 @@
     
     if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
     {
-        curso.setCurCod(Integer.valueOf(CurCod));
-        curso = loCurso.obtener(curso.getCurCod());
+        Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(CurCod));
+        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        {
+            curso = (Curso) retorno.getObjeto();
+        }
+        else
+        {
+            out.print(retorno.getMensaje().toString());
+        }
     }
     
     String CamposActivos = "disabled";

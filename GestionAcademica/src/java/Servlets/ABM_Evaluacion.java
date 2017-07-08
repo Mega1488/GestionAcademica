@@ -5,13 +5,12 @@
  */
 package Servlets;
 
-
-import Entidad.Parametro;
 import Entidad.Curso;
+import Entidad.Evaluacion;
 import Enumerado.TipoMensaje;
-import Logica.LoParametro;
 import Logica.LoCurso;
-import Logica.Seguridad;
+import Logica.LoParametro;
+import Logica.LoTipoEvaluacion;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -26,11 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author alvar
  */
-public class ABM_Curso extends HttpServlet {
+public class ABM_Evaluacion extends HttpServlet {
     private final LoParametro loParametro   = LoParametro.GetInstancia();
-    private final Parametro parametro       = loParametro.obtener(1);
-    private final Seguridad seguridad       = Seguridad.GetInstancia();
-    private final LoCurso loCurso           = LoCurso.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
@@ -68,49 +64,16 @@ public class ABM_Curso extends HttpServlet {
                 case "ELIMINAR":
                     retorno = this.EliminarDatos(request);
                 break;
-                
                         
             }
 
             out.println(retorno);
             
         }
-        
     }
     
+    
     private String AgregarDatos(HttpServletRequest request)
-        {
-            mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
-
-            try
-            {
-
-                error           = false;
-                
-                Curso curso = this.ValidarCurso(request, null);
-
-                //------------------------------------------------------------------------------------------
-                //Guardar cambios
-                //------------------------------------------------------------------------------------------
-
-                if(!error)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCurso.guardar(curso);
-                    mensaje    = retornoObj.getMensaje();
-                }
-            }
-            catch(Exception ex)
-            {
-                mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
-                throw ex;
-            }
-
-            String retorno = utilidades.ObjetoToJson(mensaje);
-
-            return retorno;
-        }
-
-    private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -118,32 +81,74 @@ public class ABM_Curso extends HttpServlet {
         {
 
             error           = false;
-            String CurCod   = request.getParameter("pCurCod");
 
-            Retorno_MsgObj retorno = loCurso.obtener(Long.valueOf(CurCod));
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
+            Evaluacion evaluacion = this.ValidarEvaluacion(request, null);
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
 
             if(!error)
             {
-                Curso curso = (Curso) retorno.getObjeto();
-                curso = this.ValidarCurso(request, curso);
-
-                //------------------------------------------------------------------------------------------
-                //Guardar cambios
-                //------------------------------------------------------------------------------------------
-
-                if(!error)
+                if(evaluacion.getCurEvl() != null)
                 {
-                    retorno     = (Retorno_MsgObj) loCurso.actualizar(curso);
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionAgregar(evaluacion);
+                    
+                    mensaje    = retornoObj.getMensaje();
+                }
+                
+                if(evaluacion.getMatEvl()!= null)
+                {
+                    //Retorno_MsgObj retornoObj = (Retorno_MsgObj) loEvaluacion.guardar(evaluacion);
+                    //mensaje    = retornoObj.getMensaje();
+                }
+                
+                if(evaluacion.getModEvl() != null)
+                {
+                    //Retorno_MsgObj retornoObj = (Retorno_MsgObj) loEvaluacion.guardar(evaluacion);
+                    //mensaje    = retornoObj.getMensaje();
                 }
             }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al Agregar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
 
-            mensaje = retorno.getMensaje(); 
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+    }
+
+    private String ActualizarDatos(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+        try
+        {
+
+            error           = false;
+            
+            Evaluacion evaluacion = this.ValidarEvaluacion(request, null);
+            
+            if(!error)
+            {
+                String EvlCod= request.getParameter("pEvlCod");
+                evaluacion.setEvlCod(Long.valueOf(EvlCod));
+                
+                if(evaluacion.getCurEvl() != null)
+                {
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionActualizar(evaluacion);
+                    
+                    mensaje    = retornoObj.getMensaje();
+                }
+
+            }
             
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
+            mensaje = new Mensajes("Error al Actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
             throw ex;
         }
 
@@ -156,20 +161,24 @@ public class ABM_Curso extends HttpServlet {
     {
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
+
         try
         {
-            String CurCod           = request.getParameter("pCurCod");
-            Retorno_MsgObj retorno  =  loCurso.obtener(Long.valueOf(CurCod));
-            
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
-
+            Evaluacion evaluacion = this.ValidarEvaluacion(request, null);
             if(!error)
             {
-                retorno = (Retorno_MsgObj) loCurso.eliminar((Curso) retorno.getObjeto());
-            }
-            
-            mensaje = retorno.getMensaje();
+                String EvlCod= request.getParameter("pEvlCod");
+                evaluacion.setEvlCod(Long.valueOf(EvlCod));
+                
+                if(evaluacion.getCurEvl() != null)
+                {
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionEliminar(evaluacion);
+                    
+                    mensaje    = retornoObj.getMensaje();
+                }
 
+            }
+           
         }
         catch(Exception ex)
         {
@@ -177,23 +186,32 @@ public class ABM_Curso extends HttpServlet {
             throw ex;
         }
 
+        String retorno = utilidades.ObjetoToJson(mensaje);
 
-
-        return utilidades.ObjetoToJson(mensaje);
+        return retorno;
     }
-        
-        private Curso ValidarCurso(HttpServletRequest request, Curso curso)
-        {
-            if(curso == null)
+
+    private Evaluacion ValidarEvaluacion(HttpServletRequest request, Evaluacion evaluacion)
+    {
+            if(evaluacion == null)
             {
-                curso   = new Curso();
+                evaluacion   = new Evaluacion();
             }
 
-                String CurNom= request.getParameter("pCurNom");
-                String CurDsc= request.getParameter("pCurDsc");
-                String CurFac= request.getParameter("pCurFac");
-                String CurCrt= request.getParameter("pCurCrt");
-                String CurCatCod= request.getParameter("pCurCatCod");
+          
+                String MatEvlCarCod= request.getParameter("pMatEvlCarCod");
+                String MatEvlPlaEstCod= request.getParameter("pMatEvlPlaEstCod");
+                String MatEvlMatCod= request.getParameter("pMatEvlMatCod");
+                
+                String CurEvlCurCod= request.getParameter("pCurEvlCurCod");
+                
+                String ModEvlCurCod= request.getParameter("pModEvlCurCod");
+                String ModEvlModCod= request.getParameter("pModEvlModCod");
+                
+                String EvlNom= request.getParameter("pEvlNom");
+                String EvlDsc= request.getParameter("pEvlDsc");
+                String EvlNotTot= request.getParameter("pEvlNotTot");
+                String TpoEvlCod= request.getParameter("pTpoEvlCod");
                 
                 //------------------------------------------------------------------------------------------
                 //Validaciones
@@ -205,27 +223,36 @@ public class ABM_Curso extends HttpServlet {
 
 
                 //Sin validacion
-                curso.setCurNom(CurNom);
-                curso.setCurDsc(CurDsc);
-                curso.setCurFac(CurFac);
-                curso.setCurCrt(CurCrt);
-                
-                if(parametro.getParUtlMdl())
+                if(!MatEvlMatCod.isEmpty())
                 {
-                    if(!CurCatCod.isEmpty())
-                    {
-                        curso.setCurCatCod(Long.valueOf(CurCatCod));
-                    }
+                    //evaluacion.setMatEvl(MatEvlCarCod);
                 }
                 
+                if(!CurEvlCurCod.isEmpty())
+                {
+                    evaluacion.setCurEvl((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurEvlCurCod)).getObjeto());
+                }
                 
+                if(!ModEvlCurCod.isEmpty())
+                {
+                    //evaluacion.setModEvl(LoModulo.GetInstancia().obtener(new Modulo())ModEvlCurCod);
+                }
                 
+                evaluacion.setEvlNom(EvlNom);
+                evaluacion.setEvlDsc(EvlDsc);
                 
-            return curso;
+                evaluacion.setEvlNotTot(Double.valueOf(EvlNotTot));
+                
+                if(!TpoEvlCod.isEmpty())
+                {
+                    evaluacion.setTpoEvl(LoTipoEvaluacion.GetInstancia().obtener(Integer.valueOf(TpoEvlCod)));
+                }
+        
+           
+                
+            return evaluacion;
         }
 
-    
-        
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.

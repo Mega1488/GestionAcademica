@@ -38,6 +38,12 @@ public class Mensajes {
     public void setTipoMensaje(TipoMensaje tipoMensaje) {
         this.tipoMensaje = tipoMensaje;
     }
+
+    @Override
+    public String toString() {
+        return tipoMensaje + ": " + mensaje;
+    }
+    
     
     
 }

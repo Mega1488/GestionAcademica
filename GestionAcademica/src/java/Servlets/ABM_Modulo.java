@@ -7,15 +7,10 @@ package Servlets;
 
 
 import Entidad.Curso;
-import Entidad.Parametro;
 import Entidad.Modulo;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Logica.LoCurso;
-import Logica.LoParametro;
-import Logica.LoModulo;
-import Logica.LoModulo;
-import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -31,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
  * @author alvar
  */
 public class ABM_Modulo extends HttpServlet {
-    private final LoModulo loModulo           = LoModulo.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
@@ -79,35 +73,35 @@ public class ABM_Modulo extends HttpServlet {
     }
     
     private String AgregarDatos(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
         {
-            mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
-            try
+            error         = false;
+            Modulo modulo = this.ValidarModulo(request, null);
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
             {
-
-                error           = false;
-                
-                Modulo modulo = this.ValidarModulo(request, null);
-
-                //------------------------------------------------------------------------------------------
-                //Guardar cambios
-                //------------------------------------------------------------------------------------------
-
-                if(!error)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loModulo.guardar(modulo);
-                    mensaje    = retornoObj.getMensaje();
-                }
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloAgregar(modulo);
+                mensaje    = retornoObj.getMensaje();
             }
-            catch(Exception ex)
-            {
-                ex.printStackTrace();
-            }
-
-            String retorno = utilidades.ObjetoToJson(mensaje);
-
-            return retorno;
         }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+    }
 
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -121,23 +115,28 @@ public class ABM_Modulo extends HttpServlet {
 
             Modulo modulo = new Modulo();
 
-            Curso curso = LoCurso.GetInstancia().obtener(Integer.valueOf(CurCod));
-            modulo.setCurso(curso);
-            modulo.setModCod(Integer.valueOf(ModCod));
-
-
-            modulo = loModulo.obtener(modulo);
-
-            if(modulo != null)
+            Retorno_MsgObj retorno = LoCurso.GetInstancia().obtener(Long.valueOf(CurCod));
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
+            
+            if(!error)
             {
-                modulo = this.ValidarModulo(request, modulo);
-                modulo.setModCod(Integer.valueOf(ModCod));
+                modulo.setModCod(Long.valueOf(ModCod));
+                modulo.setCurso((Curso) retorno.getObjeto());
+
+                modulo = modulo.getCurso().getModuloById(modulo.getModCod());
+
+                if(modulo != null)
+                {
+                    modulo = this.ValidarModulo(request, modulo);
+                    modulo.setModCod(Long.valueOf(ModCod));
+                }
+               else
+                {
+                    mensaje = new Mensajes("El modulo que quiere actualizar, no existe", TipoMensaje.ERROR); 
+                    error   = true;
+                }
             }
-           else
-            {
-                mensaje = new Mensajes("El modulo que quiere actualizar, no existe", TipoMensaje.ERROR); 
-                error   = true;
-            }
+            
 
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -145,13 +144,15 @@ public class ABM_Modulo extends HttpServlet {
 
             if(!error)
             {
-                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loModulo.actualizar(modulo);
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloActualizar(modulo);
+                    
                 mensaje    = retornoObj.getMensaje();
             }
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
         }
 
         String retorno = utilidades.ObjetoToJson(mensaje);
@@ -169,31 +170,34 @@ public class ABM_Modulo extends HttpServlet {
             String ModCod    = request.getParameter("pModCod");
             String CurCod    = request.getParameter("pCurCod");
 
-            Modulo modulo = new Modulo();
-
-            Curso curso = LoCurso.GetInstancia().obtener(Integer.valueOf(CurCod));
-            modulo.setCurso(curso);
-            modulo.setModCod(Integer.valueOf(ModCod));
-
-            modulo = loModulo.obtener(modulo);
-
-            if(modulo == null)
-            {
-                mensaje = new Mensajes("La modulo que quiere eliminar, no existe", TipoMensaje.ERROR); 
-                error   = true;
-            }
-
+            Retorno_MsgObj retorno = LoCurso.GetInstancia().obtener(Long.valueOf(CurCod));
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
+            
             if(!error)
             {
-                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loModulo.eliminar(modulo);
-                mensaje    = retornoObj.getMensaje();
-            }
+            
+                Modulo modulo = ((Curso) retorno.getObjeto()).getModuloById(Long.valueOf(ModCod));
 
+                if(modulo == null)
+                {
+                    retorno.setMensaje( new Mensajes("La modulo que quiere eliminar, no existe", TipoMensaje.ERROR)); 
+                    error   = true;
+                }
+
+                if(!error)
+                {
+                    retorno = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEliminar(modulo);
+                }
+            }
+            
+            mensaje    = retorno.getMensaje();
+            
 
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
         }
 
 
@@ -224,9 +228,8 @@ public class ABM_Modulo extends HttpServlet {
 
 
             //Sin validacion
-            Curso curso = LoCurso.GetInstancia().obtener(Integer.valueOf(CurCod));
 
-            modulo.setCurso(curso);
+            modulo.setCurso((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto());
             modulo.setModNom(ModNom);
             modulo.setModDsc(ModDsc);
             modulo.setModTpoPer(TipoPeriodo.fromCode(Integer.valueOf(ModTpoPer)));

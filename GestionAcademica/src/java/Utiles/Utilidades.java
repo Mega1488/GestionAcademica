@@ -47,6 +47,11 @@ public class Utilidades {
         System.err.println(TAG + " ---> " + Msg);
     }
     
+    public void MostrarMensaje(Mensajes mensaje)
+    {
+        System.err.println(mensaje.getTipoMensaje() + ": " + mensaje.getMensaje());
+    }
+    
     
     public String ObjetoToJson(Object objeto)
     {

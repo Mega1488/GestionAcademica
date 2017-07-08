@@ -127,6 +127,7 @@ public class LoCategoria {
     public MoodleCategory[] Mdl_ObtenerListaCategorias(){
         
         try {
+            System.err.println("Token: " + param.getParMdlTkn());
             MoodleCategory[] lstCategorias = mdlCourse.__getCategories(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn());
             return lstCategorias;
             

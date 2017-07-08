@@ -12,6 +12,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
@@ -21,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -40,8 +43,10 @@ public class Curso implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "CurCod", nullable = false)
-    private Integer CurCod;
+    private Long CurCod;
     
     @Column(name = "CurNom", length = 100)
     private String CurNom;
@@ -62,19 +67,19 @@ public class Curso implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
-    @OneToMany(targetEntity = Modulo.class, cascade= CascadeType.ALL)
+    @OneToMany(targetEntity = Modulo.class, cascade= CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="CurCod")
     private List<Modulo> lstModulos;
     
-    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="CurEvlCurCod", referencedColumnName="CurCod")
     private List<Evaluacion> lstEvaluacion;
 
-    public Integer getCurCod() {
+    public Long getCurCod() {
         return CurCod;
     }
 
-    public void setCurCod(Integer CurCod) {
+    public void setCurCod(Long CurCod) {
         this.CurCod = CurCod;
     }
 
@@ -142,10 +147,39 @@ public class Curso implements Serializable {
         this.lstEvaluacion = lstEvaluacion;
     }
     
+    public Evaluacion getEvaluacionById(Long EvlCod){
+        
+        Evaluacion evaluacion = new Evaluacion();
+        
+        for(Evaluacion evl : this.lstEvaluacion)
+        {
+            System.err.println("Evaluacion: " + evl.toString());
+            if(evl.getEvlCod().equals(EvlCod))
+            {
+                evaluacion = evl;
+                break;
+            }
+        }
+        
+        return evaluacion;
+    }
     
-    
-    
-
+    public Modulo getModuloById(Long ModCod){
+        
+        Modulo pModulo = new Modulo();
+        
+        for(Modulo modulo : this.lstModulos)
+        {
+            if(modulo.getModCod().equals(ModCod))
+            {
+                pModulo = modulo;
+                break;
+            }
+        }
+        
+        return pModulo;
+    }
+   
     @Override
     public int hashCode() {
         int hash = 0;

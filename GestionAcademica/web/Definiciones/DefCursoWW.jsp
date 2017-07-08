@@ -3,6 +3,9 @@
     Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
+<%@page import="Enumerado.TipoMensaje"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="Entidad.Curso"%>
 <%@page import="java.util.List"%>
 <%@page import="Logica.LoCurso"%>
@@ -13,7 +16,19 @@
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
     
-    List<Curso> lstCurso = loCurso.obtenerLista();
+    List<Object> lstCurso = new ArrayList<>();
+    
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtenerLista();
+    if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR && retorno.getLstObjetos() != null)
+    {
+        System.err.println("Lista de objeto: " + retorno.getLstObjetos().size());
+        lstCurso = retorno.getLstObjetos();
+        System.err.println("Lista de curso: " + lstCurso.size());
+    }
+    else
+    {
+        out.print(retorno.getMensaje().toString());
+    }
     
     String tblCursoVisible = (lstCurso.size() > 0 ? "" : "display: none;");
 
@@ -55,9 +70,9 @@
                         <th>Certificación</th>
                     </tr>
                     
-                    <% for(Curso curso : lstCurso)
+                    <% for(Object objeto : lstCurso)
                     {
-                     
+                     Curso curso = (Curso) objeto;
                     %>
                     <tr>
                         <td><a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCurCod=<% out.print(curso.getCurCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>

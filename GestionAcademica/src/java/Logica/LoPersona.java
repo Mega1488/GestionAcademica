@@ -96,7 +96,7 @@ public class LoPersona implements Interfaz.InPersona{
             {
                 mensaje = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
                  
-                if(param.getParUtlMdl())
+                if(param.getParUtlMdl() && pObjeto.getPerUsrModID() == null)
                 {
                     mensaje = this.Mdl_AgregarUsuario(pObjeto);
 

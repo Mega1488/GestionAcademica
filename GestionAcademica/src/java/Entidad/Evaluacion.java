@@ -19,11 +19,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -33,8 +33,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "EVALUACION")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Evaluacion.findAll",       query = "SELECT t FROM Evaluacion t"),
-    @NamedQuery(name = "Evaluacion.findByPK",      query = "SELECT t FROM Evaluacion t WHERE t.EvlCod =:EvlCod"),
+    @NamedQuery(name = "Evaluacion.findAll",            query = "SELECT t FROM Evaluacion t"),
+    @NamedQuery(name = "Evaluacion.findByPK",           query = "SELECT t FROM Evaluacion t WHERE t.EvlCod =:EvlCod"),
+    @NamedQuery(name = "Evaluacion.findByCurso",        query = "SELECT t FROM Evaluacion t WHERE t.CurEvl.CurCod =:CurCod"),
+    @NamedQuery(name = "Evaluacion.findByModulo",       query = "SELECT t FROM Evaluacion t WHERE t.ModEvl.curso.CurCod =:CurCod and t.ModEvl.ModCod =:ModCod"),
+    @NamedQuery(name = "Evaluacion.findByMateria",      query = "SELECT t FROM Evaluacion t WHERE t.MatEvl.materiaPK.plan.planPK.carrera.CarCod =:CarCod and t.MatEvl.materiaPK.plan.planPK.PlaEstCod =:PlaEstCod and t.MatEvl.materiaPK.MatCod =:MatCod"),
+        
     @NamedQuery(name = "Evaluacion.findLast",      query = "SELECT t FROM Evaluacion t ORDER BY t.EvlCod DESC")})
 
 public class Evaluacion implements Serializable {
@@ -44,8 +48,11 @@ public class Evaluacion implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "EvlCod", nullable = false)
-    private Integer EvlCod;
+    private Long EvlCod;
+    
     
     @OneToOne(targetEntity = Materia.class, optional=true)
     @JoinColumns({
@@ -87,11 +94,11 @@ public class Evaluacion implements Serializable {
     
     //-GETTERS Y SETTERS
     
-    public Integer getEvlCod() {
+    public Long getEvlCod() {
         return EvlCod;
     }
 
-    public void setEvlCod(Integer EvlCod) {
+    public void setEvlCod(Long EvlCod) {
         this.EvlCod = EvlCod;
     }
 

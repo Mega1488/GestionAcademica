@@ -10,7 +10,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    LoCurso loCurso     = LoCurso.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
     
@@ -22,6 +21,7 @@
     if(!Mode.equals(Mode.INSERT))
     {  
         out.println("<div class='div_tabs'><a href='" + urlSistema + "Definiciones/DefCursoModuloSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Modulos</a></div>");
+        out.println("<div class='div_tabs'><a href='" + urlSistema + "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Evaluación</a></div>");
     }
 %>
     

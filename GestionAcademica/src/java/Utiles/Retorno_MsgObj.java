@@ -6,6 +6,7 @@
 package Utiles;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -16,6 +17,7 @@ public class Retorno_MsgObj {
     private Mensajes mensaje;
     private ArrayList<Mensajes> lstMensajes;
     private Object   objeto;
+    private List<Object> lstObjetos;
     
     public Retorno_MsgObj() {
     }
@@ -29,6 +31,17 @@ public class Retorno_MsgObj {
         this.lstMensajes = lstMensajes;
         this.objeto = objeto;
     }
+    
+    public Retorno_MsgObj(Mensajes mensaje, ArrayList<Object> lstObjetos) {
+        this.mensaje = mensaje;
+        this.lstObjetos = lstObjetos;
+    }
+
+    public Retorno_MsgObj(Mensajes mensaje) {
+        this.mensaje = mensaje;
+    }
+    
+    
 
     public ArrayList<Mensajes> getLstMensajes() {
         return lstMensajes;
@@ -59,6 +72,16 @@ public class Retorno_MsgObj {
     public void setObjeto(Object objeto) {
         this.objeto = objeto;
     }
+
+    public List<Object> getLstObjetos() {
+        return lstObjetos;
+    }
+
+    public void setLstObjetos(List<Object> lstObjetos) {
+        this.lstObjetos = lstObjetos;
+    }
+
+ 
     
     
     

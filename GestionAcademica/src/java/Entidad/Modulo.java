@@ -8,19 +8,26 @@ package Entidad;
 import Enumerado.TipoPeriodo;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.JoinColumns;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -34,17 +41,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Modulo.findAll", query = "SELECT m FROM Modulo m"),
-    @NamedQuery(name = "Modulo.findByPK", query = "SELECT m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod and m.modPK.ModCod = :ModCod"),
-    @NamedQuery(name = "Modulo.findByCurso", query = "SELECT m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod"),
-    @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.modPK.curso.CurCod = :CurCod ORDER BY m.modPK.ModCod desc")})
+    @NamedQuery(name = "Modulo.findByPK", query = "SELECT m FROM Modulo m WHERE m.curso.CurCod = :CurCod and m.ModCod = :ModCod"),
+    @NamedQuery(name = "Modulo.findByCurso", query = "SELECT m FROM Modulo m WHERE m.curso.CurCod = :CurCod"),
+    @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.curso.CurCod = :CurCod ORDER BY m.ModCod desc")})
 
 public class Modulo implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
-    @EmbeddedId
-    private final ModuloPK modPK;
-    
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "ModCod")
+    private Long ModCod;
+        
+    @OneToOne(targetEntity = Curso.class)
+    @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
+    private Curso curso;    
     
     @Column(name = "ModNom", length = 100)
     private String ModNom;
@@ -67,6 +81,13 @@ public class Modulo implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
+    @JoinColumns({
+            @JoinColumn(name="ModEvlCurCod", referencedColumnName="CurCod"),
+            @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod")
+        })
+    private List<Evaluacion> lstEvaluacion;
    
     /*
     @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
@@ -78,17 +99,24 @@ public class Modulo implements Serializable {
 */
     
     public Modulo() {
-        this.modPK = new ModuloPK();
-    }
-    
-    
-    
-    public Integer getModCod() {
-        return modPK.getModCod();
     }
 
-    public void setModCod(Integer ModCod) {
-        modPK.setModCod(ModCod);
+    public List<Evaluacion> getLstEvaluacion() {
+        return lstEvaluacion;
+    }
+
+    public void setLstEvaluacion(List<Evaluacion> lstEvaluacion) {
+        this.lstEvaluacion = lstEvaluacion;
+    }
+    
+    
+    
+    public Long getModCod() {
+        return this.ModCod;
+    }
+
+    public void setModCod(Long pModCod) {
+        this.ModCod = pModCod;
     }
 
     public Long getModEstCod() {
@@ -103,11 +131,11 @@ public class Modulo implements Serializable {
     
     
     public Curso getCurso() {
-        return modPK.getCurso();
+        return this.curso;
     }
 
-    public void setCurso(Curso curso) {
-        modPK.setCurso(curso);
+    public void setCurso(Curso pCurso) {
+        this.curso = pCurso;
     }
 
     public String getModNom() {
@@ -157,111 +185,45 @@ public class Modulo implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
-  
-    
-   
-    
-    
-    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (modPK.getModCod() != null ? modPK.getModCod().hashCode() : 0);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.ModCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Modulo)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Modulo other = (Modulo) object;
-        if ((modPK.getModCod() == null && other.modPK.getModCod() != null) || (modPK.getModCod() != null && !modPK.getModCod().equals(other.modPK.getModCod()))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Modulo other = (Modulo) obj;
+        if (!Objects.equals(this.ModCod, other.ModCod)) {
             return false;
         }
         return true;
     }
 
+ 
+    
+    
+  
+ 
+    
+
     @Override
     public String toString() {
-        return "Entidad.Modulo[ id=" + modPK.getModCod().toString() + " ]";
+        return "Entidad.Modulo[ id=" + getModCod().toString() + " ]";
     }
     
     
-    @Embeddable
-    public static class ModuloPK implements Serializable {
-        private Integer ModCod;
-
-        
-        @ManyToOne(targetEntity = Curso.class, optional=false)
-        @JoinColumn(name="CurCod", referencedColumnName = "CurCod")
-        private Curso curso;
-
-        public Integer getModCod() {
-            return ModCod;
-        }
-        
-
-        public void setModCod(Integer ModCod) {
-            this.ModCod = ModCod;
-        }
-
-        public Curso getCurso() {
-            return curso;
-        }
-
-        public void setCurso(Curso curso) {
-            this.curso = curso;
-        }
-
-        public ModuloPK(Integer ModCod, Curso curso) {
-            this.ModCod = ModCod;
-            this.curso = curso;
-        }
-
-        public ModuloPK() {
-        }
-
-        @Override
-        public String toString() {
-            return "ModuloPK{" + "ModCod=" + ModCod + ", curso=" + curso + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 79 * hash + Objects.hashCode(this.ModCod);
-            hash = 79 * hash + Objects.hashCode(this.curso);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final ModuloPK other = (ModuloPK) obj;
-            if (!Objects.equals(this.ModCod, other.ModCod)) {
-                return false;
-            }
-            if (!Objects.equals(this.curso, other.curso)) {
-                return false;
-            }
-            return true;
-        }
-
-        
-
-
-
-    }
     
 }
 

@@ -5,18 +5,17 @@
  */
 package Interfaz;
 
-import Entidad.Curso;
-import Utiles.Retorno_MsgObj;
+import Entidad.Evaluacion;
 import java.util.List;
 
 /**
  *
  * @author alvar
  */
-public interface InCurso {
-    Object guardar(Curso pCurso);
-    Object actualizar(Curso pCurso);
-    Object eliminar(Curso pCurso);
-    Retorno_MsgObj obtener(Long pCurCod);
-    Retorno_MsgObj obtenerLista();
+public interface InEvaluacion {
+    Object guardar(Evaluacion pObjeto);
+    Object actualizar(Evaluacion pObjeto);
+    Object eliminar(Evaluacion pObjeto);
+    Evaluacion obtener(Object pCodigo);
+    List<Evaluacion> obtenerLista();
 }

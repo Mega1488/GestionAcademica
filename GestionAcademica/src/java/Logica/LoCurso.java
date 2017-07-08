@@ -6,14 +6,17 @@
 package Logica;
 
 import Entidad.Curso;
+import Entidad.Evaluacion;
 import Entidad.Modulo;
 import Entidad.Parametro;
 import Enumerado.TipoMensaje;
 import Moodle.MoodleCategory;
+import Moodle.MoodleCourse;
 import Moodle.MoodleRestCourse;
 import Persistencia.PerCurso;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,9 +27,9 @@ public class LoCurso implements Interfaz.InCurso{
     private final Parametro         param;
     private final MoodleRestCourse  mdlCourse;
     private final LoCategoria       loCategoria;
-    private final LoModulo          loModulo;
     private static LoCurso instancia;
     private PerCurso perCurso;
+    private final LoEstudio  loEstudio;
 
     private LoCurso() {
         mdlCourse           = new MoodleRestCourse();
@@ -34,8 +37,7 @@ public class LoCurso implements Interfaz.InCurso{
         param               = loParam.obtener(1);
         perCurso            = new PerCurso();
         loCategoria         = LoCategoria.GetInstancia();
-        loModulo            = LoModulo.GetInstancia();
-
+        loEstudio           = LoEstudio.GetInstancia();
     }
     
     public static LoCurso GetInstancia(){
@@ -51,45 +53,28 @@ public class LoCurso implements Interfaz.InCurso{
     @Override
     public Object guardar(Curso pCurso) {
         boolean error           = false;
-        Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error al guardar curso", TipoMensaje.ERROR), pCurso);
         
-        Object objeto = null;
-        
-        if(pCurso.getCurCatCod() != null && param.getParUtlMdl())
+        if(param.getParUtlMdl())
         {
-            if(!this.Mdl_ValidarCategoria(pCurso.getCurCatCod()))
+            if(pCurso.getCurCatCod() == null)
             {
-                error = true;
-                mensaje = new Mensajes("Categoría no valida", TipoMensaje.ERROR);
-            }
-        }
-        
-        if(!error)
-        {
-            objeto = perCurso.guardar(pCurso);
-            
-            if(((Curso) objeto).getCurCod() == null)
-            {
-                mensaje = new Mensajes("Error al guardar", TipoMensaje.ERROR);
+                retorno = this.Mdl_AgregarCategoria(pCurso);
             }
             else
             {
-                mensaje = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
-                 
-                if(param.getParUtlMdl() && pCurso.getCurCatCod() == null)
-                {
-                    mensaje = this.Mdl_AgregarCategoria(pCurso);
-
-                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                    {
-                        this.eliminar((Curso) objeto);
-                    }
-                }
+               retorno = this.Mdl_ActualizarCategoria(pCurso); 
             }
+
+            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
         }
-        
-        retorno = new Retorno_MsgObj(mensaje, objeto);
+            
+        if(!error)
+        {
+            pCurso  = (Curso) retorno.getObjeto();
+            retorno = (Retorno_MsgObj) perCurso.guardar(pCurso);
+        }
+
         return retorno;
         
     }
@@ -97,91 +82,181 @@ public class LoCurso implements Interfaz.InCurso{
     @Override
     public Object actualizar(Curso pCurso) {
         boolean error           = false;
-        Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        
-        if(pCurso.getCurCatCod() != null && param.getParUtlMdl())
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR), pCurso);
+       
+        if(param.getParUtlMdl())
         {
-            if(!this.Mdl_ValidarCategoria(pCurso.getCurCatCod()))
+            if(pCurso.getCurCatCod() != null)
             {
-                error = true;
-                mensaje = new Mensajes("Categoría no valida", TipoMensaje.ERROR);
+                retorno = this.Mdl_ActualizarCategoria(pCurso);
             }
+            else
+            {
+                retorno = this.Mdl_AgregarCategoria(pCurso);
+            }
+            
+            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
         }
         
         if(!error)
         {
-            Curso sinModificar = perCurso.obtener(pCurso.getCurCod());
+            pCurso  = (Curso) retorno.getObjeto();
+            retorno = (Retorno_MsgObj) perCurso.actualizar(pCurso);
             
-            error = (boolean) perCurso.actualizar(pCurso);
-            
-            if(!error)
+            if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
             {
-                mensaje = new Mensajes("Cambios aplicados", TipoMensaje.MENSAJE);
-                
-                if(param.getParUtlMdl())
-                {
-                    mensaje = this.Mdl_ActualizarCategoria(pCurso);
-                    
-                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                    {
-                        this.actualizar(sinModificar);
-                    }
-                }
+                retorno = this.obtener(pCurso.getCurCod());
             }
-            else
-            {
-                mensaje = new Mensajes("Error al aplicar cambios", TipoMensaje.ERROR);
-            }
+
         }
-        
-        retorno = new Retorno_MsgObj(mensaje, null);
+
         return retorno;
     }
 
     @Override
     public Object eliminar(Curso pCurso) {
-       boolean error           = false;
-       Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
-       Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        boolean error           = false;
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));
        
-       if(!perCurso.ValidarEliminacion(pCurso))
-       {
-           mensaje = this.Mdl_EliminarCategoria(pCurso);
+        if(param.getParUtlMdl() && pCurso.getCurCatCod() != null)
+        {
+            retorno = this.Mdl_EliminarCategoria(pCurso);
+            error   = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }
 
-            if(mensaje.getTipoMensaje() != TipoMensaje.ERROR)
-            {
-                error = (boolean) perCurso.eliminar(pCurso);
-                if(error)
-                {
-                    mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
-                }
-            }
-       }
-       else
-       {
-           mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
-       }
-       
-       retorno = new Retorno_MsgObj(mensaje, null);
+        if(!error)
+        {
+            retorno = (Retorno_MsgObj) perCurso.eliminar(pCurso);
+        }
        
        return retorno;
     }
 
     @Override
-    public Curso obtener(int pCurCod) {
-        Curso curso = perCurso.obtener(pCurCod);
-        curso.setLstModulos(this.ObtenerModulos(curso));
-        return curso;
+    public Retorno_MsgObj obtener(Long pCurCod) {
+        return perCurso.obtener(pCurCod);
     }
 
     @Override
-    public List<Curso> obtenerLista() {
+    public Retorno_MsgObj obtenerLista() {
         return perCurso.obtenerLista();
     }
     
-    private List<Modulo> ObtenerModulos(Curso curso){
-        return loModulo.obtenerListaByCurso(curso.getCurCod());
+    //------------------------------------------------------------------------------------
+    //-MANEJO DE MODULO
+    //------------------------------------------------------------------------------------
+    
+    public Object ModuloAgregar(Modulo modulo)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar el modulo",TipoMensaje.ERROR), modulo);
+       
+        if(param.getParUtlMdl())
+        {
+            retorno = this.Mdl_AgregarEstudio(modulo);
+            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }        
+        
+        if(!error)
+        {
+            modulo = (Modulo) retorno.getObjeto();
+            Curso curso = modulo.getCurso();
+            modulo.setObjFchMod(new Date());
+            curso.getLstModulos().add(modulo);
+            retorno = (Retorno_MsgObj) this.actualizar(curso);
+        }
+       
+        
+        return retorno;
+    }
+    
+    public Object ModuloActualizar(Modulo modulo)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error al actualizar el modulo", TipoMensaje.ERROR), modulo);
+       
+        if(param.getParUtlMdl() && modulo.getModEstCod() != null)
+        {
+            retorno = this.Mdl_ActualizarEstudio(modulo);
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }
+        
+        if(!error)
+        {
+            modulo = (Modulo) retorno.getObjeto();
+            Curso curso = modulo.getCurso();
+            int indice  = curso.getLstModulos().indexOf(modulo);
+            modulo.setObjFchMod(new Date());
+            curso.getLstModulos().set(indice, modulo);
+
+            retorno = (Retorno_MsgObj) this.actualizar(curso);
+        }
+
+        return retorno;
+    }
+    
+    public Object ModuloEliminar(Modulo modulo)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar modulo", TipoMensaje.ERROR), modulo);
+       
+        if(param.getParUtlMdl() && modulo.getModEstCod() != null)
+        {
+            retorno = this.Mdl_EliminarEstudio(modulo);
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }
+        
+        if(!error)
+        {
+            modulo = (Modulo) retorno.getObjeto();
+            Curso curso = modulo.getCurso();
+            int indice  = curso.getLstModulos().indexOf(modulo);
+            curso.getLstModulos().remove(indice);
+
+            retorno = (Retorno_MsgObj) this.actualizar(curso);
+        }
+        return retorno;
+    }
+    
+    //------------------------------------------------------------------------------------
+    //-MANEJO DE EVALUACION
+    //------------------------------------------------------------------------------------
+    public Object CursoEvaluacionAgregar(Evaluacion evaluacion)
+    {
+        evaluacion.setObjFchMod(new Date());
+        
+        Curso curso = evaluacion.getCurEvl();
+        curso.getLstEvaluacion().add(evaluacion);
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
+        
+        return retorno;
+    }
+    
+    public Object CursoEvaluacionActualizar(Evaluacion evaluacion)
+    {
+        evaluacion.setObjFchMod(new Date());
+        
+        Curso curso = evaluacion.getCurEvl();
+        int indice  = curso.getLstEvaluacion().indexOf(evaluacion);
+        
+        curso.getLstEvaluacion().set(indice, evaluacion);
+
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
+        
+        return retorno;
+    }
+    
+    public Object CursoEvaluacionEliminar(Evaluacion evaluacion)
+    {
+        Curso curso = evaluacion.getCurEvl();
+        int indice  = curso.getLstEvaluacion().indexOf(evaluacion);
+        
+        curso.getLstEvaluacion().remove(indice);
+
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
+        
+        return retorno;
     }
     
     
@@ -189,59 +264,60 @@ public class LoCurso implements Interfaz.InCurso{
     //Moodle
     //--------------------------------------------------------------------------------------------------------
     
-    private Mensajes Mdl_AgregarCategoria(Curso curso)
+    private Retorno_MsgObj Mdl_AgregarCategoria(Curso curso)
     {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
-
         Retorno_MsgObj retorno = loCategoria.Mdl_AgregarCategoria(curso.getCurDsc(), curso.getCurNom(), Boolean.TRUE);
         
-        if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
-        {    
-            mensaje = retorno.getMensaje();
-        }
-        else
+        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
         {
             MoodleCategory mdlCategoria = (MoodleCategory) retorno.getObjeto();
-
             curso.setCurCatCod(mdlCategoria.getId());
-            
-            this.actualizar(curso);
-            
-            mensaje = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
         }
         
-        return mensaje;
-
-    }
-    
-    private Boolean Mdl_ValidarCategoria(Long codigo)
-    {
-        MoodleCategory mdlCategoria  = loCategoria.Mdl_ObtenerCategoria(codigo);
+        retorno.setObjeto(curso);
         
-        return (mdlCategoria != null);
+        return retorno;
 
     }
     
-    private Mensajes Mdl_ActualizarCategoria(Curso pCurso)
+    private Retorno_MsgObj Mdl_ActualizarCategoria(Curso pCurso)
     {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
-
         Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pCurso.getCurCatCod(), pCurso.getCurDsc(), pCurso.getCurNom(), Boolean.TRUE);
-        
-        mensaje = retorno.getMensaje();
-        
-        return mensaje;
+        retorno.setObjeto(pCurso);
+        return retorno;
     }
     
-    private Mensajes Mdl_EliminarCategoria(Curso pCurso)
+    private Retorno_MsgObj Mdl_EliminarCategoria(Curso pCurso)
     {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        return loCategoria.Mdl_EliminarCategoria(pCurso.getCurCatCod());
+    }
+    
+    //--------------------------------------------------------------------------------------------------------    
+    
+    private Retorno_MsgObj Mdl_AgregarEstudio(Modulo pModulo){
+        Retorno_MsgObj retorno = loEstudio.Mdl_AgregarEstudio(pModulo.getCurso().getCurCatCod(), pModulo.getModNom(), pModulo.getModNom(), pModulo.getModDsc());
+        
+        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        {
+            MoodleCourse mdlEstudio = (MoodleCourse) retorno.getObjeto();
+            pModulo.setModEstCod(mdlEstudio.getId());
+        }
+        
+        retorno.setObjeto(pModulo);
+        return retorno;
 
-        Retorno_MsgObj retorno = loCategoria.Mdl_EliminarCategoria(pCurso.getCurCatCod());
-        
-        mensaje = retorno.getMensaje();
-        
-        return mensaje;
+    }
+    
+    private Retorno_MsgObj Mdl_ActualizarEstudio(Modulo pModulo){
+        Retorno_MsgObj retorno = loEstudio.Mdl_ActualizarEstudio(pModulo.getModEstCod(), pModulo.getCurso().getCurCatCod(), pModulo.getModNom(), pModulo.getModNom(), pModulo.getModDsc());
+        retorno.setObjeto(pModulo);
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_EliminarEstudio(Modulo pModulo){
+        Retorno_MsgObj retorno = loEstudio.Mdl_EliminarEstudio(pModulo.getModEstCod());
+        retorno.setObjeto(pModulo);
+        return retorno;
     }
     
     //--------------------------------------------------------------------------------------------------------

@@ -4,8 +4,9 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.TipoMensaje"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Enumerado.TipoPeriodo"%>
-<%@page import="Logica.LoModulo"%>
 <%@page import="Entidad.Modulo"%>
 <%@page import="Entidad.Curso"%>
 <%@page import="Enumerado.Modo"%>
@@ -16,7 +17,6 @@
 <%
     LoParametro loParam    = LoParametro.GetInstancia();
     Parametro param        = loParam.obtener(1);
-    LoModulo loModulo      = LoModulo.GetInstancia();
     LoCurso loCurso        = LoCurso.GetInstancia();
     Utilidades utilidad    = Utilidades.GetInstancia();
     String urlSistema      = utilidad.GetUrlSistema();
@@ -26,14 +26,24 @@
     String ModCod       = request.getParameter("pModCod");
     String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCursoModuloSWW.jsp?MODO=UPDATE&pCurCod=" + CurCod + "');";
 
-    Curso curso     = loCurso.obtener(Integer.valueOf(CurCod));
+    Curso curso     = new Curso();
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(CurCod));
+    if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+    {
+        curso = (Curso) retorno.getObjeto();
+    }
+    else
+    {
+        out.print(retorno.getMensaje().toString());
+    }
+        
     Modulo modulo   = new Modulo();
     modulo.setCurso(curso);
     
+    
     if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
     {
-        modulo.setModCod(Integer.valueOf(ModCod));
-        modulo = loModulo.obtener(modulo);
+        modulo = curso.getModuloById(Long.valueOf(ModCod));
     }
     
     String CamposActivos = "disabled";
