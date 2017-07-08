@@ -153,9 +153,7 @@ public class LoIniciar {
     
     private void CargarUsuarioAdministrador(){
         LoPersona loPersona   = LoPersona.GetInstancia();
-        Persona persona     = new Persona();
-        persona.setPerCod(1);
-        persona = loPersona.obtener(persona);
+        Persona persona     = (Persona) loPersona.obtener(Long.valueOf("1")).getObjeto();
         
         if(persona == null)
         {

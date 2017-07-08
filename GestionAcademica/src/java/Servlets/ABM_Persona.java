@@ -120,15 +120,12 @@ public class ABM_Persona extends HttpServlet {
                 error           = false;
                 String PerCod   = request.getParameter("pPerCod");
                 
-                Persona persona = new Persona();
-                persona.setPerCod(Integer.valueOf(PerCod));
-                
-                persona = loPersona.obtener(persona);
+                Persona persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
                 
                 if(persona != null)
                 {
                     persona = this.ValidarPersona(request, persona);
-                    persona.setPerCod(Integer.valueOf(PerCod));
+                    persona.setPerCod(Long.valueOf(PerCod));
                 }
                else
                 {
@@ -163,10 +160,7 @@ public class ABM_Persona extends HttpServlet {
             try
             {
                 String PerCod    = request.getParameter("pPerCod");
-                Persona persona = new Persona();
-                persona.setPerCod(Integer.valueOf(PerCod));
-                
-                persona = loPersona.obtener(persona);
+                Persona persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
                 
                 if(persona == null)
                 {
@@ -238,7 +232,7 @@ public class ABM_Persona extends HttpServlet {
                 
                 if(!PerPass.isEmpty())
                 {
-                    if(!parametro.getParPswValExp().isEmpty())
+                    if(parametro.getParPswValExp() != null)
                     {
                         if(!PerPass.matches(parametro.getParPswValExp()))
                         {

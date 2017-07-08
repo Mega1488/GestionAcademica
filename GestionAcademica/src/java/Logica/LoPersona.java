@@ -15,6 +15,7 @@ import Moodle.MoodleRestCourse;
 import Moodle.MoodleRestEnrol;
 import Moodle.MoodleRestException;
 import Moodle.MoodleRestUser;
+import Moodle.MoodleRestUserException;
 import Moodle.MoodleUser;
 import Moodle.MoodleUserRoleException;
 import Moodle.UserRole;
@@ -66,156 +67,127 @@ public class LoPersona implements Interfaz.InPersona{
     @Override
     public Object guardar(Persona pObjeto) {
         boolean error           = false;
-        Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR), pObjeto);
         
-        if(perPersona.obtenerByEmail(pObjeto.getPerEml()).getPerCod() != null)
+        if(this.ValidarEmail(pObjeto.getPerEml(), null))
         {
-            mensaje = new Mensajes("El email ya existe", TipoMensaje.ERROR);
+            retorno = new Retorno_MsgObj(new Mensajes("El email ya existe", TipoMensaje.ERROR), null);
             error   = true;
         }
         
-        if(perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != null)
+        if(this.ValidarUsuario(pObjeto.getPerUsrMod(), null))
         {
-            mensaje = new Mensajes("El usuario ya existe", TipoMensaje.ERROR);
+            retorno = new Retorno_MsgObj(new Mensajes("El usuario ya existe", TipoMensaje.ERROR), null);
             error   = true;
         }
-
-
-        Object objeto = null;
         
-        if(!error)
+        if(param.getParUtlMdl())
         {
-            objeto = perPersona.guardar(pObjeto);
-            
-            if(((Persona) objeto).getPerCod() == null)
+            if(pObjeto.getPerUsrModID() == null)
             {
-                mensaje = new Mensajes("Error al guardar", TipoMensaje.ERROR);
+                retorno = this.Mdl_AgregarUsuario(pObjeto);
             }
             else
             {
-                mensaje = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
-                 
-                if(param.getParUtlMdl() && pObjeto.getPerUsrModID() == null)
-                {
-                    mensaje = this.Mdl_AgregarUsuario(pObjeto);
-
-                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                    {
-                        this.eliminar((Persona) objeto);
-                    }
-                }
+                retorno = this.Mdl_ActualizarUsuario(pObjeto);
             }
+            
+            error = retorno.SurgioError();
+        }    
+
+
+        
+        if(!error)
+        {
+            retorno = (Retorno_MsgObj) perPersona.guardar(pObjeto);
         }
         
-        retorno = new Retorno_MsgObj(mensaje, objeto);
         return retorno;
     }
 
     @Override
     public Object actualizar(Persona pObjeto) {
         boolean error           = false;
-        Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error al actualizar", TipoMensaje.ERROR), pObjeto);
         
-        if(perPersona.obtenerByEmail(pObjeto.getPerEml()).getPerCod() != null && perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != pObjeto.getPerCod())
+        
+        if(this.ValidarEmail(pObjeto.getPerEml(), pObjeto.getPerCod()))
         {
-            mensaje = new Mensajes("El email ya existe", TipoMensaje.ERROR);
+            retorno = new Retorno_MsgObj(new Mensajes("El email ya existe", TipoMensaje.ERROR), null);
             error   = true;
         }
         
-        if(perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != null && perPersona.obtenerByMdlUsr(pObjeto.getPerUsrMod()).getPerCod() != pObjeto.getPerCod())
+        if(this.ValidarUsuario(pObjeto.getPerUsrMod(), pObjeto.getPerCod()))
         {
-            mensaje = new Mensajes("El usuario ya existe", TipoMensaje.ERROR);
+            retorno = new Retorno_MsgObj(new Mensajes("El usuario ya existe", TipoMensaje.ERROR), null);
             error   = true;
+        }
+        
+        if(param.getParUtlMdl())
+        {
+            retorno = this.Mdl_ActualizarUsuario(pObjeto);
+            error = retorno.SurgioErrorObjetoRequerido();
         }
 
 
         if(!error)
         {
-            Persona sinModificar = perPersona.obtener(pObjeto);
-            
-            error = (boolean) perPersona.actualizar(pObjeto);
-            
-            if(!error)
-            {
-                mensaje = new Mensajes("Cambios aplicados", TipoMensaje.MENSAJE);
-                
-                if(param.getParUtlMdl())
-                {
-                    mensaje = this.Mdl_ActualizarUsuario(pObjeto);
-                    
-                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                    {
-                        this.actualizar(sinModificar);
-                    }
-                }
-            }
-            else
-            {
-                mensaje = new Mensajes("Error al aplicar cambios", TipoMensaje.ERROR);
-            }
+            retorno = (Retorno_MsgObj) perPersona.actualizar((Persona) retorno.getObjeto());
         }
         
-        retorno = new Retorno_MsgObj(mensaje, null);
         return retorno;
     }
 
     @Override
     public Object eliminar(Persona pObjeto) {
-       boolean error           = false;
-       Mensajes mensaje        = new Mensajes("Error", TipoMensaje.ERROR);
-       Retorno_MsgObj retorno  = new Retorno_MsgObj();
+       Retorno_MsgObj retorno  = this.Mdl_EliminarUsuario(pObjeto);
        
-       if(!perPersona.ValidarEliminacion(pObjeto))
+       if(!retorno.SurgioError())
        {
-           mensaje = this.Mdl_EliminarUsuario(pObjeto);
-
-            if(mensaje.getTipoMensaje() != TipoMensaje.ERROR)
-            {
-                error = (boolean) perPersona.eliminar(pObjeto);
-                if(error)
-                {
-                    mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
-                }
-            }
+           retorno = (Retorno_MsgObj) perPersona.eliminar(pObjeto);
        }
-       else
-       {
-           mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
-       }
-       
-       retorno = new Retorno_MsgObj(mensaje, null);
        
        return retorno;
     }
 
     @Override
-    public Persona obtener(Object pCodigo) {
+    public Retorno_MsgObj obtener(Object pCodigo) {
         return perPersona.obtener(pCodigo);
     }
     
     @Override
-    public Persona obtenerByMdlUsr(String pMdlUsr) {
+    public Retorno_MsgObj obtenerByMdlUsr(String pMdlUsr) {
         return perPersona.obtenerByMdlUsr(pMdlUsr);
     }
 
     @Override
-    public List<Persona> obtenerLista() {
+    public Retorno_MsgObj obtenerLista() {
         return perPersona.obtenerLista();
     }
     
     public Boolean IniciarSesion(String usuario, String password){
         boolean resultado = false;
         
-        try
-        {
-
-            Persona persona = this.obtenerByMdlUsr(usuario);
+            Persona persona = new Persona();
+            
+            Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+            
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                persona = (Persona) retorno.getObjeto();
+            }
+            else
+            {
+                retorno = perPersona.obtenerByEmail(usuario);
+                if(!retorno.SurgioErrorObjetoRequerido())
+                {
+                    persona = (Persona) retorno.getObjeto();
+                }
+            }
             
             if(persona.getPerCod() != null)
             {
-                
+            
                 resultado = persona.getPerPass().equals(password);
 
                 if(resultado)
@@ -225,26 +197,52 @@ public class LoPersona implements Interfaz.InPersona{
                 }
                 else
                 {
-                    if(persona.getPerCntIntLgn() != null)
-                    {
-                        persona.setPerCntIntLgn(persona.getPerCntIntLgn() + 1);
-                    }
-                    else
-                    {
-                        persona.setPerCntIntLgn(1);
-                    }
+                    persona.setPerCntIntLgn((persona.getPerCntIntLgn() != null ? persona.getPerCntIntLgn() + 1 : 1));
                 }
 
                 this.actualizar(persona);
             }
             
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
         
         return resultado;
+    }
+    
+    private boolean ValidarEmail(String email, Long idOriginal){
+        boolean error = false;
+
+        Retorno_MsgObj retorno = perPersona.obtenerByEmail(email);
+        if(idOriginal == null)
+        {
+            error = retorno.getObjeto() != null;
+        }
+        else
+        {
+            if(retorno.getObjeto() != null)
+            {
+                error = !((Persona) retorno.getObjeto()).getPerCod().equals(idOriginal);
+            }
+        }
+        
+        return error;
+    }
+    
+    private boolean ValidarUsuario(String usuario, Long idOriginal){
+        boolean error = false;
+
+        Retorno_MsgObj retorno = perPersona.obtenerByMdlUsr(usuario);
+        if(idOriginal == null)
+        {
+            error = retorno.getObjeto() != null;
+        }
+        else
+        {
+            if(retorno.getObjeto() != null)
+            {
+                error = !((Persona) retorno.getObjeto()).getPerCod().equals(idOriginal);
+            }
+        }
+        
+        return error;
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -292,7 +290,7 @@ public class LoPersona implements Interfaz.InPersona{
                         MoodleUser mdlUsr           = lstUser[e];
                         ArrayList<UserRole> roles   = mdlUsr.getRoles();
 
-                        Persona persona = this.obtenerByMdlUsr(mdlUsr.getUsername());
+                        Persona persona = (Persona) this.obtenerByMdlUsr(mdlUsr.getUsername()).getObjeto();
                         
                         if(!persona.getPerEsAdm())
                         {
@@ -320,11 +318,7 @@ public class LoPersona implements Interfaz.InPersona{
                 
             }
             
-        } catch (MoodleRestException ex) {
-            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MoodleUserRoleException ex) {
+        } catch (MoodleRestException | UnsupportedEncodingException | MoodleUserRoleException ex) {
             Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
         
@@ -352,9 +346,9 @@ public class LoPersona implements Interfaz.InPersona{
                 lstPersonas.add(persona);
              }
         }
-        catch(Exception ex)
+        catch(MoodleRestException | MoodleUserRoleException ex)
         {
-            ex.printStackTrace();
+            System.err.println("Error: " + ex.getLocalizedMessage());
         }
 
 
@@ -363,7 +357,11 @@ public class LoPersona implements Interfaz.InPersona{
     
     private Persona Mdl_UsuarioToPersona(MoodleUser usuario)
     {
-        Persona persona = this.obtenerByMdlUsr(usuario.getUsername());
+        Persona persona = (Persona) this.obtenerByMdlUsr(usuario.getUsername()).getObjeto();
+        if(persona == null)
+        {
+            persona = new Persona();
+        }
         persona.setPerUsrMod(usuario.getUsername());
         persona.setPerEml(usuario.getEmail());
         persona.setPerNom(usuario.getFirstname());
@@ -373,9 +371,11 @@ public class LoPersona implements Interfaz.InPersona{
         return persona;
     }
     
-    private Mensajes Mdl_AgregarUsuario(Persona persona)
+    //----------------------------------------------------------------------------------------------------
+    
+    private Retorno_MsgObj Mdl_AgregarUsuario(Persona persona)
     {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        Retorno_MsgObj retorno;
 
         MoodleUser usr = new MoodleUser();
         
@@ -386,81 +386,91 @@ public class LoPersona implements Interfaz.InPersona{
         usr.setFirstname(persona.getPerNom());
         usr.setPassword("21!_646?adD.09Ajku");
         
-        try
-        {
-            usr = mdlRestUser.__createUser(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), usr);
-            
-            persona.setPerUsrModID(usr.getId());
-            
-            this.actualizar(persona);
-            
-            mensaje = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        
-        return mensaje;
-    }
-    
-    private Mensajes Mdl_ActualizarUsuario(Persona persona)
-    {
-        Mensajes mensaje    = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
-        MoodleUser usr      = Mdl_ObtenerUsuarioByID(persona.getPerUsrModID());
-        
-        usr.setUsername(persona.getPerUsrMod());
-        usr.setEmail(persona.getPerEml());
-        usr.setFirstname(persona.getPerNom());
-        usr.setLastname(persona.getPerApe());
-        usr.setFirstname(persona.getPerNom());
-        
-        try
-        {
-            mdlRestUser.__updateUser(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), usr);
-            mensaje = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
-        }
-        
-        return mensaje;
-    }
-    
-    private Mensajes Mdl_EliminarUsuario(Persona persona)
-    {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        try {
 
+            usr = mdlRestUser.__createUser(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), usr);
+            persona.setPerUsrModID(usr.getId());
+            retorno = new Retorno_MsgObj(new Mensajes("Cambios correctos", TipoMensaje.MENSAJE), persona);
+            
+        } catch (MoodleRestException ex) {
+
+            retorno = new Retorno_MsgObj(new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR), persona);
+            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_ActualizarUsuario(Persona persona)
+    {
+        Retorno_MsgObj retorno = Mdl_ObtenerUsuarioByID(persona.getPerUsrModID());
+        
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            MoodleUser usr      = (MoodleUser) retorno.getObjeto();
+        
+            usr.setUsername(persona.getPerUsrMod());
+            usr.setEmail(persona.getPerEml());
+            usr.setFirstname(persona.getPerNom());
+            usr.setLastname(persona.getPerApe());
+            usr.setFirstname(persona.getPerNom());
+        
+            try
+            {
+                mdlRestUser.__updateUser(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), usr);
+                retorno = new Retorno_MsgObj(new Mensajes("Cambios correctos", TipoMensaje.MENSAJE), persona);
+            } catch (MoodleRestException ex) {
+
+                retorno = new Retorno_MsgObj(new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR), persona);
+                Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_EliminarUsuario(Persona persona)
+    {
+        Retorno_MsgObj retorno;
+        
         try
         {
             mdlRestUser.__deleteUser(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), persona.getPerUsrModID());
-            mensaje = new Mensajes("Cambios correctos", TipoMensaje.MENSAJE);
-        }
-        catch(Exception ex)
-        {
-            ex.printStackTrace();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Cambios correctos", TipoMensaje.MENSAJE), null);
+        } catch (MoodleRestException ex) {
+
+            retorno = new Retorno_MsgObj(new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR), persona);
+            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            retorno = new Retorno_MsgObj(new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR), persona);
+            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        return mensaje;
+        return retorno;
     }
     
     
-    private MoodleUser Mdl_ObtenerUsuarioByID(Long id)
+    private Retorno_MsgObj Mdl_ObtenerUsuarioByID(Long id)
     {
-        MoodleUser usr = new MoodleUser();
-
+        Retorno_MsgObj retorno;
+ 
         try
         {
-
-            usr = mdlRestUser.__getUserById(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), id);
+            MoodleUser usr = mdlRestUser.__getUserById(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), id);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), usr);
         }
-        catch (Exception ex)
-        {
-            ex.printStackTrace();
+        catch (MoodleRestException ex) {
+
+            retorno = new Retorno_MsgObj(new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR), null);
+            Logger.getLogger(LoEstudio.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (UnsupportedEncodingException ex) {
+            retorno = new Retorno_MsgObj(new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR), null);
+            Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        return usr;
+        return retorno;
     }
     //----------------------------------------------------------------------------------------------------
     //-Fin Modle

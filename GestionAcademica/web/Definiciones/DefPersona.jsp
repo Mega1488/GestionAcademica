@@ -24,8 +24,7 @@
     
     if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
     {
-        persona.setPerCod(Integer.valueOf(PerCod));
-        persona = loPersona.obtener(persona);
+        persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
     }
     
     String CamposActivos = "disabled";

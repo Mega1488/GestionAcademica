@@ -6,6 +6,7 @@
 package Interfaz;
 
 import Entidad.Persona;
+import Utiles.Retorno_MsgObj;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public interface InPersona {
     Object guardar(Persona pObjeto);
     Object actualizar(Persona pObjeto);
     Object eliminar(Persona pObjeto);
-    Persona obtener(Object pCodigo);
-    Persona obtenerByMdlUsr(String pMdlUsr);
-    List<Persona> obtenerLista();
+    Retorno_MsgObj obtener(Object pCodigo);
+    Retorno_MsgObj obtenerByMdlUsr(String pMdlUsr);
+    Retorno_MsgObj obtenerLista();
 }

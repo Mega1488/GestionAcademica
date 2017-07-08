@@ -6,11 +6,9 @@
 package Persistencia;
 
 import Entidad.Curso;
-import Entidad.Modulo;
 import Enumerado.TipoMensaje;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;

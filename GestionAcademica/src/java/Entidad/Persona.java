@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -42,8 +45,10 @@ public class Persona implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "PerCod", nullable = false)
-    private Integer PerCod;
+    private Long PerCod;
     
     @Column(name = "PerNom", length = 100)
     private String PerNom;
@@ -76,7 +81,7 @@ public class Persona implements Serializable {
     @Column(name = "PerFil")
     private Filial PerFil;
     
-    @Column(name = "PerEml", length = 255)
+    @Column(name = "PerEml", length = 255, unique = true)
     private String PerEml;
     
     @Column(name = "PerNotEml")
@@ -111,7 +116,7 @@ public class Persona implements Serializable {
         PerPass         = "";
     }
 
-    public Persona(Integer PerCod, String PerNom, String PerApe, String PerUsrMod, Boolean PerEsDoc, Boolean PerEsAdm, Boolean PerEsAlu, Integer PerNroLib, Integer PerNroEstOrt, Filial PerFil, String PerEml, Boolean PerNotEml, Boolean PerNotApp, Date ObjFchMod) {
+    public Persona(Long PerCod, String PerNom, String PerApe, String PerUsrMod, Boolean PerEsDoc, Boolean PerEsAdm, Boolean PerEsAlu, Integer PerNroLib, Integer PerNroEstOrt, Filial PerFil, String PerEml, Boolean PerNotEml, Boolean PerNotApp, Date ObjFchMod) {
         this.PerCod = PerCod;
         this.PerNom = PerNom;
         this.PerApe = PerApe;
@@ -129,150 +134,288 @@ public class Persona implements Serializable {
     }
  
     
-    
-    
-    
-
-    public Integer getPerCod() {
+    /** 
+    * @return Retorna el código de la persona
+    */
+    public Long getPerCod() {
         return PerCod;
     }
 
-    public void setPerCod(Integer PerCod) {
+    /**
+    *@param PerCod Código de una persona
+    */
+    public void setPerCod(Long PerCod) {
         this.PerCod = PerCod;
     }
 
+    /**
+     *
+     * @return Nombre de persona
+     */
     public String getPerNom() {
         return PerNom;
     }
 
+    /**
+     *
+     * @param PerNom Nombre de persona
+     */
     public void setPerNom(String PerNom) {
         this.PerNom = PerNom;
     }
 
+    /**
+     *
+     * @return Apellido
+     */
     public String getPerApe() {
         return PerApe;
     }
 
+    /**
+     *
+     * @param PerApe Apellido
+     */
     public void setPerApe(String PerApe) {
         this.PerApe = PerApe;
     }
 
+    /**
+     *
+     * @return Usuario en moodle
+     */
     public String getPerUsrMod() {
         return PerUsrMod;
     }
 
+    /**
+     *
+     * @param PerUsrMod Usuario en moodle
+     */
     public void setPerUsrMod(String PerUsrMod) {
         this.PerUsrMod = PerUsrMod;
     }
 
+    /**
+     *
+     * @return Es docente
+     */
     public Boolean getPerEsDoc() {
         return PerEsDoc;
     }
 
+    /**
+     *
+     * @param PerEsDoc Es docente
+     */
     public void setPerEsDoc(Boolean PerEsDoc) {
         this.PerEsDoc = PerEsDoc;
     }
 
+    /**
+     *
+     * @return Es administrador
+     */
     public Boolean getPerEsAdm() {
         return PerEsAdm;
     }
 
+    /**
+     *
+     * @param PerEsAdm Es administrador
+     */
     public void setPerEsAdm(Boolean PerEsAdm) {
         this.PerEsAdm = PerEsAdm;
     }
 
+    /**
+     *
+     * @return Es alumno
+     */
     public Boolean getPerEsAlu() {
         return PerEsAlu;
     }
 
+    /**
+     *
+     * @param PerEsAlu Es alumno
+     */
     public void setPerEsAlu(Boolean PerEsAlu) {
         this.PerEsAlu = PerEsAlu;
     }
 
+    /**
+     *
+     * @return Número en libra
+     */
     public Integer getPerNroLib() {
         return PerNroLib;
     }
 
+    /**
+     *
+     * @param PerNroLib Número en libra
+     */
     public void setPerNroLib(Integer PerNroLib) {
         this.PerNroLib = PerNroLib;
     }
 
+    /**
+     *
+     * @return Número estudiante ORT
+     */
     public Integer getPerNroEstOrt() {
         return PerNroEstOrt;
     }
 
+    /**
+     *
+     * @param PerNroEstOrt Número estudiante ORT
+     */
     public void setPerNroEstOrt(Integer PerNroEstOrt) {
         this.PerNroEstOrt = PerNroEstOrt;
     }
 
+    /**
+     *
+     * @return Filial
+     */
     public Filial getPerFil() {
         return PerFil;
     }
 
+    /**
+     *
+     * @param PerFil Filial
+     */
     public void setPerFil(Filial PerFil) {
         this.PerFil = PerFil;
     }
 
+    /**
+     *
+     * @return Email
+     */
     public String getPerEml() {
         return PerEml;
     }
 
+    /**
+     *
+     * @param PerEml Email
+     */
     public void setPerEml(String PerEml) {
         this.PerEml = PerEml;
     }
 
+    /**
+     *
+     * @return Notificar por Email
+     */
     public Boolean getPerNotEml() {
         return PerNotEml;
     }
 
+    /**
+     *
+     * @param PerNotEml Notificar por EMail
+     */
     public void setPerNotEml(Boolean PerNotEml) {
         this.PerNotEml = PerNotEml;
     }
 
+    /**
+     *
+     * @return Notificar por app
+     */
     public Boolean getPerNotApp() {
         return PerNotApp;
     }
 
+    /**
+     *
+     * @param PerNotApp Notificar por APP
+     */
     public void setPerNotApp(Boolean PerNotApp) {
         this.PerNotApp = PerNotApp;
     }
 
+    /**
+     *
+     * @return Fecha de modificado
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Fecha de modificado
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Password
+     */
     public String getPerPass() {
         return PerPass;
     }
 
+    /**
+     *
+     * @param PerPass Password
+     */
     public void setPerPass(String PerPass) {
         this.PerPass = PerPass;
     }
 
+    /**
+     *
+     * @return ID de usuario en moodle
+     */
     public Long getPerUsrModID() {
         return PerUsrModID;
     }
 
+    /**
+     *
+     * @param PerUsrModID ID de usuario en moodle
+     */
     public void setPerUsrModID(Long PerUsrModID) {
         this.PerUsrModID = PerUsrModID;
     }
 
-    public Date getPerFchLog() {
+    /**
+     *
+     * @return Fecha de login
+     */
+    public Date getPerFchLog() { 
         return PerFchLog;
     }
 
+    /**
+     *
+     * @param PerFchLog Fecha de login
+     */
     public void setPerFchLog(Date PerFchLog) {
         this.PerFchLog = PerFchLog;
     }
 
+    /**
+     *
+     * @return Intentos de login
+     */
     public Integer getPerCntIntLgn() {
         return PerCntIntLgn;
     }
 
+    /**
+     *
+     * @param PerCntIntLgn Intentos de login
+     */
     public void setPerCntIntLgn(Integer PerCntIntLgn) {
         this.PerCntIntLgn = PerCntIntLgn;
     }

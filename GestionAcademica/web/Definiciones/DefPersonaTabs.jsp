@@ -24,8 +24,7 @@
     {   
         Persona persona     = new Persona();
 
-        persona.setPerCod(Integer.valueOf(PerCod));
-        persona = loPersona.obtener(persona);
+        persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
         
         estudiosVisible     = (persona.getPerEsAlu() || persona.getPerEsDoc());
         escolaridadVisible  = (persona.getPerEsAlu());

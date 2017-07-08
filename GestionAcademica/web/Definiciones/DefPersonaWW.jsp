@@ -4,6 +4,8 @@
     Author     : alvar
 --%>
 
+<%@page import="java.util.ArrayList"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Entidad.Persona"%>
 <%@page import="java.util.List"%>
 <%@page import="Utiles.Utilidades"%>
@@ -16,11 +18,19 @@
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = utilidad.GetUrlSistema();
     
-    List<Persona> lstPersonas = loPersona.obtenerLista();
+    Retorno_MsgObj retorno = loPersona.obtenerLista();
+    List<Object> lstObjeto = new ArrayList<>();
     
-    System.err.println("Tamaño: " + lstPersonas.size());
-    
-    String tblPersonaVisible = (lstPersonas.size() > 0 ? "" : "display: none;");
+    if(!retorno.SurgioError())
+    {
+        lstObjeto = retorno.getLstObjetos();
+    }
+    else
+    {
+       out.print(retorno.getMensaje().getMensaje());
+    }
+
+    String tblPersonaVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
 %>
 <!DOCTYPE html>
@@ -61,8 +71,9 @@
                         <th>Alumno</th>
                         <th>Administrador</th>
                     </tr>
-                <% for(Persona persona : lstPersonas)
+                <% for(Object objeto : lstObjeto)
                     {
+                        Persona persona = (Persona) objeto;
                      
                 %>
                     <tr>

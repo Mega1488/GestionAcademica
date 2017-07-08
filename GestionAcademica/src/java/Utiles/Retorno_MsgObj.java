@@ -5,6 +5,7 @@
  */
 package Utiles;
 
+import Enumerado.TipoMensaje;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,6 +82,15 @@ public class Retorno_MsgObj {
         this.lstObjetos = lstObjetos;
     }
 
+    public boolean SurgioError()
+    {
+        return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+    }
+    
+    public boolean SurgioErrorObjetoRequerido()
+    {
+        return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getObjeto() == null;
+    }
  
     
     
