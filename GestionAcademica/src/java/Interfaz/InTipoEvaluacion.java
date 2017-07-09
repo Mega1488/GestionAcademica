@@ -6,6 +6,7 @@
 package Interfaz;
 
 import Entidad.TipoEvaluacion;
+import Utiles.Retorno_MsgObj;
 import java.util.List;
 
 /**
@@ -13,9 +14,9 @@ import java.util.List;
  * @author alvar
  */
 public interface InTipoEvaluacion {
-    int guardar(TipoEvaluacion pTipoEvaluacion);
-    void actualizar(TipoEvaluacion pTipoEvaluacion);
-    void eliminar(TipoEvaluacion pTipoEvaluacion);
-    TipoEvaluacion obtener(int pTpoEvlCod);
-    List<TipoEvaluacion> obtenerLista();
+    Object guardar(TipoEvaluacion pTipoEvaluacion);
+    Object actualizar(TipoEvaluacion pTipoEvaluacion);
+    Object eliminar(TipoEvaluacion pTipoEvaluacion);
+    Retorno_MsgObj obtener(Long pTpoEvlCod);
+    Retorno_MsgObj obtenerLista();
 }

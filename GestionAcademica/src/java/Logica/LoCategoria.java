@@ -5,7 +5,6 @@
  */
 package Logica;
 
-import Entidad.Curso;
 import Entidad.Parametro;
 import Enumerado.Constantes;
 import Enumerado.TipoMensaje;

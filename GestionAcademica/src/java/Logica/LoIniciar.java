@@ -71,32 +71,32 @@ public class LoIniciar {
     
     private void CargarTipoEvaluacion(){
         LoTipoEvaluacion lTpoEval = LoTipoEvaluacion.GetInstancia();
-        if(lTpoEval.obtenerLista().size() < 4)
+        if(lTpoEval.obtenerLista().getLstObjetos().size() < 4)
         {
             TipoEvaluacion tpoEval = new TipoEvaluacion();
 
             tpoEval.setTpoEvlNom("Parcial");
             tpoEval.setTpoEvlExm(Boolean.FALSE);
             tpoEval.setTpoEvlInsAut(Boolean.TRUE);
-            tpoEval.setTpoEvlCod(lTpoEval.guardar(tpoEval));
+            lTpoEval.guardar(tpoEval);
             
             tpoEval = new TipoEvaluacion();
             tpoEval.setTpoEvlNom("Obligatorio");
             tpoEval.setTpoEvlExm(Boolean.FALSE);
             tpoEval.setTpoEvlInsAut(Boolean.TRUE);
-            tpoEval.setTpoEvlCod(lTpoEval.guardar(tpoEval));
+            lTpoEval.guardar(tpoEval);
 
             tpoEval = new TipoEvaluacion();
             tpoEval.setTpoEvlNom("Examen");
             tpoEval.setTpoEvlExm(Boolean.TRUE);
             tpoEval.setTpoEvlInsAut(Boolean.FALSE);
-            tpoEval.setTpoEvlCod(lTpoEval.guardar(tpoEval));
+            lTpoEval.guardar(tpoEval);
             
             tpoEval = new TipoEvaluacion();
             tpoEval.setTpoEvlNom("Trabajo");
             tpoEval.setTpoEvlExm(Boolean.FALSE);
             tpoEval.setTpoEvlInsAut(Boolean.TRUE);
-            tpoEval.setTpoEvlCod(lTpoEval.guardar(tpoEval));
+            lTpoEval.guardar(tpoEval);
 
         }
         

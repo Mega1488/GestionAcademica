@@ -6,10 +6,16 @@
 package Persistencia;
 
 import Entidad.TipoEvaluacion;
+import Enumerado.TipoMensaje;
 import Interfaz.InTipoEvaluacion;
+import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -33,117 +39,147 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
         }
     }
 
-    private void manejaExcepcion(HibernateException he) throws HibernateException {
+    private Retorno_MsgObj manejaExcepcion(HibernateException he, Retorno_MsgObj retorno) throws HibernateException {
         tx.rollback();
-        throw new HibernateException("Ocurrió un error en la capa de acceso a datos", he);
+        String mensaje;
+        
+        Throwable cause = he.getCause();
+        if (cause instanceof SQLException) {
+            switch(((SQLException) cause).getErrorCode())
+            {
+                case 1451:
+                    mensaje = "Existen datos en otros registros";
+                    break;
+                default: 
+                    mensaje = cause.getMessage();
+                    break;
+            }
+        }
+        else
+        {
+            mensaje = he.getMessage();
+        }
+        
+        retorno.setMensaje(new Mensajes("Error: " + mensaje, TipoMensaje.ERROR));
+        
+        Logger.getLogger(PerTipoEvaluacion.class.getName()).log(Level.SEVERE, null, he);
+        
+        return retorno;
     }
 
     @Override
-    public int guardar(TipoEvaluacion objeto) {
+    public Object guardar(TipoEvaluacion objeto) {
 
-        int id = 0;
-        objeto = this.DevolverNuevoID(objeto);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), objeto);
+
         objeto.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            id = (int) sesion.save(objeto);
-            tx.commit();
-        } catch (HibernateException he) {
-            manejaExcepcion(he);
-            throw he;
-        } finally {
-            sesion.close();
-        }
-        
-        return id;
-    }
-    
-    @Override
-    public void actualizar(TipoEvaluacion objeto) {
-        try {
-            objeto.setObjFchMod(new Date());
-            iniciaOperacion();
-            sesion.update(objeto);
-            tx.commit();
-        } catch (HibernateException he) {
-            manejaExcepcion(he);
-            throw he;
-        } finally {
-            sesion.close();
-        }
-    }
-
-    @Override
-    public void eliminar(TipoEvaluacion objeto) {
-        try {
-            iniciaOperacion();
-            sesion.delete(objeto);
+            objeto.setTpoEvlCod((Long) sesion.save(objeto));
             tx.commit();
             
-            //Agregar objeto eliminado a la tabla de sincronización
-            //-
+            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), objeto);
             
         } catch (HibernateException he) {
-            manejaExcepcion(he);
-            throw he;
-        } finally {
-            sesion.close();
-        }
-    }
-
-    @Override
-    public TipoEvaluacion obtener(int codigo) {
-        TipoEvaluacion objetoRetorno = new TipoEvaluacion();
-        try {
-            iniciaOperacion();
-                objetoRetorno = (TipoEvaluacion) sesion.get(TipoEvaluacion.class, codigo);
+            
+            manejaExcepcion(he, retorno);
             
         } finally {
             sesion.close();
-        }
-        return objetoRetorno;
-    }
-    
-    @Override
-    public List<TipoEvaluacion> obtenerLista() {
-        List<TipoEvaluacion> listaRetorno = null;
-
-        try {
-            iniciaOperacion();
-            
-                listaRetorno = sesion.getNamedQuery("TipoEvaluacion.findAll").list();
-            
-        } finally {
-            sesion.close();
-        }
-
-        return listaRetorno;
-    }
-    
-    private TipoEvaluacion DevolverNuevoID(TipoEvaluacion objeto){
-
-        objeto.setTpoEvlCod(this.DevolverUltimoID());
-        
-        return objeto;
-    }
-    
-    private int DevolverUltimoID(){
-        int retorno = 1;
-        List<TipoEvaluacion> listaTpoEvaluacion = new ArrayList<TipoEvaluacion>(); 
-        try {
-            iniciaOperacion();
-            listaTpoEvaluacion = sesion.getNamedQuery("TipoEvaluacion.findLastTpoEvl").setMaxResults(1).list();
-        } finally {
-            sesion.close();
-        }
-        if (!listaTpoEvaluacion.isEmpty()){
-            TipoEvaluacion tpoEvaluacion = listaTpoEvaluacion.get(0);
-            retorno = tpoEvaluacion.getTpoEvlCod() + 1;
         }
         
         return retorno;
     }
     
+    @Override
+    public Object actualizar(TipoEvaluacion objeto) {
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), objeto);
+
+        try {
+            objeto.setObjFchMod(new Date());
+            iniciaOperacion();
+            sesion.update(objeto);
+            tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), objeto);
+            
+        } catch (HibernateException he) {
+            
+            manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        
+        return retorno;
+    }
+
+    @Override
+    public Object eliminar(TipoEvaluacion objeto) {
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), objeto);
+
+        try {
+            iniciaOperacion();
+            sesion.delete(objeto);
+            tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Eliminado correctamente", TipoMensaje.MENSAJE), objeto);
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+        } finally {
+            sesion.close();
+        }
+        
+        return retorno;
+    }
+
+    @Override
+    public Retorno_MsgObj obtener(Long codigo) {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
+        
+        try {
+            iniciaOperacion();
+            TipoEvaluacion tpoEvl = (TipoEvaluacion) sesion.get(TipoEvaluacion.class, codigo);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), tpoEvl);
+            
+        } catch (HibernateException he) {
+            
+            manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+
+        return retorno;
+    }
+    
+    @Override
+    public Retorno_MsgObj obtenerLista() {
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            
+            List<Object> listaRetorno = sesion.getNamedQuery("TipoEvaluacion.findAll").list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+        } catch (HibernateException he) {
+            
+            manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+
+        return retorno;
+    }
     
 }

@@ -41,7 +41,7 @@
     String js_redirect        = "";
     Evaluacion evaluacion     = new Evaluacion();
     
-    List<TipoEvaluacion> lstTpoEvaluacion = LoTipoEvaluacion.GetInstancia().obtenerLista();
+    List<Object> lstTpoEvaluacion = LoTipoEvaluacion.GetInstancia().obtenerLista().getLstObjetos();
     
     if(Relacion.equals("CURSO"))
     {
@@ -297,8 +297,10 @@
                                     <label>Tipo Evaluacion</label>
                                     <select class="form-control" id="TpoEvlCod" name="TpoEvlCod" <% out.print(CamposActivos); %>>
                                         <%
-                                            for( TipoEvaluacion tpoEval : lstTpoEvaluacion){
+                                            for( Object tpoEvalOb : lstTpoEvaluacion){
                                             
+                                                TipoEvaluacion tpoEval = (TipoEvaluacion) tpoEvalOb;
+                                                
                                                 if(evaluacion.getTpoEvl() == null)
                                                 {
                                                     out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");

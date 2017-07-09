@@ -8,6 +8,7 @@ package Logica;
 import Entidad.TipoEvaluacion;
 import Interfaz.InTipoEvaluacion;
 import Persistencia.PerTipoEvaluacion;
+import Utiles.Retorno_MsgObj;
 import java.util.List;
 
 /**
@@ -34,27 +35,27 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
     
 
     @Override
-    public int guardar(TipoEvaluacion pTipoEvaluacion) {
+    public Object guardar(TipoEvaluacion pTipoEvaluacion) {
         return perTpoEval.guardar(pTipoEvaluacion);
     }
 
     @Override
-    public void actualizar(TipoEvaluacion pTipoEvaluacion) {
-        perTpoEval.actualizar(pTipoEvaluacion);
+    public Object actualizar(TipoEvaluacion pTipoEvaluacion) {
+        return perTpoEval.actualizar(pTipoEvaluacion);
     }
 
     @Override
-    public void eliminar(TipoEvaluacion pTipoEvaluacion) {
-        perTpoEval.eliminar(pTipoEvaluacion);
+    public Object eliminar(TipoEvaluacion pTipoEvaluacion) {
+        return perTpoEval.eliminar(pTipoEvaluacion);
     }
 
     @Override
-    public TipoEvaluacion obtener(int pTpoEvlCod) {
+    public Retorno_MsgObj obtener(Long pTpoEvlCod) {
         return perTpoEval.obtener(pTpoEvlCod);
     }
 
     @Override
-    public List<TipoEvaluacion> obtenerLista() {
+    public Retorno_MsgObj obtenerLista() {
         return perTpoEval.obtenerLista();
     }
     

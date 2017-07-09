@@ -7,6 +7,7 @@ package Servlets;
 
 import Entidad.Curso;
 import Entidad.Evaluacion;
+import Entidad.TipoEvaluacion;
 import Enumerado.TipoMensaje;
 import Logica.LoCurso;
 import Logica.LoParametro;
@@ -266,7 +267,11 @@ public class ABM_Evaluacion extends HttpServlet {
                 
                 if(!TpoEvlCod.isEmpty())
                 {
-                    evaluacion.setTpoEvl(LoTipoEvaluacion.GetInstancia().obtener(Integer.valueOf(TpoEvlCod)));
+                    Retorno_MsgObj retorno = LoTipoEvaluacion.GetInstancia().obtener(Long.valueOf(TpoEvlCod));
+                    if(!retorno.SurgioErrorObjetoRequerido())
+                    {
+                        evaluacion.setTpoEvl((TipoEvaluacion) retorno.getObjeto());
+                    }
                 }
         
            
