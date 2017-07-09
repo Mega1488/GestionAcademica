@@ -62,7 +62,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
         
         retorno.setMensaje(new Mensajes("Error: " + mensaje, TipoMensaje.ERROR));
         
-        Logger.getLogger(PerTipoEvaluacion.class.getName()).log(Level.SEVERE, null, he);
+        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, he);
         
         return retorno;
     }
@@ -83,7 +83,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             
         } catch (HibernateException he) {
             
-            manejaExcepcion(he, retorno);
+            retorno = manejaExcepcion(he, retorno);
             
         } finally {
             sesion.close();
@@ -107,7 +107,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             
         } catch (HibernateException he) {
             
-            manejaExcepcion(he, retorno);
+            retorno = manejaExcepcion(he, retorno);
             
         } finally {
             sesion.close();
@@ -149,7 +149,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             
         } catch (HibernateException he) {
             
-            manejaExcepcion(he, retorno);
+            retorno = manejaExcepcion(he, retorno);
             
         } finally {
             sesion.close();
@@ -173,7 +173,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             
         } catch (HibernateException he) {
             
-            manejaExcepcion(he, retorno);
+            retorno = manejaExcepcion(he, retorno);
             
         } finally {
             sesion.close();

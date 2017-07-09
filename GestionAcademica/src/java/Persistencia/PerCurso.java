@@ -9,8 +9,11 @@ import Entidad.Curso;
 import Enumerado.TipoMensaje;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -34,9 +37,32 @@ public class PerCurso implements Interfaz.InCurso{
         }
     }
 
-    private void manejaExcepcion(HibernateException he) throws HibernateException {
+    private Retorno_MsgObj manejaExcepcion(HibernateException he, Retorno_MsgObj retorno) throws HibernateException {
         tx.rollback();
-        throw new HibernateException("Ocurrió un error en la capa de acceso a datos", he);
+        String mensaje;
+        
+        Throwable cause = he.getCause();
+        if (cause instanceof SQLException) {
+            switch(((SQLException) cause).getErrorCode())
+            {
+                case 1451:
+                    mensaje = "Existen datos en otros registros";
+                    break;
+                default: 
+                    mensaje = cause.getMessage();
+                    break;
+            }
+        }
+        else
+        {
+            mensaje = he.getMessage();
+        }
+        
+        retorno.setMensaje(new Mensajes("Error: " + mensaje, TipoMensaje.ERROR));
+        
+        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, he);
+        
+        return retorno;
     }
 
     @Override
@@ -52,9 +78,7 @@ public class PerCurso implements Interfaz.InCurso{
             
             retorno = new Retorno_MsgObj(new Mensajes("Curso guardado correctamente", TipoMensaje.MENSAJE), pCurso);
         } catch (HibernateException he) {
-            retorno = new Retorno_MsgObj(new Mensajes("Error al guardar curso: " + he.getMessage(), TipoMensaje.ERROR), pCurso);
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
         } finally {
             sesion.close();
         }
@@ -76,9 +100,8 @@ public class PerCurso implements Interfaz.InCurso{
             
             retorno = new Retorno_MsgObj(new Mensajes("Curso actualizado correctamente", TipoMensaje.MENSAJE), pCurso);
         } catch (HibernateException he) {
-            retorno = new Retorno_MsgObj(new Mensajes("Error al actualizar curso: " + he.getMessage(), TipoMensaje.ERROR), pCurso);
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
+      
         } finally {
             sesion.close();
         }
@@ -97,9 +120,8 @@ public class PerCurso implements Interfaz.InCurso{
             retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
             
         } catch (HibernateException he) {
-            retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar: " + he.getMessage(), TipoMensaje.ERROR));
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
+         
         } finally {
             sesion.close();
         }
@@ -119,9 +141,7 @@ public class PerCurso implements Interfaz.InCurso{
         
         } catch (HibernateException he) {
         
-            retorno = new Retorno_MsgObj(new Mensajes("Error al obtener: " + he.getMessage(), TipoMensaje.ERROR), null);
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
         }  finally {
             sesion.close();
         }
@@ -143,9 +163,7 @@ public class PerCurso implements Interfaz.InCurso{
         
         } catch (HibernateException he) {
         
-            retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista: " + he.getMessage(), TipoMensaje.ERROR), null);
-            manejaExcepcion(he);
-            throw he;
+           retorno = manejaExcepcion(he, retorno);
         }  finally {
             sesion.close();
         }
