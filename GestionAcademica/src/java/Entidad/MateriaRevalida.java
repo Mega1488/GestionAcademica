@@ -8,19 +8,25 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -30,26 +36,63 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "MATERIA_REVALIDA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MateriaRevalida.findAll",       query = "SELECT t FROM MateriaRevalida t"),
-    @NamedQuery(name = "MateriaRevalida.findByPK",      query = "SELECT t FROM MateriaRevalida t WHERE t.materiaRevalidaPK =:revalidaPK")})
+    @NamedQuery(name = "MateriaRevalida.findAll",       query = "SELECT t FROM MateriaRevalida t")})
 
 public class MateriaRevalida implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final MateriaRevalidaPK materiaRevalidaPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "MatRvlCod", nullable = false)
+    private Long MatRvlCod; 
+    
+    @OneToOne(targetEntity = Inscripcion.class, optional=false)        
+    @JoinColumn(name="InsCod", referencedColumnName="InsCod")
+    private Inscripcion inscripcion;
+
+    @ManyToOne(targetEntity = Materia.class, optional=false)        
+    @JoinColumn(name="MatCod", referencedColumnName="MatCod")
+    private Materia materia;
+
+
+
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
     //-CONSTRUCTOR
     public MateriaRevalida() {
-        this.materiaRevalidaPK = new MateriaRevalidaPK();
     }   
     
     //-GETTERS Y SETTERS
+
+    public Long getMatRvlCod() {
+        return MatRvlCod;
+    }
+
+    public void setMatRvlCod(Long MatRvlCod) {
+        this.MatRvlCod = MatRvlCod;
+    }
+
+    public Inscripcion getInscripcion() {
+        return inscripcion;
+    }
+
+    public void setInscripcion(Inscripcion inscripcion) {
+        this.inscripcion = inscripcion;
+    }
+
+    public Materia getMateria() {
+        return materia;
+    }
+
+    public void setMateria(Materia materia) {
+        this.materia = materia;
+    }
 
     public Date getObjFchMod() {
         return ObjFchMod;
@@ -58,23 +101,27 @@ public class MateriaRevalida implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
-    
-    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (materiaRevalidaPK != null ? materiaRevalidaPK.hashCode() : 0);
+        int hash = 3;
+        hash = 53 * hash + Objects.hashCode(this.MatRvlCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof MateriaRevalida)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        MateriaRevalida other = (MateriaRevalida) object;
-        if ((this.materiaRevalidaPK == null && other.materiaRevalidaPK != null) || (this.materiaRevalidaPK != null && !this.materiaRevalidaPK.equals(other.materiaRevalidaPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MateriaRevalida other = (MateriaRevalida) obj;
+        if (!Objects.equals(this.MatRvlCod, other.MatRvlCod)) {
             return false;
         }
         return true;
@@ -82,80 +129,12 @@ public class MateriaRevalida implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.MateriaRevalida[ id=" + materiaRevalidaPK.toString() + " ]";
+        return "MateriaRevalida{" + "MatRvlCod=" + MatRvlCod + ", inscripcion=" + inscripcion + ", materia=" + materia + ", ObjFchMod=" + ObjFchMod + '}';
     }
-   
+
     
-    @Embeddable
-    public static class MateriaRevalidaPK implements Serializable {
-        @ManyToOne(targetEntity = Inscripcion.class, optional=false)        
-        @JoinColumns({
-                @JoinColumn(name="InsCod", referencedColumnName="InsCod"),
-                @JoinColumn(name="AluPerCod", referencedColumnName="AluPerCod"),
-            })
-        private Inscripcion inscripcion;
-
-        @ManyToOne(targetEntity = Materia.class, optional=false)        
-        @JoinColumn(name="MatCod", referencedColumnName="MatCod")
-        private Materia materia;
-
-        public MateriaRevalidaPK() {
-        }
-
-        public Inscripcion getInscripcion() {
-            return inscripcion;
-        }
-
-        public void setInscripcion(Inscripcion inscripcion) {
-            this.inscripcion = inscripcion;
-        }
-
-        public Materia getMateria() {
-            return materia;
-        }
-
-        public void setMateria(Materia materia) {
-            this.materia = materia;
-        }
-
-        @Override
-        public String toString() {
-            return "MateriaRevalidaPK{" + "inscripcion=" + inscripcion + ", materia=" + materia + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 67 * hash + Objects.hashCode(this.inscripcion);
-            hash = 67 * hash + Objects.hashCode(this.materia);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final MateriaRevalidaPK other = (MateriaRevalidaPK) obj;
-            if (!Objects.equals(this.inscripcion, other.inscripcion)) {
-                return false;
-            }
-            if (!Objects.equals(this.materia, other.materia)) {
-                return false;
-            }
-            return true;
-        }
-
-
-
-    }
-
+    
+    
     
 }
 

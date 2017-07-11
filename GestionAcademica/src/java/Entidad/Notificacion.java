@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -41,8 +42,10 @@ public class Notificacion implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "NotCod", nullable = false)
-    private Integer NotCod;
+    private Long NotCod;
     
     @Column(name = "NotNom", length = 100)
     private String NotNom;
@@ -85,11 +88,11 @@ public class Notificacion implements Serializable {
     
     //-GETTERS Y SETTERS
 
-    public Integer getNotCod() {
+    public Long getNotCod() {
         return NotCod;
     }
 
-    public void setNotCod(Integer NotCod) {
+    public void setNotCod(Long NotCod) {
         this.NotCod = NotCod;
     }
 

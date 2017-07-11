@@ -8,10 +8,14 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -22,6 +26,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -31,35 +36,43 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "INSCRIPCION")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Inscripcion.findAll",       query = "SELECT t FROM Inscripcion t"),
-    @NamedQuery(name = "Inscripcion.findByPK",      query = "SELECT t FROM Inscripcion t WHERE t.inscripcionPK.InsCod =:InsCod and t.inscripcionPK.Persona.PerCod =:PerCod "),
-    @NamedQuery(name = "Inscripcion.findLast",      query = "SELECT t FROM Inscripcion t WHERE t.inscripcionPK.Persona.PerCod = :PerCod ORDER BY t.inscripcionPK.InsCod DESC")})
+    @NamedQuery(name = "Inscripcion.findAll",       query = "SELECT t FROM Inscripcion t")})
 
 public class Inscripcion implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final InscripcionPK inscripcionPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "InsCod", nullable = false)
+    private Long InsCod; 
+    
+    
+    @OneToOne(targetEntity = Persona.class, optional=false)        
+    @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
+    private Persona Persona;
+
+    @OneToOne(targetEntity = Persona.class, optional=true)        
+    @JoinColumn(name="InsPerCod", referencedColumnName="PerCod")
+    private Persona PersonaInscribe;
+    
+    @ManyToOne(targetEntity = PlanEstudio.class, optional=true)        
+    @JoinColumn(name="CarInsPlaEstCod", referencedColumnName="PlaEstCod")
+    private PlanEstudio PlanEstudio;
+    
+    @OneToOne(targetEntity = Curso.class, optional=true)        
+    @JoinColumn(name="CurInsCurCod", referencedColumnName="CurCod")
+    private Curso Curso;
+          
     @Column(name = "AluFchCert", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date AluFchCert;   
     @Column(name = "AluFchInsc", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date AluFchInsc;
-    @OneToOne(targetEntity = Persona.class, optional=true)        
-    @JoinColumn(name="InsPerCod", referencedColumnName="PerCod")
-    private Persona PersonaInscribe;
-    @ManyToOne(targetEntity = PlanEstudio.class, optional=true)        
-    @JoinColumns({
-        @JoinColumn(name="CarInsCarCod", referencedColumnName="CarCod"),
-        @JoinColumn(name="CarInsPlaEstCod", referencedColumnName="PlaEstCod")
-    })
-    private PlanEstudio PlanEstudio;
-    @OneToOne(targetEntity = Curso.class, optional=true)        
-    @JoinColumn(name="CurInsCurCod", referencedColumnName="CurCod")
-    private Curso Curso;
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
@@ -67,25 +80,24 @@ public class Inscripcion implements Serializable {
     //-CONSTRUCTOR
 
     public Inscripcion() {
-        this.inscripcionPK = new InscripcionPK();
     }
     
     //-GETTERS Y SETTERS
 
-    public Date getAluFchCert() {
-        return AluFchCert;
+    public Long getInsCod() {
+        return InsCod;
     }
 
-    public void setAluFchCert(Date AluFchCert) {
-        this.AluFchCert = AluFchCert;
+    public void setInsCod(Long InsCod) {
+        this.InsCod = InsCod;
     }
 
-    public Date getAluFchInsc() {
-        return AluFchInsc;
+    public Persona getPersona() {
+        return Persona;
     }
 
-    public void setAluFchInsc(Date AluFchInsc) {
-        this.AluFchInsc = AluFchInsc;
+    public void setPersona(Persona Persona) {
+        this.Persona = Persona;
     }
 
     public Persona getPersonaInscribe() {
@@ -112,6 +124,22 @@ public class Inscripcion implements Serializable {
         this.Curso = Curso;
     }
 
+    public Date getAluFchCert() {
+        return AluFchCert;
+    }
+
+    public void setAluFchCert(Date AluFchCert) {
+        this.AluFchCert = AluFchCert;
+    }
+
+    public Date getAluFchInsc() {
+        return AluFchInsc;
+    }
+
+    public void setAluFchInsc(Date AluFchInsc) {
+        this.AluFchInsc = AluFchInsc;
+    }
+
     public Date getObjFchMod() {
         return ObjFchMod;
     }
@@ -119,25 +147,27 @@ public class Inscripcion implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
-    
-    
-
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (inscripcionPK != null ? inscripcionPK.hashCode() : 0);
+        int hash = 7;
+        hash = 37 * hash + Objects.hashCode(this.InsCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Inscripcion)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Inscripcion other = (Inscripcion) object;
-        if ((this.inscripcionPK == null && other.inscripcionPK != null) || (this.inscripcionPK != null && !this.inscripcionPK.equals(other.inscripcionPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Inscripcion other = (Inscripcion) obj;
+        if (!Objects.equals(this.InsCod, other.InsCod)) {
             return false;
         }
         return true;
@@ -145,73 +175,12 @@ public class Inscripcion implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Inscripcion[ id=" + inscripcionPK.toString() + " ]";
+        return "Inscripcion{" + "InsCod=" + InsCod + ", Persona=" + Persona + ", PersonaInscribe=" + PersonaInscribe + ", PlanEstudio=" + PlanEstudio + ", Curso=" + Curso + ", AluFchCert=" + AluFchCert + ", AluFchInsc=" + AluFchInsc + ", ObjFchMod=" + ObjFchMod + '}';
     }
+
     
     
-    @Embeddable
-    public static class InscripcionPK implements Serializable {
-       @OneToOne(targetEntity = Persona.class, optional=false)        
-       @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
-       private Persona Persona;
-
-       private Integer InsCod;    
-
-       public InscripcionPK() {
-       }
-
-       public Persona getPersona() {
-           return Persona;
-       }
-
-       public void setPersona(Persona Persona) {
-           this.Persona = Persona;
-       }
-
-       public Integer getInsCod() {
-           return InsCod;
-       }
-
-       public void setInsCod(Integer InsCod) {
-           this.InsCod = InsCod;
-       }
-
-       @Override
-       public String toString() {
-           return "InscripcionPK{" + "Persona=" + Persona + ", InsCod=" + InsCod + '}';
-       }
-
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 97 * hash + Objects.hashCode(this.Persona);
-            hash = 97 * hash + Objects.hashCode(this.InsCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final InscripcionPK other = (InscripcionPK) obj;
-            if (!Objects.equals(this.Persona, other.Persona)) {
-                return false;
-            }
-            if (!Objects.equals(this.InsCod, other.InsCod)) {
-                return false;
-            }
-            return true;
-        }
-       
-       
-   }
+    
 }
 
 

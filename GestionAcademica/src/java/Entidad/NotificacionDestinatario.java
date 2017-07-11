@@ -7,16 +7,22 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -34,8 +40,16 @@ public class NotificacionDestinatario implements Serializable {
     private static final long serialVersionUID = 1L;
    
     //-ATRIBUTOS
-    @EmbeddedId
-    private final NotificacionDestinatarioPK notDestPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "NotDstCod", nullable = false)
+    private Long NotDstCod;
+    
+    @OneToOne(targetEntity = Notificacion.class, optional=false)
+    @JoinColumn(name="NotCod", referencedColumnName="NotCod")
+    private Notificacion notificacion;
     
     @ManyToOne(targetEntity = Persona.class, optional=true)
     @JoinColumn(name="NotPerCod", referencedColumnName="PerCod")
@@ -47,11 +61,25 @@ public class NotificacionDestinatario implements Serializable {
     
     //-CONSTRUCTOR
     public NotificacionDestinatario() {
-        this.notDestPK = new NotificacionDestinatarioPK();
     }
     
-    
     //-GETTERS Y SETTERS
+
+    public Long getNotDstCod() {
+        return NotDstCod;
+    }
+
+    public void setNotDstCod(Long NotDstCod) {
+        this.NotDstCod = NotDstCod;
+    }
+
+    public Notificacion getNotificacion() {
+        return notificacion;
+    }
+
+    public void setNotificacion(Notificacion notificacion) {
+        this.notificacion = notificacion;
+    }
 
     public Persona getPersona() {
         return persona;
@@ -68,24 +96,27 @@ public class NotificacionDestinatario implements Serializable {
     public void setNotEmail(String NotEmail) {
         this.NotEmail = NotEmail;
     }
-    
-    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (notDestPK != null ? notDestPK.hashCode() : 0);
+        int hash = 3;
+        hash = 19 * hash + Objects.hashCode(this.NotDstCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof NotificacionDestinatario)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        NotificacionDestinatario other = (NotificacionDestinatario) object;
-        if ((this.notDestPK == null && other.notDestPK != null) || (this.notDestPK != null && !this.notDestPK.equals(other.notDestPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final NotificacionDestinatario other = (NotificacionDestinatario) obj;
+        if (!Objects.equals(this.NotDstCod, other.NotDstCod)) {
             return false;
         }
         return true;
@@ -93,74 +124,7 @@ public class NotificacionDestinatario implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.NotificacionDestinatario[ id=" + notDestPK + " ]";
-    }
-    
-    
-    
-    @Embeddable
-    public static class NotificacionDestinatarioPK implements Serializable {
-       @ManyToOne(targetEntity = Notificacion.class, optional=false)
-       @JoinColumn(name="NotCod", referencedColumnName="NotCod")
-       private Notificacion notificacion;
-
-       private Integer NotDstCod;
-
-       public NotificacionDestinatarioPK() {
-       }
-
-       public Notificacion getNotificacion() {
-           return notificacion;
-       }
-
-       public void setNotificacion(Notificacion notificacion) {
-           this.notificacion = notificacion;
-       }
-
-       public Integer getNotDstCod() {
-           return NotDstCod;
-       }
-
-       public void setNotDstCod(Integer NotDstCod) {
-           this.NotDstCod = NotDstCod;
-       }
-
-       @Override
-       public String toString() {
-           return "NotificacionDestinatarioPK{" + "notificacion=" + notificacion + ", NotDstCod=" + NotDstCod + '}';
-       }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 71 * hash + Objects.hashCode(this.notificacion);
-            hash = 71 * hash + Objects.hashCode(this.NotDstCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final NotificacionDestinatarioPK other = (NotificacionDestinatarioPK) obj;
-            if (!Objects.equals(this.notificacion, other.notificacion)) {
-                return false;
-            }
-            if (!Objects.equals(this.NotDstCod, other.NotDstCod)) {
-                return false;
-            }
-            return true;
-        }
-
-       
-
+        return "NotificacionDestinatario{" + "NotDstCod=" + NotDstCod + ", notificacion=" + notificacion + ", persona=" + persona + ", NotEmail=" + NotEmail + '}';
     }
 
 }

@@ -142,7 +142,7 @@ public class ABM_ParametroEmail extends HttpServlet {
             if(parametroEmail != null)
             {
                 parametroEmail = this.ValidarObjeto(request, parametroEmail);
-                parametroEmail.setParEmlCod(Integer.valueOf(ParEmlCod));
+                parametroEmail.setParEmlCod(Long.valueOf(ParEmlCod));
             }
            else
             {

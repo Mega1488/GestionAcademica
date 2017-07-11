@@ -7,6 +7,7 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -37,8 +39,10 @@ public class Objeto implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "ObjCod", nullable = false)
-    private Integer ObjCod;
+    private Long ObjCod;
     
     @Column(name = "ObjNom", length = 100)
     private String ObjNom;
@@ -56,11 +60,12 @@ public class Objeto implements Serializable {
     
 
     //-GETTERS Y SETTERS
-    public Integer getObjCod() {
+
+    public Long getObjCod() {
         return ObjCod;
     }
 
-    public void setObjCod(Integer ObjCod) {
+    public void setObjCod(Long ObjCod) {
         this.ObjCod = ObjCod;
     }
 
@@ -75,26 +80,31 @@ public class Objeto implements Serializable {
     public Date getObjFchMod() {
         return ObjFchMod;
     }
-    
-    public void setObjFchMod(Date ObjFchMod) {    
+
+    public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (ObjCod != null ? ObjCod.hashCode() : 0);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.ObjCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Objeto)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Objeto other = (Objeto) object;
-        if ((this.ObjCod == null && other.ObjCod != null) || (this.ObjCod != null && !this.ObjCod.equals(other.ObjCod))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Objeto other = (Objeto) obj;
+        if (!Objects.equals(this.ObjCod, other.ObjCod)) {
             return false;
         }
         return true;
@@ -102,7 +112,9 @@ public class Objeto implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Objeto[ id=" + ObjCod + " ]";
+        return "Objeto{" + "ObjCod=" + ObjCod + ", ObjNom=" + ObjNom + ", ObjFchMod=" + ObjFchMod + '}';
     }
+    
+    
     
 }

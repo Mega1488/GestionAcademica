@@ -14,11 +14,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -38,8 +41,10 @@ public class ParametroEmail implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "ParEmlCod", nullable = false)
-    private Integer ParEmlCod;
+    private Long ParEmlCod;
     
     @Column(name = "ParEmlNom", length = 100)
     private String ParEmlNom;
@@ -92,11 +97,11 @@ public class ParametroEmail implements Serializable {
 
     //-GETTERS Y SETTERS
 
-    public Integer getParEmlCod() {
+    public Long getParEmlCod() {
         return ParEmlCod;
     }
 
-    public void setParEmlCod(Integer ParEmlCod) {
+    public void setParEmlCod(Long ParEmlCod) {
         this.ParEmlCod = ParEmlCod;
     }
 

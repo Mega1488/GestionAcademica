@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -42,8 +43,10 @@ public class Solicitud implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "SolCod", nullable = false)
-    private Integer SolCod;
+    private Long  SolCod;
 
     @ManyToOne(targetEntity = Persona.class, optional=false)
     @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
@@ -82,11 +85,11 @@ public class Solicitud implements Serializable {
 
   
     //-GETTERS Y SETTERS
-  public Integer getSolCod() {
+  public Long getSolCod() {
         return SolCod;
     }
 
-    public void setSolCod(Integer SolCod) {
+    public void setSolCod(Long SolCod) {
         this.SolCod = SolCod;
     }
 
@@ -180,7 +183,9 @@ public class Solicitud implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Solicitud[ id=" + SolCod + " ]";
+        return "Solicitud{" + "SolCod=" + SolCod + ", Alumno=" + Alumno + ", Funcionario=" + Funcionario + ", SolTpo=" + SolTpo + ", SolEst=" + SolEst + ", SolFchIng=" + SolFchIng + ", SolFchPrc=" + SolFchPrc + ", SolFchFin=" + SolFchFin + ", ObjFchMod=" + ObjFchMod + '}';
     }
+
+    
     
 }

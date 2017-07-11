@@ -11,6 +11,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -38,8 +41,11 @@ public class Periodo implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "PeriCod", nullable = false)
-    private Integer PeriCod;
+    private Long PeriCod;
+    
     @Column(name = "PerTpo")
     private TipoPeriodo PerTpo;
     @Column(name = "PerVal", precision=10, scale=2)
@@ -57,11 +63,11 @@ public class Periodo implements Serializable {
     
     //-GETTERS Y SETTERS
 
-    public Integer getPeriCod() {
+    public Long getPeriCod() {
         return PeriCod;
     }
 
-    public void setPeriCod(Integer PeriCod) {
+    public void setPeriCod(Long PeriCod) {
         this.PeriCod = PeriCod;
     }
 

@@ -8,19 +8,22 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -37,11 +40,26 @@ public class PeriodoEstudioAlumno implements Serializable {
     private static final long serialVersionUID = 1L;
    
     //-ATRIBUTOS
-    @EmbeddedId
-    private final PeriodoEstudioAlumnoPK periodoEstudioAlumnoPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "PeriEstAluCod", nullable = false)
+    private Long PeriEstAluCod;
+    
+    @OneToOne(targetEntity = PeriodoEstudio.class, optional=false)
+    @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
+    private PeriodoEstudio PeriodoEstudio;
+
+    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
+    private Persona Alumno;
+   
+    
     @ManyToOne(targetEntity = Persona.class, optional=false)
     @JoinColumn(name="PerInsPerCod", referencedColumnName="PerCod")
     private Persona InscritoPor;
+
     @Column(name = "PerInsFchInsc", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date PerInsFchInsc;
@@ -57,17 +75,40 @@ public class PeriodoEstudioAlumno implements Serializable {
 
     //-CONSTRUCTOR
     public PeriodoEstudioAlumno() {
-        this.periodoEstudioAlumnoPK = new PeriodoEstudioAlumnoPK();
     }
     
     //-GETTERS Y SETTERS
+
+    public Long getPeriEstAluCod() {
+        return PeriEstAluCod;
+    }
+
+    public void setPeriEstAluCod(Long PeriEstAluCod) {
+        this.PeriEstAluCod = PeriEstAluCod;
+    }
+
+    public PeriodoEstudio getPeriodoEstudio() {
+        return PeriodoEstudio;
+    }
+
+    public void setPeriodoEstudio(PeriodoEstudio PeriodoEstudio) {
+        this.PeriodoEstudio = PeriodoEstudio;
+    }
+
+    public Persona getAlumno() {
+        return Alumno;
+    }
+
+    public void setAlumno(Persona Alumno) {
+        this.Alumno = Alumno;
+    }
 
     public Persona getInscritoPor() {
         return InscritoPor;
     }
 
-    public void setInscritoPor(Persona Ins) {
-        this.InscritoPor = Ins;
+    public void setInscritoPor(Persona InscritoPor) {
+        this.InscritoPor = InscritoPor;
     }
 
     public Date getPerInsFchInsc() {
@@ -102,25 +143,26 @@ public class PeriodoEstudioAlumno implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-   
-    
-    
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (periodoEstudioAlumnoPK != null ? periodoEstudioAlumnoPK.hashCode() : 0);
+        int hash = 5;
+        hash = 79 * hash + Objects.hashCode(this.PeriEstAluCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PeriodoEstudioAlumno)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        PeriodoEstudioAlumno other = (PeriodoEstudioAlumno) object;
-        if ((this.periodoEstudioAlumnoPK == null && other.periodoEstudioAlumnoPK != null) || (this.periodoEstudioAlumnoPK != null && !this.periodoEstudioAlumnoPK.equals(other.periodoEstudioAlumnoPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PeriodoEstudioAlumno other = (PeriodoEstudioAlumno) obj;
+        if (!Objects.equals(this.PeriEstAluCod, other.PeriEstAluCod)) {
             return false;
         }
         return true;
@@ -128,80 +170,11 @@ public class PeriodoEstudioAlumno implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.PeriodoEstudioAlumno[ id=" + periodoEstudioAlumnoPK.toString() + " ]";
+        return "PeriodoEstudioAlumno{" + "PeriEstAluCod=" + PeriEstAluCod + ", PeriodoEstudio=" + PeriodoEstudio + ", Alumno=" + Alumno + ", InscritoPor=" + InscritoPor + ", PerInsFchInsc=" + PerInsFchInsc + ", PerInsCalFin=" + PerInsCalFin + ", PerInsFrz=" + PerInsFrz + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
     
-    @Embeddable
-    public static class PeriodoEstudioAlumnoPK implements Serializable {
-        @ManyToOne(targetEntity = PeriodoEstudio.class, optional=false)
-        @JoinColumns({
-                @JoinColumn(name="PeriCod", referencedColumnName="PeriCod"),
-                @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
-            })
-        private PeriodoEstudio PeriodoEstudio;
-
-        @ManyToOne(targetEntity = Persona.class, optional=false)
-        @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
-        private Persona Alumno;
-
-        public PeriodoEstudioAlumnoPK() {
-        }
-
-        public PeriodoEstudio getPeriodoEstudio() {
-            return PeriodoEstudio;
-        }
-
-        public void setPeriodoEstudio(PeriodoEstudio Peri) {
-            this.PeriodoEstudio = Peri;
-        }
-
-        public Persona getAlu() {
-            return Alumno;
-        }
-
-        public void setDoc(Persona Alu) {
-            this.Alumno = Alu;
-        }
-
-        @Override
-        public String toString() {
-            return "PeriodoEstudioAlumnoPK{" + "Peri=" + PeriodoEstudio + ", Alu=" + Alumno + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 59 * hash + Objects.hashCode(this.PeriodoEstudio);
-            hash = 59 * hash + Objects.hashCode(this.Alumno);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final PeriodoEstudioAlumnoPK other = (PeriodoEstudioAlumnoPK) obj;
-            if (!Objects.equals(this.PeriodoEstudio, other.PeriodoEstudio)) {
-                return false;
-            }
-            if (!Objects.equals(this.Alumno, other.Alumno)) {
-                return false;
-            }
-            return true;
-        }
-
-        
-
-
-    }
+    
     
 }
 

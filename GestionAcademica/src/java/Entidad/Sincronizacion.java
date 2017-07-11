@@ -20,6 +20,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -38,8 +39,10 @@ public class Sincronizacion implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "SncCod", nullable = false)
-    private Integer SncCod;
+    private Long SncCod;
     
     @Column(name = "SncFch", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -65,11 +68,11 @@ public class Sincronizacion implements Serializable {
     
     //-GETTERS Y SETTERS
 
-    public Integer getSncCod() {
+    public Long getSncCod() {
         return SncCod;
     }
 
-    public void setSncCod(Integer SncCod) {
+    public void setSncCod(Long SncCod) {
         this.SncCod = SncCod;
     }
 

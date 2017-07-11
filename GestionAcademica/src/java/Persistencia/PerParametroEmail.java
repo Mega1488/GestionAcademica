@@ -40,7 +40,6 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
     @Override
     public Object guardar(ParametroEmail pObjeto) {
         
-        pObjeto = this.DevolverNuevoID(pObjeto);
         try {
             iniciaOperacion();
             sesion.save(pObjeto);
@@ -120,27 +119,5 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
     }
     
     
-     private ParametroEmail DevolverNuevoID(ParametroEmail objeto){
-
-        objeto.setParEmlCod(this.DevolverUltimoID());
-        
-        return objeto;
-    }
     
-    private int DevolverUltimoID(){
-        int retorno = 1;
-        List<ParametroEmail> listaObjeto = new ArrayList<ParametroEmail>(); 
-        try {
-            iniciaOperacion();
-            listaObjeto = sesion.getNamedQuery("ParametroEmail.findLast").setMaxResults(1).list();
-        } finally {
-            sesion.close();
-        }
-        if (!listaObjeto.isEmpty()){
-            ParametroEmail objeto = listaObjeto.get(0);
-            retorno = objeto.getParEmlCod() + 1;
-        }
-        
-        return retorno;
-    }
 }

@@ -14,21 +14,27 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -45,8 +51,17 @@ public class PeriodoEstudioDocumento implements Serializable {
     private static final long serialVersionUID = 1L;
    
     //-ATRIBUTOS
-    @EmbeddedId
-    private final PeriodoEstudioDocumentoPK periodoEstudioDocumentoPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "DocCod", nullable = false)
+    private Long DocCod;
+    
+    @OneToOne(targetEntity = PeriodoEstudio.class, optional=false)
+    @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
+    private PeriodoEstudio periodo;
+    
     @Column(name = "DocFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date DocFch;
@@ -64,7 +79,6 @@ public class PeriodoEstudioDocumento implements Serializable {
 
     //-CONSTRUCTOR
     public PeriodoEstudioDocumento() {
-        this.periodoEstudioDocumentoPK = new PeriodoEstudioDocumentoPK();
     }
     
     //-GETTERS Y SETTERS
@@ -103,6 +117,22 @@ public class PeriodoEstudioDocumento implements Serializable {
         }
     }
 
+    public Long getDocCod() {
+        return DocCod;
+    }
+
+    public void setDocCod(Long DocCod) {
+        this.DocCod = DocCod;
+    }
+
+    public PeriodoEstudio getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(PeriodoEstudio periodo) {
+        this.periodo = periodo;
+    }
+
     public String getDocNom() {
         return DocNom;
     }
@@ -127,23 +157,26 @@ public class PeriodoEstudioDocumento implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (periodoEstudioDocumentoPK != null ? periodoEstudioDocumentoPK.hashCode() : 0);
+        int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.DocCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PeriodoEstudioDocumento)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        PeriodoEstudioDocumento other = (PeriodoEstudioDocumento) object;
-        if ((this.periodoEstudioDocumentoPK == null && other.periodoEstudioDocumentoPK != null) || (this.periodoEstudioDocumentoPK != null && !this.periodoEstudioDocumentoPK.equals(other.periodoEstudioDocumentoPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PeriodoEstudioDocumento other = (PeriodoEstudioDocumento) obj;
+        if (!Objects.equals(this.DocCod, other.DocCod)) {
             return false;
         }
         return true;
@@ -151,73 +184,13 @@ public class PeriodoEstudioDocumento implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.PeriodoEstudioDocumento[ id=" + periodoEstudioDocumentoPK.toString() + " ]";
+        return "PeriodoEstudioDocumento{" + "DocCod=" + DocCod + ", periodo=" + periodo + ", DocFch=" + DocFch + ", DocAdj=" + DocAdj + ", DocNom=" + DocNom + ", DocExt=" + DocExt + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
     
-    @Embeddable
-    public static class PeriodoEstudioDocumentoPK implements Serializable {
-        @ManyToOne(targetEntity = PeriodoEstudio.class, optional=false)
-        @JoinColumns({
-                @JoinColumn(name="PeriCod", referencedColumnName="PeriCod"),
-                @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
-            })
-        private PeriodoEstudio Peri;
+    
 
-        private Integer DocCod;
-
-        public PeriodoEstudioDocumentoPK() {
-        }
-
-        public PeriodoEstudio getPeri() {
-            return Peri;
-        }
-
-        public void setPeri(PeriodoEstudio Peri) {
-            this.Peri = Peri;
-        }
-
-        public Integer getDocCod() {
-            return DocCod;
-        }
-
-        public void setDocCod(Integer DocCod) {
-            this.DocCod = DocCod;
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 79 * hash + Objects.hashCode(this.Peri);
-            hash = 79 * hash + Objects.hashCode(this.DocCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final PeriodoEstudioDocumentoPK other = (PeriodoEstudioDocumentoPK) obj;
-            if (!Objects.equals(this.Peri, other.Peri)) {
-                return false;
-            }
-            if (!Objects.equals(this.DocCod, other.DocCod)) {
-                return false;
-            }
-            return true;
-        }
-
-
-
-
-    }
+  
 }
 
 

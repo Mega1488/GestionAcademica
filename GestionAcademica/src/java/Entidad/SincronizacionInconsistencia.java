@@ -8,17 +8,23 @@ package Entidad;
 import Enumerado.EstadoInconsistencia;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -35,15 +41,21 @@ public class SincronizacionInconsistencia implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final SincInconsistenciaPK sincIncPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "IncCod", nullable = false)
+    private Long  IncCod;
+           
+    @OneToOne(targetEntity = Sincronizacion.class, optional=false)
+    @JoinColumn(name="SncCod", referencedColumnName="SncCod")
+    private Sincronizacion sincronizacion;
+
+ 
     
-    @ManyToOne(targetEntity = SincInconsistenciaDatos.class, optional=false)
-    @JoinColumns({
-        @JoinColumn(name="IncObjValSncCod", referencedColumnName="SncCod"),
-        @JoinColumn(name="IncObjValIncCod", referencedColumnName="IncCod"),
-        @JoinColumn(name="IncObjValObjCod", referencedColumnName="IncObjCod")            
-    })
+    @OneToOne(targetEntity = SincInconsistenciaDatos.class, optional=false)
+    @JoinColumn(name="IncObjValObjCod", referencedColumnName="IncObjCod")            
     private SincInconsistenciaDatos objetoSeleccionado;
     
     @Column(name = "IncEst")
@@ -51,11 +63,26 @@ public class SincronizacionInconsistencia implements Serializable {
     
     //-CONSTRUCTOR
     public SincronizacionInconsistencia() {
-        this.sincIncPK = new SincInconsistenciaPK();
     }
     
     
     //-GETTERS Y SETTERS
+
+    public Long getIncCod() {
+        return IncCod;
+    }
+
+    public void setIncCod(Long IncCod) {
+        this.IncCod = IncCod;
+    }
+
+    public Sincronizacion getSincronizacion() {
+        return sincronizacion;
+    }
+
+    public void setSincronizacion(Sincronizacion sincronizacion) {
+        this.sincronizacion = sincronizacion;
+    }
 
     public SincInconsistenciaDatos getObjetoSeleccionado() {
         return objetoSeleccionado;
@@ -73,25 +100,26 @@ public class SincronizacionInconsistencia implements Serializable {
         this.IncEst = IncEst;
     }
 
-    
-    
-    
-
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (sincIncPK != null ? sincIncPK.hashCode() : 0);
+        int hash = 3;
+        hash = 71 * hash + Objects.hashCode(this.IncCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SincronizacionInconsistencia)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        SincronizacionInconsistencia other = (SincronizacionInconsistencia) object;
-        if ((this.sincIncPK == null && other.sincIncPK != null) || (this.sincIncPK != null && !this.sincIncPK.equals(other.sincIncPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SincronizacionInconsistencia other = (SincronizacionInconsistencia) obj;
+        if (!Objects.equals(this.IncCod, other.IncCod)) {
             return false;
         }
         return true;
@@ -99,73 +127,13 @@ public class SincronizacionInconsistencia implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.SincronizacionInconsistencia[ id=" + sincIncPK + " ]";
+        return "SincronizacionInconsistencia{" + "IncCod=" + IncCod + ", sincronizacion=" + sincronizacion + ", objetoSeleccionado=" + objetoSeleccionado + ", IncEst=" + IncEst + '}';
     }
+
     
     
-    @Embeddable
-    public static class SincInconsistenciaPK implements Serializable {
-        @ManyToOne(targetEntity = Sincronizacion.class, optional=false)
-        @JoinColumn(name="SncCod", referencedColumnName="SncCod")
-        private Sincronizacion sincronizacion;
-
-        private Integer IncCod;
-
-        public SincInconsistenciaPK() {
-        }
-
-        public Sincronizacion getSincronizacion() {
-            return sincronizacion;
-        }
-
-        public void setSincronizacion(Sincronizacion sincronizacion) {
-            this.sincronizacion = sincronizacion;
-        }
-
-        public Integer getIncCod() {
-            return IncCod;
-        }
-
-        public void setIncCod(Integer IncCod) {
-            this.IncCod = IncCod;
-        }
-
-        @Override
-        public String toString() {
-            return "SincInconsistenciaPK{" + "sincronizacion=" + sincronizacion + ", IncCod=" + IncCod + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 29 * hash + Objects.hashCode(this.sincronizacion);
-            hash = 29 * hash + Objects.hashCode(this.IncCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final SincInconsistenciaPK other = (SincInconsistenciaPK) obj;
-            if (!Objects.equals(this.sincronizacion, other.sincronizacion)) {
-                return false;
-            }
-            if (!Objects.equals(this.IncCod, other.IncCod)) {
-                return false;
-            }
-            return true;
-        }
-
-
-    }
+    
+ 
 
     
 }

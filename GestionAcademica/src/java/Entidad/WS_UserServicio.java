@@ -8,15 +8,21 @@ package Entidad;
 import Enumerado.ServicioWeb;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -33,35 +39,70 @@ public class WS_UserServicio implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS 
-    @EmbeddedId
-    private final UserServicioPK usrServPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "WsSrvCod", nullable = false)
+    private Long WsSrvCod;   
+    
+    @ManyToOne(targetEntity = WS_User.class, optional=false)
+    @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
+    private WS_User usuario;
+
+    private ServicioWeb WsSrv;
 
     //-CONSTRUCTOR
     public WS_UserServicio() {
-        this.usrServPK = new UserServicioPK();
     }
     
     
     //-GETTERS Y SETTERS
 
-    
-    
+    public Long getWsSrvCod() {
+        return WsSrvCod;
+    }
+
+    public void setWsSrvCod(Long WsSrvCod) {
+        this.WsSrvCod = WsSrvCod;
+    }
+
+    public WS_User getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(WS_User usuario) {
+        this.usuario = usuario;
+    }
+
+    public ServicioWeb getWsSrv() {
+        return WsSrv;
+    }
+
+    public void setWsSrv(ServicioWeb WsSrv) {
+        this.WsSrv = WsSrv;
+    }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (usrServPK != null ? usrServPK.hashCode() : 0);
+        int hash = 5;
+        hash = 53 * hash + Objects.hashCode(this.WsSrvCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof WS_UserServicio)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        WS_UserServicio other = (WS_UserServicio) object;
-        if ((this.usrServPK == null && other.usrServPK != null) || (this.usrServPK != null && !this.usrServPK.equals(other.usrServPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final WS_UserServicio other = (WS_UserServicio) obj;
+        if (!Objects.equals(this.WsSrvCod, other.WsSrvCod)) {
             return false;
         }
         return true;
@@ -69,75 +110,13 @@ public class WS_UserServicio implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.WS_UserServicio[ id=" + usrServPK + " ]";
+        return "WS_UserServicio{" + "WsSrvCod=" + WsSrvCod + ", usuario=" + usuario + ", WsSrv=" + WsSrv + '}';
     }
+
     
     
-    @Embeddable
-    public static class UserServicioPK implements Serializable {
-       @ManyToOne(targetEntity = WS_User.class, optional=false)
-       @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
-       private WS_User usuario;
-
-       private ServicioWeb WsSrv;
-
-       public UserServicioPK() {
-       }
-
-       public WS_User getUsuario() {
-           return usuario;
-       }
-
-       public void setUsuario(WS_User usuario) {
-           this.usuario = usuario;
-       }
-
-       public ServicioWeb getWsSrv() {
-           return WsSrv;
-       }
-
-       public void setWsSrv(ServicioWeb WsSrv) {
-           this.WsSrv = WsSrv;
-       }
-
-       @Override
-       public String toString() {
-           return "UserServicioPK{" + "usuario=" + usuario + ", WsSrv=" + WsSrv + '}';
-       }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 53 * hash + Objects.hashCode(this.usuario);
-            hash = 53 * hash + Objects.hashCode(this.WsSrv);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final UserServicioPK other = (UserServicioPK) obj;
-            if (!Objects.equals(this.usuario, other.usuario)) {
-                return false;
-            }
-            if (this.WsSrv != other.WsSrv) {
-                return false;
-            }
-            return true;
-        }
-
-       
-
-
-   }
+    
+    
 }
 
 

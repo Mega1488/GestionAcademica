@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -42,8 +43,10 @@ public class WS_Bit implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "WsBitCod", nullable = false)
-    private Integer WsBitCod;
+    private Long WsBitCod;
     
     @ManyToOne(targetEntity = WS_User.class, optional=false)
     @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
@@ -62,17 +65,16 @@ public class WS_Bit implements Serializable {
     
     //-CONSTRUCTOR
     
-    
     public WS_Bit() {    
     }
 
     //-GETTERS Y SETTERS
 
-    public Integer getWsBitCod() {
+    public Long getWsBitCod() {
         return WsBitCod;
     }
 
-    public void setWsBitCod(Integer WsBitCod) {
+    public void setWsBitCod(Long WsBitCod) {
         this.WsBitCod = WsBitCod;
     }
 

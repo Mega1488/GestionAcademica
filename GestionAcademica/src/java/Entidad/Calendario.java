@@ -8,18 +8,24 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -36,9 +42,17 @@ public class Calendario implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final CalendarioPK calPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "CalCod", nullable = false)
+    private Long CalCod;
     
+    @OneToOne(targetEntity = Evaluacion.class, optional=false)
+    @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
+    private Evaluacion evaluacion;
+
     
     @Column(name = "CalFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
@@ -58,10 +72,25 @@ public class Calendario implements Serializable {
 
     //-CONSTRUCTOR
     public Calendario() {
-        this.calPK = new CalendarioPK();
     } 
 
     //-GETTERS Y SETTERS
+
+    public Long getCalCod() {
+        return CalCod;
+    }
+
+    public void setCalCod(Long CalCod) {
+        this.CalCod = CalCod;
+    }
+
+    public Evaluacion getEvaluacion() {
+        return evaluacion;
+    }
+
+    public void setEvaluacion(Evaluacion evaluacion) {
+        this.evaluacion = evaluacion;
+    }
 
     public Date getCalFch() {
         return CalFch;
@@ -95,24 +124,26 @@ public class Calendario implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    
-    
-        
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (calPK != null ? calPK.hashCode() : 0);
+        int hash = 3;
+        hash = 67 * hash + Objects.hashCode(this.CalCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Calendario)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Calendario other = (Calendario) object;
-        if ((this.calPK == null && other.calPK != null) || (this.calPK != null && !this.calPK.equals(other.calPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Calendario other = (Calendario) obj;
+        if (!Objects.equals(this.CalCod, other.CalCod)) {
             return false;
         }
         return true;
@@ -120,74 +151,12 @@ public class Calendario implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Calendario[ id=" + calPK.toString() + " ]";
+        return "Calendario{" + "CalCod=" + CalCod + ", evaluacion=" + evaluacion + ", CalFch=" + CalFch + ", EvlInsFchDsd=" + EvlInsFchDsd + ", EvlInsFchHst=" + EvlInsFchHst + ", ObjFchMod=" + ObjFchMod + '}';
     }
+
+
     
     
-    @Embeddable
-    public static class CalendarioPK implements Serializable {
-        @ManyToOne(targetEntity = Evaluacion.class, optional=false)
-        @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
-        private Evaluacion Evl;
-
-        private Integer CalCod;
-
-        public CalendarioPK() {
-        }
-
-        public Evaluacion getEvl() {
-            return Evl;
-        }
-
-        public void setEvl(Evaluacion Evl) {
-            this.Evl = Evl;
-        }
-
-        public Integer getCalCod() {
-            return CalCod;
-        }
-
-        public void setCalCod(Integer CalCod) {
-            this.CalCod = CalCod;
-        }
-
-        @Override
-        public String toString() {
-            return "CalendarioPK{" + "Evl=" + Evl + ", CalCod=" + CalCod + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 3;
-            hash = 59 * hash + Objects.hashCode(this.Evl);
-            hash = 59 * hash + Objects.hashCode(this.CalCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final CalendarioPK other = (CalendarioPK) obj;
-            if (!Objects.equals(this.Evl, other.Evl)) {
-                return false;
-            }
-            if (!Objects.equals(this.CalCod, other.CalCod)) {
-                return false;
-            }
-            return true;
-        }
-
-        
-
-    }
 
     
 }

@@ -8,10 +8,14 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
@@ -21,6 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -37,8 +42,16 @@ public class SincRegistroELiminado implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final ObjEliminadoPK objEliminadoPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "SncObjElimCod", nullable = false)
+    private Long SncObjElimCod;
+
+    @ManyToOne(targetEntity = ObjetoCampo.class, optional=false)
+    @JoinColumn(name="ObjCmpCod", referencedColumnName="ObjCmpCod")
+    private ObjetoCampo objetoCampo;
     
     @Column(name = "SncObjElimFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
@@ -49,10 +62,25 @@ public class SincRegistroELiminado implements Serializable {
     
     //-CONSTRUCTOR
     public SincRegistroELiminado() {
-        this.objEliminadoPK = new ObjEliminadoPK();
     }
         
     //-GETTERS Y SETTERS
+
+    public Long getSncObjElimCod() {
+        return SncObjElimCod;
+    }
+
+    public void setSncObjElimCod(Long SncObjElimCod) {
+        this.SncObjElimCod = SncObjElimCod;
+    }
+
+    public ObjetoCampo getObjetoCampo() {
+        return objetoCampo;
+    }
+
+    public void setObjetoCampo(ObjetoCampo objetoCampo) {
+        this.objetoCampo = objetoCampo;
+    }
 
     public Date getSncObjElimFch() {
         return SncObjElimFch;
@@ -70,24 +98,26 @@ public class SincRegistroELiminado implements Serializable {
         this.ObjCmpVal = ObjCmpVal;
     }
 
-    
-    
-    
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (objEliminadoPK != null ? objEliminadoPK.hashCode() : 0);
+        int hash = 5;
+        hash = 59 * hash + Objects.hashCode(this.SncObjElimCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SincRegistroELiminado)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        SincRegistroELiminado other = (SincRegistroELiminado) object;
-        if ((this.objEliminadoPK == null && other.objEliminadoPK != null) || (this.objEliminadoPK != null && !this.objEliminadoPK.equals(other.objEliminadoPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SincRegistroELiminado other = (SincRegistroELiminado) obj;
+        if (!Objects.equals(this.SncObjElimCod, other.SncObjElimCod)) {
             return false;
         }
         return true;
@@ -95,77 +125,14 @@ public class SincRegistroELiminado implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.SincRegistroELiminado[ id=" + objEliminadoPK + " ]";
+        return "SincRegistroELiminado{" + "SncObjElimCod=" + SncObjElimCod + ", objetoCampo=" + objetoCampo + ", SncObjElimFch=" + SncObjElimFch + ", ObjCmpVal=" + ObjCmpVal + '}';
     }
+
     
     
-    @Embeddable
-    public static class ObjEliminadoPK implements Serializable {
-        private Integer SncObjElimCod;
-
-        @ManyToOne(targetEntity = ObjetoCampo.class, optional=false)
-        @JoinColumns({
-           @JoinColumn(name="ObjCod", referencedColumnName="ObjCod"),
-           @JoinColumn(name="ObjCmpCod", referencedColumnName="ObjCmpCod")
-        }) 
-        private ObjetoCampo objetoCampo;
-
-        public ObjEliminadoPK() {
-        }
-
-        public Integer getSncObjElimCod() {
-            return SncObjElimCod;
-        }
-
-        public void setSncObjElimCod(Integer SncObjElimCod) {
-            this.SncObjElimCod = SncObjElimCod;
-        }
-
-        public ObjetoCampo getObjetoCampo() {
-            return objetoCampo;
-        }
-
-        public void setObjetoCampo(ObjetoCampo objetoCampo) {
-            this.objetoCampo = objetoCampo;
-        }
-
-        @Override
-        public String toString() {
-            return "ObjEliminadoPK{" + "SncObjElimCod=" + SncObjElimCod + ", objetoCampo=" + objetoCampo + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 53 * hash + Objects.hashCode(this.SncObjElimCod);
-            hash = 53 * hash + Objects.hashCode(this.objetoCampo);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final ObjEliminadoPK other = (ObjEliminadoPK) obj;
-            if (!Objects.equals(this.SncObjElimCod, other.SncObjElimCod)) {
-                return false;
-            }
-            if (!Objects.equals(this.objetoCampo, other.objetoCampo)) {
-                return false;
-            }
-            return true;
-        }
-
-
-
-    }
+    
+    
+   
 
     
 }

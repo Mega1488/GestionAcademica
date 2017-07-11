@@ -8,19 +8,22 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -38,18 +41,28 @@ public class Escolaridad implements Serializable {
     
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final EscolaridadPK escolaridadPK;    
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "EscCod", nullable = false)
+    private Long EscCod;
     
+    @OneToOne(targetEntity = Inscripcion.class, optional=false)        
+    @JoinColumn(name="InsCod", referencedColumnName="InsCod")
+    private Inscripcion inscripcion;
+
     @ManyToOne(targetEntity = Materia.class, optional=true)
-    @JoinColumns({
-            @JoinColumn(name="EscMatCod", referencedColumnName="MatCod")
-        })
+    @JoinColumn(name="EscMatCod", referencedColumnName="MatCod")
     private Materia materia;
     
     @ManyToOne(targetEntity = Modulo.class, optional=true)
     @JoinColumn(name="EscModCod", referencedColumnName="ModCod")
     private Modulo modulo;   
+    
+    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @JoinColumn(name="EscPerCod", referencedColumnName="PerCod")
+    private Persona InscritoPor;
 
     @Column(name = "EscCalVal", precision=10, scale=2)
     private Double EscCalVal;
@@ -58,20 +71,31 @@ public class Escolaridad implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date EscFch;
     
-    @ManyToOne(targetEntity = Persona.class, optional=true)
-    @JoinColumn(name="EscPerCod", referencedColumnName="PerCod")
-    private Persona InscritoPor;
-    
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
     //-CONSTRUCTOR
     public Escolaridad() {
-        this.escolaridadPK = new EscolaridadPK();
     }
 
     //-GETTERS Y SETTERS
+
+    public Long getEscCod() {
+        return EscCod;
+    }
+
+    public void setEscCod(Long EscCod) {
+        this.EscCod = EscCod;
+    }
+
+    public Inscripcion getInscripcion() {
+        return inscripcion;
+    }
+
+    public void setInscripcion(Inscripcion inscripcion) {
+        this.inscripcion = inscripcion;
+    }
 
     public Materia getMateria() {
         return materia;
@@ -87,6 +111,14 @@ public class Escolaridad implements Serializable {
 
     public void setModulo(Modulo modulo) {
         this.modulo = modulo;
+    }
+
+    public Persona getInscritoPor() {
+        return InscritoPor;
+    }
+
+    public void setInscritoPor(Persona InscritoPor) {
+        this.InscritoPor = InscritoPor;
     }
 
     public Double getEscCalVal() {
@@ -105,14 +137,6 @@ public class Escolaridad implements Serializable {
         this.EscFch = EscFch;
     }
 
-    public Persona getInscritoPor() {
-        return InscritoPor;
-    }
-
-    public void setInscritoPor(Persona InscritoPor) {
-        this.InscritoPor = InscritoPor;
-    }
-
     public Date getObjFchMod() {
         return ObjFchMod;
     }
@@ -120,25 +144,27 @@ public class Escolaridad implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
-    
-    
-    
-    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (escolaridadPK != null ? escolaridadPK.hashCode() : 0);
+        int hash = 7;
+        hash = 89 * hash + Objects.hashCode(this.EscCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Escolaridad)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Escolaridad other = (Escolaridad) object;
-        if ((this.escolaridadPK == null && other.escolaridadPK != null) || (this.escolaridadPK != null && !this.escolaridadPK.equals(other.escolaridadPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Escolaridad other = (Escolaridad) obj;
+        if (!Objects.equals(this.EscCod, other.EscCod)) {
             return false;
         }
         return true;
@@ -146,77 +172,11 @@ public class Escolaridad implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Escolaridad[ id=" + escolaridadPK + " ]";
+        return "Escolaridad{" + "EscCod=" + EscCod + ", inscripcion=" + inscripcion + ", materia=" + materia + ", modulo=" + modulo + ", InscritoPor=" + InscritoPor + ", EscCalVal=" + EscCalVal + ", EscFch=" + EscFch + ", ObjFchMod=" + ObjFchMod + '}';
     }
+
     
-    
-    @Embeddable
-    public static class EscolaridadPK implements Serializable {
-        @ManyToOne(targetEntity = Inscripcion.class, optional=false)        
-        @JoinColumns({
-                @JoinColumn(name="InsCod", referencedColumnName="InsCod"),
-                @JoinColumn(name="AluPerCod", referencedColumnName="AluPerCod"),
-            })
-        private Inscripcion inscripcion;
-
-        private Integer EscCod;
-
-        public EscolaridadPK() {
-        }
-
-        public Inscripcion getInscripcion() {
-            return inscripcion;
-        }
-
-        public void setInscripcion(Inscripcion inscripcion) {
-            this.inscripcion = inscripcion;
-        }
-
-        public Integer getEscCod() {
-            return EscCod;
-        }
-
-        public void setEscCod(Integer EscCod) {
-            this.EscCod = EscCod;
-        }
-
-        @Override
-        public String toString() {
-            return "EscolaridadPK{" + "inscripcion=" + inscripcion + ", EscCod=" + EscCod + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 97 * hash + Objects.hashCode(this.inscripcion);
-            hash = 97 * hash + Objects.hashCode(this.EscCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final EscolaridadPK other = (EscolaridadPK) obj;
-            if (!Objects.equals(this.inscripcion, other.inscripcion)) {
-                return false;
-            }
-            if (!Objects.equals(this.EscCod, other.EscCod)) {
-                return false;
-            }
-            return true;
-        }
-
-
-
-    }
+  
 }
 
 

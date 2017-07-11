@@ -9,19 +9,25 @@ import Enumerado.EstadoCalendarioEvaluacion;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -38,22 +44,28 @@ public class CalendarioAlumno implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final CalendarioAlumnoPK calAluPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "CalAlCod", nullable = false)
+    private Long CalAlCod;
+    
+    @OneToOne(targetEntity = Calendario.class, optional=false)
+    @JoinColumn(name="CalCod", referencedColumnName = "CalCod")
+    private Calendario calendario;
+
+    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
+    private Persona Alumno;
+
     
     @Column(name = "EvlCalVal", precision=10, scale=2)
     private Double EvlCalVal;
     
-    @ManyToOne(targetEntity = Persona.class, optional=true)
-    @JoinColumn(name="EvlCalPerCod", referencedColumnName = "PerCod")
-    private Persona EvlCalPor;
     
     @Column(name = "EvlCalEst", precision=10, scale=2)
     private EstadoCalendarioEvaluacion EvlCalEst;
-    
-    @ManyToOne(targetEntity = Persona.class, optional=true)
-    @JoinColumn(name="EvlValPerCod", referencedColumnName = "PerCod")
-    private Persona EvlValPor;
 
     @Column(name = "EvlCalObs", length = 500)
     private String EvlCalObs;
@@ -72,22 +84,47 @@ public class CalendarioAlumno implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+
+    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @JoinColumn(name="EvlCalPerCod", referencedColumnName = "PerCod")
+    private Persona EvlCalPor;
+    
+    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @JoinColumn(name="EvlValPerCod", referencedColumnName = "PerCod")
+    private Persona EvlValPor;
+
+
     
 
     //-CONSTRUCTOR
 
     public CalendarioAlumno() {
-        this.calAluPK = new CalendarioAlumnoPK();
     }
 
     //-GETTERS Y SETTERS
 
-    public Date getObjFchMod() {
-        return ObjFchMod;
+    public Long getCalAlCod() {
+        return CalAlCod;
     }
 
-    public void setObjFchMod(Date ObjFchMod) {
-        this.ObjFchMod = ObjFchMod;
+    public void setCalAlCod(Long CalAlCod) {
+        this.CalAlCod = CalAlCod;
+    }
+
+    public Calendario getCalendario() {
+        return calendario;
+    }
+
+    public void setCalendario(Calendario calendario) {
+        this.calendario = calendario;
+    }
+
+    public Persona getAlumno() {
+        return Alumno;
+    }
+
+    public void setAlumno(Persona Alumno) {
+        this.Alumno = Alumno;
     }
 
     public Double getEvlCalVal() {
@@ -98,28 +135,12 @@ public class CalendarioAlumno implements Serializable {
         this.EvlCalVal = EvlCalVal;
     }
 
-    public Persona getEvlCalPor() {
-        return EvlCalPor;
-    }
-
-    public void setEvlCalPor(Persona EvlCalPor) {
-        this.EvlCalPor = EvlCalPor;
-    }
-
     public EstadoCalendarioEvaluacion getEvlCalEst() {
         return EvlCalEst;
     }
 
     public void setEvlCalEst(EstadoCalendarioEvaluacion EvlCalEst) {
         this.EvlCalEst = EvlCalEst;
-    }
-
-    public Persona getEvlValPor() {
-        return EvlValPor;
-    }
-
-    public void setEvlValPor(Persona EvlValPor) {
-        this.EvlValPor = EvlValPor;
     }
 
     public String getEvlCalObs() {
@@ -153,25 +174,51 @@ public class CalendarioAlumno implements Serializable {
     public void setEvlValFch(Date EvlValFch) {
         this.EvlValFch = EvlValFch;
     }
-    
-    
-    
-    
+
+    public Date getObjFchMod() {
+        return ObjFchMod;
+    }
+
+    public void setObjFchMod(Date ObjFchMod) {
+        this.ObjFchMod = ObjFchMod;
+    }
+
+    public Persona getEvlCalPor() {
+        return EvlCalPor;
+    }
+
+    public void setEvlCalPor(Persona EvlCalPor) {
+        this.EvlCalPor = EvlCalPor;
+    }
+
+    public Persona getEvlValPor() {
+        return EvlValPor;
+    }
+
+    public void setEvlValPor(Persona EvlValPor) {
+        this.EvlValPor = EvlValPor;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (calAluPK != null ? calAluPK.hashCode() : 0);
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.CalAlCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CalendarioAlumno)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        CalendarioAlumno other = (CalendarioAlumno) object;
-        if ((this.calAluPK == null && other.calAluPK != null) || (this.calAluPK != null && !this.calAluPK.equals(other.calAluPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final CalendarioAlumno other = (CalendarioAlumno) obj;
+        if (!Objects.equals(this.CalAlCod, other.CalAlCod)) {
             return false;
         }
         return true;
@@ -179,77 +226,11 @@ public class CalendarioAlumno implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.CalendarioAlumno[ id=" + calAluPK.toString() + " ]";
+        return "CalendarioAlumno{" + "CalAlCod=" + CalAlCod + ", calendario=" + calendario + ", Alumno=" + Alumno + ", EvlCalVal=" + EvlCalVal + ", EvlCalEst=" + EvlCalEst + ", EvlCalObs=" + EvlCalObs + ", EvlValObs=" + EvlValObs + ", EvlCalFch=" + EvlCalFch + ", EvlValFch=" + EvlValFch + ", ObjFchMod=" + ObjFchMod + ", EvlCalPor=" + EvlCalPor + ", EvlValPor=" + EvlValPor + '}';
     }
+
     
-    @Embeddable
-    public static class CalendarioAlumnoPK implements Serializable {
-        @ManyToOne(targetEntity = Calendario.class, optional=false)
-        @JoinColumns({
-            @JoinColumn(name="CalCod", referencedColumnName = "CalCod"),
-            @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
-        })
-        private Calendario Cal;
-
-        @ManyToOne(targetEntity = Persona.class, optional=false)
-        @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
-        private Persona Alumno;
-
-        public Calendario getCal() {
-            return Cal;
-        }
-
-        public void setCal(Calendario Cal) {
-            this.Cal = Cal;
-        }
-
-        public Persona getAlumno() {
-            return Alumno;
-        }
-
-        public void setAlumno(Persona Alumno) {
-            this.Alumno = Alumno;
-        }
-
-        public CalendarioAlumnoPK() {
-        }
-
-        @Override
-        public String toString() {
-            return "CalendarioAlumnoPK{" + "Cal=" + Cal + ", Alumno=" + Alumno + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 83 * hash + Objects.hashCode(this.Cal);
-            hash = 83 * hash + Objects.hashCode(this.Alumno);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final CalendarioAlumnoPK other = (CalendarioAlumnoPK) obj;
-            if (!Objects.equals(this.Cal, other.Cal)) {
-                return false;
-            }
-            if (!Objects.equals(this.Alumno, other.Alumno)) {
-                return false;
-            }
-            return true;
-        }
-
-
-    }
+    
 }
 
 

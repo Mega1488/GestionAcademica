@@ -16,6 +16,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -32,11 +33,14 @@ public class WS_User implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
+    
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "WsUsrCod", nullable = false)
-    private Integer WsUsrCod;
-    
+    private Long WsUsrCod;
+        
     @Column(name = "WsUsr", length = 100)
     private String WsUsr;
     
@@ -50,11 +54,11 @@ public class WS_User implements Serializable {
     
     //-GETTERS Y SETTERS
 
-    public Integer getWsUsrCod() {
+    public Long getWsUsrCod() {
         return WsUsrCod;
     }
 
-    public void setWsUsrCod(Integer WsUsrCod) {
+    public void setWsUsrCod(Long WsUsrCod) {
         this.WsUsrCod = WsUsrCod;
     }
 

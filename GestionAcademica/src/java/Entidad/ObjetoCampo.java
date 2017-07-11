@@ -8,16 +8,22 @@ package Entidad;
 import Enumerado.TipoCampo;
 import java.io.Serializable;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -34,8 +40,19 @@ public class ObjetoCampo implements Serializable {
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    @EmbeddedId
-    private final ObjetoCampoPK objCmpPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "ObjCmpCod", nullable = false)
+    private Long ObjCmpCod;
+
+    @OneToOne(targetEntity = Objeto.class, optional=false)
+    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
+    private Objeto objeto;
+
+    
+    
     
     @Column(name = "ObjCmpNom", length = 100)
     private String ObjCmpNom;
@@ -48,10 +65,25 @@ public class ObjetoCampo implements Serializable {
     
     //-CONSTRUCTOR
     public ObjetoCampo() {
-        this.objCmpPK = new ObjetoCampoPK();
     }
     
     //-GETTERS Y SETTERS
+
+    public Long getObjCmpCod() {
+        return ObjCmpCod;
+    }
+
+    public void setObjCmpCod(Long ObjCmpCod) {
+        this.ObjCmpCod = ObjCmpCod;
+    }
+
+    public Objeto getObjeto() {
+        return objeto;
+    }
+
+    public void setObjeto(Objeto objeto) {
+        this.objeto = objeto;
+    }
 
     public String getObjCmpNom() {
         return ObjCmpNom;
@@ -76,29 +108,27 @@ public class ObjetoCampo implements Serializable {
     public void setObjCmpPK(Boolean ObjCmpPK) {
         this.ObjCmpPK = ObjCmpPK;
     }
-    
-    
 
-    
-    
-    
-    
-    
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (objCmpPK != null ? objCmpPK.hashCode() : 0);
+        int hash = 7;
+        hash = 31 * hash + Objects.hashCode(this.ObjCmpCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ObjetoCampo)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        ObjetoCampo other = (ObjetoCampo) object;
-        if ((this.objCmpPK == null && other.objCmpPK != null) || (this.objCmpPK != null && !this.objCmpPK.equals(other.objCmpPK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ObjetoCampo other = (ObjetoCampo) obj;
+        if (!Objects.equals(this.ObjCmpCod, other.ObjCmpCod)) {
             return false;
         }
         return true;
@@ -106,76 +136,10 @@ public class ObjetoCampo implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.ObjetoCampo[ id=" + objCmpPK + " ]";
+        return "ObjetoCampo{" + "ObjCmpCod=" + ObjCmpCod + ", objeto=" + objeto + ", ObjCmpNom=" + ObjCmpNom + ", ObjCmpTpoDat=" + ObjCmpTpoDat + ", ObjCmpPK=" + ObjCmpPK + '}';
     }
-    
 
 
-    @Embeddable
-    public static class ObjetoCampoPK implements Serializable {
-        @ManyToOne(targetEntity = Objeto.class, optional=false)
-        @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
-        private Objeto objeto;
-
-        private Integer ObjCmpCod;
-
-        public ObjetoCampoPK() {
-        }
-
-        public Objeto getObjeto() {
-            return objeto;
-        }
-
-        public void setObjeto(Objeto objeto) {
-            this.objeto = objeto;
-        }
-
-        public Integer getObjCmpCod() {
-            return ObjCmpCod;
-        }
-
-        public void setObjCmpCod(Integer ObjCmpCod) {
-            this.ObjCmpCod = ObjCmpCod;
-        }
-
-        @Override
-        public String toString() {
-            return "ObjetoCampoPK{" + "objeto=" + objeto + ", ObjCmpCod=" + ObjCmpCod + '}';
-        }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 29 * hash + Objects.hashCode(this.objeto);
-            hash = 29 * hash + Objects.hashCode(this.ObjCmpCod);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final ObjetoCampoPK other = (ObjetoCampoPK) obj;
-            if (!Objects.equals(this.objeto, other.objeto)) {
-                return false;
-            }
-            if (!Objects.equals(this.ObjCmpCod, other.ObjCmpCod)) {
-                return false;
-            }
-            return true;
-        }
-
-
-
-
-    }
 }
 
 
