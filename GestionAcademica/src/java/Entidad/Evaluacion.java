@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -37,7 +36,6 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Evaluacion.findByPK",           query = "SELECT t FROM Evaluacion t WHERE t.EvlCod =:EvlCod"),
     @NamedQuery(name = "Evaluacion.findByCurso",        query = "SELECT t FROM Evaluacion t WHERE t.CurEvl.CurCod =:CurCod"),
     @NamedQuery(name = "Evaluacion.findByModulo",       query = "SELECT t FROM Evaluacion t WHERE t.ModEvl.curso.CurCod =:CurCod and t.ModEvl.ModCod =:ModCod"),
-    @NamedQuery(name = "Evaluacion.findByMateria",      query = "SELECT t FROM Evaluacion t WHERE t.MatEvl.materiaPK.plan.planPK.carrera.CarCod =:CarCod and t.MatEvl.materiaPK.plan.planPK.PlaEstCod =:PlaEstCod and t.MatEvl.materiaPK.MatCod =:MatCod"),
         
     @NamedQuery(name = "Evaluacion.findLast",      query = "SELECT t FROM Evaluacion t ORDER BY t.EvlCod DESC")})
 
@@ -55,11 +53,7 @@ public class Evaluacion implements Serializable {
     
     
     @OneToOne(targetEntity = Materia.class, optional=true)
-    @JoinColumns({
-            @JoinColumn(name="MatEvlCarCod", referencedColumnName="CarCod"),
-            @JoinColumn(name="MatEvlPlaEstCod", referencedColumnName="PlaEstCod"),
-            @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
-        })
+    @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
     private Materia MatEvl;
     
     @OneToOne(targetEntity = Curso.class, optional=true)
@@ -67,21 +61,19 @@ public class Evaluacion implements Serializable {
     private Curso CurEvl;
     
     @OneToOne(targetEntity = Modulo.class, optional=true)
-    @JoinColumns({
-            @JoinColumn(name="ModEvlCurCod", referencedColumnName="CurCod"),
-            @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod")
-        })
+    @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod")
     private Modulo ModEvl;
     
+    @ManyToOne(targetEntity = TipoEvaluacion.class, optional=true)
+    @JoinColumn(name="TpoEvlCod", referencedColumnName="TpoEvlCod")
+    private TipoEvaluacion tipoEvaluacion;
+        
     @Column(name = "EvlNom", length = 100)
     private String EvlNom;
     @Column(name = "EvlDsc", length = 500)
     private String EvlDsc;
     @Column(name = "EvlNotTot", precision=10, scale=2)
     private Double EvlNotTot;
-    @ManyToOne(targetEntity = TipoEvaluacion.class, optional=true)
-    @JoinColumn(name="TpoEvlCod", referencedColumnName="TpoEvlCod")
-    private TipoEvaluacion tipoEvaluacion;
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;

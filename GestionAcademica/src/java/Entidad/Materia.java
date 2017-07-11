@@ -7,25 +7,28 @@ package Entidad;
 
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import Enumerado.TipoAprobacion;
 import Enumerado.TipoPeriodo;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -35,18 +38,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "MATERIA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Materia.findAll",       query = "SELECT t FROM Materia t"),
-    @NamedQuery(name = "Materia.findByPK",      query = "SELECT t FROM Materia t WHERE t.materiaPK.MatCod =:MatCod and t.materiaPK.plan.planPK.PlaEstCod =:PlaEstCod and t.materiaPK.plan.planPK.carrera.CarCod =:CarCod"),
-    @NamedQuery(name = "Materia.findLast",      query = "SELECT t FROM Materia t WHERE t.materiaPK.plan.planPK.carrera.CarCod = :CarCod and t.materiaPK.plan.planPK.PlaEstCod =:PlaEstCod ORDER BY t.materiaPK.MatCod DESC")})
+    @NamedQuery(name = "Materia.findAll",       query = "SELECT t FROM Materia t")})
 
 public class Materia implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     //-ATRIBUTOS
-    
-    @EmbeddedId
-    private final MateriaPK materiaPK;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "MatCod")
+    private Long MatCod;
+
+    @OneToOne(targetEntity = PlanEstudio.class, optional=false)
+    @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
+    private PlanEstudio plan;
+
+           
     @Column(name = "MatNom", length = 100)
     private String MatNom;
     @Column(name = "MatCntHor", precision=10, scale=2)
@@ -57,35 +67,44 @@ public class Materia implements Serializable {
     private TipoPeriodo MatTpoPer;    
     @Column(name = "MatPerVal", precision=10, scale=2)
     private Double MatPerVal;
-    @ManyToOne(targetEntity = Materia.class, optional=true)
-    @JoinColumns({
-        @JoinColumn(name="PreCarCod", referencedColumnName="CarCod"),
-        @JoinColumn(name="PrePlaEstCod", referencedColumnName="PlaEstCod"),
-        @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
-    })
-    private Materia materiaPrevia;
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
-    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name="MatEvlCarCod", referencedColumnName="CarCod"),
-            @JoinColumn(name="MatEvlPlaEstCod", referencedColumnName="PlaEstCod"),
-            @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
-        })
-    private List<Evaluacion> lstEvaluacion;
     
+    @ManyToOne(targetEntity = Materia.class, optional=true)
+    @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
+    private Materia materiaPrevia;
+    
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
+    private List<Evaluacion> lstEvaluacion;
     
    
     //-CONSTRUCTOR
 
     public Materia() {
-        this.materiaPK = new MateriaPK();
+       
     }
     
     
     
     //-GETTERS Y SETTERS
+
+    public Long getMatCod() {
+        return MatCod;
+    }
+
+    public void setMatCod(Long MatCod) {
+        this.MatCod = MatCod;
+    }
+
+    public PlanEstudio getPlan() {
+        return plan;
+    }
+
+    public void setPlan(PlanEstudio plan) {
+        this.plan = plan;
+    }
 
     public String getMatNom() {
         return MatNom;
@@ -127,7 +146,6 @@ public class Materia implements Serializable {
         this.MatPerVal = MatPerVal;
     }
 
-
     public Date getObjFchMod() {
         return ObjFchMod;
     }
@@ -136,11 +154,11 @@ public class Materia implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    public Materia getmateriaPrevia() {
+    public Materia getMateriaPrevia() {
         return materiaPrevia;
     }
 
-    public void setmateriaPrevia(Materia materiaPrevia) {
+    public void setMateriaPrevia(Materia materiaPrevia) {
         this.materiaPrevia = materiaPrevia;
     }
 
@@ -153,27 +171,27 @@ public class Materia implements Serializable {
     }
 
     
-    
-    
-    
-    
-    
-    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (materiaPK.MatCod() != null ? materiaPK.MatCod().hashCode() : 0);
+        int hash = 5;
+        hash = 29 * hash + Objects.hashCode(this.MatCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Materia)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Materia other = (Materia) object;
-        if ((this.materiaPK.MatCod() == null && other.materiaPK.MatCod() != null) || (this.materiaPK.MatCod() != null && !this.materiaPK.MatCod().equals(other.materiaPK.MatCod()))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Materia other = (Materia) obj;
+        if (!Objects.equals(this.MatCod, other.MatCod)) {
             return false;
         }
         return true;
@@ -181,69 +199,13 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Materia[ id=" + materiaPK.MatCod() + " ]";
+        return "Materia{" + "MatCod=" + MatCod + ", plan=" + plan + ", MatNom=" + MatNom + ", MatCntHor=" + MatCntHor + ", MatTpoApr=" + MatTpoApr + ", MatTpoPer=" + MatTpoPer + ", MatPerVal=" + MatPerVal + ", ObjFchMod=" + ObjFchMod + ", materiaPrevia=" + materiaPrevia + '}';
     }
+
+    
+   
     
     
-    @Embeddable
-    public static class MateriaPK implements Serializable {
-           private Integer MatCod;
-
-           @ManyToOne(targetEntity = PlanEstudio.class, optional=false)
-           @JoinColumns({
-               @JoinColumn(name="CarCod", referencedColumnName="CarCod"),
-               @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
-           })
-           private PlanEstudio plan;
-
-
-           public Integer MatCod() {
-               return MatCod;
-           }
-
-           public void setMatCod(Integer MatCod) {
-               this.MatCod = MatCod;
-           }
-
-           public PlanEstudio getPlanEstudio() {
-               return plan;
-           }
-
-           public void setPlanEstudio(PlanEstudio plan) {
-               this.plan = plan;
-           }
-
-        @Override
-        public int hashCode() {
-            int hash = 5;
-            hash = 11 * hash + Objects.hashCode(this.MatCod);
-            hash = 11 * hash + Objects.hashCode(this.plan);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final MateriaPK other = (MateriaPK) obj;
-            if (!Objects.equals(this.MatCod, other.MatCod)) {
-                return false;
-            }
-            if (!Objects.equals(this.plan, other.plan)) {
-                return false;
-            }
-            return true;
-        }
-           
-           
-       }
 }
 
 

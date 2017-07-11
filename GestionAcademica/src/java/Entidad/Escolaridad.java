@@ -43,17 +43,12 @@ public class Escolaridad implements Serializable {
     
     @ManyToOne(targetEntity = Materia.class, optional=true)
     @JoinColumns({
-            @JoinColumn(name="CarCod", referencedColumnName="CarCod"),
-            @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod"),
             @JoinColumn(name="EscMatCod", referencedColumnName="MatCod")
         })
     private Materia materia;
     
     @ManyToOne(targetEntity = Modulo.class, optional=true)
-    @JoinColumns({
-            @JoinColumn(name="CurCod", referencedColumnName="CurCod"),
-            @JoinColumn(name="EscModCod", referencedColumnName="ModCod")
-        })
+    @JoinColumn(name="EscModCod", referencedColumnName="ModCod")
     private Modulo modulo;   
 
     @Column(name = "EscCalVal", precision=10, scale=2)

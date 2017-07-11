@@ -13,7 +13,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -42,18 +41,11 @@ public class PeriodoEstudio implements Serializable {
     private final PeriodoEstudioPK periodoEstudioPK;
     
     @ManyToOne(targetEntity = Materia.class, optional=true)        
-    @JoinColumns({
-            @JoinColumn(name="MatEstCarCod", referencedColumnName="CarCod"),
-            @JoinColumn(name="MatEstPlaEstCod", referencedColumnName="PlaEstCod"),
-            @JoinColumn(name="MatEstMatCod", referencedColumnName="MatCod")
-        })
+    @JoinColumn(name="MatEstMatCod", referencedColumnName="MatCod")
     private Materia Materia;
     
     @ManyToOne(targetEntity = Modulo.class, optional=true)        
-    @JoinColumns({
-            @JoinColumn(name="ModEstCurCod", referencedColumnName="CurCod"),
-            @JoinColumn(name="ModEstModCod", referencedColumnName="ModCod")
-        })
+    @JoinColumn(name="ModEstModCod", referencedColumnName="ModCod")
     private Modulo Modulo;
     
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")

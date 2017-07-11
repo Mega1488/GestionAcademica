@@ -9,21 +9,26 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -33,18 +38,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "PLAN_ESTUDIO")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PlanEstudio.findAll",       query = "SELECT t FROM PlanEstudio t"),
-    @NamedQuery(name = "PlanEstudio.findByPK",      query = "SELECT t FROM PlanEstudio t WHERE t.planPK.PlaEstCod =:PlaEstCod and t.planPK.carrera.CarCod =:CarCod"),
-    @NamedQuery(name = "PlanEstudio.findByCarrera", query = "SELECT t FROM PlanEstudio t WHERE t.planPK.carrera.CarCod = :CarCod"),
-    @NamedQuery(name = "PlanEstudio.findLast",      query = "SELECT t FROM PlanEstudio t WHERE t.planPK.carrera.CarCod = :CarCod ORDER BY t.planPK.PlaEstCod DESC")})
+    @NamedQuery(name = "PlanEstudio.findAll",       query = "SELECT t FROM PlanEstudio t")})
 
 public class PlanEstudio implements Serializable {
 
     private static final long serialVersionUID = 1L;
-   
+
     //-ATRIBUTOS
-    @EmbeddedId
-    private final PlanEstudioPK planPK;
+    
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "PlaEstCod")
+    private Long PlaEstCod;
+
+    @OneToOne(targetEntity = Carrera.class, optional=false)
+    @JoinColumn(name="CarCod", referencedColumnName = "CarCod")
+    private Carrera carrera;
+           
     @Column(name = "PlaEstNom", length = 100)
     private String PlaEstNom;
     @Column(name = "PlaEstDsc", length = 500)
@@ -57,20 +69,32 @@ public class PlanEstudio implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     @OneToMany(targetEntity = Materia.class, cascade= CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name="CarCod", referencedColumnName="CarCod"),
-            @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
-        })
+    @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
     private List<Materia> lstMateria;
     
     
     //-CONSTRUCTOR
     public PlanEstudio() {
-        this.planPK = new PlanEstudioPK();
     }
     
 
     //-GETTERS Y SETTERS
+
+    public Long getPlaEstCod() {
+        return PlaEstCod;
+    }
+
+    public void setPlaEstCod(Long PlaEstCod) {
+        this.PlaEstCod = PlaEstCod;
+    }
+
+    public Carrera getCarrera() {
+        return carrera;
+    }
+
+    public void setCarrera(Carrera carrera) {
+        this.carrera = carrera;
+    }
 
     public String getPlaEstNom() {
         return PlaEstNom;
@@ -119,26 +143,27 @@ public class PlanEstudio implements Serializable {
     public void setLstMateria(List<Materia> lstMateria) {
         this.lstMateria = lstMateria;
     }
-    
-    
-    
-    
-    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (planPK.PlaEstCod() != null ? planPK.PlaEstCod().hashCode() : 0);
+        int hash = 3;
+        hash = 17 * hash + Objects.hashCode(this.PlaEstCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof PlanEstudio)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        PlanEstudio other = (PlanEstudio) object;
-        if ((this.planPK.PlaEstCod() == null && other.planPK.PlaEstCod() != null) || (this.planPK.PlaEstCod() != null && !this.planPK.PlaEstCod().equals(other.planPK.PlaEstCod()))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final PlanEstudio other = (PlanEstudio) obj;
+        if (!Objects.equals(this.PlaEstCod, other.PlaEstCod)) {
             return false;
         }
         return true;
@@ -146,69 +171,13 @@ public class PlanEstudio implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.PlanEstudio[ id=" + planPK.PlaEstCod() + " ]";
+        return "PlanEstudio{" + "PlaEstCod=" + PlaEstCod + ", carrera=" + carrera + ", PlaEstNom=" + PlaEstNom + ", PlaEstDsc=" + PlaEstDsc + ", PlaEstCreNec=" + PlaEstCreNec + ", PlaEstCatCod=" + PlaEstCatCod + ", ObjFchMod=" + ObjFchMod + ", lstMateria=" + lstMateria + '}';
     }
+
+
     
     
-    @Embeddable
-    public static class PlanEstudioPK implements Serializable {
-           private Integer PlaEstCod;
-
-           @ManyToOne(targetEntity = Carrera.class, optional=false)
-           @JoinColumn(name="CarCod", referencedColumnName = "CarCod")
-           private Carrera carrera;
-
-
-           public Integer PlaEstCod() {
-               return PlaEstCod;
-           }
-
-           public void setPlaEstCod(Integer PlaEstCod) {
-               this.PlaEstCod = PlaEstCod;
-           }
-
-           public Carrera getCarrera() {
-               return carrera;
-           }
-
-           public void setCarrera(Carrera carrera) {
-               this.carrera = carrera;
-           }
-
-        @Override
-        public int hashCode() {
-            int hash = 7;
-            hash = 19 * hash + Objects.hashCode(this.PlaEstCod);
-            hash = 19 * hash + Objects.hashCode(this.carrera);
-            return hash;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) {
-                return true;
-            }
-            if (obj == null) {
-                return false;
-            }
-            if (getClass() != obj.getClass()) {
-                return false;
-            }
-            final PlanEstudioPK other = (PlanEstudioPK) obj;
-            if (!Objects.equals(this.PlaEstCod, other.PlaEstCod)) {
-                return false;
-            }
-            if (!Objects.equals(this.carrera, other.carrera)) {
-                return false;
-            }
-            return true;
-        }
-           
-           
-       }
     
-    
-
 }
 
 

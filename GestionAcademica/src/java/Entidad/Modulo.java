@@ -84,20 +84,8 @@ public class Modulo implements Serializable {
     private Date ObjFchMod;
     
     @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
-    @JoinColumns({
-            @JoinColumn(name="ModEvlCurCod", referencedColumnName="CurCod"),
-            @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod")
-        })
+    @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod")
     private List<Evaluacion> lstEvaluacion;
-   
-    /*
-    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL)
-    @JoinColumns({
-            @JoinColumn(name="ModEvlCurCod", referencedColumnName="CurCod"),
-            @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod"),
-        })
-    private List<Evaluacion> lstEvaluacion;
-*/
     
     public Modulo() {
     }

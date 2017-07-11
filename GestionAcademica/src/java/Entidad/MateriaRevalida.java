@@ -84,7 +84,7 @@ public class MateriaRevalida implements Serializable {
     public String toString() {
         return "Entidad.MateriaRevalida[ id=" + materiaRevalidaPK.toString() + " ]";
     }
-    
+   
     
     @Embeddable
     public static class MateriaRevalidaPK implements Serializable {
@@ -96,11 +96,7 @@ public class MateriaRevalida implements Serializable {
         private Inscripcion inscripcion;
 
         @ManyToOne(targetEntity = Materia.class, optional=false)        
-        @JoinColumns({
-                @JoinColumn(name="CarCod", referencedColumnName="CarCod"),
-                @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod"),
-                @JoinColumn(name="MatCod", referencedColumnName="MatCod")
-            })
+        @JoinColumn(name="MatCod", referencedColumnName="MatCod")
         private Materia materia;
 
         public MateriaRevalidaPK() {

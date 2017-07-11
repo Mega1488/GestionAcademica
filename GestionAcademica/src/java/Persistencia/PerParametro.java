@@ -23,6 +23,7 @@ public class PerParametro implements Interfaz.InParametro{
         try {
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
+            
         } catch (HibernateException ec) {
             ec.printStackTrace();
 
