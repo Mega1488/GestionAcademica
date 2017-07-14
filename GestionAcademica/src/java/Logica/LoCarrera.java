@@ -8,14 +8,10 @@ package Logica;
 import Entidad.Carrera;
 import Utiles.Mensajes;
 import Entidad.Parametro;
-import Enumerado.Constantes;
 import Enumerado.TipoMensaje;
-import Moodle.MoodleRestCourse;
 import Moodle.MoodleCategory;
 import Persistencia.PerCarrera;
 import Utiles.Retorno_MsgObj;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -24,13 +20,11 @@ import java.util.List;
 public class LoCarrera implements Interfaz.InCarrera{
     private static LoCarrera        instancia;
     private final PerCarrera        perCarrera;
-    private final MoodleRestCourse  mdlRestCourse;
     private final Parametro         param;
     private final LoCategoria       loCategoria;
     
     private LoCarrera(){
         perCarrera      = new PerCarrera();
-        mdlRestCourse   = new MoodleRestCourse();
         LoParametro loParam = LoParametro.GetInstancia();
         param               = loParam.obtener(1);
         loCategoria     = LoCategoria.GetInstancia();
@@ -44,132 +38,84 @@ public class LoCarrera implements Interfaz.InCarrera{
     }
     
     @Override
-    public Object guardar(Carrera pCarrera) {
+    public Object guardar(Carrera pCarrera) 
+    {
         boolean error           = false;
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-        Mensajes mensaje = new Mensajes("Error", TipoMensaje.ERROR);
-
-        Object objeto = null;
-
-        if(pCarrera.getCarCatCod() != null && param.getParUtlMdl())
-        {
-            if(!this.Mdl_ValidarCategoria(pCarrera.getCarCatCod()))
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error al guardar la Carrera", TipoMensaje.ERROR), pCarrera);
+        if(param.getParUtlMdl())
+        {   
+            if(pCarrera.getCarCatCod() == null)
             {
-                error = true;
-                mensaje = new Mensajes("Categoría no valida", TipoMensaje.ERROR);
+                retorno = this.Mdl_AgregarCategoria(pCarrera);
+                pCarrera    = (Carrera) retorno.getObjeto();
             }
+            else
+            {
+                retorno = this.Mdl_ActualizarCategoria(pCarrera);
+                pCarrera    = (Carrera) retorno.getObjeto();
+            }
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
         }
 
         if(!error)
         {
-            objeto = perCarrera.guardar(pCarrera);
-            
-            if(((Carrera) objeto).getCarCod() == null)
-            {
-                mensaje = new Mensajes("Error al guardar", TipoMensaje.ERROR);
-            }
-            else
-            {
-                mensaje = new Mensajes("La Carrera fue Ingresada", TipoMensaje.MENSAJE);
-                System.out.println("Parametro: "+param.getParUtlMdl().toString());
-
-                if(param.getParUtlMdl() && pCarrera.getCarCatCod() == null)
-                {
-                    mensaje = this.Mdl_AgregarCategoria(pCarrera);
-
-                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                    {
-                        this.eliminar((Carrera) objeto);
-                    }
-                }
-            }
+            pCarrera    = (Carrera) retorno.getObjeto();
+            retorno     = (Retorno_MsgObj) perCarrera.guardar(pCarrera);
         }
-        retorno = new Retorno_MsgObj(mensaje, objeto);
         return retorno;
     }
 
     @Override
     public Object actualizar(Carrera pCarrera) {
         boolean error       = false;
-        Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR), pCarrera);
         
-        if(pCarrera.getCarCatCod() != null && param.getParUtlMdl())
+        if (param.getParUtlMdl())
         {
-            if(!this.Mdl_ValidarCategoria(pCarrera.getCarCatCod()))
+            if(pCarrera.getCarCatCod() != null)
             {
-                error = true;
-                mensaje = new Mensajes("Categoría no valida", TipoMensaje.ERROR);
+                retorno = this.Mdl_ActualizarCategoria(pCarrera);
             }
+            else
+            {
+                retorno = this.Mdl_ActualizarCategoria(pCarrera);
+            }
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
         }
         
         if (!error)
         {
-            Carrera carr = perCarrera.obtener(pCarrera);
-            error = (boolean) perCarrera.actualizar(pCarrera);
-
-            if(!error)
+            pCarrera = (Carrera) retorno.getObjeto();
+            retorno = (Retorno_MsgObj) perCarrera.actualizar(pCarrera);
+        
+            if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
             {
-                mensaje = new Mensajes("Cambios aplicados", TipoMensaje.MENSAJE);
-
-                if(param.getParUtlMdl())
-                {
-                    mensaje = this.Mdl_ActualizarCategoria(pCarrera);
-
-                    if(mensaje.getTipoMensaje() == TipoMensaje.ERROR)
-                    {
-                        this.actualizar(carr);
-                    }
-                }
-            }
-            else
-            {
-                mensaje = new Mensajes("Error al aplicar cambios", TipoMensaje.ERROR);
+                retorno = this.obtener(pCarrera.getCarCod());
             }
         }
-        retorno = new Retorno_MsgObj(mensaje, null);
         return retorno;
     }
 
     @Override
     public Object eliminar(Carrera pCarrera) {
-        perCarrera.eliminar(pCarrera);
-        
         boolean error       = false;
-        Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
-       
-        if(!perCarrera.ValidarEliminacion(pCarrera))
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));        
+        if(param.getParUtlMdl() && pCarrera.getCarCatCod() != null)
         {
-            if(pCarrera.getCarCatCod() != null)
-            {
-                mensaje = this.Mdl_EliminarCategoria(pCarrera);
-            }
-           
-            if(mensaje.getTipoMensaje() != TipoMensaje.ERROR || pCarrera.getCarCatCod() == null)
-            {
-                error = (boolean) perCarrera.eliminar(pCarrera);
-                if(error)
-                {
-                    mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
-                }
-                else
-                {
-                    mensaje = new Mensajes("Eliminación Correcta", TipoMensaje.MENSAJE);
-                }
-            }
+            retorno = this.Mdl_EliminarCategoria(pCarrera);
+            error   = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
         }
-        else
+
+        if(!error)
         {
-            mensaje = new Mensajes("Error al impactar en la base de datos", TipoMensaje.ERROR);
+            retorno = (Retorno_MsgObj) perCarrera.eliminar(pCarrera);
         }
-        retorno = new Retorno_MsgObj(mensaje, null);
         return retorno;
     }
 
     @Override
-    public Carrera obtener(Carrera pCarrera) {
-        return perCarrera.obtener(pCarrera);
+    public Retorno_MsgObj obtener(Long pCarCod) {
+        return perCarrera.obtener(pCarCod);
     }
 
     @Override
@@ -178,7 +124,7 @@ public class LoCarrera implements Interfaz.InCarrera{
     }
 
     @Override
-    public List<Carrera> obtenerLista() {
+    public Retorno_MsgObj obtenerLista() {
         return perCarrera.obtenerLista();
     }
     
@@ -186,26 +132,18 @@ public class LoCarrera implements Interfaz.InCarrera{
     //-Modle
     //----------------------------------------------------------------------------------------------------
 
-    public Mensajes Mdl_AgregarCategoria(Carrera pCarrera)
+    public Retorno_MsgObj Mdl_AgregarCategoria(Carrera pCarrera)
     {
-        Mensajes mensaje        = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        if(pCarrera == null){System.out.println("CARRERA NULL EN LO CARRERA Mdl_AgregarCategoría");}
         Retorno_MsgObj retorno  = loCategoria.Mdl_AgregarCategoria(pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
         
         if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
         {
-            mensaje = retorno.getMensaje();
+            MoodleCategory mdlCat= (MoodleCategory) retorno.getObjeto();
+            pCarrera.setCarCatCod(mdlCat.getId());
         }
-        else
-        {
-            MoodleCategory category = (MoodleCategory)retorno.getObjeto();
-            
-            pCarrera.setCarCatCod(category.getId());
-            
-            this.actualizar(pCarrera);
-            
-            mensaje = new Mensajes("Cambios Correctos", TipoMensaje.MENSAJE);
-        }
-        return mensaje;
+        retorno.setObjeto(pCarrera);
+        return retorno;
     }
     
     public Boolean Mdl_ValidarCategoria(Long cod)
@@ -214,20 +152,16 @@ public class LoCarrera implements Interfaz.InCarrera{
         return (category != null);
     }
     
-    private Mensajes Mdl_ActualizarCategoria(Carrera pCarrera)
+    private Retorno_MsgObj Mdl_ActualizarCategoria(Carrera pCarrera)
     {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
+        if(pCarrera == null){System.out.println("CARRERA NULL EN LO CARRERA mdl_ActualizarCategoría");}
         Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pCarrera.getCarCatCod(), pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
-        mensaje = retorno.getMensaje();
-        return mensaje;
+        retorno.setObjeto(pCarrera);
+        return retorno;
     }
     
-    private Mensajes Mdl_EliminarCategoria(Carrera pCarrera)
+    private Retorno_MsgObj Mdl_EliminarCategoria(Carrera pCarrera)
     {
-        Mensajes mensaje = new Mensajes("Error al impactar en moodle", TipoMensaje.ERROR);
-        Retorno_MsgObj retorno = loCategoria.Mdl_EliminarCategoria(pCarrera.getCarCatCod());
-        mensaje = retorno.getMensaje();
-        return mensaje;
+        return loCategoria.Mdl_EliminarCategoria(pCarrera.getCarCatCod());
     }
-    
 }

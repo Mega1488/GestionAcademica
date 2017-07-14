@@ -9,17 +9,15 @@ import Entidad.Carrera;
 import Enumerado.TipoMensaje;
 import Logica.LoCarrera;
 import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -28,10 +26,10 @@ import javax.servlet.http.HttpSession;
 public class ABM_Carrera extends HttpServlet {
 
     Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
+    boolean error       = false; 
     String retorno;
     Date fecha = new Date();
     LoCarrera loCarrera = LoCarrera.GetInstancia();
-    
     private final Utilidades utiles = Utilidades.GetInstancia();
     
     /**
@@ -79,6 +77,8 @@ public class ABM_Carrera extends HttpServlet {
         String Fac          = request.getParameter("pfac");
         String Crt          = request.getParameter("pCrt");
         
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al ingresar la Carrera", TipoMensaje.ERROR));
+        
         if (nom != "")
         {
             Carrera pC = new Carrera();
@@ -87,17 +87,15 @@ public class ABM_Carrera extends HttpServlet {
             pC.setCarFac(Fac);
             pC.setCarCrt(Crt);
             
-            loCarrera.guardar(pC);
+            retorno = (Retorno_MsgObj)loCarrera.guardar(pC);
             
-            mensaje = new Mensajes("Se ingresó correctametne la Carrera ", TipoMensaje.MENSAJE);
+            mensaje = retorno.getMensaje();
         }
         else
         {
-            mensaje = new Mensajes("Deberá ingresar un nombre a la Carrera", TipoMensaje.ERROR);
+            mensaje = retorno.getMensaje();
         }
-        retorno = utiles.ObjetoToJson(mensaje);
-        
-        return retorno;
+        return utiles.ObjetoToJson(mensaje);
     } 
     
     private String ModificarCarrera(HttpServletRequest request)
@@ -111,7 +109,7 @@ public class ABM_Carrera extends HttpServlet {
         if (nom != "")
         {
             Carrera pC = new Carrera();
-            pC.setCarCod(Integer.valueOf(cod));
+            pC.setCarCod(Long.valueOf(cod));
             pC.setCarNom(nom);
             pC.setCarDsc(Dsc);
             pC.setCarFac(Fac);
@@ -132,26 +130,25 @@ public class ABM_Carrera extends HttpServlet {
     
     private String EliminarCarrera(HttpServletRequest request)
     {   
-        String cod  = request.getParameter("pCod");
+        String cod              = request.getParameter("pCod");
+        
+        Retorno_MsgObj retorno = loCarrera.obtener(Long.valueOf(cod));
+        error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
         
         if (cod != "")
         {
-            Carrera pC = new Carrera();
-            pC.setCarCod(Integer.valueOf(cod));
-            
-            pC = loCarrera.obtener(pC);
-            
-            loCarrera.eliminar(pC);
-
-            mensaje = new Mensajes("La carrera fue Eliminada", TipoMensaje.MENSAJE);
+            if(!error)
+            {
+                retorno = (Retorno_MsgObj)loCarrera.eliminar((Carrera)retorno.getObjeto());
+            }
+            mensaje = retorno.getMensaje();
         }
         else
         {
-            mensaje = new Mensajes("Hubieron problemas que impidieron eliminar la carrera", TipoMensaje.ERROR);
+            mensaje = retorno.getMensaje();
+//            mensaje = new Mensajes("No se logró eliminar la carrera", TipoMensaje.ERROR);
         }
-        retorno = utiles.ObjetoToJson(mensaje);
-        
-        return retorno;
+        return utiles.ObjetoToJson(mensaje);
     }
     
 //    private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)

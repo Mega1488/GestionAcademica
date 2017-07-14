@@ -4,6 +4,9 @@
     Author     : aa
 --%>
 
+<%@page import="Enumerado.TipoMensaje"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="Logica.LoCarrera"%>
 <%@page import="Entidad.Carrera"%>
@@ -16,10 +19,19 @@
     String urlSistema   = utilidad.GetUrlSistema();
     LoCarrera loCar     = LoCarrera.GetInstancia();
         
-    List<Carrera> lstCarrera = loCar.obtenerLista();
+    List<Object> lstCarrera = new ArrayList<>();
+    
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtenerLista();
+    if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR && retorno.getLstObjetos() != null)
+    {
+        lstCarrera = retorno.getLstObjetos();
+    }
+    else
+    {
+        out.print(retorno.getMensaje().toString());
+    }
     
 //    String tblCarreraVisible = (lstCarrera.size() > 0 ? "" : "display: none;");
-//    String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCarrera.jsp');";
 %>
 
 <html>
@@ -30,11 +42,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Definición de Carreras</title>
     <jsp:include page="/masterPage/head.jsp"/>
-
-    <script>
-        //----------------------------------------
-        //----------------------------------------
-    </script>
     
   </head>
   <body>
@@ -125,8 +132,9 @@
                                             <th>Certificación</th>
                                         </tr>
                                         <%
-                                        for(Carrera car : lstCarrera)
+                                        for(Object obj : lstCarrera)
                                         {
+                                            Carrera car = (Carrera)obj;
                                         %>
                                         <tr>
 <!--                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>''&pCarCod='<% out.print(car.getCarCod()); %>"></button></td>

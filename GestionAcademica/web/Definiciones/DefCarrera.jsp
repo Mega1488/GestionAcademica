@@ -4,6 +4,8 @@
     Author     : aa
 --%>
 
+<%@page import="Enumerado.TipoMensaje"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Logica.LoCarrera"%>
 <%@page import="Entidad.Carrera"%>
 <%@page import="Enumerado.Modo"%>
@@ -28,13 +30,20 @@
     String CamposActivos    = "disabled";
     
     Date fecha              = new Date();
-    DateFormat f            = new SimpleDateFormat("dd/mm/yyyy");
+    DateFormat f            = new SimpleDateFormat("dd/MM/YYYY");
     String today            = "";
     
     if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
     {
-        car.setCarCod(Integer.valueOf(CarCod));
-        car = loCar.obtener(car);
+        Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(CarCod));
+        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        {
+            car = (Carrera) retorno.getObjeto();
+        }
+        else
+        {
+            out.print(retorno.getMensaje().toString());
+        }
     }
     
     if (mode.equals(Modo.DELETE) || mode.equals(Modo.UPDATE))
