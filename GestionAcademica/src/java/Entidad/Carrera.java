@@ -147,6 +147,39 @@ public class Carrera implements Serializable {
         this.lstPlanEstudio = lstPlanEstudio;
     }
 
+//    public Evaluacion getEvaluacionById(Long EvlCod){
+//        
+//        Evaluacion evaluacion = new Evaluacion();
+//        
+//        for(Evaluacion evl : this.lstEvaluacion)
+//        {
+//            System.err.println("Evaluacion: " + evl.toString());
+//            if(evl.getEvlCod().equals(EvlCod))
+//            {
+//                evaluacion = evl;
+//                break;
+//            }
+//        }
+//        
+//        return evaluacion;
+//    }
+    
+    public PlanEstudio getPlanEstudioById(Long PlaEstCod){
+        
+        PlanEstudio pPlan = new PlanEstudio();
+        
+        for(PlanEstudio plan : this.lstPlanEstudio)
+        {
+            if(plan.getPlaEstCod().equals(PlaEstCod))
+            {
+                pPlan = plan;
+                break;
+            }
+        }
+        
+        return pPlan;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 5;

@@ -8,10 +8,12 @@ package Logica;
 import Entidad.Carrera;
 import Utiles.Mensajes;
 import Entidad.Parametro;
+import Entidad.PlanEstudio;
 import Enumerado.TipoMensaje;
 import Moodle.MoodleCategory;
 import Persistencia.PerCarrera;
 import Utiles.Retorno_MsgObj;
+import java.util.Date;
 
 /**
  *
@@ -74,7 +76,7 @@ public class LoCarrera implements Interfaz.InCarrera{
         {
             if(pCarrera.getCarCatCod() != null)
             {
-                retorno = this.Mdl_ActualizarCategoria(pCarrera);
+                retorno = this.Mdl_AgregarCategoria(pCarrera);
             }
             else
             {
@@ -129,12 +131,86 @@ public class LoCarrera implements Interfaz.InCarrera{
     }
     
     //----------------------------------------------------------------------------------------------------
-    //-Modle
+    //-Manejo de Plan Estudio
+    //----------------------------------------------------------------------------------------------------
+    
+    public Object PlanEstudioAgregar(PlanEstudio plan)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar el Plan de Estudio",TipoMensaje.ERROR), plan);
+       
+        if(param.getParUtlMdl())
+        {
+            retorno = this.Mdl_AgregarSubCategoria(plan);
+            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }        
+        
+        if(!error)
+        {
+            plan = (PlanEstudio) retorno.getObjeto();
+            Carrera car = plan.getCarrera();
+            plan.setObjFchMod(new Date());
+            car.getPlan().add(plan);
+            
+            retorno = (Retorno_MsgObj) this.actualizar(car);
+            System.out.println("RETORNO: "+retorno);
+        }
+        return retorno;
+    }
+    
+    public Object PlanEstudioActualizar(PlanEstudio plan)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error al actualizar el Plan de Estudio", TipoMensaje.ERROR), plan);
+       
+        if(param.getParUtlMdl() && plan.getPlaEstCatCod()!= null)
+        {
+            retorno = this.Mdl_ActualizarSubCategoria(plan);
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }
+        
+        if(!error)
+        {
+            plan = (PlanEstudio) retorno.getObjeto();
+            Carrera car = plan.getCarrera();
+            int indice  = car.getPlan().indexOf(plan);
+            plan.setObjFchMod(new Date());
+            car.getPlan().set(indice, plan);
+
+            retorno = (Retorno_MsgObj) this.actualizar(car);
+        }
+        return retorno;
+    }
+    
+    public Object PlanEstudioEliminar(PlanEstudio plan)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar el Plan de Estudio", TipoMensaje.ERROR), plan);
+       
+        if(param.getParUtlMdl() && plan.getPlaEstCatCod()!= null)
+        {
+            retorno = this.Mdl_EliminarSubCategoria(plan);
+            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+        }
+        
+        if(!error)
+        {
+            plan = (PlanEstudio) retorno.getObjeto();
+            Carrera car = plan.getCarrera();
+            int indice  = car.getPlan().indexOf(plan);
+            car.getPlan().remove(indice);
+
+            retorno = (Retorno_MsgObj) this.actualizar(car);
+        }
+        return retorno;
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    //-Modle_Categoría
     //----------------------------------------------------------------------------------------------------
 
     public Retorno_MsgObj Mdl_AgregarCategoria(Carrera pCarrera)
     {
-        if(pCarrera == null){System.out.println("CARRERA NULL EN LO CARRERA Mdl_AgregarCategoría");}
         Retorno_MsgObj retorno  = loCategoria.Mdl_AgregarCategoria(pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
         
         if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
@@ -146,15 +222,8 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
-    public Boolean Mdl_ValidarCategoria(Long cod)
-    {
-        MoodleCategory category = loCategoria.Mdl_ObtenerCategoria(cod);
-        return (category != null);
-    }
-    
     private Retorno_MsgObj Mdl_ActualizarCategoria(Carrera pCarrera)
     {
-        if(pCarrera == null){System.out.println("CARRERA NULL EN LO CARRERA mdl_ActualizarCategoría");}
         Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pCarrera.getCarCatCod(), pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
         retorno.setObjeto(pCarrera);
         return retorno;
@@ -163,5 +232,44 @@ public class LoCarrera implements Interfaz.InCarrera{
     private Retorno_MsgObj Mdl_EliminarCategoria(Carrera pCarrera)
     {
         return loCategoria.Mdl_EliminarCategoria(pCarrera.getCarCatCod());
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    //-Modle_SubCategoría
+    //----------------------------------------------------------------------------------------------------
+
+    public Retorno_MsgObj Mdl_AgregarSubCategoria(PlanEstudio pPlan)
+    {
+        Retorno_MsgObj retorno  = loCategoria.Mdl_AgregarCategoria(pPlan.getPlaEstDsc(), pPlan.getPlaEstNom(), Boolean.TRUE);
+        
+        if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
+        {
+            MoodleCategory mdlCat= (MoodleCategory) retorno.getObjeto();
+            pPlan.setPlaEstCatCod(mdlCat.getId());
+        }
+        retorno.setObjeto(pPlan);
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_ActualizarSubCategoria(PlanEstudio pPlan)
+    {
+        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pPlan.getPlaEstCatCod(), pPlan.getPlaEstDsc(), pPlan.getPlaEstNom(), Boolean.TRUE);
+        retorno.setObjeto(pPlan);
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_EliminarSubCategoria(PlanEstudio pPlan)
+    {
+        return loCategoria.Mdl_EliminarCategoria(pPlan.getPlaEstCatCod());
+    }
+    
+    //----------------------------------------------------------------------------------------------------
+    //-Funcionalidades en Común
+    //----------------------------------------------------------------------------------------------------
+    
+    public Boolean Mdl_ValidarCategoria(Long cod)
+    {
+        MoodleCategory category = loCategoria.Mdl_ObtenerCategoria(cod);
+        return (category != null);
     }
 }

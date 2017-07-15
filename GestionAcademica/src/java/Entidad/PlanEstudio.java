@@ -12,14 +12,11 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -59,15 +56,20 @@ public class PlanEstudio implements Serializable {
            
     @Column(name = "PlaEstNom", length = 100)
     private String PlaEstNom;
+    
     @Column(name = "PlaEstDsc", length = 500)
     private String PlaEstDsc;
+    
     @Column(name = "PlaEstCreNec", precision=10, scale=2)
     private Double PlaEstCreNec;
+    
     @Column(name = "PlaEstCatCod")
-    private Integer PlaEstCatCod;
+    private Long PlaEstCatCod;
+    
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
     @OneToMany(targetEntity = Materia.class, cascade= CascadeType.ALL)
     @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
     private List<Materia> lstMateria;
@@ -120,11 +122,11 @@ public class PlanEstudio implements Serializable {
         this.PlaEstCreNec = PlaEstCreNec;
     }
 
-    public Integer getPlaEstCatCod() {
+    public Long getPlaEstCatCod() {
         return PlaEstCatCod;
     }
 
-    public void setPlaEstCatCod(Integer PlaEstCatCod) {
+    public void setPlaEstCatCod(Long PlaEstCatCod) {
         this.PlaEstCatCod = PlaEstCatCod;
     }
 
@@ -173,11 +175,6 @@ public class PlanEstudio implements Serializable {
     public String toString() {
         return "PlanEstudio{" + "PlaEstCod=" + PlaEstCod + ", carrera=" + carrera + ", PlaEstNom=" + PlaEstNom + ", PlaEstDsc=" + PlaEstDsc + ", PlaEstCreNec=" + PlaEstCreNec + ", PlaEstCatCod=" + PlaEstCatCod + ", ObjFchMod=" + ObjFchMod + ", lstMateria=" + lstMateria + '}';
     }
-
-
-    
-    
-    
 }
 
 

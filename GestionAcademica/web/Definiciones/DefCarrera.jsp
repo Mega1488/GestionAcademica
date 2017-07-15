@@ -17,13 +17,14 @@
 
 <!DOCTYPE html>
 
-<%    
+<%        
     Utilidades utilidad     = Utilidades.GetInstancia();
     String urlSistema       = utilidad.GetUrlSistema();
     LoCarrera loCar         = LoCarrera.GetInstancia();
     Carrera car             = new Carrera();
     
     String DefCar           = "DefCarreraWW.jsp";
+    String PlaEst           = "DefPlanEstudioWW.jsp";
     String CarCod           = request.getParameter("pCarCod");
     Modo mode               = Modo.valueOf(request.getParameter("MODO"));
     String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefCarreraWW.jsp');";
@@ -184,101 +185,102 @@
     </div>
 
     <div id="contenido" name="contenido" style="float: right; width: 90%;">
-    <!--<div class="row">-->
-        <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-heading"><h1>Ingreso de Carrera</h1></div>
+        <div class="col-md-8 col-md-offset-1">
+            <div class="panel-heading"><h1>Ingreso de Carrera</h1><hr size="200" style="color: #000000;"/></div>
+                <table border= "0" width="100%">
+                    <tr>
+                        <td>
+                            <!-- En "ejemplo" hay que poner el en lace de la pagina Inicio en este caso -->
+                            <a id="lnkIni" href=<%out.println(urlSistema);%>> Inicio </a> >
+                            <a id="lnkDefCar" href="<%out.println(DefCar);%>"> Carreras </a> >
+                            Ingreso de Carrera                                    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                            </div>
+                        </td>
+                        <td align="right">
+                            <div id="msgFecha" name="msgFecha"> 
+                                <%out.println(today);%>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h10>
+                        <%if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY))
+                        {%>
+                            <a href="<%out.println(DefCar);%>"> Carreras </a>
+                            /
+                            <a href="<%out.println(PlaEst);%>?&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
+                        <%}else{%>  
+                            <a href="<%out.println(DefCar);%>"> Carreras </a>
+                        <%}%>
+                    </h10></div>
                     <div class="panel-body">
-                    <form>  
                         <table border= "0" width="100%">
                             <tr>
                                 <td>
-                                    <!-- En "ejemplo" hay que poner el en lace de la pagina Inicio en este caso -->
-                                    <a id="lnkIni" href="ejemplo"> Inicio </a> >
-                                    <a id="lnkDefCar" href="<%out.println(DefCar);%>"> Definición de Carrera </a> >
-                                    Ingreso de Carrera
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <br>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
-                                    </div>
-                                </td>
-                                <td align="right">
-                                    <div id="msgFecha" name="msgFecha"> 
-                                        <%out.println(today);%>
+                                    <div class="form-group">
+                                        <label>Código</label>
+                                        <!--<imput type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">-->
+                                        <input type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">
                                     </div>
                                 </td>
                             </tr>
-                        </table>
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><h10>Datos de la Carrera</h10></div>
-                                <div class="panel-body">
-                                    <table border= "0" width="100%">
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                <label>Código</label>
-                                                <!--<imput type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">-->
-                                                <input type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                  <label for="InputNombre">Nombre</label>
-                                                  <input type="text" class="form-control" id="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarNom())); %>">
-                                                </div>                                            
-                                            </td>
-                                            <td class="margin">
-                                                <div class="form-group">
-                                                  <label for="InputDescripcion">Descripción</label>
-                                                  <input type="text" class="form-control" id="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarDsc())); %>">
-                                                </div>                                                
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                  <label for="InputFacultad">Facultad</label>
-                                                  <input type="text" class="form-control" id="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarFac())); %>">
-                                                </div>                                            
-                                            </td>
-                                            <td class="margin">
-                                                <div class="form-group">
-                                                  <label for="InputCertificacion">Certificación</label>
-                                                  <input type="text" class="form-control" id="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarCrt())); %>">
-                                                </div>                                                
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-                        </div>
-                        <table>
                             <tr>
-                                <td style="text-align:right" class="margin">
-                                    <button type="button" id="BtnAceCar" class="btn btn-default">Aceptar</button>
-                                </td>
                                 <td>
+                                    <div class="form-group">
+                                      <label for="InputNombre">Nombre</label>
+                                      <input type="text" class="form-control" id="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarNom())); %>">
+                                    </div>                                            
                                 </td>
-                                <td style="text-align:right" class="margin">
-                                    <input type="button" class="btn btn-default" value="Volver" id="BtnVol" name="BtnVol" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp'" />
+                                <td class="margin">
+                                    <div class="form-group">
+                                      <label for="InputDescripcion">Descripción</label>
+                                      <input type="text" class="form-control" id="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarDsc())); %>">
+                                    </div>                                                
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="form-group">
+                                      <label for="InputFacultad">Facultad</label>
+                                      <input type="text" class="form-control" id="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarFac())); %>">
+                                    </div>                                            
+                                </td>
+                                <td class="margin">
+                                    <div class="form-group">
+                                      <label for="InputCertificacion">Certificación</label>
+                                      <input type="text" class="form-control" id="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarCrt())); %>">
+                                    </div>                                                
                                 </td>
                             </tr>
                         </table>
-                  </form>
+                    </div>
                 </div>
+                <table>
+                    <tr>
+                        <td style="text-align:right" class="margin">
+                            <button type="button" id="BtnAceCar" class="btn btn-default">Aceptar</button>
+                        </td>
+                        <td>
+                        </td>
+                        <td style="text-align:right" class="margin">
+                            <input type="button" class="btn btn-default" value="Volver" id="BtnVol" name="BtnVol" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp'" />
+                        </td>
+                    </tr>
+                </table>
             </div>
         </div>
-    <!--</div>-->
-    </div>
-    <div id="div_cargando" name="div_cargando"></div>
+        <div id="div_cargando" name="div_cargando"></div>
     </body>
 </html>
