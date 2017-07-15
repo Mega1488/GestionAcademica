@@ -8,10 +8,12 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +25,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -67,12 +71,14 @@ public class Curso implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
-    @OneToMany(targetEntity = Modulo.class, cascade= CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Modulo.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="CurCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Modulo> lstModulos;
     
-    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="CurEvlCurCod", referencedColumnName="CurCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Evaluacion> lstEvaluacion;
 
     public Long getCurCod() {
@@ -179,30 +185,32 @@ public class Curso implements Serializable {
         
         return pModulo;
     }
-   
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (CurCod != null ? CurCod.hashCode() : 0);
+        int hash = 5;
+        hash = 89 * hash + Objects.hashCode(this.CurCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Curso)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Curso other = (Curso) object;
-        if ((this.CurCod == null && other.CurCod != null) || (this.CurCod != null && !this.CurCod.equals(other.CurCod))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Curso other = (Curso) obj;
+        if (!Objects.equals(this.CurCod, other.CurCod)) {
             return false;
         }
         return true;
     }
-
-    @Override
-    public String toString() {
-        return "Entidad.Curso[ id=" + CurCod + " ]";
-    }
+   
+  
     
 }

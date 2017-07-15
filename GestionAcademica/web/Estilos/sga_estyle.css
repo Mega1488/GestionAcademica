@@ -57,3 +57,47 @@ and open the template in the editor.
 .margin{
     padding-left: 20px;
 }
+
+.PopEvl_Seleccionar{
+    text-align: center;
+}
+
+
+.menu{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+}
+
+.menu li a {
+    display: block;
+    color: #000;
+    padding: 8px 16px;
+    text-decoration: none;
+}
+
+.menu li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.menu li a:hover:not(.active) {
+    background-color: #555;
+    color: white;
+}
+
+.campoCodigo{
+    width: 80px !Important;
+}
+
+.campoFecha{
+    width: 200px !Important;
+}
+
+.campoTexto100{
+    width: 200px !Important;
+}
+

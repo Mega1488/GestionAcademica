@@ -47,7 +47,6 @@
             break;
     }
     
-    
     String tblVisible = (curso.getLstEvaluacion().size() > 0 ? "" : "display: none;");
 
 %>

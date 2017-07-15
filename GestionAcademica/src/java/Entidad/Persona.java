@@ -38,6 +38,16 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Persona.findByMdlUsr",      query = "SELECT p FROM Persona p WHERE p.PerUsrMod  = :MdlUsr"),
     @NamedQuery(name = "Persona.findByPerNom",      query = "SELECT p FROM Persona p WHERE p.PerNom     = :PerNom"),
     @NamedQuery(name = "Persona.findByEmail",       query = "SELECT p FROM Persona p WHERE p.PerEml     = :PerEml"),
+
+/*    
+    @NamedQuery(name = "Persona.findPopUp",         query = "SELECT p FROM Persona p "
+            + "WHERE (p.PerEsAdm = :PerEsAdm or :PerEsAdm is null) "
+            + "AND (p.PerEsAlu = :PerEsAlu or :PerEsAlu is null) "
+            + "AND (p.PerEsDoc = :PerEsDoc or :PerEsDoc is null) "
+            + "AND (p.PerNom like :PerNom or :PerNom is null) "
+            + "AND (p.PerApe like :PerApe or :PerApe is null) "
+            + "AND (p.PerCod in (SELECT e.AluPerCod FROM Inscripcion e where e.Curso.CurCod = :CurCod) or :CurCod is null)"),
+  */  
     @NamedQuery(name = "Persona.findLastPersona",   query = "SELECT p FROM Persona p ORDER BY p.PerCod DESC")})
 
 public class Persona implements Serializable {
@@ -422,7 +432,10 @@ public class Persona implements Serializable {
  
     
     
-    
+    public String getNombreCompleto()
+    {
+        return this.PerNom + " " + this.PerApe;
+    }
     
     
 

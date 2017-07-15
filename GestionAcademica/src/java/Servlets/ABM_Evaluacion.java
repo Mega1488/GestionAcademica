@@ -7,6 +7,7 @@ package Servlets;
 
 import Entidad.Curso;
 import Entidad.Evaluacion;
+import Entidad.Modulo;
 import Entidad.TipoEvaluacion;
 import Enumerado.TipoMensaje;
 import Logica.LoCurso;
@@ -17,6 +18,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +67,10 @@ public class ABM_Evaluacion extends HttpServlet {
                 
                 case "ELIMINAR":
                     retorno = this.EliminarDatos(request);
+                break;
+                
+                case "POPUP_ISTAR":
+                    retorno = this.PopUp_ListarDatos(request);
                 break;
                         
             }
@@ -209,6 +216,34 @@ public class ABM_Evaluacion extends HttpServlet {
         String retorno = utilidades.ObjetoToJson(mensaje);
 
         return retorno;
+    }
+    
+    private String PopUp_ListarDatos(HttpServletRequest request)
+    {
+
+        List<Evaluacion> lstRetorno = new ArrayList<>();
+        
+        String MatCod = request.getParameter("popMatCod");
+        String CurCod = request.getParameter("popCurCod");
+        String ModCod = request.getParameter("popModCod");
+        
+        if(!CurCod.isEmpty())
+        {
+            lstRetorno = ((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto()).getLstEvaluacion();
+        }
+        
+        if(!ModCod.isEmpty())
+        {
+            lstRetorno = ((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto()).getLstEvaluacion();
+        }
+        
+        if(!MatCod.isEmpty())
+        {
+            lstRetorno = ((Modulo) ((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto()).getModuloById(Long.valueOf(ModCod))).getLstEvaluacion();
+        }
+
+        return  utilidades.ObjetoToJson(lstRetorno);
+                
     }
 
     private Evaluacion ValidarEvaluacion(HttpServletRequest request, Evaluacion evaluacion)

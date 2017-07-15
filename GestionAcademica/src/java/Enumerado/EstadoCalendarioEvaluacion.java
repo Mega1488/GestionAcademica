@@ -10,20 +10,35 @@ package Enumerado;
  * @author Alvaro
  */
 public enum EstadoCalendarioEvaluacion {
-    SIN_CALIFICAR(1), CALIFICADO(2), VALIDADO(3);
+    SIN_CALIFICAR("Sin calificar", 1), CALIFICADO("Calificado", 2), VALIDADO("Validado", 3);
     
     EstadoCalendarioEvaluacion(){
         
     }
     
+    private String vEstadoNom;
     private int vEstado;
 
-    EstadoCalendarioEvaluacion(int pEstado) {
+    EstadoCalendarioEvaluacion(String estadoNom, int pEstado) {
         this.vEstado = pEstado;
+        this.vEstadoNom = estadoNom;
     }
 
     public int getEstado() {
         return vEstado;
     }
     
+    public String getEstadoNombre() {
+        return vEstadoNom;
+    }
+    
+     public static EstadoCalendarioEvaluacion fromCode(int cod) {
+        for (EstadoCalendarioEvaluacion estado :EstadoCalendarioEvaluacion.values()){
+            if (estado.getEstado() == cod){
+                return estado;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El estado " + cod + " is not supported!");
+    }
 }

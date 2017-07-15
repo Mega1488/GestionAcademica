@@ -92,7 +92,10 @@ public class Retorno_MsgObj {
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getObjeto() == null;
     }
  
-    
+    public boolean SurgioErrorListaRequerida()
+    {
+        return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getLstObjetos() == null;
+    }
     
     
     

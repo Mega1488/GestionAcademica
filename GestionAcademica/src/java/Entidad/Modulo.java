@@ -14,6 +14,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,6 +28,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -34,7 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-
+@JsonIgnoreProperties({"curso"})
 
 @Entity
 @Table(name = "MODULO")
@@ -83,8 +87,9 @@ public class Modulo implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     
-    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="ModEvlModCod", referencedColumnName="ModCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Evaluacion> lstEvaluacion;
     
     public Modulo() {
@@ -191,8 +196,8 @@ public class Modulo implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 89 * hash + Objects.hashCode(this.ModCod);
+        int hash = 3;
+        hash = 73 * hash + Objects.hashCode(this.ModCod) + Objects.hashCode(this.curso);
         return hash;
     }
 
@@ -211,20 +216,18 @@ public class Modulo implements Serializable {
         if (!Objects.equals(this.ModCod, other.ModCod)) {
             return false;
         }
+        if (!Objects.equals(this.curso, other.curso)) {
+            return false;
+        }
         return true;
     }
 
- 
-    
-    
-  
- 
-    
-
     @Override
     public String toString() {
-        return "Entidad.Modulo[ id=" + getModCod().toString() + " ]";
+        return "Modulo{" + "ModCod=" + ModCod + ", curso=" + curso + ", ModNom=" + ModNom + ", ModDsc=" + ModDsc + ", ModTpoPer=" + ModTpoPer + ", ModPerVal=" + ModPerVal + ", ModCntHor=" + ModCntHor + ", ModEstCod=" + ModEstCod + ", ObjFchMod=" + ObjFchMod + ", lstEvaluacion=" + lstEvaluacion + '}';
     }
+
+    
     
     
     

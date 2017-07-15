@@ -71,30 +71,17 @@
                 });
         </script>
 
-    
+<div  class="col-sm-8" style="text-align: right;">
 
         
         <form name="login">
 
-            <p>Username :
-
-            <input size="10" name="username" id="username" />
-
-            </p>
-
-            <p>Password :
-
-            <input size="10" name="password" id="password" type="password" />
-
-            </p>
-
-            <p>
+            <label>Usuario:</label><input size="10" name="username" id="username" />
+            <label>Contraseña:</label><input size="10" name="password" id="password" type="password" />
 
             <input name="submit" id="submit" value="Login" type="button" />
-
-            </p>
 
         </form>
         
         
-       
+</div>       

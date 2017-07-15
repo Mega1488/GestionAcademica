@@ -7,19 +7,20 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -69,6 +70,16 @@ public class Calendario implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
+    
+    @OneToMany(targetEntity = CalendarioAlumno.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="CalCod")
+    private List<CalendarioAlumno> lstAlumnos;
+    
+    @OneToMany(targetEntity = CalendarioDocente.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="CalCod")
+    private List<CalendarioDocente> lstDocentes;
+    
 
     //-CONSTRUCTOR
     public Calendario() {
@@ -123,6 +134,40 @@ public class Calendario implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+
+    public List<CalendarioAlumno> getLstAlumnos() {
+        return lstAlumnos;
+    }
+
+    public void setLstAlumnos(List<CalendarioAlumno> lstAlumnos) {
+        this.lstAlumnos = lstAlumnos;
+    }
+
+    public List<CalendarioDocente> getLstDocentes() {
+        return lstDocentes;
+    }
+
+    public void setLstDocentes(List<CalendarioDocente> lstDocentes) {
+        this.lstDocentes = lstDocentes;
+    }
+    
+    public CalendarioAlumno getAlumnoById(Long CalAlCod){
+        
+        CalendarioAlumno pAlumno = new CalendarioAlumno();
+        
+        for(CalendarioAlumno alumn : this.lstAlumnos)
+        {
+            if(alumn.getCalAlCod().equals(CalAlCod))
+            {
+                pAlumno = alumn;
+                break;
+            }
+        }
+        
+        return pAlumno;
+    }
+    
+    
 
     @Override
     public int hashCode() {

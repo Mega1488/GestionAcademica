@@ -22,12 +22,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"modEvl", "matEvl", "curEvl"})
+
 @Entity
 @Table(name = "EVALUACION")
 @XmlRootElement
@@ -36,6 +41,8 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Evaluacion.findByPK",           query = "SELECT t FROM Evaluacion t WHERE t.EvlCod =:EvlCod"),
     @NamedQuery(name = "Evaluacion.findByCurso",        query = "SELECT t FROM Evaluacion t WHERE t.CurEvl.CurCod =:CurCod"),
     @NamedQuery(name = "Evaluacion.findByModulo",       query = "SELECT t FROM Evaluacion t WHERE t.ModEvl.curso.CurCod =:CurCod and t.ModEvl.ModCod =:ModCod"),
+    
+  //  @NamedQuery(name = "Evaluacion.findByEstudio",       query = "SELECT t FROM Evaluacion t WHERE (t.CurEvl.CurCod =:CurCod OR :CurCod IS NULL) OR (t.ModEvl.ModCod = :ModCod OR :ModCod IS NULL) OR (T.MatEvl.MatCod =:MatCod OR :MatCod IS NULL)"),
         
     @NamedQuery(name = "Evaluacion.findLast",      query = "SELECT t FROM Evaluacion t ORDER BY t.EvlCod DESC")})
 
@@ -50,7 +57,6 @@ public class Evaluacion implements Serializable {
     @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "EvlCod", nullable = false)
     private Long EvlCod;
-    
     
     @OneToOne(targetEntity = Materia.class, optional=true)
     @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
@@ -158,6 +164,47 @@ public class Evaluacion implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+
+    public String getEstudioTipo()
+    {
+        if(this.getCurEvl() != null)
+        {
+            return "Curso";
+        }
+        
+        if(this.getMatEvl() != null)
+        {
+            return "Materia";
+        }
+        
+        if(this.getModEvl() != null)
+        {
+            return "Modulo";
+        }
+        
+        return "";
+    }
+    
+    public String getEstudioNombre()
+    {
+        if(this.getCurEvl() != null)
+        {
+            return this.getCurEvl().getCurNom();
+        }
+        
+        if(this.getMatEvl() != null)
+        {
+            return this.getMatEvl().getMatNom();
+        }
+        
+        if(this.getModEvl() != null)
+        {
+            return this.getModEvl().getModNom();
+        }
+        
+        return "";
+    }
+    
 
     @Override
     public int hashCode() {

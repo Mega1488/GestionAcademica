@@ -6,16 +6,15 @@
 package Utiles;
 
 import Entidad.Parametro;
-import Entidad.Version;
 import Enumerado.ExpresionesRegulares;
-import Enumerado.TipoAutenticacion;
 import Enumerado.TipoDato;
-import Enumerado.TipoSSL;
 import Logica.LoParametro;
 import Logica.LoVersion;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.ObjectMapper;
 
@@ -28,10 +27,13 @@ public class Utilidades {
     private static Utilidades instancia;
     private final LoParametro loParam;
     private final LoVersion loVersion;
+    
 
     private Utilidades() {
         loParam     = LoParametro.GetInstancia();
         loVersion   = LoVersion.GetInstancia();
+        
+     
     }
     
     public static Utilidades GetInstancia(){
@@ -138,5 +140,20 @@ public class Utilidades {
          return (objeto == null ? "No" : (objeto == true ? "Si" : "No"));
      }
      
+     public String GetPaginaActual(HttpServletRequest request)
+     {
+        String url = request.getRequestURL().toString();
+        
+        if(!url.isEmpty())
+        {
+           url = url.substring(url.lastIndexOf("/") + 1, url.length());
+        }
+        
+        return url;
+     }
             
+     
+     
+     
+    
 }

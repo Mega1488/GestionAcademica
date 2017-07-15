@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -215,4 +216,42 @@ public class PerPersona implements Interfaz.InPersona{
 
         return retorno;
     }
+
+    public Retorno_MsgObj obtenerPopUp(Long CarCod, Long PlaEstCod, Long CurCod, String PerNom, String PerApe, Boolean docente, Boolean alumno)
+    {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));
+                
+        try
+        {
+            iniciaOperacion();
+            
+            String consulta     = "from Persona ";
+            
+            String parametros = ""; 
+                    
+            if(!PerNom.isEmpty())
+            {
+                parametros = " where PerNom like '" + PerNom + "'";
+            }
+
+            Query query = sesion.createQuery(consulta + parametros);
+        
+
+            List<Object> list = query.list();
+
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(list);
+        
+        } catch (HibernateException he) {
+        
+            retorno = manejaExcepcion(he, retorno);
+        }  finally {
+            sesion.close();
+        }
+        
+        
+        
+        return retorno;
+    }
+
 }

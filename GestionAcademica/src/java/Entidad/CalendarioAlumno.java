@@ -11,14 +11,13 @@ import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -51,19 +50,18 @@ public class CalendarioAlumno implements Serializable {
     @Column(name = "CalAlCod", nullable = false)
     private Long CalAlCod;
     
-    @OneToOne(targetEntity = Calendario.class, optional=false)
+    @ManyToOne(targetEntity = Calendario.class)
     @JoinColumn(name="CalCod", referencedColumnName = "CalCod")
     private Calendario calendario;
 
-    @ManyToOne(targetEntity = Persona.class, optional=false)
-    @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
+    @ManyToOne(targetEntity = Persona.class)
+    @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod", unique = true)
     private Persona Alumno;
 
-    
     @Column(name = "EvlCalVal", precision=10, scale=2)
     private Double EvlCalVal;
     
-    
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "EvlCalEst", precision=10, scale=2)
     private EstadoCalendarioEvaluacion EvlCalEst;
 
@@ -92,7 +90,6 @@ public class CalendarioAlumno implements Serializable {
     @ManyToOne(targetEntity = Persona.class, optional=true)
     @JoinColumn(name="EvlValPerCod", referencedColumnName = "PerCod")
     private Persona EvlValPor;
-
 
     
 
