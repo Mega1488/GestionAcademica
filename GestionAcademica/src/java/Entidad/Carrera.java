@@ -8,19 +8,25 @@ package Entidad;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -38,10 +44,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Carrera implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    
     @Id
     @Basic(optional = false)
-    @Column(name = "CarCod", nullable = false)
-    private Integer CarCod;
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name="native", strategy="native")
+    @Column(name="CarCod", nullable = false)
+    private Long CarCod;
+    
     @Column(name = "CarNom", length = 100)
     private String CarNom;
     @Column(name = "CarDsc", length = 500)
@@ -52,19 +62,18 @@ public class Carrera implements Serializable {
     private String CarCrt;
     @Column(name = "CarCatCod")
     private Long CarCatCod;
-    @Column(name = "ObjFchMod")
+    @Column(name = "ObjFchMod", columnDefinition = "DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
-    @OneToMany(targetEntity = PlanEstudio.class, cascade= CascadeType.ALL)
-    @JoinColumn(name="CarCod")
-    private List<PlanEstudio> lstPlanes;
-
     
+    @OneToMany(targetEntity = PlanEstudio.class, cascade= CascadeType.ALL)
+    @JoinColumn(name="CarCod", referencedColumnName="CarCod")
+    private List<PlanEstudio> lstPlanEstudio;
     
     public Carrera() {
     }
 
-    public Carrera(Integer CarCod, String CarNom, String CarDsc, String CarFac, String CarCrt, Long CarCatCod, Date ObjFchMod) {
+    public Carrera(Long CarCod, String CarNom, String CarDsc, String CarFac, String CarCrt, Long CarCatCod, Date ObjFchMod) {
         this.CarCod = CarCod;
         this.CarNom = CarNom;
         this.CarDsc = CarDsc;
@@ -74,14 +83,11 @@ public class Carrera implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
     
-    
-    
-    
-    public Integer getCarCod() {
+    public Long getCarCod() {
         return CarCod;
     }
 
-    public void setCarCod(Integer CarCod) {
+    public void setCarCod(Long CarCod) {
         this.CarCod = CarCod;
     }
 
@@ -133,33 +139,34 @@ public class Carrera implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    public List<PlanEstudio> getLstPlanes() {
-        return lstPlanes;
+    public List<PlanEstudio> getPlan() {
+        return lstPlanEstudio;
     }
 
-    public void setLstPlanes(List<PlanEstudio> lstPlanes) {
-        this.lstPlanes = lstPlanes;
+    public void setPlan(List<PlanEstudio> lstPlanEstudio) {
+        this.lstPlanEstudio = lstPlanEstudio;
     }
-   
-    
-    
-    
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (CarCod != null ? CarCod.hashCode() : 0);
+        int hash = 5;
+        hash = 67 * hash + Objects.hashCode(this.CarCod);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Carrera)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Carrera other = (Carrera) object;
-        if ((this.CarCod == null && other.CarCod != null) || (this.CarCod != null && !this.CarCod.equals(other.CarCod))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Carrera other = (Carrera) obj;
+        if (!Objects.equals(this.CarCod, other.CarCod)) {
             return false;
         }
         return true;
@@ -167,7 +174,6 @@ public class Carrera implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Carrera[ id=" + CarCod + " ]";
+        return "Carrera{" + "CarCod=" + CarCod + '}';
     }
-    
 }

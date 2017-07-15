@@ -6,12 +6,19 @@
 package Persistencia;
 
 import Entidad.Carrera;
+import Enumerado.TipoMensaje;
+import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import sun.util.logging.PlatformLogger;
 
 /**
  *
@@ -32,107 +39,110 @@ public class PerCarrera implements Interfaz.InCarrera{
         }
     }
 
-    private void manejaExcepcion(HibernateException he) throws HibernateException {
+    private Retorno_MsgObj manejaExcepcion(HibernateException he, Retorno_MsgObj retorno) throws HibernateException 
+    {     
         tx.rollback();
-        throw new HibernateException("Ocurrió un error en la capa de acceso a datos", he);
+        String mensaje;
+        Throwable cause = he.getCause();
+        if(cause instanceof SQLException)
+        {
+            switch (((SQLException) cause).getErrorCode())
+            {
+                case 1451:
+                    mensaje = "Existen datos en otros registros";
+                    break;
+                default:
+                    mensaje = cause.getMessage();
+                            break;
+            }
+        }
+        else
+        {
+            mensaje = he.getMessage();
+        }
+        retorno.setMensaje(new Mensajes("Error: " + mensaje, TipoMensaje.ERROR));
+        
+        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, he);
+        
+        return retorno;
     }
 
     @Override
     public Object guardar(Carrera pCarrera) {
-//        int id = 0;
-        pCarrera = this.DevolverNuevoID(pCarrera);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar la Carrera", TipoMensaje.ERROR), pCarrera);
+        
         pCarrera.setObjFchMod(new Date());
-
+        
         try {
             iniciaOperacion();
-            pCarrera.setCarCod((int) sesion.save(pCarrera));
+            pCarrera.setCarCod((Long) sesion.save(pCarrera));
             tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Carrera guardada correctamente", TipoMensaje.MENSAJE), pCarrera);
         } catch (HibernateException he) {
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
         } finally {
             sesion.close();
         }
-        return pCarrera;
+        return retorno;
     }
     
     @Override
     public Object actualizar(Carrera pCarrera) {
-        boolean error   = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al Modificar la Carrera", TipoMensaje.ERROR), pCarrera);
         try
         {
             pCarrera.setObjFchMod(new Date());
             iniciaOperacion();
             sesion.update(pCarrera);
             tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Carrera modificada correctamente", TipoMensaje.MENSAJE), pCarrera);
         }
         catch(HibernateException he)
         {
-            error = true;
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
         }
         finally
         {
             sesion.close();
         }
-        return error;
+        return retorno;
     }
 
     @Override
     public Object eliminar(Carrera pObjeto) {
-        boolean error = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar la curso", TipoMensaje.ERROR));
         try {
             iniciaOperacion();
             sesion.delete(pObjeto);
             tx.commit();
             
-            //Agregar objeto eliminado a la tabla de sincronización
-            //-
-            
+            retorno = new Retorno_MsgObj(new Mensajes("Carrera eliminada correctamente", TipoMensaje.MENSAJE));
         } catch (HibernateException he) {
-            error = true;
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
         } finally {
             sesion.close();
         }
-        return error;
+        return retorno;
     }
-    
-    public boolean ValidarEliminacion(Carrera pCarrera)
-    {
-        boolean error   = false;
-        try
+   
+    @Override
+    public Retorno_MsgObj obtener(Long pCarCod) {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
+        try {
+                iniciaOperacion();
+                Carrera car = (Carrera) sesion.get(Carrera.class, pCarCod);
+                retorno     = new Retorno_MsgObj(new Mensajes("OK", TipoMensaje.MENSAJE), car );
+        }catch(HibernateException he)
         {
-            iniciaOperacion();
-            sesion.delete(pCarrera);
-            tx.rollback();
-        }
-        catch(HibernateException he)
-        {
-            error = true;
-            manejaExcepcion(he);
-            throw he;
+            retorno = manejaExcepcion(he, retorno);
         }
         finally
         {
             sesion.close();
         }
-        return error;
-    }
-
-    @Override
-    public Carrera obtener(Carrera pCarrera) {
-        int codigo              = pCarrera.getCarCod();
-        Carrera objetoRetorno   = new Carrera();
-        try {
-                iniciaOperacion();
-                objetoRetorno = (Carrera) sesion.get(Carrera.class, codigo);            
-        } finally {
-            sesion.close();
-        }
-        return objetoRetorno;
+        return retorno;
     }
 
     @Override
@@ -154,19 +164,20 @@ public class PerCarrera implements Interfaz.InCarrera{
     }
 
     @Override
-    public List<Carrera> obtenerLista() {
-        List<Carrera> listaRetorno = null;
-
+    public Retorno_MsgObj obtenerLista() {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener la lista de Carreras", TipoMensaje.ERROR), null);
         try {
             iniciaOperacion();
-            
-                listaRetorno = sesion.getNamedQuery("Carrera.findAll").list();
-            
+            List<Object> listaRetorno = sesion.getNamedQuery("Carrera.findAll").list();
+
+            retorno.setMensaje(new Mensajes("Lista de carreras OK", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+        }catch(HibernateException he){
+            retorno = manejaExcepcion(he, retorno);
         } finally {
             sesion.close();
         }
-
-        return listaRetorno;
+        return retorno;
     }
     
     private Carrera DevolverNuevoID(Carrera objeto){
@@ -176,8 +187,8 @@ public class PerCarrera implements Interfaz.InCarrera{
         return objeto;
     }
 
-    private int DevolverUltimoID(){
-        int retorno = 1;
+    private Long DevolverUltimoID(){
+        Long retorno = 1L;
         List<Carrera> listaObjeto = new ArrayList<Carrera>(); 
         try {
             iniciaOperacion();
@@ -187,7 +198,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         }
         if (!listaObjeto.isEmpty()){
             Carrera objeto = listaObjeto.get(0);
-            retorno = objeto.getCarCod()+ 1;
+            retorno = Long.valueOf(objeto.getCarCod().intValue() + 1);
         }
         return retorno;
     }
