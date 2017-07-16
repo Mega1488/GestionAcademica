@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page import="Logica.LoIniciar"%>
@@ -12,6 +13,8 @@
     
     LoIniciar iniciar_sistema   = new LoIniciar();
     iniciar_sistema.Iniciar(request);
+    
+    session.setAttribute(NombreSesiones.URL_SISTEMA.getValor(), Utilidades.GetInstancia().GetUrlSistema());
     
 %>
 

@@ -8,13 +8,16 @@ package Logica;
 import Entidad.Calendario;
 import Entidad.CalendarioAlumno;
 import Entidad.CalendarioDocente;
+import Entidad.Persona;
 import Enumerado.EstadoCalendarioEvaluacion;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
 import Persistencia.PerCalendario;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -95,7 +98,7 @@ public class LoCalendario implements InABMGenerico{
         alumno.setObjFchMod(new Date());
         calendario.getLstAlumnos().set(indice, alumno);
 
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(alumno);
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(calendario);
 
         return retorno;
     }
@@ -113,6 +116,40 @@ public class LoCalendario implements InABMGenerico{
        
             retorno = (Retorno_MsgObj) this.actualizar(calendario);
         }
+        return retorno;
+    }
+    
+    public List<CalendarioAlumno> AlumnoObtenerListaPorUsuario(Calendario calendario, String usuario){
+        
+        List<CalendarioAlumno> retorno = new ArrayList<>();
+        
+        Persona persona = new Persona();
+        if(usuario != null) persona = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
+        
+        if(persona != null)
+        {
+            if(persona.getPerEsAdm())
+            {
+                retorno = calendario.getLstAlumnos();
+            }
+            else
+            {
+                if(persona.getPerEsDoc())
+                {
+                    if(calendario.getDocenteById(persona.getPerCod()).getCalDocCod() != null)
+                    {
+                        for(CalendarioAlumno alumno : calendario.getLstAlumnos())
+                        {
+                            if(alumno.getEvlCalEst().equals(EstadoCalendarioEvaluacion.CALIFICADO) || alumno.getEvlCalEst().equals(EstadoCalendarioEvaluacion.PENDIENTE_CORRECCION) || alumno.getEvlCalEst().equals(EstadoCalendarioEvaluacion.SIN_CALIFICAR))
+                            {
+                                retorno.add(alumno);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         return retorno;
     }
     
@@ -166,5 +203,6 @@ public class LoCalendario implements InABMGenerico{
         }
         return retorno;
     }
+    
     
 }

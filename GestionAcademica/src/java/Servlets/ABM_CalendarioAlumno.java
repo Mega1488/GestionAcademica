@@ -10,6 +10,7 @@ import Entidad.CalendarioAlumno;
 import Entidad.Persona;
 import Enumerado.EstadoCalendarioEvaluacion;
 import Enumerado.Modo;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoCalendario;
 import Logica.LoPersona;
@@ -23,6 +24,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.jasper.Constants;
 
 /**
  *
@@ -33,6 +36,7 @@ public class ABM_CalendarioAlumno extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
+    private Persona perUsuario;
 
 
     /**
@@ -52,25 +56,44 @@ public class ABM_CalendarioAlumno extends HttpServlet {
             
             
             String action   = request.getParameter("pAction");
-            Modo mode = Modo.valueOf(action);
             String retorno  = "";
+            
+            HttpSession session=request.getSession(); 
+            String usuario  = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());            
+            if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
 
             
-            switch(mode)
+            switch(action)
             {
                 
-                case INSERT:
+                case "INSERT":
                     retorno = this.AgregarDatos(request);
                 break;
-             /*   
-                case UPDATE:
+                
+                case "UPDATE":
                     retorno = this.ActualizarDatos(request);
                 break;
-               */ 
-                case DELETE:
+                
+                case "DELETE":
                     retorno = this.EliminarDatos(request);
                 break;
-                        
+                
+                case "VALIDAR":
+                    retorno = this.ValidarCalificacion(request);
+                break;
+                
+                case "TO_VALIDAR":
+                    retorno = this.toValidacion(request);
+                break;
+                
+                case "TO_CORRECCION":
+                    retorno = this.toCorreccion(request);
+                break;
+                
+                case "OBTENER":
+                    retorno = this.ObtenerDatos(request);
+                break;
+                
             }
 
             out.println(retorno);
@@ -90,6 +113,8 @@ public class ABM_CalendarioAlumno extends HttpServlet {
             error           = false;
 
             CalendarioAlumno calAlumno = this.ValidarCalendarioAlumno(request, null);
+            
+            
 
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -133,7 +158,199 @@ public class ABM_CalendarioAlumno extends HttpServlet {
 
        return utilidades.ObjetoToJson(mensaje);
     }
-     
+    
+    private String ActualizarDatos(HttpServletRequest request){
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+
+            error           = false;
+            
+            CalendarioAlumno calAlumno = ValidarCalendarioAlumno(request, null);
+            
+            if(calAlumno.getEvlCalVal() == null)
+            {
+                error = true;
+                mensaje = new Mensajes("No se recibió una calificación", TipoMensaje.ERROR);
+            }
+            
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.AlumnoActualizar(calAlumno);
+                    
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+    }
+    
+    private String ObtenerDatos(HttpServletRequest request)
+    {
+        error       = false;
+        CalendarioAlumno calAlumno = new CalendarioAlumno();
+        
+        try
+        {
+            calAlumno = this.ValidarCalendarioAlumno(request, null);
+            calAlumno = calAlumno.getCalendario().getAlumnoById(calAlumno.getCalAlCod());
+            
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al obtener: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+       return utilidades.ObjetoToJson(calAlumno);
+    }
+    
+    private String ValidarCalificacion(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+
+            error           = false;
+            
+            CalendarioAlumno calAlumno = ValidarCalendarioAlumno(request, null);
+            
+            if(calAlumno.getEvlCalVal() == null)
+            {
+                error = true;
+                mensaje = new Mensajes("No se recibió una calificación", TipoMensaje.ERROR);
+            }
+            
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                if(perUsuario != null) calAlumno.setEvlValPor(perUsuario);
+                
+                calAlumno.setEvlValFch(new java.util.Date());
+                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.VALIDADO);
+                
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.AlumnoActualizar(calAlumno);
+                    
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+
+    }
+    
+    private String toValidacion(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+
+            error           = false;
+            
+            CalendarioAlumno calAlumno = ValidarCalendarioAlumno(request, null);
+            
+            if(calAlumno.getEvlCalVal() == null)
+            {
+                error = true;
+                mensaje = new Mensajes("No se recibió una calificación", TipoMensaje.ERROR);
+            }
+            
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                if(perUsuario != null) calAlumno.setEvlCalPor(perUsuario);
+                
+                calAlumno.setEvlCalFch(new java.util.Date());
+                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.PENDIENTE_VALIDACION);
+                
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.AlumnoActualizar(calAlumno);
+                    
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+
+    }
+    
+    private String toCorreccion(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+
+            error           = false;
+            
+            CalendarioAlumno calAlumno = ValidarCalendarioAlumno(request, null);
+            
+            if(calAlumno.getEvlCalVal() == null)
+            {
+                error = true;
+                mensaje = new Mensajes("No se recibió una calificación", TipoMensaje.ERROR);
+            }
+            
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                if(perUsuario != null) calAlumno.setEvlValPor(perUsuario);
+                
+                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.PENDIENTE_CORRECCION);
+                
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.AlumnoActualizar(calAlumno);
+                    
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+
+    }
+    
     private CalendarioAlumno ValidarCalendarioAlumno(HttpServletRequest request, CalendarioAlumno calAlumno)
     {
         if(calAlumno == null)
@@ -145,14 +362,9 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         String CalCod= request.getParameter("pCalCod");
         String AluPerCod= request.getParameter("pAluPerCod");
         String EvlCalVal= request.getParameter("pEvlCalVal");
-        String EvlCalPerCod= request.getParameter("pEvlCalPerCod");
-        String EvlCalEst= request.getParameter("pEvlCalEst");
-        String EvlValPerCod= request.getParameter("pEvlValPerCod");
         String EvlCalObs= request.getParameter("pEvlCalObs");
         String EvlValObs= request.getParameter("pEvlValObs");
-        String EvlCalFch= request.getParameter("pEvlCalFch");
-        String EvlValFch= request.getParameter("pEvlValFch");
-
+        
         //------------------------------------------------------------------------------------------
         //Validaciones
         //------------------------------------------------------------------------------------------
@@ -163,18 +375,31 @@ public class ABM_CalendarioAlumno extends HttpServlet {
 
 
         //Sin validacion
-        if(CalAlCod != null)        calAlumno.setCalAlCod(Long.valueOf(CalAlCod));
-        if(CalCod != null)          calAlumno.setCalendario((Calendario) loCalendario.obtener(Long.valueOf(CalCod)).getObjeto());
-        if(AluPerCod != null)       calAlumno.setAlumno((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(AluPerCod)).getObjeto());
-        if(EvlCalVal != null)       calAlumno.setEvlCalVal(Double.valueOf(EvlCalVal));
-        if(EvlCalPerCod != null)    calAlumno.setEvlCalPor((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(EvlCalPerCod)).getObjeto());
-        if(EvlCalEst != null)       calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.fromCode(Integer.valueOf(EvlCalEst)));
-        if(EvlValPerCod != null)    calAlumno.setEvlValPor((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(EvlValPerCod)).getObjeto());
-        if(EvlCalObs != null)       calAlumno.setEvlCalObs(EvlCalObs);
-        if(EvlValObs != null)       calAlumno.setEvlValObs(EvlValObs);
-        if(EvlCalFch != null)       calAlumno.setEvlCalFch(Date.valueOf(EvlCalFch));
-        if(EvlValFch != null)       calAlumno.setEvlValFch(Date.valueOf(EvlValFch));
+        if(CalCod != null)                  calAlumno.setCalendario((Calendario) loCalendario.obtener(Long.valueOf(CalCod)).getObjeto());
+        
+        if(CalAlCod != null)                calAlumno.setCalAlCod(Long.valueOf(CalAlCod)); 
+        if(calAlumno.getCalAlCod() != null) calAlumno = calAlumno.getCalendario().getAlumnoById(calAlumno.getCalAlCod());
+        
+        if(AluPerCod != null)               calAlumno.setAlumno((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(AluPerCod)).getObjeto());
+        
+        if(EvlCalVal != null)
+        {
 
+            if(calAlumno.getEvlCalVal() != Double.valueOf(EvlCalVal))
+            {
+                if(perUsuario != null) calAlumno.setEvlCalPor(perUsuario);
+                
+                calAlumno.setEvlCalFch(new java.util.Date());
+                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.CALIFICADO);
+            }
+            
+            calAlumno.setEvlCalVal(Double.valueOf(EvlCalVal));
+        }
+
+        if(EvlCalObs != null)       calAlumno.setEvlCalObs(EvlCalObs);
+        
+        if(EvlValObs != null)       calAlumno.setEvlValObs(EvlValObs);
+        
 
         return calAlumno;
     }

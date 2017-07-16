@@ -11,9 +11,12 @@ import Entidad.TipoEvaluacion;
 import Entidad.Version;
 import Enumerado.Constantes;
 import Enumerado.Filial;
+import Enumerado.NombreSesiones;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -137,12 +140,14 @@ public class LoIniciar {
         }
         catch(MalformedURLException ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         
         Parametro param = loParam.obtener(1);
         param.setParUrlSis(urlSistema);
         loParam.actualizar(param);
+        
+        request.getSession().setAttribute(NombreSesiones.URL_SISTEMA.getValor(), urlSistema);
         
     }
     

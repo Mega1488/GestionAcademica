@@ -167,6 +167,21 @@ public class Calendario implements Serializable {
         return pAlumno;
     }
     
+    public CalendarioDocente getDocenteById(Long CalDocCod){
+        
+        CalendarioDocente pDocente = new CalendarioDocente();
+        
+        for(CalendarioDocente docente : this.lstDocentes)
+        {
+            if(docente.getCalDocCod().equals(CalDocCod))
+            {
+                pDocente = docente;
+                break;
+            }
+        }
+        
+        return pDocente;
+    }
     
 
     @Override

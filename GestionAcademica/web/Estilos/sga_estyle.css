@@ -26,6 +26,7 @@ and open the template in the editor.
     width: 279px;
     position: fixed;
     left: 50%;
+    z-index: 1051;
 }
 
 .div_tabs
@@ -100,4 +101,3 @@ and open the template in the editor.
 .campoTexto100{
     width: 200px !Important;
 }
-

@@ -4,6 +4,8 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Entidad.Evaluacion"%>
@@ -17,7 +19,22 @@
 
     LoCurso loCurso     = LoCurso.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
+    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    
+    //----------------------------------------------------------------------------------------------------
+    //CONTROL DE ACCESO
+    //----------------------------------------------------------------------------------------------------
+    
+    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
+    
+    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
+            
+    //----------------------------------------------------------------------------------------------------
+    
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CurCod       = request.getParameter("pCurCod");
     

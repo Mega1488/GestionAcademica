@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Entidad.Persona"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Enumerado.Modo"%>
@@ -11,9 +12,8 @@
 <%
 
     LoPersona loPersona = LoPersona.GetInstancia();
-    Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
-    
+    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+   
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String PerCod       = request.getParameter("pPerCod");
     

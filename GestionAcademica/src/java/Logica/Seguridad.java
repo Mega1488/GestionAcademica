@@ -5,6 +5,13 @@
  */
 package Logica;
 
+import Dominio.Sitios;
+import Entidad.Persona;
+import Enumerado.Accion;
+import Enumerado.TipoMensaje;
+import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
+import Utiles.Utilidades;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -27,7 +34,7 @@ public class Seguridad {
     private Seguridad() {
     }
     
-   public static Seguridad GetInstancia(){
+    public static Seguridad GetInstancia(){
         if (instancia==null)
         {
             instancia   = new Seguridad();
@@ -37,7 +44,6 @@ public class Seguridad {
         return instancia;
     }
     
-      
     public String md5(String input) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
 
@@ -68,9 +74,7 @@ public class Seguridad {
         return decryptedData;
     }
 
-    
-
-   public String cryptWithMD5(String pass){
+    public String cryptWithMD5(String pass){
        MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -89,6 +93,62 @@ public class Seguridad {
 
 
        }
+   
+    private boolean PermisoSitio(String sitioActual, Boolean esAdm, Boolean esDoc, Boolean esAlu)
+    {
+        if(Sitios.GetInstancia().getLstSinSeguridad().contains(sitioActual)) return true;
+            
+        if(esAdm) return true;
+        
+        if(esDoc)
+        {
+            return Sitios.GetInstancia().getLstDocente().contains(sitioActual);
+        }
+        
+        if(esAlu)
+        {
+            return Sitios.GetInstancia().getLstAlumno().contains(sitioActual);
+        }
+        
+        return false;
+    }
+    
+    public Retorno_MsgObj ControlarAcceso(String usuario, Boolean esAdm, Boolean esDoc, Boolean esAlu, String sitioActual)
+    {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));
+        
+        esAdm = (esAdm == null ? false : esAdm);
+        esAlu = (esAlu == null ? false : esAlu);
+        esDoc = (esDoc == null ? false : esDoc);
+
+        if(usuario == null )
+        {
+            if(!Sitios.GetInstancia().getLstSinSeguridad().contains(sitioActual))
+            {
+                String texto = "Debe iniciar sesion para ver esta página";
+                texto = Utilidades.GetInstancia().GetUrlSistema() + "Error.jsp?pMensaje=" + Utilidades.GetInstancia().UrlEncode(texto);
+                retorno.setObjeto(texto);
+                return retorno;
+            }
+        }
+
+        if (!Seguridad.GetInstancia().PermisoSitio(sitioActual, esAdm, esDoc, esAlu))
+        {
+            String texto = "No tiene acceso a está página";
+            
+            texto = Utilidades.GetInstancia().GetUrlSistema() + "Error.jsp?pMensaje=" + Utilidades.GetInstancia().UrlEncode(texto);
+            retorno.setObjeto(texto);
+            
+        }
+        else
+        {
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+        }
+        
+        return retorno;
+
+    }
+   
 
 
 }

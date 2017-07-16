@@ -6,6 +6,7 @@
 package Entidad;
 
 import Enumerado.EstadoCalendarioEvaluacion;
+import Utiles.JSonDateTimeSerializer;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -21,17 +22,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"calendario"})
+
 @Entity
 @Table(name = "CALENDARIO_ALUMNO")
 @XmlRootElement
@@ -194,6 +199,26 @@ public class CalendarioAlumno implements Serializable {
 
     public void setEvlValPor(Persona EvlValPor) {
         this.EvlValPor = EvlValPor;
+    }
+    
+    public boolean puedeCalificarse()
+    {
+        return (this.EvlCalEst.equals(EstadoCalendarioEvaluacion.CALIFICADO) || this.EvlCalEst.equals(EstadoCalendarioEvaluacion.PENDIENTE_CORRECCION) || this.EvlCalEst.equals(EstadoCalendarioEvaluacion.SIN_CALIFICAR));
+    }
+    
+    public boolean puedeEnviarToValidar()
+    {
+        return (this.EvlCalEst.equals(EstadoCalendarioEvaluacion.CALIFICADO));
+    }
+    
+    public boolean puedeValidarse()
+    {
+        return (this.EvlCalEst.equals(EstadoCalendarioEvaluacion.PENDIENTE_VALIDACION));
+    }
+    
+    public boolean puedeEditarlo()
+    {
+        return (!this.EvlCalEst.equals(EstadoCalendarioEvaluacion.VALIDADO));
     }
 
     @Override

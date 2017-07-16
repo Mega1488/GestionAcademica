@@ -4,7 +4,30 @@
     Author     : alvar
 --%>
 
+<%@page import="Utiles.Utilidades"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<%
+    Utilidades utilidad    = Utilidades.GetInstancia();
+    String urlSistema           = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    
+    //----------------------------------------------------------------------------------------------------
+    //CONTROL DE ACCESO
+    //----------------------------------------------------------------------------------------------------
+    
+    String  usuario = (String) session.getAttribute(Enumerado.NombreSesiones.USUARIO.getValor());
+    Boolean esAdm   = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_DOC.getValor());
+    Retorno_MsgObj acceso = Logica.Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
+    
+    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
+            
+    //----------------------------------------------------------------------------------------------------
+    
+%>
+
 <!DOCTYPE html>
 <html>
     <head>

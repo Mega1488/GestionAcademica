@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import Entidad.Persona;
 import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoPersona;
@@ -73,30 +74,30 @@ public class Login extends HttpServlet {
         LoPersona loPersona = LoPersona.GetInstancia();
         Seguridad seguridad = Seguridad.GetInstancia();
 
-        System.err.println("B");
-
 
         if(loPersona.IniciarSesion(usr, seguridad.cryptWithMD5(psw)))
         {
             //Inicio correctamente
             HttpSession session=request.getSession(); 
             session.setAttribute(NombreSesiones.USUARIO.getValor(), usr);
+            
+            Persona persona = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usr).getObjeto();
+            session.setAttribute(NombreSesiones.USUARIO_NOMBRE.getValor(), persona.getPerNom());
+            session.setAttribute(NombreSesiones.USUARIO_ADM.getValor(), persona.getPerEsAdm());
+            session.setAttribute(NombreSesiones.USUARIO_ALU.getValor(), persona.getPerEsAlu());
+            session.setAttribute(NombreSesiones.USUARIO_DOC.getValor(), persona.getPerEsDoc());
 
             mensaje = new Mensajes("OK", TipoMensaje.MENSAJE);
         }
         else
         {
-            System.err.println("D");
 
             //No inicio correctamente
             mensaje = new Mensajes("Usuario o contraseña incorrectos", TipoMensaje.ERROR);
         }
 
-        System.err.println("F");
-
         retorno = utiles.ObjetoToJson(mensaje);
 
-        System.err.println("Este es el retorno " + retorno);
         return retorno;
     }
     
@@ -112,6 +113,11 @@ public class Login extends HttpServlet {
             if(!usuario.isEmpty())
             {
                 session.removeAttribute(NombreSesiones.USUARIO.getValor());
+                session.removeAttribute(NombreSesiones.USUARIO_NOMBRE.getValor());
+                session.removeAttribute(NombreSesiones.USUARIO_ADM.getValor());
+                session.removeAttribute(NombreSesiones.USUARIO_ALU.getValor());
+                session.removeAttribute(NombreSesiones.USUARIO_DOC.getValor());
+
                 mensaje     = new Mensajes("OK", TipoMensaje.MENSAJE);
                 resultado   = true;
             }

@@ -18,16 +18,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
-<%
-    Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
-    
-    String js_redirect = "window.location.replace('" + urlSistema +  "');";
-    
-%>
-
         <script>
                 $(document).ready(function() {
+                    var urlAct = $('#sga_url').val();
                     
                     MostrarCargando(false);
                         
@@ -60,9 +53,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <%
-                                                        out.print(js_redirect);
-                                                    %>     
+                                                   window.location.replace(urlAct); 
                                                 }
                                         });
                                 }

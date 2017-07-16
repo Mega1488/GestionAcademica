@@ -66,6 +66,9 @@ public class Persona implements Serializable {
     @Column(name = "PerApe", length = 100)
     private String PerApe;
     
+    @Column(name = "PerDoc", length = 15)
+    private String PerDoc;
+    
     @Column(name = "PerUsrMod", length = 255, unique = true)
     private String PerUsrMod;
     
@@ -430,14 +433,46 @@ public class Persona implements Serializable {
         this.PerCntIntLgn = PerCntIntLgn;
     }
  
+    /**
+     *
+     * @return Documento
+     */
+    public String getPerDoc() {
+        return PerDoc;
+    }
+
+    /**
+     *
+     * @param PerDoc Documento
+     */
+    public void setPerDoc(String PerDoc) {
+        this.PerDoc = PerDoc;
+    }    
     
-    
+    /**
+     *
+     * @return Nombre completo
+     */
     public String getNombreCompleto()
     {
         return this.PerNom + " " + this.PerApe;
     }
     
-    
+    /**
+     *
+     * @return Tipo de persona
+     */
+    public String getTipoPersona()
+    {
+        String retorno = "";
+        
+        if(this.PerEsAdm) retorno += (retorno.isEmpty() ? "Administrador" : ", Administrador");
+        if(this.PerEsAlu) retorno += (retorno.isEmpty() ? "Alumno" : ", Alumno");
+        if(this.PerEsAdm) retorno += (retorno.isEmpty() ? "Docente" : ", Docente");
+
+        return retorno;
+    }
+
 
     @Override
     public int hashCode() {

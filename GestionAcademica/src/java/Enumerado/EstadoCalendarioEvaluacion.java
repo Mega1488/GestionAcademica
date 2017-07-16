@@ -10,7 +10,11 @@ package Enumerado;
  * @author Alvaro
  */
 public enum EstadoCalendarioEvaluacion {
-    SIN_CALIFICAR("Sin calificar", 1), CALIFICADO("Calificado", 2), VALIDADO("Validado", 3);
+    SIN_CALIFICAR("Sin calificar", 1), 
+    CALIFICADO("Calificado", 2), 
+    PENDIENTE_VALIDACION("Pendiente de validación", 3), 
+    PENDIENTE_CORRECCION("Pendiente de corrección", 4), 
+    VALIDADO("Validado", 5);
     
     EstadoCalendarioEvaluacion(){
         

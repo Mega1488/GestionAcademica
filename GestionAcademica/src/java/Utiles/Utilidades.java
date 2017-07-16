@@ -11,6 +11,8 @@ import Enumerado.TipoDato;
 import Logica.LoParametro;
 import Logica.LoVersion;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -152,7 +154,19 @@ public class Utilidades {
         return url;
      }
             
-     
+     public String UrlEncode(String texto)
+     {
+        String encodedUrl = null;
+
+        try {
+            encodedUrl = URLEncoder.encode(texto, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            // Can be safely ignored because UTF-8 is always supported
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return encodedUrl;
+     }
      
      
     

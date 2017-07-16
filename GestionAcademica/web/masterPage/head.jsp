@@ -3,6 +3,13 @@
     Created on : 24-jun-2017, 11:59:53
     Author     : alvar
 --%>
+<%@page import="Dominio.Sitios"%>
+<%@page import="Entidad.Persona"%>
+<%@page import="Logica.LoPersona"%>
+<%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Enumerado.Accion"%>
+<%@page import="Enumerado.Modo"%>
+<%@page import="Logica.Seguridad"%>
 <%@page import="Utiles.Utilidades"%>
 <%
     
@@ -16,6 +23,9 @@
     String jquery_css   = "'" + urlSistema + "JavaScript/jquery_ui/jquery-ui.css'";
     String css          = "'" + urlSistema + "Estilos/sga_estyle.css'";
     String bootstrap    = "'" + urlSistema + "Bootstrap/css/bootstrap.min.css'";
+    
+   
+
 %>
 
 <script src=<% out.print(jquery); %> type="text/javascript"></script>
@@ -28,6 +38,7 @@
 <link href=<% out.print(jquery_css); %> rel="stylesheet" type="text/css"/>
 
 <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
 
 <script>
     

@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Entidad.Persona"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Enumerado.Modo"%>
@@ -12,7 +13,7 @@
 
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
+    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
 
     String urlActual = utilidad.GetPaginaActual(request);
 %>

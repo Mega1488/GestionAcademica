@@ -38,19 +38,16 @@
                 
                 
                 
-                <table id="PopUpTblPersona" name="PopUpTblPersona" class="display" cellspacing="0"  class="table" width="100%">
+                <table id="PopUpTblPersona" name="PopUpTblPersona" class="table table-striped" cellspacing="0"  class="table" width="100%">
                     <thead>
                         <tr>
                             <th>Codigo</th>
                             <th>Nombre</th>
+                            <th>Tipo</th>
+                            <th>Documento</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Codigo</th>
-                            <th>Nombre</th>
-                        </tr>
-                    </tfoot>
+                    
                 </table>
             </div>
 
@@ -58,7 +55,7 @@
           
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
       </div>
     </div>
 </div>
@@ -120,16 +117,27 @@
                             $('#PopUpTblPersona').DataTable( {
                                 data: personas,
                                 deferRender: true,
+                                bLengthChange : false, //thought this line could hide the LengthMenu
+                                pageLength: 10,
                                 language: {
                                     "lengthMenu": "Mostrando _MENU_ registros por página",
                                     "zeroRecords": "No se encontraron registros",
                                     "info": "Página _PAGE_ de _PAGES_",
                                     "infoEmpty": "No hay registros",
+                                    "search":         "Buscar:",
+                                    "paginate": {
+                                            "first":      "Primera",
+                                            "last":       "Ultima",
+                                            "next":       "Siguiente",
+                                            "previous":   "Anterior"
+                                        },
                                     "infoFiltered": "(Filtrado de _MAX_ total de registros)"
                                 }
                                 ,columns: [
                                     { "data": "perCod" },
-                                    { "data": "perNom"}
+                                    { "data": "nombreCompleto"},
+                                    { "data": "tipoPersona"},
+                                    { "data": "perDoc"}
                                 ]
 
                             } );

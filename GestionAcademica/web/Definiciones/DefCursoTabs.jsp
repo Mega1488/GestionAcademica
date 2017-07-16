@@ -4,14 +4,14 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Enumerado.Modo"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page import="Logica.LoCurso"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
+    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CurCod       = request.getParameter("pCurCod");

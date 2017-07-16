@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Enumerado.Filial"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Entidad.Persona"%>
@@ -14,7 +15,21 @@
 <%
     LoPersona loPersona    = LoPersona.GetInstancia();
     Utilidades utilidad    = Utilidades.GetInstancia();
-    String urlSistema      = utilidad.GetUrlSistema();
+    String urlSistema           = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    
+    //----------------------------------------------------------------------------------------------------
+    //CONTROL DE ACCESO
+    //----------------------------------------------------------------------------------------------------
+    
+    String  usuario = (String) session.getAttribute(Enumerado.NombreSesiones.USUARIO.getValor());
+    Boolean esAdm   = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_DOC.getValor());
+    Retorno_MsgObj acceso = Logica.Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
+    
+    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
+            
+    //----------------------------------------------------------------------------------------------------
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String PerCod       = request.getParameter("pPerCod");
