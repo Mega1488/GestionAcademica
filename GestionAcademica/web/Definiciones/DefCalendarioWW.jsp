@@ -83,17 +83,19 @@
 
 
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Código</th>
-                                <th>Evaluación</th>
-                                <th>Estudio</th>
-                                <th>Nombre</th>
-                                <th>Fecha</th>
-                                <th>Inscripción desde</th>
-                                <th>Inscripcion hasta</th>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Código</th>
+                                    <th>Evaluación</th>
+                                    <th>Estudio</th>
+                                    <th>Nombre</th>
+                                    <th>Fecha</th>
+                                    <th>Inscripción desde</th>
+                                    <th>Inscripcion hasta</th>
+                                </tr>
+                            </thead>
 
                             <% for(Object objeto : lstObjeto)
                             {

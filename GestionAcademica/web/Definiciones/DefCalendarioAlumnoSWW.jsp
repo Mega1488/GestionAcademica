@@ -140,7 +140,7 @@
                 </div>
         </div>
         
-        <!-- PopUp para Eliminar personas del calendario -->
+        <!-- PopUp para Agregar personas del calendario -->
                                 
         <div id="PopUpPersona" class="modal fade" role="dialog">
             <jsp:include page="/PopUps/PopUpPersonaCalendario.jsp"/>

@@ -167,6 +167,7 @@ public class LoCalendario implements InABMGenerico{
         {
             Calendario calendario = docente.getCalendario();
             docente.setObjFchMod(new Date());
+            
             calendario.getLstDocentes().add(docente);
             retorno = (Retorno_MsgObj) this.actualizar(calendario);
         }

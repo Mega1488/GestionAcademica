@@ -4,6 +4,12 @@
     Author     : alvar
 --%>
 
+<%@page import="Entidad.Escolaridad"%>
+<%@page import="SDT.SDT_PersonaEstudio"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="Logica.LoPersona"%>
+<%@page import="Entidad.Persona"%>
+<%@page import="Enumerado.Modo"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -25,30 +31,90 @@
     if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
             
     //----------------------------------------------------------------------------------------------------
+    
+    Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
+    String PerCod       = request.getParameter("pPerCod");
+    
+    ArrayList<SDT_PersonaEstudio> lstEstudio = new ArrayList<>();
+    if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
+    {
+        lstEstudio = LoPersona.GetInstancia().ObtenerEstudios(Long.valueOf(PerCod));
+    }
+
+    String tblVisible = (lstEstudio.size() > 0 ? "" : "display: none;");
+    
 %>
 
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Persona | Escolaridades</title>
+        <title>Sistema de Gestión Académica - Persona | Escolaridad</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
+        <div class="container-fluid">
+            
+            <div id="cabezal" name="cabezal" class="row">
             <jsp:include page="/masterPage/cabezal.jsp"/>
         </div>
+        
+        
+                <div class="col-sm-2">
+                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+                </div>
 
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
+                <div id="contenido" name="contenido"  class="col-sm-8">
+                    <div class="row"> 
+                        <div class="col-lg-6"><h1>Escolaridad</h1></div>
+                        <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
+                    </div>
+                    
+                    <div id="tabs" name="tabs">
+                        <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                    </div>
 
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <div id="tabs" name="tabs">
-                <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
-            </div>
-            
-            <h1>Persona | Escolaridades</h1>
+                    <div name="cont_estudio" style=' <% out.print(tblVisible); %>'>
+                        <%
+                            for(SDT_PersonaEstudio est : lstEstudio)
+                            {
+                                
+                                if(est.getInscripcion().getInsCod() == Long.valueOf("0"))
+                                {
+                                    out.println("<div><label>Sin inscripción</label></div>");
+                                }
+                                else
+                                {
+                                    if(est.getInscripcion().getCurso() != null){
+                                        out.println("<div><label>Inscripto a: " + est.getInscripcion().getCurso().getCurNom() + "</label></div>");
+                                    }
+                                    
+                                    if(est.getInscripcion().getPlanEstudio() != null){
+                                        out.println("<div><label>Inscripto a: " + est.getInscripcion().getPlanEstudio().getPlaEstNom() + "</label></div>");
+                                    }                                   
+                                    
+                                }
+                                
+                                for(Escolaridad esc : est.getEscolaridad())
+                                {
+                                    out.println("<div class='row'>");
+                                        out.println("<div class='col-lg-3'>");
+
+                                        if(esc.getModulo() != null) out.println(esc.getModulo().getModNom() + ":");
+                                        if(esc.getCurso() != null) out.println(esc.getCurso().getCurNom() + ":");
+                                        if(esc.getMateria() != null) out.println(esc.getMateria().getMatNom() + ":");
+
+                                        out.println("</div>");
+
+                                        out.println("<div class='col-lg-2'><label>" + esc.getEscCalVal() + "</label></div>");
+                                    out.println("</div>");
+                                }
+                            }
+                        %>
+                    </div>
+
+                </div>
         </div>
+                                     
     </body>
 </html>

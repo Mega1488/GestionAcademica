@@ -22,6 +22,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -30,7 +31,12 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 @Entity
-@Table(name = "MATERIA_REVALIDA")
+@Table(
+        name = "MATERIA_REVALIDA",
+        uniqueConstraints = {
+                                @UniqueConstraint(columnNames = {"InsCod", "MatCod"})
+                            }
+        )
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "MateriaRevalida.findAll",       query = "SELECT t FROM MateriaRevalida t")})
@@ -47,15 +53,13 @@ public class MateriaRevalida implements Serializable {
     @Column(name = "MatRvlCod", nullable = false)
     private Long MatRvlCod; 
     
-    @OneToOne(targetEntity = Inscripcion.class, optional=false)        
+    @ManyToOne(targetEntity = Inscripcion.class)        
     @JoinColumn(name="InsCod", referencedColumnName="InsCod")
     private Inscripcion inscripcion;
 
-    @ManyToOne(targetEntity = Materia.class, optional=false)        
+    @ManyToOne(targetEntity = Materia.class)        
     @JoinColumn(name="MatCod", referencedColumnName="MatCod")
     private Materia materia;
-
-
 
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)

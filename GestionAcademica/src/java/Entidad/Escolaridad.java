@@ -18,7 +18,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,6 +33,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Escolaridad.findAll",       query = "SELECT t FROM Escolaridad t"),
+    @NamedQuery(name = "Escolaridad.findByAlumno",  query = "SELECT t FROM Escolaridad t WHERE t.alumno.PerCod = :PerCod")
 })
 public class Escolaridad implements Serializable {
 
@@ -48,21 +48,29 @@ public class Escolaridad implements Serializable {
     @Column(name = "EscCod", nullable = false)
     private Long EscCod;
     
-    @OneToOne(targetEntity = Inscripcion.class, optional=false)        
-    @JoinColumn(name="InsCod", referencedColumnName="InsCod")
-    private Inscripcion inscripcion;
+//    @ManyToOne(targetEntity = Inscripcion.class)        
+//    @JoinColumn(name="InsCod", referencedColumnName="InsCod")
+//    private Inscripcion inscripcion;
+    
+    @ManyToOne(targetEntity = Persona.class)
+    @JoinColumn(name="EscAluPerCod", referencedColumnName="PerCod")
+    private Persona alumno;
 
-    @ManyToOne(targetEntity = Materia.class, optional=true)
+    @ManyToOne(targetEntity = Materia.class)
     @JoinColumn(name="EscMatCod", referencedColumnName="MatCod")
     private Materia materia;
     
-    @ManyToOne(targetEntity = Modulo.class, optional=true)
+    @ManyToOne(targetEntity = Modulo.class)
     @JoinColumn(name="EscModCod", referencedColumnName="ModCod")
-    private Modulo modulo;   
+    private Modulo modulo;
     
-    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @ManyToOne(targetEntity = Curso.class)
+    @JoinColumn(name="EscCurCod", referencedColumnName="CurCod")
+    private Curso curso;
+    
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="EscPerCod", referencedColumnName="PerCod")
-    private Persona InscritoPor;
+    private Persona IngresadaPor;
 
     @Column(name = "EscCalVal", precision=10, scale=2)
     private Double EscCalVal;
@@ -89,14 +97,6 @@ public class Escolaridad implements Serializable {
         this.EscCod = EscCod;
     }
 
-    public Inscripcion getInscripcion() {
-        return inscripcion;
-    }
-
-    public void setInscripcion(Inscripcion inscripcion) {
-        this.inscripcion = inscripcion;
-    }
-
     public Materia getMateria() {
         return materia;
     }
@@ -113,12 +113,12 @@ public class Escolaridad implements Serializable {
         this.modulo = modulo;
     }
 
-    public Persona getInscritoPor() {
-        return InscritoPor;
+    public Persona getIngresadaPor() {
+        return IngresadaPor;
     }
 
-    public void setInscritoPor(Persona InscritoPor) {
-        this.InscritoPor = InscritoPor;
+    public void setIngresadaPor(Persona IngresadaPor) {
+        this.IngresadaPor = IngresadaPor;
     }
 
     public Double getEscCalVal() {
@@ -144,6 +144,24 @@ public class Escolaridad implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+
+    public Curso getCurso() {
+        return curso;
+    }
+
+    public void setCurso(Curso curso) {
+        this.curso = curso;
+    }
+
+    public Persona getAlumno() {
+        return alumno;
+    }
+
+    public void setAlumno(Persona alumno) {
+        this.alumno = alumno;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -172,7 +190,7 @@ public class Escolaridad implements Serializable {
 
     @Override
     public String toString() {
-        return "Escolaridad{" + "EscCod=" + EscCod + ", inscripcion=" + inscripcion + ", materia=" + materia + ", modulo=" + modulo + ", InscritoPor=" + InscritoPor + ", EscCalVal=" + EscCalVal + ", EscFch=" + EscFch + ", ObjFchMod=" + ObjFchMod + '}';
+        return "Escolaridad{" + "EscCod=" + EscCod + ", materia=" + materia + ", modulo=" + modulo + ", IngresadaPor=" + IngresadaPor + ", EscCalVal=" + EscCalVal + ", EscFch=" + EscFch + ", ObjFchMod=" + ObjFchMod + '}';
     }
 
     

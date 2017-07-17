@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Logica.LoParametro"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.Modo"%>
 <%@page import="Enumerado.Accion"%>
@@ -18,7 +19,7 @@
 
 <%
     String usuario          = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    String urlSistema       = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema       = LoParametro.GetInstancia().obtener(1).getParUrlSis();
     Boolean logueado        = false;
     
     if(usuario != null)
