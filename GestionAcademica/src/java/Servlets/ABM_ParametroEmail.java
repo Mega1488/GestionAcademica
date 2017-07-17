@@ -16,6 +16,7 @@ import Utiles.Mensajes;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -70,6 +71,10 @@ public class ABM_ParametroEmail extends HttpServlet {
                 case "ELIMINAR":
                     retorno = this.EliminarDatos(request);
                 break;
+                
+                case "POPUP_OBTENER":
+                    retorno = this.PopObtenerDatos();
+                break;
                         
             }
 
@@ -88,6 +93,23 @@ public class ABM_ParametroEmail extends HttpServlet {
         try
         {
             retorno = utilidades.ObjetoToJson(parametroEmail);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return retorno;
+    }
+    
+    private String PopObtenerDatos()
+    {
+        String retorno = "";
+        
+        List<ParametroEmail> lstParam   = loParamEmail.obtenerLista();
+        
+        try
+        {
+            retorno = utilidades.ObjetoToJson(lstParam);
         }
         catch(Exception ex)
         {

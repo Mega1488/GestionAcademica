@@ -85,7 +85,6 @@
                 $(document).ready(function() {
                     $('#btn_guardar').click(function(event) {
                                 
-                                MostrarCargando(true);
                                 
                                 var	TpoEvlCod	= $('#TpoEvlCod').val();
                                 var	TpoEvlNom	= $('#TpoEvlNom').val();
@@ -95,7 +94,6 @@
                                 if(TpoEvlNom == '')
                                     {
                                         MostrarMensaje("ERROR", "Completa los datos papa");
-                                        MostrarCargando(false);
                                     }
                                     else
                                     {
@@ -112,8 +110,7 @@
                                                             pAction          : "INSERTAR"
                                                      }, function(responseText) {
                                                          var obj = JSON.parse(responseText);
-                                                         MostrarCargando(false);
-
+                                                         
                                                          if(obj.tipoMensaje != 'ERROR')
                                                          {
                                                              <%
@@ -140,8 +137,7 @@
                                                         pAction          : "ACTUALIZAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -166,8 +162,7 @@
                                                         pAction          : "ELIMINAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -190,33 +185,39 @@
         
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
+        <div class="container-fluid">
+            <div id="cabezal" name="cabezal" class="row">
+                <jsp:include page="/masterPage/cabezal.jsp"/>
+            </div>
 
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
+            <div class="col-sm-2">
+                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            </div>
 
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-
+            <div id="contenido" name="contenido" class="col-sm-8">
+                
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Tipo de evaluación</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacionWW.jsp">Regresar</a></div>
+                </div>
             
-            <h1>Tipo de Evaluacion</h1>
-            
-            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                     <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
                 </div>
+                
                 <form id="frm_objeto" name="frm_objeto">
                     
                     <div><label>Código</label><input type="text" class="form-control" id="TpoEvlCod" name="TpoEvlCod" placeholder="TpoEvlCod" disabled value="<% out.print( utilidad.NuloToVacio(tpoEvaluacion.getTpoEvlCod())); %>" ></div>
                     <div><label>Nombre</label><input type="text" class="form-control" id="TpoEvlNom" name="TpoEvlNom" placeholder="TpoEvlNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(tpoEvaluacion.getTpoEvlNom())); %>" ></div>
-                    <div><label>Es exámen</label><input type="checkbox" class="form-control" id="TpoEvlExm" name="TpoEvlExm" placeholder="TpoEvlExm" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlExm())); %> ></div>
-                    <div><label>Inscripción automática</label><input type="checkbox" class="form-control" id="TpoEvlInsAut" name="TpoEvlInsAut" placeholder="TpoEvlInsAut" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlInsAut())); %> ></div>
+                    <div class="checkbox"><label><input type="checkbox" id="TpoEvlExm" name="TpoEvlExm" placeholder="TpoEvlExm" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlExm())); %> > Es exámen</label></div>
+                    <div class="checkbox"><label><input type="checkbox" id="TpoEvlInsAut" name="TpoEvlInsAut" placeholder="TpoEvlInsAut" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlInsAut())); %> > Inscripción automática</label></div>
                     
                     <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" />
+                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
+                        <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                     </div>
-            </form>
+                </form>
+            </div>
         </div>
     </body>
 </html>

@@ -67,57 +67,62 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
-
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <div id="tabs" name="tabs">
-                <jsp:include page="/Definiciones/DefModuloTabs.jsp"/>
+        <div class="container-fluid">
+            
+            <div id="cabezal" name="cabezal" class="row">
+                <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
-            
-            <h1>Modulo | Evaluaciones</h1>
-            
-            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
-                <input type="hidden" name="ModCod" id="ModCod" value="<% out.print(modulo.getModCod()); %>">
+        
+        
+            <div class="col-sm-2">
+                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             </div>
 
-            <div>
-                <a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pRelacion=MODULO&pModEvlCurCod=<% out.print(curso.getCurCod()); %>&pModEvlModCod=<% out.print(modulo.getModCod()); %>">Ingresar</a>
-            </div>
-            
-            
-                <table style=' <% out.print(tblVisible); %>'>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Tipo</th>
-                        <th>Nota toal</th>
+            <div id="contenido" name="contenido"  class="col-sm-8">
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Evaluaciones</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoModuloSWW.jsp?MODO=UPDATE&pCurCod=<% out.print(CurCod); %>">Regresar</a></div>
+                </div>
 
-                    </tr>
+                <div id="tabs" name="tabs">
+                    <jsp:include page="/Definiciones/DefModuloTabs.jsp"/>
+                </div>
+            
+                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                        <a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pRelacion=MODULO&pModEvlCurCod=<% out.print(curso.getCurCod()); %>&pModEvlModCod=<% out.print(modulo.getModCod()); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                        <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
+                        <input type="hidden" name="ModCod" id="ModCod" value="<% out.print(modulo.getModCod()); %>">
+                </div>
+                    
+
+            
+                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Tipo</th>
+                            <th>Nota toal</th>
+                        </tr>
+                    </thead>
                     
                     <% for(Evaluacion evaluacion : modulo.getLstEvaluacion())
                     {
                      
                     %>
                     <tr>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pRelacion=MODULO&pModEvlCurCod=<% out.print(curso.getCurCod()); %>&pModEvlModCod=<% out.print(modulo.getModCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pRelacion=MODULO&pModEvlCurCod=<% out.print(curso.getCurCod()); %>&pModEvlModCod=<% out.print(modulo.getModCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pRelacion=MODULO&pModEvlCurCod=<% out.print(curso.getCurCod()); %>&pModEvlModCod=<% out.print(modulo.getModCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_eliminar" id="btn_eliminar" title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'></a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pRelacion=MODULO&pModEvlCurCod=<% out.print(curso.getCurCod()); %>&pModEvlModCod=<% out.print(modulo.getModCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_editar" id="btn_editar" title='Editar' class='glyphicon glyphicon-edit btn_editar'></a></td>
                         
                         <td><% out.print( utilidad.NuloToVacio(evaluacion.getEvlCod())); %> </td>
                         <td><% out.print( utilidad.NuloToVacio(evaluacion.getEvlNom())); %> </td>
                         <td><% out.print( utilidad.NuloToVacio(evaluacion.getEvlDsc())); %> </td>
+                        <td><% out.print( utilidad.NuloToVacio(evaluacion.getTpoEvl().getTpoEvlNom())); %> </td>
                         <td><% out.print( utilidad.NuloToVacio(evaluacion.getEvlNotTot())); %> </td>
-                        <td><% out.print( utilidad.NuloToVacio(evaluacion.getTpoEvl())); %> </td>
                         
                     </tr>
                     <%
@@ -125,6 +130,7 @@
                     %>
                 </table>
 
+            </div>
         </div>
     </body>
 </html>

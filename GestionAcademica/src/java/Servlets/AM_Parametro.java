@@ -123,7 +123,7 @@ public class AM_Parametro extends HttpServlet {
                     { 
                         
                         LoParametroEmail loParamEml = LoParametroEmail.GetInstancia();
-                        ParametroEmail paramEmail   = loParamEml.obtener(ParCod);
+                        ParametroEmail paramEmail   = loParamEml.obtener(Long.valueOf(ParEmlCod));
                         
                         if(paramEmail == null)
                         {

@@ -69,7 +69,6 @@
                 $(document).ready(function() {
                     $('#btn_guardar').click(function(event) {
                                 
-                                MostrarCargando(true);
                                 
                                 var PerCod          = $('#PerCod').val();
                                 var PerNom          = $('#PerNom').val();
@@ -90,7 +89,6 @@
                                 if(PerNom == '')
                                     {
                                         MostrarMensaje("ERROR", "Completa los datos papa");
-                                        MostrarCargando(false);
                                     }
                                     else
                                     {
@@ -118,8 +116,7 @@
                                                             pAction          : "INSERTAR"
                                                      }, function(responseText) {
                                                          var obj = JSON.parse(responseText);
-                                                         MostrarCargando(false);
-
+                                                         
                                                          if(obj.tipoMensaje != 'ERROR')
                                                          {
                                                              <%
@@ -157,8 +154,7 @@
                                                         pAction          : "ACTUALIZAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -180,8 +176,7 @@
                                                         pAction          : "ELIMINAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%

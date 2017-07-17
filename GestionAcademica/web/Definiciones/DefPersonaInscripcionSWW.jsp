@@ -364,8 +364,7 @@
                                          pAction: "<% out.print(Modo.DELETE);%>"
                                      }, function (responseText) {
                                          var obj = JSON.parse(responseText);
-                                         MostrarCargando(false);
-
+                                         
                                          if (obj.tipoMensaje != 'ERROR')
                                          {
                                              location.reload();

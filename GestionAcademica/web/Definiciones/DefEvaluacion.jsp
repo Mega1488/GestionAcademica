@@ -50,14 +50,16 @@
     String MatEvlMatCod       = request.getParameter("pModCod");
     String EvlCod             = request.getParameter("pEvlCod");
     
-    String js_redirect        = "";
+    
     Evaluacion evaluacion     = new Evaluacion();
     
     List<Object> lstTpoEvaluacion = LoTipoEvaluacion.GetInstancia().obtenerLista().getLstObjetos();
     
+    String urlRetorno = "";
+    
     if(Relacion.equals("CURSO"))
     {
-        js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + CurEvlCurCod + "');";
+        urlRetorno  = urlSistema +  "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + CurEvlCurCod;
         
         Curso curso     = new Curso();
         Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(CurEvlCurCod));
@@ -78,7 +80,7 @@
     }
     if(Relacion.equals("MODULO"))
     {
-        js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + ModEvlCurCod + "&pModCod=" + ModEvlModCod + "');";
+        urlRetorno  = urlSistema +  "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + ModEvlCurCod + "&pModCod=" + ModEvlModCod;
         
         Curso curso     = new Curso();
         Modulo modulo   = new Modulo();
@@ -100,7 +102,7 @@
     }
     if(Relacion.equals("MATERIA"))
     {
-        //js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefMateriaEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + CurEvlCurCod + "');";
+        //urlRetorno  = urlSistema +  "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + ModEvlCurCod + "&pModCod=" + ModEvlModCod;
     }
     
     
@@ -108,9 +110,8 @@
         
     
     
-    
-    
-    String CamposActivos = "disabled";
+    String js_redirect      = "window.location.replace('" + urlRetorno + "');";;
+    String CamposActivos    = "disabled";
     
     switch(Mode)
     {
@@ -138,8 +139,6 @@
                 $(document).ready(function() {
                     $('#btn_guardar').click(function(event) {
                                 
-                                MostrarCargando(true);
-                                
                                 var	EvlCod	= $('#EvlCod').val();
                                 var	MatEvlCarCod	= $('#MatEvlCarCod').val();
                                 var	MatEvlPlaEstCod	= $('#MatEvlPlaEstCod').val();
@@ -155,7 +154,6 @@
                                 if(EvlNom == '')
                                     {
                                         MostrarMensaje("ERROR", "Completa los datos papa");
-                                        MostrarCargando(false);
                                     }
                                     else
                                     {
@@ -179,8 +177,7 @@
                                                             pAction          : "INSERTAR"
                                                      }, function(responseText) {
                                                          var obj = JSON.parse(responseText);
-                                                         MostrarCargando(false);
-
+                                                         
                                                          if(obj.tipoMensaje != 'ERROR')
                                                          {
                                                              <%
@@ -215,8 +212,7 @@
                                                         pAction          : "ACTUALIZAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -249,8 +245,7 @@
                                                         pAction          : "ELIMINAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -273,22 +268,25 @@
         
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
-
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <div id="tabs" name="tabs">
-                <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
+        <div class="container-fluid">
+            
+            <div id="cabezal" name="cabezal" class="row">
+                <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
+        
+        
+            <div class="col-sm-2">
+                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            </div>
+
+            <div id="contenido" name="contenido"  class="col-sm-8">
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Evaluación</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
+                </div>
+                
             
-            <h1>Evaluación</h1>
-            
-            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                     <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
                     <input type="hidden" name="MatEvlCarCod" id="MatEvlCarCod" value="<% out.print(MatEvlCarCod); %>">
                     <input type="hidden" name="MatEvlPlaEstCod" id="MatEvlPlaEstCod" value="<% out.print(MatEvlPlaEstCod); %>">
@@ -336,9 +334,11 @@
                             </div>
         
                     <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" />
+                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
+                        <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                     </div>
-            </form>
+                </form>
+            </div>
         </div>
     </body>
 </html>
