@@ -69,61 +69,62 @@
         </div>
         
         
-                <div class="col-sm-2">
+            <div class="col-sm-2">
                     <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-                </div>
+            </div>
 
-                <div id="contenido" name="contenido"  class="col-sm-8">
-                    <div class="row"> 
-                        <div class="col-lg-6"><h1>Inscripción</h1></div>
-                        <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
-                    </div>
+            <div id="contenido" name="contenido"  class="col-sm-8">
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Inscripción</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
+                </div>
              
-                    <div id="tabs" name="tabs">
-                        <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
-                    </div>
-
-                    <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                        <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                        <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(PerCod); %>">
-                    </div>
-
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead><tr>
-                                <th></th>
-                                <th>Código</th>
-                                <th>Alumno</th>
-                                <th>Estudio</th>
-                                <th>Fecha de inscripción</th>
-                                <th>Fecha de certificación</th>
-                            </tr>
-                            </thead>
-                            
-                            <tbody>
-                            <% for(Object objeto : lstObjeto)
-                            {
-                                Inscripcion insc = (Inscripcion) objeto;
-                                
-                            %>
-                            <tr>
-                                <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getAlumno().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getInsCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getAlumno().getNombreCompleto())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getNombreEstudio())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
-                            </tr>
-                            <%
-                            }
-                            %>
-                                </tbody>
-                        </table>
-
+                <div id="tabs" name="tabs">
+                    <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
                 </div>
+
+                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                    <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                    <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(PerCod); %>">
+                </div>
+
+
+                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Código</th>
+                            <th>Estudio</th>
+                            <th>Fecha de inscripción</th>
+                            <th>Fecha de certificación</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    <% for(Object objeto : lstObjeto)
+                    {
+                        Inscripcion insc = (Inscripcion) objeto;
+
+                    %>
+                    <tr>
+                        <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() +"' data-alumno='" + insc.getAlumno().getNombreCompleto() +"' data-fecha='" + insc.getAluFchCert() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                        <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() +"' data-alumno='" + insc.getAlumno().getNombreCompleto() +"' data-fecha='" + insc.getAluFchCert() +"' data-toggle='modal' data-target='#PopUpFechaCert' name='btn_editar' id='btn_editar' title='Fecha de certificación' class='glyphicon glyphicon-edit btn_editar'/>"); %> </td>
+                        <td><% out.print( utilidad.NuloToVacio(insc.getInsCod())); %> </td>
+                        <td><% out.print( utilidad.NuloToVacio(insc.getNombreEstudio())); %> </td>
+                        <td><% out.print( utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
+                        <td><% out.print( utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
+                    </tr>
+                    <%
+                    }
+                    %>
+                        </tbody>
+                </table>
+
+            </div>
         </div>
         
-        <!-- PopUp para Agregar docentes al calendario -->
+        <!-- PopUp para Agregar -->
                                 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
@@ -142,7 +143,7 @@
                         
                         <div class="row">
                             <div id="pop_FltrCarrera" name="pop_FltrCarrera">
-                                <select class="form-control" id="pop_FltrCarCod" name="popCarCod"></select>
+                                <select class="form-control" id="pop_FltrCarCod" name="pop_FltrCarCod"></select>
                             </div>
                         </div>
                         
@@ -168,6 +169,8 @@
                     
                     $('input:radio[name="pop_TpoEst"][value="carrera"]').prop("checked", true);
                     $('#pop_FltrCarrera').show();
+                        
+                    CargarCarreras();
                     
                     $('input:radio[name="pop_TpoEst"]').change(
                         function(){
@@ -176,7 +179,7 @@
                             if (this.checked) {
                                 if(this.value == "carrera")
                                 {
-                                    CargarPlanes();
+                                    CargarCarreras();
                                 }
                                 
                                 if(this.value == "curso")
@@ -204,6 +207,7 @@
                                             data: cursos,
                                             deferRender: true,
                                             bLengthChange : false, //thought this line could hide the LengthMenu
+                                            destroy: true,
                                             pageLength: 10,
                                             language: {
                                                 "lengthMenu": "Mostrando _MENU_ registros por página",
@@ -229,49 +233,92 @@
                                      });
                     }
                     
-                    function CargarPlanes()
+                    function CargarCarreras()
                     {
+                        $('#pop_FltrCarCod').empty();
+                        
                         $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                                         pAction: "POPUP_OBTENER"
+                                         pAccion: "POPUP_OBTENER"
                                      }, function (responseText) {
                                         var carreras = JSON.parse(responseText);
-                                         
-                                        $.each(carreras, function(f , carrera) {
-                                            carrera.carCod = "<td> <a href='#' data-codigo='"+carrera.carCod+"' data-nombre='"+carrera.carNom+"' class='Pop_Seleccionar'>"+carrera.carCod+" </a> </td>";
-                                        });
+                                        
+                                        $.each(carreras, function (i, objeto) {
+                                             $('#pop_FltrCarCod').append($('<option>', { 
+                                                value: objeto.carCod,
+                                                text : objeto.carNom 
+                                            }));
 
-                                         
-                                        $('#PopUpTblEstudio').DataTable( {
-                                            data: carreras,
-                                            deferRender: true,
-                                            bLengthChange : false, //thought this line could hide the LengthMenu
-                                            pageLength: 10,
-                                            language: {
-                                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                                "zeroRecords": "No se encontraron registros",
-                                                "info": "Página _PAGE_ de _PAGES_",
-                                                "infoEmpty": "No hay registros",
-                                                "search":         "Buscar:",
-                                                "paginate": {
-                                                        "first":      "Primera",
-                                                        "last":       "Ultima",
-                                                        "next":       "Siguiente",
-                                                        "previous":   "Anterior"
-                                                    },
-                                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                            if(i == 0)
+                                            {
+                                                CargarPlanes(objeto);
                                             }
-                                            ,columns: [
-                                                { "data": "carCod" },
-                                                { "data": "carNom"}
-                                            ]
 
-                                        } );
-
-                                     });
+                                        });
+                                    });
                     }
+                    
+                    function CargarPlanes(carrera)
+                    {
+                        
+                        
+                        $.each(carrera.plan, function(f , plan) {
+                            plan.plaEstCod = "<td> <a href='#' data-codigo='"+plan.plaEstCod+"' data-nombre='"+plan.plaEstNom+"' class='Pop_Seleccionar'>"+plan.plaEstCod+" </a> </td>";
+                        });
+                        
+                            $('#PopUpTblEstudio').DataTable( {
+                                data: carrera.plan,
+                                deferRender: true,
+                                destroy: true,
+                                bLengthChange : false, //thought this line could hide the LengthMenu
+                                pageLength: 10,
+                                language: {
+                                    "lengthMenu": "Mostrando _MENU_ registros por página",
+                                    "zeroRecords": "No se encontraron registros",
+                                    "info": "Página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros",
+                                    "search":         "Buscar:",
+                                    "paginate": {
+                                            "first":      "Primera",
+                                            "last":       "Ultima",
+                                            "next":       "Siguiente",
+                                            "previous":   "Anterior"
+                                        },
+                                    "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                }
+                                ,columns: [
+                                    { "data": "plaEstCod" },
+                                    { "data": "plaEstNom"}
+                                ]
+
+                            } );
+                        
+                    }
+                    
+                    $('#pop_FltrCarCod').on('change', function() {
+                        
+                        //$('#PopUpTblEstudio').dataTable().fnClearTable();
+                        
+                        var CarCod = $('select[name=pop_FltrCarCod]').val();
+                        $.post('<% out.print(urlSistema); %>ABM_Carrera', {
+                                         pAccion: "POPUP_OBTENER"
+                                     }, function (responseText) {
+                                        var carreras = JSON.parse(responseText);
+                                        
+                                        
+                                        $.each(carreras, function (i, objeto) {
+                                            if(objeto.carCod == CarCod)
+                                            {
+                                                
+                                                CargarPlanes(objeto);
+                                            }
+
+                                        });
+                                    });
+                     })
                 
                     $(document).on('click', ".Pop_Seleccionar", function() {
 
+                            var CarCod = $('select[name=pop_FltrCarCod]').val();
                             var codigo = $(this).data("codigo");
                             var PerCod = $('#PerCod').val();
                             
@@ -288,27 +335,28 @@
                             }
                             
                             
-                                $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
-                                         pPerCod: PerCod,
-                                         pCodigoEstudio: codigo,
-                                         pTipoEstudio: tipo,
-                                         pAction: "<% out.print(Modo.INSERT);%>"
-                                     }, function (responseText) {
-                                         var obj = JSON.parse(responseText);
+                            $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
+                                    pCarCod: CarCod,
+                                    pPerCod: PerCod,
+                                    pCodigoEstudio: codigo,
+                                    pTipoEstudio: tipo,
+                                    pAction: "<% out.print(Modo.INSERT);%>"
+                                 }, function (responseText) {
+                                     var obj = JSON.parse(responseText);
 
-                                         if (obj.tipoMensaje != 'ERROR')
-                                         {
-                                             location.reload();
-                                         } else
-                                         {
-                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                         }
+                                     if (obj.tipoMensaje != 'ERROR')
+                                     {
+                                         location.reload();
+                                     } else
+                                     {
+                                         MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                     }
 
-                                     });
+                                 });
 
-                                    $(function () {
-                                            $('#PopUpAgregar').modal('toggle');
-                                         });
+                            $(function () {
+                                    $('#PopUpAgregar').modal('toggle');
+                                 });
                     });
                     
                     
@@ -319,7 +367,7 @@
         
         <!------------------------------------------------->
         
-        <!-- PopUp para Eliminar personas del calendario -->
+        <!-- PopUp para Eliminar -->
         
         <div id="PopUpEliminar"  class="modal fade" role="dialog">
            
@@ -384,8 +432,86 @@
                 });
             </script>
         </div>
-                                     
+
         <!------------------------------------------------->
-                                     
+        
+        <!-- PopUp Ingresar fecha de certificación -->
+        
+        <div id="PopUpFechaCert"  class="modal fade" role="dialog">
+           
+            <!-- Modal -->
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Certificación</h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <p>Alumno: <label name="cert_alumno" id="cert_alumno"></label></p>
+                      <p>Estudio: <label name="cert_estudio" id="cert_estudio"></label></p>
+                      <p>Fecha de certificación: <input type="date" class="form-control" id="AluFchCert" name="AluFchCert" placeholder="Fecha de certificación" value=""></p>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button name="cert_boton_confirmar" id="cert_boton_confirmar" type="button" class="btn btn-success" data-codigo="">Confirmar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    
+                    $('.btn_editar').on('click', function(e) {
+                        
+                        var codigo  = $(this).data("codigo");
+                        var nombre  = $(this).data("nombre");
+                        var alumno  = $(this).data("alumno");
+                        var fecha   = $(this).data("fecha");
+                        
+                        $('#cert_estudio').text(nombre);
+                        $('#cert_alumno').text(alumno);
+                        $('#AluFchCert').val(fecha);
+                        
+                        $('#cert_boton_confirmar').data('codigo', codigo);
+                        
+                        
+                      });
+                      
+                      $('#cert_boton_confirmar').on('click', function(e) {
+                            var codigo  = $('#cert_boton_confirmar').data('codigo');
+                            var fecha   = $('#AluFchCert').val();
+                            
+                            $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
+                                         pInsCod: codigo,
+                                         pAluFchCert: fecha,
+                                         pAction: "<% out.print(Modo.UPDATE);%>"
+                                     }, function (responseText) {
+                                         var obj = JSON.parse(responseText);
+                                         
+                                         if (obj.tipoMensaje != 'ERROR')
+                                         {
+                                             location.reload();
+                                         } else
+                                         {
+                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                         }
+
+                                     });
+
+                             $(function () {
+                                     $('#PopUpFechaCert').modal('toggle');
+                                  });
+                     
+                      });
+
+                });
+            </script>
+        </div>
+
+        <!------------------------------------------------->
+        
+        
     </body>
 </html>

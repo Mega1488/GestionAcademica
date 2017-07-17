@@ -137,11 +137,11 @@ public class OpcionesDeMenu {
     }
     
     private void CargarAlumno(){
-        lstAdministrador.add(new Menu(10, TipoMenu.ALUMNO, urlSistema + "Alumno/Estudios.jsp", "Estudios", 1));
+        lstAlumno.add(new Menu(10, TipoMenu.ALUMNO, urlSistema + "Alumno/Estudios.jsp", "Estudios", 1));
     }
 
     private void CargarDocente(){
-        lstAdministrador.add(new Menu(9, TipoMenu.DOCENTE, urlSistema + "Docente/EstudiosDictados.jsp", "Estudios dictados", 1));
+        lstDocente.add(new Menu(9, TipoMenu.DOCENTE, urlSistema + "Docente/EstudiosDictados.jsp", "Estudios dictados", 1));
     }
 
     public ArrayList<Menu> getLstAdministrador() {

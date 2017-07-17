@@ -6,10 +6,8 @@
 package Persistencia;
 
 import Entidad.Calendario;
-import Entidad.TipoEvaluacion;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
-import Interfaz.InTipoEvaluacion;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;

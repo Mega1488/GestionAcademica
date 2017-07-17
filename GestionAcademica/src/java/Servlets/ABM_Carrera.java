@@ -14,6 +14,7 @@ import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -61,6 +62,10 @@ public class ABM_Carrera extends HttpServlet {
 
                 case "ELIMINAR":
                     retorno = this.EliminarCarrera(request);
+                break;
+                
+                case "POPUP_OBTENER":
+                    retorno = this.PopUp_ObtenerDatos();
                 break;
 
                 default:
@@ -149,6 +154,23 @@ public class ABM_Carrera extends HttpServlet {
 //            mensaje = new Mensajes("No se logró eliminar la carrera", TipoMensaje.ERROR);
         }
         return utiles.ObjetoToJson(mensaje);
+    }
+    
+    private String PopUp_ObtenerDatos()
+    {
+        String retorno = "";
+        
+        List<Object> lstCarrera   = loCarrera.obtenerLista().getLstObjetos();
+        
+        try
+        {
+            retorno = utiles.ObjetoToJson(lstCarrera);
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+        }
+        return retorno;
     }
     
 //    private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)

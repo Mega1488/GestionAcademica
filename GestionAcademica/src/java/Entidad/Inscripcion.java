@@ -75,8 +75,8 @@ public class Inscripcion implements Serializable {
     @JoinColumn(name="CurInsCurCod", referencedColumnName="CurCod")
     private Curso Curso;
           
-    @Column(name = "AluFchCert", columnDefinition="DATETIME")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "AluFchCert", columnDefinition="DATE")
+    @Temporal(TemporalType.DATE)
     private Date AluFchCert;   
     @Column(name = "AluFchInsc", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -158,6 +158,7 @@ public class Inscripcion implements Serializable {
     
     public String getNombreEstudio()
     {
+        
         if(this.PlanEstudio != null) return this.PlanEstudio.getPlaEstNom();
         if(this.Curso != null) return this.Curso.getCurNom();
 

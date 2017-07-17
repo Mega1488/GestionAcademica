@@ -55,7 +55,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Cursos</title>
+        <title>Sistema de Gestión Académica -  Calendario</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
@@ -68,13 +68,13 @@
         </div>
 
         <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <h1>Cursos</h1>
+            <h1>Calendario</h1>
             
             <div id="tabs" name="tabs">
                 <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
             </div>
             
         
-             Calendario
+             
     </body>
 </html>

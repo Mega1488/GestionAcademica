@@ -6,6 +6,7 @@
 package Servlets;
 
 
+import Entidad.Carrera;
 import Entidad.Curso;
 import Entidad.Parametro;
 import Entidad.Inscripcion;
@@ -203,10 +204,11 @@ public class ABM_Inscripcion extends HttpServlet {
             
                 String 	InsCod          = request.getParameter("pInsCod");
                 String 	PerCod          = request.getParameter("pPerCod");
+                String 	CarCod          = request.getParameter("pCarCod");
                 
                 String 	EstudioCodigo   = request.getParameter("pCodigoEstudio");
                 String 	TipoEstudio     = request.getParameter("pTipoEstudio");
-
+                String  AluFchCert       = request.getParameter("pAluFchCert");
                 
                 
                 //------------------------------------------------------------------------------------------
@@ -226,10 +228,16 @@ public class ABM_Inscripcion extends HttpServlet {
                 
                 if(TipoEstudio != null)
                 {
-                    //if(TipoEstudio.equals("CARRERA") && EstudioCodigo != null) inscripcion.setPlanEstudio();
+                    if(TipoEstudio.equals("CARRERA") && EstudioCodigo != null)
+                    {
+                        Carrera carrera = (Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod)).getObjeto();
+                        inscripcion.setPlanEstudio(carrera.getPlanEstudioById(Long.valueOf(EstudioCodigo)));
+                    }
                     
                     if(TipoEstudio.equals("CURSO") && EstudioCodigo != null) inscripcion.setCurso((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(EstudioCodigo)).getObjeto());
                 }
+                
+                if(AluFchCert != null) inscripcion.setAluFchCert(Date.valueOf(AluFchCert));
                 
                 return inscripcion;
         }
