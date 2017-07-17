@@ -4,6 +4,9 @@
     Author     : aa
 --%>
 
+<%@page import="Entidad.Carrera"%>
+<%@page import="Logica.Seguridad"%>
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Logica.LoCarrera"%>
@@ -17,9 +20,23 @@
 <!DOCTYPE html>
 <%    
     Utilidades utilidad     = Utilidades.GetInstancia();
-    String urlSistema       = utilidad.GetUrlSistema();
     PlanEstudio plan        = new PlanEstudio();
     LoCarrera   loCar       = LoCarrera.GetInstancia();
+    
+    String urlSistema       = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    //----------------------------------------------------------------------------------------------------
+    //CONTROL DE ACCESO
+    //----------------------------------------------------------------------------------------------------
+    
+    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
+    
+    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
+            
+    //----------------------------------------------------------------------------------------------------
     
     String DefPlaEst        = "DefPlanEstudioWW.jsp";
     String DefMat           = "DefMateriaWW.jsp";
@@ -33,17 +50,24 @@
     DateFormat f            = new SimpleDateFormat("dd/MM/YYYY");
     String today            = "";
     
+    Carrera car = new Carrera();
     if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
     {
-        Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(PlaEstCod));
-        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(CarCod));
+        if(!retorno.SurgioErrorObjetoRequerido())
         {
-            plan = (PlanEstudio) retorno.getLstObjetos();
+            car = (Carrera) retorno.getObjeto();
         }
         else
         {
+            System.err.println("ELSE:");
             out.print(retorno.getMensaje().toString());
         }
+    }
+    
+    if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
+    {
+        plan = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
     }
     
     if (mode.equals(Modo.DELETE) || mode.equals(Modo.UPDATE))
@@ -145,10 +169,9 @@
                     <table border= "0" width="100%">
                         <tr>
                             <td>
-                                <!-- En "ejemplo" hay que poner el en lace de la pagina Inicio en este caso -->
-                                <a href="<% out.print(urlSistema); %>"> Inicio </a> >
-                                <a href="<% out.print(DefPlaEst); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a> >
-                                Ingreso Plan de Estudio
+                                    <a href="<% out.print(urlSistema); %>"> Inicio </a> >
+                                    <a href="<% out.print(DefPlaEst); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a> >
+                                    Ingreso Plan de Estudio
                             </td>
                         </tr>
                         <tr>
@@ -169,13 +192,13 @@
                                 if(mode.equals(Modo.UPDATE) ||  mode.equals(Modo.DISPLAY))
                                 { 
                             %>
-                                <a id="lnkDefCar" href="<% out.println(DefPlaEst); %>"> Plan de Estudio </a>
+                                <a href="<% out.print(DefPlaEst); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
                                 /
                                 <a id="lnkDefCar" href="<% out.println(DefMat); %>"> Materias </a>
                             <%
                                 } else {
                             %>
-                                <a id="lnkDefCar" href="<% out.println(DefPlaEst); %>?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
+                                <a href="<% out.println(DefPlaEst); %>?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
                             <%
                                 } 
                             %>
@@ -186,7 +209,7 @@
                                     <td>
                                         <div class="form-group">
                                             <label for="ImputCodigo">Código</label>
-                                            <input type="text" class="form-control" id="PlaEstCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstCod())); %>">
+                                            <input type="text" class="form-control" id="PlaEstCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToCero(plan.getPlaEstCod())); %>">
                                         </div>
                                     </td>
                                     <td>
@@ -206,7 +229,7 @@
                                     <td>
                                         <div class="margin">
                                             <label for="InputFacultad">Creditos Necesarios</label>
-                                            <input type="text" class="form-control" id="PlaEstCre" placeholder="Creditos Necesarios" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstCreNec())); %>">
+                                            <input type="text" class="form-control" id="PlaEstCre" placeholder="Creditos Necesarios" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToCero(plan.getPlaEstCreNec())); %>">
                                         </div>                                            
                                     </td>
                                 </tr>
@@ -219,7 +242,6 @@
                                 <button type="button" id="BtnAcePla" class="btn btn-default">Aceptar</button>
                             </td>
                             <td style="text-align:right" class="margin">
-                                <!--<input type="button" class="btn btn-default" value="Volver" id="BtnVolPla" name="BtnVolPla" />-->
                                 <input type="button" class="btn btn-default" value="Volver" id="BtnVolPla" name="BtnVolPla" onclick= "self.location.href='<%out.print(urlSistema); %>Definiciones/DefPlanEstudioWW.jsp?MODO=<% out.print(Enumerado.Modo.DISPLAY); %>&pCarCod=<%out.print(CarCod.toString());%>'"/>
                             </td>
                         </tr>

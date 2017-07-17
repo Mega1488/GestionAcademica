@@ -4,6 +4,11 @@
     Author     : aa
 --%>
 
+<%@page import="Entidad.Carrera"%>
+<%@page import="Logica.LoCarrera"%>
+<%@page import="Utiles.Retorno_MsgObj"%>
+<%@page import="Logica.Seguridad"%>
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Enumerado.Modo"%>
 <%@page import="java.util.List"%>
 <%@page import="Entidad.PlanEstudio"%>
@@ -13,10 +18,37 @@
 
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
-    String carrera      = "DefCarreraWW.jsp";
+    LoCarrera loCar     = LoCarrera.GetInstancia();
+    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    //----------------------------------------------------------------------------------------------------
+    //CONTROL DE ACCESO
+    //----------------------------------------------------------------------------------------------------
     
+    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
+    
+    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
+            
+    //----------------------------------------------------------------------------------------------------
+    
+    String carrera      = "DefCarreraWW.jsp";
     String CarCod       = request.getParameter("pCarCod");
+    
+    Carrera car = new Carrera();
+    
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(CarCod));
+    if(!retorno.SurgioErrorObjetoRequerido())
+    {
+        car = (Carrera) retorno.getObjeto();
+    }
+    else
+    {
+        out.print(retorno.getMensaje().toString());
+    }
+    
 //    LoPlanEstudio loPE  = LoPlanEstudio.GetInstancia();
     
 //    List<PlanEstudio> lstPlanEstudio    = loPE.obtenerLista();
@@ -118,19 +150,19 @@
                                 <th>Creditos Necesarios</th>
                             </tr>
                             <%
-//                                        for(PlanEstudio PE : lstPlanEstudio)
-//                                        {
+                                for(PlanEstudio PE : car.getPlan())
+                                {
                             %>
                             <tr>
-<!--                                            <td><a href="<%// out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<%// out.print(Enumerado.Modo.DELETE); %>&pPlaEstCod=<%// out.print(PE.getPlaEstCod()); %>" name="btn_eliminar" id="btn_elim_PlaEst" >Eliminar</a></td>
-                                <td><a href="<%// out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<%// out.print(Enumerado.Modo.UPDATE); %>&pPlaEstCod=<%// out.print(PE.getPlaEstCod()); %>" name="btn_editar" id="btn_edit_PlaEst" >Editar</a></td>
-                                <td><%// out.print(utilidad.NuloToCero(PE.getPlaEstCod())); %></td>
-                                <td><%// out.print(utilidad.NuloToVacio(PE.getPlaEstNom())); %></td>
-                                <td><%// out.print(utilidad.NuloToVacio(PE.getPlaEstDsc())); %></td>
-                                <td><%// out.print(utilidad.NuloToVacio(PE.getPlaEstCreNec())); %></td>-->
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPlaEstCod=<% out.print(PE.getPlaEstCod()); %>&pCarCod=<% out.print(CarCod.toString()); %>" name="btn_elim_PlaEst" id="btn_elim_PlaEst" >Eliminar</a></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPlaEstCod=<% out.print(PE.getPlaEstCod()); %>&pCarCod=<% out.print(CarCod.toString()); %>" name="btn_edit_PlaEst" id="btn_edit_PlaEst" >Editar</a></td>
+                                <td><% out.print(utilidad.NuloToCero(PE.getPlaEstCod())); %></td>
+                                <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstNom())); %></td>
+                                <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstDsc())); %></td>
+                                <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstCreNec())); %></td>
                             </tr>
                             <%
-//                                        }
+                                }
                             %>
                         </table>
                     </div>

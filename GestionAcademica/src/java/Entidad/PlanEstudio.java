@@ -50,7 +50,7 @@ public class PlanEstudio implements Serializable {
     @Column(name = "PlaEstCod")
     private Long PlaEstCod;
 
-    @OneToOne(targetEntity = Carrera.class, optional=false)
+    @OneToOne(targetEntity = Carrera.class)
     @JoinColumn(name="CarCod", referencedColumnName = "CarCod")
     private Carrera carrera;
            

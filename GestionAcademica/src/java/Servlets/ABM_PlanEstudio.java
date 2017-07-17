@@ -28,7 +28,7 @@ public class ABM_PlanEstudio extends HttpServlet {
 
     boolean error;
     Mensajes mensaje;
-    Utilidades utilidades;
+    Utilidades utilidades   = Utilidades.GetInstancia();
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -50,16 +50,15 @@ public class ABM_PlanEstudio extends HttpServlet {
             switch(action)
             {
                 case "INSERT":
-                    System.out.println("INSERT");
                     retorno = this.IngresarPlanEstudio(request);
                 break;
 
                 case "UPDATE":
-//                    retorno = this.ModificarPlanEstudio(request);
+                    retorno = this.ModificarPlanEstudio(request);
                 break;
 
                 case "DELETE":
-//                    retorno = this.EliminarPlanEstudio(request);
+                    retorno = this.EliminarPlanEstudio(request);
                 break;
 
                 default:
@@ -81,13 +80,10 @@ public class ABM_PlanEstudio extends HttpServlet {
             //------------------------------------------------------------------------------------------
             //Guardar cambios
             //------------------------------------------------------------------------------------------
-//            System.out.println(plan.getPlaEstNom());
-//            System.out.println(plan.getPlaEstDsc());
-//            System.out.println(plan.getPlaEstCreNec());
-//            System.out.println(plan.getCarrera().getCarCod());
-//            System.out.println(plan.getCarrera().getCarNom());
+
             if(!error)
             {
+                System.out.println("1");
                 Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCarrera.GetInstancia().PlanEstudioAgregar(plan);
                 mensaje    = retornoObj.getMensaje();
             }
@@ -97,7 +93,7 @@ public class ABM_PlanEstudio extends HttpServlet {
             mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
             throw ex;
         }
-        System.out.println("MENSAJE: "+mensaje);
+        System.out.println("RETORNO EN ABM_PlanEstudio: "+mensaje);
         String retorno = utilidades.ObjetoToJson(mensaje);
         return retorno;
     }
@@ -109,12 +105,12 @@ public class ABM_PlanEstudio extends HttpServlet {
         try
         {
             error               = false;
-            String PlaEstCod    = request.getParameter("pPlaEstCodCod");
-            String CurCod       = request.getParameter("pCurCod");
+            String PlaEstCod    = request.getParameter("pPlaEstCod");
+            String CarCod       = request.getParameter("pCarCod");
 
             PlanEstudio plan = new PlanEstudio();
-
-            Retorno_MsgObj retorno = LoCarrera.GetInstancia().obtener(Long.valueOf(CurCod));
+            
+            Retorno_MsgObj retorno = LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod));
             error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
             
             if(!error)
@@ -163,9 +159,9 @@ public class ABM_PlanEstudio extends HttpServlet {
         try
         {
             String PlaEstCod    = request.getParameter("pPlaEstCod");
-            String CurCod       = request.getParameter("pCurCod");
+            String CarCod       = request.getParameter("pCarCod");
 
-            Retorno_MsgObj retorno = LoCarrera.GetInstancia().obtener(Long.valueOf(CurCod));
+            Retorno_MsgObj retorno = LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod));
             error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
             
             if(!error)
@@ -206,16 +202,12 @@ public class ABM_PlanEstudio extends HttpServlet {
             String CarCod       = request.getParameter("pCarCod");
             
             //Validaciones
-//            System.out.println(PlaEstNom);
-//            System.out.println(PlaEstDsc);
-//            System.out.println(PlaEstCreNec);
-//            System.out.println(CarCod);
             
             //Tipos de Datos (Expresiones regulares, etc)
             
             plan.setPlaEstNom(PlaEstNom);
             plan.setPlaEstDsc(PlaEstDsc);
-            plan.setPlaEstCreNec(Double.valueOf(PlaEstCreNec));
+            plan.setPlaEstCreNec(Double.valueOf(PlaEstCreNec).doubleValue());
             plan.setCarrera((Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod)).getObjeto());
             
             return plan;

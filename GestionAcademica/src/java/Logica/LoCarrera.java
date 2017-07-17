@@ -90,7 +90,7 @@ public class LoCarrera implements Interfaz.InCarrera{
             pCarrera = (Carrera) retorno.getObjeto();
             retorno = (Retorno_MsgObj) perCarrera.actualizar(pCarrera);
         
-            if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+            if(!retorno.SurgioErrorObjetoRequerido())
             {
                 retorno = this.obtener(pCarrera.getCarCod());
             }
@@ -147,13 +147,13 @@ public class LoCarrera implements Interfaz.InCarrera{
         
         if(!error)
         {
+            System.out.println("2");
             plan = (PlanEstudio) retorno.getObjeto();
             Carrera car = plan.getCarrera();
             plan.setObjFchMod(new Date());
             car.getPlan().add(plan);
             
             retorno = (Retorno_MsgObj) this.actualizar(car);
-            System.out.println("RETORNO: "+retorno);
         }
         return retorno;
     }

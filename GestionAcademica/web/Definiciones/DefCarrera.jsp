@@ -4,6 +4,8 @@
     Author     : aa
 --%>
 
+<%@page import="Logica.Seguridad"%>
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Logica.LoCarrera"%>
@@ -19,9 +21,22 @@
 
 <%        
     Utilidades utilidad     = Utilidades.GetInstancia();
-    String urlSistema       = utilidad.GetUrlSistema();
     LoCarrera loCar         = LoCarrera.GetInstancia();
     Carrera car             = new Carrera();
+    String urlSistema       = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    //----------------------------------------------------------------------------------------------------
+    //CONTROL DE ACCESO
+    //----------------------------------------------------------------------------------------------------
+    
+    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
+    
+    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
+            
+    //----------------------------------------------------------------------------------------------------
     
     String DefCar           = "DefCarreraWW.jsp";
     String PlaEst           = "DefPlanEstudioWW.jsp";

@@ -13,6 +13,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +27,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -66,8 +69,9 @@ public class Carrera implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     
-    @OneToMany(targetEntity = PlanEstudio.class, cascade= CascadeType.ALL)
-    @JoinColumn(name="CarCod", referencedColumnName="CarCod")
+    @OneToMany(targetEntity = PlanEstudio.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="CarCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<PlanEstudio> lstPlanEstudio;
     
     public Carrera() {
