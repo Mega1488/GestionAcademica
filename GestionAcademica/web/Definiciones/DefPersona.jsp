@@ -266,7 +266,7 @@
 
                         <div>
                             <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
-                            <input name="btn_guardar" id="btn_guardar" value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
+                            <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                         </div>
                 </form>
             </div>
