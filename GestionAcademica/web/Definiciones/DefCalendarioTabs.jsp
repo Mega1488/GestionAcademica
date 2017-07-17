@@ -19,11 +19,12 @@
    
     String urlActual = utilidad.GetPaginaActual(request);
     
+    out.println("<ul class='nav nav-tabs'>");
+    
+    out.println("<li class='" + (urlActual.equals("DefCalendario.jsp") ? "active" : "") + "'><a href='" + urlSistema + "Definiciones/DefCalendario.jsp?MODO="+Mode+"&pCalCod=" +CalCod+"'>Calendario</a></li>");
+    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefCalendarioAlumnoSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=" +Mode + "&pCalCod=" + CalCod + "'>Alumnos</a></li>");
+    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefCalendarioDocenteSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefCalendarioDocenteSWW.jsp?MODO=" +Mode + "&pCalCod=" + CalCod + "'>Docentes</a></li>");
+    
+    out.println("</ul>");
 %>
     
-
-<ul class="nav nav-tabs">
-    <li class="<% out.print((urlActual.equals("DefCalendario.jsp") ? "active" : "")); %>"><a href='<% out.print(urlSistema); %>Definiciones/DefCalendario.jsp?MODO=<% out.print(Mode); %>&pCalCod=<% out.print(CalCod); %>'>Calendario</a></li>
-    <li class="<% out.print((urlActual.equals("DefCalendarioAlumnoSWW.jsp") ? "active" : "")); %>"><a href='<% out.print(urlSistema); %>Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=<% out.print(Mode); %>&pCalCod=<% out.print(CalCod); %>'>Alumnos</a></li>
-    <li class="<% out.print((urlActual.equals("DefCalendarioDocenteSWW.jsp") ? "active" : "")); %>"><a href='<% out.print(urlSistema); %>Definiciones/DefCalendarioDocenteSWW.jsp?MODO=<% out.print(Mode); %>&pCalCod=<% out.print(CalCod); %>'>Docentes</a></li>
-</ul>

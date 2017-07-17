@@ -30,6 +30,8 @@
     
     LoParametroEmail  loParamEml     = LoParametroEmail.GetInstancia();
     List<ParametroEmail> lstParamEml = loParamEml.obtenerLista();
+    
+    String tblVisible = (lstParamEml.size() > 0 ? "" : "display: none;");
 %>
 
 <!DOCTYPE html>
@@ -41,39 +43,47 @@
     </head>
     <body>
      
-            <div id="cabezal" name="cabezal">
+        <div class="container-fluid">
+            
+            <div id="cabezal" name="cabezal" class="row">
                 <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
-
-            <div style="float:left; width: 10%; height: 100%;">
+        
+        
+            <div class="col-sm-2">
                 <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             </div>
 
-            <div id="contenido" name="contenido" style="float: right; width: 90%;">
+            <div id="contenido" name="contenido"  class="col-sm-8">
+           
                 <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                     <input type="hidden" name="LISTA" id="LISTA" value="">
                 </div>
                 
                 <h1>Parámetro email</h1>
-                <div> <a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a> </div>
+                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                    <a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                </div>
                 
-                <table>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th>Servidor de correo</th>
-                        <th>Nombre del remitente</th>
-                        <th>Email del remitente</th>
-                    </tr>
+                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                    <thead> 
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Servidor de correo</th>
+                            <th>Nombre del remitente</th>
+                            <th>Email del remitente</th>
+                        </tr>
+                    </thead>
                 <% for(ParametroEmail prmEml : lstParamEml)
                     {
                      
                 %>
                     <tr>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_eliminar" id="btn_eliminar"   title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'></a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmail.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pParEmlCod=<% out.print(prmEml.getParEmlCod()); %>" name="btn_editar" id="btn_editar"   title='Editar' class='glyphicon glyphicon-edit btn_editar'></a></td>
                         <td><% out.print(utilidad.NuloToCero(prmEml.getParEmlCod())); %></td>
                         <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlNom())); %></td>
                         <td><% out.print(utilidad.NuloToVacio(prmEml.getParEmlSrv())); %></td>
@@ -87,7 +97,6 @@
                 
                 </table>
             </div>
-            
-  
+        </div>
     </body>
 </html>

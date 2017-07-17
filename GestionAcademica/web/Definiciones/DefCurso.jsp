@@ -92,7 +92,6 @@
                 $(document).ready(function() {
                     $('#btn_guardar').click(function(event) {
                                 
-                                MostrarCargando(true);
                                 
                                 var	CurCod	= $('#CurCod').val();
                                 var	CurNom	= $('#CurNom').val();
@@ -104,7 +103,6 @@
                                 if(CurNom == '')
                                     {
                                         MostrarMensaje("ERROR", "Completa los datos papa");
-                                        MostrarCargando(false);
                                     }
                                     else
                                     {
@@ -123,8 +121,7 @@
                                                             pAction          : "INSERTAR"
                                                      }, function(responseText) {
                                                          var obj = JSON.parse(responseText);
-                                                         MostrarCargando(false);
-
+                                                         
                                                          if(obj.tipoMensaje != 'ERROR')
                                                          {
                                                              <%
@@ -153,8 +150,7 @@
                                                         pAction          : "ACTUALIZAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -176,8 +172,7 @@
                                                         pAction          : "ELIMINAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
-                                                    MostrarCargando(false);
-
+                                                    
                                                     if(obj.tipoMensaje != 'ERROR')
                                                     {
                                                         <%
@@ -200,64 +195,71 @@
         
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
-
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <div id="tabs" name="tabs">
-                <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
+        <div class="container-fluid">
+            <div id="cabezal" name="cabezal" class="row">
+                <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
-            
-            <h1>Curso</h1>
-            
-            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                    <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+
+            <div class="col-sm-2">
+                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            </div>
+
+            <div id="contenido" name="contenido" class="col-sm-8">
+                
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Curso</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoWW.jsp">Regresar</a></div>
                 </div>
-                <form id="frm_objeto" name="frm_objeto">
-                    
-                    <div><label>Código</label><input type="text" class="form-control" id="CurCod" name="CurCod" placeholder="CurCod" disabled value="<% out.print( utilidad.NuloToVacio(curso.getCurCod())); %>" ></div>
-                    <div><label>Nombre</label><input type="text" class="form-control" id="CurNom" name="CurNom" placeholder="CurNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurNom())); %>" ></div>
-                    <div><label>Descripción</label><input type="text" class="form-control" id="CurDsc" name="CurDsc" placeholder="CurDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurDsc())); %>" ></div>
-                    <div><label>Facultad</label><input type="text" class="form-control" id="CurFac" name="CurFac" placeholder="CurFac" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurFac())); %>" ></div>
-                    <div><label>Certificación</label><input type="text" class="form-control" id="CurCrt" name="CurCrt" placeholder="CurCrt" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurCrt())); %>" ></div>
-                    
-                    <%
-                        if(param.getParUtlMdl())
-                        {
-                    %>
-                            <div>
-                                    <label>Categoría en moodle</label>
-                                    <select class="form-control" id="CurCatCod" name="CurCatCod" <% out.print(CamposActivos); %>>
-                                        <option value=''>Nueva</option>
-                                        <%
-                                            for (int i = 0; i< lstCategorias.length; i++){
-                                                MoodleCategory mdlCat = lstCategorias[i];
-                                            
-                                                if(mdlCat.getId() == curso.getCurCatCod()){
-                                                    //return filial;
-                                                    out.println("<option selected value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
-                                                }
-                                                else
-                                                {
-                                                    out.println("<option value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
-                                                }
-                                            }
-                                        %>
-                                    </select>
-                            </div>
-        
-                    <%
-                        }
-                    %>
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" />
+                
+                <div id="tabs" name="tabs">
+                    <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
+                </div>
+
+                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
                     </div>
-            </form>
+                    <form id="frm_objeto" name="frm_objeto">
+
+                        <div><label>Código</label><input type="text" class="form-control" id="CurCod" name="CurCod" placeholder="CurCod" disabled value="<% out.print( utilidad.NuloToVacio(curso.getCurCod())); %>" ></div>
+                        <div><label>Nombre</label><input type="text" class="form-control" id="CurNom" name="CurNom" placeholder="CurNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurNom())); %>" ></div>
+                        <div><label>Descripción</label><input type="text" class="form-control" id="CurDsc" name="CurDsc" placeholder="CurDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurDsc())); %>" ></div>
+                        <div><label>Facultad</label><input type="text" class="form-control" id="CurFac" name="CurFac" placeholder="CurFac" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurFac())); %>" ></div>
+                        <div><label>Certificación</label><input type="text" class="form-control" id="CurCrt" name="CurCrt" placeholder="CurCrt" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(curso.getCurCrt())); %>" ></div>
+
+                        <%
+                            if(param.getParUtlMdl())
+                            {
+                        %>
+                                <div>
+                                        <label>Categoría en moodle</label>
+                                        <select class="form-control" id="CurCatCod" name="CurCatCod" <% out.print(CamposActivos); %>>
+                                            <option value=''>Nueva</option>
+                                            <%
+                                                for (int i = 0; i< lstCategorias.length; i++){
+                                                    MoodleCategory mdlCat = lstCategorias[i];
+
+                                                    if(mdlCat.getId() == curso.getCurCatCod()){
+                                                        //return filial;
+                                                        out.println("<option selected value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
+                                                    }
+                                                    else
+                                                    {
+                                                        out.println("<option value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
+                                                    }
+                                                }
+                                            %>
+                                        </select>
+                                </div>
+
+                        <%
+                            }
+                        %>
+                        <div>
+                            <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
+                            <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
+                        </div>
+                </form>
+            </div>
         </div>
     </body>
 </html>

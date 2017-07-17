@@ -89,7 +89,7 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
 
     @Override
     public ParametroEmail obtener(Object pCodigo) {
-        int  codigo                     = (int) pCodigo;
+        Long  codigo                     = (Long) pCodigo;
         ParametroEmail objetoRetorno    = new ParametroEmail();
         try {
                 iniciaOperacion();

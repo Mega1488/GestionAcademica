@@ -26,17 +26,19 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div>
-            <div id="cabezal" name="cabezal">
+        <div class="container-fluid">
+            
+            <div id="cabezal" name="cabezal" class="row">
                 <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
+        
+        
+                <div class="col-sm-2">
+                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+                </div>
 
-            <div style="float:left; width: 10%; height: 100%;">
-                <jsp:include page="masterPage/menu_izquierdo.jsp" />
-            </div>
-
-            <div id="contenido" name="contenido" style="float: right; width: 90%;">
-                    <h1>Indice en jsp</h1>
+                <div id="contenido" name="contenido"  class="col-sm-8">
+                    <h1>Inicio</h1>
                     <div>
                         <label>
                             <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam dignissim eros ac risus fermentum, mattis lacinia velit convallis. Vestibulum hendrerit nibh et turpis commodo finibus. Etiam mattis mauris sed lacus egestas scelerisque. Vestibulum at arcu ac urna accumsan malesuada. Morbi luctus lorem ut eros iaculis, at imperdiet lacus elementum. Suspendisse leo orci, imperdiet vitae iaculis vel, efficitur aliquam lorem. Pellentesque posuere mauris nec risus placerat semper. Nam commodo consectetur malesuada. Aenean ante lorem, vehicula sit amet est sit amet, dictum sagittis felis. Aliquam erat volutpat. Pellentesque et vehicula tortor, eu rhoncus lorem. Praesent tempor augue turpis, vel vestibulum lectus malesuada auctor. Suspendisse potenti. Suspendisse potenti. Quisque mattis nulla nec finibus tempor. Suspendisse eu finibus augue.</p>
@@ -49,7 +51,7 @@
                         </label>
                     </div>
 
-            </div>
+                </div>
         </div>
     </body>
 </html>

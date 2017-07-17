@@ -26,6 +26,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -50,10 +52,9 @@ public class Calendario implements Serializable {
     @Column(name = "CalCod", nullable = false)
     private Long CalCod;
     
-    @OneToOne(targetEntity = Evaluacion.class, optional=false)
+    @OneToOne(targetEntity = Evaluacion.class)
     @JoinColumn(name="EvlCod", referencedColumnName = "EvlCod")
     private Evaluacion evaluacion;
-
     
     @Column(name = "CalFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
@@ -74,10 +75,12 @@ public class Calendario implements Serializable {
     
     @OneToMany(targetEntity = CalendarioAlumno.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="CalCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<CalendarioAlumno> lstAlumnos;
     
     @OneToMany(targetEntity = CalendarioDocente.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="CalCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<CalendarioDocente> lstDocentes;
     
 

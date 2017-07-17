@@ -84,7 +84,6 @@
                 $(document).ready(function() {
                     $('#btn_guardar').click(function(event) {
                                 
-                                MostrarCargando(true);
                                 
                                 var CalCod= $('#CalCod').val();
                                 var EvlCod= $('#EvlCod').val();
@@ -97,7 +96,6 @@
                                 if(CalFch == '')
                                     {
                                         MostrarMensaje("ERROR", "Completa los datos papa");
-                                        MostrarCargando(false);
                                     }
                                     else
                                     {
@@ -113,8 +111,7 @@
                                                pAction          : modo
                                         }, function(responseText) {
                                             var obj = JSON.parse(responseText);
-                                            MostrarCargando(false);
-
+                                            
                                             if(obj.tipoMensaje != 'ERROR')
                                             {
                                                 <%
@@ -218,7 +215,7 @@
             </div>
         </div>
                     
-        <div id="PopUpEvaluacion" title="Evaluacion" class="modal fade" role="dialog">
+        <div id="PopUpEvaluacion"  class="modal fade" role="dialog">
             <jsp:include page="/PopUps/PopUpEvaluacion.jsp"/>
         </div>
  

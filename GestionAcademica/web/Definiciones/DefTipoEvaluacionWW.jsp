@@ -58,39 +58,44 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
-
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <h1>Tipos de evaluación</h1>
+        <div class="container-fluid">
             
-            <div>
-                <a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a>
+            <div id="cabezal" name="cabezal" class="row">
+                <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
+        
+        
+            <div class="col-sm-2">
+                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            </div>
+
+            <div id="contenido" name="contenido"  class="col-sm-8">
+                <h1>Tipos de evaluación</h1>
+                
+                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                    <a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                </div>
             
             
-                <table style=' <% out.print(tblVisible); %>'>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th>Exámen</th>
-                        <th>Inscripción automática</th>
-                    </tr>
+                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Exámen</th>
+                            <th>Inscripción automática</th>
+                        </tr>
+                    </thead>
                     
                     <% for(Object objeto : lstTipoEvl)
                     {
                      TipoEvaluacion tpoEvl = (TipoEvaluacion) objeto;
                     %>
                     <tr>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pTpoEvlCod=<% out.print(tpoEvl.getTpoEvlCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pTpoEvlCod=<% out.print(tpoEvl.getTpoEvlCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pTpoEvlCod=<% out.print(tpoEvl.getTpoEvlCod()); %>" name="btn_eliminar" id="btn_eliminar"  title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'></a></td>
+                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pTpoEvlCod=<% out.print(tpoEvl.getTpoEvlCod()); %>" name="btn_editar" id="btn_editar"  title='Editar' class='glyphicon glyphicon-edit btn_editar'></a></td>
                         <td><% out.print( utilidad.NuloToVacio(tpoEvl.getTpoEvlCod())); %> </td>
                         <td><% out.print( utilidad.NuloToVacio(tpoEvl.getTpoEvlNom())); %> </td>
                         <td><% out.print( utilidad.BooleanToSiNo(tpoEvl.getTpoEvlExm())); %> </td>
@@ -100,5 +105,7 @@
                     }
                     %>
                 </table>
+            </div>
+        </div>
     </body>
 </html>

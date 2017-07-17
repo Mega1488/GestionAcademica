@@ -22,6 +22,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -30,10 +31,20 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 @Entity
-@Table(name = "INSCRIPCION")
+@Table(
+        name = "INSCRIPCION",
+        uniqueConstraints = {
+                                @UniqueConstraint(columnNames = {"AluPerCod", "CarInsPlaEstCod"}),
+                                @UniqueConstraint(columnNames = {"AluPerCod", "CurInsCurCod"})
+                            }
+    )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Inscripcion.findAll",       query = "SELECT t FROM Inscripcion t")})
+    @NamedQuery(name = "Inscripcion.findAll",       query = "SELECT t FROM Inscripcion t"),
+    @NamedQuery(name = "Inscripcion.findByAlumno",  query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod"),
+    @NamedQuery(name = "Inscripcion.findByPlan",    query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod and t.PlanEstudio.PlaEstCod =:PlaEstCod"),
+    @NamedQuery(name = "Inscripcion.findByCurso",   query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod and t.Curso.CurCod =:CurCod")
+})
 
 public class Inscripcion implements Serializable {
 
@@ -48,19 +59,19 @@ public class Inscripcion implements Serializable {
     private Long InsCod; 
     
     
-    @OneToOne(targetEntity = Persona.class, optional=false)        
+    @OneToOne(targetEntity = Persona.class)        
     @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
-    private Persona Persona;
+    private Persona Alumno;
 
-    @OneToOne(targetEntity = Persona.class, optional=true)        
+    @OneToOne(targetEntity = Persona.class)        
     @JoinColumn(name="InsPerCod", referencedColumnName="PerCod")
     private Persona PersonaInscribe;
     
-    @ManyToOne(targetEntity = PlanEstudio.class, optional=true)        
+    @ManyToOne(targetEntity = PlanEstudio.class)        
     @JoinColumn(name="CarInsPlaEstCod", referencedColumnName="PlaEstCod")
     private PlanEstudio PlanEstudio;
     
-    @OneToOne(targetEntity = Curso.class, optional=true)        
+    @OneToOne(targetEntity = Curso.class)        
     @JoinColumn(name="CurInsCurCod", referencedColumnName="CurCod")
     private Curso Curso;
           
@@ -89,12 +100,12 @@ public class Inscripcion implements Serializable {
         this.InsCod = InsCod;
     }
 
-    public Persona getPersona() {
-        return Persona;
+    public Persona getAlumno() {
+        return Alumno;
     }
 
-    public void setPersona(Persona Persona) {
-        this.Persona = Persona;
+    public void setAlumno(Persona Alumno) {
+        this.Alumno = Alumno;
     }
 
     public Persona getPersonaInscribe() {
@@ -144,6 +155,14 @@ public class Inscripcion implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+    
+    public String getNombreEstudio()
+    {
+        if(this.PlanEstudio != null) return this.PlanEstudio.getPlaEstNom();
+        if(this.Curso != null) return this.Curso.getCurNom();
+
+        return "";
+    }
 
     @Override
     public int hashCode() {
@@ -172,7 +191,7 @@ public class Inscripcion implements Serializable {
 
     @Override
     public String toString() {
-        return "Inscripcion{" + "InsCod=" + InsCod + ", Persona=" + Persona + ", PersonaInscribe=" + PersonaInscribe + ", PlanEstudio=" + PlanEstudio + ", Curso=" + Curso + ", AluFchCert=" + AluFchCert + ", AluFchInsc=" + AluFchInsc + ", ObjFchMod=" + ObjFchMod + '}';
+        return "Inscripcion{" + "InsCod=" + InsCod + ", Persona=" + Alumno + ", PersonaInscribe=" + PersonaInscribe + ", PlanEstudio=" + PlanEstudio + ", Curso=" + Curso + ", AluFchCert=" + AluFchCert + ", AluFchInsc=" + AluFchInsc + ", ObjFchMod=" + ObjFchMod + '}';
     }
 
     

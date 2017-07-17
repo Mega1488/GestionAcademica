@@ -57,50 +57,57 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
-
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <h1>Cursos</h1>
+        <div class="container-fluid">
             
-            <div>
-                <a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>">Ingresar</a>
+            <div id="cabezal" name="cabezal" class="row">
+                <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
-            
-            
-                <table style=' <% out.print(tblCursoVisible); %>'>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Código</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Facultad</th>
-                        <th>Certificación</th>
-                    </tr>
-                    
-                    <% for(Object objeto : lstCurso)
-                    {
-                     Curso curso = (Curso) objeto;
-                    %>
-                    <tr>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCurCod=<% out.print(curso.getCurCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
-                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCurCod=<% out.print(curso.getCurCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
-                        <td><% out.print( utilidad.NuloToVacio(curso.getCurCod())); %> </td>
-                        <td><% out.print( utilidad.NuloToVacio(curso.getCurNom())); %> </td>
-                        <td><% out.print( utilidad.NuloToVacio(curso.getCurDsc())); %> </td>
-                        <td><% out.print( utilidad.NuloToVacio(curso.getCurFac())); %> </td>
-                        <td><% out.print( utilidad.NuloToVacio(curso.getCurCrt())); %> </td>
-                        
-                    </tr>
-                    <%
-                    }
-                    %>
-                </table>
+        
+        
+                <div class="col-sm-2">
+                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+                </div>
+
+                <div id="contenido" name="contenido"  class="col-sm-8">
+                    <h1>Cursos</h1>
+
+                    <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                        <a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                    </div>
+      
+                        <table style=' <% out.print(tblCursoVisible); %>' class='table table-hover'>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                    <th>Facultad</th>
+                                    <th>Certificación</th>
+                                </tr>
+                            </thead>
+                                
+
+                            <% for(Object objeto : lstCurso)
+                            {
+                             Curso curso = (Curso) objeto;
+                            %>
+                            <tr>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCurCod=<% out.print(curso.getCurCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCurCod=<% out.print(curso.getCurCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
+                                <td><% out.print( utilidad.NuloToVacio(curso.getCurCod())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(curso.getCurNom())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(curso.getCurDsc())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(curso.getCurFac())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(curso.getCurCrt())); %> </td>
+
+                            </tr>
+                            <%
+                            }
+                            %>
+                        </table>
+                </div>
+        </div>
     </body>
 </html>

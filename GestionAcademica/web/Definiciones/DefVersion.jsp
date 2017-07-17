@@ -4,6 +4,8 @@
     Author     : alvar
 --%>
 
+<%@page import="Entidad.Version"%>
+<%@page import="Logica.LoVersion"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Enumerado.NombreSesiones"%>
@@ -27,6 +29,8 @@
             
     //----------------------------------------------------------------------------------------------------
     
+    Version version     = LoVersion.GetInstancia().obtener(Integer.valueOf(1));
+    
 %>
 
 <!DOCTYPE html>
@@ -38,11 +42,9 @@
         
         <script>
                 $(document).ready(function() {
-                        MostrarCargando(false);
                         
                         $('#btn_guardar').click(function(event) {
                                 
-                                MostrarCargando(true);
                                 
                     
                                 var SisVerCod   = $('#SisVerCod').val();
@@ -53,7 +55,6 @@
                                 if(SisVerCod == '' || SisVer == '')
                                 {
                                     MostrarMensaje("ERROR", "Completa los datos papa");
-                                    MostrarCargando(false);
                                 }
                                 else
                                 {
@@ -64,7 +65,6 @@
                                                 pAction      : "ACTUALIZAR"
                                         }, function(responseText) {
                                             var obj = JSON.parse(responseText);
-                                            MostrarCargando(false);
                                             
                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
 
@@ -72,59 +72,48 @@
                                 }
                         });
                         
-                        $.post('<% out.print(urlSistema); %>AM_Version', {
-                            pSisVerCod : "1",        
-                            pAction : "OBTENER"
-                                }, function(responseText) {
-                                        var obj = JSON.parse(responseText);
-                                        
-                                        $('#SisVerCod').val(obj.sisVerCod);
-                                        $('#SisVer').val(obj.sisVer);
-                                        $('#SisCrgDat').prop('checked', obj.sisCrgDat);
-                                        
-                                });
-                                
-                    
                     
                 });
         </script>
         
     </head>
     <body>
-        <div>
-            <div id="cabezal" name="cabezal">
+        <div class="container-fluid">
+            <div id="cabezal" name="cabezal" class="row">
                 <jsp:include page="/masterPage/cabezal.jsp"/>
             </div>
 
-            <div style="float:left; width: 10%; height: 100%;">
-                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div class="col-sm-2">
+                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             </div>
 
-            <div id="contenido" name="contenido" style="float: right; width: 90%;">
-                <h1>Versión</h1>
+            <div id="contenido" name="contenido" class="col-sm-8">
+                
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Versión</h1></div>
+                </div>
+
                 <form id="frm_Version" name="frm_Version">
                     <div>
-                        <label>Código:</label>
-                        <input type="num" class="form-control" id="SisVerCod" name="SisVerCod" placeholder="Código" disabled>
+                        <input type="hidden" id="SisVerCod" name="SisVerCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(version.getSisVerCod())); %>">
                     </div>
                     
                     <div>
                         <label>Versión:</label>
-                        <input type="text" class="form-control" id="SisVer" name="SisVer" placeholder="Versión" disabled>
+                        <input type="text" class="form-control" id="SisVer" name="SisVer" placeholder="Versión" disabled value="<% out.print( utilidad.NuloToVacio(version.getSisVer())); %>">
+                    </div>
+
+                    <div class="checkbox">
+                        <label> <input type="checkbox" id="SisCrgDat" name="SisCrgDat" <% out.print( utilidad.BooleanToChecked(version.getSisCrgDat())); %>> Datos iniciales cargados</label>
                     </div>
 
                     <div>
-                        <label>Datos iniciales cargados:</label>
-                        <input type="checkbox" id="SisCrgDat" name="SisCrgDat" >
-                    </div>
-
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" />
+                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
                     </div>
                 </form>
             </div>
             
-            <div id="div_cargando" name="div_cargando"></div>
+        </div>
             
     </body>
 </html>

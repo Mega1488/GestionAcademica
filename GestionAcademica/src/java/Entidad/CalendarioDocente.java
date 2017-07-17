@@ -25,6 +25,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -33,7 +34,10 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 @Entity
-@Table(name = "CALENDARIO_DOCENTE")
+@Table(
+        name = "CALENDARIO_DOCENTE",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"CalCod", "DocPerCod"})}
+    )
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CalendarioDocente.findAll",       query = "SELECT t FROM CalendarioDocente t")})
@@ -54,16 +58,14 @@ public class CalendarioDocente implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     
-    
-    @OneToOne(targetEntity = Calendario.class, optional=false)
+    @OneToOne(targetEntity = Calendario.class)
     @JoinColumn(name="CalCod", referencedColumnName = "CalCod")
     private Calendario calendario;
 
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="DocPerCod", referencedColumnName = "PerCod")
     private Persona Docente;
 
-    
     //-CONSTRUCTOR
 
     public CalendarioDocente() {

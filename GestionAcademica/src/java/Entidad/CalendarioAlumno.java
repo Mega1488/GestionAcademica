@@ -25,6 +25,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -38,7 +39,10 @@ import org.hibernate.annotations.GenericGenerator;
 @JsonIgnoreProperties({"calendario"})
 
 @Entity
-@Table(name = "CALENDARIO_ALUMNO")
+@Table(
+        name = "CALENDARIO_ALUMNO",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"CalCod", "AluPerCod"})}
+    )
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CalendarioAlumno.findAll",       query = "SELECT t FROM CalendarioAlumno t")})
@@ -60,7 +64,7 @@ public class CalendarioAlumno implements Serializable {
     private Calendario calendario;
 
     @ManyToOne(targetEntity = Persona.class)
-    @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod", unique = true)
+    @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
     private Persona Alumno;
 
     @Column(name = "EvlCalVal", precision=10, scale=2)

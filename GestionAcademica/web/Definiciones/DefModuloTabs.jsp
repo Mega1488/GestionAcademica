@@ -13,16 +13,17 @@
 
 <%
     String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CurCod       = request.getParameter("pCurCod");
     String ModCod       = request.getParameter("pModCod");
     
-    out.println("<div class='div_tabs'><a href='" + urlSistema + "Definiciones/DefModulo.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Modulo</a></div>");
+    out.println("<ul class='nav nav-tabs'>");
     
-    if(!Mode.equals(Mode.INSERT))
-    {  
-        out.println("<div class='div_tabs'><a href='" + urlSistema + "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Evaluación</a></div>");
-    }
+    out.println("<li class='" + (urlActual.equals("DefModulo.jsp") ? "active" : "") + "'><a href='" + urlSistema + "Definiciones/DefModulo.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Modulo</a></li>");
+    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefModuloEvaluacionSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Evaluación</a></li>");
+    
+    out.println("</ul>");
 %>
     

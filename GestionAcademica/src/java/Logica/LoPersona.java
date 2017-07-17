@@ -5,6 +5,8 @@
  */
 package Logica;
 
+import Entidad.Escolaridad;
+import Entidad.Inscripcion;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
@@ -20,6 +22,7 @@ import Moodle.MoodleUser;
 import Moodle.MoodleUserRoleException;
 import Moodle.UserRole;
 import Persistencia.PerPersona;
+import SDT.SDT_PersonaEstudio;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.io.UnsupportedEncodingException;
@@ -248,6 +251,68 @@ public class LoPersona implements Interfaz.InPersona{
         }
         
         return error;
+    }
+    
+    public ArrayList<SDT_PersonaEstudio> ObtenerEstudios(Long PerCod)
+    {
+        ArrayList<SDT_PersonaEstudio> lstEstudios = null;
+        Retorno_MsgObj retorno = LoEscolaridad.GetInstancia().obtenerListaByAlumno(PerCod);
+        
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+
+            lstEstudios = new ArrayList<>();
+                    
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                Escolaridad escolaridad = (Escolaridad) objeto;
+                
+                if(escolaridad.getMateria() != null) retorno = LoInscripcion.GetInstancia().obtenerListaByPlan(PerCod, escolaridad.getMateria().getPlan().getPlaEstCod());
+                
+                if(escolaridad.getModulo() != null) retorno = LoInscripcion.GetInstancia().obtenerListaByCurso(PerCod, escolaridad.getModulo().getCurso().getCurCod());
+                
+                if(escolaridad.getCurso() != null) retorno = LoInscripcion.GetInstancia().obtenerListaByCurso(PerCod, escolaridad.getCurso().getCurCod());
+
+                if(!retorno.SurgioError()) lstEstudios = PersonaAgregarEstudio(lstEstudios, escolaridad, (Inscripcion) retorno.getObjeto());
+                
+                
+            }
+        }
+        
+        return lstEstudios;
+    }
+    
+    private ArrayList<SDT_PersonaEstudio> PersonaAgregarEstudio(ArrayList<SDT_PersonaEstudio> lstEstudio, Escolaridad escolaridad, Inscripcion inscripcion)
+    {
+        boolean existe = false;
+        
+        if(inscripcion == null)
+        {
+           inscripcion = new Inscripcion();
+           inscripcion.setInsCod(Long.valueOf("0"));
+        }
+        
+        for(SDT_PersonaEstudio est : lstEstudio)
+        {
+            if(est.getInscripcion().getInsCod().equals(inscripcion.getInsCod())){
+                existe = true;
+                est.getEscolaridad().add(escolaridad);
+                break;
+            }
+        }
+        
+        if(!existe){
+            SDT_PersonaEstudio est = new SDT_PersonaEstudio();
+            est.setInscripcion(inscripcion);
+            est.getEscolaridad().add(escolaridad);
+            
+            lstEstudio.add(est);
+        }
+        
+        
+
+        return lstEstudio;
     }
     
     //----------------------------------------------------------------------------------------------------
