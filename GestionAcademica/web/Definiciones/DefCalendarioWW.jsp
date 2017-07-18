@@ -78,7 +78,8 @@
                     </div>
 
                     <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                        <a href="<% out.print(urlSistema); %>Definiciones/DefCalendario.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                        <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                    
                     </div>
 
 
@@ -119,6 +120,226 @@
                         </table>
 
                 </div>
+        </div>
+             
+                        
+        <div id="PopUpAgregar" class="modal fade" role="dialog">
+               <!-- Modal -->
+                <div class="modal-dialog modal-lg">
+                    <!-- Modal content-->
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Evaluaciones</h4>
+                        <input type="hidden" name="obj_calendario" id="obj_calendario" value="<% out.print(utilidad.ObjetoToJson(new Calendario())); %>">
+                      </div>
+                     
+                        <div class="modal-body">
+
+                            <div>
+                                <table name="PopUpTblEvaluaciones" id="PopUpTblEvaluaciones" class="table table-striped" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Estudio</th>
+                                            <th>Evaluación</th>
+                                            <th>Inscripción automatica</th>
+                                            <th>Fecha</th>
+                                            <th>Inscripción desde</th>
+                                            <th>Inscripción hasta</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                </table>
+                            </div>
+                      </div>
+                      <div class="modal-footer">
+                        <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
+                        <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
+                      </div>
+                    </div>
+                </div>
+               
+                <script type="text/javascript">
+
+                    $(document).ready(function() {
+
+                        $(document).on('click', "#btn_guardar", function() {
+
+                            var table = $('#PopUpTblEvaluaciones').DataTable();
+                            
+                            var count =  table.rows({selected:true}).count();
+                            
+                            var rows = table.rows({selected:true});
+                            
+                            var error           = false;
+                            
+                            for(i=0;i<count;i++)
+                            {
+                                var objeto  = rows.data()[i];
+                                var fila    = rows.nodes()[i];
+                                
+                                var fechaEvaluacion = fila.cells[3].lastChild.value;
+                                var fechaDesde      = fila.cells[4].lastChild.value;
+                                var fechaHasta      = fila.cells[5].lastChild.value;
+                                
+                                if(fechaEvaluacion == "")
+                                {
+                                    MostrarMensaje("ERROR", "Debe ingresar una fecha de evaluación para: " + objeto.evlNom);
+                                    error = true;
+                                }
+                                
+                                if(!objeto.tpoEvl.tpoEvlInsAut)
+                                {
+                                    if(fechaDesde == "")
+                                    {
+                                        MostrarMensaje("ERROR", "Debe ingresar una fecha de inicio de inscripción para: " + objeto.evlNom);
+                                        error = true;
+                                    }
+
+                                    if(fechaHasta == "")
+                                    {
+                                        MostrarMensaje("ERROR", "Debe ingresar una fecha de fin de inscripción para: " + objeto.evlNom);
+                                        error = true;
+                                    }
+                                }
+                                
+                            }
+                            
+                             
+                             
+                             if(count < 1)
+                            {
+                                MostrarMensaje("ERROR", "Debe seleccionar al menos una fila");
+                            }
+                            else
+                            {
+                                if(!error)
+                                {
+                               
+                                   
+                                var listaCalendario = new Array(count);
+
+                                    //Procesar
+                                    for(i=0;i<count;i++)
+                                    {
+                                       
+                                            var calendario = JSON.parse('{"evaluacion":{"evlCod":null},"calFch":null,"calCod":null,"evlInsFchHst":null,"evlInsFchDsd":null}');
+                                            var objeto  = rows.data()[i];
+                                            var fila    = rows.nodes()[i];
+
+                                            var fechaEvaluacion = fila.cells[3].lastChild.value;
+                                            var fechaDesde      = fila.cells[4].lastChild.value;
+                                            var fechaHasta      = fila.cells[5].lastChild.value;
+                                            
+                                            calendario.evaluacion.evlCod = objeto.evlCod;
+                                            calendario.calFch = fechaEvaluacion;
+                                            calendario.evlInsFchHst = fechaDesde;
+                                            calendario.evlInsFchDsd = fechaHasta;
+                                            
+                                            listaCalendario[i] = calendario;
+
+                                    }
+                                    
+                                    
+                                    $.ajax({
+                                            url: '<% out.print(urlSistema); %>ABM_Calendario',
+                                                type: 'POST',
+                                                data: {
+                                                    pLstCalendario: JSON.stringify(listaCalendario),
+                                                    pAction          : "INSERT_LIST"
+                                                },
+                                                async: false,
+                                                cache: false,
+                                                timeout: 30000,
+                                                success: function(responseText) {
+                                                    var obj = JSON.parse(responseText);
+                                                    
+                                                    if(obj.tipoMensaje == 'ERROR')
+                                                    {
+                                                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                                                    }
+                                                    else{
+                                                        location.reload();
+                                                    }
+                                                    
+                                                }
+                                        });
+
+                                    
+                                }
+
+                            }
+                            
+                           // $(function () {
+                           //         $('#PopUpTblEvaluaciones').modal('toggle');
+                           //      });
+                        });
+
+                        $.post('<% out.print(urlSistema); %>ABM_Evaluacion', {
+                            pAction : "POPUP_LISTAR"
+                            }, function(responseText) {
+
+                                var evaluaciones = JSON.parse(responseText);
+
+                                $('#PopUpTblEvaluaciones').DataTable( {
+                                    data: evaluaciones,
+                                    deferRender: true,
+                                    bLengthChange : false, //thought this line could hide the LengthMenu
+                                    pageLength: 10,
+                                    select: {
+                                        style:    'multi',
+                                        selector: 'td:last-child'
+                                    },
+                                    language: {
+                                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                                        "zeroRecords": "No se encontraron registros",
+                                        "info": "Página _PAGE_ de _PAGES_",
+                                        "infoEmpty": "No hay registros",
+                                        "search":         "Buscar:",
+                                        "paginate": {
+                                                "first":      "Primera",
+                                                "last":       "Ultima",
+                                                "next":       "Siguiente",
+                                                "previous":   "Anterior"
+                                            },
+                                        "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                    },
+                                    columns: [
+                                        {"data": "estudioNombre"},
+                                        {"data": "evlNom"},
+                                        {"data": "inscripcionAutomatica"},
+                                        {   
+                                            "orderable":      false,
+                                            "data":           null,
+                                            "defaultContent": '<input type="date" name="cel_fecha">'
+                                        },
+                                        {   
+                                            "orderable":      false,
+                                            "data":           null,
+                                            "defaultContent": '<input type="date" name="cel_fecha_desde">'
+                                        },
+                                        {   
+                                            "orderable":      false,
+                                            "data":           null,
+                                            "defaultContent": '<input type="date" name="cel_fecha_hasta" >'
+                                        },
+                                        {
+                                            "className":      'select-checkbox',
+                                            "orderable":      false,
+                                            "data":           null,
+                                            "defaultContent": ''
+                                        }
+                                    ]
+
+                                } );
+
+                        });
+
+      
+                    });
+                </script>
         </div>
     </body>
 </html>

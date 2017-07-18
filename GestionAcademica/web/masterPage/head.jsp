@@ -32,12 +32,14 @@
 <script src=<% out.print(jquery_ui); %> type="text/javascript"></script> 
 <script src=<% out.print(bootstrap_js); %> type="text/javascript"></script>
 <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
 
 <link href=<% out.print(css); %>  rel="stylesheet" type="text/css"/>
 <link href=<% out.print(bootstrap); %>  rel="stylesheet">
 <link href=<% out.print(jquery_css); %> rel="stylesheet" type="text/css"/>
 
 <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
 
 <script>

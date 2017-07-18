@@ -26,7 +26,7 @@ import java.util.List;
 public class LoCalendario implements InABMGenerico{
 
     private static LoCalendario instancia;
-    private PerCalendario perCalendario;
+    private final PerCalendario perCalendario;
 
     private LoCalendario() {
         perCalendario  = new PerCalendario();

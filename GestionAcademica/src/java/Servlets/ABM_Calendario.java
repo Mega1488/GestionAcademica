@@ -21,20 +21,23 @@ import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *
  * @author alvar
  */
 public class ABM_Calendario extends HttpServlet {
-    private final LoParametro loParametro   = LoParametro.GetInstancia();
-    private final Parametro parametro       = loParametro.obtener(1);
-    private final Seguridad seguridad       = Seguridad.GetInstancia();
-    private final LoCalendario loCalendario           = LoCalendario.GetInstancia();
+    private final LoCalendario loCalendario = LoCalendario.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
@@ -54,34 +57,81 @@ public class ABM_Calendario extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            String action   = request.getParameter("pAction");
-            Modo mode = Modo.valueOf(action);
             String retorno  = "";
+            String action   = request.getParameter("pAction");
 
-            
-            switch(mode)
+            if(action.equals("INSERT_LIST"))
             {
-                
-                case INSERT:
-                    retorno = this.AgregarDatos(request);
-                break;
-                
-                case UPDATE:
-                    retorno = this.ActualizarDatos(request);
-                break;
-                
-                case DELETE:
-                    retorno = this.EliminarDatos(request);
-                break;
-                
-                
-                        
+                retorno = this.GuardarLista(request);
             }
+            else
+            {
+                Modo mode = Modo.valueOf(action);
+                
 
+                switch(mode)
+                {
+
+                    case INSERT:
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case UPDATE:
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case DELETE:
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+
+
+                }
+            }
+            
             out.println(retorno);
             
         }
         
+    }
+    
+    
+    private String GuardarLista(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        List<Object> lstCalendario = new ArrayList<>();
+        String listaCala    = request.getParameter("pLstCalendario");
+        
+        if(listaCala != null)
+        {
+            if(!listaCala.isEmpty())
+            {
+                lstCalendario       = utilidades.JsonToListObject(listaCala, Calendario.class);
+                
+                for(Object objeto : lstCalendario)
+                {
+                    Calendario calendario = (Calendario) objeto;
+                    
+                    
+                    if(calendario.getEvaluacion().getEvlCod() !=null) calendario.setEvaluacion((Evaluacion) LoEvaluacion.GetInstancia().obtener(calendario.getEvaluacion().getEvlCod()).getObjeto());
+                    
+                    System.err.println("Inicio ABM Guardar");
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.guardar(calendario);
+                    mensaje    = retornoObj.getMensaje();
+                    System.err.println("Fin ABM Guardar");
+                    
+                    if(retornoObj.SurgioError())
+                    {
+                        break;
+                    }
+                    
+
+                }
+            }
+        }
+        
+        return  utilidades.ObjetoToJson(mensaje);
     }
     
     private String AgregarDatos(HttpServletRequest request)
@@ -94,15 +144,18 @@ public class ABM_Calendario extends HttpServlet {
                 error           = false;
                 
                 Calendario calendario = this.ValidarCalendario(request, null);
-
+                
+               
                 //------------------------------------------------------------------------------------------
                 //Guardar cambios
                 //------------------------------------------------------------------------------------------
 
                 if(!error)
                 {
+                    System.err.println("Inicio ABM Guardar");
                     Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.guardar(calendario);
                     mensaje    = retornoObj.getMensaje();
+                    System.err.println("Fin ABM Guardar");
                 }
             }
             catch(Exception ex)
@@ -211,12 +264,14 @@ public class ABM_Calendario extends HttpServlet {
 
 
                 //Sin validacion
-                Evaluacion evaluacion = (Evaluacion) LoEvaluacion.GetInstancia().obtener(Long.valueOf(EvlCod)).getObjeto();
+                Evaluacion evaluacion = new Evaluacion();
+                if(EvlCod !=null) evaluacion  = (Evaluacion) LoEvaluacion.GetInstancia().obtener(Long.valueOf(EvlCod)).getObjeto();
                 
-                calendario.setEvaluacion(evaluacion);
-                calendario.setCalFch(Date.valueOf(CalFch));
-                calendario.setEvlInsFchDsd(Date.valueOf(EvlInsFchDsd));
-                calendario.setEvlInsFchHst(Date.valueOf(EvlInsFchHst));
+                if(EvlCod !=null) calendario.setEvaluacion(evaluacion);
+
+                if(CalFch !=null) if(!CalFch.isEmpty()) calendario.setCalFch(Date.valueOf(CalFch));
+                if(EvlInsFchDsd !=null) if(!EvlInsFchDsd.isEmpty()) calendario.setEvlInsFchDsd(Date.valueOf(EvlInsFchDsd));
+                if(EvlInsFchHst !=null) if(!EvlInsFchHst.isEmpty()) calendario.setEvlInsFchHst(Date.valueOf(EvlInsFchHst));
                 
                 
             return calendario;

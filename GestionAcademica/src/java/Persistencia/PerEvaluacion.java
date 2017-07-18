@@ -147,7 +147,6 @@ public class PerEvaluacion implements InABMGenerico{
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        
         Long codigo = (Long) pObjeto;
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
@@ -165,6 +164,7 @@ public class PerEvaluacion implements InABMGenerico{
             sesion.close();
         }
 
+        
         return retorno;
     }
     

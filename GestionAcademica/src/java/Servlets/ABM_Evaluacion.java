@@ -11,6 +11,7 @@ import Entidad.Modulo;
 import Entidad.TipoEvaluacion;
 import Enumerado.TipoMensaje;
 import Logica.LoCurso;
+import Logica.LoEvaluacion;
 import Logica.LoParametro;
 import Logica.LoTipoEvaluacion;
 import Utiles.Mensajes;
@@ -69,7 +70,7 @@ public class ABM_Evaluacion extends HttpServlet {
                     retorno = this.EliminarDatos(request);
                 break;
                 
-                case "POPUP_ISTAR":
+                case "POPUP_LISTAR":
                     retorno = this.PopUp_ListarDatos(request);
                 break;
                         
@@ -227,22 +228,29 @@ public class ABM_Evaluacion extends HttpServlet {
         String CurCod = request.getParameter("popCurCod");
         String ModCod = request.getParameter("popModCod");
         
-        if(!CurCod.isEmpty())
+        if(CurCod != null)
         {
             lstRetorno = ((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto()).getLstEvaluacion();
         }
         
-        if(!ModCod.isEmpty())
+        if(ModCod  != null)
         {
             lstRetorno = ((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto()).getLstEvaluacion();
         }
         
-        if(!MatCod.isEmpty())
+        if(MatCod != null)
         {
             lstRetorno = ((Modulo) ((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto()).getModuloById(Long.valueOf(ModCod))).getLstEvaluacion();
         }
 
-        return  utilidades.ObjetoToJson(lstRetorno);
+        if(MatCod == null && ModCod == null && CurCod == null)
+        {
+            return utilidades.ObjetoToJson(LoEvaluacion.GetInstancia().obtenerLista().getLstObjetos());
+        }
+        else
+        {
+            return  utilidades.ObjetoToJson(lstRetorno);
+        }
                 
     }
 

@@ -28,7 +28,7 @@ public class PerCalendario implements InABMGenerico{
     private Session sesion;
     private Transaction tx;
     
-   private void iniciaOperacion() throws HibernateException {
+    private void iniciaOperacion() throws HibernateException {
         try {
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
@@ -71,7 +71,6 @@ public class PerCalendario implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        
         Calendario calendario = (Calendario) pObjeto;
 
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), calendario);
@@ -92,6 +91,7 @@ public class PerCalendario implements InABMGenerico{
         } finally {
             sesion.close();
         }
+        
         
         return retorno;
     }
@@ -171,7 +171,7 @@ public class PerCalendario implements InABMGenerico{
     
     @Override
     public Retorno_MsgObj obtenerLista() {
-
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
 
         try {
@@ -189,6 +189,8 @@ public class PerCalendario implements InABMGenerico{
         } finally {
             sesion.close();
         }
+        
+        
 
         return retorno;
     }

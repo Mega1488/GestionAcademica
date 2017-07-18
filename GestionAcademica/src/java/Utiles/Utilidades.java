@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -97,6 +98,27 @@ public class Utilidades {
         return null;
     }
 
+    public List<Object> JsonToListObject(String jsonValue, Class clase)
+    {
+        List<Object> lstObjeto = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
+        
+        try {
+            // convert user object to json string and return it 
+            //return mapper.readValue(listaCala, Object.class);
+            lstObjeto = mapper.readValue(jsonValue, mapper.getTypeFactory().constructCollectionType(List.class, clase));
+        }
+
+          // catch various errors
+          catch (JsonGenerationException e) {
+            e.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return lstObjeto;
+    }
+    
     public String GetUrlSistema(){
         Parametro param = loParam.obtener(1);
         

@@ -185,6 +185,11 @@ public class Evaluacion implements Serializable {
         return "";
     }
     
+    public String getInscripcionAutomatica()
+    {
+        return (this.tipoEvaluacion.getTpoEvlInsAut() ? "Si" :  "No");
+    }
+    
     public String getEstudioNombre()
     {
         if(this.getCurEvl() != null)
