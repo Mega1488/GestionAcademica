@@ -10,6 +10,7 @@ import Entidad.Evaluacion;
 import Entidad.Modulo;
 import Entidad.Parametro;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoPeriodo;
 import Moodle.MoodleCategory;
 import Moodle.MoodleCourse;
 import Moodle.MoodleRestCourse;
@@ -216,6 +217,10 @@ public class LoCurso implements Interfaz.InCurso{
             retorno = (Retorno_MsgObj) this.actualizar(curso);
         }
         return retorno;
+    }
+    
+    public Retorno_MsgObj ModuloPorPeriodo(TipoPeriodo tpoPer, Double perVal) {
+        return perCurso.obtenerModuloPorPeriodo(tpoPer, perVal);
     }
     
     //------------------------------------------------------------------------------------

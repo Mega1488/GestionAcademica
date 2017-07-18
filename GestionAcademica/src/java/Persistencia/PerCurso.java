@@ -7,6 +7,7 @@ package Persistencia;
 
 import Entidad.Curso;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoPeriodo;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;
@@ -157,6 +158,31 @@ public class PerCurso implements Interfaz.InCurso{
             iniciaOperacion();
             
             List<Object> listaRetorno =  sesion.getNamedQuery("Curso.findAll").list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+        
+        } catch (HibernateException he) {
+        
+           retorno = manejaExcepcion(he, retorno);
+        }  finally {
+            sesion.close();
+        }
+
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerModuloPorPeriodo(TipoPeriodo tpoPer, Double perVal) {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+        
+        try {
+            
+            iniciaOperacion();
+            
+            List<Object> listaRetorno =  sesion.getNamedQuery("Modulo.findByPeriodo")
+                    .setParameter("TpoPer", tpoPer)
+                    .setParameter("PerVal", perVal)
+                    .list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
             retorno.setLstObjetos(listaRetorno);

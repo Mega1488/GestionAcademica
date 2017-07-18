@@ -6,7 +6,6 @@
 package Entidad;
 
 import Enumerado.EstadoCalendarioEvaluacion;
-import Utiles.JSonDateTimeSerializer;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -28,7 +27,6 @@ import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.hibernate.annotations.GenericGenerator;
 
 /**

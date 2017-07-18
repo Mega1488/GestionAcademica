@@ -6,15 +6,12 @@
 package Servlets;
 
 
-import Entidad.Parametro;
 import Entidad.Calendario;
 import Entidad.Evaluacion;
 import Enumerado.Modo;
 import Enumerado.TipoMensaje;
-import Logica.LoParametro;
 import Logica.LoCalendario;
 import Logica.LoEvaluacion;
-import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -23,14 +20,10 @@ import java.io.PrintWriter;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  *

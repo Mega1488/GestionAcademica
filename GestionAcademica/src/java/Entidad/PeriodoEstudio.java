@@ -7,32 +7,46 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"Periodo", "lstDocumento"})
+
 @Entity
-@Table(name = "PERIODO_ESTUDIO")
+@Table(
+        name = "PERIODO_ESTUDIO",
+        uniqueConstraints = {
+                                @UniqueConstraint(columnNames = {"PeriCod", "MatEstMatCod"}),
+                                @UniqueConstraint(columnNames = {"PeriCod", "ModEstModCod"})
+                            }
+    )
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t"),
@@ -49,21 +63,40 @@ public class PeriodoEstudio implements Serializable {
     @Column(name = "PeriEstCod", nullable = false)
     private Long PeriEstCod;
     
-    @OneToOne(targetEntity = Periodo.class, optional=false)        
+    @OneToOne(targetEntity = Periodo.class)        
     @JoinColumn(name="PeriCod", referencedColumnName="PeriCod")
     private Periodo Periodo;
 
-    @OneToOne(targetEntity = Materia.class, optional=true)        
+    @OneToOne(targetEntity = Materia.class)        
     @JoinColumn(name="MatEstMatCod", referencedColumnName="MatCod")
     private Materia Materia;
     
-    @OneToOne(targetEntity = Modulo.class, optional=true)        
+    @OneToOne(targetEntity = Modulo.class)        
     @JoinColumn(name="ModEstModCod", referencedColumnName="ModCod")
     private Modulo Modulo;
     
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
+    
+    //----------------------------------------------------------------------
+    @OneToMany(targetEntity = PeriodoEstudioAlumno.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="PeriEstCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<PeriodoEstudioAlumno> lstAlumno;
+    
+    @OneToMany(targetEntity = PeriodoEstudioDocente.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="PeriEstCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<PeriodoEstudioDocente> lstDocente;
+    
+    @OneToMany(targetEntity = PeriodoEstudioDocumento.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="PeriEstCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<PeriodoEstudioDocumento> lstDocumento;
+    //----------------------------------------------------------------------
+    
 
     //-CONSTRUCTOR
 
@@ -112,6 +145,32 @@ public class PeriodoEstudio implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    public List<PeriodoEstudioAlumno> getLstAlumno() {
+        return lstAlumno;
+    }
+
+    public void setLstAlumno(List<PeriodoEstudioAlumno> lstAlumno) {
+        this.lstAlumno = lstAlumno;
+    }
+
+    public List<PeriodoEstudioDocente> getLstDocente() {
+        return lstDocente;
+    }
+
+    public void setLstDocente(List<PeriodoEstudioDocente> lstDocente) {
+        this.lstDocente = lstDocente;
+    }
+
+    public List<PeriodoEstudioDocumento> getLstDocumento() {
+        return lstDocumento;
+    }
+
+    public void setLstDocumento(List<PeriodoEstudioDocumento> lstDocumento) {
+        this.lstDocumento = lstDocumento;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 5;

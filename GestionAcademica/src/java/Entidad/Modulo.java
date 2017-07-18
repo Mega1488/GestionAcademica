@@ -46,6 +46,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Modulo.findAll", query = "SELECT m FROM Modulo m"),
     @NamedQuery(name = "Modulo.findByPK", query = "SELECT m FROM Modulo m WHERE m.curso.CurCod = :CurCod and m.ModCod = :ModCod"),
     @NamedQuery(name = "Modulo.findByCurso", query = "SELECT m FROM Modulo m WHERE m.curso.CurCod = :CurCod"),
+    @NamedQuery(name = "Modulo.findByPeriodo", query = "SELECT m FROM Modulo m WHERE m.ModTpoPer = :TpoPer and m.ModPerVal =:PerVal"),
     @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.curso.CurCod = :CurCod ORDER BY m.ModCod desc")})
 
 public class Modulo implements Serializable {

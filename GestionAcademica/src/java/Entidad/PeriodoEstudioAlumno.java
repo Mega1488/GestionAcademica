@@ -22,15 +22,22 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
+@JsonIgnoreProperties({"PeriodoEstudio"})
+
 @Entity
-@Table(name = "PERIODO_ESTUDIO_ALUMNO")
+@Table(
+        name = "PERIODO_ESTUDIO_ALUMNO",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"PeriEstCod", "AluPerCod"})}
+    )
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PeriodoEstudioAlumno.findAll",       query = "SELECT t FROM PeriodoEstudioAlumno t"),
@@ -47,16 +54,16 @@ public class PeriodoEstudioAlumno implements Serializable {
     @Column(name = "PeriEstAluCod", nullable = false)
     private Long PeriEstAluCod;
     
-    @OneToOne(targetEntity = PeriodoEstudio.class, optional=false)
+    @OneToOne(targetEntity = PeriodoEstudio.class)
     @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
     private PeriodoEstudio PeriodoEstudio;
 
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
     private Persona Alumno;
    
     
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="PerInsPerCod", referencedColumnName="PerCod")
     private Persona InscritoPor;
 

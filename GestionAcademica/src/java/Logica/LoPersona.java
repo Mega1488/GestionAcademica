@@ -268,11 +268,11 @@ public class LoPersona implements Interfaz.InPersona{
             {
                 Escolaridad escolaridad = (Escolaridad) objeto;
                 
-                if(escolaridad.getMateria() != null) retorno = LoInscripcion.GetInstancia().obtenerListaByPlan(PerCod, escolaridad.getMateria().getPlan().getPlaEstCod());
+                if(escolaridad.getMateria() != null) retorno = LoInscripcion.GetInstancia().obtenerInscByPlan(PerCod, escolaridad.getMateria().getPlan().getPlaEstCod());
                 
-                if(escolaridad.getModulo() != null) retorno = LoInscripcion.GetInstancia().obtenerListaByCurso(PerCod, escolaridad.getModulo().getCurso().getCurCod());
+                if(escolaridad.getModulo() != null) retorno = LoInscripcion.GetInstancia().obtenerInscByCurso(PerCod, escolaridad.getModulo().getCurso().getCurCod());
                 
-                if(escolaridad.getCurso() != null) retorno = LoInscripcion.GetInstancia().obtenerListaByCurso(PerCod, escolaridad.getCurso().getCurCod());
+                if(escolaridad.getCurso() != null) retorno = LoInscripcion.GetInstancia().obtenerInscByCurso(PerCod, escolaridad.getCurso().getCurCod());
 
                 if(!retorno.SurgioError()) lstEstudios = PersonaAgregarEstudio(lstEstudios, escolaridad, (Inscripcion) retorno.getObjeto());
                 

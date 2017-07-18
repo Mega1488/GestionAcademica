@@ -5,7 +5,7 @@
  */
 package Persistencia;
 
-import Entidad.Inscripcion;
+import Entidad.Periodo;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
 import Utiles.Mensajes;
@@ -23,12 +23,12 @@ import org.hibernate.Transaction;
  *
  * @author alvar
  */
-public class PerInscripcion implements InABMGenerico{
+public class PerPeriodo implements InABMGenerico{
     
     private Session sesion;
     private Transaction tx;
     
-   private void iniciaOperacion() throws HibernateException {
+    private void iniciaOperacion() throws HibernateException {
         try {
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
@@ -71,19 +71,18 @@ public class PerInscripcion implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        
-        Inscripcion inscripcion = (Inscripcion) pObjeto;
+        Periodo periodo = (Periodo) pObjeto;
 
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), inscripcion);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), periodo);
 
-        inscripcion.setObjFchMod(new Date());
+        periodo.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            inscripcion.setInsCod((Long) sesion.save(inscripcion));
+            periodo.setPeriCod((Long) sesion.save(periodo));
             tx.commit();
             
-            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), inscripcion);
+            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), periodo);
             
         } catch (HibernateException he) {
             
@@ -93,23 +92,24 @@ public class PerInscripcion implements InABMGenerico{
             sesion.close();
         }
         
+        
         return retorno;
     }
     
     @Override
     public Object actualizar(Object pObjeto) {
         
-        Inscripcion inscripcion = (Inscripcion) pObjeto;
+        Periodo periodo = (Periodo) pObjeto;
         
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), inscripcion);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), periodo);
 
         try {
-            inscripcion.setObjFchMod(new Date());
+            periodo.setObjFchMod(new Date());
             iniciaOperacion();
-            sesion.update(inscripcion);
+            sesion.update(periodo);
             tx.commit();
             
-            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), inscripcion);
+            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), periodo);
             
         } catch (HibernateException he) {
             
@@ -125,13 +125,13 @@ public class PerInscripcion implements InABMGenerico{
     @Override
     public Object eliminar(Object pObjeto) {
         
-        Inscripcion inscripcion = (Inscripcion) pObjeto;
+        Periodo periodo = (Periodo) pObjeto;
 
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), null);
 
         try {
             iniciaOperacion();
-            sesion.delete(inscripcion);
+            sesion.delete(periodo);
             tx.commit();
             
             retorno = new Retorno_MsgObj(new Mensajes("Eliminado correctamente", TipoMensaje.MENSAJE), null);
@@ -155,8 +155,8 @@ public class PerInscripcion implements InABMGenerico{
         
         try {
             iniciaOperacion();
-            Inscripcion inscripcion = (Inscripcion) sesion.get(Inscripcion.class, codigo);
-            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), inscripcion);
+            Periodo periodo = (Periodo) sesion.get(Periodo.class, codigo);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), periodo);
             
         } catch (HibernateException he) {
             
@@ -171,13 +171,13 @@ public class PerInscripcion implements InABMGenerico{
     
     @Override
     public Retorno_MsgObj obtenerLista() {
-
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
 
         try {
             iniciaOperacion();
             
-            List<Object> listaRetorno = sesion.getNamedQuery("Inscripcion.findAll").list();
+            List<Object> listaRetorno = sesion.getNamedQuery("Periodo.findAll").list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
             retorno.setLstObjetos(listaRetorno);
@@ -189,24 +189,29 @@ public class PerInscripcion implements InABMGenerico{
         } finally {
             sesion.close();
         }
+        
+        
 
         return retorno;
     }
     
-    public Retorno_MsgObj obtenerListaByPlan(Long PerCod, Long PlaEstCod) {
-
+    public Retorno_MsgObj obtenerUltimoByMateria(Long MatCod) {
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
 
         try {
             iniciaOperacion();
             
-            List<Object> listaRetorno = sesion.getNamedQuery("Inscripcion.findByPlan")
-                    .setParameter("PlaEstCod", PlaEstCod)
-                    .setParameter("PerCod", PerCod)
+            List<Object> listaRetorno = sesion.getNamedQuery("Periodo.findLastByMat")
+                    .setParameter("MatCod", MatCod)
+                    .setMaxResults(1)
                     .list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
-            retorno.setLstObjetos(listaRetorno);
+             if(!listaRetorno.isEmpty())
+            {
+                retorno.setObjeto(listaRetorno.get(0));
+            }
             
         } catch (HibernateException he) {
             
@@ -215,25 +220,29 @@ public class PerInscripcion implements InABMGenerico{
         } finally {
             sesion.close();
         }
+        
+        
 
         return retorno;
-
     }
     
-    public Retorno_MsgObj obtenerListaByCurso(Long PerCod, Long CurCod) {
-
+    public Retorno_MsgObj obtenerUltimoByModulo(Long ModCod) {
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
 
         try {
             iniciaOperacion();
             
-            List<Object> listaRetorno = sesion.getNamedQuery("Inscripcion.findByCurso")
-                    .setParameter("CurCod", CurCod)
-                    .setParameter("PerCod", PerCod)
+            List<Object> listaRetorno = sesion.getNamedQuery("Periodo.findLastByMod")
+                    .setParameter("ModCod", ModCod)
+                    .setMaxResults(1)
                     .list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
-            retorno.setLstObjetos(listaRetorno);
+             if(!listaRetorno.isEmpty())
+            {
+                retorno.setObjeto(listaRetorno.get(0));
+            }
             
         } catch (HibernateException he) {
             
@@ -242,33 +251,9 @@ public class PerInscripcion implements InABMGenerico{
         } finally {
             sesion.close();
         }
+        
+        
 
         return retorno;
     }
-    
-    public Retorno_MsgObj obtenerListaByAlumno(Long PerCod) {
-
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
-
-        try {
-            iniciaOperacion();
-            
-            List<Object> listaRetorno = sesion.getNamedQuery("Inscripcion.findByAlumno")
-            .setParameter("PerCod", PerCod)
-            .list();
-            
-            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
-            retorno.setLstObjetos(listaRetorno);
-            
-        } catch (HibernateException he) {
-            
-            retorno = manejaExcepcion(he, retorno);
-            
-        } finally {
-            sesion.close();
-        }
-
-        return retorno;
-    }
-    
 }

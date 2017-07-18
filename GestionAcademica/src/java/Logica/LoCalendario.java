@@ -8,6 +8,9 @@ package Logica;
 import Entidad.Calendario;
 import Entidad.CalendarioAlumno;
 import Entidad.CalendarioDocente;
+import Entidad.PeriodoEstudio;
+import Entidad.PeriodoEstudioAlumno;
+import Entidad.PeriodoEstudioDocente;
 import Entidad.Persona;
 import Enumerado.EstadoCalendarioEvaluacion;
 import Enumerado.TipoMensaje;
@@ -44,7 +47,37 @@ public class LoCalendario implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        return perCalendario.guardar(pObjeto);
+        Calendario calendario = (Calendario) pObjeto;
+        
+        if(calendario.getEvaluacion().getTpoEvl().getTpoEvlInsAut())
+        {
+            PeriodoEstudio perEst = new PeriodoEstudio();
+
+            if(calendario.getEvaluacion().getMatEvl() != null) perEst = LoPeriodo.GetInstancia().obtenerLastPeriodoEstudioByMateria(calendario.getEvaluacion().getMatEvl().getMatCod());
+            if(calendario.getEvaluacion().getModEvl() != null) perEst = LoPeriodo.GetInstancia().obtenerLastPeriodoEstudioByModulo(calendario.getEvaluacion().getModEvl().getModCod());
+            
+            for(PeriodoEstudioAlumno alumno : perEst.getLstAlumno())
+            {
+                CalendarioAlumno calAlumno = new CalendarioAlumno();
+                calAlumno.setAlumno(alumno.getAlumno());
+                calAlumno.setCalendario(calendario);
+                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
+                
+                calendario.getLstAlumnos().add(calAlumno);
+
+            }
+            
+            for(PeriodoEstudioDocente docente : perEst.getLstDocente())
+            {
+                CalendarioDocente calDocente = new CalendarioDocente();
+                calDocente.setDocente(docente.getDocente());
+                calDocente.setCalendario(calendario);
+                
+                calendario.getLstDocentes().add(calDocente);                
+            }
+        }
+        
+        return perCalendario.guardar(calendario);
     }
 
     @Override
@@ -184,7 +217,7 @@ public class LoCalendario implements InABMGenerico{
         docente.setObjFchMod(new Date());
         calendario.getLstDocentes().set(indice, docente);
 
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(docente);
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(calendario);
 
         return retorno;
     }

@@ -57,12 +57,34 @@ public class LoInscripcion implements InABMGenerico{
         return perInscripcion.obtenerLista();
     }
     
-    public Retorno_MsgObj obtenerListaByCurso(Long PerCod, Long CurCod) {
-        return perInscripcion.obtenerListaByCurso(PerCod, CurCod);
+    public Retorno_MsgObj obtenerInscByCurso(Long PerCod, Long CurCod) {
+        Retorno_MsgObj retorno = perInscripcion.obtenerListaByCurso(PerCod, CurCod);
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            retorno.setObjeto(retorno.getLstObjetos().get(0));
+        }
+        retorno.setLstObjetos(null);
+        return retorno;
     }
     
-    public Retorno_MsgObj obtenerListaByPlan(Long PerCod, Long PlaEstCod) {
-        return perInscripcion.obtenerListaByPlan(PerCod, PlaEstCod);
+    public Retorno_MsgObj obtenerInscByPlan(Long PerCod, Long PlaEstCod) {
+        Retorno_MsgObj retorno = perInscripcion.obtenerListaByPlan(PerCod, PlaEstCod);
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            retorno.setObjeto(retorno.getLstObjetos().get(0));
+        }
+        retorno.setLstObjetos(null);
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerListaByCurso(Long CurCod) {
+        return perInscripcion.obtenerListaByCurso(null, CurCod);
+    }
+    
+    public Retorno_MsgObj obtenerListaByPlan(Long PlaEstCod) {
+        return perInscripcion.obtenerListaByPlan(null, PlaEstCod);
     }
     
     public Retorno_MsgObj obtenerListaByAlumno(Long PerCod) {

@@ -116,7 +116,6 @@ public class ABM_Inscripcion extends HttpServlet {
                 {
                     if(perUsuario != null) inscripcion.setPersonaInscribe(perUsuario);
                     inscripcion.setAluFchInsc(new java.util.Date());
-                    
                     Retorno_MsgObj retornoObj = (Retorno_MsgObj) loInscripcion.guardar(inscripcion);
                     mensaje    = retornoObj.getMensaje();
                 }

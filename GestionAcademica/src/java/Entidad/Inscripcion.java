@@ -42,8 +42,8 @@ import org.hibernate.annotations.GenericGenerator;
 @NamedQueries({
     @NamedQuery(name = "Inscripcion.findAll",       query = "SELECT t FROM Inscripcion t"),
     @NamedQuery(name = "Inscripcion.findByAlumno",  query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod"),
-    @NamedQuery(name = "Inscripcion.findByPlan",    query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod and t.PlanEstudio.PlaEstCod =:PlaEstCod"),
-    @NamedQuery(name = "Inscripcion.findByCurso",   query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod and t.Curso.CurCod =:CurCod")
+    @NamedQuery(name = "Inscripcion.findByPlan",    query = "SELECT t FROM Inscripcion t WHERE (t.Alumno.PerCod =:PerCod or :PerCod IS NULL) and t.PlanEstudio.PlaEstCod =:PlaEstCod"),
+    @NamedQuery(name = "Inscripcion.findByCurso",   query = "SELECT t FROM Inscripcion t WHERE (t.Alumno.PerCod =:PerCod or :PerCod IS NULL) and t.Curso.CurCod =:CurCod")
 })
 
 public class Inscripcion implements Serializable {
