@@ -79,7 +79,10 @@
             </div>
 
             <div id="contenido" name="contenido"  class="col-sm-8">
-                <h1>Calendario</h1>
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Calendario</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+                </div>
 
                 <div id="tabs" name="tabs">
                     <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>

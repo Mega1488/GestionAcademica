@@ -38,7 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "CALENDARIO")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Calendario.findAll",       query = "SELECT t FROM Calendario t")})
+    @NamedQuery(name = "Calendario.findAll",       query = "SELECT t FROM Calendario t order by t.CalFch desc")})
 
 public class Calendario implements Serializable {
 

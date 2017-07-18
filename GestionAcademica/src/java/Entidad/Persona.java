@@ -468,7 +468,7 @@ public class Persona implements Serializable {
         
         if(this.PerEsAdm) retorno += (retorno.isEmpty() ? "Administrador" : ", Administrador");
         if(this.PerEsAlu) retorno += (retorno.isEmpty() ? "Alumno" : ", Alumno");
-        if(this.PerEsAdm) retorno += (retorno.isEmpty() ? "Docente" : ", Docente");
+        if(this.PerEsDoc) retorno += (retorno.isEmpty() ? "Docente" : ", Docente");
 
         return retorno;
     }

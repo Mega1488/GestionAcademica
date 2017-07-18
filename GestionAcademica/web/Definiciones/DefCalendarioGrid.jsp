@@ -59,22 +59,25 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
+        <div class="container-fluid">
+            
+            <div id="cabezal" name="cabezal" class="row">
             <jsp:include page="/masterPage/cabezal.jsp"/>
         </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
-
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <h1>Calendario</h1>
-            
-            <div id="tabs" name="tabs">
-                <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
-            </div>
-            
         
+            <div class="col-sm-2">
+                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            </div>
+
+            <div id="contenido" name="contenido"  class="col-sm-8">
+                <h1>Calendario</h1>
+
+                <div id="tabs" name="tabs">
+                    <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
+                </div>
+            
+            </div>
+        </div>
              
     </body>
 </html>

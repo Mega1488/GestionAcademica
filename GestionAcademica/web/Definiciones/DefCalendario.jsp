@@ -127,30 +127,7 @@
                                           
                                     }
                         });
-                    /*    
-                    
-                    $(function () {
-                        $( "#PopUpEvaluacion" ).dialog({
-                          autoOpen: false
-                        });
-
-                        $("#btnEvlCod").click(function() {
-                          $("#PopUpEvaluacion").dialog('open');
-                        });
-                      });
-
-*/
-/*$("#PopUpEvaluacion").dialog({
-                       autoOpen: false,
-                       modal: true
-                     });
-
-                    $("#btnEvlCod").on("click", function(e) {
-                        e.preventDefault();
-                        $("#PopUpEvaluacion").dialog("open");
-                    });
-
-  */                  
+                  
                 });
             
         </script>
@@ -168,14 +145,14 @@
 
             <div id="contenido" name="contenido" class="col-sm-8">
                 
-                <h1>Definición de calendario</h1>
-
+                <div class="row"> 
+                    <div class="col-lg-6"><h1>Calendario</h1></div>
+                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+                </div>
                 
                 <div id="tabs" name="tabs">
                     <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
                 </div>
-
-                <h2>Calendario</h2>
                 
                 <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                         <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
@@ -210,7 +187,8 @@
                         </div>
                             
                         
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button"  class="btn btn-default" />
+                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button"  class="btn btn-success" />
+                        <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                 </form>
             </div>
         </div>
