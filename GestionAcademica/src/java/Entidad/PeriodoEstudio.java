@@ -6,6 +6,7 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -101,6 +102,9 @@ public class PeriodoEstudio implements Serializable {
     //-CONSTRUCTOR
 
     public PeriodoEstudio() {
+        this.lstAlumno = new ArrayList<>();
+        this.lstDocente = new ArrayList<>();
+        this.lstDocumento = new ArrayList<>();
     }
     
     //-GETTERS Y SETTERS

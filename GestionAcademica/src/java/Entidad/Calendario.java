@@ -6,6 +6,7 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -86,6 +87,8 @@ public class Calendario implements Serializable {
 
     //-CONSTRUCTOR
     public Calendario() {
+        this.lstAlumnos = new ArrayList<>();
+        this.lstDocentes = new ArrayList<>();
     } 
 
     //-GETTERS Y SETTERS
