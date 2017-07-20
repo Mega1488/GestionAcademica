@@ -4,49 +4,85 @@
     Author     : alvar
 --%>
 
+<%@page import="Logica.LoParametro"%>
+<%@page import="Entidad.Menu"%>
+<%@page import="Dominio.OpcionesDeMenu"%>
+<%@page import="Logica.LoPersona"%>
+<%@page import="Entidad.Persona"%>
+<%@page import="Dominio.Sitios"%>
+<%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = utilidad.GetUrlSistema();
+    String urlSistema       = LoParametro.GetInstancia().obtener(1).getParUrlSis();
+    String sitioActual = utilidad.GetPaginaActual(request);
     
-    String version      = "'" + urlSistema + "Definiciones/DefVersion.jsp'";
-    String parametro    = "'" + urlSistema + "Definiciones/DefParametro.jsp'";
-    String parametroEml = "'" + urlSistema + "Definiciones/DefParametroEmailWW.jsp'";
-    String persona      = "'" + urlSistema + "Definiciones/DefPersonaWW.jsp'";
-    String carrera      = "'" + urlSistema + "Definiciones/DefCarreraWW.jsp'";
-    String curso      = "'" + urlSistema + "Definiciones/DefCursoWW.jsp'";
+    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
     
-    String prueba      = "'" + urlSistema + "Prueba'";
+    esAdm = (esAdm == null ? false : esAdm);
+    esAlu = (esAlu == null ? false : esAlu);
+    esDoc = (esDoc == null ? false : esDoc);
 %>
     
-<div >
-<list>
-<ul>
-    <li>
-        <a href=<% out.print(version); %>>Versión</a>
-    </li>
-    <li>
-        <a href=<% out.print(parametro); %>>Parametros</a>
-    </li>
-    <li>
-        <a href=<% out.print(parametroEml); %>>Parametros Email</a>
-    </li>
-    <li>
-        <a href=<% out.print(persona); %>>Persona</a>
-    </li>
-    <li>
-        <a href=<% out.print(carrera); %>> Carrera </a>
-    </li>
-    <li>
-        <a href=<% out.print(curso); %>>Curso</a>
-    </li>
-    <li>
-        <a href=<% out.print(prueba); %>> Prueba </a>
-    </li>
-    <li>
-        <a href=<% out.print(prueba); %>> Futura Pag </a>
-    </li>
-</ul>
+<div class="sidebar" data-color="red">    
+    
+        <div id="logo" name="logo" class="logo">
+            <a href="<% out.print(urlSistema); %>"> <img src="<% out.print(urlSistema); %>/Imagenes/logo_ctc.png" height="55px" alt="logo del instituto"/></a>
+        </div>
 
+    <input type="hidden" name="sga_sitioactual" id="sga_sitioactual" value="<% out.print(sitioActual); %>">    
+    
+    
+    <div class='sidebar-wrapper'>
+
+    <%
+        if(esAdm)
+        {               
+
+            out.println("<ul class='nav'>");
+           /* out.println("   <li class='active'><a href='#'><i class='material-icons'>dashboard</i><p>Inicio</p></a></li>");*/
+
+            for(Menu menu : OpcionesDeMenu.GetInstancia().getLstAdministrador())
+            {
+                out.println("<li><a href='" + menu.getMenUrl() + "'>" + menu.getMenNom() + "</a></li>");
+            }
+            
+            out.println("</ul>");
+        }
+
+        if(esDoc)
+        {
+            out.println("<label>Docente</label>");
+            out.println("<ul class='nav nav-pills nav-stacked'>");
+            
+            for(Menu menu : OpcionesDeMenu.GetInstancia().getLstDocente())
+            {
+                out.println("<li><a href='" + menu.getMenUrl() + "'>" + menu.getMenNom() + "</a></li>");
+            }
+            
+            out.println("</ul>");
+        }
+        
+        if(esAlu)
+        {
+            out.println("<label>Alumno</label>");
+            out.println("<ul class='nav nav-pills nav-stacked'>");
+            
+            for(Menu menu : OpcionesDeMenu.GetInstancia().getLstAlumno())
+            {
+                out.println("<li><a href='" + menu.getMenUrl() + "'>" + menu.getMenNom() + "</a></li>");
+            }
+            
+            out.println("</ul>");
+
+        }
+
+
+    %>
+    
+    </div>
 </div>
+
