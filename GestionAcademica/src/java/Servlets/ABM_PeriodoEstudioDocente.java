@@ -5,7 +5,7 @@
  */
 package Servlets;
 
-import Entidad.PeriodoEstudioAlumno;
+import Entidad.PeriodoEstudioDocente;
 import Entidad.PeriodoEstudio;
 import Entidad.Persona;
 import Enumerado.NombreSesiones;
@@ -28,7 +28,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author alvar
  */
-public class ABM_PeriodoEstudioAlumno extends HttpServlet {
+public class ABM_PeriodoEstudioDocente extends HttpServlet {
     LoPeriodo loPeriodo                     = LoPeriodo.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
@@ -95,7 +95,7 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         {
             error           = false;
 
-            PeriodoEstudioAlumno periAlumno = this.ValidarPeriodoEstudioAlumno(request, null);
+            PeriodoEstudioDocente periDocente = this.ValidarPeriodoEstudioDocente(request, null);
 
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -103,11 +103,10 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
 
             if(!error)
             {
-                periAlumno.setPerInsFchInsc(new Date());
-                if(perUsuario != null) periAlumno.setInscritoPor(perUsuario);
-                periAlumno.setPerInsFrz(true);
+                periDocente.setDocFchInsc(new Date());
+                if(perUsuario != null) periDocente.setInscritoPor(perUsuario);
                 
-                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPeriodo.AlumnoAgregar(periAlumno);
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPeriodo.DocenteAgregar(periDocente);
                 mensaje    = retornoObj.getMensaje();
             }
         }
@@ -127,9 +126,9 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         try
         {
-            PeriodoEstudioAlumno periAlumno = this.ValidarPeriodoEstudioAlumno(request, null);
+            PeriodoEstudioDocente periDocente = this.ValidarPeriodoEstudioDocente(request, null);
             
-            Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.AlumnoEliminar(periAlumno);
+            Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.DocenteEliminar(periDocente);
             
             mensaje = retorno.getMensaje();
 
@@ -151,7 +150,7 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
 
             error           = false;
             
-            PeriodoEstudioAlumno periAlumno = ValidarPeriodoEstudioAlumno(request, null);
+            PeriodoEstudioDocente periDocente = ValidarPeriodoEstudioDocente(request, null);
             
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -159,7 +158,7 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
 
             if(!error)
             {
-                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPeriodo.AlumnoActualizar(periAlumno);
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loPeriodo.DocenteActualizar(periDocente);
                     
                 mensaje    = retornoObj.getMensaje();
             }
@@ -177,11 +176,11 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
     
     private String ObtenerDatos(HttpServletRequest request){
         error       = false;
-        PeriodoEstudioAlumno periAlumno = new PeriodoEstudioAlumno();
+        PeriodoEstudioDocente periDocente = new PeriodoEstudioDocente();
         
         try
         {
-            periAlumno = this.ValidarPeriodoEstudioAlumno(request, null);
+            periDocente = this.ValidarPeriodoEstudioDocente(request, null);
         }
         catch(Exception ex)
         {
@@ -189,32 +188,32 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
             throw ex;
         }
 
-       return utilidades.ObjetoToJson(periAlumno);
+       return utilidades.ObjetoToJson(periDocente);
     }
     
-    private PeriodoEstudioAlumno ValidarPeriodoEstudioAlumno(HttpServletRequest request, PeriodoEstudioAlumno periAlumno){
-        if(periAlumno == null)
+    private PeriodoEstudioDocente ValidarPeriodoEstudioDocente(HttpServletRequest request, PeriodoEstudioDocente periDocente){
+        if(periDocente == null)
         {
-            periAlumno   = new PeriodoEstudioAlumno();
+            periDocente   = new PeriodoEstudioDocente();
         }
 
         String 	PeriEstCod	= request.getParameter("pPeriEstCod");
-        String 	PeriEstAluCod   = request.getParameter("pPeriEstAluCod");
-        String 	AluPerCod	= request.getParameter("pAluPerCod");
-        
+        String 	PeriEstDocCod   = request.getParameter("pPeriEstDocCod");
+        String  DocPerCod       = request.getParameter("pDocPerCod");
+
         //------------------------------------------------------------------------------------------
         //Validaciones
         //------------------------------------------------------------------------------------------
 
         //TIPO DE DATO
 
-        if(PeriEstCod != null) periAlumno.setPeriodoEstudio(((PeriodoEstudio) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
+        if(PeriEstCod != null) periDocente.setPeriodoEstudio(((PeriodoEstudio) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
         
-        if(PeriEstAluCod != null) periAlumno = periAlumno.getPeriodoEstudio().getAlumnoById(Long.valueOf(PeriEstAluCod));
+        if(PeriEstDocCod != null) periDocente = periDocente.getPeriodoEstudio().getDocenteById(Long.valueOf(PeriEstDocCod));
         
-        if(AluPerCod != null) periAlumno.setAlumno((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(AluPerCod)).getObjeto());
+        if(DocPerCod != null) periDocente.setDocente((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(DocPerCod)).getObjeto());
             
-        return periAlumno;
+        return periDocente;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

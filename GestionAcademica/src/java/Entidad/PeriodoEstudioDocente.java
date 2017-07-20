@@ -55,20 +55,22 @@ public class PeriodoEstudioDocente implements Serializable {
     @Column(name = "PeriEstDocCod", nullable = false)
     private Long PeriEstDocCod;
     
-    @OneToOne(targetEntity = PeriodoEstudio.class, optional=false)
+    @OneToOne(targetEntity = PeriodoEstudio.class)
     @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
     private PeriodoEstudio periodoEstudio;
 
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="DocPerCod", referencedColumnName="PerCod")
     private Persona Docente;
     
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="PerInsPerCod", referencedColumnName="PerCod")
     private Persona InscritoPor;
+
     @Column(name = "DocFchInsc", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date DocFchInsc;
+
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
