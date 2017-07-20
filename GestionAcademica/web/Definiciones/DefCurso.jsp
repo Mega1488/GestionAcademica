@@ -195,6 +195,7 @@
         
     </head>
     <body>
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             <div id="contenido" name="contenido" class="main-panel">

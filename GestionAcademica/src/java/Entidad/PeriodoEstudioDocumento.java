@@ -58,15 +58,17 @@ public class PeriodoEstudioDocumento implements Serializable {
     @Column(name = "DocCod", nullable = false)
     private Long DocCod;
     
-    @OneToOne(targetEntity = PeriodoEstudio.class, optional=false)
+    @OneToOne(targetEntity = PeriodoEstudio.class)
     @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
     private PeriodoEstudio periodo;
     
     @Column(name = "DocFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date DocFch;
-    @Column(name = "DocAdj")
+    
+    @Column(name = "DocAdj", columnDefinition = "LONGBLOB")
     private byte[] DocAdj;
+    
     @Column(name = "DocNom", length = 100)
     private String DocNom;
     @Column(name = "DocExt", length = 10)
@@ -92,7 +94,6 @@ public class PeriodoEstudioDocumento implements Serializable {
     }
 
     public File getArchivo(){
-        //File archivo = new File(RutaArchivos.CARPETA_PRIVADA.getRuta() + File.pathSeparator + this.getDocNom() + "." + this.DocExt);
        String nombreArchivo = RutaArchivos.CARPETA_PRIVADA.getRuta() + File.pathSeparator + this.getDocNom() + "." + this.DocExt;
 
        try {

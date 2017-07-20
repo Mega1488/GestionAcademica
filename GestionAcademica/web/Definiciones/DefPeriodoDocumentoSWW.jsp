@@ -3,11 +3,19 @@
     Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
+<%@page import="org.apache.commons.fileupload.FileUploadException"%>
+<%@page import="org.apache.commons.fileupload.FileItem"%>
+<%@page import="java.io.File"%>
+<%@page import="java.util.Date"%>
+<%@page import="org.apache.commons.fileupload.servlet.ServletFileUpload"%>
+<%@page import="org.apache.commons.fileupload.disk.DiskFileItemFactory"%>
+<%@page import="org.apache.commons.fileupload.FileItemFactory"%>
+<%@page import="Utiles.Mensajes"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Entidad.Persona"%>
-<%@page import="Entidad.PeriodoEstudioAlumno"%>
+<%@page import="Entidad.PeriodoEstudioDocumento"%>
 <%@page import="Enumerado.Modo"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
@@ -36,17 +44,72 @@
             
     //----------------------------------------------------------------------------------------------------
     
+    File fichero        = null;
     String PeriEstCod   = request.getParameter("pPeriEstCod");
-    Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
-    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + PeriEstCod;
+    String ModoTxt      = request.getParameter("MODO");
     
+    if(ModoTxt == null)
+    { 
+        try 
+        {
+            List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+            for (FileItem item : items) {
+                if (item.isFormField()) {
+                    // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
+                    String fieldName = item.getFieldName();
+                    String fieldValue = item.getString();
+                    
+                    
+                    //--------------------------------
+                    //CARGAR VARIABLES
+                    //--------------------------------
+                    switch(fieldName)
+                    {
+                        case "pPeriEstCod": 
+                            PeriEstCod = fieldValue;
+                            break;
+                        case "MODO": 
+                            ModoTxt = fieldValue;
+                            break;
+                    }
+                    //--------------------------------
+                    
+                } 
+                else
+                {
+                    fichero = new File("C:/librerias", item.getName());
+                    item.write(fichero);
+                }
+            }
+        } catch (FileUploadException e) {
+            throw new ServletException("Cannot parse multipart request.", e);
+        }
+    }
+       
     
-    List<PeriodoEstudioAlumno> lstObjeto = new ArrayList<>();
+    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Modo.UPDATE + "&pPeriCod=" + PeriEstCod;
+    
+    Modo Mode = Modo.valueOf(ModoTxt);
+    
+    if(Mode.equals(Modo.INSERT))
+    {
+        Retorno_MsgObj retorno = AgregarDatos(fichero, Long.valueOf(PeriEstCod));
+        if(!retorno.SurgioError())
+        {
+            response.sendRedirect(urlSistema + "Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=" +Modo.UPDATE+ "&pPeriEstCod=" + PeriEstCod);
+        }
+        else
+        {
+           out.println(retorno.getMensaje()); 
+        }
+    }
+    
+    List<PeriodoEstudioDocumento> lstObjeto = new ArrayList<>();
     
     Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod));
     if(!retorno.SurgioErrorObjetoRequerido())
     {
-        lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstAlumno();
+        lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstDocumento();
     }
     else
     {
@@ -63,11 +126,13 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Periodo Estudio | Alumnos</title>
+        <title>Sistema de Gestión Académica - Periodo Estudio | Documentos</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        
+     
     </head>
     <body>
-        
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             
@@ -81,7 +146,10 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
                         
                         <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp">
+                                <jsp:param name="MostrarTabs" value="SI" />
+                                <jsp:param name="Codigo" value="<%= PeriEstCod %>" />
+                            </jsp:include>
                         </div>
                         
                         <div class=""> 
@@ -90,32 +158,31 @@
         
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="PeriEstCod" id="PeriEstCod" value="<% out.print(PeriEstCod); %>">
                         </div>
         
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                             <thead><tr>
                                 <th></th>
                                 <th>Código</th>
-                                <th>Alumno</th>
-                                <th>Fecha de inscripción</th>
-                                <th>Calificación final</th>
-                                <th>Inscripcion forzada</th>
+                                <th>Nombre</th>
+                                <th>Extension</th>
+                                <th>Fecha</th>
+                                <th></th>
                             </tr>
                             </thead>
 
                             <tbody>
-                            <% for(PeriodoEstudioAlumno periAlumno : lstObjeto)
+                            <% for(PeriodoEstudioDocumento periDocumento : lstObjeto)
                             {
 
                             %>
                             <tr>
-                                <td><% out.print("<a href='#' data-codigo='" + periAlumno.getPeriEstAluCod() + "' data-nombre='" + periAlumno.getAlumno().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getPeriEstAluCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getAlumno().getNombreCompleto())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getPerInsFchInsc())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getPerInsCalFin())); %> </td>
-                                <td><% out.print( utilidad.BooleanToSiNo(periAlumno.getPerInsFrz())); %> </td>
+                                <td><% out.print("<a href='#' data-codigo='" + periDocumento.getDocCod() + "' data-nombre='" + periDocumento.getDocNom() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periDocumento.getDocCod())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periDocumento.getDocNom())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periDocumento.getDocExt())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periDocumento.getDocFch())); %> </td>
+                                <td><% out.print( "<a  target='_blank' href='"+urlSistema+"DescargarArchivo?pPeriEstCod=" + PeriEstCod +"&pDocCod=" + periDocumento.getDocCod() + "' name='btn_descargar' id='btn_descargar' title='Descargar' class='glyphicon glyphicon-save btn_descargar'/>"); %> </td>
                             </tr>
                             <%
                             }
@@ -136,121 +203,28 @@
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Personas</h4>
+                    <h4 class="modal-title">Documento</h4>
                   </div>
-                  <div class="modal-body">
+                    <form action="DefPeriodoDocumentoSWW.jsp" enctype="MULTIPART/FORM-DATA" method="post">
+                        <div class="modal-body">
 
-                      <p>Forzar inscripción de alumnos.</p>
-                      <p>Seleccione a la persona que desea inscribir.</p>
+                              <div>
+                                      <input type="hidden" name="PeriEstCod" id="PeriEstCod" value="<% out.print(PeriEstCod); %>">
+                                      <input type="hidden" name="MODO" id="MODO" value="INSERT">
+                                      <input type="hidden" name="pPeriEstCod" id="pPeriEstCod" value="<% out.print(PeriEstCod); %>">
+                                      <input type="file" name="file" /><br/>
 
-                        <div>
-
-                            <table id="PopUpTblPersona" name="PopUpTblPersona" class="table table-striped" cellspacing="0"  class="table" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                        <th>Tipo</th>
-                                        <th>Documento</th>
-                                    </tr>
-                                </thead>
-
-                            </table>
+                              </div>
                         </div>
-
-
-
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  </div>
+                    
+                        <div class="modal-footer">
+                          <input type="submit" value="Subir archivo" class="btn btn-success"/>
+                          <input type="button" value="Cancelar" class="btn btn-default" data-dismiss="modal" />
+                        </div>
+                    </form>
                 </div>
             </div>
 
-
-
-                <script type="text/javascript">
-
-                    $(document).ready(function() {
-
-                        Buscar();
-
-
-                        $(document).on('click', ".PopPer_Seleccionar", function() {
-
-                           var AluPerCod = $(this).data("codigo");
-                           var PeriEstCod = $('#PeriEstCod').val();
-
-                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioAlumno', {
-                                        pPeriEstCod: PeriEstCod,
-                                        pAluPerCod: AluPerCod,
-                                        pAction: "<% out.print(Modo.INSERT);%>"
-                                    }, function (responseText) {
-                                        var obj = JSON.parse(responseText);
-                                        MostrarCargando(false);
-
-                                        if (obj.tipoMensaje != 'ERROR')
-                                        {
-                                            location.reload();
-                                        } else
-                                        {
-                                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                        }
-
-                                    });
-                            
-                        });
-
-
-                        function Buscar()
-                        {
-
-                                $.post('<% out.print(urlSistema); %>ABM_Persona', {
-                                pAction : "POPUP_OBTENER"
-                                    }, function(responseText) {
-
-
-                                        var personas = JSON.parse(responseText);
-
-                                        $.each(personas, function(f , persona) {
-
-                                                       persona.perCod = "<td> <a href='#' data-codigo='"+persona.perCod+"' data-nombre='"+persona.perNom+"' class='PopPer_Seleccionar'>"+persona.perCod+" </a> </td>";
-                                        });
-
-                                        $('#PopUpTblPersona').DataTable( {
-                                            data: personas,
-                                            deferRender: true,
-                                            bLengthChange : false, //thought this line could hide the LengthMenu
-                                            pageLength: 10,
-                                            language: {
-                                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                                "zeroRecords": "No se encontraron registros",
-                                                "info": "Página _PAGE_ de _PAGES_",
-                                                "infoEmpty": "No hay registros",
-                                                "search":         "Buscar:",
-                                                "paginate": {
-                                                        "first":      "Primera",
-                                                        "last":       "Ultima",
-                                                        "next":       "Siguiente",
-                                                        "previous":   "Anterior"
-                                                    },
-                                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                                            }
-                                            ,columns: [
-                                                { "data": "perCod" },
-                                                { "data": "nombreCompleto"},
-                                                { "data": "tipoPersona"},
-                                                { "data": "perDoc"}
-                                            ]
-
-                                        } );
-
-                                });
-                        }
-
-
-                    });
-                    </script>
         </div>
         
         <!------------------------------------------------->
@@ -297,9 +271,9 @@
                             var PeriEstCod = $('#PeriEstCod').val();
                             var codigo = $('#elim_boton_confirmar').data('codigo');
 
-                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioAlumno', {
+                            $.post('<% out.print(urlSistema); %>AB_PeriodoEstudioDocumento', {
                                          pPeriEstCod: PeriEstCod,
-                                         pPeriEstAluCod: codigo,
+                                         pDocCod: codigo,
                                          pAction: "<% out.print(Modo.DELETE);%>"
                                      }, function (responseText) {
                                          var obj = JSON.parse(responseText);
@@ -324,3 +298,48 @@
                                      
     </body>
 </html>
+
+<%!
+    
+    private Retorno_MsgObj AgregarDatos(File fichero, Long PeriEstCod){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar datos", TipoMensaje.ERROR));
+
+        try
+        {
+            PeriodoEstudioDocumento periDocumento = new PeriodoEstudioDocumento();
+
+        
+                //------------------------------------------------------------------------------------------
+                //Validaciones
+                //------------------------------------------------------------------------------------------
+
+                //TIPO DE DATO
+
+                if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) LoPeriodo.GetInstancia().obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
+
+                //if(DocCod != null) periDocumento = periDocumento.getPeriodo().getDocumentoById(Long.valueOf(DocCod));
+
+                if(fichero != null) periDocumento.setArchivo(fichero);
+
+
+
+          
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            periDocumento.setDocFch(new Date());
+
+            retorno = (Retorno_MsgObj) LoPeriodo.GetInstancia().DocumentoAgregar(periDocumento);
+        }
+        catch(Exception ex)
+        {
+            retorno.setMensaje(new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR));
+            ex.printStackTrace();
+        }
+
+        return retorno;
+    }
+    
+   
+%>

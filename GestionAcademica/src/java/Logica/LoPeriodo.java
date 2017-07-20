@@ -163,7 +163,7 @@ public class LoPeriodo implements InABMGenerico{
         int indice  = periodo.getLstEstudio().indexOf(periEstudio);
         periEstudio.setObjFchMod(new Date());
         periodo.getLstEstudio().set(indice, periEstudio);
-
+        
         Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(periodo);
 
         return retorno;
@@ -317,7 +317,7 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
-    public Object DocenteActualizar(PeriodoEstudioDocumento documento)
+    public Object DocumentoActualizar(PeriodoEstudioDocumento documento)
     {
         
         PeriodoEstudio periodo = documento.getPeriodo();
@@ -330,7 +330,7 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
-    public Object DocenteEliminar(PeriodoEstudioDocumento documento)
+    public Object DocumentoEliminar(PeriodoEstudioDocumento documento)
     {
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), documento);
@@ -340,7 +340,7 @@ public class LoPeriodo implements InABMGenerico{
             PeriodoEstudio periodo = documento.getPeriodo();
             int indice  = periodo.getLstDocumento().indexOf(documento);
             periodo.getLstDocumento().remove(indice);
-
+            
             retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
         }
         return retorno;
