@@ -268,76 +268,80 @@
         
     </head>
     <body>
-        <div class="container-fluid">
-            
-            <div id="cabezal" name="cabezal" class="row">
-                <jsp:include page="/masterPage/cabezal.jsp"/>
-            </div>
         
-        
-            <div class="col-sm-2">
-                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            </div>
-
-            <div id="contenido" name="contenido"  class="col-sm-8">
-                <div class="row"> 
-                    <div class="col-lg-6"><h1>Evaluación</h1></div>
-                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div id="contenido" name="contenido" class="main-panel">
+                
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
                 
-            
-                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                    <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                    <input type="hidden" name="MatEvlCarCod" id="MatEvlCarCod" value="<% out.print(MatEvlCarCod); %>">
-                    <input type="hidden" name="MatEvlPlaEstCod" id="MatEvlPlaEstCod" value="<% out.print(MatEvlPlaEstCod); %>">
-                    <input type="hidden" name="MatEvlMatCod" id="MatEvlMatCod" value="<% out.print(MatEvlMatCod); %>">
-                    <input type="hidden" name="CurEvlCurCod" id="CurEvlCurCod" value="<% out.print(CurEvlCurCod); %>">
-                    <input type="hidden" name="ModEvlCurCod" id="ModEvlCurCod" value="<% out.print(ModEvlCurCod); %>">
-                    <input type="hidden" name="ModEvlModCod" id="ModEvlModCod" value="<% out.print(ModEvlModCod); %>">
-            
-                </div>
-                <form id="frm_objeto" name="frm_objeto">
-                    
-                    <div><label>EvlCod</label><input type="text" class="form-control" id="EvlCod" name="EvlCod" placeholder="EvlCod" disabled value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlCod())); %>" ></div>
-                    <div><label>EvlNom</label><input type="text" class="form-control" id="EvlNom" name="EvlNom" placeholder="EvlNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlNom())); %>" ></div>
-                    <div><label>EvlDsc</label><input type="text" class="form-control" id="EvlDsc" name="EvlDsc" placeholder="EvlDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlDsc())); %>" ></div>
-                    <div><label>EvlNotTot</label><input type="number" class="form-control" id="EvlNotTot" name="EvlNotTot" placeholder="EvlNotTot" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlNotTot())); %>" ></div>
-                    
-                           <div>
-                                    <label>Tipo Evaluacion</label>
-                                    <select class="form-control" id="TpoEvlCod" name="TpoEvlCod" <% out.print(CamposActivos); %>>
-                                        <%
-                                            for( Object tpoEvalOb : lstTpoEvaluacion){
-                                            
-                                                TipoEvaluacion tpoEval = (TipoEvaluacion) tpoEvalOb;
-                                                
-                                                if(evaluacion.getTpoEvl() == null)
-                                                {
-                                                    out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
-                                                }
-                                                else
-                                                {
-                                                    
-                                                    if(tpoEval.getTpoEvlCod() == evaluacion.getTpoEvl().getTpoEvlCod())
-                                                    {
-                                                        //return filial;
-                                                        out.println("<option selected value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        <div class="contenedor-titulo">    
+                            <p>Evaluación</p>
+                        </div>  
+                        
+                        <div class=""> 
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
+                        </div>
+                        
+                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                            <input type="hidden" name="MatEvlCarCod" id="MatEvlCarCod" value="<% out.print(MatEvlCarCod); %>">
+                            <input type="hidden" name="MatEvlPlaEstCod" id="MatEvlPlaEstCod" value="<% out.print(MatEvlPlaEstCod); %>">
+                            <input type="hidden" name="MatEvlMatCod" id="MatEvlMatCod" value="<% out.print(MatEvlMatCod); %>">
+                            <input type="hidden" name="CurEvlCurCod" id="CurEvlCurCod" value="<% out.print(CurEvlCurCod); %>">
+                            <input type="hidden" name="ModEvlCurCod" id="ModEvlCurCod" value="<% out.print(ModEvlCurCod); %>">
+                            <input type="hidden" name="ModEvlModCod" id="ModEvlModCod" value="<% out.print(ModEvlModCod); %>">
+
+                        </div>
+                        <form id="frm_objeto" name="frm_objeto">
+
+                            <div><label>EvlCod</label><input type="text" class="form-control" id="EvlCod" name="EvlCod" placeholder="EvlCod" disabled value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlCod())); %>" ></div>
+                            <div><label>EvlNom</label><input type="text" class="form-control" id="EvlNom" name="EvlNom" placeholder="EvlNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlNom())); %>" ></div>
+                            <div><label>EvlDsc</label><input type="text" class="form-control" id="EvlDsc" name="EvlDsc" placeholder="EvlDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlDsc())); %>" ></div>
+                            <div><label>EvlNotTot</label><input type="number" class="form-control" id="EvlNotTot" name="EvlNotTot" placeholder="EvlNotTot" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(evaluacion.getEvlNotTot())); %>" ></div>
+
+                                   <div>
+                                            <label>Tipo Evaluacion</label>
+                                            <select class="form-control" id="TpoEvlCod" name="TpoEvlCod" <% out.print(CamposActivos); %>>
+                                                <%
+                                                    for( Object tpoEvalOb : lstTpoEvaluacion){
+
+                                                        TipoEvaluacion tpoEval = (TipoEvaluacion) tpoEvalOb;
+
+                                                        if(evaluacion.getTpoEvl() == null)
+                                                        {
+                                                            out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
+                                                        }
+                                                        else
+                                                        {
+
+                                                            if(tpoEval.getTpoEvlCod() == evaluacion.getTpoEvl().getTpoEvlCod())
+                                                            {
+                                                                //return filial;
+                                                                out.println("<option selected value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
+                                                            }
+                                                            else
+                                                            {
+                                                                out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
+                                                            }
+                                                        }
                                                     }
-                                                    else
-                                                    {
-                                                        out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
-                                                    }
-                                                }
-                                            }
-                                        %>
-                                    </select>
+                                                %>
+                                            </select>
+                                    </div>
+
+                            <div>
+                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
+                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                             </div>
-        
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
-                        <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </body>

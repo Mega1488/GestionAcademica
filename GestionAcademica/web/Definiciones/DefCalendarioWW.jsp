@@ -57,31 +57,25 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        
-
-        <div class="container-fluid">
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             
-            <div id="cabezal" name="cabezal" class="row">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-        
-        
-                <div class="col-sm-2">
-                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div id="contenido" name="contenido" class="main-panel">
+                
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
-
-                <div id="contenido" name="contenido"  class="col-sm-8">
-                    <h1>Calendario</h1>
-
-                    <div id="tabs" name="tabs">
-                        <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
-                    </div>
-
-                    <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                        <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                    
-                    </div>
-
+                
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
+                            <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
+                        </div>
+                
+                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                        </div>
 
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                             <thead>
@@ -119,7 +113,9 @@
                             %>
                         </table>
 
+                    </div>
                 </div>
+            </div>
         </div>
              
                         

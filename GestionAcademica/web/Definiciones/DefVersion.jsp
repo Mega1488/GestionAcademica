@@ -78,42 +78,45 @@
         
     </head>
     <body>
-        <div class="container-fluid">
-            <div id="cabezal" name="cabezal" class="row">
-                <jsp:include page="/masterPage/cabezal.jsp"/>
-            </div>
-
-            <div class="col-sm-2">
-                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            </div>
-
-            <div id="contenido" name="contenido" class="col-sm-8">
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            
+            <div id="contenido" name="contenido" class="main-panel">
                 
-                <div class="row"> 
-                    <div class="col-lg-6"><h1>Versión</h1></div>
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
+                
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        <div class="contenedor-titulo">    
+                            <p>Versión</p>
+                        </div> 
+                
+                        <div style="height: 30px;"></div>
 
-                <form id="frm_Version" name="frm_Version">
-                    <div>
-                        <input type="hidden" id="SisVerCod" name="SisVerCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(version.getSisVerCod())); %>">
-                    </div>
-                    
-                    <div>
-                        <label>Versión:</label>
-                        <input type="text" class="form-control" id="SisVer" name="SisVer" placeholder="Versión" disabled value="<% out.print( utilidad.NuloToVacio(version.getSisVer())); %>">
-                    </div>
+                        <form id="frm_Version" name="frm_Version">
+                            <div>
+                                <input type="hidden" id="SisVerCod" name="SisVerCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(version.getSisVerCod())); %>">
+                            </div>
 
-                    <div class="checkbox">
-                        <label> <input type="checkbox" id="SisCrgDat" name="SisCrgDat" <% out.print( utilidad.BooleanToChecked(version.getSisCrgDat())); %>> Datos iniciales cargados</label>
-                    </div>
+                            <div>
+                                <label>Versión:</label>
+                                <input type="text" class="form-control" id="SisVer" name="SisVer" placeholder="Versión" disabled value="<% out.print( utilidad.NuloToVacio(version.getSisVer())); %>">
+                            </div>
 
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
+                            <div class="checkbox">
+                                <label> <input type="checkbox" id="SisCrgDat" name="SisCrgDat" <% out.print( utilidad.BooleanToChecked(version.getSisCrgDat())); %>> Datos iniciales cargados</label>
+                            </div>
+
+                            <div>
+                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
-            
         </div>
-            
     </body>
 </html>

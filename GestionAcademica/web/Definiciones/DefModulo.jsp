@@ -193,66 +193,67 @@
         
     </head>
     <body>
-        <div class="container-fluid">
-            
-            <div id="cabezal" name="cabezal" class="row">
-                <jsp:include page="/masterPage/cabezal.jsp"/>
-            </div>
-        
-            <div class="col-sm-2">
-                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            </div>
-
-            <div id="contenido" name="contenido"  class="col-sm-8">
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div id="contenido" name="contenido" class="main-panel">
                 
-                <div class="row"> 
-                    <div class="col-lg-6"><h1>Modulo</h1></div>
-                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoModuloSWW.jsp?MODO=UPDATE&pCurCod=<% out.print(CurCod); %>">Regresar</a></div>
-                </div>
-                    
-                <div id="tabs" name="tabs">
-                    <jsp:include page="/Definiciones/DefModuloTabs.jsp"/>
-                </div>
-            
-                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                    <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                    <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
                 
-                <form id="frm_objeto" name="frm_objeto">
-                    
-                    <div><label>ModCod</label><input type="text" class="form-control" id="ModCod" name="ModCod" placeholder="ModCod" disabled value="<% out.print( utilidad.NuloToVacio(modulo.getModCod())); %>" ></div>
-                    <div><label>ModNom</label><input type="text" class="form-control" id="ModNom" name="ModNom" placeholder="ModNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModNom())); %>" ></div>
-                    <div><label>ModDsc</label><input type="text" class="form-control" id="ModDsc" name="ModDsc" placeholder="ModDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModDsc())); %>" ></div>
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
+                            <jsp:include page="/Definiciones/DefModuloTabs.jsp"/>
+                        </div>
+                        
+                        <div class=""> 
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoModuloSWW.jsp?MODO=UPDATE&pCurCod=<% out.print(CurCod); %>">Regresar</a></div>
+                        </div>
 
-                    <div>
-                                    <label>ModTpoPer</label>
-                                    <select class="form-control" id="ModTpoPer" name="ModTpoPer" <% out.print(CamposActivos); %>>
-                                        <%
-                                            for (TipoPeriodo tpoPeriodo : TipoPeriodo.values()){
-                                            
-                                                if(modulo.getModTpoPer() == tpoPeriodo){
-                                                    //return filial;
-                                                    out.println("<option selected value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
-                                                }
-                                                else
-                                                {
-                                                    out.println("<option value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
-                                                }
-                                            }
-                                        %>
-                                    </select>
+                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                            <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
+                        </div>
+                
+                        <form id="frm_objeto" name="frm_objeto">
+
+                            <div><label>ModCod</label><input type="text" class="form-control" id="ModCod" name="ModCod" placeholder="ModCod" disabled value="<% out.print( utilidad.NuloToVacio(modulo.getModCod())); %>" ></div>
+                            <div><label>ModNom</label><input type="text" class="form-control" id="ModNom" name="ModNom" placeholder="ModNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModNom())); %>" ></div>
+                            <div><label>ModDsc</label><input type="text" class="form-control" id="ModDsc" name="ModDsc" placeholder="ModDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModDsc())); %>" ></div>
+
+                            <div>
+                                            <label>ModTpoPer</label>
+                                            <select class="form-control" id="ModTpoPer" name="ModTpoPer" <% out.print(CamposActivos); %>>
+                                                <%
+                                                    for (TipoPeriodo tpoPeriodo : TipoPeriodo.values()){
+
+                                                        if(modulo.getModTpoPer() == tpoPeriodo){
+                                                            //return filial;
+                                                            out.println("<option selected value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
+                                                        }
+                                                        else
+                                                        {
+                                                            out.println("<option value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
+                                                        }
+                                                    }
+                                                %>
+                                            </select>
+                                    </div>
+
+
+                            <div><label>MotPerVal</label><input type=number step=0.5 class="form-control" id="MotPerVal" name="MotPerVal" placeholder="MotPerVal" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModPerVal())); %>" ></div>
+                            <div><label>ModCntHor</label><input type=number step=0.5 class="form-control" id="ModCntHor" name="ModCntHor" placeholder="ModCntHor" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModCntHor())); %>" ></div>
+
+                            <div>
+                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
+                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                             </div>
-                                    
-                    
-                    <div><label>MotPerVal</label><input type=number step=0.5 class="form-control" id="MotPerVal" name="MotPerVal" placeholder="MotPerVal" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModPerVal())); %>" ></div>
-                    <div><label>ModCntHor</label><input type=number step=0.5 class="form-control" id="ModCntHor" name="ModCntHor" placeholder="ModCntHor" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(modulo.getModCntHor())); %>" ></div>
-                    
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
-                        <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
+                        </form>
                     </div>
-            </form>
+                </div>
+            </div>
         </div>
     </body>
 </html>

@@ -20,17 +20,24 @@
     String jquery_ui    = "'" + urlSistema + "JavaScript/jquery_ui/jquery-ui.js'";
     String bootstrap_js = "'" + urlSistema + "Bootstrap/js/bootstrap.min.js'";
     
-    String jquery_css   = "'" + urlSistema + "JavaScript/jquery_ui/jquery-ui.css'";
-    String css          = "'" + urlSistema + "Estilos/sga_estyle.css'";
+    String jquery_css   = "'" + urlSistema + "JavaScript/jquery_ui/jquery-ui.css'";    
     String bootstrap    = "'" + urlSistema + "Bootstrap/css/bootstrap.min.css'";
+    String css          = "'" + urlSistema + "Estilos/sga_estyle.css'";
     
    
 
 %>
 
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=10; IE=11; IE=EDGE" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>	
+
+
 <script src=<% out.print(jquery); %> type="text/javascript"></script>
 <script src=<% out.print(jquery_ui); %> type="text/javascript"></script> 
 <script src=<% out.print(bootstrap_js); %> type="text/javascript"></script>
+
+
+
 <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
 
@@ -40,6 +47,9 @@
 
 <link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <link href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons" rel="stylesheet">
+
+<link rel="shortcut icon" type="image/png" href="../Imagenes/ctc_ic.png"/>
 
 
 <script>

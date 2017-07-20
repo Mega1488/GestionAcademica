@@ -185,38 +185,44 @@
         
     </head>
     <body>
-        <div class="container-fluid">
-            <div id="cabezal" name="cabezal" class="row">
-                <jsp:include page="/masterPage/cabezal.jsp"/>
-            </div>
-
-            <div class="col-sm-2">
-                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            </div>
-
-            <div id="contenido" name="contenido" class="col-sm-8">
-                
-                <div class="row"> 
-                    <div class="col-lg-6"><h1>Tipo de evaluación</h1></div>
-                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacionWW.jsp">Regresar</a></div>
-                </div>
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             
-                <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                    <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+            <div id="contenido" name="contenido" class="main-panel">
+                
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
                 
-                <form id="frm_objeto" name="frm_objeto">
-                    
-                    <div><label>Código</label><input type="text" class="form-control" id="TpoEvlCod" name="TpoEvlCod" placeholder="TpoEvlCod" disabled value="<% out.print( utilidad.NuloToVacio(tpoEvaluacion.getTpoEvlCod())); %>" ></div>
-                    <div><label>Nombre</label><input type="text" class="form-control" id="TpoEvlNom" name="TpoEvlNom" placeholder="TpoEvlNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(tpoEvaluacion.getTpoEvlNom())); %>" ></div>
-                    <div class="checkbox"><label><input type="checkbox" id="TpoEvlExm" name="TpoEvlExm" placeholder="TpoEvlExm" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlExm())); %> > Es exámen</label></div>
-                    <div class="checkbox"><label><input type="checkbox" id="TpoEvlInsAut" name="TpoEvlInsAut" placeholder="TpoEvlInsAut" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlInsAut())); %> > Inscripción automática</label></div>
-                    
-                    <div>
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
-                        <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                       <div class="contenedor-titulo">    
+                            <p>Tipo de evaluación</p>
+                        </div> 
+                        
+                        <div class=""> 
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefTipoEvaluacionWW.jsp">Regresar</a></div>
+                        </div>
+            
+                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                        </div>
+
+                        <form id="frm_objeto" name="frm_objeto">
+
+                            <div><label>Código</label><input type="text" class="form-control" id="TpoEvlCod" name="TpoEvlCod" placeholder="TpoEvlCod" disabled value="<% out.print( utilidad.NuloToVacio(tpoEvaluacion.getTpoEvlCod())); %>" ></div>
+                            <div><label>Nombre</label><input type="text" class="form-control" id="TpoEvlNom" name="TpoEvlNom" placeholder="TpoEvlNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(tpoEvaluacion.getTpoEvlNom())); %>" ></div>
+                            <div class="checkbox"><label><input type="checkbox" id="TpoEvlExm" name="TpoEvlExm" placeholder="TpoEvlExm" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlExm())); %> > Es exámen</label></div>
+                            <div class="checkbox"><label><input type="checkbox" id="TpoEvlInsAut" name="TpoEvlInsAut" placeholder="TpoEvlInsAut" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(tpoEvaluacion.getTpoEvlInsAut())); %> > Inscripción automática</label></div>
+
+                            <div>
+                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
+                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     </body>

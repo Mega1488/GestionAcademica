@@ -1,23 +1,28 @@
 <%-- 
-    Document   : DefPersonaEstudio
-    Created on : 30-jun-2017, 20:50:47
+    Document   : DefCalendarioWW
+    Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
-<%@page import="Entidad.Inscripcion"%>
-<%@page import="Logica.LoInscripcion"%>
-<%@page import="Enumerado.Modo"%>
+<%@page import="Entidad.Periodo"%>
+<%@page import="Enumerado.EstadoCalendarioEvaluacion"%>
 <%@page import="Logica.Seguridad"%>
+<%@page import="Logica.LoPersona"%>
 <%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Entidad.Persona"%>
+<%@page import="Entidad.PeriodoEstudio"%>
+<%@page import="Enumerado.Modo"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import="Entidad.Calendario"%>
 <%@page import="java.util.List"%>
+<%@page import="Logica.LoPeriodo"%>
 <%@page import="Utiles.Utilidades"%>
-
 <%
 
-    Utilidades utilidad         = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    LoPeriodo loPeriodo   = LoPeriodo.GetInstancia();
+    Utilidades utilidad   = Utilidades.GetInstancia();
+    String urlSistema     = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -33,15 +38,16 @@
             
     //----------------------------------------------------------------------------------------------------
     
-    String PerCod       = request.getParameter("pPerCod");
+
     
-    List<Object> lstObjeto = new ArrayList<>();
+    String PeriCod       = request.getParameter("pPeriCod");
     
-    Retorno_MsgObj retorno = (Retorno_MsgObj) LoInscripcion.GetInstancia().obtenerListaByAlumno(Long.valueOf(PerCod));
- 
-    if(!retorno.SurgioErrorListaRequerida())
+    List<PeriodoEstudio> lstObjeto = new ArrayList<>();
+    
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtener(Long.valueOf(PeriCod));
+    if(!retorno.SurgioErrorObjetoRequerido())
     {
-        lstObjeto = retorno.getLstObjetos();
+        lstObjeto = ((Periodo) retorno.getObjeto()).getLstEstudio();
     }
     else
     {
@@ -58,7 +64,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Persona | Inscripción</title>
+        <title>Sistema de Gestión Académica - Estudios</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
@@ -75,16 +81,16 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
                         
                         <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefPeriodoTabs.jsp"/>
                         </div>
                         
                         <div class=""> 
-                            <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoWW.jsp">Regresar</a></div>
                         </div>
-
+        
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(PerCod); %>">
+                            <input type="hidden" name="PeriCod" id="PeriCod" value="<% out.print(PeriCod); %>">
                         </div>
 
 
@@ -92,27 +98,31 @@
                             <thead>
                                 <tr>
                                     <th></th>
-                                    <th></th>
                                     <th>Código</th>
                                     <th>Estudio</th>
-                                    <th>Fecha de inscripción</th>
-                                    <th>Fecha de certificación</th>
+                                    <th>Alumnos</th>
+                                    <th></th>
+                                    <th>Docentes</th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                            <% for(Object objeto : lstObjeto)
+                            <% for(PeriodoEstudio periEst : lstObjeto)
                             {
-                                Inscripcion insc = (Inscripcion) objeto;
 
                             %>
                             <tr>
-                                <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() +"' data-alumno='" + insc.getAlumno().getNombreCompleto() +"' data-fecha='" + insc.getAluFchCert() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() +"' data-alumno='" + insc.getAlumno().getNombreCompleto() +"' data-fecha='" + insc.getAluFchCert() +"' data-toggle='modal' data-target='#PopUpFechaCert' name='btn_editar' id='btn_editar' title='Fecha de certificación' class='glyphicon glyphicon-edit btn_editar'/>"); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getInsCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getNombreEstudio())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
+                                <td><% out.print( utilidad.NuloToVacio(periEst.getPeriEstCod())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periEst.getEstudioNombre())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periEst.getCantidadAlumnos())); %> </td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_alm" id="btn_edit_alm" title="Alumnos" class="glyphicon glyphicon-edit"/></td>
+                                <td><% out.print( utilidad.NuloToVacio(periEst.getCantidadDocente())); %> </td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocenteSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_dct" id="btn_edit_dct" title="Docentes" class="glyphicon glyphicon-edit"/></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-file"/></td>
+                                
                             </tr>
                             <%
                             }
@@ -121,11 +131,11 @@
                         </table>
                     </div>
                 </div>
-
             </div>
         </div>
+
         
-        <!-- PopUp para Agregar -->
+       <!-- PopUp para Agregar -->
                                 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
@@ -145,6 +155,7 @@
                         <div class="row">
                             <div id="pop_FltrCarrera" name="pop_FltrCarrera">
                                 <select class="form-control" id="pop_FltrCarCod" name="pop_FltrCarCod"></select>
+                                <select class="form-control" id="pop_FltrPlaCod" name="pop_FltrPlaCod"></select>
                             </div>
                         </div>
                         
@@ -365,154 +376,6 @@
             </script>
 
         </div>
-        
-        <!------------------------------------------------->
-        
-        <!-- PopUp para Eliminar -->
-        
-        <div id="PopUpEliminar"  class="modal fade" role="dialog">
-           
-            <!-- Modal -->
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Eliminar</h4>
-                  </div>
-                  <div class="modal-body">
-
-                      <p>Eliminar la inscripción de: <label name="elim_nombre" id="elim_nombre"></label></p>
-                      <p>Quiere proceder?</p>
-
-                  </div>
-                  <div class="modal-footer">
-                    <button name="elim_boton_confirmar" id="elim_boton_confirmar" type="button" class="btn btn-danger" data-codigo="">Eliminar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  </div>
-                </div>
-            </div>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    
-                    $('.btn_eliminar').on('click', function(e) {
-                        
-                        var codigo = $(this).data("codigo");
-                        var nombre = $(this).data("nombre");
-                        
-                        $('#elim_nombre').text(nombre);
-                        $('#elim_boton_confirmar').data('codigo', codigo);
-                        
-                        
-                      });
-                      
-                      $('#elim_boton_confirmar').on('click', function(e) {
-                            var codigo = $('#elim_boton_confirmar').data('codigo');
-                            $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
-                                         pInsCod: codigo,
-                                         pAction: "<% out.print(Modo.DELETE);%>"
-                                     }, function (responseText) {
-                                         var obj = JSON.parse(responseText);
-                                         
-                                         if (obj.tipoMensaje != 'ERROR')
-                                         {
-                                             location.reload();
-                                         } else
-                                         {
-                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                         }
-
-                                     });
-
-                             $(function () {
-                                     $('#PopUpEliminar').modal('toggle');
-                                  });
-                     
-                      });
-
-                });
-            </script>
-        </div>
-
-        <!------------------------------------------------->
-        
-        <!-- PopUp Ingresar fecha de certificación -->
-        
-        <div id="PopUpFechaCert"  class="modal fade" role="dialog">
-           
-            <!-- Modal -->
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Certificación</h4>
-                  </div>
-                  <div class="modal-body">
-
-                      <p>Alumno: <label name="cert_alumno" id="cert_alumno"></label></p>
-                      <p>Estudio: <label name="cert_estudio" id="cert_estudio"></label></p>
-                      <p>Fecha de certificación: <input type="date" class="form-control" id="AluFchCert" name="AluFchCert" placeholder="Fecha de certificación" value=""></p>
-
-                  </div>
-                  <div class="modal-footer">
-                    <button name="cert_boton_confirmar" id="cert_boton_confirmar" type="button" class="btn btn-success" data-codigo="">Confirmar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  </div>
-                </div>
-            </div>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    
-                    $('.btn_editar').on('click', function(e) {
-                        
-                        var codigo  = $(this).data("codigo");
-                        var nombre  = $(this).data("nombre");
-                        var alumno  = $(this).data("alumno");
-                        var fecha   = $(this).data("fecha");
-                        
-                        $('#cert_estudio').text(nombre);
-                        $('#cert_alumno').text(alumno);
-                        $('#AluFchCert').val(fecha);
-                        
-                        $('#cert_boton_confirmar').data('codigo', codigo);
-                        
-                        
-                      });
-                      
-                      $('#cert_boton_confirmar').on('click', function(e) {
-                            var codigo  = $('#cert_boton_confirmar').data('codigo');
-                            var fecha   = $('#AluFchCert').val();
-                            
-                            $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
-                                         pInsCod: codigo,
-                                         pAluFchCert: fecha,
-                                         pAction: "<% out.print(Modo.UPDATE);%>"
-                                     }, function (responseText) {
-                                         var obj = JSON.parse(responseText);
-                                         
-                                         if (obj.tipoMensaje != 'ERROR')
-                                         {
-                                             location.reload();
-                                         } else
-                                         {
-                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                         }
-
-                                     });
-
-                             $(function () {
-                                     $('#PopUpFechaCert').modal('toggle');
-                                  });
-                     
-                      });
-
-                });
-            </script>
-        </div>
-
-        <!------------------------------------------------->
-        
-        
+                                     
     </body>
 </html>

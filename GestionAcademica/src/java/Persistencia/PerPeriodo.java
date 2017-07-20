@@ -6,6 +6,7 @@
 package Persistencia;
 
 import Entidad.Periodo;
+import Entidad.PeriodoEstudio;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
 import Utiles.Mensajes;
@@ -252,6 +253,26 @@ public class PerPeriodo implements InABMGenerico{
             sesion.close();
         }
         
+        
+
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerPeriodoEstudio(Long PeriEstCod)
+    {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
+        
+        try {
+            iniciaOperacion();
+            PeriodoEstudio periEstudio = (PeriodoEstudio) sesion.get(PeriodoEstudio.class, PeriEstCod);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), periEstudio);
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
         
 
         return retorno;

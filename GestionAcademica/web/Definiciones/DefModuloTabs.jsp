@@ -22,7 +22,7 @@
     out.println("<ul class='nav nav-tabs'>");
     
     out.println("<li class='" + (urlActual.equals("DefModulo.jsp") ? "active" : "") + "'><a href='" + urlSistema + "Definiciones/DefModulo.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Modulo</a></li>");
-    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefModuloEvaluacionSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Evaluación</a></li>");
+    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefModuloEvaluacionSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Evaluaciones</a></li>");
     
     out.println("</ul>");
 %>

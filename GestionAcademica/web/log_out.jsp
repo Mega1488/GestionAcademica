@@ -11,7 +11,7 @@
     String usuarioNombre = (String) session.getAttribute(NombreSesiones.USUARIO_NOMBRE.getValor());
 %>
 
-<div  class="col-sm-8" style="text-align: right;">
+<div  class="" style="text-align: right;">
     <p>
         <label>Bienvenido: <% out.print(usuarioNombre); %></label>
     </p>

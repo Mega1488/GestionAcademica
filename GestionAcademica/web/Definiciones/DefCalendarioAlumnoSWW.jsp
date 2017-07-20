@@ -67,79 +67,80 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             
-            <div id="cabezal" name="cabezal" class="row">
-                <jsp:include page="/masterPage/cabezal.jsp"/>
-            </div>
-        
-        
-            <div class="col-sm-2">
-                <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            </div>
-
-            <div id="contenido" name="contenido"  class="col-sm-8">
-                <div class="row"> 
-                    <div class="col-lg-6"><h1>Calendario</h1></div>
-                    <div class="col-lg-6" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+            <div id="contenido" name="contenido" class="main-panel">
+                
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
+                
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
+                            <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
+                        </div>
+                
+                        <div class=""> 
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+                        </div>
+       
+                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpPersona"> </a>
+                            <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
+                        </div>
 
-                <div id="tabs" name="tabs">
-                    <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
+
+                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                            <thead><tr>
+                                <th></th>
+                                <th></th>
+                                <th>Código</th>
+                                <th>Alumno</th>
+                                <th>Calificación</th>
+                                <th>Calificado por</th>
+                                <th>Fecha</th>
+                                <th>Estado</th>
+                                <th>Validado por</th>
+                                <th>Fecha</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <% for(CalendarioAlumno calAlumno : lstObjeto)
+                            {
+
+                            %>
+                            <tr>
+                                <td><% if(calAlumno.puedeEditarlo())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-nombre='" + calAlumno.getAlumno().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminarAlumno' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                <td><a href="#" data-codigo="<% out.print(calAlumno.getCalAlCod()); %>" data-toggle="modal" data-target="#PopUpMostrarAlumno" name="btn_ver" id="btn_ver" title="Ver" class="glyphicon glyphicon-search btn_ver"/></td>
+                                <td><% out.print( utilidad.NuloToVacio(calAlumno.getCalAlCod())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio((calAlumno.getAlumno() != null ? calAlumno.getAlumno().getNombreCompleto() : "" ))); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlCalVal())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio((calAlumno.getEvlCalPor() != null ? calAlumno.getEvlCalPor().getNombreCompleto() : "" ))); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlCalFch())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlCalEst().getEstadoNombre())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio((calAlumno.getEvlValPor() != null ? calAlumno.getEvlValPor().getNombreCompleto() : "" ))); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlValFch())); %> </td>
+                                <td><% if(calAlumno.puedeCalificarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpCalificarAlumno' name='btn_calificar' id='btn_calificar' title='Calificar' class='glyphicon glyphicon-edit btn_calificar'/>"); %> </td>
+                                <td><% if(calAlumno.puedeEnviarToValidar())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpEnviarValidacion' name='btn_toVal' id='btn_toVal' title='Enviar a validación' class='glyphicon glyphicon-log-out btn_toVal'/>"); %> </td>
+                                <td><% if(calAlumno.puedeValidarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpEnviarCorreccion' name='btn_toCor' id='btn_toCor' title='Enviar a corrección' class='glyphicon glyphicon-log-out btn_toCor'/>"); %> </td>
+                                <td><% if(calAlumno.puedeValidarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpValidarAlumno' name='btn_validar' id='btn_validar' title='Validar' class='glyphicon glyphicon-ok btn_validar'/>"); %> </td>
+
+                            </tr>
+                            <%
+                            }
+                            %>
+                                </tbody>
+                        </table>
+
+                    </div>
                 </div>
-
-                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                    <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpPersona"> </a>
-                    <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
-                </div>
-
-
-                    <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                        <thead><tr>
-                            <th></th>
-                            <th></th>
-                            <th>Código</th>
-                            <th>Alumno</th>
-                            <th>Calificación</th>
-                            <th>Calificado por</th>
-                            <th>Fecha</th>
-                            <th>Estado</th>
-                            <th>Validado por</th>
-                            <th>Fecha</th>
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                        </thead>
-
-                        <tbody>
-                        <% for(CalendarioAlumno calAlumno : lstObjeto)
-                        {
-
-                        %>
-                        <tr>
-                            <td><% if(calAlumno.puedeEditarlo())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-nombre='" + calAlumno.getAlumno().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminarAlumno' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                            <td><a href="#" data-codigo="<% out.print(calAlumno.getCalAlCod()); %>" data-toggle="modal" data-target="#PopUpMostrarAlumno" name="btn_ver" id="btn_ver" title="Ver" class="glyphicon glyphicon-search btn_ver"/></td>
-                            <td><% out.print( utilidad.NuloToVacio(calAlumno.getCalAlCod())); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio((calAlumno.getAlumno() != null ? calAlumno.getAlumno().getNombreCompleto() : "" ))); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlCalVal())); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio((calAlumno.getEvlCalPor() != null ? calAlumno.getEvlCalPor().getNombreCompleto() : "" ))); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlCalFch())); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlCalEst().getEstadoNombre())); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio((calAlumno.getEvlValPor() != null ? calAlumno.getEvlValPor().getNombreCompleto() : "" ))); %> </td>
-                            <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlValFch())); %> </td>
-                            <td><% if(calAlumno.puedeCalificarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpCalificarAlumno' name='btn_calificar' id='btn_calificar' title='Calificar' class='glyphicon glyphicon-edit btn_calificar'/>"); %> </td>
-                            <td><% if(calAlumno.puedeEnviarToValidar())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpEnviarValidacion' name='btn_toVal' id='btn_toVal' title='Enviar a validación' class='glyphicon glyphicon-log-out btn_toVal'/>"); %> </td>
-                            <td><% if(calAlumno.puedeValidarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpEnviarCorreccion' name='btn_toCor' id='btn_toCor' title='Enviar a corrección' class='glyphicon glyphicon-log-out btn_toCor'/>"); %> </td>
-                            <td><% if(calAlumno.puedeValidarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpValidarAlumno' name='btn_validar' id='btn_validar' title='Validar' class='glyphicon glyphicon-ok btn_validar'/>"); %> </td>
-
-                        </tr>
-                        <%
-                        }
-                        %>
-                            </tbody>
-                    </table>
-
             </div>
         </div>
         

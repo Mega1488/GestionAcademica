@@ -24,7 +24,7 @@
         out.println("<li class='" + (urlActual.equals("DefCurso.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCurso.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Curso</a></li>");
         
         if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoModuloSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCursoModuloSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Modulos</a></li>");
-        if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoEvaluacionSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Evaluación</a></li>");
+        if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoEvaluacionSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Evaluaciones</a></li>");
     
     %>
 </ul>

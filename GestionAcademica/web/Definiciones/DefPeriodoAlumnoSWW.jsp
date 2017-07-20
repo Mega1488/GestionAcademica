@@ -1,22 +1,24 @@
 <%-- 
-    Document   : DefCalendarioWW
+    Document   : DefPeriodoEstudioWW
     Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
-<%@page import="Enumerado.Modo"%>
-<%@page import="Entidad.CalendarioDocente"%>
 <%@page import="Logica.Seguridad"%>
+<%@page import="Logica.LoPersona"%>
 <%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Entidad.Persona"%>
+<%@page import="Entidad.PeriodoEstudioAlumno"%>
+<%@page import="Enumerado.Modo"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="Entidad.Calendario"%>
+<%@page import="Entidad.PeriodoEstudio"%>
 <%@page import="java.util.List"%>
-<%@page import="Logica.LoCalendario"%>
+<%@page import="Logica.LoPeriodo"%>
 <%@page import="Utiles.Utilidades"%>
 <%
 
-    LoCalendario loCalendario   = LoCalendario.GetInstancia();
+    LoPeriodo loPeriodo         = LoPeriodo.GetInstancia();
     Utilidades utilidad         = Utilidades.GetInstancia();
     String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
@@ -34,14 +36,17 @@
             
     //----------------------------------------------------------------------------------------------------
     
-    String CalCod       = request.getParameter("pCalCod");
+    String PeriEstCod   = request.getParameter("pPeriEstCod");
+    Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
+    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + PeriEstCod;
     
-    List<CalendarioDocente> lstObjeto = new ArrayList<>();
     
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loCalendario.obtener(Long.valueOf(CalCod));
+    List<PeriodoEstudioAlumno> lstObjeto = new ArrayList<>();
+    
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod));
     if(!retorno.SurgioErrorObjetoRequerido())
     {
-        lstObjeto = ((Calendario) retorno.getObjeto()).getLstDocentes();
+        lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstAlumno();
     }
     else
     {
@@ -58,7 +63,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Calendario | Docentes</title>
+        <title>Sistema de Gestión Académica - Periodo Estudio | Alumnos</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
@@ -76,51 +81,54 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
                         
                         <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp"/>
                         </div>
-                
+                        
                         <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
                         </div>
         
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
+                            <input type="hidden" name="PeriEstCod" id="PeriEstCod" value="<% out.print(PeriEstCod); %>">
                         </div>
-
-
+        
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                             <thead><tr>
                                 <th></th>
                                 <th>Código</th>
-                                <th>Docente</th>
-                                <th>Documento</th>
+                                <th>Alumno</th>
+                                <th>Fecha de inscripción</th>
+                                <th>Calificación final</th>
+                                <th>Inscripcion forzada</th>
                             </tr>
                             </thead>
-                            
-                            <tbody>
-                                <% for(CalendarioDocente calDocente : lstObjeto)
-                                {
 
-                                %>
-                                <tr>
-                                    <td><% out.print("<a href='#' data-codigo='" + calDocente.getCalDocCod() + "' data-nombre='" + calDocente.getDocente().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                    <td><% out.print( utilidad.NuloToVacio(calDocente.getCalDocCod())); %> </td>
-                                    <td><% out.print( utilidad.NuloToVacio((calDocente.getDocente() != null ? calDocente.getDocente().getNombreCompleto() : "" ))); %> </td>
-                                    <td><% out.print( utilidad.NuloToVacio((calDocente.getDocente() != null ? calDocente.getDocente().getPerDoc() : "" ))); %> </td>
-                                </tr>
-                                <%
-                                }
-                                %>
-                            </tbody>
+                            <tbody>
+                            <% for(PeriodoEstudioAlumno periAlumno : lstObjeto)
+                            {
+
+                            %>
+                            <tr>
+                                <td><% out.print("<a href='#' data-codigo='" + periAlumno.getPeriEstAluCod() + "' data-nombre='" + periAlumno.getAlumno().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getPeriEstAluCod())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getAlumno().getNombreCompleto())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getPerInsFchInsc())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periAlumno.getPerInsCalFin())); %> </td>
+                                <td><% out.print( utilidad.BooleanToSiNo(periAlumno.getPerInsFrz())); %> </td>
+                            </tr>
+                            <%
+                            }
+                            %>
+                                </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- PopUp para Agregar docentes al calendario -->
-                                
+         <!-- PopUp para Agregar personas del calendario -->
+
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog">
@@ -132,11 +140,10 @@
                   </div>
                   <div class="modal-body">
 
-
+                      <p>Forzar inscripción de alumnos.</p>
+                      <p>Seleccione a la persona que desea inscribir.</p>
 
                         <div>
-
-
 
                             <table id="PopUpTblPersona" name="PopUpTblPersona" class="table table-striped" cellspacing="0"  class="table" width="100%">
                                 <thead>
@@ -159,97 +166,96 @@
                   </div>
                 </div>
             </div>
-    
-    
-    
-            <script type="text/javascript">
-
-                $(document).ready(function() {
-
-                Buscar();
 
 
-                $(document).on('click', ".PopPer_Seleccionar", function() {
 
-                   var PerCod = $(this).data("codigo");
-                   var CalCod = $('#CalCod').val();
-                   $.post('<% out.print(urlSistema); %>ABM_CalendarioDocente', {
-                                pCalCod: CalCod,
-                                pDocPerCod: PerCod,
-                                pAction: "<% out.print(Modo.INSERT);%>"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
+                <script type="text/javascript">
 
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-                                    location.reload();
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
+                    $(document).ready(function() {
 
-                            });
-
-                    $(function () {
-                            $('#PopUpPersona').modal('toggle');
-                         });
-                });
+                        Buscar();
 
 
-                function Buscar()
-                {
+                        $(document).on('click', ".PopPer_Seleccionar", function() {
 
-                        $.post('<% out.print(urlSistema); %>ABM_Persona', {
-                        pAction : "POPUP_OBTENER"
-                            }, function(responseText) {
+                           var AluPerCod = $(this).data("codigo");
+                           var PeriEstCod = $('#PeriEstCod').val();
 
+                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioAlumno', {
+                                        pPeriEstCod: PeriEstCod,
+                                        pAluPerCod: AluPerCod,
+                                        pAction: "<% out.print(Modo.INSERT);%>"
+                                    }, function (responseText) {
+                                        var obj = JSON.parse(responseText);
+                                        MostrarCargando(false);
 
-                                var personas = JSON.parse(responseText);
+                                        if (obj.tipoMensaje != 'ERROR')
+                                        {
+                                            location.reload();
+                                        } else
+                                        {
+                                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                        }
 
-                                $.each(personas, function(f , persona) {
-
-                                               persona.perCod = "<td> <a href='#' data-codigo='"+persona.perCod+"' data-nombre='"+persona.perNom+"' class='PopPer_Seleccionar'>"+persona.perCod+" </a> </td>";
-                                });
-
-                                $('#PopUpTblPersona').DataTable( {
-                                    data: personas,
-                                    deferRender: true,
-                                    bLengthChange : false, //thought this line could hide the LengthMenu
-                                    pageLength: 10,
-                                    language: {
-                                        "lengthMenu": "Mostrando _MENU_ registros por página",
-                                        "zeroRecords": "No se encontraron registros",
-                                        "info": "Página _PAGE_ de _PAGES_",
-                                        "infoEmpty": "No hay registros",
-                                        "search":         "Buscar:",
-                                        "paginate": {
-                                                "first":      "Primera",
-                                                "last":       "Ultima",
-                                                "next":       "Siguiente",
-                                                "previous":   "Anterior"
-                                            },
-                                        "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                                    }
-                                    ,columns: [
-                                        { "data": "perCod" },
-                                        { "data": "nombreCompleto"},
-                                        { "data": "tipoPersona"},
-                                        { "data": "perDoc"}
-                                    ]
-
-                                } );
-
+                                    });
+                            
                         });
-                }
 
 
-            });
-            </script>
+                        function Buscar()
+                        {
+
+                                $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                                pAction : "POPUP_OBTENER"
+                                    }, function(responseText) {
+
+
+                                        var personas = JSON.parse(responseText);
+
+                                        $.each(personas, function(f , persona) {
+
+                                                       persona.perCod = "<td> <a href='#' data-codigo='"+persona.perCod+"' data-nombre='"+persona.perNom+"' class='PopPer_Seleccionar'>"+persona.perCod+" </a> </td>";
+                                        });
+
+                                        $('#PopUpTblPersona').DataTable( {
+                                            data: personas,
+                                            deferRender: true,
+                                            bLengthChange : false, //thought this line could hide the LengthMenu
+                                            pageLength: 10,
+                                            language: {
+                                                "lengthMenu": "Mostrando _MENU_ registros por página",
+                                                "zeroRecords": "No se encontraron registros",
+                                                "info": "Página _PAGE_ de _PAGES_",
+                                                "infoEmpty": "No hay registros",
+                                                "search":         "Buscar:",
+                                                "paginate": {
+                                                        "first":      "Primera",
+                                                        "last":       "Ultima",
+                                                        "next":       "Siguiente",
+                                                        "previous":   "Anterior"
+                                                    },
+                                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                            }
+                                            ,columns: [
+                                                { "data": "perCod" },
+                                                { "data": "nombreCompleto"},
+                                                { "data": "tipoPersona"},
+                                                { "data": "perDoc"}
+                                            ]
+
+                                        } );
+
+                                });
+                        }
+
+
+                    });
+                    </script>
         </div>
         
         <!------------------------------------------------->
         
-        <!-- PopUp para Eliminar personas del calendario -->
+        <!-- PopUp para Eliminar -->
         
         <div id="PopUpEliminar"  class="modal fade" role="dialog">
            
@@ -263,7 +269,7 @@
                   </div>
                   <div class="modal-body">
 
-                      <p>Eliminar docente: <label name="elim_nombre" id="elim_nombre"></label></p>
+                      <p>Eliminar la inscripción de: <label name="elim_nombre" id="elim_nombre"></label></p>
                       <p>Quiere proceder?</p>
 
                   </div>
@@ -288,11 +294,12 @@
                       });
                       
                       $('#elim_boton_confirmar').on('click', function(e) {
+                            var PeriEstCod = $('#PeriEstCod').val();
                             var codigo = $('#elim_boton_confirmar').data('codigo');
-                            var CalCod = $('#CalCod').val();
-                            $.post('<% out.print(urlSistema); %>ABM_CalendarioDocente', {
-                                         pCalCod: CalCod,
-                                         pCalDocCod: codigo,
+
+                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioAlumno', {
+                                         pPeriEstCod: PeriEstCod,
+                                         pPeriEstAluCod: codigo,
                                          pAction: "<% out.print(Modo.DELETE);%>"
                                      }, function (responseText) {
                                          var obj = JSON.parse(responseText);
@@ -306,21 +313,14 @@
                                          }
 
                                      });
-
-                             $(function () {
-                                     $('#PopUpEliminar').modal('toggle');
-                                  });
                      
                       });
 
                 });
             </script>
         </div>
-                                     
+
         <!------------------------------------------------->
-        
-      
                                      
     </body>
 </html>
-

@@ -62,7 +62,7 @@ public class LoInscripcion implements InABMGenerico{
         
         if(!retorno.SurgioErrorListaRequerida())
         {
-            retorno.setObjeto(retorno.getLstObjetos().get(0));
+            if(retorno.getLstObjetos().size() > 0) retorno.setObjeto(retorno.getLstObjetos().get(0));
         }
         retorno.setLstObjetos(null);
         return retorno;
@@ -73,7 +73,7 @@ public class LoInscripcion implements InABMGenerico{
         
         if(!retorno.SurgioErrorListaRequerida())
         {
-            retorno.setObjeto(retorno.getLstObjetos().get(0));
+            if(retorno.getLstObjetos().size() > 0) retorno.setObjeto(retorno.getLstObjetos().get(0));
         }
         retorno.setLstObjetos(null);
         return retorno;

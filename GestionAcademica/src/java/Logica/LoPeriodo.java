@@ -185,6 +185,11 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
+    public Retorno_MsgObj obtenerPeriodoEstudio(Long PeriEstCod)
+    {
+        return perPeriodo.obtenerPeriodoEstudio(PeriEstCod);
+    }
+    
     //------------------------------------------------------------------------------------
     //-MANEJO DE ALUMNO
     //------------------------------------------------------------------------------------
@@ -228,10 +233,12 @@ public class LoPeriodo implements InABMGenerico{
         if(!error)
         {
             PeriodoEstudio periodo = alumno.getPeriodoEstudio();
+            
             int indice  = periodo.getLstAlumno().indexOf(alumno);
+            
             periodo.getLstAlumno().remove(indice);
 
-            retorno = (Retorno_MsgObj) this.actualizar(periodo);
+            retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
         }
         return retorno;
     }

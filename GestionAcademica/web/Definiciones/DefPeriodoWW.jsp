@@ -61,139 +61,141 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        
+    <div class="wrapper">
+          
+        <jsp:include page="/masterPage/menu_izquierdo.jsp" />
 
-        <div class="container-fluid">
-            <div id="cabezal" name="cabezal" class="row">
+        <div id="contenido" name="contenido"  class="main-panel">
+            <div class="contenedor-cabezal">
             <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-        
-        
-                <div class="col-sm-2">
-                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-                </div>
+            </div>
+            <div class="contenedor-principal">
 
-                <div id="contenido" name="contenido"  class="col-sm-8">
-                    <h1>Periodos</h1>
+
+                <div class="col-sm-11 contenedor-texto-titulo-flotante">
+
+
+                    <div class="contenedor-titulo">    
+                        <p>Periodos</p>
+                    </div>        
 
                     <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
                         <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                    
                     </div>
 
 
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                    <th>Fecha de inicio</th>
-                                </tr>
-                            </thead>
-
-                            <% for(Object objeto : lstObjeto)
-                            {
-                             Periodo periodo = (Periodo) objeto;
-                            %>
+                    <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                        <thead>
                             <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
-                                <td><% out.print( utilidad.NuloToVacio(periodo.getPeriCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periodo.getPerTpo().getTipoPeriodoNombre())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periodo.getPerVal())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periodo.getPerFchIni())); %> </td>
-
+                                <th></th>
+                                <th></th>
+                                <th>Código</th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Fecha de inicio</th>
                             </tr>
-                            <%
-                            }
-                            %>
-                        </table>
+                        </thead>
 
+                        <% for(Object objeto : lstObjeto)
+                        {
+                         Periodo periodo = (Periodo) objeto;
+                        %>
+                        <tr>
+                            <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
+                            <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
+                            <td><% out.print( utilidad.NuloToVacio(periodo.getPeriCod())); %> </td>
+                            <td><% out.print( utilidad.NuloToVacio(periodo.getPerTpo().getTipoPeriodoNombre())); %> </td>
+                            <td><% out.print( utilidad.NuloToVacio(periodo.getPerVal())); %> </td>
+                            <td><% out.print( utilidad.NuloToVacio(periodo.getPerFchIni())); %> </td>
+
+                        </tr>
+                        <%
+                        }
+                        %>
+                    </table>
                 </div>
+            </div>
         </div>
-             
+    </div>
                         
-        <div id="PopUpAgregar" class="modal fade" role="dialog">
-               <!-- Modal -->
-                <div class="modal-dialog modal-lg">
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Periodo</h4>
-                      </div>
-                     
-                        <div class="modal-body">
-
-                            <div><label>Tipo</label>
-                                <select class="form-control" id="PerTpo" name="PerTpo" placeholder="PerTpo">
-                                    <%
-                                        for(TipoPeriodo tpoPer : TipoPeriodo.values())
-                                        {
-                                            out.println("<option value='"+tpoPer.getTipoPeriodo()+"'>"+tpoPer.getTipoPeriodoNombre()+"</option>");
-                                        }
-                                    %>
-                                    
-                                </select> 
-                            </div>
-                            <div><label>Valor</label><input type="number" class="form-control" id="PerVal" name="PerVal" placeholder="PerVal" value="" ></div>
-                            <div><label>Fecha de inicio</label><input type="date" class="form-control" id="PerFchIni" name="PerFchIni" placeholder="PerFchIni" value="" ></div>
-                      </div>
-                      <div class="modal-footer">
-                        <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
-                        <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
-                      </div>
-                    </div>
+    <div id="PopUpAgregar" class="modal fade" role="dialog">
+        <!-- Modal -->
+         <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Periodo</h4>
                 </div>
-               
-                <script type="text/javascript">
 
-                    $(document).ready(function() {
+                <div class="modal-body">
 
-                        $(document).on('click', "#btn_guardar", function() {
+                    <div><label>Tipo</label>
+                        <select class="form-control" id="PerTpo" name="PerTpo" placeholder="PerTpo">
+                            <%
+                                for(TipoPeriodo tpoPer : TipoPeriodo.values())
+                                {
+                                    out.println("<option value='"+tpoPer.getTipoPeriodo()+"'>"+tpoPer.getTipoPeriodoNombre()+"</option>");
+                                }
+                            %>
 
-                                var PerTpo= $('select[name=PerTpo]').val();
-                                var PerVal= $('#PerVal').val();
-                                var PerFchIni= $('#PerFchIni').val();
-                                
-                                if(PerVal == '')
+                        </select> 
+                    </div>
+                    <div><label>Valor</label><input type="number" class="form-control" id="PerVal" name="PerVal" placeholder="PerVal" value="" ></div>
+                    <div><label>Fecha de inicio</label><input type="date" class="form-control" id="PerFchIni" name="PerFchIni" placeholder="PerFchIni" value="" ></div>
+                </div>
+                <div class="modal-footer">
+                    <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
+                    <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+
+                $(document).on('click', "#btn_guardar", function() {
+
+                        var PerTpo= $('select[name=PerTpo]').val();
+                        var PerVal= $('#PerVal').val();
+                        var PerFchIni= $('#PerFchIni').val();
+
+                        if(PerVal == '')
+                            {
+                                MostrarMensaje("ERROR", "Completa los datos papa");
+                            }
+                            else
+                            {
+
+
+                                // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                                $.post('<% out.print(urlSistema); %>ABM_Periodo', {
+                                    pPerTpo:PerTpo,
+                                    pPerVal:PerVal,
+                                    pPerFchIni:PerFchIni,
+                                    pAction:"INSERT"
+                                }, function(responseText) {
+                                    var obj = JSON.parse(responseText);
+
+                                    if(obj.tipoMensaje != 'ERROR')
                                     {
-                                        MostrarMensaje("ERROR", "Completa los datos papa");
+                                        location.reload();
                                     }
                                     else
                                     {
-                                        
-
-                                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                                        $.post('<% out.print(urlSistema); %>ABM_Periodo', {
-                                            pPerTpo:PerTpo,
-                                            pPerVal:PerVal,
-                                            pPerFchIni:PerFchIni,
-                                            pAction:"INSERT"
-                                        }, function(responseText) {
-                                            var obj = JSON.parse(responseText);
-                                            
-                                            if(obj.tipoMensaje != 'ERROR')
-                                            {
-                                                location.reload();
-                                            }
-                                            else
-                                            {
-                                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                            }
-
-                                        });
-                                          
+                                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
                                     }
-                           
-                        });
 
-      
-                    });
-                </script>
+                                });
+
+                            }
+
+                });
+
+
+            });
+            </script>
         </div>
     </body>
 </html>

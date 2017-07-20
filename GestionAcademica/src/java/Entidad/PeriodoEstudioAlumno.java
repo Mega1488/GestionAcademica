@@ -152,8 +152,8 @@ public class PeriodoEstudioAlumno implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 79 * hash + Objects.hashCode(this.PeriEstAluCod);
+        int hash = 7;
+        hash = 73 * hash + Objects.hashCode(this.PeriEstAluCod);
         return hash;
     }
 
@@ -174,6 +174,8 @@ public class PeriodoEstudioAlumno implements Serializable {
         }
         return true;
     }
+
+   
 
     @Override
     public String toString() {

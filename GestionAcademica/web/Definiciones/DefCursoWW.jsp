@@ -57,23 +57,26 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        <div class="container-fluid">
+        <div class="wrapper">
+          
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             
-            <div id="cabezal" name="cabezal" class="row">
-                <jsp:include page="/masterPage/cabezal.jsp"/>
-            </div>
-        
-        
-                <div class="col-sm-2">
-                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div id="contenido" name="contenido"  class="main-panel">
+                <div class="contenedor-cabezal">
+                  <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
+                <div class="contenedor-principal">
+                    
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        
+                        <div class="contenedor-titulo">    
+                            <p>Cursos</p>
+                        </div>
 
-                <div id="contenido" name="contenido"  class="col-sm-8">
-                    <h1>Cursos</h1>
-
-                    <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                        <a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
-                    </div>
+                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                            <a href="<% out.print(urlSistema); %>Definiciones/DefCurso.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                        </div>
       
                         <table style=' <% out.print(tblCursoVisible); %>' class='table table-hover'>
                             <thead>
@@ -107,7 +110,9 @@
                             }
                             %>
                         </table>
+                    </div>
                 </div>
+            </div>
         </div>
     </body>
 </html>

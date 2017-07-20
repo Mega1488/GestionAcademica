@@ -173,6 +173,61 @@ public class PeriodoEstudio implements Serializable {
         this.lstDocumento = lstDocumento;
     }
 
+    public String getEstudioNombre()
+    {
+        if(this.Materia != null) return this.Materia.getMatNom();
+        
+        if(this.Modulo != null) return this.Modulo.getModNom();
+        
+        return "";
+    }
+    
+    public int getCantidadAlumnos()
+    {
+        if(this.lstAlumno != null) return this.lstAlumno.size();
+        
+        return 0;
+    }
+    
+    public int getCantidadDocente()
+    {
+        if(this.lstDocente != null) return this.lstDocente.size();
+        
+        return 0;
+    }
+    
+    
+     public PeriodoEstudioAlumno getAlumnoById(Long PeriEstAluCod){
+        
+        PeriodoEstudioAlumno pAlumno = new PeriodoEstudioAlumno();
+        
+        for(PeriodoEstudioAlumno alumn : this.lstAlumno)
+        {
+            if(alumn.getPeriEstAluCod().equals(PeriEstAluCod))
+            {
+                pAlumno = alumn;
+                break;
+            }
+        }
+        
+        return pAlumno;
+    }
+    
+    public PeriodoEstudioDocente getDocenteById(Long PeriEstDocCod){
+        
+        PeriodoEstudioDocente pDocente = new PeriodoEstudioDocente();
+        
+        for(PeriodoEstudioDocente docente : this.lstDocente)
+        {
+            if(docente.getPeriEstDocCod().equals(PeriEstDocCod))
+            {
+                pDocente = docente;
+                break;
+            }
+        }
+        
+        return pDocente;
+    }
     
     
     @Override

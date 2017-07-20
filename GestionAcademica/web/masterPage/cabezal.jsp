@@ -33,14 +33,9 @@
     
 %>
 
-
-<div class="container-fluid">
-    <div class="row">
         <input type="hidden" name="sga_url" id="sga_url" value="<% out.print(urlSistema); %>">    
         
-        <div id="logo" name="logo" class="col-sm-4">
-            <a href="<% out.print(urlSistema); %>"> <img src="<% out.print(urlSistema); %>/Imagenes/logo_ctc.png" height="100px" alt="logo del instituto"/> </a>
-        </div>
+    
         
         <% if(logueado)
         {
@@ -57,7 +52,6 @@
         %>
 
         
-    </div>
     <div>
                 <div id="msgError" name="msgError" class="alert alert-success div_msg" style="display: none;"> 
             <label id="txtError" name="txtError">Error</label>
@@ -65,8 +59,7 @@
 
         <div id="div_cargando" name="div_cargando"></div>
 
-    </div>
-</div>
+    </div>       
 
 
 
