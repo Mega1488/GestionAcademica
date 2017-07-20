@@ -75,31 +75,34 @@
                             <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
                         </div>
 
-                        <div name="cont_estudio" style=' <% out.print(tblVisible); %>'>
+                        <div name="cont_estudio" class="col-sm-8" style=' <% out.print(tblVisible); %>'>
                             <%
                                 for(SDT_PersonaEstudio est : lstEstudio)
                                 {
 
+                                    
+                                    
                                     if(est.getInscripcion().getInsCod() == Long.valueOf("0"))
                                     {
-                                        out.println("<div><label>Sin inscripción</label></div>");
+                                        out.println("<div class='contenedor_titulo_escolaridad'><label>Sin inscripción</label></div>");
                                     }
                                     else
                                     {
                                         if(est.getInscripcion().getCurso() != null){
-                                            out.println("<div><label>Inscripto a: " + est.getInscripcion().getCurso().getCurNom() + "</label></div>");
+                                            out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getCurso().getCurNom() + "</label></div>");
                                         }
 
                                         if(est.getInscripcion().getPlanEstudio() != null){
-                                            out.println("<div><label>Inscripto a: " + est.getInscripcion().getPlanEstudio().getPlaEstNom() + "</label></div>");
+                                            out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getPlanEstudio().getPlaEstNom() + "</label></div>");
                                         }                                   
 
                                     }
                                     
-                                    out.println("<table class='table table-hover'>");
+                                    out.println("<div class='contenedor_tabla_escolaridad'>");
+                                    out.println("<table class='table table-hover eliminar_margen_tabla'>");
                                     out.println("<thead><tr>");
                                     out.println("<th>Materia</th>");
-                                    out.println("<th>Calificación</th>");
+                                    out.println("<th class='texto_derecha'>Calificación</th>");
                                     out.println("</tr>");
                                     out.println("</thead>");
                                     out.println("<tbody>");
@@ -114,7 +117,7 @@
                                             if(esc.getMateria() != null) out.println(esc.getMateria().getMatNom() );
                                             out.println("</td>");
 
-                                            out.println("<td>");
+                                            out.println("<td class='texto_derecha'>");
                                             out.println("<label>" + esc.getEscCalVal() + "</label>");
                                             out.println("</td>");
 
@@ -123,6 +126,8 @@
                                     
                                     out.println("</tbody>");
                                     out.println("</table>");
+                                    
+                                    out.println("</div>");
                                 }
                             %>
                         </div>

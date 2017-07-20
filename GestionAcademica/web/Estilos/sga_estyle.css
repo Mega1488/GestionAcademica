@@ -449,3 +449,27 @@ input[type=search]{
     left:26px;
       
 }
+
+/* Escolaridad */
+
+.contenedor_tabla_escolaridad{
+    border-bottom:1px solid #ececec;
+    border-right:1px solid #ececec;
+    border-left:1px solid #ececec;
+    padding:0px 10px 0px 10px;
+}
+
+.contenedor_titulo_escolaridad{
+    margin-top:20px;
+    background-color: #ececec;
+    padding:6px;
+    padding-left:18px;
+}
+
+.eliminar_margen_tabla{
+    margin-bottom:0px !important;
+}
+
+.texto_derecha{
+    text-align:right;
+}
