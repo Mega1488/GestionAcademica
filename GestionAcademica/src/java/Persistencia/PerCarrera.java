@@ -19,7 +19,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import sun.util.logging.PlatformLogger;
 
 /**
  *

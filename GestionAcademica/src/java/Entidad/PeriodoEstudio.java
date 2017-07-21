@@ -229,6 +229,22 @@ public class PeriodoEstudio implements Serializable {
         return pDocente;
     }
     
+    public PeriodoEstudioDocumento getDocumentoById(Long DocCod){
+        
+        PeriodoEstudioDocumento pDocumento = new PeriodoEstudioDocumento();
+        
+        for(PeriodoEstudioDocumento documento : this.lstDocumento)
+        {
+            if(documento.getDocCod().equals(DocCod))
+            {
+                pDocumento = documento;
+                break;
+            }
+        }
+        
+        return pDocumento;
+    }
+    
     
     @Override
     public int hashCode() {

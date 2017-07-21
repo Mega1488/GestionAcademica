@@ -53,9 +53,7 @@
 
         
     <div>
-                <div id="msgError" name="msgError" class="alert alert-success div_msg" style="display: none;"> 
-            <label id="txtError" name="txtError">Error</label>
-        </div>
+        
 
         <div id="div_cargando" name="div_cargando"></div>
 

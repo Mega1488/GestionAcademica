@@ -67,7 +67,7 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
-        
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             
@@ -81,7 +81,10 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
                         
                         <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp">
+                                <jsp:param name="MostrarTabs" value="SI" />
+                                <jsp:param name="Codigo" value="<%= PeriEstCod %>" />
+                            </jsp:include>
                         </div>
                         
                         <div class=""> 

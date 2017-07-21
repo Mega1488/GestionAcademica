@@ -10,7 +10,7 @@ package Enumerado;
  * @author Alvaro
  */
 public enum RutaArchivos {
-    CARPETA_PRIVADA("WEB-INF/PrivateTempStorage"), CARPETA_PUBLICA("PublicTempStorage");
+    CARPETA_PRIVADA("/WEB-INF/PrivateTempStorage"), CARPETA_PUBLICA("/PublicTempStorage");
     
     RutaArchivos(){
         
