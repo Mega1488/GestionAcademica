@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import sun.util.logging.PlatformLogger;
@@ -90,8 +91,13 @@ public class PerCarrera implements Interfaz.InCarrera{
     @Override
     public Object actualizar(Carrera pCarrera) {
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al Modificar la Carrera", TipoMensaje.ERROR), pCarrera);
+
+         System.err.println("Carrera: " + pCarrera.toString());
+         
         try
         {
+           
+            
             pCarrera.setObjFchMod(new Date());
             iniciaOperacion();
             sesion.update(pCarrera);
@@ -203,5 +209,30 @@ public class PerCarrera implements Interfaz.InCarrera{
         return retorno;
     }
 
-    
+    public Retorno_MsgObj obtenerPopUp(Long PlaEstCod)
+    {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));
+        try
+        {
+            iniciaOperacion();
+            String consulta     = "from Materia ";
+            String parametros = "";
+            
+            parametros = " where PlaEstCod = '" + PlaEstCod + "'";
+
+            Query query = sesion.createQuery(consulta + parametros);
+        
+
+            List<Object> list = query.list();
+
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(list);
+        
+        } catch (HibernateException he) {
+            retorno = manejaExcepcion(he, retorno);
+        }  finally {
+            sesion.close();
+        }
+        return retorno;
+    }
 }
