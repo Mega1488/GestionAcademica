@@ -17,20 +17,40 @@ public enum TipoAprobacion{
         no exonerable s/ganancia de curso (Examen)
     */
 
-    EXONERABLE_CON_GANANCIA(1), EXONERABLE_SIN_GANANCIA(2), NO_EXONERABLE_CON_GANANCIA(3), NO_EXONERABLE_SIN_GANANCIA(4);
+    EXONERABLE_CON_GANANCIA("Exonerable con Ganancia", 1), EXONERABLE_SIN_GANANCIA("Exonerable sin Ganancia", 2), NO_EXONERABLE_CON_GANANCIA("No Exonerable con Ganancia", 3), NO_EXONERABLE_SIN_GANANCIA("No Exonerable sin Ganancia", 4);
     
     TipoAprobacion(){
         
     }
     
-    private int vTipoAprobacion;
+    private int vTpoAprCod;
+    private String vTpoAprNom;
 
-    TipoAprobacion(int tpoAp) {
-        this.vTipoAprobacion = tpoAp;
+    TipoAprobacion(String tpoAprNom, int tpoAprCod) {
+        this.vTpoAprCod = tpoAprCod;
+        this.vTpoAprNom = tpoAprNom;
     }
 
-    public int getTipoAprobacion() {
-        return vTipoAprobacion;
+    public int getTipoAprobacionC()
+    {
+        return vTpoAprCod;
     }
     
+    public String getTipoAprobacionN()
+    {
+        return vTpoAprNom;
+    }
+    
+    public static TipoAprobacion fromCode(int tpoAprCod)
+    {
+        for(TipoAprobacion tipoApr :TipoAprobacion.values())
+        {
+            if(tipoApr.getTipoAprobacionC() == tpoAprCod)
+            {
+                return tipoApr;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El tipo de Aprobación "+ tpoAprCod + " is not suported!");
+    }
 }

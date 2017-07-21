@@ -5,11 +5,15 @@
  */
 package Servlets;
 
+import Entidad.Carrera;
 import Entidad.Curso;
 import Entidad.Evaluacion;
+import Entidad.Materia;
 import Entidad.Modulo;
+import Entidad.PlanEstudio;
 import Entidad.TipoEvaluacion;
 import Enumerado.TipoMensaje;
+import Logica.LoCarrera;
 import Logica.LoCurso;
 import Logica.LoEvaluacion;
 import Logica.LoParametro;
@@ -119,8 +123,8 @@ public class ABM_Evaluacion extends HttpServlet {
                 
                 if(evaluacion.getMatEvl() != null)
                 {
-                    //Retorno_MsgObj retornoObj = (Retorno_MsgObj) loEvaluacion.guardar(evaluacion);
-                    //mensaje    = retornoObj.getMensaje();
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().guardar(evaluacion);
+                    mensaje    = retornoObj.getMensaje();
                 }
             }
         }
@@ -163,7 +167,12 @@ public class ABM_Evaluacion extends HttpServlet {
                     
                     mensaje    = retornoObj.getMensaje();
                 }
-
+                
+                if(evaluacion.getMatEvl() != null)
+                {
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().actualizar(evaluacion);
+                    mensaje    = retornoObj.getMensaje();
+                }
             }
             
         }
@@ -204,9 +213,13 @@ public class ABM_Evaluacion extends HttpServlet {
                     
                     mensaje    = retornoObj.getMensaje();
                 }
-
+                
+                if(evaluacion.getMatEvl() != null)
+                {
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().eliminar(evaluacion);
+                    mensaje    = retornoObj.getMensaje();
+                }
             }
-           
         }
         catch(Exception ex)
         {
@@ -287,8 +300,15 @@ public class ABM_Evaluacion extends HttpServlet {
 
                 //Sin validacion
                 if(!MatEvlMatCod.equals("null"))
-                {
-                    //evaluacion.setMatEvl(MatEvlCarCod);
+                {           
+                    Carrera car = new Carrera();
+                    car = (Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(MatEvlCarCod)).getObjeto();
+                    PlanEstudio plan = new PlanEstudio();
+                    plan = car.getPlanEstudioById(Long.valueOf(MatEvlPlaEstCod));
+                    Materia mat = new Materia();
+                    mat = plan.getMateriaById(Long.valueOf(MatEvlMatCod));
+                    
+                    evaluacion.setMatEvl(mat);
                 }
                      
                 if(!CurEvlCurCod.equals("null"))

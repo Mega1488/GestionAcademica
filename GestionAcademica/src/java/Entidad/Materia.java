@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import Enumerado.TipoAprobacion;
 import Enumerado.TipoPeriodo;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -58,7 +59,7 @@ public class Materia implements Serializable {
     @Column(name = "MatCod")
     private Long MatCod;
 
-    @OneToOne(targetEntity = PlanEstudio.class, optional=false)
+    @ManyToOne(targetEntity = PlanEstudio.class)
     @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
     private PlanEstudio plan;
 
@@ -77,7 +78,7 @@ public class Materia implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     
-    @ManyToOne(targetEntity = Materia.class, optional=true)
+    @ManyToOne(targetEntity = Materia.class)
     @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
     private Materia materiaPrevia;
     
@@ -89,9 +90,7 @@ public class Materia implements Serializable {
     //-CONSTRUCTOR
 
     public Materia() {
-       
     }
-    
     
     
     //-GETTERS Y SETTERS
@@ -176,7 +175,21 @@ public class Materia implements Serializable {
         this.lstEvaluacion = lstEvaluacion;
     }
 
-    
+    public Evaluacion getEvaluacionById(Long EvaCod){
+        
+        Evaluacion pEva = new Evaluacion();
+        
+        for(Evaluacion eva : this.lstEvaluacion)
+        {
+            if(eva.getEvlCod().equals(EvaCod))
+            {
+                pEva = eva;
+                break;
+            }
+        }
+        
+        return pEva;
+    }
 
     @Override
     public int hashCode() {
@@ -205,13 +218,8 @@ public class Materia implements Serializable {
 
     @Override
     public String toString() {
-        return "Materia{" + "MatCod=" + MatCod + ", plan=" + plan + ", MatNom=" + MatNom + ", MatCntHor=" + MatCntHor + ", MatTpoApr=" + MatTpoApr + ", MatTpoPer=" + MatTpoPer + ", MatPerVal=" + MatPerVal + ", ObjFchMod=" + ObjFchMod + ", materiaPrevia=" + materiaPrevia + '}';
-    }
-
-    
-   
-    
-    
+        return "Materia{" + "MatCod=" + MatCod + '}';
+    } 
 }
 
 

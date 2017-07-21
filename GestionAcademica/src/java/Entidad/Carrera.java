@@ -6,6 +6,7 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -75,6 +76,7 @@ public class Carrera implements Serializable {
     private List<PlanEstudio> lstPlanEstudio;
     
     public Carrera() {
+        this.lstPlanEstudio = new ArrayList<>();
     }
 
     public Carrera(Long CarCod, String CarNom, String CarDsc, String CarFac, String CarCrt, Long CarCatCod, Date ObjFchMod) {
@@ -211,6 +213,9 @@ public class Carrera implements Serializable {
 
     @Override
     public String toString() {
-        return "Carrera{" + "CarCod=" + CarCod + '}';
+        return "Carrera{" + "CarCod=" + CarCod + ", CarNom=" + CarNom + ", CarDsc=" + CarDsc + '}';
     }
+
+
+   
 }

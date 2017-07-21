@@ -60,7 +60,6 @@
         }
         else
         {
-            System.err.println("ELSE:");
             out.print(retorno.getMensaje().toString());
         }
     }
@@ -194,7 +193,7 @@
                             %>
                                 <a href="<% out.print(DefPlaEst); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
                                 /
-                                <a id="lnkDefCar" href="<% out.println(DefMat); %>"> Materias </a>
+                                <a href="<% out.println(DefMat); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>"> Materias </a>
                             <%
                                 } else {
                             %>

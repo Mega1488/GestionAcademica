@@ -4,6 +4,10 @@
     Author     : alvar
 --%>
 
+<%@page import="Logica.LoCarrera"%>
+<%@page import="Entidad.Materia"%>
+<%@page import="Entidad.PlanEstudio"%>
+<%@page import="Entidad.Carrera"%>
 <%@page import="Entidad.Modulo"%>
 <%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
@@ -22,9 +26,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    LoCurso loCurso        = LoCurso.GetInstancia();
-    Utilidades utilidad    = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    LoCurso loCurso         = LoCurso.GetInstancia();
+    LoCarrera loCarrera     = LoCarrera.GetInstancia();
+    Utilidades utilidad     = Utilidades.GetInstancia();
+    String urlSistema       = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
     
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -45,9 +50,9 @@
     String CurEvlCurCod       = request.getParameter("pCurEvlCurCod");
     String ModEvlCurCod       = request.getParameter("pModEvlCurCod");
     String ModEvlModCod       = request.getParameter("pModEvlModCod");
-    String MatEvlCarCod       = request.getParameter("pModCod");
-    String MatEvlPlaEstCod    = request.getParameter("pModCod");
-    String MatEvlMatCod       = request.getParameter("pModCod");
+    String MatEvlCarCod       = request.getParameter("pCarCod");
+    String MatEvlPlaEstCod    = request.getParameter("pPlaEstCod");
+    String MatEvlMatCod       = request.getParameter("pMatCod");
     String EvlCod             = request.getParameter("pEvlCod");
     
     
@@ -101,14 +106,30 @@
         }
     }
     if(Relacion.equals("MATERIA"))
-    {
-        //urlRetorno  = urlSistema +  "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=UPDATE&pCurCod=" + ModEvlCurCod + "&pModCod=" + ModEvlModCod;
-    }
-    
-    
-    
+    {   
+        urlRetorno  = urlSistema +  "Definiciones/DefMateriaEvaluacionSWW.jsp?MODO=DISPLAY&pPlaEstCod=" + MatEvlPlaEstCod + "&pCarCod=" + MatEvlCarCod + "&pMatCod=" + MatEvlMatCod;
         
-    
+        Carrera car         = new Carrera();
+        PlanEstudio plan    = new PlanEstudio();
+        Materia mat         = new Materia();
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) loCarrera.obtener(Long.valueOf(MatEvlCarCod));
+        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        {
+            car = (Carrera) retorno.getObjeto();
+            plan = car.getPlanEstudioById(Long.valueOf(MatEvlPlaEstCod));
+            mat = plan.getMateriaById(Long.valueOf(MatEvlMatCod));
+        }
+        else
+        {
+            out.print(retorno.getMensaje().toString());
+        }
+        
+        if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
+        {
+            evaluacion = mat.getEvaluacionById(Long.valueOf(EvlCod));
+        }
+    }
     
     String js_redirect      = "window.location.replace('" + urlRetorno + "');";;
     String CamposActivos    = "disabled";
@@ -268,7 +289,7 @@
         
     </head>
     <body>
-        
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             <div id="contenido" name="contenido" class="main-panel">
