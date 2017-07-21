@@ -37,17 +37,12 @@
     if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
             
     //----------------------------------------------------------------------------------------------------
-    
-    String DefCar           = "DefCarreraWW.jsp";
-    String PlaEst           = "DefPlanEstudioWW.jsp";
+
     String CarCod           = request.getParameter("pCarCod");
     Modo mode               = Modo.valueOf(request.getParameter("MODO"));
     String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefCarreraWW.jsp');";
     String CamposActivos    = "disabled";
-    
-    Date fecha              = new Date();
-    DateFormat f            = new SimpleDateFormat("dd/MM/YYYY");
-    String today            = "";
+    String boton            = "";
     
     if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
     {
@@ -62,58 +57,48 @@
         }
     }
     
-    if (mode.equals(Modo.DELETE) || mode.equals(Modo.UPDATE))
-    {
-        today = "Fecha de Modificación: " + f.format(car.getObjFchMod());
-    }
-    else
-    {
-        today = "Fecha de Modificación: " + f.format(fecha);
-    }
-    
     switch(mode)
     {
         case INSERT:
-            CamposActivos = "enabled";
+            CamposActivos   = "enabled";
+            boton           = "<input name='BtnAceCar' id='BtnAceCar' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case DELETE:
             CamposActivos = "disabled";
+            boton           = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimCarrera'/>";
+//            boton           = "btn btn-danger";
             break;
         case DISPLAY:
             CamposActivos = "disabled";
+            boton           = "<input name='BtnAceCar' id='BtnAceCar' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            boton           = "<input name='BtnAceCar' id='BtnAceCar' value='Guardar' type='button' class='btn btn-success' />";
             break;
     }
 %>
 
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Ingreso de Carreras</title>
-    <jsp:include page="/masterPage/head.jsp"/>
-    
-    <script>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Sistema de Gestión Académica - Carrera</title>
+        <jsp:include page="/masterPage/head.jsp"/>
+
+        <script>
             $(document).ready(function() {
-                MostrarCargando(false);
-                
-                $('#BtnAceCar').click(function() {
-                 MostrarCargando(true);
+
+                $('#BtnAceCar').click(function() 
+                {
                     var codVar          = $('#CarCod').val();
                     var nomVar          = $('#CarNom').val();
                     var dscVar          = $('#CarDsc').val();
                     var facVar          = $('#CarFac').val();
                     var crtVar          = $('#CarCrt').val();
-                    
+
                     if(nomVar == '' && $('#MODO').val()!= "DELETE")
                     {
                         MostrarMensaje("ERROR", "Deberá asignar un nombre a la Carrera");
-                        MostrarCargando(false);
                     }
                     else
                     {
@@ -128,7 +113,7 @@
                                     pAccion       : "INGRESAR"
                             }, function(responseText) {
                                 var obj = JSON.parse(responseText);
-                                MostrarCargando(false);
+
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
                                     <%out.print(js_redirect);%>
@@ -139,7 +124,7 @@
                                 }
                             });
                         }
-                        
+
                         if ($('#MODO').val()== "UPDATE")
                         {
                             // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
@@ -152,7 +137,6 @@
                                     pAccion     : "MODIFICAR"
                             }, function(responseText) {
                                 var obj = JSON.parse(responseText);
-                                MostrarCargando(false);
 
                                 if(obj.tipoMensaje != 'ERROR')
                                 {
@@ -164,7 +148,7 @@
                                 }
                             });
                         }
-                        
+
                         if ($('#MODO').val()== "DELETE")
                         {
                             $.post('<% out.print(urlSistema); %>ABM_Carrera', {
@@ -172,7 +156,6 @@
                                     pAccion     : "ELIMINAR"
                             }, function(responseText) {
                                 var obj = JSON.parse(responseText);
-                                MostrarCargando(false);
 
                                 if(obj.tipoMensaje != 'ERROR')
                                 {
@@ -187,115 +170,72 @@
                     }
                 });
             });
-    </script>
-    
-  </head>
-  <body>
-    <div id="cabezal" name="cabezal">
-        <jsp:include page="/masterPage/cabezal.jsp"/>
-    </div>
+      </script>
 
-    <div style="float:left; width: 10%; height: 100%;">
-        <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-    </div>
+    </head>
+    <body>
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div id="contenido" name="contenido" class="main-panel">
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                </div>
 
-    <div id="contenido" name="contenido" style="float: right; width: 90%;">
-        <div class="col-md-8 col-md-offset-1">
-            <div class="panel-heading"><h1>Ingreso de Carrera</h1><hr size="200" style="color: #000000;"/></div>
-                <table border= "0" width="100%">
-                    <tr>
-                        <td>
-                            <!-- En "ejemplo" hay que poner el en lace de la pagina Inicio en este caso -->
-                            <a id="lnkIni" href=<%out.println(urlSistema);%>> Inicio </a> >
-                            <a id="lnkDefCar" href="<%out.println(DefCar);%>"> Carreras </a> >
-                            Ingreso de Carrera                                    
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
+                            <jsp:include page="/Definiciones/DefCarreraTabs.jsp"/>
+                        </div>
+
+                        <div class=""> 
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>">Regresar</a></div>
+                        </div>
+
+                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                        </div>
+
+                        <form id="frm_objeto" name="frm_objeto">
+                            <div><label>Código</label><input type="number" class="form-control" id="CarCod" name="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>"></div>
+                            <div><label>Nombre</label><input type="text" class="form-control" id="CarNom" name="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarNom())); %>"></div>
+                            <div><label>Descripción</label><input type="text" class="form-control" id="CarDsc" name="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarDsc())); %>"></div>
+                            <div><label>Facultad</label><input type="text" class="form-control" id="CarFac" name="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarFac())); %>"></div>
+                            <div><label>Certificación</label><input type="text" class="form-control" id="CarCrt" name="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarCrt())); %>"></div>
+
                             <br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                            <div>
+                                <%out.print(boton);%> 
+                                <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href='<%out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp'"/>
                             </div>
-                        </td>
-                        <td align="right">
-                            <div id="msgFecha" name="msgFecha"> 
-                                <%out.println(today);%>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h10>
-                        <%if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY))
-                        {%>
-                            <a href="<%out.println(DefCar);%>"> Carreras </a>
-                            /
-                            <a href="<%out.println(PlaEst);%>?&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
-                        <%}else{%>  
-                            <a href="<%out.println(DefCar);%>"> Carreras </a>
-                        <%}%>
-                    </h10></div>
-                    <div class="panel-body">
-                        <table border= "0" width="100%">
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                        <label>Código</label>
-                                        <!--<imput type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">-->
-                                        <input type="text" class="form-control" id="CarCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(car.getCarCod())); %>">
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                      <label for="InputNombre">Nombre</label>
-                                      <input type="text" class="form-control" id="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarNom())); %>">
-                                    </div>                                            
-                                </td>
-                                <td class="margin">
-                                    <div class="form-group">
-                                      <label for="InputDescripcion">Descripción</label>
-                                      <input type="text" class="form-control" id="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarDsc())); %>">
-                                    </div>                                                
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="form-group">
-                                      <label for="InputFacultad">Facultad</label>
-                                      <input type="text" class="form-control" id="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarFac())); %>">
-                                    </div>                                            
-                                </td>
-                                <td class="margin">
-                                    <div class="form-group">
-                                      <label for="InputCertificacion">Certificación</label>
-                                      <input type="text" class="form-control" id="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(car.getCarCrt())); %>">
-                                    </div>                                                
-                                </td>
-                            </tr>
-                        </table>
+                        </form>
                     </div>
                 </div>
-                <table>
-                    <tr>
-                        <td style="text-align:right" class="margin">
-                            <button type="button" id="BtnAceCar" class="btn btn-default">Aceptar</button>
-                        </td>
-                        <td>
-                        </td>
-                        <td style="text-align:right" class="margin">
-                            <input type="button" class="btn btn-default" value="Volver" id="BtnVol" name="BtnVol" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp'" />
-                        </td>
-                    </tr>
-                </table>
-            </div>
+            </div>           
         </div>
-        <div id="div_cargando" name="div_cargando"></div>
+                            
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpElimCarrera" class="modal fade" role="dialog">
+        <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar Carrera</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>¿Desea eliminar la Carrera: <% out.print( utilidad.NuloToVacio(car.getCarNom())); %>?</h4>
+                            <h4>Se eliminará tambien los Planes, Materias y Evaluaciones que contenga</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <input name="BtnAceCar" id="BtnAceCar" value="Confirmar" type="button" class="btn btn-success" />
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>                       
     </body>
 </html>

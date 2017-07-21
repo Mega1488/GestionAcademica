@@ -46,8 +46,9 @@
     String CarCod           = request.getParameter("pCarCod");
     String MatCod           = request.getParameter("pMatCod");
     Modo mode               = Modo.valueOf(request.getParameter("MODO"));
-    String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefMateriaWW.jsp?MODE="+ mode.DISPLAY +"&pPlaEstCod="+PlaEstCod+"&pCarCod="+ CarCod +"');";
+    String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefMateriaSWW.jsp?MODO="+ mode.DISPLAY +"&pPlaEstCod="+PlaEstCod+"&pCarCod="+ CarCod +"');";
     String CamposActivos    = "disabled";
+    String boton            = "";
     
     if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
     {
@@ -68,15 +69,19 @@
     {
         case INSERT:
             CamposActivos = "enabled";
+            boton           = "<input name='BtnAceMat' id='BtnAceMat' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case DELETE:
             CamposActivos = "disabled";
+            boton           = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimMateria'/>";
             break;
         case DISPLAY:
             CamposActivos = "disabled";
+            boton           = "<input name='BtnAceMat' id='BtnAceMat' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            boton           = "<input name='BtnAceMat' id='BtnAceMat' value='Guardar' type='button' class='btn btn-success' />";
             break;
     }
 %>
@@ -155,7 +160,7 @@
                         </div>
                         
                         <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>">Regresar</a></div>
                         </div>
                         
                         <div style="display:none" id="datos_ocultos" name="datos_ocultos">
@@ -210,8 +215,8 @@
                             </div>
 
                             <div>
-                                <input name="BtnAceMat" id="BtnAceMat" value="Guardar" type="button" class="btn btn-success"/>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href='<%out.print(urlSistema); %>Definiciones/DefMateriaWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>'"/>
+                                <%out.print(boton);%>
+                                <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href='<%out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>'"/>
                             </div>                
                         </form>
                     </div>                                            
@@ -317,6 +322,30 @@
                     }
                 });
             </script>
+        </div>
+                        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpElimMateria" class="modal fade" role="dialog">
+        <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar Materia</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>¿Seguro que quiere eliminar la Materia: <% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>?</h4>
+                            <h4>Se eliminará tambien las Evaluaciones que contenga</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <input name="BtnAceMat" id="BtnAceMat" value="Confirmar" type="button" class="btn btn-success"/>
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </body>
 </html>

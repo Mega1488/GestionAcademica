@@ -38,17 +38,12 @@
             
     //----------------------------------------------------------------------------------------------------
     
-    String DefPlaEst        = "DefPlanEstudioWW.jsp";
-    String DefMat           = "DefMateriaWW.jsp";
     String PlaEstCod        = request.getParameter("pPlaEstCod");
     String CarCod           = request.getParameter("pCarCod");
     Modo mode               = Modo.valueOf(request.getParameter("MODO"));
-    String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefPlanEstudioWW.jsp?MODO=" + Enumerado.Modo.DISPLAY + "&pCarCod="+ CarCod +"');";
+    String js_redirect      = "window.location.replace('" + urlSistema +  "Definiciones/DefPlanEstudioSWW.jsp?MODO=" + Enumerado.Modo.DISPLAY + "&pCarCod="+ CarCod +"');";
     String CamposActivos    = "disabled";
-    
-    Date fecha              = new Date();
-    DateFormat f            = new SimpleDateFormat("dd/MM/YYYY");
-    String today            = "";
+    String boton            = "";
     
     Carrera car = new Carrera();
     if(mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE))
@@ -69,40 +64,31 @@
         plan = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
     }
     
-    if (mode.equals(Modo.DELETE) || mode.equals(Modo.UPDATE))
-    {
-        today = "Fecha de Modificación: " + f.format(plan.getObjFchMod());
-    }
-    else
-    {
-        today = "Fecha de Modificación: " + f.format(fecha);
-    }
-    
     switch(mode)
     {
         case INSERT:
             CamposActivos = "enabled";
+            boton           = "<input name='BtnAcePla' id='BtnAcePla' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case DELETE:
             CamposActivos = "disabled";
+            boton           = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimPlan'/>";
             break;
         case DISPLAY:
             CamposActivos = "disabled";
+            boton           = "<input name='BtnAcePla' id='BtnAcePla' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            boton           = "<input name='BtnAcePla' id='BtnAcePla' value='Guardar' type='button' class='btn btn-success' />";
             break;
     }
 %>
 
 <html>
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-        <title>Ingreso de Plan de Estudio</title>
+        <title>Sistema de Gestión Académica - Materia</title>
         <jsp:include page="/masterPage/head.jsp"/>
 
     <script>
@@ -154,99 +140,70 @@
     
     </head>
     <body>
-        <div id="cabezal" name="cabezal">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
-
-        <div style="float:left; width: 10%; height: 100%;">
+        <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-        </div>
+            <div id="contenido" name="contenido" class="main-panel">
 
-        <div id="contenido" name="contenido" style="float: right; width: 90%;">
-            <div class="col-md-8 col-md-offset-1">
-                <div class="panel-heading"><h1>Ingreso Plan de Estudio</h1><hr size="200" style="color: #000000;"/></div>   
-                    <table border= "0" width="100%">
-                        <tr>
-                            <td>
-                                    <a href="<% out.print(urlSistema); %>"> Inicio </a> >
-                                    <a href="<% out.print(DefPlaEst); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a> >
-                                    Ingreso Plan de Estudio
-                            </td>
-                        </tr>
-                        <tr>
-                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
-                                <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
-                            </div>
-                            <td align="right">
-                                <div id="msgFecha" name="msgFecha">
-                                    <% out.println(today); %>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h10>
-                            <%
-                                if(mode.equals(Modo.UPDATE) ||  mode.equals(Modo.DISPLAY))
-                                { 
-                            %>
-                                <a href="<% out.print(DefPlaEst); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
-                                /
-                                <a href="<% out.println(DefMat); %>?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>"> Materias </a>
-                            <%
-                                } else {
-                            %>
-                                <a href="<% out.println(DefPlaEst); %>?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod.toString());%>"> Plan de Estudio </a>
-                            <%
-                                } 
-                            %>
-                        </h10></div>
-                        <div class="panel-body">
-                            <table border= "0" width="100%">
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="ImputCodigo">Código</label>
-                                            <input type="text" class="form-control" id="PlaEstCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToCero(plan.getPlaEstCod())); %>">
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="margin">
-                                            <label for="InputNombre">Nombre</label>
-                                            <input type="text" class="form-control" id="PlaEstNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstNom())); %>">
-                                        </div>                                            
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="form-group">
-                                        <div class="form-group">
-                                            <label for="InputDescripcion">Descripción</label>
-                                            <input type="text" class="form-control" id="PlaEstDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstDsc())); %>">
-                                        </div>                                                
-                                    </td>
-                                    <td>
-                                        <div class="margin">
-                                            <label for="InputFacultad">Creditos Necesarios</label>
-                                            <input type="text" class="form-control" id="PlaEstCre" placeholder="Creditos Necesarios" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToCero(plan.getPlaEstCreNec())); %>">
-                                        </div>                                            
-                                    </td>
-                                </tr>
-                            </table>
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                </div>
+
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
+                            <jsp:include page="/Definiciones/DefPlanEstudioTabs.jsp"/>
                         </div>
+                        
+                        <div class=""> 
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod);%>">Regresar</a></div>
+                        </div>
+                        
+                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                            <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
+                        </div>
+                        
+                        <form id="frm_objeto" name="frm_objeto">
+
+                                <div><label>Código</label><input type="text" class="form-control" id="PlaEstCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstCod())); %>"></div>
+                                <div><label>Nombre</label><input type="text" class="form-control" id="PlaEstNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstNom())); %>"></div>
+                                <div><label>Descripción</label><input type="text" class="form-control" id="PlaEstDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(plan.getPlaEstDsc())); %>"></div>
+                                <div><label>Creditos Necesarios</label><input type="text" class="form-control" id="PlaEstCre" placeholder="Creditos Necesarios" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToCero(plan.getPlaEstCreNec())); %>"></div>                                    
+
+                                <br>
+                                <div>
+                                    <%out.print(boton);%>
+                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href='<%out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<% out.print(Enumerado.Modo.DISPLAY); %>&pCarCod=<%out.print(CarCod.toString());%>'"/>
+                                </div>
+                        </form>
                     </div>
-                    <table>
-                        <tr>
-                            <td style="text-align:right" class="margin">
-                                <button type="button" id="BtnAcePla" class="btn btn-default">Aceptar</button>
-                            </td>
-                            <td style="text-align:right" class="margin">
-                                <input type="button" class="btn btn-default" value="Volver" id="BtnVolPla" name="BtnVolPla" onclick= "self.location.href='<%out.print(urlSistema); %>Definiciones/DefPlanEstudioWW.jsp?MODO=<% out.print(Enumerado.Modo.DISPLAY); %>&pCarCod=<%out.print(CarCod.toString());%>'"/>
-                            </td>
-                        </tr>
-                    </table>
                 </div>
             </div>
-        <div id="div_cargando" name="div_cargando"></div>
+        </div>
+                                
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpElimPlan" class="modal fade" role="dialog">
+        <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar Plan</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>¿Seguro que quiere eliminar el Plan: <% out.print( utilidad.NuloToVacio(plan.getPlaEstNom())); %>?</h4>
+                            <h4>Se eliminará tambien las Materias y Evaluaciones que contenga</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <input name="BtnAcePla" id="BtnAcePla" value="Confirmar" type="button" class="btn btn-success" />
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>          
     </body>
 </html>

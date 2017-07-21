@@ -46,114 +46,51 @@
         out.print(retorno.getMensaje().toString());
     }
     
-//    String tblCarreraVisible = (lstCarrera.size() > 0 ? "" : "display: none;");
+    String tblCarreraVisible = (lstCarrera.size() > 0 ? "" : "display: none;");
 %>
 
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Definición de Carreras</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Sistema de Gestión Académica - Carreras</title>
     <jsp:include page="/masterPage/head.jsp"/>
-    
-  </head>
-  <body>
-    
-    <div id="cabezal" name="cabezal">
-        <jsp:include page="/masterPage/cabezal.jsp"/>
-    </div>
-
-    <div style="float:left; width: 10%; height: 100%;">
-        <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-    </div>
-
-    <div id="contenido" name="contenido" style="float: right; width: 90%;">
-        <div class="col-md-8 col-md-offset-1">
-            <div class="panel-heading"><h1>Definición de Carreras</h1><hr size="200" style="color: #000000;"/></div>
-                <table border= "0" width="100%">
-                    <tr>
-                        <td>
-                            <!-- En "ejemplo" hay que poner el en lace de la pagina Inicio en este caso -->
-                            <a id="lnkIni" href=<%out.print(urlSistema);%>> Inicio </a>
-                            >
-                            Definición de Carrera
-
-                        </td>
-                        <td style="text-align:right">
-                            <button type="button" id="BtnIngPla" class="BtnAlta" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>'"></button>
-                        </td>
-                    </tr>
-                </table>
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h10>Filtros</h10></div>
-                        <div class="panel-body">
-                            <table border= "0" width="100%">
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                            <label for="InputCodigo">Código</label>
-                                            <input type="text" class="form-control" id="TxtCod" placeholder="Código">
-                                          </div>
-                                    </td>
-                                    <td class="margin">
-                                        <div class="form-group">
-                                          <label for="InputNombre">Nombre</label>
-                                          <input type="text" class="form-control" id="TxtNom" placeholder="Nombre">
-                                        </div>                                            
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-group">
-                                          <label for="InputFacultad">Facultad</label>
-                                          <input type="text" class="form-control" id="TxtFacu" placeholder="Facultad">
-                                        </div>                                                
-                                    </td>
-                                    <td class="margin">
-                                        <div class="form-group">
-                                          <label for="InputCategoria">Categoría</label>
-                                          <input type="text" class="form-control" id="TxtCate" placeholder="Categoría">
-                                        </div>                                            
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-
-                                    </td>
-                                    <td style="text-align:right">
-                                        <button id="BtnBus" class="btn btn-default">Buscar</button>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+</head>
+    <body>
+        <div class="wrapper">
+            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+            <div id="contenido" name="contenido"  class="main-panel">
+                <div class="contenedor-cabezal">
+                    <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
+                <div class="contenedor-principal">
+                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        <div class="contenedor-titulo">    
+                            <p>Carreras</p>
+                        </div>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading"><h10>Lista de Carreras</h10></div>
-                    <div class="panel-body">
-                        <table id="TblCar" class="table table-bordered">
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th>Código</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Facultad</th>
-                                <th>Certificación</th>
-                            </tr>
+                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                            <a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                        </div>
+
+                        <table style=' <% out.print(tblCarreraVisible); %>' class='table table-hover'>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Facultad</th>
+                                    <th>Categoría</th>
+                                </tr>    
+                            </thead>
                             <%
                             for(Object obj : lstCarrera)
                             {
                                 Carrera car = (Carrera)obj;
                             %>
                             <tr>
-<!--                                            <td style="text-align:center"><button type="button" class="btn_eli" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>''&pCarCod='<% out.print(car.getCarCod()); %>"></button></td>
-                                <td style="text-align:center"><button type="button" class="btn_mod" onclick= "self.location.href ='<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>''&pCarCod='<% out.print(car.getCarCod()); %>"></button></td>-->
-
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_eliminar" id="btn_eliminar" >Eliminar</a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_editar" id="btn_editar" >Editar</a></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
                                 <td><% out.print(utilidad.NuloToCero(car.getCarCod())); %></td>
                                 <td><% out.print(utilidad.NuloToVacio(car.getCarNom())); %></td>
                                 <td><% out.print(utilidad.NuloToVacio(car.getCarDsc())); %></td>

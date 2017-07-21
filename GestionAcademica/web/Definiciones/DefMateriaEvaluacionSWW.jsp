@@ -52,7 +52,6 @@
         car     = (Carrera) retorno.getObjeto();
         plan    = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
         mat     = plan.getMateriaById(Long.valueOf(MatCod));
-//        eva     = mat.getEvaluacionById(Long.valueOf(mat.));
     }
     else
     {
@@ -83,11 +82,11 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
                         
                         <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefMateriaEvaluacionSWWTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefMateriaTabs.jsp"/>
                         </div>
                 
                         <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaWW.jsp?MODO=DISPLAY&pCarCod=<% out.print(CarCod); %>&pPlaEstCod=<% out.print(PlaEstCod); %>&pMatCod=<% out.print(MatCod); %>">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=DISPLAY&pCarCod=<% out.print(CarCod); %>&pPlaEstCod=<% out.print(PlaEstCod); %>&pMatCod=<% out.print(MatCod); %>">Regresar</a></div>
                         </div>
             
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">

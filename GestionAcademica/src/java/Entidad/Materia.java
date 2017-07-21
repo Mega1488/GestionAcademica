@@ -30,6 +30,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -84,6 +86,7 @@ public class Materia implements Serializable {
     
     @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
+    @Fetch(FetchMode.SUBSELECT)
     private List<Evaluacion> lstEvaluacion;
     
    

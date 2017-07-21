@@ -60,7 +60,8 @@
     
     List<Object> lstTpoEvaluacion = LoTipoEvaluacion.GetInstancia().obtenerLista().getLstObjetos();
     
-    String urlRetorno = "";
+    String urlRetorno   = "";
+    String boton        = "";
     
     if(Relacion.equals("CURSO"))
     {
@@ -136,13 +137,21 @@
     
     switch(Mode)
     {
-        case INSERT: CamposActivos = "enabled";
+        case INSERT: 
+            CamposActivos = "enabled";
+            boton           = "<input name='btn_guardar' id='btn_guardar' value='Guardar' type='button' class='btn btn-success' />";
             break;
-        case DELETE: CamposActivos = "disabled";
+        case DELETE: 
+            CamposActivos = "disabled";
+            boton           = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimEvaluacion'/>";
             break;
-        case DISPLAY: CamposActivos = "disabled";
+        case DISPLAY: 
+            CamposActivos = "disabled";
+            boton           = "<input name='btn_guardar' id='btn_guardar' value='Guardar' type='button' class='btn btn-success' />";
             break;
-        case UPDATE: CamposActivos = "enabled";
+        case UPDATE: 
+            CamposActivos = "enabled";
+            boton           = "<input name='btn_guardar' id='btn_guardar' value='Guardar' type='button' class='btn btn-success' />";
             break;
     }
     
@@ -355,9 +364,9 @@
                                                 %>
                                             </select>
                                     </div>
-
+                            <br>
                             <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
+                                <%out.print(boton);%>
                                 <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %> "/>
                             </div>
                         </form>
@@ -365,5 +374,30 @@
                 </div>
             </div>
         </div>
+                            
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpElimEvaluacion" class="modal fade" role="dialog">
+        <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar Evaluación</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>¿Seguro que quiere eliminar la Evaluación: <% out.print( utilidad.NuloToVacio(evaluacion.getEvlNom())); %> del Estudio: <% out.print(evaluacion.getEstudioNombre()); %>?</h4>
+<!--                            <h4>Se eliminará tambien las Evaluaciones que contenga</h4>-->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <input name="btn_guardar" id="btn_guardar" value="Confirmar" type="button" class="btn btn-success"/>
+                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+                            
     </body>
 </html>

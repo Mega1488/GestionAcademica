@@ -78,12 +78,12 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
 
 
-                        <div class="contenedor-titulo">    
-                            <p>Materias</p>
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
+                            <jsp:include page="/Definiciones/DefPlanEstudioTabs.jsp"/>
                         </div>
                         
                         <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>">Regresar</a></div>
                         </div>
                         
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
@@ -115,8 +115,8 @@
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatCod())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatNom())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatCntHor())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(mat.getMatTpoApr())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(mat.getMatTpoPer())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(mat.getMatTpoApr().getTipoAprobacionN())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(mat.getMatTpoPer().getTipoPeriodoNombre())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %> </td>
                                 <td>
                                 <%
