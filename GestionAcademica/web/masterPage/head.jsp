@@ -49,7 +49,9 @@
 <link href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons" rel="stylesheet">
 
-<link rel="shortcut icon" type="image/png" href="../Imagenes/ctc_ic.png"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="shortcut icon" type="image/png" href="<% out.print(urlSistema); %>Imagenes/ctc_ic.png"/>
 
 
 <script>

@@ -79,6 +79,9 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
                     retorno = this.ObtenerDatos(request);
                 break;
                 
+                case "INGRESAR_GENERACION":
+                    retorno = this.IngresarGeneracion(request);
+                break;
             }
 
             out.println(retorno);
@@ -118,7 +121,6 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         }
 
         String retorno = utilidades.ObjetoToJson(mensaje);
-
         return retorno;
     }
     
@@ -190,6 +192,37 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         }
 
        return utilidades.ObjetoToJson(periAlumno);
+    }
+    
+    private String IngresarGeneracion(HttpServletRequest request){
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+            error           = false;
+
+            String 	PeriCod     = request.getParameter("pPeriCod");
+            String 	InsGenAnio  = request.getParameter("pInsGenAnio");
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                Retorno_MsgObj retornoObj = loPeriodo.GeneracionAgregar(Long.valueOf(PeriCod) , Integer.valueOf(InsGenAnio));
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
     }
     
     private PeriodoEstudioAlumno ValidarPeriodoEstudioAlumno(HttpServletRequest request, PeriodoEstudioAlumno periAlumno){

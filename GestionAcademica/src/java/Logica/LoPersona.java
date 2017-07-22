@@ -17,7 +17,6 @@ import Moodle.MoodleRestCourse;
 import Moodle.MoodleRestEnrol;
 import Moodle.MoodleRestException;
 import Moodle.MoodleRestUser;
-import Moodle.MoodleRestUserException;
 import Moodle.MoodleUser;
 import Moodle.MoodleUserRoleException;
 import Moodle.UserRole;

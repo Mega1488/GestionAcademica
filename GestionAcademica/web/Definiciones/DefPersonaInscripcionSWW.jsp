@@ -98,6 +98,7 @@
                                     <th>Estudio</th>
                                     <th>Fecha de inscripción</th>
                                     <th>Fecha de certificación</th>
+                                    <th>Generación</th>
                                 </tr>
                             </thead>
 
@@ -114,6 +115,7 @@
                                 <td><% out.print( utilidad.NuloToVacio(insc.getNombreEstudio())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(insc.getInsGenAnio())); %> </td>
                             </tr>
                             <%
                             }
@@ -142,6 +144,9 @@
                             <div class="row">
                                 <label id="lbl_carrera" name="lbl_carrera" class="unchecked"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" class="hide" value="carrera">Carrera</label>
                                 <label id="lbl_curso" name="lbl_curso"  class="unchecked"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" class="hide" value="curso">Curso</label>
+                                <div style="display: inline;">
+                                    <label>Generación:</label> <input type="number" name="InsGenAnio" id="InsGenAnio" min="1" step="1" class="" max="2049">
+                                </div>
                             </div>
 
                             <div class="row">
@@ -171,6 +176,8 @@
     
             <script type="text/javascript">
                 $(document).ready(function() {
+                    
+                    $('#InsGenAnio').val(new Date().getFullYear());
                     
                     $('input:radio[name="pop_TpoEst"][value="carrera"]').prop("checked", true);
                     $('#pop_FltrCarrera').show();
@@ -330,9 +337,10 @@
                 
                     $(document).on('click', ".Pop_Seleccionar", function() {
 
-                            var CarCod = $('select[name=pop_FltrCarCod]').val();
-                            var codigo = $(this).data("codigo");
-                            var PerCod = $('#PerCod').val();
+                            var CarCod      = $('select[name=pop_FltrCarCod]').val();
+                            var codigo      = $(this).data("codigo");
+                            var PerCod      = $('#PerCod').val();
+                            var InsGenAnio  = $('#InsGenAnio').val();
                             
                             var tipo    = "CARRERA";
                             
@@ -346,30 +354,40 @@
                                 tipo = "CURSO";
                             }
                             
-                            
-                            $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
-                                    pCarCod: CarCod,
-                                    pPerCod: PerCod,
-                                    pCodigoEstudio: codigo,
-                                    pTipoEstudio: tipo,
-                                    pAction: "<% out.print(Modo.INSERT);%>"
-                                 }, function (responseText) {
-                                     var obj = JSON.parse(responseText);
+                            if(InsGenAnio < 1960 || InsGenAnio > 2049)
+                            {
+                                MostrarMensaje("ERROR", "Generación no valida");
+                            }
+                            else
+                            {
 
-                                     if (obj.tipoMensaje != 'ERROR')
-                                     {
-                                         location.reload();
-                                     } else
-                                     {
-                                         MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                     }
+                                $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
+                                        pCarCod: CarCod,
+                                        pPerCod: PerCod,
+                                        pCodigoEstudio: codigo,
+                                        pTipoEstudio: tipo,
+                                        pInsGenAnio: InsGenAnio,
+                                        pAction: "<% out.print(Modo.INSERT);%>"
+                                     }, function (responseText) {
+                                         var obj = JSON.parse(responseText);
 
-                                 });
+                                         if (obj.tipoMensaje != 'ERROR')
+                                         {
+                                             location.reload();
+                                         } else
+                                         {
+                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                         }
 
-                            $(function () {
-                                    $('#PopUpAgregar').modal('toggle');
-                                 });
-                    });
+                                     });
+
+                                $(function () {
+                                        $('#PopUpAgregar').modal('toggle');
+                                     });
+                                     
+                            }
+
+                        });
                     
                     
                 });

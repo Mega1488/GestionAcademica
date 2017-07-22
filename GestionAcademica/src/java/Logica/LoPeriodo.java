@@ -6,6 +6,7 @@
 package Logica;
 
 import Entidad.Inscripcion;
+import Entidad.Materia;
 import Entidad.Modulo;
 import Entidad.Periodo;
 import Entidad.PeriodoEstudio;
@@ -17,6 +18,7 @@ import Interfaz.InABMGenerico;
 import Persistencia.PerPeriodo;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -52,6 +54,7 @@ public class LoPeriodo implements InABMGenerico{
         //--------------------------------------------------------------------------------------------------------------------------------------------
         
         List<Object> lstModulo = LoCurso.GetInstancia().ModuloPorPeriodo(periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
+
         if(lstModulo != null)
         {
             for(Object objeto : lstModulo)
@@ -61,22 +64,6 @@ public class LoPeriodo implements InABMGenerico{
                 PeriodoEstudio periEstudio = new PeriodoEstudio();
                 periEstudio.setModulo(mdl);
                 periEstudio.setPeriodo(periodo);
-                
-                Retorno_MsgObj retorno = LoInscripcion.GetInstancia().obtenerListaByCurso(mdl.getCurso().getCurCod());
-                if(!retorno.SurgioErrorListaRequerida())
-                {
-                    for(Object ob : retorno.getLstObjetos())
-                    {
-                        Inscripcion ins = (Inscripcion) ob;
-                        PeriodoEstudioAlumno periEstAlumno = new PeriodoEstudioAlumno();
-                        periEstAlumno.setAlumno(ins.getAlumno());
-                        periEstAlumno.setPerInsFchInsc(new Date());
-                        periEstAlumno.setPeriodoEstudio(periEstudio);
-                        
-                        periEstudio.getLstAlumno().add(periEstAlumno);
-                    }
-                }
-                
                 periodo.getLstEstudio().add(periEstudio);
             }
         }
@@ -243,6 +230,45 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
    
+    public Retorno_MsgObj GeneracionAgregar(Long PeriCod, Integer InsGenAnio)
+    {
+        boolean error           = false;
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), null);
+        
+        if(!error)
+        {
+            Periodo periodo = (Periodo) this.obtener(PeriCod).getObjeto();
+            
+            for(PeriodoEstudio periEst : periodo.getLstEstudio())
+            {
+                List<Object> inscripciones = new ArrayList<>();
+                
+                if(periEst.getMateria() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByPlan(periEst.getMateria().getPlan().getPlaEstCod()).getLstObjetos();
+                if(periEst.getModulo() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByCurso(periEst.getModulo().getCurso().getCurCod()).getLstObjetos();
+                
+                for(Object objeto : inscripciones )
+                {
+                    Inscripcion inscripcion = (Inscripcion) objeto;
+                    
+                    if(inscripcion.getInsGenAnio().equals(InsGenAnio))
+                    {
+                        PeriodoEstudioAlumno periEstAlu = new PeriodoEstudioAlumno();
+                        periEstAlu.setAlumno(inscripcion.getAlumno());
+                        periEstAlu.setPerInsFchInsc(new Date());
+                        periEstAlu.setPeriodoEstudio(periEst);
+                        retorno = (Retorno_MsgObj) this.AlumnoAgregar(periEstAlu);
+
+                        if(retorno.SurgioError()) return retorno;
+                                   
+                    }
+                }
+            }
+            
+        }
+       
+        
+        return retorno;
+    }
     
     //------------------------------------------------------------------------------------
     //-MANEJO DE DOCENTES

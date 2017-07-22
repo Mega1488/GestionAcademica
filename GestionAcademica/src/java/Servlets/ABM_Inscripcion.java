@@ -209,6 +209,8 @@ public class ABM_Inscripcion extends HttpServlet {
                 String 	TipoEstudio     = request.getParameter("pTipoEstudio");
                 String  AluFchCert       = request.getParameter("pAluFchCert");
                 
+                String  InsGenAnio       = request.getParameter("pInsGenAnio");
+                
                 
                 //------------------------------------------------------------------------------------------
                 //Validaciones
@@ -237,6 +239,8 @@ public class ABM_Inscripcion extends HttpServlet {
                 }
                 
                 if(AluFchCert != null) inscripcion.setAluFchCert(Date.valueOf(AluFchCert));
+                
+                if(InsGenAnio != null) inscripcion.setInsGenAnio(Integer.valueOf(InsGenAnio));
                 
                 return inscripcion;
         }

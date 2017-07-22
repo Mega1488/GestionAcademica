@@ -6,23 +6,11 @@
 package Servlets;
 
 
-import Entidad.Carrera;
-import Entidad.Curso;
-import Entidad.Parametro;
 import Entidad.Periodo;
-import Entidad.Evaluacion;
-import Entidad.Persona;
 import Enumerado.Modo;
-import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
-import Logica.LoCarrera;
-import Logica.LoCurso;
-import Logica.LoParametro;
 import Logica.LoPeriodo;
-import Logica.LoEvaluacion;
-import Logica.LoPersona;
-import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -44,7 +32,6 @@ public class ABM_Periodo extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
-    private Persona perUsuario;
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -62,14 +49,12 @@ public class ABM_Periodo extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             
             HttpSession session=request.getSession(); 
-            String usuario  = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());            
-            if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
             
             String action   = request.getParameter("pAction");
             Modo mode = Modo.valueOf(action);
             String retorno  = "";
 
-            
+        
             switch(mode)
             {
                 
@@ -97,6 +82,7 @@ public class ABM_Periodo extends HttpServlet {
     
     private String AgregarDatos(HttpServletRequest request)
         {
+        
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
             try
@@ -123,7 +109,6 @@ public class ABM_Periodo extends HttpServlet {
             }
 
             String retorno = utilidades.ObjetoToJson(mensaje);
-
             return retorno;
         }
 

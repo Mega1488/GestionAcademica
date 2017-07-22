@@ -94,6 +94,7 @@
                                 <th>Tipo</th>
                                 <th>Valor</th>
                                 <th>Fecha de inicio</th>
+                                <th></th>
                             </tr>
                         </thead>
 
@@ -108,6 +109,7 @@
                             <td><% out.print( utilidad.NuloToVacio(periodo.getPerTpo().getTipoPeriodoNombre())); %> </td>
                             <td><% out.print( utilidad.NuloToVacio(periodo.getPerVal())); %> </td>
                             <td><% out.print( utilidad.NuloToVacio(periodo.getPerFchIni())); %> </td>
+                            <td><% out.print("<a href='#' data-codigo='" + periodo.getPeriCod() + "' data-toggle='modal' data-target='#PopUpInscGeneracion' name='btn_generacion' id='btn_generacion' title='Agregar por generación' class='fa fa-group btn_generacion'/>"); %></td>
 
                         </tr>
                         <%
@@ -194,6 +196,82 @@
 
                 });
 
+
+            });
+            </script>
+        </div>
+                                    
+        <div id="PopUpInscGeneracion" class="modal fade" role="dialog">
+        <!-- Modal -->
+         <div class="modal-dialog modal-lg">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Inscripción</h4>
+                </div>
+
+                <div class="modal-body">
+                    <p>Ingrese la generación que desea inscribir a este periodo</p>
+                    <label>Generación:</label> <input type="number" name="InsGenAnio" id="InsGenAnio" min="1" step="1" class="" max="2049">
+                </div>
+                <div class="modal-footer">
+                    <input name="btn_inscribir" id="btn_inscribir" value="Inscribir" class="btn btn-success" type="button" />
+                    <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                
+                $('#InsGenAnio').val(new Date().getFullYear());
+
+                 $('.btn_generacion').on('click', function(e) {
+                        
+                        var codigo = $(this).data("codigo");
+                        
+                        $('#btn_inscribir').data('codigo', codigo);
+                        
+                        
+                      });
+
+                $(document).on('click', "#btn_inscribir", function() {
+
+                        var InsGenAnio= $('#InsGenAnio').val();
+                        var codigo = $('#btn_inscribir').data('codigo');
+
+                        if(InsGenAnio == '')
+                            {
+                                MostrarMensaje("ERROR", "Completa los datos papa");
+                            }
+                            else
+                            {
+
+
+                                // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                                $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioAlumno', {
+                                    pPeriCod: codigo,
+                                    pInsGenAnio: InsGenAnio,
+                                    pAction: "INGRESAR_GENERACION"
+                                }, function(responseText) {
+                                    var obj = JSON.parse(responseText);
+
+                                    if(obj.tipoMensaje != 'ERROR')
+                                    {
+                                        location.reload();
+                                    }
+                                    else
+                                    {
+                                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                    }
+
+                                });
+
+                            }
+
+                });
 
             });
             </script>

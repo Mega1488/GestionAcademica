@@ -155,13 +155,12 @@
                                         <th>Nombre</th>
                                         <th>Tipo</th>
                                         <th>Documento</th>
+                                        <th>Inscripciones</th>
+                                        <th>Periodo anterior</th>
                                     </tr>
                                 </thead>
-
                             </table>
                         </div>
-
-
 
                   </div>
                   <div class="modal-footer">

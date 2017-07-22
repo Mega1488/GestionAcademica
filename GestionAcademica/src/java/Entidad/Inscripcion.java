@@ -78,12 +78,17 @@ public class Inscripcion implements Serializable {
     @Column(name = "AluFchCert", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date AluFchCert;   
+    
     @Column(name = "AluFchInsc", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date AluFchInsc;
+    
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
+    @Column(name = "InsGenAnio")
+    private Integer InsGenAnio;
     
     //-CONSTRUCTOR
 
@@ -164,6 +169,17 @@ public class Inscripcion implements Serializable {
 
         return "";
     }
+
+    public Integer getInsGenAnio() {
+        return InsGenAnio;
+    }
+
+    public void setInsGenAnio(Integer InsGenAnio) {
+        this.InsGenAnio = InsGenAnio;
+    }
+    
+    
+    
 
     @Override
     public int hashCode() {
