@@ -6,7 +6,9 @@
 package Entidad;
 
 import Enumerado.Filial;
+import SDT.SDT_PersonaEstudio;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -117,6 +119,7 @@ public class Persona implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
+    private ArrayList<SDT_PersonaEstudio> lstEstudios;
 
     public Persona() {
         PerCntIntLgn    = 0;
@@ -473,6 +476,23 @@ public class Persona implements Serializable {
         return retorno;
     }
 
+    /**
+     *
+     * @return lista de estudios
+     */
+    public ArrayList<SDT_PersonaEstudio> getLstEstudios() {
+        return lstEstudios;
+    }
+
+    /**
+     *
+     * @param lstEstudios lista de estudios
+     */
+    public void setLstEstudios(ArrayList<SDT_PersonaEstudio> lstEstudios) {
+        this.lstEstudios = lstEstudios;
+    }
+
+    
 
     @Override
     public int hashCode() {

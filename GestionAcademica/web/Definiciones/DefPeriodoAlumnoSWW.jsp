@@ -65,6 +65,17 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Periodo Estudio | Alumnos</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        <style>
+            td.details-control{
+                cursor: pointer;
+            }
+            
+            th.fa-plus-square{
+               display: none; 
+            }
+           
+            
+        </style>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -155,6 +166,7 @@
                                         <th>Nombre</th>
                                         <th>Tipo</th>
                                         <th>Documento</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -172,6 +184,8 @@
                 <script type="text/javascript">
 
                     $(document).ready(function() {
+                        
+                        var table;
 
                         Buscar();
 
@@ -217,7 +231,7 @@
                                                        persona.perCod = "<td> <a href='#' data-codigo='"+persona.perCod+"' data-nombre='"+persona.perNom+"' class='PopPer_Seleccionar'>"+persona.perCod+" </a> </td>";
                                         });
 
-                                        $('#PopUpTblPersona').DataTable( {
+                                        table = $('#PopUpTblPersona').DataTable( {
                                             data: personas,
                                             deferRender: true,
                                             bLengthChange : false, //thought this line could hide the LengthMenu
@@ -240,13 +254,101 @@
                                                 { "data": "perCod" },
                                                 { "data": "nombreCompleto"},
                                                 { "data": "tipoPersona"},
-                                                { "data": "perDoc"}
+                                                { "data": "perDoc"},
+                                                {
+                                                    "className":      'details-control fa fa-plus-square',
+                                                    "orderable":      false,
+                                                    "data":           null,
+                                                    "defaultContent": ''
+                                                }
+                                                
                                             ]
-
                                         } );
+                                        
+                                        
+                                        
 
                                 });
                         }
+                        
+                        
+                        function format ( d ) 
+                        {
+                            
+                            var retorno = "";
+                            
+                            $.each(d.lstEstudios, function(f , estudio) {
+                                retorno += "<div>";
+                                
+                                retorno += "<div class='contenedor_titulo_escolaridad'><label>" + estudio.tituloEstudio + "</label></div>";
+                                
+                                retorno += "<div class='contenedor_tabla_escolaridad'>";
+                                retorno += "<table class='table table-hover eliminar_margen_tabla'>";
+                                retorno += "<thead><tr>";
+                                retorno += "<th>Materia</th>";
+                                retorno += "<th class='texto_derecha'>Calificación</th>";
+                                retorno += "</tr>";
+                                retorno += "</thead>";
+                                retorno += "<tbody>";
+                            
+                                $.each(estudio.escolaridad, function(f , esc) {
+                                    
+                                    retorno += "<tr>";
+                                    retorno += "<td>";
+                                    
+                                    retorno += esc.nombreEstudio;
+                                    
+                                    retorno += "</td>";
+
+                                    retorno += "<td class='texto_derecha'>";
+                                    retorno += "<label>" + esc.aprobacion + "</label>";
+                                    retorno += "</td>";
+
+                                    retorno += "</tr>";
+                                    
+                                });
+                                
+                                retorno += "</tbody>";
+                                retorno += "</table>";
+                                retorno += "</div>";
+                                
+                                retorno += "</div>";
+                            });
+                                        
+                            
+
+                                   
+                            return retorno;
+                                   
+                        }
+                        
+                        
+                        // Add event listener for opening and closing details
+                        $(document).on('click', ".details-control", function() {
+                            
+                            var tr = $(this).closest('tr');
+                            var td = $(this).closest('td');
+                            
+                            var row = table.row( tr );
+
+                            if ( row.child.isShown() ) {
+                                // This row is already open - close it
+                                row.child.hide();
+                                tr.removeClass('shown');
+                                td.addClass("fa-plus-square");
+                                td.removeClass("fa-minus-square");
+                            }
+                            else {
+                                // Open this row
+                                row.child( format(row.data()) ).show();
+                                tr.addClass('shown');
+                                
+                                td.removeClass("fa-plus-square");
+                                td.addClass("fa-minus-square");
+                            }
+
+                           
+                        } );
 
 
                     });

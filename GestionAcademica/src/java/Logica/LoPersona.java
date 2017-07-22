@@ -169,7 +169,17 @@ public class LoPersona implements Interfaz.InPersona{
     
     public Retorno_MsgObj obtenerPopUp(Long CarCod, Long PlaEstCod, Long CurCod, String PerNom, String PerApe, Boolean docente, Boolean alumno)
     {
-        return perPersona.obtenerPopUp(CarCod, PlaEstCod, CurCod, PerNom, PerApe, docente, alumno);
+        Retorno_MsgObj retorno = perPersona.obtenerPopUp(CarCod, PlaEstCod, CurCod, PerNom, PerApe, docente, alumno);
+        for(Object objeto : retorno.getLstObjetos())
+        {
+            Persona persona = (Persona) objeto;
+            
+            persona.setLstEstudios(this.ObtenerEstudios(persona.getPerCod()));
+            
+        }
+
+        return retorno;
+        
     }
     
     public Boolean IniciarSesion(String usuario, String password){

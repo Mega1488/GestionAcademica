@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Enumerado.TipoAprobacion;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -82,6 +83,7 @@ public class Escolaridad implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
+    
 
     //-CONSTRUCTOR
     public Escolaridad() {
@@ -160,7 +162,22 @@ public class Escolaridad implements Serializable {
     public void setAlumno(Persona alumno) {
         this.alumno = alumno;
     }
-    
+
+    public String getAprobacion() {
+        if(this.EscCalVal >= 70) return "Aprobado";
+        if(this.EscCalVal < 70) return "Eliminado";
+        return "";
+    }
+
+    public String getNombreEstudio()
+    {
+        
+        if(this.getModulo() != null) return this.getModulo().getModNom();
+        if(this.getCurso() != null) return this.getCurso().getCurNom();
+        if(this.getMateria() != null) return this.getMateria().getMatNom();
+
+        return "";
+    }
     
 
     @Override
