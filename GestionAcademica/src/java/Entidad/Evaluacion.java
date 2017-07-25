@@ -209,6 +209,26 @@ public class Evaluacion implements Serializable {
         return "";
     }
     
+    public String getCarreraCursoNombre()
+    {
+        if(this.getCurEvl() != null)
+        {
+            return this.getCurEvl().getCurNom();
+        }
+        
+        if(this.getMatEvl() != null)
+        {
+            return this.getMatEvl().getPlan().getCarreraPlanNombre();
+        }
+        
+        if(this.getModEvl() != null)
+        {
+            return this.getModEvl().getCurso().getCurNom();
+        }
+        
+        return "";
+    }
+    
 
     @Override
     public int hashCode() {

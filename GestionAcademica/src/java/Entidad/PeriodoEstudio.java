@@ -245,6 +245,20 @@ public class PeriodoEstudio implements Serializable {
         return pDocumento;
     }
     
+    public String getCarreraCursoNombre()
+    {
+        if(this.getModulo() != null)
+        {
+            return this.getModulo().getCurso().getCurNom();
+        }
+        
+        if(this.getMateria() != null)
+        {
+            return this.getMateria().getPlan().getCarreraPlanNombre();
+        }
+        
+        return "";
+    }
     
     @Override
     public int hashCode() {

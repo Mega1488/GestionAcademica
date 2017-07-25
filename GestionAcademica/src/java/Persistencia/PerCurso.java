@@ -6,6 +6,7 @@
 package Persistencia;
 
 import Entidad.Curso;
+import Entidad.Modulo;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Utiles.Mensajes;
@@ -172,7 +173,7 @@ public class PerCurso implements Interfaz.InCurso{
         return retorno;
     }
     
-    public Retorno_MsgObj obtenerModuloPorPeriodo(TipoPeriodo tpoPer, Double perVal) {
+    public Retorno_MsgObj obtenerModuloPorPeriodo(Long CurCod, TipoPeriodo tpoPer, Double perVal) {
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
         
         try {
@@ -182,6 +183,7 @@ public class PerCurso implements Interfaz.InCurso{
             List<Object> listaRetorno =  sesion.getNamedQuery("Modulo.findByPeriodo")
                     .setParameter("TpoPer", tpoPer)
                     .setParameter("PerVal", perVal)
+                    .setParameter("CurCod", CurCod)
                     .list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
@@ -194,6 +196,25 @@ public class PerCurso implements Interfaz.InCurso{
             sesion.close();
         }
 
+        return retorno;
+    }
+    
+    public Retorno_MsgObj ModuloObtener(Long pModCod) {
+       
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
+       
+        try {
+            
+            iniciaOperacion();
+            Modulo modulo   = (Modulo) sesion.get(Modulo.class, pModCod);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), modulo);
+        
+        } catch (HibernateException he) {
+        
+            retorno = manejaExcepcion(he, retorno);
+        }  finally {
+            sesion.close();
+        }
         return retorno;
     }
     

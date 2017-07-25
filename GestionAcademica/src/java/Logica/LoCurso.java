@@ -147,6 +147,11 @@ public class LoCurso implements Interfaz.InCurso{
     //-MANEJO DE MODULO
     //------------------------------------------------------------------------------------
     
+    public Retorno_MsgObj ModuloObtener(Long ModCod)
+    {
+        return perCurso.ModuloObtener(ModCod);
+    }
+    
     public Object ModuloAgregar(Modulo modulo)
     {
         boolean error           = false;
@@ -219,8 +224,8 @@ public class LoCurso implements Interfaz.InCurso{
         return retorno;
     }
     
-    public Retorno_MsgObj ModuloPorPeriodo(TipoPeriodo tpoPer, Double perVal) {
-        return perCurso.obtenerModuloPorPeriodo(tpoPer, perVal);
+    public Retorno_MsgObj ModuloPorPeriodo(Long CurCod, TipoPeriodo tpoPer, Double perVal) {
+        return perCurso.obtenerModuloPorPeriodo(CurCod, tpoPer, perVal);
     }
     
     //------------------------------------------------------------------------------------

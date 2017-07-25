@@ -101,34 +101,20 @@ public class ABM_Calendario extends HttpServlet {
             if(!listaCala.isEmpty())
             {
                 lstCalendario       = utilidades.JsonToListObject(listaCala, Calendario.class);
+                Retorno_MsgObj retorno = loCalendario.guardarLista(lstCalendario);
                 
-                for(Object objeto : lstCalendario)
-                {
-                    Calendario calendario = (Calendario) objeto;
-                    
-                    
-                    if(calendario.getEvaluacion().getEvlCod() !=null) calendario.setEvaluacion((Evaluacion) LoEvaluacion.GetInstancia().obtener(calendario.getEvaluacion().getEvlCod()).getObjeto());
-                    
-                    System.err.println("Inicio ABM Guardar");
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCalendario.guardar(calendario);
-                    mensaje    = retornoObj.getMensaje();
-                    System.err.println("Fin ABM Guardar");
-                    
-                    if(retornoObj.SurgioError())
-                    {
-                        break;
-                    }
-                    
-
-                }
+                mensaje = retorno.getMensaje();
+                
             }
         }
         
         return  utilidades.ObjetoToJson(mensaje);
     }
     
+    
+    
     private String AgregarDatos(HttpServletRequest request)
-        {
+    {
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
             try
@@ -235,8 +221,8 @@ public class ABM_Calendario extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
-        private Calendario ValidarCalendario(HttpServletRequest request, Calendario calendario)
-        {
+    private Calendario ValidarCalendario(HttpServletRequest request, Calendario calendario)
+    {
             if(calendario == null)
             {
                 calendario   = new Calendario();

@@ -100,6 +100,7 @@
                                 <tr>
                                     <th></th>
                                     <th>Código</th>
+                                    <th>Carrera / Curso</th>
                                     <th>Estudio</th>
                                     <th>Alumnos</th>
                                     <th></th>
@@ -117,6 +118,7 @@
                             <tr>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
                                 <td><% out.print( utilidad.NuloToVacio(periEst.getPeriEstCod())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(periEst.getCarreraCursoNombre())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(periEst.getEstudioNombre())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(periEst.getCantidadAlumnos())); %> </td>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_alm" id="btn_edit_alm" title="Alumnos" class="glyphicon glyphicon-edit"/></td>
@@ -156,7 +158,6 @@
                         <div class="row">
                             <div id="pop_FltrCarrera" name="pop_FltrCarrera">
                                 <select class="form-control" id="pop_FltrCarCod" name="pop_FltrCarCod"></select>
-                                <select class="form-control" id="pop_FltrPlaCod" name="pop_FltrPlaCod"></select>
                             </div>
                         </div>
                         
@@ -331,9 +332,9 @@
                 
                     $(document).on('click', ".Pop_Seleccionar", function() {
 
-                            var CarCod = $('select[name=pop_FltrCarCod]').val();
-                            var codigo = $(this).data("codigo");
-                            var PerCod = $('#PerCod').val();
+                            var CarCod      = $('select[name=pop_FltrCarCod]').val();
+                            var PeriCod     = $('#PeriCod').val();
+                            var codigo      = $(this).data("codigo");
                             
                             var tipo    = "CARRERA";
                             
@@ -348,9 +349,9 @@
                             }
                             
                             
-                            $.post('<% out.print(urlSistema); %>ABM_Inscripcion', {
+                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudio', {
                                     pCarCod: CarCod,
-                                    pPerCod: PerCod,
+                                    pPeriCod: PeriCod,
                                     pCodigoEstudio: codigo,
                                     pTipoEstudio: tipo,
                                     pAction: "<% out.print(Modo.INSERT);%>"
@@ -366,10 +367,7 @@
                                      }
 
                                  });
-
-                            $(function () {
-                                    $('#PopUpAgregar').modal('toggle');
-                                 });
+                           
                     });
                     
                     

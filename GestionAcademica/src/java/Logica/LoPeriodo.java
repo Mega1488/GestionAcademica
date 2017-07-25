@@ -5,6 +5,7 @@
  */
 package Logica;
 
+import Entidad.Curso;
 import Entidad.Inscripcion;
 import Entidad.Materia;
 import Entidad.Modulo;
@@ -13,6 +14,7 @@ import Entidad.PeriodoEstudio;
 import Entidad.PeriodoEstudioAlumno;
 import Entidad.PeriodoEstudioDocente;
 import Entidad.PeriodoEstudioDocumento;
+import Entidad.PlanEstudio;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
 import Persistencia.PerPeriodo;
@@ -53,7 +55,7 @@ public class LoPeriodo implements InABMGenerico{
         //MODULO
         //--------------------------------------------------------------------------------------------------------------------------------------------
         
-        List<Object> lstModulo = LoCurso.GetInstancia().ModuloPorPeriodo(periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
+        List<Object> lstModulo = LoCurso.GetInstancia().ModuloPorPeriodo(null, periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
 
         if(lstModulo != null)
         {
@@ -94,6 +96,54 @@ public class LoPeriodo implements InABMGenerico{
     @Override
     public Retorno_MsgObj obtenerLista() {
         return perPeriodo.obtenerLista();
+    }
+    
+    public Retorno_MsgObj guardarPorEstudio(Periodo periodo, Curso curso, PlanEstudio plan) {
+        
+        //--------------------------------------------------------------------------------------------------------------------------------------------
+        //MODULO
+        //--------------------------------------------------------------------------------------------------------------------------------------------
+        if(curso != null)
+        {
+            List<Object> lstModulo = LoCurso.GetInstancia().ModuloPorPeriodo(curso.getCurCod(), periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
+
+            if(lstModulo != null)
+            {
+                for(Object objeto : lstModulo)
+                {
+                    Modulo mdl = (Modulo) objeto;
+
+                    PeriodoEstudio periEstudio = new PeriodoEstudio();
+                    periEstudio.setModulo(mdl);
+                    periEstudio.setPeriodo(periodo);
+                    periodo.getLstEstudio().add(periEstudio);
+                }
+            }
+        }
+        //--------------------------------------------------------------------------------------------------------------------------------------------
+        //MATERIA
+        //--------------------------------------------------------------------------------------------------------------------------------------------
+        if(plan != null)
+        {
+            /*
+            List<Object> lstModulo = LoCurso.GetInstancia().ModuloPorPeriodo(periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
+
+            if(lstModulo != null)
+            {
+                for(Object objeto : lstModulo)
+                {
+                    Modulo mdl = (Modulo) objeto;
+
+                    PeriodoEstudio periEstudio = new PeriodoEstudio();
+                    periEstudio.setModulo(mdl);
+                    periEstudio.setPeriodo(periodo);
+                    periodo.getLstEstudio().add(periEstudio);
+                }
+            }
+            */
+        }
+        
+        return (Retorno_MsgObj) perPeriodo.actualizar(periodo);
     }
  
     public PeriodoEstudio obtenerLastPeriodoEstudioByMateria(Long MatCod) {

@@ -8,6 +8,7 @@ package Logica;
 import Entidad.Calendario;
 import Entidad.CalendarioAlumno;
 import Entidad.CalendarioDocente;
+import Entidad.Evaluacion;
 import Entidad.PeriodoEstudio;
 import Entidad.PeriodoEstudioAlumno;
 import Entidad.PeriodoEstudioDocente;
@@ -47,37 +48,7 @@ public class LoCalendario implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        Calendario calendario = (Calendario) pObjeto;
-        
-        if(calendario.getEvaluacion().getTpoEvl().getTpoEvlInsAut())
-        {
-            PeriodoEstudio perEst = new PeriodoEstudio();
-
-            if(calendario.getEvaluacion().getMatEvl() != null) perEst = LoPeriodo.GetInstancia().obtenerLastPeriodoEstudioByMateria(calendario.getEvaluacion().getMatEvl().getMatCod());
-            if(calendario.getEvaluacion().getModEvl() != null) perEst = LoPeriodo.GetInstancia().obtenerLastPeriodoEstudioByModulo(calendario.getEvaluacion().getModEvl().getModCod());
-            
-            for(PeriodoEstudioAlumno alumno : perEst.getLstAlumno())
-            {
-                CalendarioAlumno calAlumno = new CalendarioAlumno();
-                calAlumno.setAlumno(alumno.getAlumno());
-                calAlumno.setCalendario(calendario);
-                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
-                
-                calendario.getLstAlumnos().add(calAlumno);
-
-            }
-            
-            for(PeriodoEstudioDocente docente : perEst.getLstDocente())
-            {
-                CalendarioDocente calDocente = new CalendarioDocente();
-                calDocente.setDocente(docente.getDocente());
-                calDocente.setCalendario(calendario);
-                
-                calendario.getLstDocentes().add(calDocente);                
-            }
-        }
-        
-        return perCalendario.guardar(calendario);
+        return perCalendario.guardar(pObjeto);
     }
 
     @Override
@@ -98,6 +69,77 @@ public class LoCalendario implements InABMGenerico{
     @Override
     public Retorno_MsgObj obtenerLista() {
         return perCalendario.obtenerLista();
+    }
+    
+    public Retorno_MsgObj guardarLista(List<Object> lstCalendario)
+    {
+        Retorno_MsgObj retornoObj = new Retorno_MsgObj();
+        
+        for(Object objeto : lstCalendario)
+        {
+            Calendario calendario = (Calendario) objeto;
+
+            if(calendario.getEvaluacion().getEvlCod() !=null) calendario.setEvaluacion((Evaluacion) LoEvaluacion.GetInstancia().obtener(calendario.getEvaluacion().getEvlCod()).getObjeto());
+
+            retornoObj = (Retorno_MsgObj) this.guardar(calendario);
+            
+            if(retornoObj.SurgioError())
+            {
+                int indice = lstCalendario.indexOf(objeto);
+                EliminarCalendariosHasta(lstCalendario, indice);
+                break;
+            }
+            else
+            {
+                if(calendario.getEvaluacion().getTpoEvl().getTpoEvlInsAut())
+                {
+                    PeriodoEstudio perEst = new PeriodoEstudio();
+
+                    if(calendario.getEvaluacion().getMatEvl() != null) perEst = LoPeriodo.GetInstancia().obtenerLastPeriodoEstudioByMateria(calendario.getEvaluacion().getMatEvl().getMatCod());
+                    if(calendario.getEvaluacion().getModEvl() != null) perEst = LoPeriodo.GetInstancia().obtenerLastPeriodoEstudioByModulo(calendario.getEvaluacion().getModEvl().getModCod());
+
+                    for(PeriodoEstudioAlumno alumno : perEst.getLstAlumno())
+                    {
+                        CalendarioAlumno calAlumno = new CalendarioAlumno();
+                        calAlumno.setAlumno(alumno.getAlumno());
+                        calAlumno.setCalendario(calendario);
+                        calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
+
+                        calendario.getLstAlumnos().add(calAlumno);
+
+                    }
+
+                    for(PeriodoEstudioDocente docente : perEst.getLstDocente())
+                    {
+                        CalendarioDocente calDocente = new CalendarioDocente();
+                        calDocente.setDocente(docente.getDocente());
+                        calDocente.setCalendario(calendario);
+
+                        calendario.getLstDocentes().add(calDocente);                
+                    }
+                }
+            }
+
+
+        }
+        
+        return retornoObj;
+    }
+    
+    private void EliminarCalendariosHasta(List<Object> lstCalendario, int indice)
+    {
+        for(Object objeto : lstCalendario)
+        {
+            if(lstCalendario.indexOf(objeto) < indice)
+            {
+                this.eliminar(objeto);
+            }
+            else
+            {
+                return;
+            }
+        }
+        
     }
     
     

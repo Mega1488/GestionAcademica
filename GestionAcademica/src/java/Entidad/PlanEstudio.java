@@ -172,6 +172,12 @@ public class PlanEstudio implements Serializable {
         
         return pMat;
     }
+    
+    public String getCarreraPlanNombre()
+    {
+        return this.getCarrera().getCarNom() + " - " + this.getPlaEstNom();
+    }
+    
 
     @Override
     public int hashCode() {
