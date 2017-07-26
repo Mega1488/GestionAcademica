@@ -102,7 +102,7 @@ public class OpcionesDeMenu {
     
     private void LevantarMenu(List<Object> lstMenu)
     {
-        if(lstMenu.size() < 12)
+        if(lstMenu.size() < 13)
         {
             for(Object objeto : lstMenu)
             {
@@ -142,6 +142,7 @@ public class OpcionesDeMenu {
     
     private void CargarAlumno(){
         lstAlumno.add(new Menu(10, TipoMenu.ALUMNO, urlSistema + "Alumno/Estudios.jsp", "Estudios", 1));
+        lstAlumno.add(new Menu(13, TipoMenu.ALUMNO, urlSistema + "Alumno/Evaluaciones.jsp", "Evaluaciones", 2));
     }
 
     private void CargarDocente(){
