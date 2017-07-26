@@ -77,14 +77,7 @@
                                     }
                                     else
                                     {
-                                        if(est.getInscripcion().getCurso() != null){
-                                            out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getCurso().getCurNom() + "</label></div>");
-                                        }
-
-                                        if(est.getInscripcion().getPlanEstudio() != null){
-                                            out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getPlanEstudio().getPlaEstNom() + "</label></div>");
-                                        }                                   
-
+                                        out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getNombreEstudio()+ "</label></div>");
                                     }
                                     
                                     out.println("<div class='contenedor_tabla_escolaridad'>");
@@ -92,6 +85,7 @@
                                     out.println("<thead><tr>");
                                     out.println("<th>Materia</th>");
                                     out.println("<th class='texto_derecha'>Calificación</th>");
+                                    out.println("<th class='texto_derecha'>Estado</th>");
                                     out.println("</tr>");
                                     out.println("</thead>");
                                     out.println("<tbody>");
@@ -101,13 +95,15 @@
                                             out.println("<tr>");
 
                                             out.println("<td>");
-                                            if(esc.getModulo() != null) out.println(esc.getModulo().getModNom() );
-                                            if(esc.getCurso() != null) out.println(esc.getCurso().getCurNom() );
-                                            if(esc.getMateria() != null) out.println(esc.getMateria().getMatNom() );
+                                            out.println(esc.getNombreEstudio());
                                             out.println("</td>");
 
                                             out.println("<td class='texto_derecha'>");
                                             out.println("<label>" + esc.getEscCalVal() + "</label>");
+                                            out.println("</td>");
+                                            
+                                            out.println("<td class='texto_derecha'>");
+                                            out.println("<label>" + esc.getAprobacion() + "</label>");
                                             out.println("</td>");
 
                                             out.println("</tr>");
