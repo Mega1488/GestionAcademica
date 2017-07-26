@@ -102,7 +102,7 @@ public class OpcionesDeMenu {
     
     private void LevantarMenu(List<Object> lstMenu)
     {
-        if(lstMenu.size() < 13)
+        if(lstMenu.size() < 15)
         {
             for(Object objeto : lstMenu)
             {
@@ -133,16 +133,18 @@ public class OpcionesDeMenu {
         lstAdministrador.add(new Menu(3, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefCursoWW.jsp", "Cursos", 3));
         lstAdministrador.add(new Menu(4, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefCalendarioGrid.jsp", "Calendario", 5));
         lstAdministrador.add(new Menu(5, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefTipoEvaluacionWW.jsp", "Tipos de evaluación", 6));
-        lstAdministrador.add(new Menu(6, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametro.jsp", "Parámetros", 7));
-        lstAdministrador.add(new Menu(7, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametroEmailWW.jsp", "Parámetros de email", 8));
+        lstAdministrador.add(new Menu(6, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametro.jsp", "Parámetros", 98));
+        lstAdministrador.add(new Menu(7, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametroEmailWW.jsp", "Parámetros de email", 97));
         lstAdministrador.add(new Menu(8, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefVersion.jsp", "Versión", 99));
         lstAdministrador.add(new Menu(11, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefPeriodoWW.jsp", "Periodos", 4));
+        lstAdministrador.add(new Menu(14, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefSolicitudWW.jsp", "Solicitudes", 7));
         
     }
     
     private void CargarAlumno(){
         lstAlumno.add(new Menu(10, TipoMenu.ALUMNO, urlSistema + "Alumno/Estudios.jsp", "Estudios", 1));
         lstAlumno.add(new Menu(13, TipoMenu.ALUMNO, urlSistema + "Alumno/Evaluaciones.jsp", "Evaluaciones", 2));
+        lstAlumno.add(new Menu(15, TipoMenu.ALUMNO, urlSistema + "Alumno/Solicitudes.jsp", "Solicitudes", 3));
     }
 
     private void CargarDocente(){
