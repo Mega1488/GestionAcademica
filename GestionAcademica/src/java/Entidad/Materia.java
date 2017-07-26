@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -84,7 +85,7 @@ public class Materia implements Serializable {
     @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
     private Materia materiaPrevia;
     
-    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
     @Fetch(FetchMode.SUBSELECT)
     private List<Evaluacion> lstEvaluacion;
