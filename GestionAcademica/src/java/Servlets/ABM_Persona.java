@@ -217,6 +217,7 @@ public class ABM_Persona extends HttpServlet {
 
             String PerNom= request.getParameter("pPerNom");
             String PerApe= request.getParameter("pPerApe");
+            String PerDoc= request.getParameter("pPerDoc");
             String PerUsrMod= request.getParameter("pPerUsrMod");
             String PerEsDoc= request.getParameter("pPerEsDoc");
             String PerEsAdm= request.getParameter("pPerEsAdm");
@@ -251,6 +252,8 @@ public class ABM_Persona extends HttpServlet {
             persona.setPerEml(PerEml);
             persona.setPerNotEml(Boolean.valueOf(PerNotEml));
             persona.setPerNotApp(Boolean.valueOf(PerNotApp));
+            
+            if(PerDoc != null) if(!PerDoc.isEmpty()) persona.setPerDoc(PerDoc);
 
             if(!PerPass.isEmpty())
             {

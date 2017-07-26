@@ -91,6 +91,7 @@
                                         <th>Código</th>
                                         <th>Nombre</th>
                                         <th>Apellido</th>
+                                        <th>Documento</th>
                                         <th>Email</th>
                                         <th>Filial</th>
                                         <th>Número en libra</th>
@@ -110,6 +111,7 @@
                                     <td><% out.print( utilidad.NuloToCero(persona.getPerCod())); %> </td>
                                     <td><% out.print( utilidad.NuloToVacio(persona.getPerNom())); %></td>
                                     <td><% out.print( utilidad.NuloToVacio(persona.getPerApe())); %></td>
+                                    <td><% out.print( utilidad.NuloToVacio(persona.getPerDoc())); %></td>
                                     <td><% out.print( utilidad.NuloToVacio(persona.getPerEml())); %></td>
                                     <td><% out.print( utilidad.NuloToVacio(persona.getPerFil().getFilialNom())); %></td>
                                     <td><% out.print( utilidad.NuloToCero(persona.getPerNroLib())); %></td>

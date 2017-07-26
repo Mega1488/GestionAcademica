@@ -168,6 +168,11 @@ public class Escolaridad implements Serializable {
         if(this.EscCalVal < 70) return "Eliminado";
         return "";
     }
+    
+    public Boolean getAprobado() {
+        if(this.EscCalVal >= 70) return true;
+        return false;
+    }
 
     public String getNombreEstudio()
     {

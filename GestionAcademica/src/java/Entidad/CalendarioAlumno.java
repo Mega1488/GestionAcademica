@@ -250,7 +250,7 @@ public class CalendarioAlumno implements Serializable {
 
     @Override
     public String toString() {
-        return "CalendarioAlumno{" + "CalAlCod=" + CalAlCod + ", calendario=" + calendario + ", Alumno=" + Alumno + ", EvlCalVal=" + EvlCalVal + ", EvlCalEst=" + EvlCalEst + ", EvlCalObs=" + EvlCalObs + ", EvlValObs=" + EvlValObs + ", EvlCalFch=" + EvlCalFch + ", EvlValFch=" + EvlValFch + ", ObjFchMod=" + ObjFchMod + ", EvlCalPor=" + EvlCalPor + ", EvlValPor=" + EvlValPor + '}';
+        return "CalendarioAlumno{" + "CalAlCod=" + CalAlCod + ", Alumno=" + Alumno + ", EvlCalVal=" + EvlCalVal + ", EvlCalEst=" + EvlCalEst + ", EvlCalObs=" + EvlCalObs + ", EvlValObs=" + EvlValObs + ", EvlCalFch=" + EvlCalFch + ", EvlValFch=" + EvlValFch + ", ObjFchMod=" + ObjFchMod + ", EvlCalPor=" + EvlCalPor + ", EvlValPor=" + EvlValPor + '}';
     }
 
     

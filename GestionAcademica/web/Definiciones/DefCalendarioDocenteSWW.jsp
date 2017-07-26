@@ -228,8 +228,11 @@
                                                 "next":       "Siguiente",
                                                 "previous":   "Anterior"
                                             },
-                                        "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                        "infoFiltered": "(Filtrado de _MAX_ registros)"
                                     }
+                                    ,search: {
+                                                "search": "Docente"
+                                              }
                                     ,columns: [
                                         { "data": "perCod" },
                                         { "data": "nombreCompleto"},

@@ -48,7 +48,7 @@ public class DescargarArchivo extends HttpServlet {
             String 	PeriEstCod  = request.getParameter("pPeriEstCod");
             String 	DocCod      = request.getParameter("pDocCod");
 
-            if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
+            if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
 
             if(DocCod != null) periDocumento = periDocumento.getPeriodo().getDocumentoById(Long.valueOf(DocCod));
         

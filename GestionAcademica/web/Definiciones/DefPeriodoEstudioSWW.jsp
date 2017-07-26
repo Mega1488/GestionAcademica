@@ -113,7 +113,6 @@
                             <tbody>
                             <% for(PeriodoEstudio periEst : lstObjeto)
                             {
-
                             %>
                             <tr>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>

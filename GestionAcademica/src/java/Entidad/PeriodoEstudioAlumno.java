@@ -31,7 +31,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author alvar
  */
-@JsonIgnoreProperties({"PeriodoEstudio"})
+@JsonIgnoreProperties({"periodoEstudio"})
 
 @Entity
 @Table(
@@ -56,7 +56,7 @@ public class PeriodoEstudioAlumno implements Serializable {
     
     @OneToOne(targetEntity = PeriodoEstudio.class)
     @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
-    private PeriodoEstudio PeriodoEstudio;
+    private PeriodoEstudio periodoEstudio;
 
     @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="AluPerCod", referencedColumnName="PerCod")
@@ -95,11 +95,11 @@ public class PeriodoEstudioAlumno implements Serializable {
     }
 
     public PeriodoEstudio getPeriodoEstudio() {
-        return PeriodoEstudio;
+        return periodoEstudio;
     }
 
     public void setPeriodoEstudio(PeriodoEstudio PeriodoEstudio) {
-        this.PeriodoEstudio = PeriodoEstudio;
+        this.periodoEstudio = PeriodoEstudio;
     }
 
     public Persona getAlumno() {
@@ -179,7 +179,7 @@ public class PeriodoEstudioAlumno implements Serializable {
 
     @Override
     public String toString() {
-        return "PeriodoEstudioAlumno{" + "PeriEstAluCod=" + PeriEstAluCod + ", PeriodoEstudio=" + PeriodoEstudio + ", Alumno=" + Alumno + ", InscritoPor=" + InscritoPor + ", PerInsFchInsc=" + PerInsFchInsc + ", PerInsCalFin=" + PerInsCalFin + ", PerInsFrz=" + PerInsFrz + ", ObjFchMod=" + ObjFchMod + '}';
+        return "PeriodoEstudioAlumno{" + "PeriEstAluCod=" + PeriEstAluCod + ", PeriodoEstudio=" + periodoEstudio + ", Alumno=" + Alumno + ", InscritoPor=" + InscritoPor + ", PerInsFchInsc=" + PerInsFchInsc + ", PerInsCalFin=" + PerInsCalFin + ", PerInsFrz=" + PerInsFrz + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
     

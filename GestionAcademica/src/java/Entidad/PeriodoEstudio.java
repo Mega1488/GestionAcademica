@@ -28,7 +28,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -38,7 +37,6 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"Periodo", "lstDocumento"})
 
 @Entity
 @Table(
@@ -50,7 +48,7 @@ import org.hibernate.annotations.GenericGenerator;
     )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t"),
+    @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t order by t.periodo.PerFchIni desc"),
 })
 public class PeriodoEstudio implements Serializable {
 
@@ -66,7 +64,7 @@ public class PeriodoEstudio implements Serializable {
     
     @OneToOne(targetEntity = Periodo.class)        
     @JoinColumn(name="PeriCod", referencedColumnName="PeriCod")
-    private Periodo Periodo;
+    private Periodo periodo;
 
     @OneToOne(targetEntity = Materia.class)        
     @JoinColumn(name="MatEstMatCod", referencedColumnName="MatCod")
@@ -118,11 +116,11 @@ public class PeriodoEstudio implements Serializable {
     }
 
     public Periodo getPeriodo() {
-        return Periodo;
+        return periodo;
     }
 
     public void setPeriodo(Periodo Periodo) {
-        this.Periodo = Periodo;
+        this.periodo = Periodo;
     }
 
     public Materia getMateria() {
@@ -287,7 +285,7 @@ public class PeriodoEstudio implements Serializable {
 
     @Override
     public String toString() {
-        return "PeriodoEstudio{" + "PeriEstCod=" + PeriEstCod + ", Periodo=" + Periodo + ", Materia=" + Materia + ", Modulo=" + Modulo + ", ObjFchMod=" + ObjFchMod + '}';
+        return "PeriodoEstudio{" + "PeriEstCod=" + PeriEstCod + ", Periodo=" + periodo + ", Materia=" + Materia + ", Modulo=" + Modulo + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
 }

@@ -53,9 +53,19 @@ public class ABM_Calendario extends HttpServlet {
             String retorno  = "";
             String action   = request.getParameter("pAction");
 
-            if(action.equals("INSERT_LIST"))
+            if(action.equals("INSERT_LIST") || action.equals("INSCRIBIR_PERIODO"))
             {
-                retorno = this.GuardarLista(request);
+                switch(action)
+                {
+                    case "INSERT_LIST":
+                        retorno = this.GuardarLista(request);
+                    break;
+                        
+                    case "INSCRIBIR_PERIODO":
+                        retorno = this.InscribirPeriodo(request);
+                    break;
+                }
+                
             }
             else
             {
@@ -88,9 +98,7 @@ public class ABM_Calendario extends HttpServlet {
         
     }
     
-    
-    private String GuardarLista(HttpServletRequest request)
-    {
+    private String GuardarLista(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
         List<Object> lstCalendario = new ArrayList<>();
@@ -111,10 +119,7 @@ public class ABM_Calendario extends HttpServlet {
         return  utilidades.ObjetoToJson(mensaje);
     }
     
-    
-    
-    private String AgregarDatos(HttpServletRequest request)
-    {
+    private String AgregarDatos(HttpServletRequest request){
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
             try
@@ -148,8 +153,7 @@ public class ABM_Calendario extends HttpServlet {
             return retorno;
         }
 
-    private String ActualizarDatos(HttpServletRequest request)
-    {
+    private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
         {
@@ -190,8 +194,7 @@ public class ABM_Calendario extends HttpServlet {
         return retorno;
     }
 
-    private String EliminarDatos(HttpServletRequest request)
-    {
+    private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         try
@@ -220,9 +223,42 @@ public class ABM_Calendario extends HttpServlet {
 
         return utilidades.ObjetoToJson(mensaje);
     }
+    
+    private String InscribirPeriodo(HttpServletRequest request){
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+            try
+            {
+                String CalCod       = request.getParameter("pCalCod");
+                String PeriEstCod   = request.getParameter("pPeriEstCod");
+                String InsTpo       = request.getParameter("pInsTpo");
+                
+                Retorno_MsgObj retornoObj = new Retorno_MsgObj();
+                
+                if(InsTpo.equals("ALUMNO"))
+                {
+                    retornoObj = (Retorno_MsgObj) loCalendario.AlumnoAgregarPorPeriodo(Long.valueOf(CalCod), Long.valueOf(PeriEstCod));
+                }
+                
+                if(InsTpo.equals("DOCENTE"))
+                {
+                    retornoObj = (Retorno_MsgObj) loCalendario.DocenteAgregarPorPeriodo(Long.valueOf(CalCod), Long.valueOf(PeriEstCod));
+                }
+ 
+                mensaje    = retornoObj.getMensaje();
+            }
+            catch(Exception ex)
+            {
+                mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
+                throw ex;
+            }
+
+            String retorno = utilidades.ObjetoToJson(mensaje);
+
+            return retorno;
+    }
         
-    private Calendario ValidarCalendario(HttpServletRequest request, Calendario calendario)
-    {
+    private Calendario ValidarCalendario(HttpServletRequest request, Calendario calendario){
             if(calendario == null)
             {
                 calendario   = new Calendario();
@@ -255,8 +291,6 @@ public class ABM_Calendario extends HttpServlet {
                 
             return calendario;
         }
-
-    
         
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

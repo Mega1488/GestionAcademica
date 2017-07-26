@@ -43,7 +43,7 @@
     
     List<PeriodoEstudioAlumno> lstObjeto = new ArrayList<>();
     
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod));
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
     if(!retorno.SurgioErrorObjetoRequerido())
     {
         lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstAlumno();
@@ -188,8 +188,7 @@
                         var table;
 
                         Buscar();
-
-
+                        
                         $(document).on('click', ".PopPer_Seleccionar", function() {
 
                            var AluPerCod = $(this).data("codigo");
@@ -248,8 +247,11 @@
                                                         "next":       "Siguiente",
                                                         "previous":   "Anterior"
                                                     },
-                                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                                "infoFiltered": "(Filtrado de _MAX_ registros)"
                                             }
+                                            ,search: {
+                                                "search": "Alumno"
+                                              }
                                             ,columns: [
                                                 { "data": "perCod" },
                                                 { "data": "nombreCompleto"},

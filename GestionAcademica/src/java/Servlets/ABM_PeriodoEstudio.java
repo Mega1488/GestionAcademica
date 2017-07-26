@@ -24,7 +24,9 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -82,8 +84,8 @@ public class ABM_PeriodoEstudio extends HttpServlet {
                     retorno = this.EliminarDatos(request);
                 break;
                 
-                case "OBTENER":
-                    retorno = this.ObtenerDatos(request);
+                case "POPUP_LISTAR":
+                    retorno = this.PopObtenerDatos();
                 break;
                 
                 
@@ -240,13 +242,19 @@ public class ABM_PeriodoEstudio extends HttpServlet {
         return retorno;
     }
     
-    private String ObtenerDatos(HttpServletRequest request){
-        error       = false;
-        PeriodoEstudio periEstudio = new PeriodoEstudio();
+    private String PopObtenerDatos(){
+        error           = false;
+        
+        List<Object> lstPeriodoEstudio = new ArrayList<>();
         
         try
         {
-            periEstudio = this.ValidarPeriodoEstudio(request, null);
+            Retorno_MsgObj retorno = loPeriodo.EstudioObtenerTodos();
+            mensaje = retorno.getMensaje();
+            if(!retorno.SurgioError())
+            {
+                lstPeriodoEstudio = retorno.getLstObjetos();
+            }
         }
         catch(Exception ex)
         {
@@ -254,7 +262,7 @@ public class ABM_PeriodoEstudio extends HttpServlet {
             throw ex;
         }
 
-       return utilidades.ObjetoToJson(periEstudio);
+       return utilidades.ObjetoToJson(lstPeriodoEstudio);
     }
     
     private PeriodoEstudio ValidarPeriodoEstudio(HttpServletRequest request, PeriodoEstudio periEstudio){
@@ -278,7 +286,7 @@ public class ABM_PeriodoEstudio extends HttpServlet {
         //TIPO DE DATO
         if(PeriCod != null) if(!PeriCod.isEmpty()) periEstudio.setPeriodo((Periodo) loPeriodo.obtener(Long.valueOf(PeriCod)).getObjeto());
 
-        if(PeriEstCod != null) if(!PeriEstCod.isEmpty()) periEstudio = (PeriodoEstudio) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto();
+        if(PeriEstCod != null) if(!PeriEstCod.isEmpty()) periEstudio = (PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto();
         
         //if(MatEstMatCod != null) if(!MatEstMatCod.isEmpty()) periEstudio.setMateria(LoCarrera.GetInstancia().);
 

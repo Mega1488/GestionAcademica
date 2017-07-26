@@ -89,7 +89,7 @@ public class LoCalendario implements InABMGenerico{
                 EliminarCalendariosHasta(lstCalendario, indice);
                 break;
             }
-            else
+            /*else
             {
                 if(calendario.getEvaluacion().getTpoEvl().getTpoEvlInsAut())
                 {
@@ -118,7 +118,7 @@ public class LoCalendario implements InABMGenerico{
                         calendario.getLstDocentes().add(calDocente);                
                     }
                 }
-            }
+            }*/
 
 
         }
@@ -224,6 +224,52 @@ public class LoCalendario implements InABMGenerico{
                 }
             }
         }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj AlumnoAgregarPorPeriodo(Long CalCod, Long PeriEstCod)
+    {
+        
+        int agregados   = 0;
+        int noAgregados = 0;
+
+        Calendario calendario  = (Calendario) this.obtener(CalCod).getObjeto();
+        PeriodoEstudio periEst = (PeriodoEstudio) LoPeriodo.GetInstancia().EstudioObtener(PeriEstCod).getObjeto();
+        
+        for(PeriodoEstudioAlumno alumno : periEst.getLstAlumno())
+        {
+            boolean agregar = true;
+            
+            if(calendario.getEvaluacion().getMatEvl() != null)
+            {
+                if(calendario.getEvaluacion().getMatEvl().getMateriaPrevia() != null)
+                {
+                    agregar = LoPersona.GetInstancia().PersonaAproboMateria(alumno.getAlumno().getPerCod(), calendario.getEvaluacion().getMatEvl().getMateriaPrevia().getMatCod());
+                }
+            }
+            
+            if(agregar)
+            {
+                CalendarioAlumno calAlumno = new CalendarioAlumno();
+                calAlumno.setAlumno(alumno.getAlumno());
+                calAlumno.setCalendario(calendario);
+                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
+                
+                Retorno_MsgObj resultado = (Retorno_MsgObj) this.AlumnoAgregar(calAlumno);
+                
+                if(resultado.SurgioError())
+                {
+                    noAgregados += 1;
+                }
+                else
+                {
+                    agregados += 1;
+                }
+                
+            }
+        }
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Alumnos agregados: " + agregados + ". Alumnos no agregados: " + noAgregados, (noAgregados > 0 ? TipoMensaje.ADVERTENCIA : TipoMensaje.MENSAJE)));
         
         return retorno;
     }
@@ -277,6 +323,40 @@ public class LoCalendario implements InABMGenerico{
 
             retorno = (Retorno_MsgObj) this.actualizar(calendario);
         }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj DocenteAgregarPorPeriodo(Long CalCod, Long PeriEstCod)
+    {
+        
+        int agregados   = 0;
+        int noAgregados = 0;
+
+        Calendario calendario  = (Calendario) this.obtener(CalCod).getObjeto();
+        PeriodoEstudio periEst = (PeriodoEstudio) LoPeriodo.GetInstancia().EstudioObtener(PeriEstCod).getObjeto();
+        
+        for(PeriodoEstudioDocente docente : periEst.getLstDocente())
+        {
+            CalendarioDocente calDocente = new CalendarioDocente();
+            calDocente.setDocente(docente.getDocente());
+            calDocente.setCalendario(calendario);
+                    
+            Retorno_MsgObj resultado = (Retorno_MsgObj) this.DocenteAgregar(calDocente);
+
+            if(resultado.SurgioError())
+            {
+                noAgregados += 1;
+            }
+            else
+            {
+                agregados += 1;
+            }
+                
+            
+        }
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Docentes agregados: " + agregados + ". Docentes no agregados: " + noAgregados, (noAgregados > 0 ? TipoMensaje.ADVERTENCIA : TipoMensaje.MENSAJE)));
+        
         return retorno;
     }
     

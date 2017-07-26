@@ -14,8 +14,8 @@
 <%@page import="Utiles.Utilidades"%>
 <%
 
-    LoCalendario loCalendario     = LoCalendario.GetInstancia();
-    Utilidades utilidad = Utilidades.GetInstancia();
+    LoCalendario loCalendario   = LoCalendario.GetInstancia();
+    Utilidades utilidad         = Utilidades.GetInstancia();
     String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
     //----------------------------------------------------------------------------------------------------
@@ -108,7 +108,8 @@
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
-                                <td><% out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-toggle='modal' data-target='#PopUpInscPeriodo' name='btn_inscribir' id='btn_inscribir' title='Inscribir periodo' class='fa fa-group btn_generacion'/>"); %></td>
+                                <td><% out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-filtro='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpInscPeriodo' name='btn_inscribirAlumno' id='btn_inscribirAlumno' title='Inscribir alumnos' class='fa fa-group btn_inscribirAlumno'/>"); %></td>
+                                <td><% out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-filtro='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpInscPeriodo' name='btn_inscribirDocente' id='btn_inscribirDocente' title='Inscribir docentes' class='fa fa-user btn_inscribirDocente'/>"); %></td>
 
                             </tr>
                             <%
@@ -121,6 +122,7 @@
             </div>
         </div>
              
+        <!-- Agregar periodo ---------------------------------------------------------------------------------------------------------------------------------------->
                         
         <div id="PopUpAgregar" class="modal fade" role="dialog">
                <!-- Modal -->
@@ -160,7 +162,9 @@
                     </div>
                 </div>
         </div>
-                      
+        
+        <!-- Inscribir periodo ---------------------------------------------------------------------------------------------------------------------------------------->
+
         <div id="PopUpInscPeriodo" class="modal fade" role="dialog">
             <!-- Modal -->
              <div class="modal-dialog modal-lg" >
@@ -174,10 +178,14 @@
                      <div class="modal-body">
 
                          <div>
-                             <table name="PopUpTblEvaluaciones" id="PopUpTblEvaluaciones" class="table table-striped" cellspacing="0" width="100%">
+                             <input type="hidden" name="CalCod" id="CalCod" value="">
+                             <input type="hidden" name="insTpo" id="insTpo" value="">
+                             <table name="PopUpTblPeriodos" id="PopUpTblPeriodos" class="table table-striped" cellspacing="0" width="100%">
                                  <thead>
                                      <tr>
                                          <th>Código</th>
+                                         <th>Carrera / Curso</th>
+                                         <th>Estudio</th>
                                          <th>Periodo</th>
                                          <th>Tipo</th>
                                          <th>Fecha de inicio</th>
@@ -187,7 +195,6 @@
                          </div>
                    </div>
                    <div class="modal-footer">
-                     <input name="btn_inscPeriodo" id="btn_inscPeriodo" value="Inscribir" class="btn btn-success" type="button" />
                      <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
                    </div>
                  </div>
@@ -198,183 +205,226 @@
 
             $(document).ready(function() {
 
-            $(document).on('click', "#btn_guardar", function() {
+                $(document).on('click', "#btn_guardar", function() {
 
-                  var table   = $('#PopUpTblEvaluaciones').DataTable();
-                  var count   = table.rows({selected:true}).count();
-                  var rows    = table.rows({selected:true});
+                      var table   = $('#PopUpTblEvaluaciones').DataTable();
+                      var count   = table.rows({selected:true}).count();
+                      var rows    = table.rows({selected:true});
 
-                  var error           = false;
+                      var error           = false;
 
-                  for(i=0;i<count;i++)
-                  {
-                      var objeto  = rows.data()[i];
-                      var fila    = rows.nodes()[i];
-
-                      var fechaEvaluacion = fila.cells[3].lastChild.value;
-                      var fechaDesde      = fila.cells[4].lastChild.value;
-                      var fechaHasta      = fila.cells[5].lastChild.value;
-
-                      if(fechaEvaluacion == "")
+                      for(i=0;i<count;i++)
                       {
-                          MostrarMensaje("ERROR", "Debe ingresar una fecha de evaluación para: " + objeto.evlNom);
-                          error = true;
-                      }
+                          var objeto  = rows.data()[i];
+                          var fila    = rows.nodes()[i];
 
-                      if(!objeto.tpoEvl.tpoEvlInsAut)
-                      {
-                          if(fechaDesde == "")
+                          var fechaEvaluacion = fila.cells[4].lastChild.value;
+                          var fechaDesde      = fila.cells[5].lastChild.value;
+                          var fechaHasta      = fila.cells[6].lastChild.value;
+
+                          if(fechaEvaluacion == "")
                           {
-                              MostrarMensaje("ERROR", "Debe ingresar una fecha de inicio de inscripción para: " + objeto.evlNom);
+                              MostrarMensaje("ERROR", "Debe ingresar una fecha de evaluación para: " + objeto.evlNom);
                               error = true;
                           }
 
-                          if(fechaHasta == "")
+                          if(!objeto.tpoEvl.tpoEvlInsAut)
                           {
-                              MostrarMensaje("ERROR", "Debe ingresar una fecha de fin de inscripción para: " + objeto.evlNom);
-                              error = true;
-                          }
-                      }
-                  }
-
-                  if(count < 1)
-                  {
-                      MostrarMensaje("ERROR", "Debe seleccionar al menos una fila");
-                  }
-                  else
-                  {
-                      if(!error)
-                      {
-
-
-                      var listaCalendario = new Array(count);
-
-                          //Procesar
-                          for(i=0;i<count;i++)
-                          {
-
-                                  var calendario = JSON.parse('{"evaluacion":{"evlCod":null},"calFch":null,"calCod":null,"evlInsFchHst":null,"evlInsFchDsd":null}');
-                                  var objeto  = rows.data()[i];
-                                  var fila    = rows.nodes()[i];
-
-                                  var fechaEvaluacion = fila.cells[3].lastChild.value;
-                                  var fechaDesde      = fila.cells[4].lastChild.value;
-                                  var fechaHasta      = fila.cells[5].lastChild.value;
-
-                                  calendario.evaluacion.evlCod = objeto.evlCod;
-                                  calendario.calFch = fechaEvaluacion;
-                                  calendario.evlInsFchHst = fechaDesde;
-                                  calendario.evlInsFchDsd = fechaHasta;
-
-                                  listaCalendario[i] = calendario;
-
-                          }
-
-                          $.ajax({
-                                  url: '<% out.print(urlSistema); %>ABM_Calendario',
-                                      type: 'POST',
-                                      data: {
-                                          pLstCalendario: JSON.stringify(listaCalendario),
-                                          pAction:        "INSERT_LIST"
-                                      },
-                                      async: false,
-                                      cache: false,
-                                      timeout: 30000,
-                                      success: function(responseText) {
-                                          var obj = JSON.parse(responseText);
-
-                                          if(obj.tipoMensaje == 'ERROR')
-                                          {
-                                              MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-
-                                          }
-                                          else{
-                                              location.reload();
-                                          }
-
-                                      }
-                              });
-                      }
-                  }
-
-              });
-
-            $.post('<% out.print(urlSistema); %>ABM_Evaluacion', {
-                  pAction : "POPUP_LISTAR"
-                  }, function(responseText) {
-
-                      var evaluaciones = JSON.parse(responseText);
-
-                      $('#PopUpTblEvaluaciones').DataTable( {
-                          data: evaluaciones,
-                          deferRender: true,
-                          bLengthChange : false, //thought this line could hide the LengthMenu
-                          pageLength: 10,
-                          select: {
-                              style:    'multi',
-                              selector: 'td:last-child'
-                          },
-                          language: {
-                              "lengthMenu": "Mostrando _MENU_ registros por página",
-                              "zeroRecords": "No se encontraron registros",
-                              "info": "Página _PAGE_ de _PAGES_",
-                              "infoEmpty": "No hay registros",
-                              "search":         "Buscar:",
-                              select: {
-                                      rows: {
-                                          _: "%d filas seleccionadas",
-                                          0: "",
-                                          1: "1 fila seleccionada"
-                                      }
-                                  },
-                              "paginate": {
-                                      "first":      "Primera",
-                                      "last":       "Ultima",
-                                      "next":       "Siguiente",
-                                      "previous":   "Anterior"
-                                  },
-                              "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                          },
-                          columns: [
-                              {"data": "carreraCursoNombre"},
-                              {"data": "estudioNombre"},
-                              {"data": "evlNom"},
-                              {"data": "inscripcionAutomatica"},
-                              {   
-                                  "orderable":      false,
-                                  "data":           null,
-                                  "defaultContent": '<input type="date" name="cel_fecha">'
-                              },
-                              {   
-                                  "orderable":      false,
-                                  "data":           null,
-                                  "defaultContent": '<input type="date" name="cel_fecha_desde">'
-                              },
-                              {   
-                                  "orderable":      false,
-                                  "data":           null,
-                                  "defaultContent": '<input type="date" name="cel_fecha_hasta" >'
-                              },
+                              if(fechaDesde == "")
                               {
-                                  "className":      'select-checkbox',
-                                  "orderable":      false,
-                                  "data":           null,
-                                  "defaultContent": ''
+                                  MostrarMensaje("ERROR", "Debe ingresar una fecha de inicio de inscripción para: " + objeto.evlNom);
+                                  error = true;
                               }
-                          ]
 
-                      } );
+                              if(fechaHasta == "")
+                              {
+                                  MostrarMensaje("ERROR", "Debe ingresar una fecha de fin de inscripción para: " + objeto.evlNom);
+                                  error = true;
+                              }
+                          }
+                      }
 
-              });
-              
-            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudio', {
+                      if(count < 1)
+                      {
+                          MostrarMensaje("ERROR", "Debe seleccionar al menos una fila");
+                      }
+                      else
+                      {
+                          if(!error)
+                          {
+
+
+                          var listaCalendario = new Array(count);
+
+                              //Procesar
+                              for(i=0;i<count;i++)
+                              {
+
+                                      var calendario = JSON.parse('{"evaluacion":{"evlCod":null},"calFch":null,"calCod":null,"evlInsFchHst":null,"evlInsFchDsd":null}');
+                                      var objeto  = rows.data()[i];
+                                      var fila    = rows.nodes()[i];
+
+                                      var fechaEvaluacion = fila.cells[4].lastChild.value;
+                                      var fechaDesde      = fila.cells[5].lastChild.value;
+                                      var fechaHasta      = fila.cells[6].lastChild.value;
+
+                                      calendario.evaluacion.evlCod = objeto.evlCod;
+                                      calendario.calFch = fechaEvaluacion;
+                                      calendario.evlInsFchDsd = fechaDesde;
+                                      calendario.evlInsFchHst = fechaHasta;
+
+                                      listaCalendario[i] = calendario;
+
+                              }
+
+                              $.ajax({
+                                      url: '<% out.print(urlSistema); %>ABM_Calendario',
+                                          type: 'POST',
+                                          data: {
+                                              pLstCalendario: JSON.stringify(listaCalendario),
+                                              pAction:        "INSERT_LIST"
+                                          },
+                                          async: false,
+                                          cache: false,
+                                          timeout: 30000,
+                                          success: function(responseText) {
+                                              var obj = JSON.parse(responseText);
+
+                                              if(obj.tipoMensaje == 'ERROR')
+                                              {
+                                                  MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                                              }
+                                              else{
+                                                  location.reload();
+                                              }
+
+                                          }
+                                  });
+                          }
+                      }
+
+                  });
+                  
+                $(document).on('click', "#btn_inscribirAlumno", function() {
+                    $('#CalCod').val($(this).data("codigo"));
+                    $('#insTpo').val("ALUMNO");
+                    var table     = $('#PopUpTblPeriodos').DataTable();
+                    var filtro    = '"' + $(this).data("filtro") + '"';
+                    table.search(filtro).draw();
+                  });
+                  
+                  $(document).on('click', "#btn_inscribirDocente", function() {
+                    $('#CalCod').val($(this).data("codigo"));
+                    $('#insTpo').val("DOCENTE");
+                    var table     = $('#PopUpTblPeriodos').DataTable();
+                    var filtro    = '"' + $(this).data("filtro") + '"';
+                    table.search(filtro).draw();
+                  });
+                  
+                $(document).on('click', ".Pop_Seleccionar", function() {
+                    var CalCod      = $('#CalCod').val();
+                    var insTpo      = $('#insTpo').val();
+                    var PeriEstCod  = $(this).data("codigo");
+        
+                    $.post('<% out.print(urlSistema); %>ABM_Calendario', {
+                                    pCalCod: CalCod,
+                                    pPeriEstCod: PeriEstCod,
+                                    pInsTpo: insTpo,
+                                    pAction: "INSCRIBIR_PERIODO"
+                                 }, function (responseText) {
+                                    
+                                    var obj = JSON.parse(responseText);
+                                    
+                                    $(function () {
+                                        $('#PopUpInscPeriodo').modal('toggle');
+                                     });
+                                        
+                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                                 });
+                  });
+
+                $.post('<% out.print(urlSistema); %>ABM_Evaluacion', {
+                      pAction : "POPUP_LISTAR"
+                      }, function(responseText) {
+
+                          var evaluaciones = JSON.parse(responseText);
+
+                          $('#PopUpTblEvaluaciones').DataTable( {
+                              data: evaluaciones,
+                              deferRender: true,
+                              bLengthChange : false, //thought this line could hide the LengthMenu
+                              pageLength: 10,
+                              select: {
+                                  style:    'multi',
+                                  selector: 'td:last-child'
+                              },
+                              language: {
+                                  "lengthMenu": "Mostrando _MENU_ registros por página",
+                                  "zeroRecords": "No se encontraron registros",
+                                  "info": "Página _PAGE_ de _PAGES_",
+                                  "infoEmpty": "No hay registros",
+                                  "search":         "Buscar:",
+                                  select: {
+                                          rows: {
+                                              _: "%d filas seleccionadas",
+                                              0: "",
+                                              1: "1 fila seleccionada"
+                                          }
+                                      },
+                                  "paginate": {
+                                          "first":      "Primera",
+                                          "last":       "Ultima",
+                                          "next":       "Siguiente",
+                                          "previous":   "Anterior"
+                                      },
+                                  "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                              },
+                              columns: [
+                                  {"data": "carreraCursoNombre"},
+                                  {"data": "estudioNombre"},
+                                  {"data": "evlNom"},
+                                  {"data": "inscripcionAutomatica"},
+                                  {   
+                                      "orderable":      false,
+                                      "data":           null,
+                                      "defaultContent": '<input type="date" name="cel_fecha">'
+                                  },
+                                  {   
+                                      "orderable":      false,
+                                      "data":           null,
+                                      "defaultContent": '<input type="date" name="cel_fecha_desde">'
+                                  },
+                                  {   
+                                      "orderable":      false,
+                                      "data":           null,
+                                      "defaultContent": '<input type="date" name="cel_fecha_hasta" >'
+                                  },
+                                  {
+                                      "className":      'select-checkbox',
+                                      "orderable":      false,
+                                      "data":           null,
+                                      "defaultContent": ''
+                                  }
+                              ]
+
+                          } );
+
+                  });
+
+                $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudio', {
                 pAction : "POPUP_LISTAR"
                 }, function(responseText) {
 
-                    var evaluaciones = JSON.parse(responseText);
+                    var periodos = JSON.parse(responseText);
+                    
+                    $.each(periodos, function(f , periodo) {
+                        periodo.periEstCod = "<td> <a href='#' data-codigo='"+periodo.periEstCod +"' class='Pop_Seleccionar'>"+periodo.periEstCod+" </a> </td>";
+                    });
 
-                    $('#PopUpTblEvaluaciones').DataTable( {
-                        data: evaluaciones,
+                    $('#PopUpTblPeriodos').DataTable( {
+                        data: periodos,
                         deferRender: true,
                         bLengthChange : false, //thought this line could hide the LengthMenu
                         pageLength: 10,
@@ -404,31 +454,12 @@
                             "infoFiltered": "(Filtrado de _MAX_ total de registros)"
                         },
                         columns: [
+                            {"data": "periEstCod"},
                             {"data": "carreraCursoNombre"},
                             {"data": "estudioNombre"},
-                            {"data": "evlNom"},
-                            {"data": "inscripcionAutomatica"},
-                            {   
-                                "orderable":      false,
-                                "data":           null,
-                                "defaultContent": '<input type="date" name="cel_fecha">'
-                            },
-                            {   
-                                "orderable":      false,
-                                "data":           null,
-                                "defaultContent": '<input type="date" name="cel_fecha_desde">'
-                            },
-                            {   
-                                "orderable":      false,
-                                "data":           null,
-                                "defaultContent": '<input type="date" name="cel_fecha_hasta" >'
-                            },
-                            {
-                                "className":      'select-checkbox',
-                                "orderable":      false,
-                                "data":           null,
-                                "defaultContent": ''
-                            }
+                            {"data": "periodo.perVal"},
+                            {"data": "periodo.perTpoNombre"},
+                            {"data": "periodo.perFchIni"}
                         ]
 
                     } );

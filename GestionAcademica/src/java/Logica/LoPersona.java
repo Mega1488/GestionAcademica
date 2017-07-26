@@ -324,6 +324,22 @@ public class LoPersona implements Interfaz.InPersona{
         return lstEstudio;
     }
     
+    public boolean PersonaAproboMateria(Long PerCod, Long MatCod)
+    {
+        
+        ArrayList<SDT_PersonaEstudio> lstEstudio = this.ObtenerEstudios(PerCod);
+        
+        for(SDT_PersonaEstudio estudio : lstEstudio)
+        {
+            for(Escolaridad escolaridad : estudio.getEscolaridad())
+            {
+                if(escolaridad.getMateria() != null)  if(escolaridad.getMateria().getMatCod().equals(MatCod)) return escolaridad.getAprobado();
+            }
+        }
+        
+        return false;
+    }
+    
     //----------------------------------------------------------------------------------------------------
     //-Modle
     //----------------------------------------------------------------------------------------------------

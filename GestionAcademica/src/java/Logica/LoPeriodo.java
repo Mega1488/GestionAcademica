@@ -125,22 +125,22 @@ public class LoPeriodo implements InABMGenerico{
         //--------------------------------------------------------------------------------------------------------------------------------------------
         if(plan != null)
         {
-            /*
-            List<Object> lstModulo = LoCurso.GetInstancia().ModuloPorPeriodo(periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
+            
+            List<Object> lstMateria = LoCarrera.GetInstancia().MateriaPorPeriodo(plan.getPlaEstCod(), periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
 
-            if(lstModulo != null)
+            if(lstMateria != null)
             {
-                for(Object objeto : lstModulo)
+                for(Object objeto : lstMateria)
                 {
-                    Modulo mdl = (Modulo) objeto;
+                    Materia mat = (Materia) objeto;
 
                     PeriodoEstudio periEstudio = new PeriodoEstudio();
-                    periEstudio.setModulo(mdl);
+                    periEstudio.setMateria(mat);
                     periEstudio.setPeriodo(periodo);
                     periodo.getLstEstudio().add(periEstudio);
                 }
             }
-            */
+            
         }
         
         return (Retorno_MsgObj) perPeriodo.actualizar(periodo);
@@ -222,9 +222,13 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
-    public Retorno_MsgObj obtenerPeriodoEstudio(Long PeriEstCod)
-    {
+    public Retorno_MsgObj EstudioObtener(Long PeriEstCod){
         return perPeriodo.obtenerPeriodoEstudio(PeriEstCod);
+    }
+    
+    public Retorno_MsgObj EstudioObtenerTodos()
+    {
+        return perPeriodo.EstudioObtenerTodos();
     }
     
     //------------------------------------------------------------------------------------

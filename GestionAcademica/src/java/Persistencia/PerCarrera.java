@@ -7,6 +7,7 @@ package Persistencia;
 
 import Entidad.Carrera;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoPeriodo;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;
@@ -232,6 +233,32 @@ public class PerCarrera implements Interfaz.InCarrera{
         }  finally {
             sesion.close();
         }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj MateriaPorPeriodo(Long PlaEstCod, TipoPeriodo tpoPer, Double perVal) {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+        
+        try {
+            
+            iniciaOperacion();
+            
+            List<Object> listaRetorno =  sesion.getNamedQuery("Materia.findByPeriodo")
+                    .setParameter("TpoPer", tpoPer)
+                    .setParameter("PerVal", perVal)
+                    .setParameter("PlaEstCod", PlaEstCod)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+        
+        } catch (HibernateException he) {
+        
+           retorno = manejaExcepcion(he, retorno);
+        }  finally {
+            sesion.close();
+        }
+
         return retorno;
     }
 }

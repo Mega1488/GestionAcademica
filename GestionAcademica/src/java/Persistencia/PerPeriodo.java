@@ -258,12 +258,12 @@ public class PerPeriodo implements InABMGenerico{
         return retorno;
     }
     
-    public Retorno_MsgObj obtenerPeriodoEstudio(Long PeriEstCod)
-    {
+    public Retorno_MsgObj obtenerPeriodoEstudio(Long PeriEstCod){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
         
         try {
             iniciaOperacion();
+            tx.commit();
             PeriodoEstudio periEstudio = (PeriodoEstudio) sesion.get(PeriodoEstudio.class, PeriEstCod);
             retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), periEstudio);
         } catch (HibernateException he) {
@@ -276,5 +276,28 @@ public class PerPeriodo implements InABMGenerico{
         
 
         return retorno;
+    }
+    
+    public Retorno_MsgObj EstudioObtenerTodos()
+    {
+       Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            
+            List<Object> listaRetorno = sesion.getNamedQuery("PeriodoEstudio.findAll").list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+
+        return retorno; 
     }
 }

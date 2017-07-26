@@ -73,6 +73,7 @@
                                 var PerCod          = $('#PerCod').val();
                                 var PerNom          = $('#PerNom').val();
                                 var PerApe          = $('#PerApe').val();
+                                var PerDoc          = $('#PerDoc').val();
                                 var PerUsrMod       = $('#PerUsrMod').val();
                                 var PerEsDoc        = document.getElementById('PerEsDoc').checked;
                                 var PerEsAdm        = document.getElementById('PerEsAdm').checked;
@@ -101,6 +102,7 @@
                                                             pPerCod	:	PerCod,
                                                             pPerNom	:	PerNom,
                                                             pPerApe	:	PerApe,
+                                                            pPerDoc	:	PerDoc,
                                                             pPerUsrMod	:	PerUsrMod,
                                                             pPerEsDoc	:	PerEsDoc,
                                                             pPerEsAdm	:	PerEsAdm,
@@ -139,6 +141,7 @@
                                                         pPerCod	:	PerCod,
                                                         pPerNom	:	PerNom,
                                                         pPerApe	:	PerApe,
+                                                        pPerDoc	:	PerDoc,
                                                         pPerUsrMod	:	PerUsrMod,
                                                         pPerEsDoc	:	PerEsDoc,
                                                         pPerEsAdm	:	PerEsAdm,
@@ -228,6 +231,7 @@
                             <div><label>Código:</label><input type="text" class="form-control" id="PerCod" name="PerCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(persona.getPerCod())); %>" ></div>
                             <div><label>Nombre:</label><input type="text" class="form-control" id="PerNom" name="PerNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerNom())); %>" ></div>
                             <div><label>Apellido:</label><input type="text" class="form-control" id="PerApe" name="PerApe" placeholder="Apellido" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerApe())); %>" ></div>
+                            <div><label>Documento:</label><input type="text" class="form-control" id="PerDoc" name="PerDoc" placeholder="Documento" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerDoc())); %>" ></div>
                             <div><label>Usuario en moodle:</label><input type="text" class="form-control" id="PerUsrMod" name="PerUsrMod" placeholder="Usuario" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(persona.getPerUsrMod())); %>" ></div>
                             <div><label>Password:</label><input type="password" class="form-control" id="PerPass" name="PerPass"  <% out.print(CamposActivos); %> value="" ></div>
 

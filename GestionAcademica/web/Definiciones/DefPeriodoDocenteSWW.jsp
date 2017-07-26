@@ -43,7 +43,7 @@
     
     List<PeriodoEstudioDocente> lstObjeto = new ArrayList<>();
     
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod));
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
     if(!retorno.SurgioErrorObjetoRequerido())
     {
         lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstDocente();
@@ -230,8 +230,11 @@
                                                         "next":       "Siguiente",
                                                         "previous":   "Anterior"
                                                     },
-                                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                                "infoFiltered": "(Filtrado de _MAX_ registros)"
                                             }
+                                            ,search: {
+                                                "search": "Docente"
+                                              }
                                             ,columns: [
                                                 { "data": "perCod" },
                                                 { "data": "nombreCompleto"},

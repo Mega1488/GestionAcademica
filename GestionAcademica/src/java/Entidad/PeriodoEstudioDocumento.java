@@ -38,7 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"periodo"})
+@JsonIgnoreProperties({"periodoEstudio"})
 
 @Entity
 @Table(name = "PERIODO_ESTUDIO_DOCUMENTO")
@@ -60,7 +60,7 @@ public class PeriodoEstudioDocumento implements Serializable {
     
     @OneToOne(targetEntity = PeriodoEstudio.class)
     @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
-    private PeriodoEstudio periodo;
+    private PeriodoEstudio periodoEstudio;
     
     @Column(name = "DocFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
@@ -127,11 +127,11 @@ public class PeriodoEstudioDocumento implements Serializable {
     }
 
     public PeriodoEstudio getPeriodo() {
-        return periodo;
+        return periodoEstudio;
     }
 
     public void setPeriodo(PeriodoEstudio periodo) {
-        this.periodo = periodo;
+        this.periodoEstudio = periodo;
     }
 
     public String getDocNom() {
@@ -185,7 +185,7 @@ public class PeriodoEstudioDocumento implements Serializable {
 
     @Override
     public String toString() {
-        return "PeriodoEstudioDocumento{" + "DocCod=" + DocCod + ", periodo=" + periodo + ", DocFch=" + DocFch + ", DocAdj=" + DocAdj + ", DocNom=" + DocNom + ", DocExt=" + DocExt + ", ObjFchMod=" + ObjFchMod + '}';
+        return "PeriodoEstudioDocumento{" + "DocCod=" + DocCod + ", periodo=" + periodoEstudio + ", DocFch=" + DocFch + ", DocAdj=" + DocAdj + ", DocNom=" + DocNom + ", DocExt=" + DocExt + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
     

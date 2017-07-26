@@ -136,6 +136,7 @@ public class PerCalendario implements InABMGenerico{
             
             retorno = new Retorno_MsgObj(new Mensajes("Eliminado correctamente", TipoMensaje.MENSAJE), null);
             
+            
         } catch (HibernateException he) {
             
             retorno = manejaExcepcion(he, retorno);
@@ -176,11 +177,12 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            
+            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findAll").list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
             retorno.setLstObjetos(listaRetorno);
+            
             
         } catch (HibernateException he) {
             

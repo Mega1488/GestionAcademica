@@ -11,6 +11,7 @@ import Utiles.Mensajes;
 import Entidad.Parametro;
 import Entidad.PlanEstudio;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoPeriodo;
 import Moodle.MoodleCategory;
 import Moodle.MoodleCourse;
 import Persistencia.PerCarrera;
@@ -285,6 +286,11 @@ public class LoCarrera implements Interfaz.InCarrera{
     public Retorno_MsgObj obtenerPopUp(Long PlaEstCod)
     {
         return perCarrera.obtenerPopUp(PlaEstCod);
+    }
+    
+    public Retorno_MsgObj MateriaPorPeriodo(Long PlaEstCod, TipoPeriodo tpoPer, Double perVal)
+    {
+        return perCarrera.MateriaPorPeriodo(PlaEstCod, tpoPer, perVal);
     }
     
     //----------------------------------------------------------------------------------------------------

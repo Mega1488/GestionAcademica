@@ -115,7 +115,7 @@
                             <tbody>
                             <% for(CalendarioAlumno calAlumno : lstObjeto)
                             {
-
+                         
                             %>
                             <tr>
                                 <td><% if(calAlumno.puedeEditarlo())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-nombre='" + calAlumno.getAlumno().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminarAlumno' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
@@ -148,79 +148,128 @@
         <!-- PopUp para Agregar personas del calendario -->
                                 
         <div id="PopUpPersona" class="modal fade" role="dialog">
-            <jsp:include page="/PopUps/PopUpPersonaCalendario.jsp"/>
-        </div>
-        
-        <!------------------------------------------------->
-        
-        <!-- PopUp para Eliminar personas del calendario -->
-        
-        <div id="PopUpEliminarAlumno"  class="modal fade" role="dialog">
-           
-            <!-- Modal -->
+           <!-- Modal -->
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
                   <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Eliminar</h4>
+                    <h4 class="modal-title">Personas</h4>
                   </div>
                   <div class="modal-body">
+                        <div>
+                            <table id="PopUpTblPersona" name="PopUpTblPersona" class="table table-striped" cellspacing="0"  class="table" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Codigo</th>
+                                        <th>Nombre</th>
+                                        <th>Tipo</th>
+                                        <th>Documento</th>
+                                    </tr>
+                                </thead>
 
-                      <p>Eliminar alumno: <label name="elim_nombre" id="elim_nombre"></label></p>
-                      <p>Quiere proceder?</p>
-
+                            </table>
+                        </div>
                   </div>
                   <div class="modal-footer">
-                    <button name="elim_boton_confirmar" id="elim_boton_confirmar" type="button" class="btn btn-danger" data-codigo="">Eliminar</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                   </div>
                 </div>
             </div>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    
-                    $('.btn_eliminar').on('click', function(e) {
-                        
-                        var codigo = $(this).data("codigo");
-                        var nombre = $(this).data("nombre");
-                        
-                        $('#elim_nombre').text(nombre);
-                        $('#elim_boton_confirmar').data('codigo', codigo);
-                        
-                        
-                      });
-                      
-                      $('#elim_boton_confirmar').on('click', function(e) {
-                            var codigo = $('#elim_boton_confirmar').data('codigo');
-                            var CalCod = $('#CalCod').val();
-                            $.post('<% out.print(urlSistema); %>ABM_CalendarioAlumno', {
-                                         pCalCod: CalCod,
-                                         pCalAlCod: codigo,
-                                         pAction: "<% out.print(Modo.DELETE);%>"
-                                     }, function (responseText) {
-                                         var obj = JSON.parse(responseText);
-                                         
-                                         if (obj.tipoMensaje != 'ERROR')
-                                         {
-                                             location.reload();
-                                         } else
-                                         {
-                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                         }
+    
+    
+    
+        <script type="text/javascript">
 
-                                     });
+            $(document).ready(function() {
 
-                             $(function () {
-                                     $('#PopUpEliminarAlumno').modal('toggle');
-                                  });
-                     
-                      });
+                Buscar();
 
+
+                $(document).on('click', ".PopPer_Seleccionar", function() {
+
+                   var AluPerCod = $(this).data("codigo");
+                   var CalCod = $('#CalCod').val();
+                   $.post('<% out.print(urlSistema); %>ABM_CalendarioAlumno', {
+                                pCalCod: CalCod,
+                                pAluPerCod: AluPerCod,
+                                pAction: "<% out.print(Modo.INSERT);%>"
+                            }, function (responseText) {
+                                var obj = JSON.parse(responseText);
+                                MostrarCargando(false);
+
+                                if (obj.tipoMensaje != 'ERROR')
+                                {
+                                    location.reload();
+                                } else
+                                {
+                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                }
+
+                            });
+
+                    $(function () {
+                            $('#PopUpPersona').modal('toggle');
+                         });
                 });
+
+
+                function Buscar()
+                {
+                        var PerNom = $('#popPerNom').val();
+
+                        $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                        popPerNom : PerNom,        
+                        pAction : "POPUP_OBTENER"
+                            }, function(responseText) {
+
+
+                                var personas = JSON.parse(responseText);
+
+                                $.each(personas, function(f , persona) {
+
+                                               persona.perCod = "<td> <a href='#' data-codigo='"+persona.perCod+"' data-nombre='"+persona.perNom+"' class='PopPer_Seleccionar'>"+persona.perCod+" </a> </td>";
+                                });
+
+                                $('#PopUpTblPersona').DataTable( {
+                                    data: personas,
+                                    deferRender: true,
+                                    bLengthChange : false, //thought this line could hide the LengthMenu
+                                    pageLength: 10,
+                                    language: {
+                                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                                        "zeroRecords": "No se encontraron registros",
+                                        "info": "Página _PAGE_ de _PAGES_",
+                                        "infoEmpty": "No hay registros",
+                                        "search":         "Buscar:",
+                                        "paginate": {
+                                                "first":      "Primera",
+                                                "last":       "Ultima",
+                                                "next":       "Siguiente",
+                                                "previous":   "Anterior"
+                                            },
+                                        "infoFiltered": "(Filtrado de _MAX_ registros)"
+                                    }
+                                    ,search: {
+                                                "search": "Alumno"
+                                              }
+                                    ,columns: [
+                                        { "data": "perCod" },
+                                        { "data": "nombreCompleto"},
+                                        { "data": "tipoPersona"},
+                                        { "data": "perDoc"}
+                                    ]
+
+                                } );
+
+                        });
+                }
+
+
+            });
             </script>
         </div>
-                                     
+        
         <!------------------------------------------------->
         
         <!-- PopUp para Eliminar personas del calendario -->

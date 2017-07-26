@@ -137,7 +137,7 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
 
         //TIPO DE DATO
 
-        if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
+        if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
         
         if(DocCod != null) periDocumento = periDocumento.getPeriodo().getDocumentoById(Long.valueOf(DocCod));
         

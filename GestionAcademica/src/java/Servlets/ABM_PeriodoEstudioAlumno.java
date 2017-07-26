@@ -241,7 +241,7 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
 
         //TIPO DE DATO
 
-        if(PeriEstCod != null) periAlumno.setPeriodoEstudio(((PeriodoEstudio) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
+        if(PeriEstCod != null) periAlumno.setPeriodoEstudio(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
         
         if(PeriEstAluCod != null) periAlumno = periAlumno.getPeriodoEstudio().getAlumnoById(Long.valueOf(PeriEstAluCod));
         

@@ -46,7 +46,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Materia.findAll",       query = "SELECT t FROM Materia t"),
-    @NamedQuery(name = "Materia.findByPeriodo", query = "SELECT t FROM Materia t WHERE t.MatTpoPer = :TpoPer and t.MatPerVal =:PerVal")
+    @NamedQuery(name = "Materia.findByPeriodo", query = "SELECT m FROM Materia m WHERE (m.plan.PlaEstCod =:PlaEstCod or :PlaEstCod IS NULL) and m.MatTpoPer = :TpoPer and m.MatPerVal =:PerVal")
 })
 
 public class Materia implements Serializable {

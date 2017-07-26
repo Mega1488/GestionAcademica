@@ -26,6 +26,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -34,14 +35,17 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"lstEstudio"})
+
 @Entity
 @Table(name = "PERIODO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Periodo.findAll",       query = "SELECT t FROM Periodo t"),
     @NamedQuery(name = "Periodo.findByPK",      query = "SELECT t FROM Periodo t WHERE t.PeriCod =:PeriCod"),
-    @NamedQuery(name = "Periodo.findLastByMat",     query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.Periodo.PeriCod and e.Materia.MatCod =:MatCod order by t.PerFchIni desc"),
-    @NamedQuery(name = "Periodo.findLastByMod",     query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.Periodo.PeriCod and e.Modulo.ModCod =:ModCod order by t.PerFchIni desc"),
+    @NamedQuery(name = "Periodo.findLastByMat",     query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.periodo.PeriCod and e.Materia.MatCod =:MatCod order by t.PerFchIni desc"),
+    @NamedQuery(name = "Periodo.findLastByMod",     query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.periodo.PeriCod and e.Modulo.ModCod =:ModCod order by t.PerFchIni desc"),
     @NamedQuery(name = "Periodo.findLast",      query = "SELECT t FROM Periodo t ORDER BY t.PerFchIni DESC")})
 
 public class Periodo implements Serializable {
@@ -133,7 +137,9 @@ public class Periodo implements Serializable {
         this.lstEstudio = lstEstudio;
     }
     
-
+    public String getPerTpoNombre() {
+        return PerTpo.getTipoPeriodoNombre();
+    }
 
 
     @Override
