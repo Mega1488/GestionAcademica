@@ -164,7 +164,7 @@ public class Inscripcion implements Serializable {
     public String getNombreEstudio()
     {
         
-        if(this.PlanEstudio != null) return this.PlanEstudio.getPlaEstNom();
+        if(this.PlanEstudio != null) return this.PlanEstudio.getCarreraPlanNombre();
         if(this.Curso != null) return this.Curso.getCurNom();
 
         return "";

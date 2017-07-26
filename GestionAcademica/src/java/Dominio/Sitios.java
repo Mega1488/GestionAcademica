@@ -43,8 +43,12 @@ public class Sitios {
     }
     
     private void CargarAlumno(){
-        
+        lstAlumno.add("Estudios.jsp");
+        lstAlumno.add("Evaluaciones.jsp");
+        lstAlumno.add("Solicitudes.jsp");
+        lstAlumno.add("Escolaridad.jsp");
     }
+
     private void CargarDocente(){
         lstDocente.add("EstudiosDictados.jsp");
     }
