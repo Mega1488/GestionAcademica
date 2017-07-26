@@ -46,6 +46,7 @@ public class Sitios {
         lstAlumno.add("Estudios.jsp");
         lstAlumno.add("Evaluaciones.jsp");
         lstAlumno.add("Solicitudes.jsp");
+        lstAlumno.add("Escolaridad.jsp");
     }
 
     private void CargarDocente(){

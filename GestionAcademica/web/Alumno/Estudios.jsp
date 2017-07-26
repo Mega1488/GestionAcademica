@@ -4,16 +4,16 @@
     Author     : alvar
 --%>
 
+<%@page import="Logica.LoPeriodo"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Utiles.Utilidades"%>
-<%@page import="Logica.LoCalendario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    LoCalendario loCalendario   = LoCalendario.GetInstancia();
-    Utilidades utilidad         = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    LoPeriodo loPeriodo   = LoPeriodo.GetInstancia();
+    Utilidades utilidad   = Utilidades.GetInstancia();
+    String urlSistema     = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO

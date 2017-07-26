@@ -73,7 +73,20 @@ public class LoPeriodo implements InABMGenerico{
         //--------------------------------------------------------------------------------------------------------------------------------------------
         //MATERIA
         //--------------------------------------------------------------------------------------------------------------------------------------------
-        
+        List<Object> lstMateria = LoCarrera.GetInstancia().MateriaPorPeriodo(null, periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
+
+        if(lstMateria != null)
+        {
+            for(Object objeto : lstMateria)
+            {
+                Materia mat = (Materia) objeto;
+                
+                PeriodoEstudio periEstudio = new PeriodoEstudio();
+                periEstudio.setMateria(mat);
+                periEstudio.setPeriodo(periodo);
+                periodo.getLstEstudio().add(periEstudio);
+            }
+        }
         
         return perPeriodo.guardar(periodo);
     }
