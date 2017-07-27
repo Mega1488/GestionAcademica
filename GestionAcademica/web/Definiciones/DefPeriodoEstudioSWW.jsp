@@ -149,27 +149,30 @@
                         <h4 class="modal-title">Estudio</h4>
                     </div>
                     <div class="modal-body">
-                        <p>Se ingresaran los estudios que correspondan con este periodo</p>
-                        <div class="row">
-                            <label class="radio-inline"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" value="carrera">Carrera</label>
-                            <label class="radio-inline"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" value="curso">Curso</label>
-                        </div>
-                        
-                        <div class="row">
-                            <div id="pop_FltrCarrera" name="pop_FltrCarrera">
-                                <select class="form-control" id="pop_FltrCarCod" name="pop_FltrCarCod"></select>
+                        <div class="padding-popup">
+                            <div class="alert alert-warning"><span class="glyphicon glyphicon-warning-sign" style="margin-right:10px;"></span>Se ingresaran los estudios que correspondan con este periodo</div>
+                            <div class="row">
+                                <label id="lbl_carrera" name="lbl_carrera" class="unchecked"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" class="hide" value="carrera">Carrera</label>
+                                <label id="lbl_curso" name="lbl_curso" class="unchecked"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" class="hide" value="curso">Curso</label>
                             </div>
-                        </div>
-                        
-                        <div class="row">
-                            <table id="PopUpTblEstudio" name="PopUpTblEstudio" class="table table-striped" cellspacing="0"  class="table" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            
+                            <div class="row">
+                                <div id="pop_FltrCarrera" name="pop_FltrCarrera" class="contenedorSelect">
+                                    <div class="triangulo"></div>
+                                    <select class="form-control" id="pop_FltrCarCod" name="pop_FltrCarCod"></select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <table id="PopUpTblEstudio" name="PopUpTblEstudio" class="table table-striped" cellspacing="0"  class="table" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -183,6 +186,8 @@
                     
                     $('input:radio[name="pop_TpoEst"][value="carrera"]').prop("checked", true);
                     $('#pop_FltrCarrera').show();
+                    $('#lbl_carrera').addClass("checked");
+                    $('#lbl_curso').removeClass("checked");
                         
                     CargarCarreras();
                     
@@ -194,10 +199,14 @@
                                 if(this.value == "carrera")
                                 {
                                     CargarCarreras();
+                                    $('#lbl_carrera').addClass("checked");
+                                    $('#lbl_curso').removeClass("checked");
                                 }
                                 
                                 if(this.value == "curso")
                                 {
+                                    $('#lbl_curso').addClass("checked");
+                                    $('#lbl_carrera').removeClass("checked");
                                     CargarCurso();
                                     $('#pop_FltrCarrera').hide();
                                 }

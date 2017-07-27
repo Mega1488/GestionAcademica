@@ -55,7 +55,9 @@
     <div>
         
 
-        <div id="div_cargando" name="div_cargando"></div>
+        <div id="div_cargando" name="div_cargando">
+            <div class="loading"></div>
+        </div>
 
     </div>       
 
