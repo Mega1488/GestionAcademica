@@ -5,9 +5,12 @@
  */
 package Logica;
 
+import Entidad.Curso;
 import Entidad.Escolaridad;
 import Entidad.Inscripcion;
+import Entidad.Materia;
 import Entidad.MateriaRevalida;
+import Entidad.Modulo;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
@@ -341,7 +344,7 @@ public class LoPersona implements Interfaz.InPersona{
         return lstEstudio;
     }
     
-    public boolean PersonaAproboMateria(Long PerCod, Long MatCod)
+    public boolean PersonaAproboEstudio(Long PerCod, Materia materia, Modulo modulo, Curso curso)
     {
         
         ArrayList<SDT_PersonaEstudio> lstEstudio = this.ObtenerEstudios(PerCod);
@@ -350,11 +353,19 @@ public class LoPersona implements Interfaz.InPersona{
         {
             for(Escolaridad escolaridad : estudio.getEscolaridad())
             {
-                if(escolaridad.getMateria() != null)  if(escolaridad.getMateria().getMatCod().equals(MatCod)) return escolaridad.getAprobado();
+                if(escolaridad.getMateria() != null && materia != null)  if(escolaridad.getMateria().equals(materia)) return escolaridad.getAprobado();
+                if(escolaridad.getCurso() != null && curso != null)  if(escolaridad.getCurso().equals(curso)) return escolaridad.getAprobado();
+                if(escolaridad.getModulo() != null && modulo != null)  if(escolaridad.getModulo().equals(modulo)) return escolaridad.getAprobado();
             }
         }
         
         return false;
+    }
+    
+    public Boolean PersonaPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso)
+    {
+        return LoCalendario.GetInstancia().AlumnoPuedeDarExamen(PerCod, materia, modulo, curso);
+        
     }
     
     //----------------------------------------------------------------------------------------------------

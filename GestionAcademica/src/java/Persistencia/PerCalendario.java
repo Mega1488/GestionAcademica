@@ -197,4 +197,135 @@ public class PerCalendario implements InABMGenerico{
         return retorno;
     }
     
+    public Retorno_MsgObj obtenerByMateriaPersona(Long PerCod, Long MatCod){
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            tx.commit();
+            List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findMateriaAlumno")
+                    .setParameter("PerCod", PerCod)
+                    .setParameter("MatCod", MatCod)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerByModuloPersona(Long PerCod, Long ModCod){
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            tx.commit();
+            List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findModuloAlumno")
+                    .setParameter("PerCod", PerCod)
+                    .setParameter("ModCod", ModCod)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerByCursoPersona(Long PerCod, Long CurCod){
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            tx.commit();
+            List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findCursoAlumno")
+                    .setParameter("PerCod", PerCod)
+                    .setParameter("CurCod", CurCod)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerByAlumno(Long PerCod){
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            tx.commit();
+            List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findByAlumno")
+                    .setParameter("PerCod", PerCod)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+            
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        
+        
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerByDocente(Long PerCod){
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            tx.commit();
+            List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findByDocente")
+                    .setParameter("PerCod", PerCod)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        return retorno;
+    }
+    
 }

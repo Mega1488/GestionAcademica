@@ -212,7 +212,7 @@
                                       <input type="hidden" name="PeriEstCod" id="PeriEstCod" value="<% out.print(PeriEstCod); %>">
                                       <input type="hidden" name="MODO" id="MODO" value="INSERT">
                                       <input type="hidden" name="pPeriEstCod" id="pPeriEstCod" value="<% out.print(PeriEstCod); %>">
-                                      <input type="file" name="file" /><br/>
+                                      <input required type="file" name="file" /><br/>
 
                               </div>
                         </div>

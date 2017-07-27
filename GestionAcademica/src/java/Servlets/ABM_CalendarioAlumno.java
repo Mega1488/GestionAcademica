@@ -244,14 +244,14 @@ public class ABM_CalendarioAlumno extends HttpServlet {
                 
                 mensaje    = retornoObj.getMensaje();
                 
-                if(calAlumno.getCalendario().getEvaluacion().getTpoEvl().getTpoEvlExm())
+                if(calAlumno.getCalendario().getEvaluacion().getTpoEvl().getTpoEvlExm() || loCalendario.AlumnoExonera(calAlumno.getAlumno().getPerCod(), calAlumno.getCalendario().getEvaluacion().getMatEvl(), calAlumno.getCalendario().getEvaluacion().getModEvl(), calAlumno.getCalendario().getEvaluacion().getCurEvl()))
                 {
                     Escolaridad escolaridad = new Escolaridad();
                     
                     escolaridad.setEscFch(new java.util.Date());
                     if(perUsuario != null) escolaridad.setIngresadaPor(perUsuario);
                     if(calAlumno.getAlumno() != null) escolaridad.setAlumno(calAlumno.getAlumno());
-                    if(calAlumno.getEvlCalVal() != null) escolaridad.setEscCalVal(calAlumno.getEvlCalVal());
+                    if(calAlumno.getEvlCalVal() != null) escolaridad.setEscCalVal(loCalendario.AlumnoCreditoParcial(calAlumno.getAlumno().getPerCod(), calAlumno.getCalendario().getEvaluacion().getMatEvl(), calAlumno.getCalendario().getEvaluacion().getModEvl(), calAlumno.getCalendario().getEvaluacion().getCurEvl()));
                     if(calAlumno.getCalendario().getEvaluacion().getMatEvl() != null) escolaridad.setMateria(calAlumno.getCalendario().getEvaluacion().getMatEvl());
                     if(calAlumno.getCalendario().getEvaluacion().getModEvl() != null) escolaridad.setModulo(calAlumno.getCalendario().getEvaluacion().getModEvl());
                     if(calAlumno.getCalendario().getEvaluacion().getCurEvl() != null) escolaridad.setCurso(calAlumno.getCalendario().getEvaluacion().getCurEvl());
@@ -380,9 +380,6 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         //------------------------------------------------------------------------------------------
 
         //TIPO DE DATO
-
-
-
 
         //Sin validacion
         if(CalCod != null)                  calAlumno.setCalendario((Calendario) loCalendario.obtener(Long.valueOf(CalCod)).getObjeto());

@@ -141,7 +141,7 @@
             </div>
         </div>
         
-         <!-- PopUp para Agregar personas del calendario -->
+        <!-- PopUp para Agregar personas del calendario -->
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->

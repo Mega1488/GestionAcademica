@@ -39,7 +39,12 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "CALENDARIO")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Calendario.findAll",       query = "SELECT t FROM Calendario t order by t.CalFch desc")})
+    @NamedQuery(name = "Calendario.findMateriaAlumno",  query = "SELECT t FROM Calendario t where t.evaluacion.MatEvl.MatCod =:MatCod and t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioAlumno A WHERE A.calendario.CalCod = t.CalCod AND A.Alumno.PerCod =:PerCod) order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findModuloAlumno",   query = "SELECT t FROM Calendario t where t.evaluacion.ModEvl.ModCod =:ModCod and t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioAlumno A WHERE A.calendario.CalCod = t.CalCod AND A.Alumno.PerCod =:PerCod)  order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findCursoAlumno",    query = "SELECT t FROM Calendario t where t.evaluacion.CurEvl.CurCod =:CurCod and t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioAlumno A WHERE A.calendario.CalCod = t.CalCod AND A.Alumno.PerCod =:PerCod)  order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findByAlumno",       query = "SELECT t FROM Calendario t where t.CalCod in (SELECT A.calendario.CalCod FROM t.lstAlumnos A WHERE A.Alumno.PerCod =:PerCod)  order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findByDocente",      query = "SELECT t FROM Calendario t where t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioDocente A WHERE A.calendario.CalCod = t.CalCod AND A.Docente.PerCod =:PerCod)  order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findAll",            query = "SELECT t FROM Calendario t order by t.CalFch desc")})
 
 public class Calendario implements Serializable {
 
@@ -173,6 +178,22 @@ public class Calendario implements Serializable {
         return pAlumno;
     }
     
+    public CalendarioAlumno getAlumnoByPersona(Long PerCod){
+        
+        CalendarioAlumno pAlumno = new CalendarioAlumno();
+        
+        for(CalendarioAlumno alumn : this.lstAlumnos)
+        {
+            if(alumn.getAlumno().getPerCod().equals(PerCod))
+            {
+                pAlumno = alumn;
+                break;
+            }
+        }
+        
+        return pAlumno;
+    }
+    
     public CalendarioDocente getDocenteById(Long CalDocCod){
         
         CalendarioDocente pDocente = new CalendarioDocente();
@@ -189,6 +210,44 @@ public class Calendario implements Serializable {
         return pDocente;
     }
     
+    public Boolean existeAlumno(Long PerCod){
+        for(CalendarioAlumno calAlumno : this.lstAlumnos)
+        {
+            if(calAlumno.getAlumno().getPerCod().equals(PerCod))
+            {
+                return true;
+            }
+        }    
+            
+        return false;
+    }
+    
+    public Boolean existeDocente(Long PerCod){
+        for(CalendarioDocente calDocente : this.lstDocentes)
+        {
+            if(calDocente.getDocente().getPerCod().equals(PerCod))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public Double getAlumnoCalificacion(Long PerCod)
+    {
+        Double retorno = 0.0;
+        
+        for(CalendarioAlumno calAlumno : this.lstAlumnos)
+        {
+            if(calAlumno.getAlumno().getPerCod().equals(PerCod))
+            {
+                retorno = calAlumno.getEvlCalVal();
+                return retorno;
+            }
+        }
+        
+        return retorno;
+    }
 
     @Override
     public int hashCode() {

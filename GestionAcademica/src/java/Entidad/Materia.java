@@ -194,6 +194,42 @@ public class Materia implements Serializable {
         
         return pEva;
     }
+    
+    public boolean MateriaPuedeDarExamen(Double calificacion){
+        boolean puede = false;
+        switch(this.MatTpoApr)
+        {
+            case EXONERABLE_CON_GANANCIA:
+                if(calificacion < 86 && calificacion >= 70) puede =  true;
+                break;
+            case EXONERABLE_SIN_GANANCIA:
+                if(calificacion < 86) puede =  true;
+                break;
+            case NO_EXONERABLE_CON_GANANCIA: 
+                if(calificacion >= 70) puede =  true;
+                break;
+            case NO_EXONERABLE_SIN_GANANCIA:
+                puede =  true;
+                break;
+        }
+        
+        return puede;
+    }
+    
+    public boolean MateriaExonera(Double calificacion){
+        boolean puede = false;
+        switch(this.MatTpoApr)
+        {
+            case EXONERABLE_CON_GANANCIA:
+                if(calificacion >= 86) puede =  true;
+                break;
+            case EXONERABLE_SIN_GANANCIA:
+                if(calificacion >= 86) puede =  true;
+                break;
+        }
+        
+        return puede;
+    }
 
     @Override
     public int hashCode() {

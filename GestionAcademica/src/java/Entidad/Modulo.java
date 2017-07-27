@@ -193,6 +193,8 @@ public class Modulo implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+    
+    
 
     @Override
     public int hashCode() {
