@@ -110,7 +110,7 @@
                                             out.println("</td>");
 
                                             out.println("<td class='texto_derecha'>");
-                                            out.println("<label>" + (esc.getEscCalVal().equals(Double.NaN) ? "0" : esc.getEscCalVal()) + "</label>");
+                                            out.println("<label>" + (esc.Revalida() ? "0" : esc.getEscCalVal()) + "</label>");
                                             out.println("</td>");
                                             
                                             out.println("<td class='texto_derecha'>");

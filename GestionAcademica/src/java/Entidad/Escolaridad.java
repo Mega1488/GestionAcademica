@@ -164,7 +164,7 @@ public class Escolaridad implements Serializable {
     }
 
     public String getAprobacion() {
-        if(this.EscCalVal.equals(Double.NaN)) return "Revalida";
+        if(this.Revalida()) return "Revalida";
         if(this.EscCalVal >= 70) return "Aprobado";
         if(this.EscCalVal < 70) return "Eliminado";
         return "";
@@ -173,6 +173,10 @@ public class Escolaridad implements Serializable {
     public Boolean getAprobado() {
         if(this.EscCalVal >= 70) return true;
         return false;
+    }
+    
+    public Boolean Revalida(){
+        return this.EscCalVal.equals(Double.NaN);
     }
 
     public String getNombreEstudio()
