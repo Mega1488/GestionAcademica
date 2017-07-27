@@ -11,6 +11,8 @@ import Entidad.Curso;
 import Entidad.Parametro;
 import Entidad.Inscripcion;
 import Entidad.Evaluacion;
+import Entidad.Materia;
+import Entidad.MateriaRevalida;
 import Entidad.Persona;
 import Enumerado.Modo;
 import Enumerado.NombreSesiones;
@@ -68,27 +70,44 @@ public class ABM_Inscripcion extends HttpServlet {
             if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
             
             String action   = request.getParameter("pAction");
-            Modo mode = Modo.valueOf(action);
             String retorno  = "";
 
             
-            switch(mode)
+            if(action.equals("REVALIDA_DELETE") || action.equals("REVALIDA_INSERT"))
             {
+                if(action.equals("REVALIDA_INSERT"))
+                {
+                    retorno = this.RevalidaAgregarDatos(request);
+                }
                 
-                case INSERT:
-                    retorno = this.AgregarDatos(request);
-                break;
+                if(action.equals("REVALIDA_DELETE"))
+                {
+                    retorno = this.RevalidaEliminarDatos(request);
+                }
                 
-                case UPDATE:
-                    retorno = this.ActualizarDatos(request);
-                break;
-                
-                case DELETE:
-                    retorno = this.EliminarDatos(request);
-                break;
-                
-                
-                        
+            }
+            else
+            {
+            
+                Modo mode = Modo.valueOf(action);
+
+
+                switch(mode)
+                {
+
+                    case INSERT:
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case UPDATE:
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case DELETE:
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+                }
             }
 
             out.println(retorno);
@@ -97,42 +116,40 @@ public class ABM_Inscripcion extends HttpServlet {
         
     }
     
-    private String AgregarDatos(HttpServletRequest request)
+    private String AgregarDatos(HttpServletRequest request){
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
         {
-            mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
-            try
+            error           = false;
+
+            Inscripcion inscripcion = this.ValidarInscripcion(request, null);
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
             {
-
-                error           = false;
-                
-                Inscripcion inscripcion = this.ValidarInscripcion(request, null);
-
-                //------------------------------------------------------------------------------------------
-                //Guardar cambios
-                //------------------------------------------------------------------------------------------
-
-                if(!error)
-                {
-                    if(perUsuario != null) inscripcion.setPersonaInscribe(perUsuario);
-                    inscripcion.setAluFchInsc(new java.util.Date());
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loInscripcion.guardar(inscripcion);
-                    mensaje    = retornoObj.getMensaje();
-                }
+                if(perUsuario != null) inscripcion.setPersonaInscribe(perUsuario);
+                inscripcion.setAluFchInsc(new java.util.Date());
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loInscripcion.guardar(inscripcion);
+                mensaje    = retornoObj.getMensaje();
             }
-            catch(Exception ex)
-            {
-                mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
-                throw ex;
-            }
-
-            String retorno = utilidades.ObjetoToJson(mensaje);
-
-            return retorno;
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
         }
 
-    private String ActualizarDatos(HttpServletRequest request)
-    {
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+    }
+
+    private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
         {
@@ -166,8 +183,7 @@ public class ABM_Inscripcion extends HttpServlet {
         return retorno;
     }
 
-    private String EliminarDatos(HttpServletRequest request)
-    {
+    private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         try
@@ -192,8 +208,88 @@ public class ABM_Inscripcion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
-    private Inscripcion ValidarInscripcion(HttpServletRequest request, Inscripcion inscripcion)
-    {
+    private String RevalidaAgregarDatos(HttpServletRequest request){
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+
+            error                   = false;
+            Inscripcion inscripcion = this.ValidarInscripcion(request, null);
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                String 	MatCod  = request.getParameter("pMatCod");
+                Materia materia = inscripcion.getPlanEstudio().getMateriaById(Long.valueOf(MatCod));
+                
+                MateriaRevalida matRvl = new MateriaRevalida();
+                matRvl.setInscripcion(inscripcion);
+                matRvl.setMateria(materia);
+                matRvl.setObjFchMod(new java.util.Date());
+                
+                inscripcion.getLstRevalidas().add(matRvl);
+                
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loInscripcion.actualizar(inscripcion);
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+        String retorno = utilidades.ObjetoToJson(mensaje);
+
+        return retorno;
+    }
+    
+    private String RevalidaEliminarDatos(HttpServletRequest request){
+        error      = false;
+        mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
+        try
+        {
+
+            Inscripcion inscripcion = this.ValidarInscripcion(request, null);
+
+            if(!error)
+            {
+                String 	MatRvlCod  = request.getParameter("pMatRvlCod");
+                
+                int indice = -1;
+                for(MateriaRevalida matRvl : inscripcion.getLstRevalidas())
+                {
+                    if(matRvl.getMatRvlCod().equals(Long.valueOf(MatRvlCod)))
+                    {
+                        indice = inscripcion.getLstRevalidas().indexOf(matRvl);
+                    }
+                }
+                
+                if(indice > -1)
+                {
+                    inscripcion.getLstRevalidas().remove(indice);
+                    
+                    mensaje = ((Retorno_MsgObj) loInscripcion.actualizar(inscripcion)).getMensaje();
+                }
+            }
+            
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+
+
+        return utilidades.ObjetoToJson(mensaje);
+    }
+    
+    private Inscripcion ValidarInscripcion(HttpServletRequest request, Inscripcion inscripcion){
         
         if(inscripcion == null)
         {

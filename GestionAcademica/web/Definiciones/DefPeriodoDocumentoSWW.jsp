@@ -87,7 +87,6 @@
     }
        
     
-    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Modo.UPDATE + "&pPeriCod=" + PeriEstCod;
     
     Modo Mode = Modo.valueOf(ModoTxt);
     
@@ -106,7 +105,7 @@
     
     List<PeriodoEstudioDocumento> lstObjeto = new ArrayList<>();
     
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtenerPeriodoEstudio(Long.valueOf(PeriEstCod));
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
     if(!retorno.SurgioErrorObjetoRequerido())
     {
         lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstDocumento();
@@ -116,6 +115,7 @@
         out.print(retorno.getMensaje().toString());
     }
     
+    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().getPeriCod();
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
 
@@ -315,7 +315,7 @@
 
                 //TIPO DE DATO
 
-                if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) LoPeriodo.GetInstancia().obtenerPeriodoEstudio(Long.valueOf(PeriEstCod)).getObjeto()));
+                if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) LoPeriodo.GetInstancia().EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
 
                 //if(DocCod != null) periDocumento = periDocumento.getPeriodo().getDocumentoById(Long.valueOf(DocCod));
 

@@ -9,6 +9,7 @@ import Entidad.Calendario;
 import Entidad.CalendarioAlumno;
 import Entidad.CalendarioDocente;
 import Entidad.Evaluacion;
+import Entidad.Inscripcion;
 import Entidad.PeriodoEstudio;
 import Entidad.PeriodoEstudioAlumno;
 import Entidad.PeriodoEstudioDocente;
@@ -152,6 +153,20 @@ public class LoCalendario implements InABMGenerico{
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), alumno);
         
+        if(alumno.getCalendario().getEvaluacion().getMatEvl() != null)
+        {
+            Inscripcion inscripcion = (Inscripcion) LoInscripcion.GetInstancia().obtenerInscByPlan(alumno.getAlumno().getPerCod(), alumno.getCalendario().getEvaluacion().getMatEvl().getPlan().getPlaEstCod()).getObjeto();
+            
+            if(inscripcion != null)
+            {
+                if(inscripcion.MateriaRevalidada(alumno.getCalendario().getEvaluacion().getMatEvl().getMatCod()))
+                {
+                    error = true;
+                    retorno.setMensaje(new Mensajes("El alumno revalida la materia", TipoMensaje.ERROR));
+                }
+            }
+        }
+        
         if(!error)
         {
             Calendario calendario = alumno.getCalendario();
@@ -250,20 +265,42 @@ public class LoCalendario implements InABMGenerico{
             
             if(agregar)
             {
-                CalendarioAlumno calAlumno = new CalendarioAlumno();
-                calAlumno.setAlumno(alumno.getAlumno());
-                calAlumno.setCalendario(calendario);
-                calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
+                boolean cargar = true;
                 
-                Retorno_MsgObj resultado = (Retorno_MsgObj) this.AlumnoAgregar(calAlumno);
-                
-                if(resultado.SurgioError())
+                if(alumno.getPeriodoEstudio().getMateria() != null)
                 {
-                    noAgregados += 1;
+                    Inscripcion inscripcion = (Inscripcion) LoInscripcion.GetInstancia().obtenerInscByPlan(alumno.getAlumno().getPerCod(), alumno.getPeriodoEstudio().getMateria().getPlan().getPlaEstCod()).getObjeto();
+
+                    if(inscripcion != null)
+                    {
+                        if(inscripcion.MateriaRevalidada(alumno.getPeriodoEstudio().getMateria().getMatCod()))
+                        {
+                            cargar = false;
+                        }
+                    }
+                }
+                
+                if(cargar)
+                {
+                    CalendarioAlumno calAlumno = new CalendarioAlumno();
+                    calAlumno.setAlumno(alumno.getAlumno());
+                    calAlumno.setCalendario(calendario);
+                    calAlumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
+
+                    Retorno_MsgObj resultado = (Retorno_MsgObj) this.AlumnoAgregar(calAlumno);
+
+                    if(resultado.SurgioError())
+                    {
+                        noAgregados += 1;
+                    }
+                    else
+                    {
+                        agregados += 1;
+                    }
                 }
                 else
                 {
-                    agregados += 1;
+                    noAgregados += 1;
                 }
                 
             }

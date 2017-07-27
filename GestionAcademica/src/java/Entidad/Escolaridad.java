@@ -164,6 +164,7 @@ public class Escolaridad implements Serializable {
     }
 
     public String getAprobacion() {
+        if(this.EscCalVal.equals(Double.NaN)) return "Revalida";
         if(this.EscCalVal >= 70) return "Aprobado";
         if(this.EscCalVal < 70) return "Eliminado";
         return "";

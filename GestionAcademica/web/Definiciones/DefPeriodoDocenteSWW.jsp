@@ -38,7 +38,6 @@
     
     String PeriEstCod   = request.getParameter("pPeriEstCod");
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
-    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + PeriEstCod;
     
     
     List<PeriodoEstudioDocente> lstObjeto = new ArrayList<>();
@@ -52,6 +51,8 @@
     {
         out.print(retorno.getMensaje().toString());
     }
+    
+    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().getPeriCod();
     
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 

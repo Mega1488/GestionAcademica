@@ -7,10 +7,13 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,12 +21,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -89,6 +95,11 @@ public class Inscripcion implements Serializable {
     
     @Column(name = "InsGenAnio")
     private Integer InsGenAnio;
+    
+    @OneToMany(targetEntity = MateriaRevalida.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="InsCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<MateriaRevalida> lstRevalidas;
     
     //-CONSTRUCTOR
 
@@ -177,7 +188,26 @@ public class Inscripcion implements Serializable {
     public void setInsGenAnio(Integer InsGenAnio) {
         this.InsGenAnio = InsGenAnio;
     }
+
+    public List<MateriaRevalida> getLstRevalidas() {
+        return lstRevalidas;
+    }
+
+    public void setLstRevalidas(List<MateriaRevalida> lstRevalidas) {
+        this.lstRevalidas = lstRevalidas;
+    }
     
+    public boolean MateriaRevalidada(Long MatCod)
+    {
+        for(MateriaRevalida matRvl : this.lstRevalidas)
+        {
+            if(matRvl.getMateria().getMatCod().equals(MatCod))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     
     
 

@@ -112,6 +112,8 @@ public class LoPeriodo implements InABMGenerico{
     }
     
     public Retorno_MsgObj guardarPorEstudio(Periodo periodo, Curso curso, PlanEstudio plan) {
+        int modAgregados = 0;
+        int matAgregadas = 0;
         
         //--------------------------------------------------------------------------------------------------------------------------------------------
         //MODULO
@@ -130,6 +132,8 @@ public class LoPeriodo implements InABMGenerico{
                     periEstudio.setModulo(mdl);
                     periEstudio.setPeriodo(periodo);
                     periodo.getLstEstudio().add(periEstudio);
+                    
+                    modAgregados += 1;
                 }
             }
         }
@@ -151,12 +155,21 @@ public class LoPeriodo implements InABMGenerico{
                     periEstudio.setMateria(mat);
                     periEstudio.setPeriodo(periodo);
                     periodo.getLstEstudio().add(periEstudio);
+                    
+                    matAgregadas += 1;
                 }
             }
             
         }
         
-        return (Retorno_MsgObj) perPeriodo.actualizar(periodo);
+        Retorno_MsgObj retorno = (Retorno_MsgObj) perPeriodo.actualizar(periodo);
+        
+        if(!retorno.SurgioError())
+        {
+            retorno.setMensaje(new Mensajes("Se ingresaron " + modAgregados + " modulos, " + matAgregadas + " materias", TipoMensaje.MENSAJE));
+        }
+
+        return retorno;
     }
  
     public PeriodoEstudio obtenerLastPeriodoEstudioByMateria(Long MatCod) {
@@ -253,6 +266,23 @@ public class LoPeriodo implements InABMGenerico{
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), alumno);
         
+        
+        if(alumno.getPeriodoEstudio().getMateria() != null)
+        {
+            Inscripcion inscripcion = (Inscripcion) LoInscripcion.GetInstancia().obtenerInscByPlan(alumno.getAlumno().getPerCod(), alumno.getPeriodoEstudio().getMateria().getPlan().getPlaEstCod()).getObjeto();
+            
+            if(inscripcion != null)
+            {
+                if(inscripcion.MateriaRevalidada(alumno.getPeriodoEstudio().getMateria().getMatCod()))
+                {
+                    error = true;
+                    retorno.setMensaje(new Mensajes("El alumno revalida la materia", TipoMensaje.ERROR));
+                }
+            }
+        }
+                
+                
+        
         if(!error)
         {
             PeriodoEstudio periEst = alumno.getPeriodoEstudio();
@@ -319,14 +349,23 @@ public class LoPeriodo implements InABMGenerico{
                     
                     if(inscripcion.getInsGenAnio().equals(InsGenAnio))
                     {
-                        PeriodoEstudioAlumno periEstAlu = new PeriodoEstudioAlumno();
-                        periEstAlu.setAlumno(inscripcion.getAlumno());
-                        periEstAlu.setPerInsFchInsc(new Date());
-                        periEstAlu.setPeriodoEstudio(periEst);
-                        retorno = (Retorno_MsgObj) this.AlumnoAgregar(periEstAlu);
+                        boolean cargar = true;
+                        
+                        if(periEst.getMateria() != null)
+                        {
+                            cargar = !inscripcion.MateriaRevalidada(periEst.getMateria().getMatCod());
+                        }
+                        
+                        if(cargar)
+                        {
+                            PeriodoEstudioAlumno periEstAlu = new PeriodoEstudioAlumno();
+                            periEstAlu.setAlumno(inscripcion.getAlumno());
+                            periEstAlu.setPerInsFchInsc(new Date());
+                            periEstAlu.setPeriodoEstudio(periEst);
+                            retorno = (Retorno_MsgObj) this.AlumnoAgregar(periEstAlu);
 
-                        if(retorno.SurgioError()) return retorno;
-                                   
+                            if(retorno.SurgioError()) return retorno;
+                        }
                     }
                 }
             }

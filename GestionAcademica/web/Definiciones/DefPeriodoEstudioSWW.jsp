@@ -115,7 +115,7 @@
                             {
                             %>
                             <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
+                                <td><% out.print("<a href='#' data-codigo='" + periEst.getPeriEstCod() + "' data-nombre='" + periEst.getEstudioNombre() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %></td>
                                 <td><% out.print( utilidad.NuloToVacio(periEst.getPeriEstCod())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(periEst.getCarreraCursoNombre())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(periEst.getEstudioNombre())); %> </td>
@@ -149,6 +149,7 @@
                         <h4 class="modal-title">Estudio</h4>
                     </div>
                     <div class="modal-body">
+                        <p>Se ingresaran los estudios que correspondan con este periodo</p>
                         <div class="row">
                             <label class="radio-inline"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" value="carrera">Carrera</label>
                             <label class="radio-inline"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" value="curso">Curso</label>
@@ -359,6 +360,10 @@
 
                                      if (obj.tipoMensaje != 'ERROR')
                                      {
+                                         $(function () {
+                                            $('#PopUpAgregar').modal('toggle');
+                                         });
+                                         MostrarMensaje(obj.tipoMensaje, obj.mensaje);
                                          location.reload();
                                      } else
                                      {
@@ -374,6 +379,76 @@
             </script>
 
         </div>
-                                     
+                 
+                                 
+                                 <!-- PopUp para Eliminar -->
+        
+        <div id="PopUpEliminar"  class="modal fade" role="dialog">
+           
+            <!-- Modal -->
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Eliminar</h4>
+                  </div>
+                  <div class="modal-body">
+
+                      <p>Eliminar : <label name="elim_nombre" id="elim_nombre"></label></p>
+                      <p>Quiere proceder?</p>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button name="elim_boton_confirmar" id="elim_boton_confirmar" type="button" class="btn btn-danger" data-codigo="">Eliminar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    
+                    $('.btn_eliminar').on('click', function(e) {
+                        
+                        var codigo = $(this).data("codigo");
+                        var nombre = $(this).data("nombre");
+                        
+                        $('#elim_nombre').text(nombre);
+                        $('#elim_boton_confirmar').data('codigo', codigo);
+                        
+                        
+                      });
+                      
+                      $('#elim_boton_confirmar').on('click', function(e) {
+                            var PeriCod = $('#PeriCod').val();
+                            var codigo = $('#elim_boton_confirmar').data('codigo');
+                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudio', {
+                                        pPeriCod: PeriCod, 
+                                        pPeriEstCod: codigo,
+                                        pAction: "<% out.print(Modo.DELETE);%>"
+                                     }, function (responseText) {
+                                         var obj = JSON.parse(responseText);
+                                         
+                                         if (obj.tipoMensaje != 'ERROR')
+                                         {
+                                             location.reload();
+                                         } else
+                                         {
+                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                         }
+
+                                     });
+
+                             $(function () {
+                                     $('#PopUpEliminar').modal('toggle');
+                                  });
+                     
+                      });
+
+                });
+            </script>
+        </div>
+
+        <!------------------------------------------------->
     </body>
 </html>

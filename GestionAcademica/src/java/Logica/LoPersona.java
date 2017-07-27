@@ -7,6 +7,7 @@ package Logica;
 
 import Entidad.Escolaridad;
 import Entidad.Inscripcion;
+import Entidad.MateriaRevalida;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
@@ -264,14 +265,20 @@ public class LoPersona implements Interfaz.InPersona{
     
     public ArrayList<SDT_PersonaEstudio> ObtenerEstudios(Long PerCod)
     {
-        ArrayList<SDT_PersonaEstudio> lstEstudios = null;
-        Retorno_MsgObj retorno = LoEscolaridad.GetInstancia().obtenerListaByAlumno(PerCod);
+        ArrayList<SDT_PersonaEstudio> lstEstudios = new ArrayList<>();;
         
+        Retorno_MsgObj inscripcion                  = LoInscripcion.GetInstancia().obtenerListaByAlumno(PerCod);
+        for(Object objeto : inscripcion.getLstObjetos())
+        {
+            lstEstudios  = PersonaAgregarEstudio(lstEstudios, null, (Inscripcion) objeto);
+        }
+        
+        Retorno_MsgObj retorno = LoEscolaridad.GetInstancia().obtenerListaByAlumno(PerCod);
         
         if(!retorno.SurgioErrorListaRequerida())
         {
 
-            lstEstudios = new ArrayList<>();
+            
                     
             for(Object objeto : retorno.getLstObjetos())
             {
@@ -314,7 +321,17 @@ public class LoPersona implements Interfaz.InPersona{
         if(!existe){
             SDT_PersonaEstudio est = new SDT_PersonaEstudio();
             est.setInscripcion(inscripcion);
-            est.getEscolaridad().add(escolaridad);
+            
+            if(escolaridad != null) est.getEscolaridad().add(escolaridad);
+            
+            for(MateriaRevalida matRvl : inscripcion.getLstRevalidas())
+            {
+                Escolaridad esc = new Escolaridad();
+                esc.setAlumno(inscripcion.getAlumno());
+                esc.setEscCalVal(Double.NaN);
+                esc.setMateria(matRvl.getMateria());
+                est.getEscolaridad().add(esc);
+            }
             
             lstEstudio.add(est);
         }
