@@ -227,6 +227,22 @@ public class PeriodoEstudio implements Serializable {
         return pDocente;
     }
     
+    public boolean getExisteDocente(Long DocCod){
+        
+        boolean error;
+        PeriodoEstudioDocente pDocente = new PeriodoEstudioDocente();
+        
+        for(PeriodoEstudioDocente docente : this.lstDocente)
+        {
+            if(docente.getDocente().getPerCod().equals(DocCod))
+            {
+                pDocente = docente;
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public PeriodoEstudioDocumento getDocumentoById(Long DocCod){
         
         PeriodoEstudioDocumento pDocumento = new PeriodoEstudioDocumento();
@@ -241,6 +257,21 @@ public class PeriodoEstudio implements Serializable {
         }
         
         return pDocumento;
+    }
+    
+    public String getEstudioTipo()
+    {
+        if(this.Materia.getMatCod() != null)
+        {
+            return "MATERIA";
+        }
+        
+        if(this.Modulo.getModCod() != null)
+        {
+            return "MODULO";
+        }
+        
+        return "";
     }
     
     public String getCarreraCursoNombre()
