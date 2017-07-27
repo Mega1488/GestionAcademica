@@ -362,6 +362,26 @@ public class LoPersona implements Interfaz.InPersona{
         return false;
     }
     
+    public boolean PersonaRevalidaMateria(Long PerCod, Materia materia)
+    {
+        if(materia == null)
+        {
+            return false;
+        }
+        
+        ArrayList<SDT_PersonaEstudio> lstEstudio = this.ObtenerEstudios(PerCod);
+        
+        for(SDT_PersonaEstudio estudio : lstEstudio)
+        {
+            for(Escolaridad escolaridad : estudio.getEscolaridad())
+            {
+                if(escolaridad.getMateria() != null && materia != null)  if(escolaridad.getMateria().equals(materia)) return escolaridad.Revalida();
+            }
+        }
+        
+        return false;
+    }
+    
     public Boolean PersonaPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso)
     {
         return LoCalendario.GetInstancia().AlumnoPuedeDarExamen(PerCod, materia, modulo, curso);
