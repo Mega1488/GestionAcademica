@@ -261,12 +261,12 @@ public class PeriodoEstudio implements Serializable {
     
     public String getEstudioTipo()
     {
-        if(this.Materia.getMatCod() != null)
+        if(this.Materia != null)
         {
             return "MATERIA";
         }
         
-        if(this.Modulo.getModCod() != null)
+        if(this.Modulo != null)
         {
             return "MODULO";
         }

@@ -42,11 +42,11 @@
     if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
             
     //----------------------------------------------------------------------------------------------------
-    Persona persona             = new Persona();
-    Periodo per                 = new Periodo();
+    Persona persona                 = new Persona();
+    Periodo per                     = new Periodo();
 
-    List<Object> lstPer       = new ArrayList<>();
-    List<PeriodoEstudio> lstObjeto     = new ArrayList<>();
+    List<Object> lstPer             = new ArrayList<>();
+    List<PeriodoEstudio> lstObjeto  = new ArrayList<>();
     
     Retorno_MsgObj retPersona   = lopersona.obtenerByMdlUsr(usuario);
     persona                     = (Persona) retPersona.getObjeto();
@@ -129,7 +129,6 @@
                             <tbody>
                             <% for(PeriodoEstudio perEstudio : lstObjeto)
                             {
-                                
                             %>
                             <tr>
                                 <td><%out.print( utilidad.NuloToVacio(perEstudio.getPeriEstCod())); %> </td>

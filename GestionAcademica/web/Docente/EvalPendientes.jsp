@@ -115,7 +115,7 @@
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getCalFch()));%> </td>
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchDsd()));%></td>
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchHst()));%></td>
-                                <td><a href="<% out.print(urlSistema); %>Docente/CalificarAlumnos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluaciones" class="glyphicon glyphicon-paste"/></td>
+                                <td><a href="<% out.print(urlSistema); %>Docente/CalificarAlumnos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluar" class="glyphicon glyphicon-paste"/></td>
                             </tr>
                             <%
                             }

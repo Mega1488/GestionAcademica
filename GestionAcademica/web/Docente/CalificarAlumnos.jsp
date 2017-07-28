@@ -83,27 +83,29 @@
                 
                         <div class=""> 
                             <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Docente/EvalPendientes.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(CalCod); %>">Regresar</a></div>
+                            <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
                         </div>
 
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead><tr>
-                                <th>Código</th>
-                                <th>Alumno</th>
-                                <th>Calificación</th>
-                                <th>Calificado por</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Validado por</th>
-                                <th>Fecha</th>
-                                <th></th>
-                                <th></th>
-                            </tr>
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Alumno</th>
+                                    <th>Calificación</th>
+                                    <th>Calificado por</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Validado por</th>
+                                    <th>Fecha</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
                             </thead>
 
                             <tbody>
                                 <% for(CalendarioAlumno calAlumno : lstObjeto)
                                 {
-
+                                    
                                 %>
                                 <tr>
                                     <td><% out.print( utilidad.NuloToVacio(calAlumno.getCalAlCod())); %> </td>
@@ -116,8 +118,6 @@
                                     <td><% out.print( utilidad.NuloToVacio(calAlumno.getEvlValFch())); %> </td>
                                     <td><% if(calAlumno.puedeCalificarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpCalificarAlumno' name='btn_calificar' id='btn_calificar' title='Calificar' class='glyphicon glyphicon-edit btn_calificar'/>"); %> </td>
                                     <td><% if(calAlumno.puedeEnviarToValidar())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpEnviarValidacion' name='btn_toVal' id='btn_toVal' title='Enviar a validación' class='glyphicon glyphicon-log-out btn_toVal'/>"); %> </td>
-                                    <!--<td><% // if(calAlumno.puedeValidarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpEnviarCorreccion' name='btn_toCor' id='btn_toCor' title='Enviar a corrección' class='glyphicon glyphicon-log-out btn_toCor'/>"); %> </td>-->
-                                    <!--<td><% // if(calAlumno.puedeValidarse())  out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpValidarAlumno' name='btn_validar' id='btn_validar' title='Validar' class='glyphicon glyphicon-ok btn_validar'/>"); %> </td>-->
 
                                 </tr>
                                 <%
@@ -157,60 +157,64 @@
                 </div>
             </div>
             <script type="text/javascript">
-                $(document).ready(function() {
+                $(document).ready(function()
+                {
                     
-                    $('.btn_calificar').on('click', function(e) {
-                        
+                    $('.btn_calificar').on('click', function(e)
+                    {
                         var codigo = $(this).data("codigo");
-                        var CalCod = $('#CalCod').val();
+                        var CalCod = $('#CalCod').val();                        
                         
                         $('#cal_boton_confirmar').data('codigo', codigo);
                         
-                        $.post('<% out.print(urlSistema); %>ABM_CalendarioAlumno', {
-                                pCalCod: CalCod,
-                                pCalAlCod: codigo,
-                                pAction: "OBTENER"
-                            }, function (responseText) {
-                                var alumno = JSON.parse(responseText);
-                                
-                                $('#cal_nombre').text(alumno.alumno.nombreCompleto);
-                                $('#cal_documento').text(alumno.alumno.perDoc);
-                                $('#cal_EvlCalVal').val(alumno.evlCalVal);
-                                $('#cal_EvlCalObs').val(alumno.evlCalObs);
-                                
+                        $.post('<% out.print(urlSistema); %>ABM_CalendarioAlumno',
+                        {
+                            pCalCod: CalCod,
+                            pCalAlCod: codigo,
+                            pAction: "OBTENER"
+                        }
+                        , function (responseText)
+                        {
+                            var alumno = JSON.parse(responseText);
+
+                            $('#cal_nombre').text(alumno.alumno.nombreCompleto);
+                            $('#cal_documento').text(alumno.alumno.perDoc);
+                            $('#cal_EvlCalVal').val(alumno.evlCalVal);
+                            $('#cal_EvlCalObs').val(alumno.evlCalObs);
                         });
 
-                      });
+                    });
                     
-                    $('#cal_boton_confirmar').on('click', function(e) {
+                    $('#cal_boton_confirmar').on('click', function(e)
+                    {
                         var codigo = $(this).data("codigo");
                         var CalCod = $('#CalCod').val();
                         var calificacion = $('#cal_EvlCalVal').val();
                         var observaciones =$('#cal_EvlCalObs').val();
                         
-                        $.post('<% out.print(urlSistema); %>ABM_CalendarioAlumno', {
+                        $.post('<% out.print(urlSistema); %>ABM_CalendarioAlumno',
+                        {
                                 pCalCod: CalCod,
                                 pCalAlCod: codigo,
                                 pEvlCalVal: calificacion,
                                 pEvlCalObs: observaciones,
                                 pAction: "<% out.print(Modo.UPDATE); %>"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
-                                
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-                                    location.reload();
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-                                
+                        }
+                        , function (responseText)
+                        {
+                            var obj = JSON.parse(responseText);
+
+                            if (obj.tipoMensaje != 'ERROR')
+                            {
+                                location.reload();
+                            }
+                            else
+                            {
+                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                            }   
                         });
-
-                      });
-                   
-
-            });
+                    });
+                });
             </script>
         </div>
                                      
@@ -293,7 +297,5 @@
             });
             </script>
         </div>
-        
-        <!------------------------------------------------->
     </body>
 </html>
