@@ -53,6 +53,7 @@ public class Sitios {
         lstDocente.add("EstudiosDictados.jsp");
         lstDocente.add("EstudioDocumentos.jsp");
         lstDocente.add("EvalPendientes.jsp");
+        lstDocente.add("CalificarAlumnos.jsp");
     }
 
     public ArrayList<String> getLstSinSeguridad() {

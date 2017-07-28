@@ -210,6 +210,22 @@ public class Calendario implements Serializable {
         return pDocente;
     }
     
+    public CalendarioDocente getDocenteByPersona(Long PerCod){
+        
+        CalendarioDocente pDocente = new CalendarioDocente();
+        
+        for(CalendarioDocente docente : this.lstDocentes)
+        {
+            if(docente.getDocente().getPerCod().equals(PerCod))
+            {
+                pDocente = docente;
+                break;
+            }
+        }
+        
+        return pDocente;
+    }
+    
     public Boolean existeAlumno(Long PerCod){
         for(CalendarioAlumno calAlumno : this.lstAlumnos)
         {

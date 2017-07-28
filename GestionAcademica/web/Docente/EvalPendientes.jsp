@@ -1,31 +1,25 @@
 <%-- 
     Document   : EvalPendientes
-    Created on : jul 23, 2017, 3:43:29 p.m.
+    Created on : jul 27, 2017, 3:06:54 p.m.
     Author     : aa
 --%>
 
-<%@page import="Entidad.Evaluacion"%>
-<%@page import="Entidad.PeriodoEstudio"%>
-<%@page import="Entidad.PeriodoEstudioDocente"%>
-<%@page import="Logica.LoPeriodo"%>
-<%@page import="Entidad.Periodo"%>
-<%@page import="java.time.Period"%>
-<%@page import="SDT.SDT_PersonaEstudio"%>
-<%@page import="Entidad.Persona"%>
 <%@page import="Logica.LoPersona"%>
-<%@page import="Enumerado.TipoMensaje"%>
-<%@page import="java.util.List"%>
+<%@page import="Entidad.Calendario"%>
+<%@page import="Entidad.Persona"%>
+<%@page import="Persistencia.PerCalendario"%>
 <%@page import="java.util.ArrayList"%>
-<%@page import="Logica.Seguridad"%>
+<%@page import="java.util.List"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
-<%@page import="Utiles.Utilidades"%>
+<%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-
 <%
+    PerCalendario perCal        = new PerCalendario();
     LoPersona lopersona         = LoPersona.GetInstancia();
-    LoPeriodo loPer             = LoPeriodo.GetInstancia();
+//    LoPeriodo loPer             = LoPeriodo.GetInstancia();
     Utilidades utilidad         = Utilidades.GetInstancia();
     String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
@@ -43,41 +37,21 @@
             
     //----------------------------------------------------------------------------------------------------
     Persona persona             = new Persona();
-    Periodo per                 = new Periodo();
 
-    List<Object> lstPer       = new ArrayList<>();
-    List<PeriodoEstudio> lstObjeto     = new ArrayList<>();
-    
     Retorno_MsgObj retPersona   = lopersona.obtenerByMdlUsr(usuario);
     persona                     = (Persona) retPersona.getObjeto();
+
+    List<Object> lstObjeto       = new ArrayList<>();
+
+    Retorno_MsgObj retorno   = perCal.obtenerByDocente(persona.getPerCod());
     
-    Retorno_MsgObj retorno      = loPer.obtenerLista();
-    
-    if(!retorno.SurgioError() && !retPersona.SurgioErrorObjetoRequerido())
+    if(!retorno.SurgioErrorListaRequerida())
     {
-        lstPer = retorno.getLstObjetos();
-        for(Object obj : lstPer)
-        {
-            per = (Periodo) obj;
-            for(PeriodoEstudio periodoEstudio : per.getLstEstudio())
-            {
-                if(periodoEstudio.getExisteDocente(persona.getPerCod()))
-                {           
-                    lstObjeto.add(periodoEstudio);
-                }
-            }
-        }
+        lstObjeto = retorno.getLstObjetos();
     }
     else
     {
-        if (retorno.SurgioError())
-        {
-            out.print(retorno.getMensaje().toString());
-        }
-        else
-        {
-            out.print(retPersona.getMensaje().toString());
-        }
+        out.print(retorno.getMensaje().toString());
     }
     
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
@@ -88,7 +62,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Estudios | Docente</title>
+        <title>Sistema de Gestión Académica - Evaluaciones | Docente</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>
@@ -106,7 +80,7 @@
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
                         
                         <div class="contenedor-titulo">    
-                            <p>Estudios</p>
+                            <p>Calendario</p>
                         </div>
                 
                         <div class=""> 
@@ -117,28 +91,31 @@
                             <thead>
                                 <tr>
                                     <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Tipo de Estudio</th>
-                                    <th>Alumnos</th>
-                                    <th>Docentes</th>
+                                    <th>Evaluación</th>
+                                    <th>Carrera/Curso</th>
+                                    <th>Estudio</th>
+                                    <th>Fecha</th>
+                                    <th>Fecha Desde</th>
+                                    <th>Fecha Hasta</th>
                                     <th></th>
                                     <th></th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                            <% for(PeriodoEstudio perEstudio : lstObjeto)
+                            <% for(Object objeto : lstObjeto)
                             {
-                                
+                                Calendario calendario = (Calendario) objeto;
                             %>
                             <tr>
-                                <td><%out.print( utilidad.NuloToVacio(perEstudio.getPeriEstCod())); %> </td>
-                                <td><%out.print( utilidad.NuloToVacio(perEstudio.getEstudioNombre())); %> </td>
-                                <td><%out.print( utilidad.NuloToVacio(perEstudio.getEstudioTipo()));%></td>
-                                <td><% out.print( utilidad.NuloToVacio(perEstudio.getCantidadAlumnos())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio((perEstudio.getCantidadDocente())));%> </td>
-                                <td><a href="<% out.print(urlSistema); %>Docente/EstudioDocumentos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(perEstudio.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-file"/></td>
-                                <td><a href="<% out.print(urlSistema); %>Docente/EvalPendientes.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(perEstudio.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluaciones" class="glyphicon glyphicon-paste"/></td>
+                                <td><%out.print( utilidad.NuloToVacio(calendario.getCalCod())); %> </td>
+                                <td><%out.print( utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
+                                <td><%out.print( utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre()));%></td>
+                                <td><% out.print( utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                <td><% out.print( utilidad.NuloToVacio(calendario.getCalFch()));%> </td>
+                                <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchDsd()));%></td>
+                                <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchHst()));%></td>
+                                <td><a href="<% out.print(urlSistema); %>Docente/CalificarAlumnos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluaciones" class="glyphicon glyphicon-paste"/></td>
                             </tr>
                             <%
                             }

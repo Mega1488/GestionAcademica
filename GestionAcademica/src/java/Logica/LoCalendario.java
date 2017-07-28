@@ -232,7 +232,7 @@ public class LoCalendario implements InABMGenerico{
         
         Persona persona = new Persona();
         if(usuario != null) persona = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
-        
+
         if(persona != null)
         {
             if(persona.getPerEsAdm())
@@ -243,7 +243,7 @@ public class LoCalendario implements InABMGenerico{
             {
                 if(persona.getPerEsDoc())
                 {
-                    if(calendario.getDocenteById(persona.getPerCod()).getCalDocCod() != null)
+                    if(calendario.getDocenteByPersona(persona.getPerCod()).getCalDocCod() != null)
                     {
                         for(CalendarioAlumno alumno : calendario.getLstAlumnos())
                         {
