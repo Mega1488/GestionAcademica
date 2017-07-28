@@ -127,13 +127,16 @@ public class LoPeriodo implements InABMGenerico{
                 for(Object objeto : lstModulo)
                 {
                     Modulo mdl = (Modulo) objeto;
-
-                    PeriodoEstudio periEstudio = new PeriodoEstudio();
-                    periEstudio.setModulo(mdl);
-                    periEstudio.setPeriodo(periodo);
-                    periodo.getLstEstudio().add(periEstudio);
                     
-                    modAgregados += 1;
+                    if(!periodo.PeriodoPoseeModulo(mdl.getModCod()))
+                    {
+                        PeriodoEstudio periEstudio = new PeriodoEstudio();
+                        periEstudio.setModulo(mdl);
+                        periEstudio.setPeriodo(periodo);
+                        periodo.getLstEstudio().add(periEstudio);
+
+                        modAgregados += 1;
+                    }
                 }
             }
         }
@@ -142,7 +145,6 @@ public class LoPeriodo implements InABMGenerico{
         //--------------------------------------------------------------------------------------------------------------------------------------------
         if(plan != null)
         {
-            
             List<Object> lstMateria = LoCarrera.GetInstancia().MateriaPorPeriodo(plan.getPlaEstCod(), periodo.getPerTpo(), periodo.getPerVal()).getLstObjetos();
 
             if(lstMateria != null)
@@ -150,17 +152,20 @@ public class LoPeriodo implements InABMGenerico{
                 for(Object objeto : lstMateria)
                 {
                     Materia mat = (Materia) objeto;
+                    if(!periodo.PeriodoPoseeMateria(mat.getMatCod()))
+                    {
+                        PeriodoEstudio periEstudio = new PeriodoEstudio();
+                        periEstudio.setMateria(mat);
+                        periEstudio.setPeriodo(periodo);
+                        periodo.getLstEstudio().add(periEstudio);
 
-                    PeriodoEstudio periEstudio = new PeriodoEstudio();
-                    periEstudio.setMateria(mat);
-                    periEstudio.setPeriodo(periodo);
-                    periodo.getLstEstudio().add(periEstudio);
-                    
-                    matAgregadas += 1;
+                        matAgregadas += 1;
+                    }
                 }
             }
             
         }
+        
         
         Retorno_MsgObj retorno = (Retorno_MsgObj) perPeriodo.actualizar(periodo);
         

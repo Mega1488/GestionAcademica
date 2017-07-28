@@ -105,8 +105,8 @@ public class ABM_PeriodoEstudio extends HttpServlet {
 
             PeriodoEstudio periEstudio = this.ValidarPeriodoEstudio(request, null);
             
-            Curso curso         = new Curso();
-            PlanEstudio plan    = new PlanEstudio();
+            Curso curso         = null;
+            PlanEstudio plan    = null;
                 
             String 	CodigoEstudio   = request.getParameter("pCodigoEstudio");
             String 	tipoEstudio	= request.getParameter("pTipoEstudio");
@@ -276,7 +276,6 @@ public class ABM_PeriodoEstudio extends HttpServlet {
         
         
 
-        System.err.println("PeriCod" + PeriCod);
         //------------------------------------------------------------------------------------------
         //Validaciones
         //------------------------------------------------------------------------------------------

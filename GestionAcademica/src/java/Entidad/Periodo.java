@@ -140,6 +140,24 @@ public class Periodo implements Serializable {
     public String getPerTpoNombre() {
         return PerTpo.getTipoPeriodoNombre();
     }
+    
+    public Boolean PeriodoPoseeModulo(Long ModCod)
+    {
+        for(PeriodoEstudio est : this.lstEstudio)
+        {
+            if(est.getModulo() != null) if(est.getModulo().getModCod().equals(ModCod)) return true;
+        }
+        return false;
+    }
+    
+    public Boolean PeriodoPoseeMateria(Long MatCod)
+    {
+        for(PeriodoEstudio est : this.lstEstudio)
+        {
+            if(est.getMateria() != null) if(est.getMateria().getMatCod().equals(MatCod)) return true;
+        }
+        return false;
+    }
 
 
     @Override
