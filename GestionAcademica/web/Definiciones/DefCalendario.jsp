@@ -39,7 +39,7 @@
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CalCod       = request.getParameter("pCalCod");
-    String js_redirect  = "window.location.replace('" + urlSistema +  "Definiciones/DefCalendarioWW.jsp');";
+    
 
     Calendario calendario     = new Calendario();
     
@@ -70,6 +70,12 @@
         case UPDATE: CamposActivos = "enabled";
             break;
     }
+    
+    String ret      = request.getParameter("RET");
+    String urlRet   = urlSistema + "Definiciones/DefCalendarioWW.jsp";
+    if(ret != null) if(!ret.isEmpty()) urlRet = urlSistema + "Definiciones/DefCalendarioGrid.jsp";
+    
+    String js_redirect  = "window.location.replace('" + urlRet +  "');";
     
 %>
 
@@ -153,7 +159,7 @@
                         </div>
                 
                         <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlRet); %>">Regresar</a></div>
                         </div>
                 
                         <div style="display:none" id="datos_ocultos" name="datos_ocultos">

@@ -21,11 +21,17 @@ import Enumerado.EstadoCalendarioEvaluacion;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
 import Persistencia.PerCalendario;
+import SDT.SDT_Evento;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -75,11 +81,45 @@ public class LoCalendario implements InABMGenerico{
     }
     
     public Retorno_MsgObj guardarLista(List<Object> lstCalendario){
+        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
         Retorno_MsgObj retornoObj = new Retorno_MsgObj();
         
         for(Object objeto : lstCalendario)
         {
             Calendario calendario = (Calendario) objeto;
+            
+            if(calendario.getCalFch() != null )
+            {
+                try {
+                    String fecha = sdf.format(new Date(calendario.getCalFch().getTime() + TimeUnit.DAYS.toMillis(1)));
+                    calendario.setCalFch(sdf.parse(fecha));
+                }catch (ParseException ex) {
+                        Logger.getLogger(LoCalendario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
+            if(calendario.getEvlInsFchDsd() != null )
+            {
+                try {
+                    String fecha = sdf.format(new Date(calendario.getEvlInsFchDsd().getTime() + TimeUnit.DAYS.toMillis(1)));
+                    calendario.setEvlInsFchDsd(sdf.parse(fecha));
+                }catch (ParseException ex) {
+                        Logger.getLogger(LoCalendario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
+            
+            if(calendario.getEvlInsFchHst() != null )
+            {
+                try {
+                    String fecha = sdf.format(new Date(calendario.getEvlInsFchHst().getTime() + TimeUnit.DAYS.toMillis(1)));
+                    calendario.setEvlInsFchHst(sdf.parse(fecha));
+                }catch (ParseException ex) {
+                        Logger.getLogger(LoCalendario.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            }
 
             if(calendario.getEvaluacion().getEvlCod() !=null) calendario.setEvaluacion((Evaluacion) LoEvaluacion.GetInstancia().obtener(calendario.getEvaluacion().getEvlCod()).getObjeto());
 
@@ -162,6 +202,83 @@ public class LoCalendario implements InABMGenerico{
         retorno.setLstObjetos(lstRetorno);
         
         return retorno;
+    }
+    
+    public Retorno_MsgObj ObtenerListaPendiente(Long PerCod)
+    {
+        Retorno_MsgObj retorno  =  perCalendario.obtenerByAlumno(PerCod);
+        List<Object> lstRetorno = new ArrayList<>();
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                Calendario calendar = (Calendario) objeto;
+                if(!calendar.getAlumnoByPersona(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
+                {
+                    lstRetorno.add(objeto);
+                }
+            }
+        }
+        
+        retorno.setLstObjetos(lstRetorno);
+        
+        return retorno;
+    }
+    
+    public ArrayList<SDT_Evento> ObtenerEventoTodosCalendario(){
+        SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
+        ArrayList<SDT_Evento> lstEvento = new ArrayList<>();
+        Retorno_MsgObj retorno = this.obtenerLista();
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                SDT_Evento evento   = new SDT_Evento();
+                Calendario calendar = (Calendario) objeto;
+                
+                evento.setId(calendar.getCalCod());
+                evento.setAllDay(Boolean.TRUE);
+                evento.setDurationEditable(Boolean.FALSE);
+                evento.setEditable(Boolean.FALSE);
+                evento.setStart(calendar.getCalFch());
+                evento.setResourceEditable(Boolean.FALSE);
+                evento.setStartEditable(Boolean.FALSE);
+                evento.setTitle(calendar.getEvaluacion().getEvlNom() + " - " + calendar.getEvaluacion().getEstudioNombre());
+                evento.setDescription(calendar.getEvaluacion().getCarreraCursoNombre() + " - " + calendar.getEvaluacion().getEstudioNombre() + " " + calendar.getEvaluacion().getEvlNom());
+                
+                lstEvento.add(evento);
+                
+                //Si es una evaluacion que requiere un plazo, agrego como evento el periodo de inscripcion
+                if(!calendar.getEvaluacion().getTpoEvl().getTpoEvlInsAut())
+                {
+                    SDT_Evento evPeriodo   = new SDT_Evento();
+                    
+                    String fechaHasta = sdf.format(new Date(calendar.getEvlInsFchHst().getTime() + TimeUnit.DAYS.toMillis(1)));
+                    
+                    evPeriodo.setId(calendar.getCalCod());
+                    evPeriodo.setAllDay(Boolean.TRUE);
+                    evPeriodo.setDurationEditable(Boolean.FALSE);
+                    evPeriodo.setEditable(Boolean.FALSE);
+                    evPeriodo.setStart(calendar.getEvlInsFchDsd());
+                    try {
+                        evPeriodo.setEnd(sdf.parse(fechaHasta));
+                    } catch (ParseException ex) {
+                        Logger.getLogger(LoCalendario.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    evPeriodo.setResourceEditable(Boolean.FALSE);
+                    evPeriodo.setStartEditable(Boolean.FALSE);
+                    evPeriodo.setTitle("Inscripción: " + calendar.getEvaluacion().getEvlNom() + " - " + calendar.getEvaluacion().getEstudioNombre());
+                    evPeriodo.setDescription("Inscripción: " + calendar.getEvaluacion().getCarreraCursoNombre() + " - " + calendar.getEvaluacion().getEstudioNombre() + " " + calendar.getEvaluacion().getEvlNom());
+
+                    lstEvento.add(evPeriodo); 
+                }
+                
+            }
+        }
+        
+        return lstEvento;
     }
     
     //------------------------------------------------------------------------------------

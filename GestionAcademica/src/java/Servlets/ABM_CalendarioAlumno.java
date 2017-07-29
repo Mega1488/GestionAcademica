@@ -374,7 +374,10 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         String EvlCalVal= request.getParameter("pEvlCalVal");
         String EvlCalObs= request.getParameter("pEvlCalObs");
         String EvlValObs= request.getParameter("pEvlValObs");
-        
+
+        System.err.println("Calcod: " + CalCod);
+        System.err.println("CalAlCod: " + CalAlCod);
+
         //------------------------------------------------------------------------------------------
         //Validaciones
         //------------------------------------------------------------------------------------------

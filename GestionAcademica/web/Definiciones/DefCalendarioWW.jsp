@@ -108,8 +108,8 @@
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
-                                <td><% out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-filtro='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpInscPeriodo' name='btn_inscribirAlumno' id='btn_inscribirAlumno' title='Inscribir alumnos' class='fa fa-group btn_inscribirAlumno'/>"); %></td>
-                                <td><% out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-filtro='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpInscPeriodo' name='btn_inscribirDocente' id='btn_inscribirDocente' title='Inscribir docentes' class='fa fa-user btn_inscribirDocente'/>"); %></td>
+                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Alumnos' class='fa fa-group'/>"); %></td>
+                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioDocenteSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Docentes' class='fa fa-group'/>"); %></td>
 
                             </tr>
                             <%
@@ -122,7 +122,7 @@
             </div>
         </div>
              
-        <!-- Agregar periodo ---------------------------------------------------------------------------------------------------------------------------------------->
+        <!-- Agregar calendario ---------------------------------------------------------------------------------------------------------------------------------------->
                         
         <div id="PopUpAgregar" class="modal fade" role="dialog">
                <!-- Modal -->
@@ -163,43 +163,6 @@
                 </div>
         </div>
         
-        <!-- Inscribir periodo ---------------------------------------------------------------------------------------------------------------------------------------->
-
-        <div id="PopUpInscPeriodo" class="modal fade" role="dialog">
-            <!-- Modal -->
-             <div class="modal-dialog modal-lg" >
-                 <!-- Modal content-->
-                 <div class="modal-content">
-                   <div class="modal-header">
-                     <button type="button" class="close" data-dismiss="modal">&times;</button>
-                     <h4 class="modal-title">Periodos</h4>
-                  </div>
-
-                     <div class="modal-body">
-
-                         <div>
-                             <input type="hidden" name="CalCod" id="CalCod" value="">
-                             <input type="hidden" name="insTpo" id="insTpo" value="">
-                             <table name="PopUpTblPeriodos" id="PopUpTblPeriodos" class="table table-striped" cellspacing="0" width="100%">
-                                 <thead>
-                                     <tr>
-                                         <th>Código</th>
-                                         <th>Carrera / Curso</th>
-                                         <th>Estudio</th>
-                                         <th>Periodo</th>
-                                         <th>Tipo</th>
-                                         <th>Fecha de inicio</th>
-                                     </tr>
-                                 </thead>
-                             </table>
-                         </div>
-                   </div>
-                   <div class="modal-footer">
-                     <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
-                   </div>
-                 </div>
-             </div>
-        </div>
 
         <script type="text/javascript">
 
@@ -260,20 +223,24 @@
                               for(i=0;i<count;i++)
                               {
 
-                                      var calendario = JSON.parse('{"evaluacion":{"evlCod":null},"calFch":null,"calCod":null,"evlInsFchHst":null,"evlInsFchDsd":null}');
-                                      var objeto  = rows.data()[i];
-                                      var fila    = rows.nodes()[i];
+                                    var calendario = JSON.parse('{"evaluacion":{"evlCod":null},"calFch":null,"calCod":null,"evlInsFchHst":null,"evlInsFchDsd":null}');
+                                    var objeto  = rows.data()[i];
+                                    var fila    = rows.nodes()[i];
 
-                                      var fechaEvaluacion = fila.cells[4].lastChild.value;
-                                      var fechaDesde      = fila.cells[5].lastChild.value;
-                                      var fechaHasta      = fila.cells[6].lastChild.value;
+                                    var fechaEvaluacion = fila.cells[4].lastChild.value;
+                                    var fechaDesde      = fila.cells[5].lastChild.value;
+                                    var fechaHasta      = fila.cells[6].lastChild.value;
 
-                                      calendario.evaluacion.evlCod = objeto.evlCod;
-                                      calendario.calFch = fechaEvaluacion;
+                                    calendario.evaluacion.evlCod = objeto.evlCod;
+                                    calendario.calFch = fechaEvaluacion;
+
+                                    if(!objeto.tpoEvl.tpoEvlInsAut)
+                                    {
                                       calendario.evlInsFchDsd = fechaDesde;
                                       calendario.evlInsFchHst = fechaHasta;
+                                    }
 
-                                      listaCalendario[i] = calendario;
+                                    listaCalendario[i] = calendario;
 
                               }
 
@@ -306,45 +273,6 @@
 
                   });
                   
-                $(document).on('click', "#btn_inscribirAlumno", function() {
-                    $('#CalCod').val($(this).data("codigo"));
-                    $('#insTpo').val("ALUMNO");
-                    var table     = $('#PopUpTblPeriodos').DataTable();
-                    var filtro    = '"' + $(this).data("filtro") + '"';
-                    table.search(filtro).draw();
-                  });
-                  
-                  $(document).on('click', "#btn_inscribirDocente", function() {
-                    $('#CalCod').val($(this).data("codigo"));
-                    $('#insTpo').val("DOCENTE");
-                    var table     = $('#PopUpTblPeriodos').DataTable();
-                    var filtro    = '"' + $(this).data("filtro") + '"';
-                    table.search(filtro).draw();
-                  });
-                  
-                $(document).on('click', ".Pop_Seleccionar", function() {
-                    var CalCod      = $('#CalCod').val();
-                    var insTpo      = $('#insTpo').val();
-                    var PeriEstCod  = $(this).data("codigo");
-        
-                    $.post('<% out.print(urlSistema); %>ABM_Calendario', {
-                                    pCalCod: CalCod,
-                                    pPeriEstCod: PeriEstCod,
-                                    pInsTpo: insTpo,
-                                    pAction: "INSCRIBIR_PERIODO"
-                                 }, function (responseText) {
-                                    
-                                    var obj = JSON.parse(responseText);
-                                    
-                                    $(function () {
-                                        $('#PopUpInscPeriodo').modal('toggle');
-                                     });
-                                        
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-
-                                 });
-                  });
-
                 $.post('<% out.print(urlSistema); %>ABM_Evaluacion', {
                       pAction : "POPUP_LISTAR"
                       }, function(responseText) {
@@ -412,59 +340,6 @@
                           } );
 
                   });
-
-                $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudio', {
-                pAction : "POPUP_LISTAR"
-                }, function(responseText) {
-
-                    var periodos = JSON.parse(responseText);
-                    
-                    $.each(periodos, function(f , periodo) {
-                        periodo.periEstCod = "<td> <a href='#' data-codigo='"+periodo.periEstCod +"' class='Pop_Seleccionar'>"+periodo.periEstCod+" </a> </td>";
-                    });
-
-                    $('#PopUpTblPeriodos').DataTable( {
-                        data: periodos,
-                        deferRender: true,
-                        bLengthChange : false, //thought this line could hide the LengthMenu
-                        pageLength: 10,
-                        select: {
-                            style:    'multi',
-                            selector: 'td:last-child'
-                        },
-                        language: {
-                            "lengthMenu": "Mostrando _MENU_ registros por página",
-                            "zeroRecords": "No se encontraron registros",
-                            "info": "Página _PAGE_ de _PAGES_",
-                            "infoEmpty": "No hay registros",
-                            "search":         "Buscar:",
-                            select: {
-                                    rows: {
-                                        _: "%d filas seleccionadas",
-                                        0: "",
-                                        1: "1 fila seleccionada"
-                                    }
-                                },
-                            "paginate": {
-                                    "first":      "Primera",
-                                    "last":       "Ultima",
-                                    "next":       "Siguiente",
-                                    "previous":   "Anterior"
-                                },
-                            "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                        },
-                        columns: [
-                            {"data": "periEstCod"},
-                            {"data": "carreraCursoNombre"},
-                            {"data": "estudioNombre"},
-                            {"data": "periodo.perVal"},
-                            {"data": "periodo.perTpoNombre"},
-                            {"data": "periodo.perFchIni"}
-                        ]
-
-                    } );
-
-            });
 
             });
         </script>

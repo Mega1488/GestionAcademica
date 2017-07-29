@@ -25,12 +25,14 @@ import org.hibernate.Transaction;
  * @author alvar
  */
 public class PerPersona implements Interfaz.InPersona{
-    
-   private Session sesion;
-   private Transaction tx;
-    
+
+    private Session sesion;
+    private Transaction tx;
+   
    private void iniciaOperacion() throws HibernateException {
+       
         try {
+                
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
         } catch (HibernateException ec) {
@@ -41,6 +43,9 @@ public class PerPersona implements Interfaz.InPersona{
 
     private Retorno_MsgObj manejaExcepcion(HibernateException he, Retorno_MsgObj retorno) throws HibernateException {
         tx.rollback();
+        
+        
+        
         String mensaje;
         
         Throwable cause = he.getCause();
@@ -83,7 +88,7 @@ public class PerPersona implements Interfaz.InPersona{
         } catch (HibernateException he) {
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -104,7 +109,7 @@ public class PerPersona implements Interfaz.InPersona{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -124,7 +129,7 @@ public class PerPersona implements Interfaz.InPersona{
 
                retorno = manejaExcepcion(he, retorno);
             } finally {
-                sesion.close();
+                sesion.clear();
             }
          return retorno;       
     }
@@ -143,7 +148,7 @@ public class PerPersona implements Interfaz.InPersona{
 
                retorno = manejaExcepcion(he, retorno);
             }  finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -166,8 +171,11 @@ public class PerPersona implements Interfaz.InPersona{
         } catch (HibernateException he) {
 
                retorno = manejaExcepcion(he, retorno);
-            }   finally {
-            sesion.close();
+            }   
+        finally {
+//            sesion.flush();
+            sesion.clear();
+  //          sesion.clear();
         }
         
         return retorno;
@@ -189,7 +197,7 @@ public class PerPersona implements Interfaz.InPersona{
         
             retorno = manejaExcepcion(he, retorno);
         }  finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -211,7 +219,7 @@ public class PerPersona implements Interfaz.InPersona{
 
                retorno = manejaExcepcion(he, retorno);
             }   finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -246,7 +254,7 @@ public class PerPersona implements Interfaz.InPersona{
         
             retorno = manejaExcepcion(he, retorno);
         }  finally {
-            sesion.close();
+            sesion.clear();
         }
         
         

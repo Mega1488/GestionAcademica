@@ -90,7 +90,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -117,7 +117,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -141,7 +141,7 @@ public class PerPeriodo implements InABMGenerico{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -164,7 +164,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -188,7 +188,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -219,7 +219,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -250,7 +250,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -263,7 +263,6 @@ public class PerPeriodo implements InABMGenerico{
         
         try {
             iniciaOperacion();
-            tx.commit();
             PeriodoEstudio periEstudio = (PeriodoEstudio) sesion.get(PeriodoEstudio.class, PeriEstCod);
             retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), periEstudio);
         } catch (HibernateException he) {
@@ -271,7 +270,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
 
@@ -295,7 +294,7 @@ public class PerPeriodo implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno; 

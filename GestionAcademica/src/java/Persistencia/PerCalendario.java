@@ -32,6 +32,8 @@ public class PerCalendario implements InABMGenerico{
         try {
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
+            
+            
         } catch (HibernateException ec) {
             ec.printStackTrace();
 
@@ -89,7 +91,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -116,7 +118,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -141,7 +143,7 @@ public class PerCalendario implements InABMGenerico{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -164,7 +166,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -177,7 +179,6 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findAll").list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
@@ -189,7 +190,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -203,7 +204,6 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findMateriaAlumno")
                     .setParameter("PerCod", PerCod)
                     .setParameter("MatCod", MatCod)
@@ -218,7 +218,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -229,7 +229,6 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findModuloAlumno")
                     .setParameter("PerCod", PerCod)
                     .setParameter("ModCod", ModCod)
@@ -244,7 +243,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -255,7 +254,6 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findCursoAlumno")
                     .setParameter("PerCod", PerCod)
                     .setParameter("CurCod", CurCod)
@@ -270,7 +268,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -281,7 +279,6 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findByAlumno")
                     .setParameter("PerCod", PerCod)
                     .list();
@@ -296,7 +293,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         
@@ -309,7 +306,6 @@ public class PerCalendario implements InABMGenerico{
 
         try {
             iniciaOperacion();
-            tx.commit();
             List<Object> listaRetorno = sesion.getNamedQuery("Calendario.findByDocente")
                     .setParameter("PerCod", PerCod)
                     .list();
@@ -323,7 +319,7 @@ public class PerCalendario implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }

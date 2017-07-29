@@ -67,10 +67,24 @@
     }
     else
     {
-        out.print(retorno.getMensaje().toString());
+        out.print(retornoEvl.getMensaje().toString());
     }
     
     String tblEvlVisible = (lstEvl.size() > 0 ? "" : "display: none;");
+    
+    List<Object> lstEvlPend = new ArrayList<>();
+    
+    Retorno_MsgObj retornoEvlPend = (Retorno_MsgObj) loCalendario.ObtenerListaPendiente(persona.getPerCod());
+    if(!retornoEvlPend.SurgioError())
+    {
+        lstEvlPend = retornoEvlPend.getLstObjetos();
+    }
+    else
+    {
+        out.print(retornoEvlPend.getMensaje().toString());
+    }
+    
+    String tblEvlPendVisible = (lstEvlPend.size() > 0 ? "" : "display: none;");
     
 %>
 <!DOCTYPE html>
@@ -99,7 +113,7 @@
                         
                         <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(persona.getPerCod()); %>">
                         
-                        <div name="Inscripcion disponible">
+                        <div name="InscripcionDisponible">
                             <h2 style=' <% out.print(tblVisible); %>'>Inscripciones</h2>
                             <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                                 <thead>
@@ -146,6 +160,39 @@
                                 %>
                             </table>
                         </div>
+                            
+                        <div name="EvaluacionPendiente">
+                            <h2 style=' <% out.print(tblEvlPendVisible); %>'>Pendientes</h2>
+                            <table style=' <% out.print(tblEvlPendVisible); %>' class='table table-hover'>
+                                <thead>
+                                    <tr>
+                                        <th>Carrera / Curso</th>
+                                        <th>Estudio</th>
+                                        <th>Evaluación</th>
+                                        <th>Fecha</th>
+                                        <th>Inscripción desde</th>
+                                        <th>Inscripcion hasta</th>
+                                    </tr>
+                                </thead>
+
+                                <% for(Object objeto : lstEvlPend)
+                                {
+                                 Calendario calendario = (Calendario) objeto;
+                                %>
+                                <tr>
+                                    <td><% out.print( utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom() )); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
+                                    
+                                </tr>
+                                <%
+                                }
+                                %>
+                            </table>
+                        </div>    
                         
                         <div name="EvaluacionesRealizadas"> 
                             <h2 style=' <% out.print(tblEvlVisible); %>'>Evaluaciones realizadas</h2>

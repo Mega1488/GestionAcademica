@@ -50,6 +50,9 @@
     
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
+    String ret      = request.getParameter("RET");
+    String urlRet   = urlSistema + "Definiciones/DefCalendarioWW.jsp";
+    if(ret != null) if(!ret.isEmpty()) urlRet = urlSistema + "Definiciones/DefCalendarioGrid.jsp";
 
 %>
 
@@ -80,12 +83,14 @@
                         </div>
                 
                         <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp">Regresar</a></div>
+                            <div class="" style="text-align: right;"><a href="<% out.print(urlRet); %>">Regresar</a></div>
                         </div>
         
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                            <a href="#" title="Inscribir periodo" name='btn_inscribirPeriodo' id='btn_inscribirPeriodo' class="fa fa-group" data-toggle="modal" data-target="#PopUpInscPeriodo"> </a>
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
                             <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
+                            <input type="hidden" name="popFiltro" id="popFiltro" value="<% out.print(((Calendario) retorno.getObjeto()).getEvaluacion().getEstudioNombre()); %>">
                         </div>
 
 
@@ -322,7 +327,131 @@
                                      
         <!------------------------------------------------->
         
-      
+        <!-- Inscribir periodo ---------------------------------------------------------------------------------------------------------------------------------------->
+
+        <div id="PopUpInscPeriodo" class="modal fade" role="dialog">
+            <!-- Modal -->
+             <div class="modal-dialog modal-lg" >
+                 <!-- Modal content-->
+                 <div class="modal-content">
+                   <div class="modal-header">
+                     <button type="button" class="close" data-dismiss="modal">&times;</button>
+                     <h4 class="modal-title">Periodos</h4>
+                  </div>
+
+                     <div class="modal-body">
+
+                         <div>
+                             <input type="hidden" name="insTpo" id="insTpo" value="">
+                             <table name="PopUpTblPeriodos" id="PopUpTblPeriodos" class="table table-striped" cellspacing="0" width="100%">
+                                 <thead>
+                                     <tr>
+                                         <th>Código</th>
+                                         <th>Carrera / Curso</th>
+                                         <th>Estudio</th>
+                                         <th>Periodo</th>
+                                         <th>Tipo</th>
+                                         <th>Fecha de inicio</th>
+                                     </tr>
+                                 </thead>
+                             </table>
+                         </div>
+                   </div>
+                   <div class="modal-footer">
+                     <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
+                   </div>
+                 </div>
+             </div>
+            
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    var filtro = $('#popFiltro').val();
+                    
+                    $(document).on('click', ".Pop_Seleccionar", function() {
+                        var CalCod      = $('#CalCod').val();
+                        var insTpo      = "DOCENTE";
+                        var PeriEstCod  = $(this).data("codigo");
+
+                        $.post('<% out.print(urlSistema); %>ABM_Calendario', {
+                                        pCalCod: CalCod,
+                                        pPeriEstCod: PeriEstCod,
+                                        pInsTpo: insTpo,
+                                        pAction: "INSCRIBIR_PERIODO"
+                                     }, function (responseText) {
+
+                                        var obj = JSON.parse(responseText);
+
+                                        $(function () {
+                                            $('#PopUpInscPeriodo').modal('toggle');
+                                         });
+
+                                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                        
+                                        location.reload();
+
+                        });
+                    });
+                    
+                    $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudio', {
+                            pAction : "POPUP_LISTAR"
+                            }, function(responseText) {
+
+                                var periodos = JSON.parse(responseText);
+
+                                $.each(periodos, function(f , periodo) {
+                                    periodo.periEstCod = "<td> <a href='#' data-codigo='"+periodo.periEstCod +"' class='Pop_Seleccionar'>"+periodo.periEstCod+" </a> </td>";
+                                });
+
+                                $('#PopUpTblPeriodos').DataTable( {
+                                    data: periodos,
+                                    deferRender: true,
+                                    bLengthChange : false, //thought this line could hide the LengthMenu
+                                    pageLength: 10,
+                                    select: {
+                                        style:    'multi',
+                                        selector: 'td:last-child'
+                                    },
+                                    search: {
+                                                "search": filtro
+                                              },
+                                    language: {
+                                        "lengthMenu": "Mostrando _MENU_ registros por página",
+                                        "zeroRecords": "No se encontraron registros",
+                                        "info": "Página _PAGE_ de _PAGES_",
+                                        "infoEmpty": "No hay registros",
+                                        "search":         "Buscar:",
+                                        select: {
+                                                rows: {
+                                                    _: "%d filas seleccionadas",
+                                                    0: "",
+                                                    1: "1 fila seleccionada"
+                                                }
+                                            },
+                                        "paginate": {
+                                                "first":      "Primera",
+                                                "last":       "Ultima",
+                                                "next":       "Siguiente",
+                                                "previous":   "Anterior"
+                                            },
+                                        "infoFiltered": "(Filtrado de _MAX_ registros)"
+                                    },
+                                    columns: [
+                                        {"data": "periEstCod"},
+                                        {"data": "carreraCursoNombre"},
+                                        {"data": "estudioNombre"},
+                                        {"data": "periodo.perVal"},
+                                        {"data": "periodo.perTpoNombre"},
+                                        {"data": "periodo.perFchIni"}
+                                    ]
+
+                                } );
+
+                        });
+                   
+
+            });
+            </script>
+        </div>
                                      
     </body>
 </html>

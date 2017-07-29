@@ -37,6 +37,35 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Estudios</title>
         <jsp:include page="/masterPage/head.jsp"/>
+       
+        <script>
+           
+
+            /*
+            function getOffset( el ) {
+                    var _x = 0;
+                    var _y = 0;
+                    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+                        _x += el.offsetLeft - el.scrollLeft;
+                        _y += el.offsetTop - el.scrollTop;
+                        el = el.offsetParent;
+                    }
+                    return { top: _y, left: _x };
+                }
+
+                var fromPoint = getOffset($('#first')[0]);
+                var toPoint = getOffset($('#second')[0]);
+
+                var from = function () {},
+                to = new String('to');
+                from.y = fromPoint.top+10;
+                from.x = fromPoint.left+10;
+                to.y = toPoint.top+10; 
+                to.x = toPoint.left+10;
+
+                $.line(from, to);
+            */
+        </script>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -54,6 +83,8 @@
                         <div class="contenedor-titulo">    
                             <p>Estudios</p>
                         </div>
+                        
+                        
                     </div>
                 </div>
             </div>
