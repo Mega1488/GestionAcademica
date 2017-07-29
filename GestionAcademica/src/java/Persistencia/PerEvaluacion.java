@@ -6,10 +6,8 @@
 package Persistencia;
 
 import Entidad.Evaluacion;
-import Entidad.TipoEvaluacion;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
-import Interfaz.InTipoEvaluacion;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;
@@ -89,7 +87,7 @@ public class PerEvaluacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -115,7 +113,7 @@ public class PerEvaluacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -139,7 +137,7 @@ public class PerEvaluacion implements InABMGenerico{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -161,7 +159,7 @@ public class PerEvaluacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         
@@ -186,7 +184,7 @@ public class PerEvaluacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;

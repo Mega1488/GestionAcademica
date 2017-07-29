@@ -48,7 +48,7 @@ public class PerParametro implements Interfaz.InParametro{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return pObjeto;
@@ -65,7 +65,7 @@ public class PerParametro implements Interfaz.InParametro{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
     }
 
@@ -79,7 +79,7 @@ public class PerParametro implements Interfaz.InParametro{
             iniciaOperacion();
             objetoRetorno = (Parametro) sesion.get(Parametro.class, codigo);            
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return objetoRetorno;

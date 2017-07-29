@@ -12,6 +12,8 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,7 +35,9 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "SOLICITUD")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Solicitud.findAll",       query = "SELECT t FROM Solicitud t")})
+    @NamedQuery(name = "Solicitud.findAll",       query = "SELECT t FROM Solicitud t order by t.SolFchIng desc"),
+    @NamedQuery(name = "Solicitud.findByAlumno",       query = "SELECT t FROM Solicitud t where t.Alumno.PerCod =:PerCod order by t.SolFchIng desc")
+})
 
 public class Solicitud implements Serializable {
 
@@ -48,17 +52,19 @@ public class Solicitud implements Serializable {
     @Column(name = "SolCod", nullable = false)
     private Long  SolCod;
 
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="AluPerCod", referencedColumnName = "PerCod")
     private Persona Alumno;
     
-    @ManyToOne(targetEntity = Persona.class, optional=false)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="FunPerCod", referencedColumnName = "PerCod")
     private Persona Funcionario;
     
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "SolTpo")
     private TipoSolicitud SolTpo;
     
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "SolEst")
     private EstadoSolicitud SolEst;
     

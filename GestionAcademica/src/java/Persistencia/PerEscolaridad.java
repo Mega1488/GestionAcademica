@@ -90,7 +90,7 @@ public class PerEscolaridad implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -116,7 +116,7 @@ public class PerEscolaridad implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -140,7 +140,7 @@ public class PerEscolaridad implements InABMGenerico{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -163,7 +163,7 @@ public class PerEscolaridad implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -187,7 +187,7 @@ public class PerEscolaridad implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -212,7 +212,7 @@ public class PerEscolaridad implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;

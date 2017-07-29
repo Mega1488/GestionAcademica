@@ -10,20 +10,37 @@ package Enumerado;
  * @author Alvaro
  */
 public enum EstadoSolicitud {
-    SIN_TOMAR(1), TOMADA(2), FINALIZADA(3);
+    SIN_TOMAR("Sin procesar", 1), 
+    TOMADA("En proceso", 2), 
+    FINALIZADA("Procesada", 3);
     
     EstadoSolicitud(){
-        
     }
     
     private int vEstSol;
+    private String vEstSolNom;
 
-    EstadoSolicitud(int pEstSol) {
+    EstadoSolicitud(String pEstSolNom, int pEstSol) {
         this.vEstSol = pEstSol;
+        this.vEstSolNom = pEstSolNom;
     }
 
     public int getEstadoSolicitud() {
         return vEstSol;
+    }
+    
+    public String getNombre() {
+        return vEstSolNom;
+    }
+    
+    public static EstadoSolicitud fromCode(int pCod) {
+        for (EstadoSolicitud estSol :EstadoSolicitud.values()){
+            if (estSol.getEstadoSolicitud() == pCod){
+                return estSol;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El estado de solicitud " + pCod + " is not supported!");
     }
     
 }

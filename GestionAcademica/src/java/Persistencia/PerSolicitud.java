@@ -5,10 +5,9 @@
  */
 package Persistencia;
 
-import Entidad.Curso;
-import Entidad.Modulo;
+import Entidad.Solicitud;
 import Enumerado.TipoMensaje;
-import Enumerado.TipoPeriodo;
+import Interfaz.InABMGenerico;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;
@@ -24,10 +23,10 @@ import org.hibernate.Transaction;
  *
  * @author alvar
  */
-public class PerCurso implements Interfaz.InCurso{
+public class PerSolicitud implements InABMGenerico{
     
-   private Session sesion;
-   private Transaction tx;
+    private Session sesion;
+    private Transaction tx;
     
    private void iniciaOperacion() throws HibernateException {
         try {
@@ -50,6 +49,9 @@ public class PerCurso implements Interfaz.InCurso{
                 case 1451:
                     mensaje = "Existen datos en otros registros";
                     break;
+                case 1062:
+                    mensaje = "Ya se ingreso el registro";
+                    break;
                 default: 
                     mensaje = cause.getMessage();
                     break;
@@ -68,18 +70,74 @@ public class PerCurso implements Interfaz.InCurso{
     }
 
     @Override
-    public Object guardar(Curso pCurso) {
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar curso", TipoMensaje.ERROR), pCurso);
+    public Object guardar(Object pObjeto) {
         
-        pCurso.setObjFchMod(new Date());
+        Solicitud solicitud = (Solicitud) pObjeto;
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), solicitud);
+
+        solicitud.setObjFchMod(new Date());
         
         try {
             iniciaOperacion();
-            pCurso.setCurCod((Long) sesion.save(pCurso));
+            solicitud.setSolCod((Long) sesion.save(solicitud));
             tx.commit();
             
-            retorno = new Retorno_MsgObj(new Mensajes("Curso guardado correctamente", TipoMensaje.MENSAJE), pCurso);
+            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), solicitud);
+            
         } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.clear();
+        }
+        
+        return retorno;
+    }
+    
+    @Override
+    public Object actualizar(Object pObjeto) {
+        
+        Solicitud solicitud = (Solicitud) pObjeto;
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), solicitud);
+
+        try {
+            solicitud.setObjFchMod(new Date());
+            iniciaOperacion();
+            sesion.update(solicitud);
+            tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE), solicitud);
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.clear();
+        }
+        
+        return retorno;
+    }
+
+    @Override
+    public Object eliminar(Object pObjeto) {
+        
+        Solicitud solicitud = (Solicitud) pObjeto;
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            sesion.delete(solicitud);
+            tx.commit();
+            
+            retorno = new Retorno_MsgObj(new Mensajes("Eliminado correctamente", TipoMensaje.MENSAJE), null);
+            
+        } catch (HibernateException he) {
+            
             retorno = manejaExcepcion(he, retorno);
         } finally {
             sesion.clear();
@@ -89,132 +147,76 @@ public class PerCurso implements Interfaz.InCurso{
     }
 
     @Override
-    public Object actualizar(Curso pCurso) {
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al actualizar curso", TipoMensaje.ERROR), pCurso);
+    public Retorno_MsgObj obtener(Object pObjeto) {
         
-        try {
-            pCurso.setObjFchMod(new Date());
-            System.err.println("Guardando curso: " + pCurso.getCurCod());
-           
-            iniciaOperacion();
-            sesion.update(pCurso);
-            tx.commit();
-            
-            retorno = new Retorno_MsgObj(new Mensajes("Curso actualizado correctamente", TipoMensaje.MENSAJE), pCurso);
-        } catch (HibernateException he) {
-            retorno = manejaExcepcion(he, retorno);
-      
-        } finally {
-            sesion.clear();
-        }
+        Long codigo = (Long) pObjeto;
         
-        return retorno;
-    }
-
-    @Override
-    public Object eliminar(Curso pCurso) {
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR));
-        try {
-            iniciaOperacion();
-            sesion.delete(pCurso);
-            tx.commit();
-            
-            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
-            
-        } catch (HibernateException he) {
-            retorno = manejaExcepcion(he, retorno);
-         
-        } finally {
-            sesion.clear();
-        }
-        return retorno;
-    }
-
-    @Override
-    public Retorno_MsgObj obtener(Long pCurCod) {
-       
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
-       
+        
         try {
-            
             iniciaOperacion();
-            Curso curso   = (Curso) sesion.get(Curso.class, pCurCod);
-            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), curso);
-        
+            Solicitud solicitud = (Solicitud) sesion.get(Solicitud.class, codigo);
+            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), solicitud);
+            
         } catch (HibernateException he) {
-        
+            
             retorno = manejaExcepcion(he, retorno);
-        }  finally {
+            
+        } finally {
             sesion.clear();
         }
+
         return retorno;
     }
-
+    
     @Override
     public Retorno_MsgObj obtenerLista() {
+
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
-        
+
         try {
-            
             iniciaOperacion();
             
-            List<Object> listaRetorno =  sesion.getNamedQuery("Curso.findAll").list();
+            List<Object> listaRetorno = sesion.getNamedQuery("Solicitud.findAll").list();
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
             retorno.setLstObjetos(listaRetorno);
-        
+            
         } catch (HibernateException he) {
-        
-           retorno = manejaExcepcion(he, retorno);
-        }  finally {
-            sesion.clear();
-        }
-
-        return retorno;
-    }
-    
-    public Retorno_MsgObj obtenerModuloPorPeriodo(Long CurCod, TipoPeriodo tpoPer, Double perVal) {
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
-        
-        try {
             
-            iniciaOperacion();
-            
-            List<Object> listaRetorno =  sesion.getNamedQuery("Modulo.findByPeriodo")
-                    .setParameter("TpoPer", tpoPer)
-                    .setParameter("PerVal", perVal)
-                    .setParameter("CurCod", CurCod)
-                    .list();
-            
-            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
-            retorno.setLstObjetos(listaRetorno);
-        
-        } catch (HibernateException he) {
-        
-           retorno = manejaExcepcion(he, retorno);
-        }  finally {
-            sesion.clear();
-        }
-
-        return retorno;
-    }
-    
-    public Retorno_MsgObj ModuloObtener(Long pModCod) {
-       
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
-       
-        try {
-            
-            iniciaOperacion();
-            Modulo modulo   = (Modulo) sesion.get(Modulo.class, pModCod);
-            retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), modulo);
-        
-        } catch (HibernateException he) {
-        
             retorno = manejaExcepcion(he, retorno);
-        }  finally {
+            
+        } finally {
             sesion.clear();
         }
+
+        return retorno;
+    }
+    
+    
+    
+    public Retorno_MsgObj obtenerListaByAlumno(Long PerCod) {
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            
+            List<Object> listaRetorno = sesion.getNamedQuery("Solicitud.findByAlumno")
+            .setParameter("PerCod", PerCod)
+            .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.clear();
+        }
+
         return retorno;
     }
     

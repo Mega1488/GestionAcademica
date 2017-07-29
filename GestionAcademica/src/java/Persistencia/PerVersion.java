@@ -47,7 +47,7 @@ public class PerVersion implements Interfaz.InVersion{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return pObjeto;
@@ -64,7 +64,7 @@ public class PerVersion implements Interfaz.InVersion{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
     }
 
@@ -78,7 +78,7 @@ public class PerVersion implements Interfaz.InVersion{
             iniciaOperacion();
             objetoRetorno = (Version) sesion.get(Version.class, codigo);            
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return objetoRetorno;

@@ -87,7 +87,7 @@ public class PerMenu implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -112,7 +112,7 @@ public class PerMenu implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -136,7 +136,7 @@ public class PerMenu implements InABMGenerico{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -159,7 +159,7 @@ public class PerMenu implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -183,7 +183,7 @@ public class PerMenu implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;

@@ -10,20 +10,38 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoSolicitud {
-    ESCOLARIDAD(1), CONSTANCIA_ESTUDIO(2), DUPLICADO_FACTURA(3);
+    ESCOLARIDAD("Escolaridad", 1), 
+    CONSTANCIA_ESTUDIO("Constancia de estudio", 2), 
+    DUPLICADO_FACTURA("Duplicado de factura", 3);
     
     TipoSolicitud(){
         
     }
     
     private int vTpoSol;
+    private String vTpoSolNom;
 
-    TipoSolicitud(int pTpoSol) {
+    TipoSolicitud(String pTpoSolNom, int pTpoSol) {
         this.vTpoSol = pTpoSol;
+        this.vTpoSolNom = pTpoSolNom;
     }
 
     public int getTipoSolicitud() {
         return vTpoSol;
+    }
+    
+    public String getNombre() {
+        return vTpoSolNom;
+    }
+    
+    public static TipoSolicitud fromCode(int pCod) {
+        for (TipoSolicitud tpoSol :TipoSolicitud.values()){
+            if (tpoSol.getTipoSolicitud()== pCod){
+                return tpoSol;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El tipo de solicitud " + pCod + " is not supported!");
     }
     
 }

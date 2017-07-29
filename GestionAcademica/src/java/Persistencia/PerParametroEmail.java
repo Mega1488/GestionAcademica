@@ -6,8 +6,6 @@
 package Persistencia;
 
 import Entidad.ParametroEmail;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -48,7 +46,7 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return pObjeto;
@@ -65,7 +63,7 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
     }
 
@@ -83,7 +81,7 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
     }
 
@@ -95,7 +93,7 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
                 iniciaOperacion();
                 objetoRetorno = (ParametroEmail) sesion.get(ParametroEmail.class, codigo);            
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return objetoRetorno;
@@ -112,7 +110,7 @@ public class PerParametroEmail implements Interfaz.InParametroEmail{
                 listaRetorno = sesion.getNamedQuery("ParametroEmail.findAll").list();
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return listaRetorno;

@@ -85,7 +85,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -109,7 +109,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -131,7 +131,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         return retorno;
@@ -151,7 +151,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;
@@ -175,7 +175,7 @@ public class PerTipoEvaluacion implements InTipoEvaluacion{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;

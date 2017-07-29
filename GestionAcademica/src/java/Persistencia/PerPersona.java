@@ -10,7 +10,6 @@ import Enumerado.TipoMensaje;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;

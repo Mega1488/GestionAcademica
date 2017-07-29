@@ -6,7 +6,6 @@
 package Persistencia;
 
 import Entidad.MateriaRevalida;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;
@@ -50,7 +49,7 @@ public class PerMateriaRevalida implements Interfaz.InMateriaRevalida{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         
         System.err.println("ID de la revalida " + pObjeto.toString());
@@ -70,7 +69,7 @@ public class PerMateriaRevalida implements Interfaz.InMateriaRevalida{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
     }
 
@@ -88,7 +87,7 @@ public class PerMateriaRevalida implements Interfaz.InMateriaRevalida{
             manejaExcepcion(he);
             throw he;
         } finally {
-            sesion.close();
+            sesion.clear();
         }
     }
 
@@ -100,7 +99,7 @@ public class PerMateriaRevalida implements Interfaz.InMateriaRevalida{
                 iniciaOperacion();
                 objetoRetorno = (MateriaRevalida) sesion.get(MateriaRevalida.class, codigo);            
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return objetoRetorno;
     }
@@ -115,7 +114,7 @@ public class PerMateriaRevalida implements Interfaz.InMateriaRevalida{
                 listaRetorno = sesion.getNamedQuery("MateriaRevalida.findAll").list();
             
         } finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return listaRetorno;
