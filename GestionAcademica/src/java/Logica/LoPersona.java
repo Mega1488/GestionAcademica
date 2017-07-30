@@ -348,18 +348,21 @@ public class LoPersona implements Interfaz.InPersona{
     {
         
         ArrayList<SDT_PersonaEstudio> lstEstudio = this.ObtenerEstudios(PerCod);
-        
+        Boolean estudioAprobado = false;
         for(SDT_PersonaEstudio estudio : lstEstudio)
         {
             for(Escolaridad escolaridad : estudio.getEscolaridad())
             {
-                if(escolaridad.getMateria() != null && materia != null)  if(escolaridad.getMateria().equals(materia)) return escolaridad.getAprobado();
-                if(escolaridad.getCurso() != null && curso != null)  if(escolaridad.getCurso().equals(curso)) return escolaridad.getAprobado();
-                if(escolaridad.getModulo() != null && modulo != null)  if(escolaridad.getModulo().equals(modulo)) return escolaridad.getAprobado();
+                if(!estudioAprobado)
+                {
+                    if(escolaridad.getMateria() != null && materia != null)  if(escolaridad.getMateria().equals(materia)) estudioAprobado = escolaridad.getAprobado();
+                    if(escolaridad.getCurso() != null && curso != null)  if(escolaridad.getCurso().equals(curso))  estudioAprobado = escolaridad.getAprobado();
+                    if(escolaridad.getModulo() != null && modulo != null)  if(escolaridad.getModulo().equals(modulo))  estudioAprobado =  escolaridad.getAprobado();
+                }
             }
         }
         
-        return false;
+        return estudioAprobado;
     }
     
     public boolean PersonaRevalidaMateria(Long PerCod, Materia materia)

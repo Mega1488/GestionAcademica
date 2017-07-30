@@ -52,6 +52,9 @@ public class PerCarrera implements Interfaz.InCarrera{
                 case 1451:
                     mensaje = "Existen datos en otros registros";
                     break;
+                case 1062:
+                    mensaje = "Ya se ingreso el registro";
+                    break;
                 default:
                     mensaje = cause.getMessage();
                             break;
@@ -83,7 +86,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         } catch (HibernateException he) {
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -111,7 +114,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         }
         finally
         {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -128,7 +131,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         } catch (HibernateException he) {
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -146,7 +149,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         }
         finally
         {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -160,7 +163,7 @@ public class PerCarrera implements Interfaz.InCarrera{
             iniciaOperacion();
             listaObjeto = sesion.getNamedQuery("Carrera.findByMdlUsr").setParameter("MdlUsr", pMdlUsr).setMaxResults(1).list();
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         if (!listaObjeto.isEmpty()){
             retorno = listaObjeto.get(0);
@@ -181,7 +184,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         }catch(HibernateException he){
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -200,7 +203,7 @@ public class PerCarrera implements Interfaz.InCarrera{
             iniciaOperacion();
             listaObjeto = sesion.getNamedQuery("Carrera.findLastCarrera").setMaxResults(1).list();
         } finally {
-            sesion.close();
+            sesion.clear();
         }
         if (!listaObjeto.isEmpty()){
             Carrera objeto = listaObjeto.get(0);
@@ -231,7 +234,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         } catch (HibernateException he) {
             retorno = manejaExcepcion(he, retorno);
         }  finally {
-            sesion.close();
+            sesion.clear();
         }
         return retorno;
     }
@@ -256,7 +259,7 @@ public class PerCarrera implements Interfaz.InCarrera{
         
            retorno = manejaExcepcion(he, retorno);
         }  finally {
-            sesion.close();
+            sesion.clear();
         }
 
         return retorno;

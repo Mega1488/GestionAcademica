@@ -251,7 +251,14 @@ public class ABM_CalendarioAlumno extends HttpServlet {
                     escolaridad.setEscFch(new java.util.Date());
                     if(perUsuario != null) escolaridad.setIngresadaPor(perUsuario);
                     if(calAlumno.getAlumno() != null) escolaridad.setAlumno(calAlumno.getAlumno());
-                    if(calAlumno.getEvlCalVal() != null) escolaridad.setEscCalVal(loCalendario.AlumnoCreditoParcial(calAlumno.getAlumno().getPerCod(), calAlumno.getCalendario().getEvaluacion().getMatEvl(), calAlumno.getCalendario().getEvaluacion().getModEvl(), calAlumno.getCalendario().getEvaluacion().getCurEvl()));
+                    
+                    if(calAlumno.getCalendario().getEvaluacion().getTpoEvl().getTpoEvlExm())
+                    {
+                        if(calAlumno.getEvlCalVal() != null) escolaridad.setEscCalVal(calAlumno.getEvlCalVal());
+                    }
+                    
+                    if(calAlumno.getEvlCalVal() != null) escolaridad.setEscCurVal(loCalendario.AlumnoCreditoParcial(calAlumno.getAlumno().getPerCod(), calAlumno.getCalendario().getEvaluacion().getMatEvl(), calAlumno.getCalendario().getEvaluacion().getModEvl(), calAlumno.getCalendario().getEvaluacion().getCurEvl()));
+                    
                     if(calAlumno.getCalendario().getEvaluacion().getMatEvl() != null) escolaridad.setMateria(calAlumno.getCalendario().getEvaluacion().getMatEvl());
                     if(calAlumno.getCalendario().getEvaluacion().getModEvl() != null) escolaridad.setModulo(calAlumno.getCalendario().getEvaluacion().getModEvl());
                     if(calAlumno.getCalendario().getEvaluacion().getCurEvl() != null) escolaridad.setCurso(calAlumno.getCalendario().getEvaluacion().getCurEvl());

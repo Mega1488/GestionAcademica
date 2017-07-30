@@ -35,6 +35,7 @@
     <class>Entidad.WS_Bit</class>
     <class>Entidad.Version</class>
     <class>Entidad.Menu</class>
+    <class>Entidad.MateriaPrevia</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull"/>

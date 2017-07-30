@@ -95,7 +95,9 @@
                                     out.println("<table class='table table-hover eliminar_margen_tabla'>");
                                     out.println("<thead><tr>");
                                     out.println("<th>Materia</th>");
-                                    out.println("<th class='texto_derecha'>Calificación</th>");
+                                    out.println("<th>Fecha</th>");
+                                    out.println("<th class='texto_derecha'>Curso</th>");
+                                    out.println("<th class='texto_derecha'>Examen</th>");
                                     out.println("<th class='texto_derecha'>Estado</th>");
                                     out.println("</tr>");
                                     out.println("</thead>");
@@ -108,9 +110,17 @@
                                             out.println("<td>");
                                             out.println(esc.getNombreEstudio());
                                             out.println("</td>");
+                                            
+                                            out.println("<td>");
+                                            out.println(esc.getEscFch());
+                                            out.println("</td>");
+                                            
+                                            out.println("<td class='texto_derecha'>");
+                                            out.println("<label>" + (esc.Revalida() ? "0" : utilidad.NuloToCero(esc.getEscCurVal())) + "</label>");
+                                            out.println("</td>");
 
                                             out.println("<td class='texto_derecha'>");
-                                            out.println("<label>" + (esc.Revalida() ? "0" : esc.getEscCalVal()) + "</label>");
+                                            out.println("<label>" + (esc.Revalida() ? "0" : utilidad.NuloToCero(esc.getEscCalVal())) + "</label>");
                                             out.println("</td>");
                                             
                                             out.println("<td class='texto_derecha'>");

@@ -81,9 +81,10 @@ public class Materia implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     
-    @ManyToOne(targetEntity = Materia.class)
-    @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
-    private Materia materiaPrevia;
+    @OneToMany(targetEntity = MateriaPrevia.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="MatCod", referencedColumnName="MatCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<MateriaPrevia> lstPrevias;
     
     @OneToMany(targetEntity = Evaluacion.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="MatEvlMatCod", referencedColumnName="MatCod")
@@ -94,6 +95,7 @@ public class Materia implements Serializable {
     //-CONSTRUCTOR
 
     public Materia() {
+        lstPrevias = new ArrayList<>();
     }
     
     
@@ -163,12 +165,12 @@ public class Materia implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    public Materia getMateriaPrevia() {
-        return materiaPrevia;
+    public List<MateriaPrevia> getLstPrevias() {
+        return lstPrevias;
     }
 
-    public void setMateriaPrevia(Materia materiaPrevia) {
-        this.materiaPrevia = materiaPrevia;
+    public void setLstPrevias(List<MateriaPrevia> lstPrevias) {
+        this.lstPrevias = lstPrevias;
     }
 
     public List<Evaluacion> getLstEvaluacion() {
@@ -193,6 +195,17 @@ public class Materia implements Serializable {
         }
         
         return pEva;
+    }
+    
+    public MateriaPrevia getPreviaById(Long MatPreCod){
+        
+        
+        for(MateriaPrevia mat : this.lstPrevias)
+        {
+            if(mat.getMatPreCod().equals(MatPreCod)) return mat;
+        }
+        
+        return null;
     }
     
     public boolean MateriaPuedeDarExamen(Double calificacion){

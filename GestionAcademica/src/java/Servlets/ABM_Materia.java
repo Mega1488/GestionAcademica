@@ -7,6 +7,7 @@ package Servlets;
 
 import Entidad.Carrera;
 import Entidad.Materia;
+import Entidad.MateriaPrevia;
 import Entidad.PlanEstudio;
 import Enumerado.TipoAprobacion;
 import Enumerado.TipoMensaje;
@@ -63,6 +64,12 @@ public class ABM_Materia extends HttpServlet {
                 break;   
                 case "DELETE":
                     retorno = this.EliminarDatos(request);
+                break;
+                case "AGREGAR_PREVIA":
+                    retorno = this.AgregarPreviaDatos(request);
+                break;
+                case "ELIMINAR_PREVIA":
+                    retorno = this.EliminarPreviaDatos(request);
                 break;
                 case "POPUP_OBTENER":
                     retorno = this.POPUP_ObtenerDatos(request);
@@ -214,6 +221,84 @@ public class ABM_Materia extends HttpServlet {
         return utilidades.ObjetoToJson(lstMateria);
     }
     
+    private String AgregarPreviaDatos(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+            error         = false;
+            Materia materia = this.ValidarMateria(request, null);
+            
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                String MatCod       = request.getParameter("pPreMatCod");
+                
+                
+                System.err.println("Plan: " + materia.getPlan().getPlaEstCod());
+                System.err.println("Materia: " + materia.getMatCod());
+                System.err.println("Previa: " + MatCod);
+                
+                MateriaPrevia matPrevia = new MateriaPrevia();
+                matPrevia.setMateria(materia);
+                matPrevia.setMateriaPrevia(materia.getPlan().getMateriaById(Long.valueOf(MatCod)));
+                
+                materia.getLstPrevias().add(matPrevia);
+                
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCarrera.MateriaActualizar(materia);
+                mensaje    = retornoObj.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+        String retorno = utilidades.ObjetoToJson(mensaje);
+        return retorno;
+    }
+    
+    private String EliminarPreviaDatos(HttpServletRequest request)
+    {
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
+        {
+            error         = false;
+            Materia materia = this.ValidarMateria(request, null);
+            
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                String MatCod       = request.getParameter("pMatPreCod");
+                
+                MateriaPrevia matPrevia = materia.getPreviaById(Long.valueOf(MatCod));
+                int indice = materia.getLstPrevias().indexOf(matPrevia);
+                
+                if(indice >= 0)
+                {
+                    materia.getLstPrevias().remove(indice);
+                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCarrera.MateriaActualizar(materia);
+                    mensaje    = retornoObj.getMensaje();
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+        String retorno = utilidades.ObjetoToJson(mensaje);
+        return retorno;
+    }
+    
     private Materia ValidarMateria(HttpServletRequest request, Materia materia)
     {
         if(materia == null)
@@ -228,8 +313,7 @@ public class ABM_Materia extends HttpServlet {
             String MatTpoApr    = request.getParameter("pMatTpoApr");
             String MatTpoPer    = request.getParameter("pMatTpoPer");
             String MatPerVal    = request.getParameter("pMatPerVal");
-            String PreMatCod    = request.getParameter("pPreMatCod");
-
+           
             //------------------------------------------------------------------------------------------
             //Validaciones
             //------------------------------------------------------------------------------------------
@@ -237,33 +321,32 @@ public class ABM_Materia extends HttpServlet {
             //TIPO DE DATO
 
             //Sin validacion
-            if(MatCod != null)
-            {
-                if(!MatCod.isEmpty())
-                {
-                    materia.setMatCod(Long.valueOf(MatCod));
-                }
-            }
-            materia.setMatNom(MatNom);
-            materia.setMatCntHor(Double.valueOf(MatCntHor).doubleValue());
-            materia.setMatTpoApr(TipoAprobacion.fromCode(Integer.valueOf(MatTpoApr)));
-            materia.setMatTpoPer(TipoPeriodo.fromCode(Integer.valueOf(MatTpoPer)));
-            materia.setMatPerVal(Double.valueOf(MatPerVal).doubleValue());
+            
+            Carrera carrera     = new Carrera();
+            
+            System.err.println("CarCod_ " + CarCod);
+            System.err.println("PlaEstCod_ " + PlaEstCod);
+            System.err.println("MatCod_ " + MatCod);
+
+            if(CarCod != null) carrera = (Carrera) loCarrera.obtener(Long.valueOf(CarCod)).getObjeto();
+            if(PlaEstCod != null && CarCod != null) materia.setPlan(carrera.getPlanEstudioById(Long.valueOf(PlaEstCod)));
+            if(MatCod != null) if(!MatCod.isEmpty() && PlaEstCod != null) materia = materia.getPlan().getMateriaById(Long.valueOf(MatCod));
+
+            if(MatNom != null) materia.setMatNom(MatNom);
+            if(MatCntHor != null) materia.setMatCntHor(Double.valueOf(MatCntHor));
+            if(MatTpoApr != null) materia.setMatTpoApr(TipoAprobacion.fromCode(Integer.valueOf(MatTpoApr)));
+            if(MatTpoPer != null) materia.setMatTpoPer(TipoPeriodo.fromCode(Integer.valueOf(MatTpoPer)));
+            if(MatPerVal != null) materia.setMatPerVal(Double.valueOf(MatPerVal));
             //Objetos
             
-            Carrera car = (Carrera) loCarrera.obtener(Long.valueOf(CarCod)).getObjeto();
-            
-            PlanEstudio plan = new PlanEstudio();
-            plan = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
-            
-            materia.setPlan(plan);
-            
+           /* 
             if(!PreMatCod.isEmpty())
             {
                 Materia mat = new Materia();
                 mat.setMatCod(Long.valueOf(PreMatCod));
                 materia.setMateriaPrevia(mat);
             }
+            */
             
         return materia;
     }

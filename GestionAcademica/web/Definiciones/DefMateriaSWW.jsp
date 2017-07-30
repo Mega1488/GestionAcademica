@@ -101,7 +101,7 @@
                                     <th>Tipo de Aprobación</th>
                                     <th>Tipo de Período</th>
                                     <th>Valor del Período</th>
-                                    <th>Materia Previa</th>
+                                    <th>Materias Previas</th>
                                 </tr>
                             </thead>
                             
@@ -118,16 +118,7 @@
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatTpoApr().getTipoAprobacionN())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatTpoPer().getTipoPeriodoNombre())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %> </td>
-                                <td>
-                                <%
-                                    if(mat.getMateriaPrevia() != null)
-                                    {
-                                %>
-                                    <% out.print( utilidad.NuloToVacio(mat.getMateriaPrevia().getMatNom())); %>
-                                <%
-                                    }
-                                %>
-                                </td>
+                                <td><%out.print( utilidad.NuloToCero(mat.getLstPrevias().size())); %></td>
                             </tr>
                             <%
                                 }

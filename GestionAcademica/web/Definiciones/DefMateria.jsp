@@ -208,12 +208,7 @@
                                 %>
                             </select>
                             <div><label>Valor del Período</label><input type="number" step="0.5" class="form-control" id="MatPerVal" name="MatPerVal" placeholder="Valor del Período" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %>"></div>
-                            <div>
-                                <label>Materia Previa</label>
-                                <input type="text" class="form-control" id="PreMatCod" name="PreMatCod" placeholder="Materia Previa" disabled value="<% out.print(utilidad.NuloToVacio((mat.getMateriaPrevia() == null ? "" : mat.getMateriaPrevia().getMatNom()))); %>" >
-                                <a href="#" id="btnMatCod" name="btnMatCod" class="glyphicon glyphicon-search" data-toggle="modal" data-target="#PopUpMateria"></a>
-                            </div>
-
+                            
                             <div>
                                 <%out.print(boton);%>
                                 <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href='<%out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>'"/>
@@ -224,106 +219,6 @@
             </div>
         </div>
         
-        <!--Popup Materia Pendiente-->
-        <div id="PopUpMateria" class="modal fade" role="dialog">
-        <!-- Modal -->
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Materias</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div>
-                            <table id="PopUpTblMateria" name="PopUpTblMateria" class="table table-striped" cellspacing="0"  class="table" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>Nombre</th>
-                                        <th>Cantidad horas</th>
-                                        <th>Tipo Aprobación</th>
-                                        <th>Tipo Periodo</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                    </div>
-                </div>
-            </div>
-            
-            <script type="text/javascript">
-
-                $(document).ready(function() {
-
-                    Buscar();
-
-                    $(document).on('click', ".PopPer_Seleccionar", function() 
-                    {
-                        var MatCod = $(this).data("codigo");
-                        $('#PreMatCod').val(MatCod);
-
-                        $(function () 
-                        {
-                            $('#PopUpMateria').modal('toggle');
-                        });
-                    });
-
-                    function Buscar()
-                    {
-                        var PlaEstCod   = $('#PlaEstCod').val();
-
-                        $.post('<% out.print(urlSistema); %>ABM_Materia', 
-                        {
-                            popPlaEstCod    : PlaEstCod,
-                            pAccion         : "POPUP_OBTENER"
-                        }
-                        , function(responseText)
-                        {
-                            var materias = JSON.parse(responseText);
-
-                            $.each(materias, function(f , materia) {
-                                
-                                materia.matCod = "<td> <a href='#' data-codigo='"+ materia.matCod+"' data-nombre='"+materia.matNom+"' class='PopPer_Seleccionar'>"+materia.matCod+" </a> </td>";
-                            
-                            });
-
-                            $('#PopUpTblMateria').DataTable( {
-                                data: materias,
-                                deferRender: true,
-                                bLengthChange: false, //thought this line could hide the LengthMenu
-                                pageLength: 10,
-                                language: {
-                                    "lengthMenu": "Mostrando _MENU_ registros por página",
-                                    "zeroRecords": "No se encontraron registros",
-                                    "info": "Página _PAGE_ de _PAGES_",
-                                    "infoEmpty": "No hay registros",
-                                    "search":         "Buscar:",
-                                    "paginate": {
-                                            "first":      "Primera",
-                                            "last":       "Ultima",
-                                            "next":       "Siguiente",
-                                            "previous":   "Anterior"
-                                        },
-                                    "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                                }
-                                ,columns: [
-                                    { "data": "matCod" },
-                                    { "data": "matNom"},
-                                    { "data": "matCntHor"},
-                                    { "data": "matTpoApr"},
-                                    { "data": "matTpoPer"}
-                                ]
-                            });
-                        });
-                    }
-                });
-            </script>
-        </div>
-                        
         <!--Popup Confirmar Eliminación-->
         <div id="PopUpElimMateria" class="modal fade" role="dialog">
         <!-- Modal -->

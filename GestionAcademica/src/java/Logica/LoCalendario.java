@@ -12,6 +12,7 @@ import Entidad.Curso;
 import Entidad.Evaluacion;
 import Entidad.Inscripcion;
 import Entidad.Materia;
+import Entidad.MateriaPrevia;
 import Entidad.Modulo;
 import Entidad.PeriodoEstudio;
 import Entidad.PeriodoEstudioAlumno;
@@ -390,9 +391,13 @@ public class LoCalendario implements InABMGenerico{
             
             if(calendario.getEvaluacion().getMatEvl() != null)
             {
-                if(calendario.getEvaluacion().getMatEvl().getMateriaPrevia() != null)
+                if(calendario.getEvaluacion().getMatEvl().getLstPrevias() != null)
                 {
-                    agregar = LoPersona.GetInstancia().PersonaAproboEstudio(alumno.getAlumno().getPerCod(), calendario.getEvaluacion().getMatEvl().getMateriaPrevia(), null, null);
+                    for(MateriaPrevia matPrevia : calendario.getEvaluacion().getMatEvl().getLstPrevias())
+                    {
+                        agregar = LoPersona.GetInstancia().PersonaAproboEstudio(alumno.getAlumno().getPerCod(), matPrevia.getMateriaPrevia(), null, null);
+                        if(!agregar) break;
+                    }
                 }
             }
             

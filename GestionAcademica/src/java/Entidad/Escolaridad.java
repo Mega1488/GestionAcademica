@@ -76,6 +76,9 @@ public class Escolaridad implements Serializable {
     @Column(name = "EscCalVal", precision=10, scale=2)
     private Double EscCalVal;
     
+    @Column(name = "EscCurVal", precision=10, scale=2)
+    private Double EscCurVal;
+    
     @Column(name = "EscFch", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date EscFch;
@@ -163,8 +166,21 @@ public class Escolaridad implements Serializable {
         this.alumno = alumno;
     }
 
+    public Double getEscCurVal() {
+        return EscCurVal;
+    }
+
+    public void setEscCurVal(Double EscCurVal) {
+        this.EscCurVal = EscCurVal;
+    }
+    
+    
+
     public String getAprobacion() {
         if(this.Revalida()) return "Revalida";
+        
+        if(this.materia.MateriaExonera(EscCurVal)) return "Exonera";
+        
         if(this.EscCalVal >= 70) return "Aprobado";
         if(this.EscCalVal < 70) return "Eliminado";
         return "";
@@ -176,9 +192,10 @@ public class Escolaridad implements Serializable {
     }
     
     public Boolean Revalida(){
+        if(this.EscCalVal == null) return false;
         return this.EscCalVal.equals(Double.NaN);
     }
-
+    
     public String getNombreEstudio()
     {
         
