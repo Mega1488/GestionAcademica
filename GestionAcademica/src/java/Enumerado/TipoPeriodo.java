@@ -10,7 +10,7 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoPeriodo {
-    MENSUAL("Mensual", 1), SEMESTRAL("Semestral", 2), ANUAL("Anual", 3), MODULAR("Modular", 4);
+    MENSUAL("Mes", 1), SEMESTRAL("Semestre", 2), ANUAL("Año", 3), MODULAR("Modulo", 4);
     
     TipoPeriodo(){
         

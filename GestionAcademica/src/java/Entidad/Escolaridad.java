@@ -188,6 +188,7 @@ public class Escolaridad implements Serializable {
     
     public Boolean getAprobado() {
         if(this.EscCalVal >= 70) return true;
+        if(this.materia.MateriaExonera(EscCurVal)) if(this.EscCurVal >= 70) return true;
         return false;
     }
     

@@ -17,9 +17,7 @@
 <%@page import="Logica.LoCalendario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    LoCalendario loCalendario   = LoCalendario.GetInstancia();
     Utilidades utilidad         = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO

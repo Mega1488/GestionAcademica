@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import Enumerado.TipoAprobacion;
 import Enumerado.TipoPeriodo;
+import Utiles.Utilidades;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -25,7 +26,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -242,6 +242,20 @@ public class Materia implements Serializable {
         }
         
         return puede;
+    }
+    
+    public String ObtenerPreviasCodigos(){
+        List<Long> lstRetorno = new ArrayList<>();
+
+        if(this.lstPrevias !=null)
+        {
+            for(MateriaPrevia matPrevia : this.lstPrevias)
+            {
+                lstRetorno.add(matPrevia.getMateriaPrevia().getMatCod());
+            }
+        }
+        
+        return Utilidades.GetInstancia().ObjetoToJson(lstRetorno);
     }
 
     @Override

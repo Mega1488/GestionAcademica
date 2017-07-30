@@ -30,6 +30,8 @@ import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -323,6 +325,29 @@ public class LoPersona implements Interfaz.InPersona{
         
         if(!existe){
             SDT_PersonaEstudio est = new SDT_PersonaEstudio();
+            
+            if(inscripcion.getPlanEstudio() != null)
+            {                    
+                Collections.sort(inscripcion.getPlanEstudio().getLstMateria(), new Comparator<Materia>(){
+                            public int compare(Materia o1, Materia o2){
+                            if(o1.getMatPerVal() == o2.getMatPerVal())
+                                return 0;
+                            return o1.getMatPerVal() < o2.getMatPerVal() ? -1 : 1;
+                        }
+                   });
+            }
+            
+            if(inscripcion.getCurso() != null)
+            {
+                Collections.sort(inscripcion.getCurso().getLstModulos(), new Comparator<Modulo>(){
+                            public int compare(Modulo o1, Modulo o2){
+                            if(o1.getModPerVal() == o2.getModPerVal())
+                                return 0;
+                            return o1.getModPerVal() < o2.getModPerVal() ? -1 : 1;
+                        }
+                   });
+            }
+            
             est.setInscripcion(inscripcion);
             
             if(escolaridad != null) est.getEscolaridad().add(escolaridad);

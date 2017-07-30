@@ -637,6 +637,30 @@ public class LoCalendario implements InABMGenerico{
         }
         
         return creditosParciales;
+    }
+
+    public Boolean AlumnoCursoEstudio(Long PerCod, Materia materia, Modulo modulo, Curso curso){
+        Retorno_MsgObj retorno      = new Retorno_MsgObj();
+         
+        if(materia != null)
+        {
+            retorno = perCalendario.obtenerByMateriaPersona(PerCod, materia.getMatCod());
+        }
+        if(modulo != null)
+        {
+            retorno = perCalendario.obtenerByModuloPersona(PerCod, modulo.getModCod());
+        }
+        if(curso != null)
+        {
+            retorno = perCalendario.obtenerByCursoPersona(PerCod, curso.getCurCod());
+        }
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            return retorno.getLstObjetos().size() > 0;
+        }
+        
+        return false;
     }    
     
     //------------------------------------------------------------------------------------
