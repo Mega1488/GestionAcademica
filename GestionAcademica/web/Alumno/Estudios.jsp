@@ -69,6 +69,9 @@
                     return { top: _y, left: _x };
                 }
                 
+                $("#lines").attr("width", $("#cont_estudio").width());
+                $("#lines").attr("height", $("#cont_estudio").height());
+                
                 $("[data-materia]").each(function() {
                     var materia = "dv_mat_" + $(this).data("id");
                     var previas = $(this).data("previas");
@@ -82,13 +85,13 @@
 
                         var from = function () {},
                         to = new String('to');
-                        from.y = fromPoint.top+10;
-                        from.x = fromPoint.left+10;
-                        to.y = toPoint.top+10; 
-                        to.x = toPoint.left+10;
+                        from.y = fromPoint.top - 150;
+                        from.x = fromPoint.left;
+                        to.y = toPoint.top - 150; 
+                        to.x = toPoint.left;
                         
                         //$("#lines").html("<svg><line x1='50' y1='50' x2='350' y2='350' stroke='black'/></svg>");
-                        //$("#lines").html($("#lines").html() + "<svg><line x1='"+from.x+"' y1='"+from.y+"' x2='"+to.x+"' y2='"+to.y+"' stroke='black'/></svg>");
+                        $("#lines").html($("#lines").html() + "<line x1='"+from.x+"' y1='"+from.y+"' x2='"+to.x+"' y2='"+to.y+"' stroke='black' data-from='"+previaCodigo+"' data-to='"+materia+"'/>");
 
                     });
                 });
@@ -126,6 +129,11 @@
                         </div>
 
                         <div name="cont_estudio" class="col-lg-12" style='margin-top:15px; <% out.print(tblVisible); %>'>
+                            
+                            <svg name="lines" id="lines" width="100%" height="100%" style="position: absolute; left: 0; top:0">
+                               
+                            </svg>
+                            
                             <%
                                 for(SDT_PersonaEstudio est : lstEstudio)
                                 {

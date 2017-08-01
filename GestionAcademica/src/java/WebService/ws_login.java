@@ -8,16 +8,9 @@ package WebService;
 import Enumerado.Constantes;
 import Logica.LoPersona;
 import Logica.Seguridad;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
  *
@@ -42,6 +35,10 @@ public class ws_login {
         //TODO write your implementation code here:
         Boolean resultado   = false;
         
+        System.err.println("mdltoken: " + mdltoken);
+        System.err.println("Usuario: " + pUser);
+        System.err.println("Contraseña: " + pPassword);
+        
         Seguridad seguridad = Seguridad.GetInstancia();
         LoPersona loPersona = LoPersona.GetInstancia();
         
@@ -51,6 +48,9 @@ public class ws_login {
         resultado = loPersona.IniciarSesion(usuarioDecrypt, seguridad.cryptWithMD5(passwordDecrypt));
         
         String retorno  = resultado.toString();        
+        
+        System.err.println("Retorno: " + retorno);
+        
         return retorno;
     }
     

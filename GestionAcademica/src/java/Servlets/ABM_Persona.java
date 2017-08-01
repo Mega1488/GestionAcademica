@@ -204,7 +204,7 @@ public class ABM_Persona extends HttpServlet {
         String plan         = request.getParameter("popPlaEstCod");
         
         lstPersona = loPersona.obtenerPopUp(null, null, null, "", null, null, null).getLstObjetos();
-        
+
         return utilidades.ObjetoToJson(lstPersona);
     }
 

@@ -9,14 +9,27 @@ import Entidad.Curso;
 import Entidad.Evaluacion;
 import Enumerado.TipoMensaje;
 import Logica.LoCurso;
+import SDT.SDT_Notificacion;
+import SDT.SDT_NotificacionDato;
+import SDT.SDT_NotificacionNotification;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import sun.net.www.http.HttpClient;
 
 /**
  *
@@ -53,27 +66,57 @@ public class Prueba extends HttpServlet {
     }
     
     public void Probar(){
-       Retorno_MsgObj retorno = LoCurso.GetInstancia().obtener(Long.valueOf("1"));
-       
-       if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
-       {
-           Curso curso = (Curso) retorno.getObjeto();
-       
-            Evaluacion evaluacion = new Evaluacion();
-            evaluacion.setCurEvl(curso);
-            evaluacion.setEvlDsc("asdasd");
-            evaluacion.setEvlNom("asdas");
-            evaluacion.setEvlNotTot(Double.MIN_NORMAL);
+
+        try {
+           // final String apiKey = "AIzaSyA8YSrq0BeiiJzNS24VlBKvAR1c03rBi0c";
+            URL url = new URL("https://fcm.googleapis.com/fcm/send");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setDoOutput(true);
+            conn.setRequestMethod("POST");
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Authorization", "key=AAAAciD0DaY:APA91bEvsL7m7l18MHBMXli8HQQUf-Hje7li6xa8SSwO-5XVxK5HAXKe5QBhiTCI0qArn-WsNG0-xqyjZjbR6xsHz-dzXuKLKcHrR629fT5iQegnGBm0Jqy08TKOsfdC7VDa1JIRFUgF");
             
-            retorno = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionAgregar(evaluacion);
+            conn.setDoOutput(true);
             
-            Utilidades.GetInstancia().MostrarMensaje(retorno.getMensaje());
-       }
-       else
-       {
-           Utilidades.GetInstancia().MostrarMensaje(retorno.getMensaje());
-       }
-       
+            SDT_Notificacion notificacion = new SDT_Notificacion();
+            notificacion.setTo("cluNmdH0708:APA91bHUZUrgE5ia18UIDxawwt_jnPwsP7bxbuyrAn7PT48x9eP3JmSUkavKe3q5yQq9PQOdqjePl0rcf47jxRtz2vLM50YUht5iEoz09V6idLX72oXIPhIxewQOwHSYvCvooOfILCTB");
+            //notificacion.setData(new SDT_NotificacionDato("Esto es un mensaje"));
+
+            notificacion.setNotification(new SDT_NotificacionNotification("adasd", "titulo", "icon"));
+            
+          //  System.err.println(Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion));
+                
+            String input = Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion);
+            
+            OutputStream os = conn.getOutputStream();
+            os.write(input.getBytes());
+            os.flush();
+            os.close();
+            
+            int responseCode = conn.getResponseCode();
+            System.out.println("\nSending 'POST' request to URL : " + url);
+            System.out.println("Post parameters : " + input);
+            System.out.println("Response Code : " + responseCode);
+            
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            
+            // print result
+            System.out.println(response.toString());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ProtocolException ex) {
+            Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
      
     }
 
