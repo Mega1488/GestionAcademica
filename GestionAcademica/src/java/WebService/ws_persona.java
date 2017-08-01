@@ -45,7 +45,7 @@ public class ws_persona {
             }
             else
             {
-                retorno = LoPersona.GetInstancia().obtener(Long.valueOf(pPerCod));
+                retorno = LoPersona.GetInstancia().obtener(pPerCod);
                 
                 //LIMPIO CONTRASEÑA, NO DEBE VIAJAR POR SERVICIO
                 if(!retorno.SurgioErrorObjetoRequerido())
