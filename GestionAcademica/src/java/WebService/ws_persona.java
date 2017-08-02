@@ -23,13 +23,13 @@ import javax.jws.WebParam;
 public class ws_persona {
 
     /**
-     * This is a sample web service operation
+     * Retorna usuario por codigo
      * @param token token para validar consumo de servicio
      * @param pPerCod codigo de persona
      * @return objeto persona
      */
-    @WebMethod(operationName = "ObtenerPersona")
-    public Retorno_MsgObj ObtenerPersona(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod) {
+    @WebMethod(operationName = "ObtenerPersonaByCod")
+    public Retorno_MsgObj ObtenerPersonaByCod(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod) {
         //Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerByMdlUsr("alumno1");
         Retorno_MsgObj retorno = new Retorno_MsgObj();
         
@@ -54,6 +54,46 @@ public class ws_persona {
                     persona.setPerPass(null);
                     
                     retorno.setObjeto(persona);
+                }
+            }
+        }
+        
+        return retorno;
+    }
+    
+    /**
+     * Retorna usuario por codigo
+     * @param token token para validar consumo de servicio
+     * @param pUser codigo de usuario
+     * @return objeto persona
+     */
+    @WebMethod(operationName = "ObtenerPersonaByUser")
+    public Retorno_MsgObj ObtenerPersonaByUser(@WebParam(name = "token") String token, @WebParam(name = "pUser") String pUser) {
+        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        
+        if(token == null)
+        {
+            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+        }
+        else
+        {
+            if(pUser == null)
+            {
+                retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+            }
+            else
+            {
+                retorno = LoPersona.GetInstancia().obtenerByMdlUsr(pUser);
+                
+                //LIMPIO CONTRASEÑA, NO DEBE VIAJAR POR SERVICIO
+                if(!retorno.SurgioErrorObjetoRequerido())
+                {
+                    Persona persona = (Persona) retorno.getObjeto();
+                    persona.setPerPass(null);
+                    
+                    retorno.setObjeto(persona);
+                    
+                    System.err.println("Persona: " + persona.toString());
                 }
             }
         }
