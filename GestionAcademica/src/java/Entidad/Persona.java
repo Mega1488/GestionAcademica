@@ -40,6 +40,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Persona.findByMdlUsr",      query = "SELECT p FROM Persona p WHERE p.PerUsrMod  = :MdlUsr"),
     @NamedQuery(name = "Persona.findByPerNom",      query = "SELECT p FROM Persona p WHERE p.PerNom     = :PerNom"),
     @NamedQuery(name = "Persona.findByEmail",       query = "SELECT p FROM Persona p WHERE p.PerEml     = :PerEml"),
+    @NamedQuery(name = "Persona.findByAppTkn",       query = "SELECT p FROM Persona p WHERE p.PerAppTkn   = :PerAppTkn"),
 
 /*    
     @NamedQuery(name = "Persona.findPopUp",         query = "SELECT p FROM Persona p "

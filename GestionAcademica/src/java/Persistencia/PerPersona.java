@@ -224,8 +224,7 @@ public class PerPersona implements Interfaz.InPersona{
         return retorno;
     }
 
-    public Retorno_MsgObj obtenerPopUp(Long CarCod, Long PlaEstCod, Long CurCod, String PerNom, String PerApe, Boolean docente, Boolean alumno)
-    {
+    public Retorno_MsgObj obtenerPopUp(Long CarCod, Long PlaEstCod, Long CurCod, String PerNom, String PerApe, Boolean docente, Boolean alumno){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));
                 
         try
@@ -261,4 +260,26 @@ public class PerPersona implements Interfaz.InPersona{
         return retorno;
     }
 
+    public Retorno_MsgObj obtenerByAppTkn(String token){
+         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
+        try
+        {
+            iniciaOperacion();
+            
+            List<Object> listaRetorno =  sesion.getNamedQuery("Persona.findByAppTkn")
+                    .setParameter("PerAppTkn", token)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+        
+        } catch (HibernateException he) {
+        
+            retorno = manejaExcepcion(he, retorno);
+        }  finally {
+            sesion.clear();
+        }
+
+        return retorno;
+    }
 }

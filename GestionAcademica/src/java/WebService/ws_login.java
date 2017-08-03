@@ -58,24 +58,16 @@ public class ws_login {
                 else
                 {
                     
-                    System.err.println("B");
                     
                     Seguridad seguridad = Seguridad.GetInstancia();
                     LoPersona loPersona = LoPersona.GetInstancia();
 
-                    System.err.println("C" + pUser);
                     
                     String usuarioDecrypt   = seguridad.decrypt(pUser, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
                     String passwordDecrypt  = seguridad.decrypt(pPassword, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
 
-                    System.err.println("d");
-                    
-                    System.err.println("Usuario: " + usuarioDecrypt);
-                    System.err.println("Password: " + usuarioDecrypt);
-                    
                     resultado = loPersona.IniciarSesion(usuarioDecrypt, seguridad.cryptWithMD5(passwordDecrypt));
 
-                    System.err.println("Resultado: " + resultado);
                 }
             }
         }
@@ -84,5 +76,44 @@ public class ws_login {
     }
     
   
+    /**
+     * Cierra sesión
+     * @param token token para validar servicio
+     * @param PerCod usuario
+     * @return Resultado
+     */
+    @WebMethod(operationName = "Logout")
+    public Retorno_MsgObj LogOut(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") String PerCod) {
+        //TODO write your implementation code here:
+        
+        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+                
+        if(token == null)
+        {
+            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+        }
+        else
+        {
+            if(PerCod == null)
+            {
+                retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+            }
+            else
+            {
+                    
+                Seguridad seguridad = Seguridad.GetInstancia();
+                LoPersona loPersona = LoPersona.GetInstancia();
+
+                String usuarioDecrypt   = seguridad.decrypt(PerCod, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+
+                retorno = loPersona.LimpiarToken(Long.valueOf(usuarioDecrypt));
+                
+            }
+        }
+        
+        retorno.setObjeto(null);
+        
+        return retorno;
+    }
 
 }

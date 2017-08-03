@@ -126,16 +126,7 @@ public class ws_persona {
             }
             else
             {
-                retorno = LoPersona.GetInstancia().obtener(pPerCod);
-                
-                if(!retorno.SurgioErrorObjetoRequerido())
-                {
-                    Persona persona = (Persona) retorno.getObjeto();
-                    
-                    persona.setPerAppTkn(PerAppTkn);
-                    
-                    retorno = (Retorno_MsgObj) LoPersona.GetInstancia().actualizar(persona);
-                }
+                retorno = LoPersona.GetInstancia().ActualizarToken(pPerCod, PerAppTkn);
             }
         }
         

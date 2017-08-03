@@ -416,6 +416,66 @@ public class LoPersona implements Interfaz.InPersona{
         
     }
     
+    public Retorno_MsgObj ActualizarToken(Long PerCod, String PerAppTkn){
+        
+        Boolean error = false;
+        Retorno_MsgObj retorno;
+        
+        //LIMPIO TOKEN IGUAL EN OTRAS PERSONAS, ESTO SUCEDE SI ALGUIEN INICIA SESION CON DISTINTAS CUENTAS EN UN MISMO DISPOSITIVO
+        
+        retorno = perPersona.obtenerByAppTkn(PerAppTkn);
+        error   = retorno.SurgioError();
+        
+        if(!error)
+        {
+            for(Object perTkn : retorno.getLstObjetos())
+            {
+                Persona persona = (Persona) perTkn;
+                persona.setPerAppTkn(null);
+                retorno = (Retorno_MsgObj) this.actualizar(persona);
+                
+                if(retorno.SurgioError())
+                {
+                    error = true;
+                    break;
+                }
+            }
+        }
+        
+        if(!error)
+        {
+            retorno = this.obtener(PerCod);
+
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                Persona persona = (Persona) retorno.getObjeto();
+
+                persona.setPerAppTkn(PerAppTkn);
+
+                retorno = (Retorno_MsgObj) this.actualizar(persona);
+            }
+        }
+        
+        return retorno;
+    }
+    
+    public Retorno_MsgObj LimpiarToken(Long PerCod){
+        
+        Retorno_MsgObj retorno  = this.obtener(PerCod);
+        Boolean error           = retorno.SurgioErrorObjetoRequerido();
+        
+        if(!error)
+        {
+            Persona persona = (Persona) retorno.getObjeto();
+
+            persona.setPerAppTkn(null);
+
+            retorno = (Retorno_MsgObj) this.actualizar(persona);
+        }
+        
+        return retorno;
+    }
+    
     //----------------------------------------------------------------------------------------------------
     //-Modle
     //----------------------------------------------------------------------------------------------------
