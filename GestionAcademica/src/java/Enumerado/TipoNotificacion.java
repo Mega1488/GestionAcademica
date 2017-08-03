@@ -10,20 +10,35 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoNotificacion {
-    AUTOMATICA(1), A_DEMANDA(2);
+    AUTOMATICA("Automática", 1), A_DEMANDA("A demanda", 2);
     
     TipoNotificacion(){
         
     }
     
     private int valor;
+    private String nombre;
 
-    TipoNotificacion(int pValor) {
+    TipoNotificacion(String pNombre, int pValor) {
         this.valor = pValor;
+        this.nombre = pNombre;
     }
 
     public int getValor() {
         return valor;
     }
     
+    public String getNombre() {
+        return nombre;
+    }
+    
+    public static TipoNotificacion fromCode(int pCod) {
+        for (TipoNotificacion tpoNot  : TipoNotificacion.values()){
+            if (tpoNot.getValor() == pCod){
+                return tpoNot;
+            }
+        }
+        throw new UnsupportedOperationException(
+                "El tipo de Notificacion " + pCod + " is not supported!");
+    }
 }

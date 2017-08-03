@@ -10,14 +10,13 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -48,14 +47,15 @@ public class NotificacionConsulta implements Serializable {
     @Column(name = "NotCnsCod", nullable = false)
     private Long NotCnsCod;
 
-    @OneToOne(targetEntity = Notificacion.class, optional=false)
+    @OneToOne(targetEntity = Notificacion.class)
     @JoinColumn(name="NotCod", referencedColumnName="NotCod")
     private Notificacion notificacion;
 
        
-    
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "NotCnsTpo")
     private TipoConsulta NotCnsTpo;    
+    
     @Column(name = "NotCnsSQL", length = 1000)
     private String NotCnsSQL;
     

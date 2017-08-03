@@ -11,9 +11,9 @@ import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -51,11 +51,11 @@ public class NotificacionBitacora implements Serializable {
     @Column(name = "NotBitCod", nullable = false)
     private Long NotBitCod;
 
-    @OneToOne(targetEntity = Notificacion.class, optional=false)
+    @OneToOne(targetEntity = Notificacion.class)
     @JoinColumn(name="NotCod", referencedColumnName="NotCod")
     private Notificacion notificacion;
 
-    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="NotPerCod", referencedColumnName="PerCod")
     private Persona persona;
     
@@ -71,6 +71,7 @@ public class NotificacionBitacora implements Serializable {
     @Column(name = "NotBitDet", length = 1000)
     private String NotBitDet;
     
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "NotBitEst")
     private NotificacionEstado NotBitEst;
     

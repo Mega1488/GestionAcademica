@@ -35,7 +35,7 @@
     List<Object> lstObjeto = new ArrayList<>();
     
     Retorno_MsgObj retorno = (Retorno_MsgObj) loCalendario.obtenerLista();
-    if(!retorno.SurgioErrorListaRequerida())
+    if(!retorno.SurgioError())
     {
         lstObjeto = retorno.getLstObjetos();
     }

@@ -9,8 +9,6 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,6 +19,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -29,7 +28,10 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 @Entity
-@Table(name = "NOTIFICACION_DESTINATARIO")
+@Table(name = "NOTIFICACION_DESTINATARIO",
+        uniqueConstraints = {
+                                @UniqueConstraint(columnNames = {"NotCod", "NotPerCod"})
+                            })
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NotificacionDestinatario.findAll",       query = "SELECT t FROM NotificacionDestinatario t")
@@ -47,11 +49,11 @@ public class NotificacionDestinatario implements Serializable {
     @Column(name = "NotDstCod", nullable = false)
     private Long NotDstCod;
     
-    @OneToOne(targetEntity = Notificacion.class, optional=false)
+    @OneToOne(targetEntity = Notificacion.class)
     @JoinColumn(name="NotCod", referencedColumnName="NotCod")
     private Notificacion notificacion;
     
-    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="NotPerCod", referencedColumnName="PerCod")
     private Persona persona;
     

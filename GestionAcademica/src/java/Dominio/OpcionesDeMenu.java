@@ -102,7 +102,7 @@ public class OpcionesDeMenu {
     
     private void LevantarMenu(List<Object> lstMenu)
     {
-        if(lstMenu.size() < 16)
+        if(lstMenu.size() < 17)
         {
             for(Object objeto : lstMenu)
             {
@@ -138,6 +138,7 @@ public class OpcionesDeMenu {
         lstAdministrador.add(new Menu(8, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefVersion.jsp", "Versión", 99));
         lstAdministrador.add(new Menu(11, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefPeriodoWW.jsp", "Periodos", 4));
         lstAdministrador.add(new Menu(14, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefSolicitudWW.jsp", "Solicitudes", 7));
+        lstAdministrador.add(new Menu(17, TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefNotificacionWW.jsp", "Notificaciones", 8));
         
     }
     
