@@ -100,4 +100,50 @@ public class ws_persona {
         
         return retorno;
     }
+
+    /**
+     * Actualizar datos de la persona
+     * @param token token para validar consumo de servicio
+     * @param pPerCod codigo de persona
+     * @param PerAppTkn token de app
+     * @return Resultado
+     */
+    @WebMethod(operationName = "PersonaActualizarToken")
+    public Retorno_MsgObj PersonaActualizarToken(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod, @WebParam(name = "pPerAppTkn") String PerAppTkn) {
+        //TODO write your implementation code here:
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        
+        if(pPerCod == null)
+        {
+            retorno.setMensaje(new Mensajes("No se recibio persona", TipoMensaje.ERROR));
+        }
+        else
+        {
+            if(PerAppTkn == null)
+            {
+                retorno.setMensaje(new Mensajes("No se recibio parametro", TipoMensaje.ERROR));
+            }
+            else
+            {
+                retorno = LoPersona.GetInstancia().obtener(pPerCod);
+                
+                if(!retorno.SurgioErrorObjetoRequerido())
+                {
+                    Persona persona = (Persona) retorno.getObjeto();
+                    
+                    persona.setPerAppTkn(PerAppTkn);
+                    
+                    retorno = (Retorno_MsgObj) LoPersona.GetInstancia().actualizar(persona);
+                }
+            }
+        }
+        
+        retorno.setObjeto(null);
+        
+        return retorno;
+    }
+
+
+
 }

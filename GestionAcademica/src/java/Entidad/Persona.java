@@ -108,6 +108,9 @@ public class Persona implements Serializable {
     @Column(name = "PerPass", length = 500)
     private String PerPass;
     
+    @Column(name = "PerAppTkn", length = 500)
+    private String PerAppTkn;
+    
     @Column(name = "PerCntIntLgn")
     private Integer PerCntIntLgn;
     
@@ -450,7 +453,26 @@ public class Persona implements Serializable {
      */
     public void setPerDoc(String PerDoc) {
         this.PerDoc = PerDoc;
-    }    
+    }
+
+    /**
+     *
+     * @return Obtener token de app
+     */
+    public String getPerAppTkn() {
+        return PerAppTkn;
+    }
+
+    /**
+     *
+     * @param PerAppTkn Guardar token de app
+     */
+    public void setPerAppTkn(String PerAppTkn) {
+        this.PerAppTkn = PerAppTkn;
+    }
+
+    
+    
     
     /**
      *
