@@ -5,15 +5,9 @@
  */
 package Pruebas;
 
-import Entidad.Curso;
-import Entidad.Evaluacion;
-import Enumerado.TipoMensaje;
-import Logica.LoCurso;
+import Logica.Notificacion.ManejoNotificacion;
 import SDT.SDT_Notificacion;
-import SDT.SDT_NotificacionDato;
 import SDT.SDT_NotificacionNotification;
-import Utiles.Retorno_MsgObj;
-import Utiles.Utilidades;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,13 +17,15 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import sun.net.www.http.HttpClient;
 
 /**
  *
@@ -61,7 +57,9 @@ public class Prueba extends HttpServlet {
             out.println("</body>");
             out.println("</html>");
             
-            this.Probar();
+            //this.Probar();
+            
+            this.ProbarManejoNotificacion();
         }
     }
     
@@ -119,6 +117,79 @@ public class Prueba extends HttpServlet {
 
      
     }
+    
+    public void ProbarManejoNotificacion()
+    {
+        String cadena = "Personas:\n" +
+"[%=INICIO_REPETICION]\n" +
+"[%=ALUMNO]  tiene el apellido [%=APELLIDO]\n" +
+"[%=FIN_REPETICION] fsd sdf sd";
+        
+//        System.err.println("Cadena: " + cadena);
+  //      System.err.println("Resultado: " + ProcesoTags(cadena));
+        
+        String repeticionTags   = cadena.substring(cadena.indexOf("[%=INICIO_REPETICION]"), cadena.indexOf("[%=FIN_REPETICION]"));
+        
+        
+        repeticionTags = repeticionTags.replace("[%=INICIO_REPETICION]", "");
+        
+        System.err.println("Resultado: " + repeticionTags);
+    }
+    
+    
+    private String ProcesoTags(String mensaje){
+        List<String> tags = this.ObtenerTags(mensaje);
+        
+        for(String unTag : tags)
+        {
+            
+            System.err.println("Tag: " + unTag);
+            
+            String campo = unTag.replace("[%=", "");
+            campo = campo.replace("]", "");
+        
+            switch(campo)
+            {
+                case "ALUMNO":
+                    mensaje = mensaje.replace(unTag, "Alvaro devotto");
+                    break;
+                case "PASSWORD":
+                    mensaje = mensaje.replace(unTag, "dJ$$ASD!jkj135");
+                    break;
+                    
+            }
+            
+        }
+            
+        return mensaje;
+    }
+    
+    private List<String> ObtenerTags(String mensaje){
+        List<String> tags = new ArrayList<>();
+        
+        boolean continuar = true;
+        int indice = 0;
+
+        while(continuar){
+            indice = mensaje.indexOf("[%=", indice);
+            
+            if(indice >= 0)
+            {
+                int fin = mensaje.indexOf("]", indice) + 1;
+                String tag = mensaje.substring(indice, fin);
+                tags.add(tag);
+                
+                indice  = fin;
+            }
+            else
+            {
+                continuar = false;
+            }
+        }
+        
+        return tags;
+    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

@@ -5,10 +5,24 @@
  */
 package Logica.Notificacion;
 
+import Enumerado.TipoMensaje;
+import SDT.SDT_NotificacionEnvio;
+import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
+
 /**
  *
  * @author alvar
  */
 public class NotificacionWeb {
+
+    public NotificacionWeb() {
+    }
     
+    public Retorno_MsgObj Notificar(SDT_NotificacionEnvio notificacion)
+    {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Notificar Web - Notificar", TipoMensaje.MENSAJE));
+        
+        return retorno;
+    }
 }

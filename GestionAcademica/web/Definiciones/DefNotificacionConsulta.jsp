@@ -186,7 +186,7 @@
                                 </select>
                             </div>
                             
-                            <div><label>Query:</label><input type="text" class="form-control" id="NotCnsSQL" name="NotCnsSQL" placeholder="NotCnsSQL" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(consulta.getNotCnsSQL())); %>" ></div>
+                                    <div><label>Query:</label><textarea rows="10" class="form-control" id="NotCnsSQL" name="NotCnsSQL" placeholder="NotCnsSQL" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(consulta.getNotCnsSQL())); %>" ><% out.print( utilidad.NuloToVacio(consulta.getNotCnsSQL())); %></textarea></div>
                             
                             <div>
                                 <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>

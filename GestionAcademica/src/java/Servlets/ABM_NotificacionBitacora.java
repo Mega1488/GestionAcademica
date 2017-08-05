@@ -75,7 +75,6 @@ public class ABM_NotificacionBitacora extends HttpServlet {
 
             }
 
-
             out.println(retorno);
             
         }
@@ -179,6 +178,7 @@ public class ABM_NotificacionBitacora extends HttpServlet {
             bitacora   = new NotificacionBitacora();
         }
             
+                String NotCod= request.getParameter("pNotCod");
                 String NotBitCod= request.getParameter("pNotBitCod");
                 String NotBitAsu= request.getParameter("pNotBitAsu");
                 String NotBitCon= request.getParameter("pNotBitCon");
@@ -186,7 +186,6 @@ public class ABM_NotificacionBitacora extends HttpServlet {
                 String NotBitDst= request.getParameter("pNotBitDst");
                 String NotBitEst= request.getParameter("pNotBitEst");
                 String NotBitFch= request.getParameter("pNotBitFch");
-                String NotCod= request.getParameter("pNotCod");
                 String NotPerCod= request.getParameter("pNotPerCod");
                 
                 

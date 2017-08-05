@@ -9,20 +9,20 @@ package Enumerado;
  *
  * @author Alvaro
  */
-public enum ObtenerDestinatario {
-    POR_CADA_REGISTRO("Por cada registro", 1), 
-    UNICA_VEZ("Única vez", 2);
+public enum TipoDestinatario {
+    PERSONA("Persona", 1), 
+    EMAIL("Email", 2);
     
-    ObtenerDestinatario(){
+    TipoDestinatario(){
         
     }
     
     private int valor;
     private String nombre;
 
-    ObtenerDestinatario(String pNom, int pValor) {
+    TipoDestinatario(String pNombre, int pValor) {
         this.valor = pValor;
-        this.nombre = pNom;
+        this.nombre = pNombre;
     }
 
     public int getValor() {
@@ -33,14 +33,14 @@ public enum ObtenerDestinatario {
         return nombre;
     }
     
-    public static ObtenerDestinatario fromCode(int pCod) {
-        for (ObtenerDestinatario obtDest  : ObtenerDestinatario.values()){
-            if (obtDest.getValor() == pCod){
-                return obtDest;
+    public static TipoDestinatario fromCode(int pCod) {
+        for (TipoDestinatario objeto  : TipoDestinatario.values()){
+            if (objeto.getValor() == pCod){
+                return objeto;
             }
         }
         throw new UnsupportedOperationException(
-                "El tipo de Obtener Destinatario " + pCod + " is not supported!");
+                "El tipo de destinatario " + pCod + " is not supported!");
     }
     
 }

@@ -7,7 +7,6 @@
 <%@page import="Entidad.NotificacionBitacora"%>
 <%@page import="Enumerado.TipoRepeticion"%>
 <%@page import="Enumerado.TipoEnvio"%>
-<%@page import="Enumerado.ObtenerBitacora"%>
 <%@page import="Enumerado.TipoNotificacion"%>
 <%@page import="Logica.LoNotificacion"%>
 <%@page import="Entidad.Notificacion"%>
@@ -160,15 +159,16 @@
 
                         <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                             <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                            <input type="hidden" name="NotCod" id="NotCod" value="<% out.print(NotCod); %>">
                         </div>
 
                         <form id="frm_objeto" name="frm_objeto">
 
                             <div><label>Código</label><input type="text" class="form-control" id="NotBitCod" name="NotBitCod" placeholder="NotBitCod" disabled value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitCod())); %>" ></div>
                             <div><label>Asunto</label><input type="text" class="form-control" id="NotBitAsu" name="NotBitAsu" placeholder="NotBitAsu" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitAsu())); %>" ></div>
-                            <div><label>Contenido</label><input type="text" class="form-control" id="NotBitCon" name="NotBitCon" placeholder="NotBitCon" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitCon())); %>" ></div>
-                            <div><label>Detalle</label><input type="text" class="form-control" id="NotBitDet" name="NotBitDet" placeholder="NotBitDet" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitDet())); %>" ></div>
-                            <div><label>Destinatarios</label><input type="text" class="form-control" id="NotBitDst" name="NotBitDst" placeholder="NotBitDst" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitDst())); %>" ></div>
+                            <div><label>Contenido</label><textarea rows="10" class="form-control" id="NotBitCon" name="NotBitCon" placeholder="NotBitCon" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitCon())); %>" ><% out.print( utilidad.NuloToVacio(bitacora.getNotBitCon())); %></textarea></div>
+                            <div><label>Detalle</label><textarea rows="10" class="form-control" id="NotBitDet" name="NotBitDet" placeholder="NotBitDet" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitDet())); %>" ><% out.print( utilidad.NuloToVacio(bitacora.getNotBitDet())); %></textarea></div>
+                            <div><label>Destinatarios</label><textarea rows="10" type="text" class="form-control" id="NotBitDst" name="NotBitDst" placeholder="NotBitDst" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitDst())); %>" ><% out.print( utilidad.NuloToVacio(bitacora.getNotBitDst())); %></textarea></div>
                             <div><label>Estado</label><input type="text" class="form-control" id="NotBitEst" name="NotBitEst" placeholder="NotBitEst" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitEst())); %>" ></div>
                             <div><label>Fecha</label><input type="text" class="form-control" id="NotBitFch" name="NotBitFch" placeholder="NotBitFch" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitFch())); %>" ></div>
                             <div><label>Persona</label><input type="text" class="form-control" id="NotPerCod" name="NotPerCod" placeholder="NotPerCod" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio((bitacora.getPersona() != null ? bitacora.getPersona().getPerCod() : ""))); %>" ></div>

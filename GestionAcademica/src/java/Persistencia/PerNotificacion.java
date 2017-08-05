@@ -7,15 +7,17 @@ package Persistencia;
 
 import Entidad.Notificacion;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoNotificacion;
 import Interfaz.InABMGenerico;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -33,8 +35,7 @@ public class PerNotificacion implements InABMGenerico{
             sesion = NewHibernateUtil.getSessionFactory().openSession();
             tx = sesion.beginTransaction();
         } catch (HibernateException ec) {
-            ec.printStackTrace();
-
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ec);
         }
     }
 
@@ -178,6 +179,58 @@ public class PerNotificacion implements InABMGenerico{
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
             retorno.setLstObjetos(listaRetorno);
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.clear();
+        }
+
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerListaByTipoActiva(Boolean NotAct, TipoNotificacion NotTpo) {
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            
+            List<Object> listaRetorno = sesion.getNamedQuery("Notificacion.findAutoActiva")
+                    .setParameter("NotAct", NotAct)
+                    .setParameter("NotTpo", NotTpo)
+                    .list();
+            
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setLstObjetos(listaRetorno);
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.clear();
+        }
+
+        return retorno;
+    }
+    
+    public Retorno_MsgObj obtenerResultadosQuery(String sentencia) {
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
+
+        try {
+            iniciaOperacion();
+            
+            Query query = sesion.createSQLQuery(sentencia);
+            query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
+            
+            List list = query.list();
+
+            retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
+            retorno.setObjeto(list);
             
         } catch (HibernateException he) {
             

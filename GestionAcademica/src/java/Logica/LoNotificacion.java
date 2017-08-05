@@ -10,10 +10,12 @@ import Entidad.NotificacionBitacora;
 import Entidad.NotificacionConsulta;
 import Entidad.NotificacionDestinatario;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoNotificacion;
 import Interfaz.InABMGenerico;
 import Persistencia.PerNotificacion;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -63,6 +65,37 @@ public class LoNotificacion implements InABMGenerico{
     public Retorno_MsgObj obtenerLista() {
         return perNotificacion.obtenerLista();
     }
+    
+    public Retorno_MsgObj obtenerListaByTipoActiva(Boolean NotAct, TipoNotificacion NotTpo) {
+        return perNotificacion.obtenerListaByTipoActiva(NotAct, NotTpo);
+    }
+    
+    public Retorno_MsgObj obtenerResultadosQuery(String query){
+        
+        Retorno_MsgObj retorno = this.ValidarQuery(query);
+        
+        if(!retorno.SurgioError())
+        {
+            retorno = perNotificacion.obtenerResultadosQuery(query);
+        }
+        
+        return retorno;
+    }
+    
+    public Retorno_MsgObj ValidarQuery(String query){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
+        
+        if(query.toLowerCase().contains(";")) retorno.setMensaje(new Mensajes("La query contiene el caracter ';'", TipoMensaje.ERROR));
+        if(query.toLowerCase().contains("insert")) retorno.setMensaje(new Mensajes("La query contiene el caracter 'insert'", TipoMensaje.ERROR));
+        if(query.toLowerCase().contains("update")) retorno.setMensaje(new Mensajes("La query contiene el caracter 'update'", TipoMensaje.ERROR));
+        if(query.toLowerCase().contains("drop")) retorno.setMensaje(new Mensajes("La query contiene el caracter 'drop'", TipoMensaje.ERROR));
+        if(query.toLowerCase().contains("delete")) retorno.setMensaje(new Mensajes("La query contiene el caracter 'delete'", TipoMensaje.ERROR));
+        if(query.toLowerCase().contains("create")) retorno.setMensaje(new Mensajes("La query contiene el caracter 'create'", TipoMensaje.ERROR));
+        if(query.toLowerCase().contains("alter")) retorno.setMensaje(new Mensajes("La query contiene el caracter 'alter'", TipoMensaje.ERROR));
+        
+        return retorno;
+    }
+    
     
     //------------------------------------------------------------------------------------
     //-MANEJO DE DESTINATARIOS
@@ -248,6 +281,8 @@ public class LoNotificacion implements InABMGenerico{
             retorno = (Retorno_MsgObj) this.actualizar(notificacion);
         }
         
+        retorno.setObjeto(bitacora);
+        
         return retorno;
     }
     
@@ -264,6 +299,8 @@ public class LoNotificacion implements InABMGenerico{
             retorno = (Retorno_MsgObj) this.actualizar(notificacion);
         }
         
+        retorno.setObjeto(bitacora);
+        
         return retorno;
     }
     
@@ -278,6 +315,15 @@ public class LoNotificacion implements InABMGenerico{
             notificacion.getLstBitacora().remove(indice);
             retorno = (Retorno_MsgObj) this.actualizar(notificacion);
         }
+        
+        return retorno;
+    }
+    
+    public Retorno_MsgObj BitacoraDepurar(Notificacion notificacion){
+        
+        notificacion.setLstBitacora(null);
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(notificacion);
         
         return retorno;
     }

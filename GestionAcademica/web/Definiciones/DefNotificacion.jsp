@@ -264,7 +264,10 @@
                             
                             
                             <div><label>Asunto</label><input type="text" class="form-control" id="NotAsu" name="NotAsu" placeholder="NotAsu" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotAsu())); %>" ></div>
-                            <div><label>Contenido</label><input type="text" class="form-control" id="NotCon" name="NotCon" placeholder="NotCon" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotCon())); %>" ></div>
+                            <div>
+                                <label>Contenido</label>
+                                <textarea <% out.print(CamposActivos); %> class="form-control" id="NotCon" name="NotCon" rows="4" cols="50" value="<% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %>"><% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %></textarea>
+                            </div>
                             
 
                             <div>

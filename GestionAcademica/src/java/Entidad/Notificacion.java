@@ -42,7 +42,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "NOTIFICACION")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Notificacion.findAll",       query = "SELECT t FROM Notificacion t")})
+    @NamedQuery(name = "Notificacion.findAll",       query = "SELECT t FROM Notificacion t"),
+    @NamedQuery(name = "Notificacion.findAutoActiva",       query = "SELECT t FROM Notificacion t WHERE t.NotAct =:NotAct AND t.NotTpo =:NotTpo")
+
+})
 
 public class Notificacion implements Serializable {
 
@@ -272,6 +275,22 @@ public class Notificacion implements Serializable {
         if(this.NotWeb) medio += (medio.equals("") ? "Web" : ", Web");
         
         return medio;
+    }
+    
+    public String ObtenerDestinatariosAgrupados(){
+        String destinatarios = "";
+        
+        for(NotificacionDestinatario destino : this.lstDestinatario)
+        {
+            if(!destinatarios.equals("")) destinatarios += "\n";
+            destinatarios += destino.getNotDstCod() + ": ";
+            
+            if(destino.getNotEmail() != null) destinatarios += destino.getNotEmail();
+            if(destino.getPersona() != null) destinatarios += destino.getPersona().getNombreCompleto();
+            
+        }
+        
+        return destinatarios;
     }
     
     public NotificacionDestinatario ObtenerDestinatarioByCod(Long NotDstCod){

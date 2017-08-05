@@ -10,7 +10,6 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoEnvio {
-    INTERNO("Interno",0),
     COMUN("Común", 1), 
     AGRUPADO("Agrupado", 2);
     

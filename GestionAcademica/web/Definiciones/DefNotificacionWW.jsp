@@ -90,6 +90,9 @@
                                     <th>Tipo</th>
                                     <th>Medio</th>
                                     <th>Activa</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
                                 </tr>
                             </thead>
 
@@ -106,6 +109,10 @@
                                 <td><% out.print( utilidad.NuloToVacio(notificacion.getNotTpo().getNombre())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(notificacion.getMedio())); %> </td>
                                 <td><% out.print( utilidad.BooleanToSiNo(notificacion.getNotAct())); %> </td>
+                                <td><a href="#" title="Ejecutar" class="glyphicon glyphicon-play btn_ejecutar" data-toggle="modal" data-target="#PopUpEjecutar" data-codigo="<% out.print(notificacion.getNotCod()); %>"> </a></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Destinatarios" class='fa fa-address-book'/></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionConsultaSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Consultas" class='fa fa-database'/></td>
+                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionBitacoraSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Bitacora" class='fa fa-folder-open'/></td>
 
                             </tr>
                             <%
@@ -119,5 +126,70 @@
         </div>
              
         
+        <!-- PopUp para ejecutar tarea -->
+                                
+        <div id="PopUpEjecutar" class="modal fade" role="dialog">
+           <!-- Modal -->
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Ejecutar</h4>
+                  </div>
+                  <div class="modal-body">
+                        <div>
+                            <p>Confirma la ejecución?</p>
+                        </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button name="boton_confirmar" id="boton_confirmar" type="button" class="btn btn-success" data-codigo="">Confirmar</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  </div>
+                </div>
+            </div>
+    
+    
+    
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+
+                $('.btn_ejecutar').on('click', function(e) {
+                        
+                        var codigo = $(this).data("codigo");
+                        
+                        $('#boton_confirmar').data('codigo', codigo);
+                        
+                        
+                      });
+                      
+                      $('#boton_confirmar').on('click', function(e) {
+                            var codigo = $('#boton_confirmar').data('codigo');
+                            
+                            $.post('<% out.print(urlSistema); %>NotificationManager', {
+                                         pNotCod: codigo,
+                                         pAction: "NOTIFICAR"
+                                     }, function (responseText) {
+                                         var obj = JSON.parse(responseText);
+                                         
+                                         $(function () {
+                                                $('#PopUpEjecutar').modal('toggle');
+                                             });
+                                         
+                                         MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                         
+
+                                     });
+
+                             
+                     
+                      });
+
+
+            });
+            </script>
+        </div>
+                        
     </body>
 </html>

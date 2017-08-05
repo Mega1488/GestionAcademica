@@ -98,6 +98,16 @@ public class NotificacionDestinatario implements Serializable {
     public void setNotEmail(String NotEmail) {
         this.NotEmail = NotEmail;
     }
+    
+    public String GetTextoDestinatario(){
+        String retorno = "";
+        
+        if(this.NotEmail != null) retorno = this.NotEmail;
+        
+        if(this.persona != null) retorno = this.persona.getNombreCompleto();
+        
+        return retorno;
+    }
 
     @Override
     public int hashCode() {
