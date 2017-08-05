@@ -615,11 +615,12 @@ public class ManejoNotificacion {
         String asunto = notificacion.getNotAsu();
         String contenido = notificacion.getNotCon();
         
+        String repeticionTags   = contenido.substring(contenido.indexOf("[%=INICIO_REPETICION]"), contenido.indexOf("[%=FIN_REPETICION]"));
+        repeticionTags          = repeticionTags.replace("[%=INICIO_REPETICION]", "");
+        
         //POSEO DESTINATARIO
         if(destinatario != null)
         {
-            String repeticionTags   = contenido.substring(contenido.indexOf("[%=INICIO_REPETICION]"), contenido.indexOf("[%=FIN_REPETICION]"));
-            repeticionTags          = repeticionTags.replace("[%=INICIO_REPETICION]", "");
             String repeticion       = "";  
             
             //UN ENVIO POR REGISTRO - DESTINATARIO
@@ -632,7 +633,7 @@ public class ManejoNotificacion {
             }
             
             if(destinatario.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", destinatario.getPersona().getPerCod().toString().trim());
-            contenido = contenido.replace("[%=INICIO_REPETICION]" + repeticionTags.trim() + "[%=FIN_REPETICION]", repeticion);
+            contenido = contenido.replace("[%=INICIO_REPETICION]" + repeticionTags + "[%=FIN_REPETICION]", repeticion);
             
             lstEnvio.add(this.ArmarEnvio(notificacion, destinatario, contenido, asunto));
             
@@ -668,8 +669,7 @@ public class ManejoNotificacion {
             
             for(NotificacionDestinatario dest : notificacion.getLstDestinatario())
             {
-                String repeticionTags   = contenido.substring(contenido.indexOf("[%=INICIO_REPETICION]"), contenido.indexOf("[%=FIN_REPETICION]"));
-                repeticionTags          = repeticionTags.replace("[%=INICIO_REPETICION]", "");
+                
                 String repeticion       = "";
                     
                  //UN ENVIO POR REGISTRO - DESTINATARIO
@@ -677,13 +677,13 @@ public class ManejoNotificacion {
                 while(ite_Registros.hasNext()){
 
                         Object registro = ite_Registros.next();
-
                         repeticion +=  this.ProcesoTags(repeticionTags, registro).trim() + "\n";
 
                 }
-
-                if(dest.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getPersona().getPerCod().toString());
-                contenido = contenido.replace(repeticionTags, repeticion.trim()).trim();
+                
+                
+                if(dest.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getPersona().getPerCod().toString().trim());
+                contenido = contenido.replace("[%=INICIO_REPETICION]" + repeticionTags + "[%=FIN_REPETICION]", repeticion.trim()).trim();
 
                 lstEnvio.add(this.ArmarEnvio(notificacion, dest, contenido, asunto));
                 
