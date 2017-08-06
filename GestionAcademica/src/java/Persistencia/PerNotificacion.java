@@ -89,7 +89,7 @@ public class PerNotificacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.clear();
+            sesion.close();
         }
         
         return retorno;
@@ -114,7 +114,7 @@ public class PerNotificacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.clear();
+            sesion.close();
         }
         
         return retorno;
@@ -138,7 +138,7 @@ public class PerNotificacion implements InABMGenerico{
             
             retorno = manejaExcepcion(he, retorno);
         } finally {
-            sesion.clear();
+            sesion.close();
         }
         
         return retorno;
@@ -161,7 +161,7 @@ public class PerNotificacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.clear();
+            sesion.close();
         }
 
         return retorno;
@@ -185,7 +185,7 @@ public class PerNotificacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.clear();
+            sesion.close();
         }
 
         return retorno;
@@ -211,7 +211,7 @@ public class PerNotificacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.clear();
+            sesion.close();
         }
 
         return retorno;
@@ -237,7 +237,7 @@ public class PerNotificacion implements InABMGenerico{
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
-            sesion.clear();
+            sesion.close();
         }
 
         return retorno;

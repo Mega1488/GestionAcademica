@@ -587,6 +587,8 @@ public class ManejoNotificacion {
                         
                         for(NotificacionDestinatario dest : notificacion.getLstDestinatario())
                         {
+                            asunto  = notificacion.getNotAsu();
+                            if(dest.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getPersona().getPerCod().toString().trim());
                             lstEnvio.add(this.ArmarEnvio(notificacion, dest, this.ProcesoTags(contenido, registro).trim(), this.ProcesoTags(asunto, registro).trim()));
                         }
                     }
@@ -612,8 +614,8 @@ public class ManejoNotificacion {
         
         List<SDT_NotificacionEnvio> lstEnvio = new ArrayList<>();
         
-        String asunto = notificacion.getNotAsu();
-        String contenido = notificacion.getNotCon();
+        String asunto       = notificacion.getNotAsu();
+        String contenido    = notificacion.getNotCon();
         
         String repeticionTags   = contenido.substring(contenido.indexOf("[%=INICIO_REPETICION]"), contenido.indexOf("[%=FIN_REPETICION]"));
         repeticionTags          = repeticionTags.replace("[%=INICIO_REPETICION]", "");
@@ -681,8 +683,10 @@ public class ManejoNotificacion {
 
                 }
                 
+                asunto  = notificacion.getNotAsu();
                 
                 if(dest.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getPersona().getPerCod().toString().trim());
+                
                 contenido = contenido.replace("[%=INICIO_REPETICION]" + repeticionTags + "[%=FIN_REPETICION]", repeticion.trim()).trim();
 
                 lstEnvio.add(this.ArmarEnvio(notificacion, dest, contenido, asunto));
