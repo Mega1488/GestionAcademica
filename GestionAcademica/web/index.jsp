@@ -55,7 +55,10 @@
                 </div>
                 
             </div>
-                
+              
+            <jsp:include page="/masterPage/footer.jsp"/>   
+              
         </div>
+        
     </body>
 </html>

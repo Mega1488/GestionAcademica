@@ -86,6 +86,7 @@ public class Login extends HttpServlet {
             session.setAttribute(NombreSesiones.USUARIO_ADM.getValor(), persona.getPerEsAdm());
             session.setAttribute(NombreSesiones.USUARIO_ALU.getValor(), persona.getPerEsAlu());
             session.setAttribute(NombreSesiones.USUARIO_DOC.getValor(), persona.getPerEsDoc());
+            session.setAttribute(NombreSesiones.USUARIO_PER.getValor(), persona.getPerCod());
 
             mensaje = new Mensajes("OK", TipoMensaje.MENSAJE);
         }

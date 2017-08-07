@@ -316,7 +316,7 @@ public class ManejoNotificacion {
                                     , sdtNotificacion.getDestinatario().GetTextoDestinatario()
                                     , NotificacionEstado.ENVIO_CON_ERRORES, (new Date()) 
                                     + ": Notificacion por web: "
-                                    + retorno.getMensaje().toString()
+                                    + retorno.getMensaje().getMensaje()
                             );
                         }
                         else
@@ -324,7 +324,7 @@ public class ManejoNotificacion {
                             bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
                                     , sdtNotificacion.getContenido()
                                     , sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                    , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por web");
+                                    , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por web: Ok");
                         }
                     }
 
