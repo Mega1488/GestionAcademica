@@ -108,6 +108,20 @@ public class NotificacionDestinatario implements Serializable {
         
         return retorno;
     }
+    
+    public String getEmail(){
+        if(this.NotEmail != null) return this.NotEmail;
+        if(this.persona != null) return this.persona.getPerEml();
+        
+        return null;
+    }
+    
+    public String getNombre(){
+        if(this.NotEmail != null) return this.NotEmail;
+        if(this.persona != null) return this.persona.getNombreCompleto();
+        
+        return null;
+    }
 
     @Override
     public int hashCode() {

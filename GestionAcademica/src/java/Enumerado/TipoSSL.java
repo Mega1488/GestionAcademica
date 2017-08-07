@@ -10,8 +10,9 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoSSL {
-    SSL("SSL",1), 
-    STAR_SSL("STAR SSL",2);
+    NINGUNO("Ninguno",0),
+    STARTTLS("STARTTLS",1), 
+    SSL("SSL",2);
     
     private int vCod;
     private String vNom;
@@ -21,6 +22,9 @@ public enum TipoSSL {
         this.vNom = pNom;
     }
 
+    private TipoSSL() {
+    }
+    
     public int getCod() {
         return vCod;
     }

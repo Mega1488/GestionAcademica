@@ -10,7 +10,10 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoAutenticacion {
-    NORMAL("Normal",1), OTRA("Otra",2);
+    NORMAL("Normal Password",0), 
+    ENCRYPTED("Encrypted Password",1),
+    KERBEROS("Kerberos/GSSAPI",2),
+    NTLM("NTLM",3);
     
     TipoAutenticacion(){
         

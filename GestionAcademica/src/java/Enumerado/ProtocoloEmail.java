@@ -10,7 +10,8 @@ package Enumerado;
  * @author Alvaro
  */
 public enum ProtocoloEmail {
-    SMTP("SMTP", 1), IMAP("IMAP",2);
+    SMTP("SMTP", 1), 
+    EWS("EWS",2);
     
     ProtocoloEmail(){
         

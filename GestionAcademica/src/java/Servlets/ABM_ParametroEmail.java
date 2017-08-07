@@ -159,7 +159,7 @@ public class ABM_ParametroEmail extends HttpServlet {
             error                   = false;
             String ParEmlCod   = request.getParameter("pParEmlCod");
                 
-            ParametroEmail parametroEmail = loParamEmail.obtener(Integer.valueOf(ParEmlCod));
+            ParametroEmail parametroEmail = loParamEmail.obtener(Long.valueOf(ParEmlCod));
 
             if(parametroEmail != null)
             {
@@ -252,6 +252,8 @@ public class ABM_ParametroEmail extends HttpServlet {
         String ParEmlPsw    = request.getParameter("pParEmlPsw");
         String ParEmlSSL    = request.getParameter("pParEmlSSL");
         String ParEmlTmpEsp = request.getParameter("pParEmlTmpEsp");
+        String ParEmlDebug = request.getParameter("pParEmlDebug");
+        String ParEmlReqConf = request.getParameter("pParEmlReqConf");
 
         //------------------------------------------------------------------------------------------
         //Validaciones
@@ -294,7 +296,10 @@ public class ABM_ParametroEmail extends HttpServlet {
         parametroEmail.setParEmlDom(ParEmlDom);
         parametroEmail.setParEmlUsr(ParEmlUsr);
         parametroEmail.setParEmlPsw(ParEmlPsw);
-            
+        
+        if(ParEmlDebug != null) parametroEmail.setParEmlDebug(Boolean.valueOf(ParEmlDebug));
+        if(ParEmlReqConf != null) parametroEmail.setParEmlReqConf(Boolean.valueOf(ParEmlReqConf));
+        
         return parametroEmail;
     }
 

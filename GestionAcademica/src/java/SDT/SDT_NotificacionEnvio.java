@@ -18,17 +18,20 @@ public class SDT_NotificacionEnvio {
     private NotificacionDestinatario destinatario;
     private String contenido;
     private String asunto;
+    private Boolean esHTML;
 
     public SDT_NotificacionEnvio() {
     }
 
-    public SDT_NotificacionEnvio(Boolean NotApp, Boolean NotWeb, Boolean NotEml, NotificacionDestinatario destinatario, String contenido, String asunto) {
+    public SDT_NotificacionEnvio(Boolean NotApp, Boolean NotWeb, Boolean NotEml, NotificacionDestinatario destinatario, String contenido, String asunto, Boolean pHtml) {
         this.NotApp = NotApp;
         this.NotWeb = NotWeb;
         this.NotEml = NotEml;
         this.destinatario = destinatario;
         this.contenido = contenido;
         this.asunto = asunto;
+        this.esHTML = pHtml;
+        
     }
 
     public Boolean getNotApp() {
@@ -77,6 +80,14 @@ public class SDT_NotificacionEnvio {
 
     public void setAsunto(String asunto) {
         this.asunto = asunto;
+    }
+
+    public Boolean getEsHTML() {
+        return esHTML;
+    }
+
+    public void setEsHTML(Boolean esHTML) {
+        this.esHTML = esHTML;
     }
     
     

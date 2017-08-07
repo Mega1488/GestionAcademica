@@ -113,7 +113,7 @@ public class ManejoNotificacion {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     public SDT_NotificacionEnvio ArmarEnvio(Notificacion notificacion, NotificacionDestinatario destinatario, String contenido, String asunto){
-        SDT_NotificacionEnvio envio = new SDT_NotificacionEnvio(notificacion.getNotApp(), notificacion.getNotWeb(), notificacion.getNotEmail(), destinatario, contenido, asunto);
+        SDT_NotificacionEnvio envio = new SDT_NotificacionEnvio(notificacion.getNotApp(), notificacion.getNotWeb(), notificacion.getNotEmail(), destinatario, contenido, asunto, false);
         return envio;
     }
     
@@ -175,7 +175,7 @@ public class ManejoNotificacion {
                                 , sdtNotificacion.getDestinatario().GetTextoDestinatario()
                                 , NotificacionEstado.ENVIO_CON_ERRORES, (new Date()) 
                                 + ": Notificacion por email: "
-                                + retorno.getMensaje().toString()
+                                + retorno.getMensaje().getMensaje()
                         );
                     }
                     else
@@ -183,7 +183,9 @@ public class ManejoNotificacion {
                         bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
                                 , sdtNotificacion.getContenido()
                                 , sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por email");
+                                , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) 
+                                        + ": Notificado por email: " 
+                                        +  retorno.getMensaje().getMensaje());
                     }
                 }
 
@@ -299,7 +301,7 @@ public class ManejoNotificacion {
                                 bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
                                         , sdtNotificacion.getContenido()
                                         , sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                        , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por email");
+                                        , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por email: " + retorno.getMensaje().getMensaje());
                             }
                         }
                         else
@@ -363,7 +365,7 @@ public class ManejoNotificacion {
 
                     //REEMPLAZO EL TAG POR EL CODIGO DE LA PERSONA, NO APLICA A EMAILS.
                     if(destinatario.getPersona() != null) query = query.replace("[%=DESTINATARIO]", destinatario.getPersona().getPerCod().toString());
-
+                   
                     retorno = loNotificacion.obtenerResultadosQuery(query);
 
                     if(retorno.SurgioError())
@@ -589,6 +591,8 @@ public class ManejoNotificacion {
                         {
                             asunto  = notificacion.getNotAsu();
                             if(dest.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getPersona().getPerCod().toString().trim());
+                            if(dest.getEmail() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getEmail().trim());
+                            
                             lstEnvio.add(this.ArmarEnvio(notificacion, dest, this.ProcesoTags(contenido, registro).trim(), this.ProcesoTags(asunto, registro).trim()));
                         }
                     }
@@ -635,6 +639,7 @@ public class ManejoNotificacion {
             }
             
             if(destinatario.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", destinatario.getPersona().getPerCod().toString().trim());
+            if(destinatario.getEmail() != null) asunto = asunto.replace("[%=DESTINATARIO]", destinatario.getEmail().trim());
             contenido = contenido.replace("[%=INICIO_REPETICION]" + repeticionTags + "[%=FIN_REPETICION]", repeticion);
             
             lstEnvio.add(this.ArmarEnvio(notificacion, destinatario, contenido, asunto));
@@ -686,6 +691,7 @@ public class ManejoNotificacion {
                 asunto  = notificacion.getNotAsu();
                 
                 if(dest.getPersona() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getPersona().getPerCod().toString().trim());
+                if(dest.getEmail() != null) asunto = asunto.replace("[%=DESTINATARIO]", dest.getEmail().trim());
                 
                 contenido = contenido.replace("[%=INICIO_REPETICION]" + repeticionTags + "[%=FIN_REPETICION]", repeticion.trim()).trim();
 

@@ -40,7 +40,7 @@
     
     if(Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE))
     {
-        paramEml = lPrmEml.obtener(Integer.valueOf(ParEmlCod));
+        paramEml = lPrmEml.obtener(Long.valueOf(ParEmlCod));
     }
     
     String CamposActivos = "disabled";
@@ -85,7 +85,9 @@
                                 var ParEmlUsr       = $('#ParEmlUsr').val();
                                 var ParEmlPsw       = $('#ParEmlPsw').val();
                                 var ParEmlSSL       = $('select[name=ParEmlSSL]').val(); 
-                                var ParEmlTmpEsp    = $('#ParEmlTmpEsp').val(); 
+                                var ParEmlTmpEsp    = $('#ParEmlTmpEsp').val();
+                                var ParEmlDebug    = document.getElementById('ParEmlDebug').checked;
+                                var ParEmlReqConf    = document.getElementById('ParEmlReqConf').checked;
                                 
                                 if(ParEmlNom == '')
                                     {
@@ -112,6 +114,8 @@
                                                              pParEmlPsw       : ParEmlPsw,   
                                                              pParEmlSSL       : ParEmlSSL,   
                                                              pParEmlTmpEsp    : ParEmlTmpEsp,   
+                                                             pParEmlDebug     : ParEmlDebug,
+                                                             pParEmlReqConf   : ParEmlReqConf,
                                                              pAction          : "INSERTAR"
                                                      }, function(responseText) {
                                                          var obj = JSON.parse(responseText);
@@ -148,7 +152,9 @@
                                                         pParEmlUsr       : ParEmlUsr,   
                                                         pParEmlPsw       : ParEmlPsw,   
                                                         pParEmlSSL       : ParEmlSSL,   
-                                                        pParEmlTmpEsp    : ParEmlTmpEsp,   
+                                                        pParEmlTmpEsp    : ParEmlTmpEsp,  
+                                                        pParEmlDebug     : ParEmlDebug,
+                                                        pParEmlReqConf   : ParEmlReqConf,
                                                         pAction          : "ACTUALIZAR"
                                                 }, function(responseText) {
                                                     var obj = JSON.parse(responseText);
@@ -330,6 +336,14 @@
 
                             <div class="checkbox">
                                 <label><input type="checkbox" id="ParEmlUtlAut" name="ParEmlUtlAut"  <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(paramEml.getParEmlUtlAut())); %>> Utiliza autenticación</label>
+                            </div>
+                            
+                            <div class="checkbox">
+                                <label><input type="checkbox" id="ParEmlDebug" name="ParEmlDebug"  <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(paramEml.getParEmlDebug())); %>> Debug</label>
+                            </div>
+                            
+                            <div class="checkbox">
+                                <label><input type="checkbox" id="ParEmlReqConf" name="ParEmlReqConf"  <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(paramEml.getParEmlReqConf())); %>> Requiere confirmacion</label>
                             </div>
 
                             <!------------------------------------------------------------------------------------------>

@@ -117,6 +117,7 @@
                                     <th>Código</th>
                                     <th>Fecha</th>
                                     <th>Estado</th>
+                                    <th>Destinatario</th>
                                 </tr>
                             </thead>
 
@@ -129,6 +130,7 @@
                                 <td><% out.print(utilidad.NuloToVacio(bitacora.getNotBitCod())); %> </td>
                                 <td><% out.print(utilidad.NuloToVacio(bitacora.getNotBitFch())); %> </td>
                                 <td><% out.print(utilidad.NuloToVacio(bitacora.getNotBitEst().getNombre())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(bitacora.getNotBitDst())); %> </td>
 
                             </tr>
                             <%
