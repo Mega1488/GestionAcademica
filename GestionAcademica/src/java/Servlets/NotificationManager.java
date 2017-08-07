@@ -6,12 +6,18 @@
 package Servlets;
 
 import Entidad.Notificacion;
+import Entidad.NotificacionBandeja;
+import Entidad.Persona;
+import Enumerado.BandejaEstado;
+import Enumerado.BandejaTipo;
 import Enumerado.ObtenerDestinatario;
 import Enumerado.TipoEnvio;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoNotificacion;
 import Enumerado.TipoRepeticion;
+import Logica.LoBandeja;
 import Logica.LoNotificacion;
+import Logica.LoPersona;
 import Logica.Notificacion.AsyncNotificar;
 import Logica.Notificacion.ManejoNotificacion;
 import Utiles.Mensajes;
@@ -62,6 +68,14 @@ public class NotificationManager extends HttpServlet {
                 case "DEPURAR_BITACORA":
                     retorno = this.DepurarBitacora(request);
                     break;
+                
+                case "ELIMINAR_MENSAJE":
+                    retorno = this.EliminarBandeja(request);
+                    break;
+                
+                case "MENSAJE_VISTO":
+                    retorno = this.VerBandeja(request);
+                    break;
             }
             
             out.print(retorno);
@@ -104,6 +118,23 @@ public class NotificationManager extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    private String EliminarBandeja(HttpServletRequest request){
+        NotificacionBandeja bandeja = this.ValidarBandeja(request);
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) LoBandeja.GetInstancia().eliminar(bandeja);
+        
+        return utilidades.ObjetoToJson(retorno.getMensaje());
+    }
+    
+    private String VerBandeja(HttpServletRequest request){
+        NotificacionBandeja bandeja = this.ValidarBandeja(request);
+        
+        bandeja.setNotBanEst(BandejaEstado.LEIDA);
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) LoBandeja.GetInstancia().actualizar(bandeja);
+        
+        return utilidades.ObjetoToJson(retorno.getMensaje());
+    }    
     
     private Notificacion ValidarNotificacion(HttpServletRequest request, Notificacion notificacion){
         
@@ -159,7 +190,41 @@ public class NotificationManager extends HttpServlet {
 
                 return notificacion;
         }
-    
+
+    private NotificacionBandeja ValidarBandeja(HttpServletRequest request){
+        
+        NotificacionBandeja bandeja   = new NotificacionBandeja();
+        
+            
+                String NotBanCod= request.getParameter("pNotBanCod");
+                String NotBanAsu= request.getParameter("pNotBanAsu");
+                String NotBanEst= request.getParameter("pNotBanEst");
+                String NotBanMen= request.getParameter("pNotBanMen");
+                String NotBanTpo= request.getParameter("pNotBanTpo");
+                String NotBanPerCod= request.getParameter("pNotBanPerCod");
+                
+                
+                //------------------------------------------------------------------------------------------
+                //Validaciones
+                //------------------------------------------------------------------------------------------
+
+                //TIPO DE DATO
+
+                
+
+
+                //Sin validacion
+                
+                if(NotBanCod != null) if(!NotBanCod.isEmpty()) bandeja = (NotificacionBandeja) LoBandeja.GetInstancia().obtener(Long.valueOf(NotBanCod)).getObjeto();
+                if(NotBanAsu != null) if(!NotBanAsu.isEmpty()) bandeja.setNotBanAsu(NotBanAsu);
+                if(NotBanEst != null) if(!NotBanEst.isEmpty()) bandeja.setNotBanEst(BandejaEstado.fromCode(Integer.valueOf(NotBanEst)));
+                if(NotBanMen != null) if(!NotBanMen.isEmpty()) bandeja.setNotBanMen(NotBanMen);
+                if(NotBanTpo != null) if(!NotBanTpo.isEmpty()) bandeja.setNotBanTpo(BandejaTipo.fromCode(Integer.valueOf(NotBanTpo)));
+                if(NotBanPerCod != null) if(!NotBanPerCod.isEmpty()) bandeja.setDestinatario((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(NotBanPerCod)).getObjeto());
+                
+                
+                return bandeja;
+        }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

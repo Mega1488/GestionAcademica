@@ -19,6 +19,7 @@
     Long PerCod             = (Long) session.getAttribute(NombreSesiones.USUARIO_PER.getValor());    
 
     List<Object> lstBandeja = new ArrayList<>();
+    List<Object> lstVistos = new ArrayList<>();
     
     if(PerCod != null)
     {
@@ -31,8 +32,18 @@
         {
             out.print(retorno.getMensaje().toString());
         }
+        
+        retorno = (Retorno_MsgObj) LoBandeja.GetInstancia().obtenerListaByTipoEstado(PerCod, BandejaTipo.WEB, BandejaEstado.LEIDA);
+        if(!retorno.SurgioError())
+        {
+            lstVistos = retorno.getLstObjetos();
+        }
+        else
+        {
+            out.print(retorno.getMensaje().toString());
+        }
     }
-    Integer cantidad = lstBandeja.size();
+    Integer cantidad = lstBandeja.size() + lstVistos.size();
 
 %>
 
@@ -41,14 +52,25 @@
         <p>Notificaciones: <label><a href="#" id="btn_ver_bandeja"><%out.print(cantidad);%></a></label></p>
         
         <div name="div_notificaciones" id="div_notificaciones" class="col-lg-2 div_notificaciones" style="display: none;" >
+            <div id="div_not_sinleer">
             <%
                 for(Object objeto : lstBandeja)
                 {
                   NotificacionBandeja bandeja = (NotificacionBandeja) objeto;  
-                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-codigo='"+bandeja.getNotBanCod()+"' data-asunto='"+bandeja.getNotBanAsu()+"' data-mensaje='"+bandeja.getNotBanMen()+"' class='btn_ver_msg'>" + bandeja.getNotBanAsu() + "</div></div>");
+                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-codigo='"+bandeja.getNotBanCod()+"' data-asunto='"+bandeja.getNotBanAsu()+"' data-mensaje='"+bandeja.getNotBanMen()+"' class='btn_ver_msg not_sinver'>" + bandeja.getNotBanAsu() + "</div></div>");
                 }
             %>
+            </div>
             
+            <div id="div_not_vistos">
+            <%
+                for(Object objeto : lstVistos)
+                {
+                  NotificacionBandeja bandeja = (NotificacionBandeja) objeto;  
+                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-codigo='"+bandeja.getNotBanCod()+"' data-asunto='"+bandeja.getNotBanAsu()+"' data-mensaje='"+bandeja.getNotBanMen()+"' class='btn_ver_msg not_vista'>" + bandeja.getNotBanAsu() + "</div></div>");
+                }
+            %>
+            </div>
         </div>
         
     </div>

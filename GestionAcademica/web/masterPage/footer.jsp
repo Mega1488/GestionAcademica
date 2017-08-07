@@ -37,6 +37,8 @@
     <script type="text/javascript">
         $(document).ready(function() {
            var notVisible = false;
+           var url     = $('#sga_url').val();
+           
            $('#div_notificaciones').hide(); 
            
             $('#btn_ver_bandeja').on('click', function(e) {
@@ -74,16 +76,28 @@
                 $('#pop_asunto').text(asunto);
                 $('#pop_mensaje').text(mensaje);
                 $('#ban_boton_confirmar').data('codigo', codigo);
+                
+                $.post(url + 'NotificationManager', {
+                                pNotBanCod: codigo,
+                                pAction: "MENSAJE_VISTO"
+                             }, function (responseText) {
+                                 var obj = JSON.parse(responseText);
+
+                                 if (obj.tipoMensaje == 'ERROR')
+                                 {
+                                     MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                 }
+
+                             });
 
 
               });
 
               $('#ban_boton_confirmar').on('click', function(e) {
                     var codigo  = $('#ban_boton_confirmar').data('codigo');
-                    var url     = $('#sga_url').val();
-                    $.post(url + 'ABM_Inscripcion', {
+                    $.post(url + 'NotificationManager', {
                                 pNotBanCod: codigo,
-                                pAction: "DELETE"
+                                pAction: "ELIMINAR_MENSAJE"
                              }, function (responseText) {
                                  var obj = JSON.parse(responseText);
 
