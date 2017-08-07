@@ -10,6 +10,7 @@ import Enumerado.TipoNotificacion;
 import Enumerado.TipoEnvio;
 import Enumerado.TipoRepeticion;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -119,6 +120,28 @@ public class Notificacion implements Serializable {
         
     //-CONSTRUCTOR
     public Notificacion() {
+        this.lstDestinatario = new ArrayList<>();
+        this.lstBitacora = new ArrayList<>();
+        this.lstConsulta = new ArrayList<>();
+        
+        this.NotAct     = false;
+        
+        this.NotWeb     = false;
+        this.NotApp     = false;
+        this.NotEmail   = false;
+       
+        
+        this.NotAsu = "";
+        this.NotCon = "";
+        this.NotDsc = "";
+        this.NotNom = "";
+        
+        this.NotObtDest = ObtenerDestinatario.UNICA_VEZ;
+        this.NotRepTpo  = TipoRepeticion.SIN_REPETICION;
+        this.NotTpo     = TipoNotificacion.A_DEMANDA;
+        this.NotTpoEnv  = TipoEnvio.COMUN;
+        
+        
     }
     
     //-GETTERS Y SETTERS

@@ -5,11 +5,21 @@
  */
 package Logica;
 
+import Entidad.Notificacion;
+import Entidad.NotificacionBandeja;
+import Entidad.NotificacionDestinatario;
 import Enumerado.BandejaEstado;
 import Enumerado.BandejaTipo;
+import Enumerado.ObtenerDestinatario;
+import Enumerado.TipoEnvio;
 import Interfaz.InABMGenerico;
+import Logica.Notificacion.AsyncNotificar;
+import Logica.Notificacion.ManejoNotificacion;
 import Persistencia.PerBandeja;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -61,6 +71,43 @@ public class LoBandeja implements InABMGenerico{
     
     public Retorno_MsgObj obtenerListaByTipoEstado(Long PerCod, BandejaTipo NotBanTpo, BandejaEstado NotBanEst) {
         return perBandeja.obtenerListaByTipoEstado(PerCod, NotBanTpo, NotBanEst);
+    }
+    
+    public void NotificarPendientes(Long PerCod){
+        Retorno_MsgObj retorno = this.obtenerListaByTipoEstado(PerCod, BandejaTipo.APP, BandejaEstado.SIN_LEER);
+        
+        if(!retorno.SurgioError())
+        {
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                NotificacionBandeja bandeja = (NotificacionBandeja) objeto;
+                
+                Notificacion notificacion = new Notificacion();
+                
+                notificacion.setNotApp(Boolean.TRUE);
+                notificacion.setNotAsu(bandeja.getNotBanAsu());
+                notificacion.setNotCon(bandeja.getNotBanMen());
+                notificacion.setNotTpoEnv(TipoEnvio.COMUN);
+                notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+                
+                NotificacionDestinatario destinatario = new NotificacionDestinatario();
+                destinatario.setNotificacion(notificacion);
+                destinatario.setPersona(bandeja.getDestinatario());
+                
+                notificacion.setLstDestinatario(new ArrayList<NotificacionDestinatario>());
+                
+                notificacion.getLstDestinatario().add(destinatario);
+                
+                ManejoNotificacion manager = new ManejoNotificacion();
+                manager.EjecutarNotificacion(notificacion);
+                  
+                  
+               bandeja.setNotBanEst(BandejaEstado.LEIDA);
+               this.actualizar(bandeja);
+                  
+            }
+        }
+        
     }
     
    

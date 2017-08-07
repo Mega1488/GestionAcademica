@@ -74,17 +74,20 @@ public class ManejoNotificacion {
         
         List<SDT_Destinatario> destExcluir = new ArrayList<>();
         
-        for(NotificacionConsulta consulta : notificacion.getLstConsulta())
+        if(notificacion.getLstConsulta() != null)
         {
-            if(consulta.getNotCnsTpo().equals(TipoConsulta.EXC_DESTINATARIO))
+            for(NotificacionConsulta consulta : notificacion.getLstConsulta())
             {
-                retorno = this.ProcesarDestinatariosExcluir(destExcluir, consulta.getNotCnsSQL());
-                
-                if(!retorno.SurgioError())
+                if(consulta.getNotCnsTpo().equals(TipoConsulta.EXC_DESTINATARIO))
                 {
-                    for(Object objeto : retorno.getLstObjetos())
+                    retorno = this.ProcesarDestinatariosExcluir(destExcluir, consulta.getNotCnsSQL());
+
+                    if(!retorno.SurgioError())
                     {
-                        destExcluir.add((SDT_Destinatario) objeto);
+                        for(Object objeto : retorno.getLstObjetos())
+                        {
+                            destExcluir.add((SDT_Destinatario) objeto);
+                        }
                     }
                 }
             }
@@ -160,15 +163,16 @@ public class ManejoNotificacion {
                 }
 
             }
-
+            
+            
             if(!excluirDestinatario)
             {
-                 Retorno_MsgObj retorno;
+                Retorno_MsgObj retorno;
                  
                 //-------------------------------------------------------------------------------------------------------------
                 //TIPO DE NOTIFICACION: EMAIL TIPO DE DESTINATARIO: EMAIL
                 //-------------------------------------------------------------------------------------------------------------
-
+                
                 if(sdtNotificacion.getNotEml() && sdtNotificacion.getDestinatario().getNotEmail() != null)
                 {
                     //NOTIFICA POR EMAIL
@@ -193,13 +197,14 @@ public class ManejoNotificacion {
                     }
                 }
 
-
+                
                 //-------------------------------------------------------------------------------------------------------------
                 //TIPO DE DESTINATARIO: PERSONA
                 //-------------------------------------------------------------------------------------------------------------
                 if(sdtNotificacion.getDestinatario().getPersona() != null)
                 {
                     Persona per = sdtNotificacion.getDestinatario().getPersona();
+                    
 
                     //-------------------------------------------------------------------------------------------------------------
                     //TIPO DE NOTIFICACION: APP
@@ -207,13 +212,15 @@ public class ManejoNotificacion {
 
                     if(sdtNotificacion.getNotApp() && per.getPerNotApp())
                     {
-
+                        
                         if(per.getPerAppTkn() != null)
                         {
                             if(!per.getPerAppTkn().isEmpty())
                             {
                                 //NOTIFICAR POR APP MOVIL
                                 retorno = notApp.Notificar(sdtNotificacion);
+                                
+                                
                                 if(retorno.SurgioError())
                                 {
                                     bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto(), sdtNotificacion.getContenido()
@@ -385,6 +392,8 @@ public class ManejoNotificacion {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     private Retorno_MsgObj ProcesarUnicaVez(Notificacion notificacion, List<SDT_Destinatario> destExcluir){
+        
+        
         Retorno_MsgObj retorno = this.ProcesarDestinatarios(notificacion);
 
         if(retorno.SurgioError())
@@ -479,7 +488,7 @@ public class ManejoNotificacion {
                     }
                 }
             }
-
+            
             //SI NO POSEE CONSULTAS, ENVIO A LOS DESTINATARIOS EL MENSAJE DEFINIDO POR DEFECTO.
             if(!tieneConsulta)
             {
@@ -985,14 +994,17 @@ public class ManejoNotificacion {
     
     private NotificacionBitacora ProcesoBitacora(NotificacionBitacora bitacora, Notificacion notificacion, String asunto, String contenido, String destinatario, NotificacionEstado estado, String mensaje){
         bitacora = this.CrearMensajeBitacora(bitacora, notificacion, asunto, contenido, destinatario, estado, mensaje);
-        
-        if(bitacora.getNotBitCod() == null)
+
+        if(notificacion.getNotCod() != null)
         {
-            bitacora = this.AgregoBitacora(bitacora);
-        }
-        else
-        {
-            this.ActualizoBitacora(bitacora);
+            if(bitacora.getNotBitCod() == null)
+            {
+                bitacora = this.AgregoBitacora(bitacora);
+            }
+            else
+            {
+                this.ActualizoBitacora(bitacora);
+            }
         }
         
         return bitacora;
@@ -1000,13 +1012,16 @@ public class ManejoNotificacion {
     
     private NotificacionBitacora CrearMensajeBitacora(NotificacionBitacora bitacora, Notificacion notificacion, String asunto, String contenido, String destinatario, NotificacionEstado estado, String mensaje){
         
+        
         if(bitacora == null) bitacora = new NotificacionBitacora();
+        
         
         bitacora.setNotBitAsu(asunto);
         bitacora.setNotBitCon(contenido);
         bitacora.setNotBitDst(destinatario);
         bitacora.setNotBitFch(new java.util.Date());
-        bitacora.setNotificacion((Notificacion) loNotificacion.obtener(notificacion.getNotCod()).getObjeto());
+        
+        if(notificacion.getNotCod() != null) bitacora.setNotificacion((Notificacion) loNotificacion.obtener(notificacion.getNotCod()).getObjeto());
         
         if(estado != null) bitacora.setNotBitEst(estado);
         

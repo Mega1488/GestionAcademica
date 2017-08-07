@@ -15,6 +15,7 @@ import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
 import Enumerado.TipoMensaje;
+import Logica.Notificacion.AsyncBandeja;
 import Moodle.Criteria;
 import Moodle.MoodleCourse;
 import Moodle.MoodleRestCourse;
@@ -453,6 +454,28 @@ public class LoPersona implements Interfaz.InPersona{
                 persona.setPerAppTkn(PerAppTkn);
 
                 retorno = (Retorno_MsgObj) this.actualizar(persona);
+                
+                if(!retorno.SurgioError())
+                {
+                    //ENVIO NOTIFICACIONES
+                    //LoBandeja.GetInstancia().NotificarPendientes(persona.getPerCod());
+                    
+                    AsyncBandeja xthread = null;
+                    //Long milliseconds = 10000; // 10 seconds
+                      try {
+                        xthread = new AsyncBandeja(persona.getPerCod());
+                        xthread.start();
+                      //  xthread.join(milliseconds);
+                      } catch (Exception ex) {
+
+                          Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+                      } finally {
+                        if (xthread != null && xthread.isAlive()) {
+                          Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+                          xthread.interrupt();
+                        }
+                      }
+                }
             }
         }
         

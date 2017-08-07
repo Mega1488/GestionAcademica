@@ -65,6 +65,7 @@ public class NotificacionBandeja implements Serializable {
     @Column(name = "NotBanMen", length = 4000)
     private String NotBanMen;
     
+    
     //-----------------------------------------------------------------
     
     public Long getNotBanCod() {
