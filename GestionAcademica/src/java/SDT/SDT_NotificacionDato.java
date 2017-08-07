@@ -11,6 +11,7 @@ package SDT;
  */
 public class SDT_NotificacionDato {
     private String message;
+    private String titulo;
 
     public SDT_NotificacionDato() {
     }
@@ -23,9 +24,21 @@ public class SDT_NotificacionDato {
         this.message = message;
     }
 
-    public SDT_NotificacionDato(String message) {
-        this.message = message;
+    public String getTitulo() {
+        return titulo;
     }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public SDT_NotificacionDato(String message, String titulo) {
+        this.message = message;
+        this.titulo = titulo;
+    }
+
+    
+    
     
     
 }

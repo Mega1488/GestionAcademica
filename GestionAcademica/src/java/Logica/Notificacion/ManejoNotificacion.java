@@ -6,10 +6,13 @@
 package Logica.Notificacion;
 
 import Entidad.Notificacion;
+import Entidad.NotificacionBandeja;
 import Entidad.NotificacionBitacora;
 import Entidad.NotificacionConsulta;
 import Entidad.NotificacionDestinatario;
 import Entidad.Persona;
+import Enumerado.BandejaEstado;
+import Enumerado.BandejaTipo;
 import Enumerado.NotificacionEstado;
 import Enumerado.ObtenerDestinatario;
 import Enumerado.TipoConsulta;
@@ -17,6 +20,7 @@ import Enumerado.TipoDestinatario;
 import Enumerado.TipoEnvio;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoNotificacion;
+import Logica.LoBandeja;
 import Logica.LoNotificacion;
 import Logica.LoPersona;
 import SDT.SDT_NotificacionEnvio;
@@ -224,29 +228,70 @@ public class ManejoNotificacion {
                                     bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
                                             , sdtNotificacion.getContenido()
                                             , sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                            , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por app");
+                                            , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Notificado por app: Ok");
                                 }
                             }
                             else
                             {
-                                bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
+                                NotificacionBandeja bandeja = new NotificacionBandeja();
+                                bandeja.setDestinatario(per);
+                                bandeja.setNotBanAsu(sdtNotificacion.getAsunto());
+                                bandeja.setNotBanMen(sdtNotificacion.getContenido());
+                                bandeja.setNotBanEst(BandejaEstado.SIN_LEER);
+                                bandeja.setNotBanTpo(BandejaTipo.APP);
+                                
+                                retorno = (Retorno_MsgObj) LoBandeja.GetInstancia().guardar(bandeja);
+                                
+                                if(retorno.SurgioError())
+                                {
+                                    bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
                                         , sdtNotificacion.getContenido()
                                         , sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                        , NotificacionEstado.ENVIO_CON_ERRORES, (new Date()) + ": El destinatario: " 
+                                        , NotificacionEstado.ENVIO_CON_ERRORES, (new Date()) + ": Error: " + retorno.getMensaje().getMensaje()
+                                    );
+                                }
+                                else
+                                {
+                                    bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
+                                        , sdtNotificacion.getContenido()
+                                        , sdtNotificacion.getDestinatario().GetTextoDestinatario()
+                                        , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": El destinatario: " 
                                         + sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                        + ", no tiene sesión iniciada en un dispositivo"
-                                );
+                                        + ", recibira la notificacion cuando inicie sesion"
+                                    );
+                                }
+                                
                             }
                         }
                         else
                         {
-                            bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
+                            NotificacionBandeja bandeja = new NotificacionBandeja();
+                            bandeja.setDestinatario(per);
+                            bandeja.setNotBanAsu(sdtNotificacion.getAsunto());
+                            bandeja.setNotBanMen(sdtNotificacion.getContenido());
+                            bandeja.setNotBanEst(BandejaEstado.SIN_LEER);
+                            bandeja.setNotBanTpo(BandejaTipo.APP);
+
+                            retorno = (Retorno_MsgObj) LoBandeja.GetInstancia().guardar(bandeja);
+
+                            if(retorno.SurgioError())
+                            {
+                                bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
                                     , sdtNotificacion.getContenido()
                                     , sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                    ,NotificacionEstado.ENVIO_CON_ERRORES, (new Date()) + ": El destinatario: " 
-                                        + sdtNotificacion.getDestinatario().GetTextoDestinatario()
-                                        + ", no tiene sesión iniciada en un dispositivo"
+                                    , NotificacionEstado.ENVIO_CON_ERRORES, (new Date()) + ": Error: " + retorno.getMensaje().getMensaje()
                                 );
+                            }
+                            else
+                            {
+                                bitacora = this.ProcesoBitacora(bitacora, notificacion, sdtNotificacion.getAsunto()
+                                    , sdtNotificacion.getContenido()
+                                    , sdtNotificacion.getDestinatario().GetTextoDestinatario()
+                                    , NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": El destinatario: " 
+                                    + sdtNotificacion.getDestinatario().GetTextoDestinatario()
+                                    + ", recibira la notificacion cuando inicie sesion"
+                                );
+                            }
                         }
                     }
 

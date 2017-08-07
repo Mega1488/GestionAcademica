@@ -7,6 +7,8 @@ package Logica.Notificacion;
 
 import Enumerado.TipoMensaje;
 import SDT.SDT_Notificacion;
+import SDT.SDT_NotificacionApp;
+import SDT.SDT_NotificacionDato;
 import SDT.SDT_NotificacionEnvio;
 import SDT.SDT_NotificacionNotification;
 import Utiles.Mensajes;
@@ -52,9 +54,9 @@ public class NotificacionApp {
             
             SDT_Notificacion notMobile = new SDT_Notificacion();
             notMobile.setTo(notificacion.getDestinatario().getPersona().getPerAppTkn());
-            //notificacion.setData(new SDT_NotificacionDato("Esto es un mensaje"));
-
-            notMobile.setNotification(new SDT_NotificacionNotification(notificacion.getContenido(), notificacion.getAsunto(), "icon"));
+            
+            notMobile.setData(new SDT_NotificacionDato(notificacion.getContenido(), notificacion.getAsunto()));
+            //notMobile.setNotification(new SDT_NotificacionNotification(notificacion.getContenido(), notificacion.getAsunto(), "icon"));
             
                 
             String input = Utiles.Utilidades.GetInstancia().ObjetoToJson(notMobile);
@@ -78,10 +80,39 @@ public class NotificacionApp {
             }
             in.close();
             
-            // print result
             System.out.println(response.toString());
             
-            retorno.setMensaje(new Mensajes(response.toString(), TipoMensaje.MENSAJE));
+            if(responseCode == 200)
+            {
+                //retorno.setMensaje(new Mensajes("Envio correcto", TipoMensaje.MENSAJE));
+               
+                SDT_NotificacionApp resultado = new SDT_NotificacionApp();
+                resultado = (SDT_NotificacionApp) Utiles.Utilidades.GetInstancia().JsonToObject(response.toString(), resultado);
+                
+                if(resultado.getSuccess() > 0)
+                {
+                    retorno.setMensaje(new Mensajes("Envio correcto", TipoMensaje.MENSAJE));
+                }
+                else
+                {
+                    retorno.setMensaje(new Mensajes("Error", TipoMensaje.ERROR));
+                    
+                    if(resultado.getResults() != null)
+                    {
+                        if(resultado.getResults().size() > 0)
+                        {
+                            retorno.setMensaje(new Mensajes("Error: " + resultado.getResults().get(0).getError(), TipoMensaje.ERROR));
+                        }
+                    }
+                    
+                }
+                
+            }
+            else
+            {
+                retorno.setMensaje(new Mensajes(response.toString(), TipoMensaje.ERROR));
+            }
+            
             
         } catch (MalformedURLException ex) {
             Logger.getLogger(NotificacionApp.class.getName()).log(Level.SEVERE, null, ex);

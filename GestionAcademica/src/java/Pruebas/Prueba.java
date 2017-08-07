@@ -7,6 +7,8 @@ package Pruebas;
 
 import Logica.Notificacion.ManejoNotificacion;
 import SDT.SDT_Notificacion;
+import SDT.SDT_NotificacionApp;
+import SDT.SDT_NotificacionAppResultado;
 import SDT.SDT_NotificacionNotification;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -59,7 +61,34 @@ public class Prueba extends HttpServlet {
             
             //this.Probar();
             
-            this.ProbarManejoNotificacion();
+            //this.ProbarManejoNotificacion();
+            
+//            SDT_NotificacionApp app = new SDT_NotificacionApp();
+            /*SDT_NotificacionAppResultado resultado = new SDT_NotificacionAppResultado();
+            
+            //resultado.setError("asda");
+            resultado.setMessage_id("0:1502071602468440%6593fe6ff9fd7ecd");
+
+            ArrayList<SDT_NotificacionAppResultado> resuls = new ArrayList<>();
+            resuls.add(resultado);
+            
+            app.setResults(resuls);
+            
+            app.setCanonical_ids(0);
+            app.setFailure(0);
+            app.setMulticast_id(Long.valueOf("8141774776764165558"));
+            app.setSuccess(1);
+            
+            System.err.println("Resultado: " + Utiles.Utilidades.GetInstancia().ObjetoToJson(app));
+            */
+            
+            SDT_NotificacionApp app = new SDT_NotificacionApp();
+            
+            String auxi = "{\"multicast_id\":8141774776764165558,\"success\":1,\"failure\":0,\"canonical_ids\":0}";
+            
+            app =  (SDT_NotificacionApp) Utiles.Utilidades.GetInstancia().JsonToObject(auxi, app);
+            
+            System.err.println(app.getMulticast_id());
         }
     }
     

@@ -78,19 +78,19 @@ public class Utilidades {
         return retorno;
     }
     
-    public Object JsonToObject(String jsonValue)
+    public Object JsonToObject(String jsonValue, Object unObj)
     {
         
         ObjectMapper mapper = new ObjectMapper();
         
         try {
             // convert user object to json string and return it 
-            return mapper.readValue(jsonValue, Object.class);
+            return mapper.readValue(jsonValue, unObj.getClass());
         }
 
           // catch various errors
           catch (JsonGenerationException e) {
-            e.printStackTrace();
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, e);
         } catch (IOException ex) {
             Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
         }
