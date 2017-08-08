@@ -17,38 +17,35 @@
 <%@page import="Utiles.Utilidades"%>
 <%
 
-    Utilidades utilidad         = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
-    
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
     //----------------------------------------------------------------------------------------------------
-    
-    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
-    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
-    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
     Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
-    
-    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
-            
+
+    if (acceso.SurgioError()) {
+        response.sendRedirect((String) acceso.getObjeto());
+    }
+
     //----------------------------------------------------------------------------------------------------
-    
     String NotCod = request.getParameter("pNotCod");
-    
+
     List<NotificacionDestinatario> lstObjeto = new ArrayList<>();
-    
+
     Retorno_MsgObj retorno = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
-    if(!retorno.SurgioError())
-    {
+    if (!retorno.SurgioError()) {
         Notificacion notificacion = (Notificacion) retorno.getObjeto();
         lstObjeto = notificacion.getLstDestinatario();
-    }
-    else
-    {
+    } else {
         out.print(retorno.getMensaje().toString());
     }
-    
+
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
 %>
@@ -65,17 +62,17 @@
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            
+
             <div id="contenido" name="contenido" class="main-panel">
-                
+
                 <div class="contenedor-cabezal">
                     <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
-                
+
                 <div class="contenedor-principal">
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        
-                       <div id="tabs" name="tabs" class="contenedor-tabs">
+
+                        <div id="tabs" name="tabs" class="contenedor-tabs">
                             <jsp:include page="/Definiciones/DefNotificacionTabs.jsp"/>
                         </div>
 
@@ -86,7 +83,7 @@
                         <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                             <input type="hidden" name="NotCod" id="NotCod" value="<% out.print(NotCod); %>">
                         </div>
-                        
+
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
                             <a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatario.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pNotCod=<% out.print(NotCod); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
                         </div>
@@ -102,28 +99,29 @@
                                 </tr>
                             </thead>
 
-                            <% for(NotificacionDestinatario destinatario : lstObjeto)
-                            {
+                            <% for (NotificacionDestinatario destinatario : lstObjeto) {
 
                             %>
                             <tr>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatario.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pNotCod=<% out.print(destinatario.getNotificacion().getNotCod()); %>&pNotDstCod=<% out.print(destinatario.getNotDstCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatario.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(destinatario.getNotificacion().getNotCod()); %>&pNotDstCod=<% out.print(destinatario.getNotDstCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
-                                <td><% out.print( utilidad.NuloToVacio(destinatario.getNotDstCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getNombreCompleto() : ""))); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(destinatario.getNotEmail())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(destinatario.getNotDstCod())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getNombreCompleto() : ""))); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(destinatario.getNotEmail())); %> </td>
 
                             </tr>
                             <%
-                            }
+                                }
                             %>
                         </table>
 
                     </div>
                 </div>
             </div>
+
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
-             
-        
+
+
     </body>
 </html>

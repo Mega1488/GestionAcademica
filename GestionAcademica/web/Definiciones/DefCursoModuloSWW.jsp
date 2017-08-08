@@ -16,54 +16,53 @@
 <%@page import="Utiles.Utilidades"%>
 <%
 
-    LoCurso loCurso     = LoCurso.GetInstancia();
+    LoCurso loCurso = LoCurso.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
-    
+    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
     //----------------------------------------------------------------------------------------------------
-    
-    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
-    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
-    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
     Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
-    
-    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
-            
-    //----------------------------------------------------------------------------------------------------
-    
-    Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
-    String CurCod       = request.getParameter("pCurCod");
-    
-    Curso curso     = new Curso();
-   
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(CurCod));
-    if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
-    {
-        curso = (Curso) retorno.getObjeto();
+
+    if (acceso.SurgioError()) {
+        response.sendRedirect((String) acceso.getObjeto());
     }
-    else
-    {
+
+    //----------------------------------------------------------------------------------------------------
+    Modo Mode = Modo.valueOf(request.getParameter("MODO"));
+    String CurCod = request.getParameter("pCurCod");
+
+    Curso curso = new Curso();
+
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(CurCod));
+    if (retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR) {
+        curso = (Curso) retorno.getObjeto();
+    } else {
         out.print(retorno.getMensaje().toString());
     }
-    
+
     String CamposActivos = "disabled";
-    
-    switch(Mode)
-    {
-        case INSERT: CamposActivos = "enabled";
+
+    switch (Mode) {
+        case INSERT:
+            CamposActivos = "enabled";
             break;
-        case DELETE: CamposActivos = "disabled";
+        case DELETE:
+            CamposActivos = "disabled";
             break;
-        case DISPLAY: CamposActivos = "disabled";
+        case DISPLAY:
+            CamposActivos = "disabled";
             break;
-        case UPDATE: CamposActivos = "enabled";
+        case UPDATE:
+            CamposActivos = "enabled";
             break;
     }
-    
-    
+
     String tblModuloVisible = (curso.getLstModulos().size() > 0 ? "" : "display: none;");
 
 %>
@@ -80,20 +79,20 @@
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            
+
             <div id="contenido" name="contenido" class="main-panel">
-                
+
                 <div class="contenedor-cabezal">
                     <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
-                
+
                 <div class="contenedor-principal">
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        
+
                         <div id="tabs" name="tabs" class="contenedor-tabs">
                             <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
                         </div>
-                
+
                         <div class=""> 
                             <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoWW.jsp">Regresar</a></div>
                         </div>
@@ -122,28 +121,29 @@
                                 </tr>
                             </thead>
 
-                            <% for(Modulo modulo : curso.getLstModulos())
-                            {
+                            <% for (Modulo modulo : curso.getLstModulos()) {
 
                             %>
                             <tr>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCurCod=<% out.print(curso.getCurCod()); %>&pModCod=<% out.print(modulo.getModCod()); %>" name="btn_eliminar" id="btn_eliminar"  title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCurCod=<% out.print(curso.getCurCod()); %>&pModCod=<% out.print(modulo.getModCod()); %>" name="btn_editar" id="btn_editar" title="Editar"  class="glyphicon glyphicon-edit"></a></td>
 
-                                <td><% out.print( utilidad.NuloToVacio(modulo.getModCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(modulo.getModNom())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(modulo.getModDsc())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(modulo.getModTpoPer().getTipoPeriodoNombre())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(modulo.getModCntHor())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(modulo.getModCod())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(modulo.getModNom())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(modulo.getModDsc())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(modulo.getModTpoPer().getTipoPeriodoNombre())); %> </td>
+                                <td><% out.print(utilidad.NuloToVacio(modulo.getModCntHor())); %> </td>
 
                             </tr>
                             <%
-                            }
+                                }
                             %>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
     </body>
 </html>

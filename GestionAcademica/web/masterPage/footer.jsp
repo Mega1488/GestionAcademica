@@ -25,7 +25,7 @@
           <div class="modal-body">
 
               <label name="pop_asunto" id="pop_asunto"></label>
-              <textarea rows="10" disabled class="form-control" name="pop_mensaje" id="pop_mensaje"></textarea>
+              <div name="pop_mensaje" id="pop_mensaje"></div>
 
           </div>
           <div class="modal-footer">
@@ -68,13 +68,14 @@
             });
 
             $('.btn_ver_msg').on('click', function(e) {
-              
-                var codigo = $(this).data("codigo");
-                var asunto = $(this).data("asunto");
-                var mensaje = $(this).data("mensaje");
+                var bandeja = $(this).data("objeto");
+                //var bandeja = JSON.parse(objeto);
+                var codigo = bandeja.notBanCod;
+                var asunto = bandeja.notBanAsu;
+                var mensaje = bandeja.notBanMen;
 
                 $('#pop_asunto').text(asunto);
-                $('#pop_mensaje').text(mensaje);
+                $('#pop_mensaje').html(mensaje);
                 $('#ban_boton_confirmar').data('codigo', codigo);
                 
                 $.post(url + 'NotificationManager', {

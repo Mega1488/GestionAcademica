@@ -141,6 +141,8 @@ public class ManejoNotificacion {
         }
         else
         {
+            sdtNotificacion.setEsHTML(Boolean.TRUE);
+            
             NotificacionBitacora bitacora   = this.ProcesoBitacora(null, notificacion, sdtNotificacion.getAsunto(), sdtNotificacion.getContenido(), sdtNotificacion.getDestinatario().GetTextoDestinatario(), NotificacionEstado.ENVIO_EN_PROGRESO, (new Date()) + ": Iniciando proceso");
 
             Boolean excluirDestinatario = false;

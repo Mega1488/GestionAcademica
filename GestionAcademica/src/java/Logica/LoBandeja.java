@@ -13,13 +13,11 @@ import Enumerado.BandejaTipo;
 import Enumerado.ObtenerDestinatario;
 import Enumerado.TipoEnvio;
 import Interfaz.InABMGenerico;
-import Logica.Notificacion.AsyncNotificar;
 import Logica.Notificacion.ManejoNotificacion;
 import Persistencia.PerBandeja;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  *
@@ -43,10 +41,14 @@ public class LoBandeja implements InABMGenerico{
         return instancia;
     }
     
-
     @Override
     public Object guardar(Object pObjeto) {
-        return perBandeja.guardar(pObjeto);
+        
+        NotificacionBandeja bandeja = (NotificacionBandeja) pObjeto;
+        
+        bandeja.setNotBanFch(new Date());
+        
+        return perBandeja.guardar(bandeja);
     }
 
     @Override

@@ -5,6 +5,7 @@
  */
 package Pruebas;
 
+import Entidad.Notificacion;
 import Logica.Notificacion.ManejoNotificacion;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionApp;
@@ -56,8 +57,16 @@ public class Prueba extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
+            
+            Notificacion notificacion = new Notificacion();
+            
+            notificacion.setNotCon("<p>esto es una <b>cosa</b></p>");
+            
+            out.println("<input type='hidden' value='"+Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion).toString()+"'>");
+            
             out.println("</body>");
             out.println("</html>");
+            
             
             //this.Probar();
             
@@ -82,13 +91,13 @@ public class Prueba extends HttpServlet {
             System.err.println("Resultado: " + Utiles.Utilidades.GetInstancia().ObjetoToJson(app));
             */
             
-            SDT_NotificacionApp app = new SDT_NotificacionApp();
+       //     SDT_NotificacionApp app = new SDT_NotificacionApp();
             
-            String auxi = "{\"multicast_id\":8141774776764165558,\"success\":1,\"failure\":0,\"canonical_ids\":0}";
+        //    String auxi = "{\"multicast_id\":8141774776764165558,\"success\":1,\"failure\":0,\"canonical_ids\":0}";
             
-            app =  (SDT_NotificacionApp) Utiles.Utilidades.GetInstancia().JsonToObject(auxi, app);
+         //   app =  (SDT_NotificacionApp) Utiles.Utilidades.GetInstancia().JsonToObject(auxi, app);
             
-            System.err.println(app.getMulticast_id());
+          //  System.err.println(app.getMulticast_id());
         }
     }
     

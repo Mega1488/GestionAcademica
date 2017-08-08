@@ -190,6 +190,11 @@ public class Utilidades {
         return encodedUrl;
      }
      
+     public String QuitarTagHTML(String contenido){
+         contenido = contenido.replaceAll("\\<.*?>","");
+         
+         return contenido;
+     }
      
     
 }

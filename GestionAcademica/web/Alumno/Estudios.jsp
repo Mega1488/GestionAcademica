@@ -42,7 +42,7 @@
     lstEstudio = LoPersona.GetInstancia().ObtenerEstudios(persona.getPerCod());
 
     String tblVisible = (lstEstudio.size() > 0 ? "" : "display: none;");
-    
+
 
 %>
 <!DOCTYPE html>
@@ -54,60 +54,60 @@
 
         <script type="text/javascript">
 
-            $(document).ready(function() {
-                
-                function getOffset( el ) {
+            $(document).ready(function () {
+
+                function getOffset(el) {
                     var _x = 0;
                     var _y = 0;
-                    while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) 
+                    while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop))
                     {
                         _x += el.offsetLeft - el.scrollLeft;
                         _y += el.offsetTop - el.scrollTop;
                         el = el.offsetParent;
                     }
-                    
-                    return { top: _y, left: _x };
+
+                    return {top: _y, left: _x};
                 }
-                
+
                 $("#lines").attr("width", $("#cont_estudio").width());
                 $("#lines").attr("height", $("#cont_estudio").height());
-                
-                $("[data-materia]").each(function() {
+
+                $("[data-materia]").each(function () {
                     var materia = "dv_mat_" + $(this).data("id");
                     var previas = $(this).data("previas");
-                    
-                    $.each(previas, function(f , previa) {
-                        
+
+                    $.each(previas, function (f, previa) {
+
                         var previaCodigo = "dv_mat_" + previa;
-                        
+
                         var fromPoint = getOffset($('#' + previaCodigo)[0]);
                         var toPoint = getOffset($('#' + materia)[0]);
 
                         var from = function () {},
-                        to = new String('to');
+                                to = new String('to');
                         from.y = fromPoint.top - 150;
                         from.x = fromPoint.left;
-                        to.y = toPoint.top - 150; 
+                        to.y = toPoint.top - 150;
                         to.x = toPoint.left;
-                        
+
                         //$("#lines").html("<svg><line x1='50' y1='50' x2='350' y2='350' stroke='black'/></svg>");
-                        $("#lines").html($("#lines").html() + "<line x1='"+from.x+"' y1='"+from.y+"' x2='"+to.x+"' y2='"+to.y+"' stroke='black' data-from='"+previaCodigo+"' data-to='"+materia+"'/>");
+                        $("#lines").html($("#lines").html() + "<line x1='" + from.x + "' y1='" + from.y + "' x2='" + to.x + "' y2='" + to.y + "' stroke='black' data-from='" + previaCodigo + "' data-to='" + materia + "'/>");
 
                     });
                 });
-/*
-                var fromPoint = getOffset($('#first')[0]);
-                var toPoint = getOffset($('#second')[0]);
-
-                var from = function () {},
-                to = new String('to');
-                from.y = fromPoint.top+10;
-                from.x = fromPoint.left+10;
-                to.y = toPoint.top+10; 
-                to.x = toPoint.left+10;
-
-                $.line(from, to);
-*/
+                /*
+                 var fromPoint = getOffset($('#first')[0]);
+                 var toPoint = getOffset($('#second')[0]);
+                 
+                 var from = function () {},
+                 to = new String('to');
+                 from.y = fromPoint.top+10;
+                 from.x = fromPoint.left+10;
+                 to.y = toPoint.top+10; 
+                 to.x = toPoint.left+10;
+                 
+                 $.line(from, to);
+                 */
             });
         </script>
     </head>
@@ -129,92 +129,80 @@
                         </div>
 
                         <div name="cont_estudio" class="col-lg-12" style='margin-top:15px; <% out.print(tblVisible); %>'>
-                            
+
                             <svg name="lines" id="lines" width="100%" height="100%" style="position: absolute; left: 0; top:0">
-                               
+
                             </svg>
-                            
+
                             <%
-                                for(SDT_PersonaEstudio est : lstEstudio)
-                                {
+                                for (SDT_PersonaEstudio est : lstEstudio) {
                                     //--------------------------------------------------------------------------------------------------------
                                     //INICIAMOS DIV INSCRIPCION
                                     //--------------------------------------------------------------------------------------------------------
                                     out.println("<div name='div_inscripcion' class='row'>");
-                                    
-                                    if(est.getInscripcion().getPlanEstudio() != null)
-                                    {
+
+                                    if (est.getInscripcion().getPlanEstudio() != null) {
                                         //--------------------------------------------------------------------------------------------------------
                                         //INSCRIPCION NOMBRE
                                         //--------------------------------------------------------------------------------------------------------
-                                        
+
                                         PlanEstudio plan = est.getInscripcion().getPlanEstudio();
                                         //MOSTRAR TODAS LAS MATERIAS DEL PLAN.
-                                        
+
                                         out.println("<div name='div_inscripcion_nombre' class='col-lg-12'><h2>" + plan.getCarreraPlanNombre() + "</h2></div>");
-                                        
+
                                         Double periodo = 0.0;
                                         boolean cerrarDivPeriodo = false;
-                                        
-                                        for(Materia materia : plan.getLstMateria())
-                                        {
+
+                                        for (Materia materia : plan.getLstMateria()) {
                                             //--------------------------------------------------------------------------------------------------------
                                             //MANEJAMOS DIV CONTENEDOR SEMESTRE
                                             //--------------------------------------------------------------------------------------------------------
-                                            if(!materia.getMatPerVal().equals(periodo))
-                                            {
+                                            if (!materia.getMatPerVal().equals(periodo)) {
                                                 periodo = materia.getMatPerVal();
-                                                
-                                                if(cerrarDivPeriodo)
-                                                {
+
+                                                if (cerrarDivPeriodo) {
                                                     //--------------------------------------------------------------------------------------------------------
                                                     //FINALIZAMOS DIV CONTENEDOR SEMESTRE
                                                     //--------------------------------------------------------------------------------------------------------
-                                                    
+
                                                     out.println("</div>");
                                                 }
-                                                
+
                                                 //--------------------------------------------------------------------------------------------------------
                                                 //INICIAMOS DIV CONTENEDOR SEMESTRE
                                                 //--------------------------------------------------------------------------------------------------------
                                                 out.println("<div name='div_semestre' class='col-lg-12'> ");
-                                                out.println("<div class='col-lg-12'><h3>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": "+materia.getMatPerVal()+"</h3></div>");
+                                                out.println("<div class='col-lg-12'><h3>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</h3></div>");
                                                 cerrarDivPeriodo = true;
                                             }
-                                            
+
                                             //--------------------------------------------------------------------------------------------------------
                                             //INICIO DIV MATERIA
                                             //--------------------------------------------------------------------------------------------------------
-                                            out.println("<div class='col-lg-3' id='dv_mat_"+materia.getMatCod()+"' data-materia='"+materia.getMatNom()+"' data-id='"+ materia.getMatCod() +"' data-previas='"+materia.ObtenerPreviasCodigos()+"'><div class='caja_estudio'>");
-                                            
-                                            String progreso     = "";
-                                            String escolaridad  = "<div name='escolaridad'>";
-                                            
-                                            if(LoCalendario.GetInstancia().AlumnoCursoEstudio(persona.getPerCod(), materia, null, null))
-                                            {
+                                            out.println("<div class='col-lg-3' id='dv_mat_" + materia.getMatCod() + "' data-materia='" + materia.getMatNom() + "' data-id='" + materia.getMatCod() + "' data-previas='" + materia.ObtenerPreviasCodigos() + "'><div class='caja_estudio'>");
+
+                                            String progreso = "";
+                                            String escolaridad = "<div name='escolaridad'>";
+
+                                            if (LoCalendario.GetInstancia().AlumnoCursoEstudio(persona.getPerCod(), materia, null, null)) {
                                                 //--------------------------------------------------------------------------------------------------------
                                                 //ALUMNO CURSO MATERIA
                                                 //--------------------------------------------------------------------------------------------------------
-                                                progreso = "En curso"; 
-                                                
-                                                for(Escolaridad esc : est.getEscolaridad())
-                                                {
-                                                    if(esc.getMateria() != null)
-                                                    {
-                                                        if(esc.getMateria().getMatCod().equals(materia.getMatCod()))
-                                                        {
+                                                progreso = "En curso";
+
+                                                for (Escolaridad esc : est.getEscolaridad()) {
+                                                    if (esc.getMateria() != null) {
+                                                        if (esc.getMateria().getMatCod().equals(materia.getMatCod())) {
                                                             //--------------------------------------------------------------------------------------------------------
                                                             //SE APLICA ESTADO DE MATERIA
                                                             //--------------------------------------------------------------------------------------------------------
-                                                            if(esc.Revalida())
-                                                            {
+                                                            if (esc.Revalida()) {
                                                                 progreso = "Revalida";
+                                                            } else if (esc.getAprobado()) {
+                                                                progreso = "Cursada";
                                                             }
-                                                            else
-                                                            {
-                                                                if(esc.getAprobado()) progreso = "Cursada";
-                                                            }
-                                                            
+
                                                             //--------------------------------------------------------------------------------------------------------
                                                             //SE AGREGA DATO DE ESCOLARIDAD
                                                             //--------------------------------------------------------------------------------------------------------
@@ -226,61 +214,64 @@
                                                             escolaridad += "</div>";
                                                         }
                                                     }
-                                                    
+
                                                 }
-                                                
-                                            }
-                                            else
-                                            {
+
+                                            } else {
                                                 //--------------------------------------------------------------------------------------------------------
                                                 //ALUMNO NO CURSO MATERIA
                                                 //--------------------------------------------------------------------------------------------------------
                                                 progreso = "No cursada";
                                             }
-                                            
+
                                             escolaridad += "</div>";
-                                            
+
                                             //-NOMBRE
                                             out.println("<div>" + materia.getMatNom() + "</div>");
-                                            
+
                                             //-PROGRESO
                                             out.println("<div>Progreso: <label>" + progreso + "</label></div>");
-                                            
+
                                             out.println(escolaridad);
-                                            
+
                                             //--------------------------------------------------------------------------------------------------------
                                             //FIN DIV MATERIA
                                             //--------------------------------------------------------------------------------------------------------
                                             out.println("</div></div>");
                                         }
-                                        
+
                                         //--------------------------------------------------------------------------------------------------------
                                         //FINALIZAMOS DIV CONTENEDOR SEMESTRE SI QUEDO ABIERTO
                                         //--------------------------------------------------------------------------------------------------------
-                                        if(plan.getLstMateria() != null) if(plan.getLstMateria().size() > 0 ) out.println("</div>");
-                                        
+                                        if (plan.getLstMateria() != null) {
+                                            if (plan.getLstMateria().size() > 0) {
+                                                out.println("</div>");
+                                            }
+                                        }
+
                                     }
-                                    
-                                    if(est.getInscripcion().getCurso() != null) 
-                                    {
+
+                                    if (est.getInscripcion().getCurso() != null) {
                                         //MOSTRAR TODAS LOS MODULOS DEL PLAN.
                                     }
-                                    
+
                                     //--------------------------------------------------------------------------------------------------------
                                     //FIN DIV INSCRIPCION
                                     //--------------------------------------------------------------------------------------------------------
                                     out.println("</div>");
-                                    
+
                                 }
                             %>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-                        
-       <!-- <div name="lines" id="lines">
 
-        </div> -->
+            <jsp:include page="/masterPage/footer.jsp"/>
+        </div>
+
+        <!-- <div name="lines" id="lines">
+ 
+         </div> -->
     </body>
 </html>

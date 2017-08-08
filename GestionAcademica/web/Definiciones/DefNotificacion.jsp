@@ -81,31 +81,35 @@
         <title>Sistema de Gestión Académica - Notificacion</title>
         <jsp:include page="/masterPage/head.jsp"/>
 
+        <link href="<% out.print(urlSistema); %>JavaScript/summernote/summernote.css" rel="stylesheet">
+        <script src="<% out.print(urlSistema); %>JavaScript/summernote/summernote.js"></script>
+        <script src="<% out.print(urlSistema); %>JavaScript/summernote/lang/summernote-es-ES.js"></script>
+
         <script>
             $(document).ready(function () {
 
 
                 $('#btn_guardar').click(function (event) {
 
-                    var NotCod= $('#NotCod').val();
-                    var NotAsu= $('#NotAsu').val();
-                    var NotCon= $('#NotCon').val();
-                    var NotDsc= $('#NotDsc').val();
-                    var NotNom= $('#NotNom').val();
-                    var NotRepHst= $('#NotRepHst').val();
-                    var NotRepVal= $('#NotRepVal').val();
-                    
-                    var NotWeb= document.getElementById('NotWeb').checked;
-                    var NotEmail= document.getElementById('NotEmail').checked;
-                    var NotApp= document.getElementById('NotApp').checked;
-                    var NotAct= document.getElementById('NotAct').checked;
-                    
-                    var NotTpo= $('select[name=NotTpo]').val();
-                    var NotTpoEnv= $('select[name=NotTpoEnv]').val();
-                    var NotObtDest= $('select[name=NotObtDest]').val();
-                    var NotRepTpo= $('select[name=NotRepTpo]').val();
-                    
-                    
+                    var NotCod = $('#NotCod').val();
+                    var NotAsu = $('#NotAsu').val();
+                    var NotCon = $('#NotCon').summernote('code'); //$('#NotCon').val();
+                    var NotDsc = $('#NotDsc').val();
+                    var NotNom = $('#NotNom').val();
+                    var NotRepHst = $('#NotRepHst').val();
+                    var NotRepVal = $('#NotRepVal').val();
+
+                    var NotWeb = document.getElementById('NotWeb').checked;
+                    var NotEmail = document.getElementById('NotEmail').checked;
+                    var NotApp = document.getElementById('NotApp').checked;
+                    var NotAct = document.getElementById('NotAct').checked;
+
+                    var NotTpo = $('select[name=NotTpo]').val();
+                    var NotTpoEnv = $('select[name=NotTpoEnv]').val();
+                    var NotObtDest = $('select[name=NotObtDest]').val();
+                    var NotRepTpo = $('select[name=NotRepTpo]').val();
+
+
                     var Modo = $('#MODO').val();
 
                     if (NotNom == '')
@@ -118,21 +122,21 @@
 
                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                         $.post('<% out.print(urlSistema); %>ABM_Notificacion', {
-                            pNotCod:NotCod,
-                            pNotAct:NotAct,
-                            pNotApp:NotApp,
-                            pNotAsu:NotAsu,
-                            pNotCon:NotCon,
-                            pNotDsc:NotDsc,
-                            pNotEmail:NotEmail,
-                            pNotNom:NotNom,
-                            pNotObtDest:NotObtDest,
-                            pNotRepHst:NotRepHst,
-                            pNotRepTpo:NotRepTpo,
-                            pNotRepVal:NotRepVal,
-                            pNotTpo:NotTpo,
-                            pNotTpoEnv:NotTpoEnv,
-                            pNotWeb:NotWeb,
+                            pNotCod: NotCod,
+                            pNotAct: NotAct,
+                            pNotApp: NotApp,
+                            pNotAsu: NotAsu,
+                            pNotCon: NotCon,
+                            pNotDsc: NotDsc,
+                            pNotEmail: NotEmail,
+                            pNotNom: NotNom,
+                            pNotObtDest: NotObtDest,
+                            pNotRepHst: NotRepHst,
+                            pNotRepTpo: NotRepTpo,
+                            pNotRepVal: NotRepVal,
+                            pNotTpo: NotTpo,
+                            pNotTpoEnv: NotTpoEnv,
+                            pNotWeb: NotWeb,
                             pAction: Modo
                         }, function (responseText) {
                             var obj = JSON.parse(responseText);
@@ -141,15 +145,23 @@
 
                             if (obj.tipoMensaje != 'ERROR')
                             {
-                                <%
-                                   out.print(js_redirect);
-                                %>
+            <%
+                                    out.print(js_redirect);
+            %>
                             }
 
                         });
 
 
                     }
+                });
+
+
+                $(document).ready(function () {
+                    $('#NotCon').summernote({
+                        lang: 'es-ES',
+                        height: 300
+                    });
                 });
 
             });
@@ -184,91 +196,106 @@
 
                         <form id="frm_objeto" name="frm_objeto">
 
-                            <div><label>Código</label><input type="text" class="form-control" id="NotCod" name="NotCod" placeholder="NotCod" disabled value="<% out.print( utilidad.NuloToVacio(notificacion.getNotCod())); %>" ></div>
-                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %> <% out.print( utilidad.NuloToVacio(notificacion.getNotAct())); %> ></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="NotNom" name="NotNom" placeholder="NotNom" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotNom())); %>" ></div>
-                            <div><label>Descripcion</label><input type="text" class="form-control" id="NotDsc" name="NotDsc" placeholder="NotDsc" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotDsc())); %>" ></div>
-                            
-                            <div><label>Aplicacion</label><input type="checkbox" id="NotApp" name="NotApp" placeholder="NotApp" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(notificacion.getNotApp())); %> ></div>
-                            <div><label>Email</label><input type="checkbox"  id="NotEmail" name="NotEmail" placeholder="NotEmail" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(notificacion.getNotEmail())); %> ></div>
-                            <div><label>Web</label><input type="checkbox"  id="NotWeb" name="NotWeb" placeholder="NotWeb" <% out.print(CamposActivos); %> <% out.print( utilidad.BooleanToChecked(notificacion.getNotWeb())); %> ></div>
-                            
+                            <div><label>Código</label><input type="text" class="form-control" id="NotCod" name="NotCod" placeholder="NotCod" disabled value="<% out.print(utilidad.NuloToVacio(notificacion.getNotCod())); %>" ></div>
+                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %> <% out.print(utilidad.NuloToVacio(notificacion.getNotAct())); %> ></div>
+                            <div><label>Nombre</label><input type="text" class="form-control" id="NotNom" name="NotNom" placeholder="NotNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotNom())); %>" ></div>
+                            <div><label>Descripcion</label><input type="text" class="form-control" id="NotDsc" name="NotDsc" placeholder="NotDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotDsc())); %>" ></div>
+
+                            <div><label>Aplicacion</label><input type="checkbox" id="NotApp" name="NotApp" placeholder="NotApp" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotApp())); %> ></div>
+                            <div><label>Email</label><input type="checkbox"  id="NotEmail" name="NotEmail" placeholder="NotEmail" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotEmail())); %> ></div>
+                            <div><label>Web</label><input type="checkbox"  id="NotWeb" name="NotWeb" placeholder="NotWeb" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotWeb())); %> ></div>
+
                             <div>
                                 <label>Obtener destinatarios</label>
                                 <select class="form-control" id="NotObtDest" name="NotObtDest" <% out.print(CamposActivos); %>>
                                     <%
                                         for (ObtenerDestinatario obtDestinatario : ObtenerDestinatario.values()) {
-                                            
+
                                             String seleccionado = "";
-                                            if(notificacion.getNotObtDest() != null) if (notificacion.getNotObtDest().equals(obtDestinatario)) seleccionado = "selected";
-                                            
+                                            if (notificacion.getNotObtDest() != null) {
+                                                if (notificacion.getNotObtDest().equals(obtDestinatario)) {
+                                                    seleccionado = "selected";
+                                                }
+                                            }
+
                                             out.println("<option " + seleccionado + " value='" + obtDestinatario.getValor() + "'>" + obtDestinatario.getNombre() + "</option>");
-                                            
+
                                         }
                                     %>
                                 </select>
                             </div>
-                            
-                            
+
+
                             <div>
                                 <label>Tipo de notificacion</label>
                                 <select class="form-control" id="NotTpo" name="NotTpo" <% out.print(CamposActivos); %>>
                                     <%
                                         for (TipoNotificacion tpoNot : TipoNotificacion.values()) {
-                                            
+
                                             String seleccionado = "";
-                                            if(notificacion.getNotTpo() != null) if (notificacion.getNotTpo().equals(tpoNot)) seleccionado = "selected";
-                                            
+                                            if (notificacion.getNotTpo() != null) {
+                                                if (notificacion.getNotTpo().equals(tpoNot)) {
+                                                    seleccionado = "selected";
+                                                }
+                                            }
+
                                             out.println("<option " + seleccionado + " value='" + tpoNot.getValor() + "'>" + tpoNot.getNombre() + "</option>");
 
                                         }
                                     %>
                                 </select>
                             </div>
-                            
+
                             <div>
                                 <label>Tipo de envio</label>
                                 <select class="form-control" id="NotTpoEnv" name="NotTpoEnv" <% out.print(CamposActivos); %>>
                                     <%
                                         for (TipoEnvio tpoEnv : TipoEnvio.values()) {
-                                            
+
                                             String seleccionado = "";
-                                            if(notificacion.getNotTpoEnv() != null) if (notificacion.getNotTpoEnv().equals(tpoEnv)) seleccionado = "selected";
-                                            
+                                            if (notificacion.getNotTpoEnv() != null) {
+                                                if (notificacion.getNotTpoEnv().equals(tpoEnv)) {
+                                                    seleccionado = "selected";
+                                                }
+                                            }
+
                                             out.println("<option " + seleccionado + " value='" + tpoEnv.getValor() + "'>" + tpoEnv.getNombre() + "</option>");
-                                            
+
                                         }
                                     %>
                                 </select>
                             </div>
-                            
-                            
+
+
                             <div>
                                 <label>Tipo de repeticion</label>
                                 <select class="form-control" id="NotRepTpo" name="NotRepTpo" <% out.print(CamposActivos); %>>
                                     <%
                                         for (TipoRepeticion tpoRep : TipoRepeticion.values()) {
-                                            
+
                                             String seleccionado = "";
-                                            if(notificacion.getNotRepTpo() != null) if (notificacion.getNotRepTpo().equals(tpoRep)) seleccionado = "selected";
-                                            
+                                            if (notificacion.getNotRepTpo() != null) {
+                                                if (notificacion.getNotRepTpo().equals(tpoRep)) {
+                                                    seleccionado = "selected";
+                                                }
+                                            }
+
                                             out.println("<option " + seleccionado + " value='" + tpoRep.getValor() + "'>" + tpoRep.getNombre() + "</option>");
-                                            
+
                                         }
                                     %>
                                 </select>
                             </div>
-                            
-                            <div><label>Repetir</label><input type="text" class="form-control" id="NotRepVal" name="NotRepVal" placeholder="NotRepVal" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotRepVal())); %>" ></div>
-                            <div><label>Repetir hasta</label><input type="date" class="form-control" id="NotRepHst" name="NotRepHst" placeholder="NotRepHst" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotRepHst())); %>" ></div>
-                            
-                            
-                            <div><label>Asunto</label><input type="text" class="form-control" id="NotAsu" name="NotAsu" placeholder="NotAsu" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(notificacion.getNotAsu())); %>" ></div>
+
+                            <div><label>Repetir</label><input type="text" class="form-control" id="NotRepVal" name="NotRepVal" placeholder="NotRepVal" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepVal())); %>" ></div>
+                            <div><label>Repetir hasta</label><input type="date" class="form-control" id="NotRepHst" name="NotRepHst" placeholder="NotRepHst" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepHst())); %>" ></div>
+
+
+                            <div><label>Asunto</label><input type="text" class="form-control" id="NotAsu" name="NotAsu" placeholder="NotAsu" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotAsu())); %>" ></div>
                             <div>
                                 <label>Contenido</label>
-                                <textarea <% out.print(CamposActivos); %> class="form-control" id="NotCon" name="NotCon" rows="4" cols="50" value="<% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %>"><% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %></textarea>
+                                <div id="NotCon" name="NotCon"><% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %></div>
                             </div>
-                            
 
                             <div>
                                 <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
@@ -278,6 +305,9 @@
                     </div>
                 </div>
             </div>
+
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
     </body>
 </html>

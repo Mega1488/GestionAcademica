@@ -136,6 +136,8 @@ a{
     background: white !Important;
     position: absolute !Important;
     right: 0 !Important;
+    z-index: 100;
+    text-align: left;
 }
 
 
@@ -143,6 +145,21 @@ a{
     height: 5vh;
 }
 
+.modal-open #contenido{
+    z-index: 1041 !Important;
+}
+
+.modal-open #div_pop_bkgr{
+    opacity: .5;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1040;
+    background-color: #000;
+    height: 100vh;
+}
 
 
 /*---------------------------------- MATÍAS --------------------------------------------------*/

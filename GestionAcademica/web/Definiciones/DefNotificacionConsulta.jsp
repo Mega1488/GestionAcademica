@@ -41,21 +41,21 @@
     Modo Mode = Modo.valueOf(request.getParameter("MODO"));
     String NotCod = request.getParameter("pNotCod");
     String NotCnsCod = request.getParameter("pNotCnsCod");
-    
-    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionConsultaSWW.jsp?MODO=UPDATE&pNotCod="+NotCod+"');";
+
+    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionConsultaSWW.jsp?MODO=UPDATE&pNotCod=" + NotCod + "');";
 
     NotificacionConsulta consulta = new NotificacionConsulta();
 
-    Notificacion notificacion   = new Notificacion();
-    Retorno_MsgObj retorno      = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
+    Notificacion notificacion = new Notificacion();
+    Retorno_MsgObj retorno = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
 
     if (Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE)) {
-       
+
         if (!retorno.SurgioError()) {
             notificacion = (Notificacion) retorno.getObjeto();
-            
+
             consulta = notificacion.ObtenerConsultaByCod(Long.valueOf(NotCnsCod));
-            
+
         } else {
             out.print(retorno.getMensaje().toString());
         }
@@ -95,11 +95,11 @@
 
                 $('#btn_guardar').click(function (event) {
 
-                    var NotCod= $('#NotCod').val();
-                    var NotCnsCod= $('#NotCnsCod').val();
-                    var NotCnsSQL= $('#NotCnsSQL').val();
-                    var NotCnsTpo= $('select[name=NotCnsTpo]').val();
-                    
+                    var NotCod = $('#NotCod').val();
+                    var NotCnsCod = $('#NotCnsCod').val();
+                    var NotCnsSQL = $('#NotCnsSQL').val();
+                    var NotCnsTpo = $('select[name=NotCnsTpo]').val();
+
                     var Modo = $('#MODO').val();
 
                     if (NotCnsSQL == '')
@@ -112,10 +112,10 @@
 
                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                         $.post('<% out.print(urlSistema); %>ABM_NotificacionConsulta', {
-                            pNotCnsCod:NotCnsCod,
-                            pNotCnsSQL:NotCnsSQL,
-                            pNotCnsTpo:NotCnsTpo,
-                            pNotCod:NotCod,
+                            pNotCnsCod: NotCnsCod,
+                            pNotCnsSQL: NotCnsSQL,
+                            pNotCnsTpo: NotCnsTpo,
+                            pNotCod: NotCod,
                             pAction: Modo
                         }, function (responseText) {
                             var obj = JSON.parse(responseText);
@@ -124,9 +124,9 @@
 
                             if (obj.tipoMensaje != 'ERROR')
                             {
-                                <%
-                                   out.print(js_redirect);
-                                %>
+            <%
+                                    out.print(js_redirect);
+            %>
                             }
 
                         });
@@ -168,26 +168,30 @@
 
                         <form id="frm_objeto" name="frm_objeto">
 
-                            <div><label>Código</label><input type="text" class="form-control" id="NotCnsCod" name="NotCnsCod" placeholder="NotCnsCod" disabled value="<% out.print( utilidad.NuloToVacio(consulta.getNotCnsCod())); %>" ></div>
-                            
+                            <div><label>Código</label><input type="text" class="form-control" id="NotCnsCod" name="NotCnsCod" placeholder="NotCnsCod" disabled value="<% out.print(utilidad.NuloToVacio(consulta.getNotCnsCod())); %>" ></div>
+
                             <div>
                                 <label>Tipo</label>
                                 <select class="form-control" id="NotCnsTpo" name="NotCnsTpo" <% out.print(CamposActivos); %>>
                                     <%
                                         for (TipoConsulta tpoConsulta : TipoConsulta.values()) {
-                                            
+
                                             String seleccionado = "";
-                                            if(consulta.getNotCnsTpo() != null) if (consulta.getNotCnsTpo().equals(tpoConsulta)) seleccionado = "selected";
-                                            
+                                            if (consulta.getNotCnsTpo() != null) {
+                                                if (consulta.getNotCnsTpo().equals(tpoConsulta)) {
+                                                    seleccionado = "selected";
+                                                }
+                                            }
+
                                             out.println("<option " + seleccionado + " value='" + tpoConsulta.getValor() + "'>" + tpoConsulta.getNombre() + "</option>");
-                                            
+
                                         }
                                     %>
                                 </select>
                             </div>
-                            
-                                    <div><label>Query:</label><textarea rows="10" class="form-control" id="NotCnsSQL" name="NotCnsSQL" placeholder="NotCnsSQL" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(consulta.getNotCnsSQL())); %>" ><% out.print( utilidad.NuloToVacio(consulta.getNotCnsSQL())); %></textarea></div>
-                            
+
+                            <div><label>Query:</label><textarea rows="10" class="form-control" id="NotCnsSQL" name="NotCnsSQL" placeholder="NotCnsSQL" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(consulta.getNotCnsSQL())); %>" ><% out.print(utilidad.NuloToVacio(consulta.getNotCnsSQL())); %></textarea></div>
+
                             <div>
                                 <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
                                 <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
@@ -196,6 +200,7 @@
                     </div>
                 </div>
             </div>
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
     </body>
 </html>

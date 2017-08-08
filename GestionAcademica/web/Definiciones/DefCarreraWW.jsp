@@ -18,44 +18,43 @@
 
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    LoCarrera loCar     = LoCarrera.GetInstancia();    
-    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    LoCarrera loCar = LoCarrera.GetInstancia();
+    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
     //----------------------------------------------------------------------------------------------------
-    
-    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
-    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
-    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+
+    String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
     Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
-    
-    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
-            
-    //----------------------------------------------------------------------------------------------------
-    
-    List<Object> lstCarrera = new ArrayList<>();
-    
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtenerLista();
-    if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR && retorno.getLstObjetos() != null)
-    {
-        lstCarrera = retorno.getLstObjetos();
+
+    if (acceso.SurgioError()) {
+        response.sendRedirect((String) acceso.getObjeto());
     }
-    else
-    {
+
+    //----------------------------------------------------------------------------------------------------
+    List<Object> lstCarrera = new ArrayList<>();
+
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtenerLista();
+    if (retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR && retorno.getLstObjetos() != null) {
+        lstCarrera = retorno.getLstObjetos();
+    } else {
         out.print(retorno.getMensaje().toString());
     }
-    
+
     String tblCarreraVisible = (lstCarrera.size() > 0 ? "" : "display: none;");
 %>
 
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Sistema de Gestión Académica - Carreras</title>
-    <jsp:include page="/masterPage/head.jsp"/>
-</head>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Sistema de Gestión Académica - Carreras</title>
+        <jsp:include page="/masterPage/head.jsp"/>
+    </head>
     <body>
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
             <div id="contenido" name="contenido"  class="main-panel">
@@ -84,9 +83,8 @@
                                 </tr>    
                             </thead>
                             <%
-                            for(Object obj : lstCarrera)
-                            {
-                                Carrera car = (Carrera)obj;
+                                for (Object obj : lstCarrera) {
+                                    Carrera car = (Carrera) obj;
                             %>
                             <tr>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
@@ -98,12 +96,14 @@
                                 <td><% out.print(utilidad.NuloToVacio(car.getCarCrt())); %></td>
                             </tr>
                             <%
-                            }
+                                }
                             %>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div> 
     </body>
 </html>

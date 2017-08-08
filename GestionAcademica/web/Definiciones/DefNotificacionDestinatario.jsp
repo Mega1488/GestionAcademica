@@ -42,21 +42,21 @@
     Modo Mode = Modo.valueOf(request.getParameter("MODO"));
     String NotCod = request.getParameter("pNotCod");
     String NotDstCod = request.getParameter("pNotDstCod");
-    
-    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=UPDATE&pNotCod="+NotCod+"');";
+
+    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=UPDATE&pNotCod=" + NotCod + "');";
 
     NotificacionDestinatario destinatario = new NotificacionDestinatario();
 
-    Notificacion notificacion   = new Notificacion();
-    Retorno_MsgObj retorno      = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
+    Notificacion notificacion = new Notificacion();
+    Retorno_MsgObj retorno = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
 
     if (Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE)) {
-       
+
         if (!retorno.SurgioError()) {
             notificacion = (Notificacion) retorno.getObjeto();
-            
+
             destinatario = notificacion.ObtenerDestinatarioByCod(Long.valueOf(NotDstCod));
-            
+
         } else {
             out.print(retorno.getMensaje().toString());
         }
@@ -96,11 +96,11 @@
 
                 $('#btn_guardar').click(function (event) {
 
-                    var NotCod= $('#NotCod').val();
-                    var NotDstCod= $('#NotDstCod').val();
-                    var NotEmail= $('#NotEmail').val();
-                    var NotPerCod= $('#NotPerCod').val();            
-        
+                    var NotCod = $('#NotCod').val();
+                    var NotDstCod = $('#NotDstCod').val();
+                    var NotEmail = $('#NotEmail').val();
+                    var NotPerCod = $('#NotPerCod').val();
+
                     var Modo = $('#MODO').val();
 
                     if (NotEmail == '' && NotPerCod == '')
@@ -113,10 +113,10 @@
 
                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                         $.post('<% out.print(urlSistema); %>ABM_NotificacionDestinatario', {
-                            pNotDstCod:NotDstCod,
-                            pNotEmail:NotEmail,
-                            pNotCod:NotCod,
-                            pNotPerCod:NotPerCod,
+                            pNotDstCod: NotDstCod,
+                            pNotEmail: NotEmail,
+                            pNotCod: NotCod,
+                            pNotPerCod: NotPerCod,
                             pAction: Modo
                         }, function (responseText) {
                             var obj = JSON.parse(responseText);
@@ -125,9 +125,9 @@
 
                             if (obj.tipoMensaje != 'ERROR')
                             {
-                                <%
-                                   out.print(js_redirect);
-                                %>
+            <%
+                                    out.print(js_redirect);
+            %>
                             }
 
                         });
@@ -169,9 +169,9 @@
 
                         <form id="frm_objeto" name="frm_objeto">
 
-                            <div><label>Código</label><input type="number" class="form-control" id="NotDstCod" name="NotDstCod" placeholder="NotDstCod" disabled value="<% out.print( utilidad.NuloToVacio(destinatario.getNotDstCod())); %>" ></div>
-                            <div><label>Email</label><input type="email" class="form-control" id="NotEmail" name="NotEmail" placeholder="NotEmail" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(destinatario.getNotEmail())); %>" ></div>
-                            <div><label>Persona</label><input type="number" class="form-control" id="NotPerCod" name="NotPerCod" placeholder="NotPerCod" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getPerCod() : ""))); %>" ></div>
+                            <div><label>Código</label><input type="number" class="form-control" id="NotDstCod" name="NotDstCod" placeholder="NotDstCod" disabled value="<% out.print(utilidad.NuloToVacio(destinatario.getNotDstCod())); %>" ></div>
+                            <div><label>Email</label><input type="email" class="form-control" id="NotEmail" name="NotEmail" placeholder="NotEmail" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(destinatario.getNotEmail())); %>" ></div>
+                            <div><label>Persona</label><input type="number" class="form-control" id="NotPerCod" name="NotPerCod" placeholder="NotPerCod" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getPerCod() : ""))); %>" ></div>
 
                             <div>
                                 <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
@@ -181,6 +181,7 @@
                     </div>
                 </div>
             </div>
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
     </body>
 </html>

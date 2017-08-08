@@ -53,7 +53,7 @@
 
         
     <div>
-        
+        <div id="div_pop_bkgr" name="div_pop_bkgr"></div>
 
         <div id="div_cargando" name="div_cargando">
             <div class="loading"></div>

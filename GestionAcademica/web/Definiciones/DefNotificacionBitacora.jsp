@@ -41,21 +41,21 @@
     Modo Mode = Modo.valueOf(request.getParameter("MODO"));
     String NotCod = request.getParameter("pNotCod");
     String NotBitCod = request.getParameter("pNotBitCod");
-    
-    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionBitacoraSWW.jsp?MODO=UPDATE&pNotCod="+NotCod+"');";
+
+    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionBitacoraSWW.jsp?MODO=UPDATE&pNotCod=" + NotCod + "');";
 
     NotificacionBitacora bitacora = new NotificacionBitacora();
 
-    Notificacion notificacion   = new Notificacion();
-    Retorno_MsgObj retorno      = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
+    Notificacion notificacion = new Notificacion();
+    Retorno_MsgObj retorno = (Retorno_MsgObj) LoNotificacion.GetInstancia().obtener(Long.valueOf(NotCod));
 
     if (Mode.equals(Modo.UPDATE) || Mode.equals(Modo.DISPLAY) || Mode.equals(Modo.DELETE)) {
-       
+
         if (!retorno.SurgioError()) {
             notificacion = (Notificacion) retorno.getObjeto();
-            
+
             bitacora = notificacion.ObtenerBitacoraByCod(Long.valueOf(NotBitCod));
-            
+
         } else {
             out.print(retorno.getMensaje().toString());
         }
@@ -95,8 +95,8 @@
 
                 $('#btn_guardar').click(function (event) {
 
-                    var NotBitCod= $('#NotBitCod').val();
-                    var NotCod= $('#NotCod').val();
+                    var NotBitCod = $('#NotBitCod').val();
+                    var NotCod = $('#NotCod').val();
 
                     var Modo = $('#MODO').val();
 
@@ -110,8 +110,8 @@
 
                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                         $.post('<% out.print(urlSistema); %>ABM_NotificacionBitacora', {
-                            pNotBitCod:NotBitCod,
-                            pNotCod:NotCod,
+                            pNotBitCod: NotBitCod,
+                            pNotCod: NotCod,
                             pAction: Modo
                         }, function (responseText) {
                             var obj = JSON.parse(responseText);
@@ -120,9 +120,9 @@
 
                             if (obj.tipoMensaje != 'ERROR')
                             {
-                                <%
-                                   out.print(js_redirect);
-                                %>
+            <%
+                                    out.print(js_redirect);
+            %>
                             }
 
                         });
@@ -164,14 +164,14 @@
 
                         <form id="frm_objeto" name="frm_objeto">
 
-                            <div><label>Código</label><input type="text" class="form-control" id="NotBitCod" name="NotBitCod" placeholder="NotBitCod" disabled value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitCod())); %>" ></div>
-                            <div><label>Asunto</label><input type="text" class="form-control" id="NotBitAsu" name="NotBitAsu" placeholder="NotBitAsu" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitAsu())); %>" ></div>
-                            <div><label>Contenido</label><textarea rows="10" class="form-control" id="NotBitCon" name="NotBitCon" placeholder="NotBitCon" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitCon())); %>" ><% out.print( utilidad.NuloToVacio(bitacora.getNotBitCon())); %></textarea></div>
-                            <div><label>Detalle</label><textarea rows="10" class="form-control" id="NotBitDet" name="NotBitDet" placeholder="NotBitDet" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitDet())); %>" ><% out.print( utilidad.NuloToVacio(bitacora.getNotBitDet())); %></textarea></div>
-                            <div><label>Destinatarios</label><textarea rows="10" type="text" class="form-control" id="NotBitDst" name="NotBitDst" placeholder="NotBitDst" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitDst())); %>" ><% out.print( utilidad.NuloToVacio(bitacora.getNotBitDst())); %></textarea></div>
-                            <div><label>Estado</label><input type="text" class="form-control" id="NotBitEst" name="NotBitEst" placeholder="NotBitEst" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitEst())); %>" ></div>
-                            <div><label>Fecha</label><input type="text" class="form-control" id="NotBitFch" name="NotBitFch" placeholder="NotBitFch" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(bitacora.getNotBitFch())); %>" ></div>
-                            <div><label>Persona</label><input type="text" class="form-control" id="NotPerCod" name="NotPerCod" placeholder="NotPerCod" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio((bitacora.getPersona() != null ? bitacora.getPersona().getPerCod() : ""))); %>" ></div>
+                            <div><label>Código</label><input type="text" class="form-control" id="NotBitCod" name="NotBitCod" placeholder="NotBitCod" disabled value="<% out.print(utilidad.NuloToVacio(bitacora.getNotBitCod())); %>" ></div>
+                            <div><label>Asunto</label><input type="text" class="form-control" id="NotBitAsu" name="NotBitAsu" placeholder="NotBitAsu" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(bitacora.getNotBitAsu())); %>" ></div>
+                            <div><label>Contenido</label><% out.print(utilidad.NuloToVacio(bitacora.getNotBitCon())); %></div>
+                            <div><label>Detalle</label><textarea rows="10" class="form-control" id="NotBitDet" name="NotBitDet" placeholder="NotBitDet" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(bitacora.getNotBitDet())); %>" ><% out.print(utilidad.NuloToVacio(bitacora.getNotBitDet())); %></textarea></div>
+                            <div><label>Destinatarios</label><textarea rows="10" type="text" class="form-control" id="NotBitDst" name="NotBitDst" placeholder="NotBitDst" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(bitacora.getNotBitDst())); %>" ><% out.print(utilidad.NuloToVacio(bitacora.getNotBitDst())); %></textarea></div>
+                            <div><label>Estado</label><input type="text" class="form-control" id="NotBitEst" name="NotBitEst" placeholder="NotBitEst" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(bitacora.getNotBitEst())); %>" ></div>
+                            <div><label>Fecha</label><input type="text" class="form-control" id="NotBitFch" name="NotBitFch" placeholder="NotBitFch" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(bitacora.getNotBitFch())); %>" ></div>
+                            <div><label>Persona</label><input type="text" class="form-control" id="NotPerCod" name="NotPerCod" placeholder="NotPerCod" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio((bitacora.getPersona() != null ? bitacora.getPersona().getPerCod() : ""))); %>" ></div>
 
                             <div>
                                 <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
@@ -181,6 +181,7 @@
                     </div>
                 </div>
             </div>
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
     </body>
 </html>

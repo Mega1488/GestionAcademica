@@ -57,7 +57,7 @@
                 for(Object objeto : lstBandeja)
                 {
                   NotificacionBandeja bandeja = (NotificacionBandeja) objeto;  
-                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-codigo='"+bandeja.getNotBanCod()+"' data-asunto='"+bandeja.getNotBanAsu()+"' data-mensaje='"+bandeja.getNotBanMen()+"' class='btn_ver_msg not_sinver'>" + bandeja.getNotBanAsu() + "</div></div>");
+                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"' class='btn_ver_msg not_sinver'><label>"+bandeja.getNotBanFch()+": </label>" + bandeja.getNotBanAsu() + "</div></div>");
                 }
             %>
             </div>
@@ -67,7 +67,7 @@
                 for(Object objeto : lstVistos)
                 {
                   NotificacionBandeja bandeja = (NotificacionBandeja) objeto;  
-                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-codigo='"+bandeja.getNotBanCod()+"' data-asunto='"+bandeja.getNotBanAsu()+"' data-mensaje='"+bandeja.getNotBanMen()+"' class='btn_ver_msg not_vista'>" + bandeja.getNotBanAsu() + "</div></div>");
+                  out.println("<div class='row'><div data-toggle='modal' data-target='#PopUpMensaje' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"' class='btn_ver_msg not_vista'><label>"+bandeja.getNotBanFch()+": </label>" + bandeja.getNotBanAsu() + "</div></div>");
                 }
             %>
             </div>

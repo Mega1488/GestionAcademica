@@ -8,6 +8,7 @@ package Entidad;
 import Enumerado.BandejaEstado;
 import Enumerado.BandejaTipo;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,6 +22,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -32,7 +35,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "NOTIFICACION_BANDEJA")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "NotificacionBandeja.findByTpoEst",       query = "SELECT t FROM NotificacionBandeja t WHERE t.destinatario.PerCod =:PerCod AND t.NotBanTpo =:NotBanTpo AND t.NotBanEst =:NotBanEst "),
+    @NamedQuery(name = "NotificacionBandeja.findByTpoEst",       query = "SELECT t FROM NotificacionBandeja t WHERE t.destinatario.PerCod =:PerCod AND t.NotBanTpo =:NotBanTpo AND t.NotBanEst =:NotBanEst ORDER BY t.NotBanFch DESC"),
     @NamedQuery(name = "NotificacionBandeja.findAll",       query = "SELECT t FROM NotificacionBitacora t")
 })
 
@@ -64,6 +67,10 @@ public class NotificacionBandeja implements Serializable {
     
     @Column(name = "NotBanMen", length = 4000)
     private String NotBanMen;
+    
+    @Column(name = "NotBanFch", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date NotBanFch;
     
     
     //-----------------------------------------------------------------
@@ -114,6 +121,14 @@ public class NotificacionBandeja implements Serializable {
 
     public void setNotBanMen(String NotBanMen) {
         this.NotBanMen = NotBanMen;
+    }
+
+    public Date getNotBanFch() {
+        return NotBanFch;
+    }
+
+    public void setNotBanFch(Date NotBanFch) {
+        this.NotBanFch = NotBanFch;
     }
 
     

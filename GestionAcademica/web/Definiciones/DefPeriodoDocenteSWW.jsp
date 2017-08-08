@@ -18,42 +18,38 @@
 <%@page import="Utiles.Utilidades"%>
 <%
 
-    LoPeriodo loPeriodo         = LoPeriodo.GetInstancia();
-    Utilidades utilidad         = Utilidades.GetInstancia();
-    String urlSistema           = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
-    
+    LoPeriodo loPeriodo = LoPeriodo.GetInstancia();
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
     //----------------------------------------------------------------------------------------------------
-    
-    String  usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
-    Boolean esAlu   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
-    Boolean esDoc   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+    String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+    Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+    Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
     Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(request));
-    
-    if(acceso.SurgioError()) response.sendRedirect((String) acceso.getObjeto());
-            
-    //----------------------------------------------------------------------------------------------------
-    
-    String PeriEstCod   = request.getParameter("pPeriEstCod");
-    Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
-    
-    
-    List<PeriodoEstudioDocente> lstObjeto = new ArrayList<>();
-    
-    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
-    if(!retorno.SurgioErrorObjetoRequerido())
-    {
-        lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstDocente();
+
+    if (acceso.SurgioError()) {
+        response.sendRedirect((String) acceso.getObjeto());
     }
-    else
-    {
+
+    //----------------------------------------------------------------------------------------------------
+    String PeriEstCod = request.getParameter("pPeriEstCod");
+    Modo Mode = Modo.valueOf(request.getParameter("MODO"));
+
+    List<PeriodoEstudioDocente> lstObjeto = new ArrayList<>();
+
+    Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
+    if (!retorno.SurgioErrorObjetoRequerido()) {
+        lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstDocente();
+    } else {
         out.print(retorno.getMensaje().toString());
     }
-    
-    String urlRetorno   = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().getPeriCod();
-    
+
+    String urlRetorno = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().getPeriCod();
+
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
 
@@ -71,74 +67,75 @@
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
         <div class="wrapper">
             <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            
+
             <div id="contenido" name="contenido" class="main-panel">
-                
+
                 <div class="contenedor-cabezal">
                     <jsp:include page="/masterPage/cabezal.jsp"/>
                 </div>
-                
+
                 <div class="contenedor-principal">
                     <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        
+
                         <div id="tabs" name="tabs" class="contenedor-tabs">
                             <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp">
                                 <jsp:param name="MostrarTabs" value="SI" />
-                                <jsp:param name="Codigo" value="<%= PeriEstCod %>" />
+                                <jsp:param name="Codigo" value="<%= PeriEstCod%>" />
                             </jsp:include>
                         </div>
-                        
+
                         <div class=""> 
                             <div class="" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
                         </div>
-        
+
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
                             <input type="hidden" name="PeriEstCod" id="PeriEstCod" value="<% out.print(PeriEstCod); %>">
                         </div>
-        
+
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                             <thead><tr>
-                                <th></th>
-                                <th>Código</th>
-                                <th>Docente</th>
-                                <th>Fecha de inscripción</th>
-                            </tr>
+                                    <th></th>
+                                    <th>Código</th>
+                                    <th>Docente</th>
+                                    <th>Fecha de inscripción</th>
+                                </tr>
                             </thead>
 
                             <tbody>
-                            <% for(PeriodoEstudioDocente periDocente : lstObjeto)
-                            {
+                                <% for (PeriodoEstudioDocente periDocente : lstObjeto) {
 
-                            %>
-                            <tr>
-                                <td><% out.print("<a href='#' data-codigo='" + periDocente.getPeriEstDocCod() + "' data-nombre='" + periDocente.getDocente().getNombreCompleto() +"' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periDocente.getPeriEstDocCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periDocente.getDocente().getNombreCompleto())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(periDocente.getDocFchInsc())); %> </td>
-                            </tr>
-                            <%
-                            }
-                            %>
-                                </tbody>
+                                %>
+                                <tr>
+                                    <td><% out.print("<a href='#' data-codigo='" + periDocente.getPeriEstDocCod() + "' data-nombre='" + periDocente.getDocente().getNombreCompleto() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                    <td><% out.print(utilidad.NuloToVacio(periDocente.getPeriEstDocCod())); %> </td>
+                                    <td><% out.print(utilidad.NuloToVacio(periDocente.getDocente().getNombreCompleto())); %> </td>
+                                    <td><% out.print(utilidad.NuloToVacio(periDocente.getDocFchInsc())); %> </td>
+                                </tr>
+                                <%
+                                    }
+                                %>
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
+
+            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
-        
-         <!-- PopUp para Agregar personas del calendario -->
+
+        <!-- PopUp para Agregar personas del calendario -->
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Personas</h4>
-                  </div>
-                  <div class="modal-body">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Personas</h4>
+                    </div>
+                    <div class="modal-body">
 
                         <div>
 
@@ -157,170 +154,170 @@
 
 
 
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
                 </div>
             </div>
 
 
 
-                <script type="text/javascript">
+            <script type="text/javascript">
 
-                    $(document).ready(function() {
+                $(document).ready(function () {
 
-                        Buscar();
+                    Buscar();
 
 
-                        $(document).on('click', ".PopPer_Seleccionar", function() {
+                    $(document).on('click', ".PopPer_Seleccionar", function () {
 
-                           var PerCod = $(this).data("codigo");
-                           var PeriEstCod = $('#PeriEstCod').val();
+                        var PerCod = $(this).data("codigo");
+                        var PeriEstCod = $('#PeriEstCod').val();
 
-                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioDocente', {
-                                        pPeriEstCod: PeriEstCod,
-                                        pDocPerCod: PerCod,
-                                        pAction: "<% out.print(Modo.INSERT);%>"
-                                    }, function (responseText) {
-                                        var obj = JSON.parse(responseText);
-                                        MostrarCargando(false);
+                        $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioDocente', {
+                            pPeriEstCod: PeriEstCod,
+                            pDocPerCod: PerCod,
+                            pAction: "<% out.print(Modo.INSERT);%>"
+                        }, function (responseText) {
+                            var obj = JSON.parse(responseText);
+                            MostrarCargando(false);
 
-                                        if (obj.tipoMensaje != 'ERROR')
-                                        {
-                                            location.reload();
-                                        } else
-                                        {
-                                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                        }
+                            if (obj.tipoMensaje != 'ERROR')
+                            {
+                                location.reload();
+                            } else
+                            {
+                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                            }
 
-                                    });
-                            
                         });
 
-
-                        function Buscar()
-                        {
-
-                                $.post('<% out.print(urlSistema); %>ABM_Persona', {
-                                pAction : "POPUP_OBTENER"
-                                    }, function(responseText) {
-
-
-                                        var personas = JSON.parse(responseText);
-
-                                        $.each(personas, function(f , persona) {
-
-                                                       persona.perCod = "<td> <a href='#' data-codigo='"+persona.perCod+"' data-nombre='"+persona.perNom+"' class='PopPer_Seleccionar'>"+persona.perCod+" </a> </td>";
-                                        });
-
-                                        $('#PopUpTblPersona').DataTable( {
-                                            data: personas,
-                                            deferRender: true,
-                                            bLengthChange : false, //thought this line could hide the LengthMenu
-                                            pageLength: 10,
-                                            language: {
-                                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                                "zeroRecords": "No se encontraron registros",
-                                                "info": "Página _PAGE_ de _PAGES_",
-                                                "infoEmpty": "No hay registros",
-                                                "search":         "Buscar:",
-                                                "paginate": {
-                                                        "first":      "Primera",
-                                                        "last":       "Ultima",
-                                                        "next":       "Siguiente",
-                                                        "previous":   "Anterior"
-                                                    },
-                                                "infoFiltered": "(Filtrado de _MAX_ registros)"
-                                            }
-                                            ,search: {
-                                                "search": "Docente"
-                                              }
-                                            ,columns: [
-                                                { "data": "perCod" },
-                                                { "data": "nombreCompleto"},
-                                                { "data": "tipoPersona"},
-                                                { "data": "perDoc"}
-                                            ]
-
-                                        } );
-
-                                });
-                        }
-
-
                     });
-                    </script>
-        </div>
-        
-        <!------------------------------------------------->
-        
-        <!-- PopUp para Eliminar -->
-        
-        <div id="PopUpEliminar"  class="modal fade" role="dialog">
-           
-            <!-- Modal -->
-            <div class="modal-dialog">
-                <!-- Modal content-->
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Eliminar</h4>
-                  </div>
-                  <div class="modal-body">
 
-                      <p>Eliminar la inscripción de: <label name="elim_nombre" id="elim_nombre"></label></p>
-                      <p>Quiere proceder?</p>
 
-                  </div>
-                  <div class="modal-footer">
-                    <button name="elim_boton_confirmar" id="elim_boton_confirmar" type="button" class="btn btn-danger" data-codigo="">Eliminar</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  </div>
-                </div>
-            </div>
-            <script type="text/javascript">
-                $(document).ready(function() {
-                    
-                    $('.btn_eliminar').on('click', function(e) {
-                        
-                        var codigo = $(this).data("codigo");
-                        var nombre = $(this).data("nombre");
-                        
-                        $('#elim_nombre').text(nombre);
-                        $('#elim_boton_confirmar').data('codigo', codigo);
-                        
-                        
-                      });
-                      
-                      $('#elim_boton_confirmar').on('click', function(e) {
-                            var PeriEstCod = $('#PeriEstCod').val();
-                            var codigo = $('#elim_boton_confirmar').data('codigo');
+                    function Buscar()
+                    {
 
-                            $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioDocente', {
-                                         pPeriEstCod: PeriEstCod,
-                                         pPeriEstDocCod: codigo,
-                                         pAction: "<% out.print(Modo.DELETE);%>"
-                                     }, function (responseText) {
-                                         var obj = JSON.parse(responseText);
-                                         
-                                         if (obj.tipoMensaje != 'ERROR')
-                                         {
-                                             location.reload();
-                                         } else
-                                         {
-                                             MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                         }
+                        $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                            pAction: "POPUP_OBTENER"
+                        }, function (responseText) {
 
-                                     });
-                     
-                      });
+
+                            var personas = JSON.parse(responseText);
+
+                            $.each(personas, function (f, persona) {
+
+                                persona.perCod = "<td> <a href='#' data-codigo='" + persona.perCod + "' data-nombre='" + persona.perNom + "' class='PopPer_Seleccionar'>" + persona.perCod + " </a> </td>";
+                            });
+
+                            $('#PopUpTblPersona').DataTable({
+                                data: personas,
+                                deferRender: true,
+                                bLengthChange: false, //thought this line could hide the LengthMenu
+                                pageLength: 10,
+                                language: {
+                                    "lengthMenu": "Mostrando _MENU_ registros por página",
+                                    "zeroRecords": "No se encontraron registros",
+                                    "info": "Página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "first": "Primera",
+                                        "last": "Ultima",
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    },
+                                    "infoFiltered": "(Filtrado de _MAX_ registros)"
+                                }
+                                , search: {
+                                    "search": "Docente"
+                                }
+                                , columns: [
+                                    {"data": "perCod"},
+                                    {"data": "nombreCompleto"},
+                                    {"data": "tipoPersona"},
+                                    {"data": "perDoc"}
+                                ]
+
+                            });
+
+                        });
+                    }
+
 
                 });
             </script>
         </div>
 
         <!------------------------------------------------->
-                                     
+
+        <!-- PopUp para Eliminar -->
+
+        <div id="PopUpEliminar"  class="modal fade" role="dialog">
+
+            <!-- Modal -->
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+
+                        <p>Eliminar la inscripción de: <label name="elim_nombre" id="elim_nombre"></label></p>
+                        <p>Quiere proceder?</p>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button name="elim_boton_confirmar" id="elim_boton_confirmar" type="button" class="btn btn-danger" data-codigo="">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+
+                    $('.btn_eliminar').on('click', function (e) {
+
+                        var codigo = $(this).data("codigo");
+                        var nombre = $(this).data("nombre");
+
+                        $('#elim_nombre').text(nombre);
+                        $('#elim_boton_confirmar').data('codigo', codigo);
+
+
+                    });
+
+                    $('#elim_boton_confirmar').on('click', function (e) {
+                        var PeriEstCod = $('#PeriEstCod').val();
+                        var codigo = $('#elim_boton_confirmar').data('codigo');
+
+                        $.post('<% out.print(urlSistema); %>ABM_PeriodoEstudioDocente', {
+                            pPeriEstCod: PeriEstCod,
+                            pPeriEstDocCod: codigo,
+                            pAction: "<% out.print(Modo.DELETE);%>"
+                        }, function (responseText) {
+                            var obj = JSON.parse(responseText);
+
+                            if (obj.tipoMensaje != 'ERROR')
+                            {
+                                location.reload();
+                            } else
+                            {
+                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                            }
+
+                        });
+
+                    });
+
+                });
+            </script>
+        </div>
+
+        <!------------------------------------------------->
+
     </body>
 </html>

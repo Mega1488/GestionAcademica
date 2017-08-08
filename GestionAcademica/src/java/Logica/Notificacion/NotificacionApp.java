@@ -13,6 +13,7 @@ import SDT.SDT_NotificacionEnvio;
 import SDT.SDT_NotificacionNotification;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import Utiles.Utilidades;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -55,8 +56,12 @@ public class NotificacionApp {
             SDT_Notificacion notMobile = new SDT_Notificacion();
             notMobile.setTo(notificacion.getDestinatario().getPersona().getPerAppTkn());
             
-            notMobile.setData(new SDT_NotificacionDato(notificacion.getContenido(), notificacion.getAsunto()));
-            //notMobile.setNotification(new SDT_NotificacionNotification(notificacion.getContenido(), notificacion.getAsunto(), "icon"));
+            
+            String contenido    = Utilidades.GetInstancia().QuitarTagHTML(notificacion.getContenido());
+            String asunto       = Utilidades.GetInstancia().QuitarTagHTML(notificacion.getAsunto());
+            
+            //notMobile.setData(new SDT_NotificacionDato(contenido, asunto));
+            notMobile.setNotification(new SDT_NotificacionNotification(contenido, asunto, "icon"));
             
                 
             String input = Utiles.Utilidades.GetInstancia().ObjetoToJson(notMobile);
