@@ -12,12 +12,15 @@ import Entidad.Version;
 import Enumerado.Constantes;
 import Enumerado.Filial;
 import Enumerado.NombreSesiones;
+import Logica.Notificacion.SchNotificar;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -36,6 +39,7 @@ public class LoIniciar {
     }
     
     public void Iniciar(HttpServletRequest request){
+        
         if(version == null)
         {
             this.CargarVersion();
@@ -50,6 +54,7 @@ public class LoIniciar {
         {
             this.SincronizarConMoodle();
         }
+        
     }
     
     private void CargarVersion(){

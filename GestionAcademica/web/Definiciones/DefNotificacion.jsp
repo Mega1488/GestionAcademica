@@ -197,7 +197,7 @@
                         <form id="frm_objeto" name="frm_objeto">
 
                             <div><label>Código</label><input type="text" class="form-control" id="NotCod" name="NotCod" placeholder="NotCod" disabled value="<% out.print(utilidad.NuloToVacio(notificacion.getNotCod())); %>" ></div>
-                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %> <% out.print(utilidad.NuloToVacio(notificacion.getNotAct())); %> ></div>
+                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotAct())); %> ></div>
                             <div><label>Nombre</label><input type="text" class="form-control" id="NotNom" name="NotNom" placeholder="NotNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotNom())); %>" ></div>
                             <div><label>Descripcion</label><input type="text" class="form-control" id="NotDsc" name="NotDsc" placeholder="NotDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotDsc())); %>" ></div>
 

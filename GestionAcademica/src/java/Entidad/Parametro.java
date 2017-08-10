@@ -84,7 +84,7 @@ public class Parametro implements Serializable {
     
     @Column(name = "ParUrlSis", length = 500)
     private String ParUrlSis;
-    
+
     
     //-CONSTRUCTOR
     public Parametro() {
