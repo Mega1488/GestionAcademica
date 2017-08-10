@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -98,15 +99,17 @@ public class Evaluacion implements Serializable {
     public void setEvlCod(Long EvlCod) {
         this.EvlCod = EvlCod;
     }
-
+    
+    @XmlTransient
     public Materia getMatEvl() {
         return MatEvl;
     }
-
+    
     public void setMatEvl(Materia MatEvl) {
         this.MatEvl = MatEvl;
     }
-
+    
+    @XmlTransient
     public Modulo getModEvl() {
         return ModEvl;
     }
@@ -150,7 +153,8 @@ public class Evaluacion implements Serializable {
     public Date getObjFchMod() {
         return ObjFchMod;
     }
-
+    
+    @XmlTransient
     public Curso getCurEvl() {
         return CurEvl;
     }
