@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -93,6 +94,7 @@ public class CalendarioDocente implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @XmlTransient
     public Calendario getCalendario() {
         return calendario;
     }
