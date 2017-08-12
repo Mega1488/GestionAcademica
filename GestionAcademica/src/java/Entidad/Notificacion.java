@@ -380,8 +380,6 @@ public class Notificacion implements Serializable {
             return true;
         }
         
-        System.err.println("Fecha previa: " + fchPrevia.toString());
-        
         fechaUltimaNotificacion.setTime(fchPrevia);
         
         
@@ -407,7 +405,6 @@ public class Notificacion implements Serializable {
                 break;
         }
         
-        System.err.println("Fecha a la que debio ejecutarse: " + fechaUltimaNotificacion.getTime());
         
         if(Calendar.getInstance().compareTo(fechaUltimaNotificacion) >= 0)
         {
