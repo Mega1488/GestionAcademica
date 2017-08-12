@@ -146,7 +146,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            tx.commit();
+            sesion.clear();
             
             Object objRetorno = sesion.get(clase, pCodigo);
             retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), objRetorno);
@@ -169,7 +169,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            tx.commit();
+            sesion.clear();
             Query query = sesion.getNamedQuery(namedQuery);
             
             if(parametros != null)
@@ -203,7 +203,8 @@ public class PerManejador{
 
         try {
             iniciaOperacion();
-            tx.commit();
+            
+            sesion.clear();
             Query query = sesion.createSQLQuery(sentencia);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List list = query.list();
