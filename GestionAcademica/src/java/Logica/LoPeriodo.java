@@ -17,7 +17,8 @@ import Entidad.PeriodoEstudioDocumento;
 import Entidad.PlanEstudio;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
-import Persistencia.PerPeriodo;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
@@ -31,10 +32,8 @@ import java.util.List;
 public class LoPeriodo implements InABMGenerico{
 
     private static LoPeriodo instancia;
-    private final PerPeriodo perPeriodo;
 
     private LoPeriodo() {
-        perPeriodo  = new PerPeriodo();
     }
     
     public static LoPeriodo GetInstancia(){
@@ -88,27 +87,52 @@ public class LoPeriodo implements InABMGenerico{
             }
         }
         
-        return perPeriodo.guardar(periodo);
+        
+        PerManejador perManager = new PerManejador();
+            
+        periodo.setObjFchMod(new Date());
+
+        Retorno_MsgObj retorno = perManager.guardar(periodo);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            periodo.setPeriCod((Long) retorno.getObjeto());
+            retorno.setObjeto(periodo);
+        }
+            
+        return retorno;
+        
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perPeriodo.actualizar(pObjeto);
+        
+        Periodo periodo = (Periodo) pObjeto;
+            
+        PerManejador perManager = new PerManejador();
+
+        periodo.setObjFchMod(new Date());
+        
+        return perManager.actualizar(periodo);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perPeriodo.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perPeriodo.obtener(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener((Long) pObjeto, Periodo.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perPeriodo.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Periodo.findAll", null);
     }
     
     public Retorno_MsgObj guardarPorEstudio(Periodo periodo, Curso curso, PlanEstudio plan) {
@@ -167,7 +191,7 @@ public class LoPeriodo implements InABMGenerico{
         }
         
         
-        Retorno_MsgObj retorno = (Retorno_MsgObj) perPeriodo.actualizar(periodo);
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(periodo);
         
         if(!retorno.SurgioError())
         {
@@ -178,12 +202,29 @@ public class LoPeriodo implements InABMGenerico{
     }
  
     public PeriodoEstudio obtenerLastPeriodoEstudioByMateria(Long MatCod) {
-        Periodo periodo = (Periodo) perPeriodo.obtenerUltimoByMateria(MatCod).getObjeto();
-        for(PeriodoEstudio perEst : periodo.getLstEstudio())
+        
+       
+        PerManejador perManager = new PerManejador();
+        
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(MatCod, "MatCod"));
+        
+        Retorno_MsgObj retorno = perManager.obtenerLista("Periodo.findLastByMat", lstParametros);
+       
+        if(!retorno.SurgioErrorListaRequerida())
         {
-            if(perEst.getMateria().getMatCod() == MatCod)
+            if(!retorno.getLstObjetos().isEmpty())
             {
-                return perEst;
+                
+                Periodo periodo = (Periodo) retorno.getLstObjetos().get(0);
+                
+                for(PeriodoEstudio perEst : periodo.getLstEstudio())
+                {
+                    if(perEst.getMateria().getMatCod().equals(MatCod))
+                    {
+                        return perEst;
+                    }
+                }
             }
         }
         
@@ -191,16 +232,33 @@ public class LoPeriodo implements InABMGenerico{
     }
     
     public PeriodoEstudio obtenerLastPeriodoEstudioByModulo(Long ModCod) {
-        Periodo periodo = (Periodo) perPeriodo.obtenerUltimoByModulo(ModCod).getObjeto();
-        for(PeriodoEstudio perEst : periodo.getLstEstudio())
+        
+        PerManejador perManager = new PerManejador();
+        
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(ModCod, "ModCod"));
+        
+        Retorno_MsgObj retorno = perManager.obtenerLista("Periodo.findLastByMod", lstParametros);
+       
+        if(!retorno.SurgioErrorListaRequerida())
         {
-            if(perEst.getModulo().getModCod() == ModCod)
+            if(!retorno.getLstObjetos().isEmpty())
             {
-                return perEst;
+                
+                Periodo periodo = (Periodo) retorno.getLstObjetos().get(0);
+                
+                for(PeriodoEstudio perEst : periodo.getLstEstudio())
+                {
+                    if(perEst.getModulo().getModCod().equals(ModCod))
+                    {
+                        return perEst;
+                    }
+                }
             }
         }
         
         return null;
+        
     }
     
     //------------------------------------------------------------------------------------
@@ -254,12 +312,16 @@ public class LoPeriodo implements InABMGenerico{
     }
     
     public Retorno_MsgObj EstudioObtener(Long PeriEstCod){
-        return perPeriodo.obtenerPeriodoEstudio(PeriEstCod);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener(PeriEstCod, PeriodoEstudio.class);
     }
     
     public Retorno_MsgObj EstudioObtenerTodos()
     {
-        return perPeriodo.EstudioObtenerTodos();
+        
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("PeriodoEstudio.findAll", null);
     }
     
     //------------------------------------------------------------------------------------
@@ -345,8 +407,8 @@ public class LoPeriodo implements InABMGenerico{
             {
                 List<Object> inscripciones = new ArrayList<>();
                 
-                if(periEst.getMateria() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByPlan(periEst.getMateria().getPlan().getPlaEstCod()).getLstObjetos();
-                if(periEst.getModulo() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByCurso(periEst.getModulo().getCurso().getCurCod()).getLstObjetos();
+                if(periEst.getMateria() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByPlan(null, periEst.getMateria().getPlan().getPlaEstCod()).getLstObjetos();
+                if(periEst.getModulo() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByCurso(null, periEst.getModulo().getCurso().getCurCod()).getLstObjetos();
                 
                 for(Object objeto : inscripciones )
                 {

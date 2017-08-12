@@ -25,7 +25,8 @@ import Moodle.MoodleRestUser;
 import Moodle.MoodleUser;
 import Moodle.MoodleUserRoleException;
 import Moodle.UserRole;
-import Persistencia.PerPersona;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import SDT.SDT_PersonaEstudio;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
@@ -45,7 +46,6 @@ import java.util.logging.Logger;
 public class LoPersona implements Interfaz.InPersona{
     
     private static LoPersona        instancia;
-    private final PerPersona        perPersona;
     private final MoodleRestUser    mdlRestUser;
     private final MoodleRestEnrol   mdlEnrol;
     private final MoodleRestCourse  mdlCourse;
@@ -53,9 +53,7 @@ public class LoPersona implements Interfaz.InPersona{
     private final Seguridad         seguridad;
 
     private LoPersona() {
-        perPersona          = new PerPersona();
-        LoParametro loParam = LoParametro.GetInstancia();
-        param               = loParam.obtener(1);
+        param               = LoParametro.GetInstancia().obtener();
         mdlRestUser         = new MoodleRestUser();
         seguridad           = Seguridad.GetInstancia();
         mdlEnrol            = new  MoodleRestEnrol();
@@ -108,7 +106,18 @@ public class LoPersona implements Interfaz.InPersona{
         
         if(!error)
         {
-            retorno = (Retorno_MsgObj) perPersona.guardar(pObjeto);
+            PerManejador perManager = new PerManejador();
+            
+            pObjeto.setObjFchMod(new Date());
+            
+            retorno = perManager.guardar(pObjeto);
+            
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                pObjeto.setPerCod((Long) retorno.getObjeto());
+                retorno.setObjeto(pObjeto);
+            }
+            
         }
         
         return retorno;
@@ -141,7 +150,14 @@ public class LoPersona implements Interfaz.InPersona{
 
         if(!error)
         {
-            retorno = (Retorno_MsgObj) perPersona.actualizar((Persona) retorno.getObjeto());
+            PerManejador perManager = new PerManejador();
+            
+            pObjeto = (Persona) retorno.getObjeto();
+            
+            pObjeto.setObjFchMod(new Date());
+            
+            retorno = perManager.actualizar(pObjeto);
+            
         }
         
         return retorno;
@@ -149,11 +165,18 @@ public class LoPersona implements Interfaz.InPersona{
 
     @Override
     public Object eliminar(Persona pObjeto) {
-       Retorno_MsgObj retorno  = this.Mdl_EliminarUsuario(pObjeto);
-       
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Eliminando", TipoMensaje.MENSAJE));
+        
+        if(param.getParUtlMdl())
+        {
+            retorno  = this.Mdl_EliminarUsuario(pObjeto);
+        }
+        
        if(!retorno.SurgioError())
        {
-           retorno = (Retorno_MsgObj) perPersona.eliminar(pObjeto);
+           PerManejador perManager = new PerManejador();
+           retorno = (Retorno_MsgObj) perManager.eliminar(pObjeto);
        }
        
        return retorno;
@@ -161,30 +184,88 @@ public class LoPersona implements Interfaz.InPersona{
 
     @Override
     public Retorno_MsgObj obtener(Object pCodigo) {
-        return perPersona.obtener(pCodigo);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener((Long) pCodigo, Persona.class);
     }
     
     @Override
     public Retorno_MsgObj obtenerByMdlUsr(String pMdlUsr) {
-        return perPersona.obtenerByMdlUsr(pMdlUsr);
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        SDT_Parameters parametro = new SDT_Parameters(pMdlUsr, "MdlUsr");
+        lstParametros.add(parametro);
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("Persona.findByMdlUsr", lstParametros);
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            if (!retorno.getLstObjetos().isEmpty())
+            {
+                retorno.setObjeto(retorno.getLstObjetos().get(0));
+                retorno.setLstObjetos(null);
+            }
+        }
+        
+        return retorno;
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perPersona.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Persona.findAll", null);
     }
     
-    public Retorno_MsgObj obtenerPopUp(Long CarCod, Long PlaEstCod, Long CurCod, String PerNom, String PerApe, Boolean docente, Boolean alumno)
-    {
-        Retorno_MsgObj retorno = perPersona.obtenerPopUp(CarCod, PlaEstCod, CurCod, PerNom, PerApe, docente, alumno);
-        for(Object objeto : retorno.getLstObjetos())
+    public Retorno_MsgObj obtenerPopUp(){
+        
+        Retorno_MsgObj retorno = this.obtenerLista();
+        
+        if(!retorno.SurgioErrorListaRequerida())
         {
-            Persona persona = (Persona) objeto;
-            
-            persona.setLstEstudios(this.ObtenerEstudios(persona.getPerCod()));
-            
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                Persona persona = (Persona) objeto;
+
+                persona.setLstEstudios(this.ObtenerEstudios(persona.getPerCod()));
+
+            }
         }
 
+        return retorno;
+        
+    }
+    
+    public Retorno_MsgObj obtenerByEmail(String pEmail) {
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        SDT_Parameters parametro = new SDT_Parameters(pEmail, "PerEml");
+        lstParametros.add(parametro);
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("Persona.findByEmail", lstParametros);
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            if (!retorno.getLstObjetos().isEmpty())
+            {
+                retorno.setObjeto(retorno.getLstObjetos().get(0));
+                retorno.setLstObjetos(null);
+            }
+        }
+        
+        return retorno;
+    }
+    
+    public Retorno_MsgObj ObtenerPersonaByAppTkn(String PerAppTkn){
+        PerManejador perManager = new PerManejador();
+                
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        SDT_Parameters parametro = new SDT_Parameters(PerAppTkn, "PerAppTkn");
+        lstParametros.add(parametro);
+        
+        Retorno_MsgObj retorno = perManager.obtenerLista("Persona.findByAppTkn", lstParametros);
+                
         return retorno;
         
     }
@@ -198,11 +279,12 @@ public class LoPersona implements Interfaz.InPersona{
             
             if(!retorno.SurgioErrorObjetoRequerido())
             {
-                persona = (Persona) retorno.getObjeto();
+                    persona = (Persona) retorno.getObjeto();
             }
             else
             {
-                retorno = perPersona.obtenerByEmail(usuario);
+                retorno = this.obtenerByEmail(usuario);
+                
                 if(!retorno.SurgioErrorObjetoRequerido())
                 {
                     persona = (Persona) retorno.getObjeto();
@@ -234,7 +316,8 @@ public class LoPersona implements Interfaz.InPersona{
     private boolean ValidarEmail(String email, Long idOriginal){
         boolean error = false;
 
-        Retorno_MsgObj retorno = perPersona.obtenerByEmail(email);
+        Retorno_MsgObj retorno = this.obtenerByEmail(email);
+        
         if(idOriginal == null)
         {
             error = retorno.getObjeto() != null;
@@ -253,7 +336,8 @@ public class LoPersona implements Interfaz.InPersona{
     private boolean ValidarUsuario(String usuario, Long idOriginal){
         boolean error = false;
 
-        Retorno_MsgObj retorno = perPersona.obtenerByMdlUsr(usuario);
+        Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+        
         if(idOriginal == null)
         {
             error = retorno.getObjeto() != null;
@@ -424,7 +508,7 @@ public class LoPersona implements Interfaz.InPersona{
         
         //LIMPIO TOKEN IGUAL EN OTRAS PERSONAS, ESTO SUCEDE SI ALGUIEN INICIA SESION CON DISTINTAS CUENTAS EN UN MISMO DISPOSITIVO
         
-        retorno = perPersona.obtenerByAppTkn(PerAppTkn);
+        retorno = this.ObtenerPersonaByAppTkn(PerAppTkn); //perPersona.obtenerByAppTkn(PerAppTkn);
         error   = retorno.SurgioError();
         
         if(!error)
@@ -565,7 +649,10 @@ public class LoPersona implements Interfaz.InPersona{
                             }
                         }
                         
-                        perPersona.actualizar(persona);
+                        PerManejador perManager = new PerManejador();
+                        perManager.actualizar(persona);
+                        
+                        //perManager.actualizar(persona);
 
                     }
                 }

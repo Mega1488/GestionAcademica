@@ -5,9 +5,13 @@
  */
 package Logica;
 
+import Entidad.Escolaridad;
 import Interfaz.InABMGenerico;
-import Persistencia.PerEscolaridad;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -16,10 +20,8 @@ import Utiles.Retorno_MsgObj;
 public class LoEscolaridad implements InABMGenerico{
 
     private static LoEscolaridad instancia;
-    private final PerEscolaridad perEscolaridad;
 
     private LoEscolaridad() {
-        perEscolaridad  = new PerEscolaridad();
     }
     
     public static LoEscolaridad GetInstancia(){
@@ -34,31 +36,64 @@ public class LoEscolaridad implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        return perEscolaridad.guardar(pObjeto);
+        
+        Escolaridad escolaridad = (Escolaridad) pObjeto;
+        
+        PerManejador perManager = new PerManejador();
+            
+        escolaridad.setObjFchMod(new Date());
+
+        Retorno_MsgObj retorno = perManager.guardar(escolaridad);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            escolaridad.setEscCod((Long) retorno.getObjeto());
+            retorno.setObjeto(escolaridad);
+        }
+            
+        return retorno;
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perEscolaridad.actualizar(pObjeto);
+        
+        Escolaridad esc  = (Escolaridad) pObjeto;
+            
+        PerManejador perManager = new PerManejador();
+
+        esc.setObjFchMod(new Date());
+        
+        return perManager.actualizar(esc);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perEscolaridad.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perEscolaridad.obtener(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener((Long) pObjeto, Escolaridad.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perEscolaridad.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Escolaridad.findAll", null);
     }
     
     public Retorno_MsgObj obtenerListaByAlumno(Long PerCod) {
-        return perEscolaridad.obtenerListaByAlumno(PerCod);
+        
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+
+        return perManager.obtenerLista("Escolaridad.findByAlumno", lstParametros);
+        
     }
     
 }

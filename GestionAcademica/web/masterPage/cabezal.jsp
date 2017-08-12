@@ -19,7 +19,7 @@
 
 <%
     String usuario          = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    String urlSistema       = LoParametro.GetInstancia().obtener(1).getParUrlSis();
+    String urlSistema       = LoParametro.GetInstancia().obtener().getParUrlSis();
     Boolean logueado        = false;
     
     if(usuario != null)

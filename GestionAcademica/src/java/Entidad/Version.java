@@ -9,8 +9,6 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,7 +33,7 @@ public class Version implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "SisVerCod", nullable = false)
-    private Integer SisVerCod;
+    private Long SisVerCod;
     
     @Column(name = "SisVer", length = 50)
     private String SisVer;
@@ -50,11 +48,11 @@ public class Version implements Serializable {
     
     //-GETTERS Y SETTERS
 
-    public Integer getSisVerCod() {
+    public Long getSisVerCod() {
         return SisVerCod;
     }
 
-    public void setSisVerCod(Integer SisVerCod) {
+    public void setSisVerCod(Long SisVerCod) {
         this.SisVerCod = SisVerCod;
     }
 

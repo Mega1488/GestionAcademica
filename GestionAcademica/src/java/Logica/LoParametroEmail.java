@@ -5,16 +5,10 @@
  */
 package Logica;
 
-import Entidad.Parametro;
 import Entidad.ParametroEmail;
-import Enumerado.Constantes;
-import Moodle.Criteria;
-import Moodle.MoodleRestUser;
-import Moodle.MoodleUser;
-import Moodle.UserCustomField;
-import Persistencia.PerParametroEmail;
+import Persistencia.PerManejador;
+import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,10 +18,9 @@ import java.util.List;
 public class LoParametroEmail implements Interfaz.InParametroEmail{
     
     private static LoParametroEmail   instancia;
-    private final PerParametroEmail   perParametroEmail;
 
     private LoParametroEmail() {
-        perParametroEmail          = new PerParametroEmail();
+        
     }
     
     public static LoParametroEmail GetInstancia(){
@@ -42,28 +35,67 @@ public class LoParametroEmail implements Interfaz.InParametroEmail{
 
     @Override
     public Object guardar(ParametroEmail pObjeto) {
-        return perParametroEmail.guardar(pObjeto);
+        ParametroEmail eml = (ParametroEmail) pObjeto;
+        
+        PerManejador perManager = new PerManejador();
+        Retorno_MsgObj retorno = perManager.guardar(eml);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            eml.setParEmlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(eml);
+        }
+            
+        return retorno; 
+        //return perParametroEmail.guardar(pObjeto);
     }
 
     @Override
     public void actualizar(ParametroEmail pObjeto) {
-        perParametroEmail.actualizar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        perManager.actualizar(pObjeto);
     }
 
     @Override
     public void eliminar(ParametroEmail pObjeto) {
-        perParametroEmail.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        perManager.eliminar(pObjeto);
     }
 
     @Override
     public ParametroEmail obtener(Object pCodigo) {
-        return perParametroEmail.obtener(pCodigo);
+        PerManejador perManager = new PerManejador();
+        Retorno_MsgObj retorno  = perManager.obtener((Long) pCodigo, ParametroEmail.class);
+        
+        ParametroEmail eml = null;
+        
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            eml = (ParametroEmail) retorno.getObjeto();
+        }
+        
+        return eml;
     }
     
 
     @Override
     public List<ParametroEmail> obtenerLista() {
-        return perParametroEmail.obtenerLista();
+        
+        PerManejador perManager = new PerManejador();
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("ParametroEmail.findAll", null);
+        
+        List<ParametroEmail> lstEml = new ArrayList<>();
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                lstEml.add((ParametroEmail) objeto);
+            }
+        }
+
+        return lstEml;
     }
    
 }

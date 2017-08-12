@@ -7,9 +7,9 @@ package Logica;
 
 import Entidad.TipoEvaluacion;
 import Interfaz.InTipoEvaluacion;
-import Persistencia.PerTipoEvaluacion;
+import Persistencia.PerManejador;
 import Utiles.Retorno_MsgObj;
-import java.util.List;
+import java.util.Date;
 
 /**
  *
@@ -18,10 +18,8 @@ import java.util.List;
 public class LoTipoEvaluacion implements InTipoEvaluacion{
 
     private static LoTipoEvaluacion instancia;
-    private PerTipoEvaluacion perTpoEval;
 
     private LoTipoEvaluacion() {
-        perTpoEval  = new PerTipoEvaluacion();
     }
     
     public static LoTipoEvaluacion GetInstancia(){
@@ -36,27 +34,50 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
 
     @Override
     public Object guardar(TipoEvaluacion pTipoEvaluacion) {
-        return perTpoEval.guardar(pTipoEvaluacion);
+        PerManejador perManejador   = new PerManejador();
+        
+        pTipoEvaluacion.setObjFchMod(new Date());
+        
+        Retorno_MsgObj retorno      = perManejador.guardar(pTipoEvaluacion);
+        
+        if(!retorno.SurgioError())
+        {
+            pTipoEvaluacion.setTpoEvlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pTipoEvaluacion);
+            
+            System.err.println("Guardar codigo: " + pTipoEvaluacion.getTpoEvlCod());
+        }
+        
+        return retorno;
     }
 
     @Override
     public Object actualizar(TipoEvaluacion pTipoEvaluacion) {
-        return perTpoEval.actualizar(pTipoEvaluacion);
+        PerManejador perManejador   = new PerManejador();
+        
+        pTipoEvaluacion.setObjFchMod(new Date());
+
+        return perManejador.actualizar(pTipoEvaluacion);
     }
 
     @Override
     public Object eliminar(TipoEvaluacion pTipoEvaluacion) {
-        return perTpoEval.eliminar(pTipoEvaluacion);
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.eliminar(pTipoEvaluacion);
     }
 
     @Override
     public Retorno_MsgObj obtener(Long pTpoEvlCod) {
-        return perTpoEval.obtener(pTpoEvlCod);
+        System.err.println("Obtener codigo: " + pTpoEvlCod);
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.obtener(pTpoEvlCod, TipoEvaluacion.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perTpoEval.obtenerLista();
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.obtenerLista("TipoEvaluacion.findAll", null);
     }
     
 }

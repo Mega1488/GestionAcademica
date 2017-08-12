@@ -27,8 +27,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author alvar
  */
 public class ABM_TipoEvaluacion extends HttpServlet {
-    private final LoParametro loParametro   = LoParametro.GetInstancia();
-    private final Parametro parametro       = loParametro.obtener(1);
+    private final Parametro parametro       = LoParametro.GetInstancia().obtener();
     private final Seguridad seguridad       = Seguridad.GetInstancia();
     private final LoTipoEvaluacion loTipoEvaluacion           = LoTipoEvaluacion.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();

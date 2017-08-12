@@ -42,7 +42,7 @@ public class Parametro implements Serializable {
     @Id
     @Basic(optional = false)
     @Column(name = "ParCod", nullable = false)
-    private Integer ParCod;
+    private Long ParCod;
     
     @ManyToOne(targetEntity = ParametroEmail.class, optional=true)
     @JoinColumn(name="ParEmlCod", referencedColumnName="ParEmlCod")
@@ -93,11 +93,11 @@ public class Parametro implements Serializable {
     
     //-GETTERS Y SETTERS
 
-    public Integer getParCod() {
+    public Long getParCod() {
         return ParCod;
     }
 
-    public void setParCod(Integer ParCod) {
+    public void setParCod(Long ParCod) {
         this.ParCod = ParCod;
     }
 

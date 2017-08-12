@@ -43,7 +43,7 @@ import java.io.Serializable;
  */
 public class MoodleCallRestWebService implements Serializable {
     
-    private static final Parametro parametro = LoParametro.GetInstancia().obtener(1);
+    private static final Parametro parametro = LoParametro.GetInstancia().obtener();
     private static final String MOODLE_REST_VERSION="Version  0.1.6";
     private static String token= parametro.getParMdlTkn();
     private static String username=null;

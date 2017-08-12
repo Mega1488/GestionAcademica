@@ -43,7 +43,7 @@ public class NotificacionEmail {
     {
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Notificar email", TipoMensaje.MENSAJE));
         
-        ParametroEmail parEmail = LoParametro.GetInstancia().obtener(1).getParametroEmail();
+        ParametroEmail parEmail = LoParametro.GetInstancia().obtener().getParametroEmail();
         
         String destinatario     = notificacion.getDestinatario().getEmail();
         String destinatarioNom  = notificacion.getDestinatario().getNombre();

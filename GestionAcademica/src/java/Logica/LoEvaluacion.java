@@ -5,13 +5,9 @@
  */
 package Logica;
 
-import Entidad.Calendario;
-import Entidad.CalendarioAlumno;
-import Entidad.CalendarioDocente;
-import Enumerado.TipoMensaje;
+import Entidad.Evaluacion;
 import Interfaz.InABMGenerico;
-import Persistencia.PerEvaluacion;
-import Utiles.Mensajes;
+import Persistencia.PerManejador;
 import Utiles.Retorno_MsgObj;
 import java.util.Date;
 
@@ -22,10 +18,8 @@ import java.util.Date;
 public class LoEvaluacion implements InABMGenerico{
 
     private static LoEvaluacion instancia;
-    private final PerEvaluacion perEvaluacion;
 
     private LoEvaluacion() {
-        perEvaluacion  = new PerEvaluacion();
     }
     
     public static LoEvaluacion GetInstancia(){
@@ -40,27 +34,52 @@ public class LoEvaluacion implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        return perEvaluacion.guardar(pObjeto);
+        
+        Evaluacion evl = (Evaluacion) pObjeto;
+        
+        PerManejador perManager = new PerManejador();
+            
+        evl.setObjFchMod(new Date());
+
+        Retorno_MsgObj retorno = perManager.guardar(evl);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            evl.setEvlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(evl);
+        }
+            
+        return retorno;
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perEvaluacion.actualizar(pObjeto);
+        Evaluacion evl  = (Evaluacion) pObjeto;
+            
+        PerManejador perManager = new PerManejador();
+
+        evl.setObjFchMod(new Date());
+        
+        return perManager.actualizar(evl);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perEvaluacion.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perEvaluacion.obtener(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener((Long) pObjeto, Evaluacion.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perEvaluacion.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Evaluacion.findAll", null);
     }
     
     

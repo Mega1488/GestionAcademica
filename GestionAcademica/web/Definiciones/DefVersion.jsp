@@ -29,7 +29,7 @@
     }
 
     //----------------------------------------------------------------------------------------------------
-    Version version = LoVersion.GetInstancia().obtener(Integer.valueOf(1));
+    Version version = LoVersion.GetInstancia().obtener(Long.valueOf("1"));
 
 %>
 

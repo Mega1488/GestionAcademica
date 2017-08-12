@@ -9,7 +9,6 @@ package Servlets;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Filial;
-import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
 import Logica.LoParametro;
 import Logica.LoPersona;
@@ -19,7 +18,6 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -31,8 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author alvar
  */
 public class ABM_Persona extends HttpServlet {
-    private final LoParametro loParametro   = LoParametro.GetInstancia();
-    private final Parametro parametro       = loParametro.obtener(1);
+    private final Parametro parametro       = LoParametro.GetInstancia().obtener();
     private final Seguridad seguridad       = Seguridad.GetInstancia();
     private final LoPersona loPersona       = LoPersona.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();
@@ -196,14 +193,8 @@ public class ABM_Persona extends HttpServlet {
     {
         List<Object> lstPersona;
         
-        String tipoPersona  = request.getParameter("popPerTipo");
-        String nombre       = request.getParameter("popPerNom");
-        String apellido       = request.getParameter("popPerApe");
-        String curso        = request.getParameter("popCurCod");
-        String carrera      = request.getParameter("popCarCod");
-        String plan         = request.getParameter("popPlaEstCod");
         
-        lstPersona = loPersona.obtenerPopUp(null, null, null, "", null, null, null).getLstObjetos();
+        lstPersona = loPersona.obtenerPopUp().getLstObjetos();
 
         return utilidades.ObjetoToJson(lstPersona);
     }

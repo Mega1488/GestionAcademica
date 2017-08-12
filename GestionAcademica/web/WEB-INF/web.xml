@@ -8,6 +8,10 @@
         <servlet-class>Pruebas.Prueba</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>Prueba2</servlet-name>
+        <servlet-class>Pruebas.Prueba2</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>ws_login</servlet-name>
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
@@ -129,6 +133,10 @@
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
         <url-pattern>/Prueba</url-pattern>
+    </servlet-mapping>
+        <servlet-mapping>
+        <servlet-name>Prueba2</servlet-name>
+        <url-pattern>/Prueba2</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ws_login</servlet-name>

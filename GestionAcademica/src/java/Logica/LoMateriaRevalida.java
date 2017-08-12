@@ -6,7 +6,10 @@
 package Logica;
 
 import Entidad.MateriaRevalida;
-import Persistencia.PerMateriaRevalida;
+import Persistencia.PerManejador;
+import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,10 +19,8 @@ import java.util.List;
 public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
     
     private static LoMateriaRevalida instancia;
-    private PerMateriaRevalida perMateriaRevalida;
 
     private LoMateriaRevalida() {
-        perMateriaRevalida  = new PerMateriaRevalida();
     }
     
     public static LoMateriaRevalida GetInstancia(){
@@ -34,27 +35,72 @@ public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
 
     @Override
     public Object guardar(MateriaRevalida pObjeto) {
-        return perMateriaRevalida.guardar(pObjeto);
+        MateriaRevalida mat = (MateriaRevalida) pObjeto;
+        
+        PerManejador perManager = new PerManejador();
+            
+        mat.setObjFchMod(new Date());
+
+        Retorno_MsgObj retorno = perManager.guardar(mat);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            mat.setMatRvlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(mat);
+        }
+            
+        return retorno;
     }
 
     @Override
     public void actualizar(MateriaRevalida pObjeto) {
-        perMateriaRevalida.actualizar(pObjeto);
+        MateriaRevalida mat = (MateriaRevalida) pObjeto;
+            
+        PerManejador perManager = new PerManejador();
+
+        mat.setObjFchMod(new Date());
+        
+        perManager.actualizar(mat);
     }
 
     @Override
     public void eliminar(MateriaRevalida pObjeto) {
-        perMateriaRevalida.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        perManager.eliminar(pObjeto);
     }
 
     @Override
     public MateriaRevalida obtener(Object pCodigo) {
-        return perMateriaRevalida.obtener(pCodigo);
+        PerManejador perManager = new PerManejador();
+        Retorno_MsgObj retorno = perManager.obtener((Long) pCodigo, MateriaRevalida.class);
+        
+        MateriaRevalida mat = null;
+        
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            mat = (MateriaRevalida) retorno.getObjeto();
+        }
+        
+        return mat;
     }
 
     @Override
     public List<MateriaRevalida> obtenerLista() {
-        return perMateriaRevalida.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("MateriaRevalida.findAll", null);
+        
+        List<MateriaRevalida> lstMat = new ArrayList<>();
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                lstMat.add((MateriaRevalida) objeto);
+            }
+        }
+
+        return lstMat;
     }
     
 }

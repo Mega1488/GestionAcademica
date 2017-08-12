@@ -211,19 +211,31 @@ public class ABM_Notificacion extends HttpServlet {
                 
                 if(NotAct != null) if(!NotAct.isEmpty()) notificacion.setNotAct(Boolean.valueOf(NotAct));
                 if(NotApp != null) if(!NotApp.isEmpty()) notificacion.setNotApp(Boolean.valueOf(NotApp));
-                if(NotAsu != null) if(!NotAsu.isEmpty()) notificacion.setNotAsu(NotAsu);
-                if(NotCon != null) if(!NotCon.isEmpty()) notificacion.setNotCon(NotCon);
-                if(NotDsc != null) if(!NotDsc.isEmpty()) notificacion.setNotDsc(NotDsc);
-                if(NotEmail != null) if(!NotEmail.isEmpty()) notificacion.setNotEmail(Boolean.valueOf(NotEmail));
-                if(NotNom != null) if(!NotNom.isEmpty()) notificacion.setNotNom(NotNom);
+                if(NotAsu != null)  notificacion.setNotAsu(NotAsu);
+                if(NotCon != null)  notificacion.setNotCon(NotCon);
+                if(NotDsc != null)  notificacion.setNotDsc(NotDsc);
+                if(NotEmail != null)  notificacion.setNotEmail(Boolean.valueOf(NotEmail));
+                if(NotNom != null)  notificacion.setNotNom(NotNom);
                 if(NotObtDest != null) if(!NotObtDest.isEmpty()) notificacion.setNotObtDest(ObtenerDestinatario.fromCode(Integer.valueOf(NotObtDest)));
-                if(NotRepHst != null) if(!NotRepHst.isEmpty()) notificacion.setNotRepHst(Date.valueOf(NotRepHst));
                 if(NotRepTpo != null) if(!NotRepTpo.isEmpty()) notificacion.setNotRepTpo(TipoRepeticion.fromCode(Integer.valueOf(NotRepTpo)));
                 if(NotRepVal != null) if(!NotRepVal.isEmpty()) notificacion.setNotRepVal(Integer.valueOf(NotRepVal));
                 if(NotTpo != null) if(!NotTpo.isEmpty()) notificacion.setNotTpo(TipoNotificacion.fromCode(Integer.valueOf(NotTpo)));
                 if(NotTpoEnv != null) if(!NotTpoEnv.isEmpty()) notificacion.setNotTpoEnv(TipoEnvio.fromCode(Integer.valueOf(NotTpoEnv)));
                 if(NotWeb != null) if(!NotWeb.isEmpty()) notificacion.setNotWeb(Boolean.valueOf(NotWeb));
 
+                if(NotRepHst != null)
+                {
+                    if(!NotRepHst.isEmpty())
+                    {
+                        notificacion.setNotRepHst(Date.valueOf(NotRepHst));
+                    }
+                    else
+                    {
+                        notificacion.setNotRepHst(null);
+                    }
+                }
+                
+                
                 return notificacion;
         }
 

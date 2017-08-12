@@ -6,19 +6,18 @@
 package Logica;
 
 import Entidad.Version;
-import Persistencia.PerVersion;
+import Persistencia.PerManejador;
+import Utiles.Retorno_MsgObj;
 
 /**
  *
  * @author alvar
  */
-public class LoVersion implements Interfaz.InVersion{
+public class LoVersion{
     
     private static LoVersion instancia;
-    private PerVersion perVersion;
 
     private LoVersion() {
-        perVersion  = new PerVersion();
     }
     
     public static LoVersion GetInstancia(){
@@ -31,19 +30,39 @@ public class LoVersion implements Interfaz.InVersion{
         return instancia;
     }
 
-    @Override
     public Object guardar(Version pObjeto) {
-        return perVersion.guardar(pObjeto);
+        
+        pObjeto.setSisVerCod(Long.valueOf("1"));
+        
+        PerManejador perManejador   = new PerManejador();
+        Retorno_MsgObj retorno      = perManejador.guardar(pObjeto);
+
+        if(!retorno.SurgioError())
+        {
+            pObjeto.setSisVerCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pObjeto);
+        }
+        
+        return retorno;
+                
     }
 
-    @Override
     public void actualizar(Version pObjeto) {
-        perVersion.actualizar(pObjeto);
+        PerManejador perManejador   = new PerManejador();
+        perManejador.actualizar(pObjeto);
     }
 
-    @Override
     public Version obtener(Object pCodigo) {
-        return perVersion.obtener(pCodigo);
+        Version version             = new Version();
+        PerManejador perManejador   = new PerManejador();
+
+        Retorno_MsgObj retorno      = perManejador.obtener((Long) pCodigo, Version.class);
+        if(!retorno.SurgioError())
+        {
+            version = (Version) retorno.getObjeto();
+        }
+        
+        return version;
     }
     
     

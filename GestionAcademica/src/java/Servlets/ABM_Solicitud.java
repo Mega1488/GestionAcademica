@@ -32,8 +32,7 @@ import javax.servlet.http.HttpSession;
  * @author alvar
  */
 public class ABM_Solicitud extends HttpServlet {
-    private final LoParametro loParametro   = LoParametro.GetInstancia();
-    private final Parametro parametro       = loParametro.obtener(1);
+    private final Parametro parametro       = LoParametro.GetInstancia().obtener();
     private final Seguridad seguridad       = Seguridad.GetInstancia();
     private final LoSolicitud loSolicitud           = LoSolicitud.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();

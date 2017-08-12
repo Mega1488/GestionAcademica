@@ -11,6 +11,9 @@ import Enumerado.TipoEnvio;
 import Enumerado.TipoRepeticion;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -343,6 +346,104 @@ public class Notificacion implements Serializable {
         return null;
     }
     
+    public Boolean NotificarAutomaticamente(){
+        Date fechaActual    = new Date();
+        Boolean notificar   = false;
+
+        if(!this.NotRepTpo.equals(TipoRepeticion.SIN_REPETICION))
+        {
+            if(this.NotRepHst == null)
+            {
+                notificar = this.NotificarAutomaticamenteRango();
+            }
+            else
+            {
+                if(this.NotRepHst.compareTo(fechaActual) <= 0)
+                {
+                    notificar = this.NotificarAutomaticamenteRango();                    
+                }
+            }
+        }
+        
+        return notificar;
+    }
+    
+    private Boolean NotificarAutomaticamenteRango()
+    {
+        Boolean notificar               = false;
+        Calendar fechaUltimaNotificacion = Calendar.getInstance();
+        
+        Date fchPrevia = this.GetLastNotification();
+        
+        if(fchPrevia == null)
+        {
+            return true;
+        }
+        
+        fechaUltimaNotificacion.setTime(fchPrevia);
+        
+        int diferencia                  = 0;
+        
+        switch(this.NotRepTpo)
+        {
+            case ANIOS:
+                diferencia = Calendar.getInstance().get(Calendar.YEAR) - fechaUltimaNotificacion.get(Calendar.YEAR);
+                break;
+            case DIAS:
+                diferencia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - fechaUltimaNotificacion.get(Calendar.DAY_OF_MONTH);
+                break;
+            case HORAS:
+                diferencia = Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - fechaUltimaNotificacion.get(Calendar.HOUR_OF_DAY);
+                break;
+            case MESES:
+                diferencia = Calendar.getInstance().get(Calendar.MONTH) - fechaUltimaNotificacion.get(Calendar.MONTH);
+                break;
+            case MINUTOS:
+                diferencia = Calendar.getInstance().get(Calendar.MINUTE) - fechaUltimaNotificacion.get(Calendar.MINUTE);
+                break;
+            case SEMANAS:
+                diferencia = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - fechaUltimaNotificacion.get(Calendar.WEEK_OF_YEAR);
+                break;
+        }
+        
+        if(this.NotRepVal < diferencia)
+        {
+            notificar = true;
+        }
+        
+        return notificar;
+    }
+    
+    private Date GetLastNotification(){
+        Date fecha = null;
+        
+        if(this.lstBitacora != null)
+        {
+            if(this.lstBitacora.size() > 0)
+            {
+                Collections.sort(this.lstBitacora, new Comparator<NotificacionBitacora>() {
+
+                    public int compare(NotificacionBitacora o1, NotificacionBitacora o2) {
+
+                        int sComp = o2.getNotBitFch().compareTo(o1.getNotBitFch());
+
+                        if (sComp != 0) {
+                            return sComp;
+                        } else {
+                            Long x1 = ((NotificacionBitacora) o2).getNotBitCod();
+                            Long x2 = ((NotificacionBitacora) o1).getNotBitCod();
+                            return x1.compareTo(x2);
+                        }
+                    }
+
+                });
+                
+                fecha = this.lstBitacora.get(0).getNotBitFch();
+            }
+        }
+        
+        return fecha;        
+    }
 
     @Override
     public int hashCode() {

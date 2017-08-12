@@ -6,20 +6,20 @@
 package Logica;
 
 import Entidad.Parametro;
-import Persistencia.PerParametro;
-import java.util.List;
+import Persistencia.PerManejador;
+import Utiles.Retorno_MsgObj;
 
 /**
  *
  * @author alvar
  */
-public class LoParametro implements Interfaz.InParametro{
+public class LoParametro{
     
     private static LoParametro instancia;
-    private PerParametro perParametro;
+    
+    private Parametro parametro;
 
     private LoParametro() {
-        perParametro  = new PerParametro();
     }
     
     public static LoParametro GetInstancia(){
@@ -32,19 +32,45 @@ public class LoParametro implements Interfaz.InParametro{
         return instancia;
     }
 
-    @Override
     public Object guardar(Parametro pObjeto) {
-        return perParametro.guardar(pObjeto);
+        
+        pObjeto.setParCod(Long.valueOf("1"));
+        
+        PerManejador perManejador   = new PerManejador();
+        Retorno_MsgObj retorno      = perManejador.guardar(pObjeto);
+
+        if(!retorno.SurgioError())
+        {
+            pObjeto.setParCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pObjeto);
+            this.parametro = pObjeto;
+        }
+        
+        return retorno;
+        
     }
 
-    @Override
     public void actualizar(Parametro pObjeto) {
-        perParametro.actualizar(pObjeto);
+        this.parametro = pObjeto;
+        PerManejador perManejador   = new PerManejador();
+        perManejador.actualizar(pObjeto);
     }
 
-    @Override
-    public Parametro obtener(Object pCodigo) {
-        return perParametro.obtener(pCodigo);
+    public Parametro obtener() {
+        
+        if(this.parametro == null)
+        {
+            parametro         = new Parametro();
+            PerManejador perManejador   = new PerManejador();
+
+            Retorno_MsgObj retorno      = perManejador.obtener(Long.valueOf("1"), Parametro.class);
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                parametro = (Parametro) retorno.getObjeto();
+            }
+        }
+        
+        return parametro;
     }
     
     

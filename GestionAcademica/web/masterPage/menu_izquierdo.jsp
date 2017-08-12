@@ -15,7 +15,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema       = LoParametro.GetInstancia().obtener(1).getParUrlSis();
+    String urlSistema       = LoParametro.GetInstancia().obtener().getParUrlSis();
     String sitioActual = utilidad.GetPaginaActual(request);
     
     Boolean esAdm   = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());

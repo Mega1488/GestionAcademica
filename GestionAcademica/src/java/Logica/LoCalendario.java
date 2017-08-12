@@ -21,8 +21,9 @@ import Entidad.Persona;
 import Enumerado.EstadoCalendarioEvaluacion;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
-import Persistencia.PerCalendario;
+import Persistencia.PerManejador;
 import SDT.SDT_Evento;
+import SDT.SDT_Parameters;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.text.ParseException;
@@ -41,10 +42,8 @@ import java.util.logging.Logger;
 public class LoCalendario implements InABMGenerico{
 
     private static LoCalendario instancia;
-    private final PerCalendario perCalendario;
 
     private LoCalendario() {
-        perCalendario  = new PerCalendario();
     }
     
     public static LoCalendario GetInstancia(){
@@ -58,27 +57,50 @@ public class LoCalendario implements InABMGenerico{
     
     @Override
     public Object guardar(Object pObjeto) {
-        return perCalendario.guardar(pObjeto);
+        Calendario calendario = (Calendario) pObjeto;
+        
+        calendario.setObjFchMod(new Date());
+        
+        PerManejador perManejador   = new PerManejador();
+        Retorno_MsgObj retorno      = perManejador.guardar(calendario);
+
+        if(!retorno.SurgioError())
+        {
+            calendario.setCalCod((Long) retorno.getObjeto());
+            retorno.setObjeto(calendario);
+        }
+        
+        return retorno;
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perCalendario.actualizar(pObjeto);
+        Calendario calendario = (Calendario) pObjeto;
+        
+        calendario.setObjFchMod(new Date());
+        
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.actualizar(calendario);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perCalendario.eliminar(pObjeto);
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perCalendario.obtener(pObjeto);
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.obtener((Long) pObjeto, Calendario.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perCalendario.obtenerLista();
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.obtenerLista("Calendario.findAll", null);
     }
     
     public Retorno_MsgObj guardarLista(List<Object> lstCalendario){
@@ -155,7 +177,13 @@ public class LoCalendario implements InABMGenerico{
     
     public Retorno_MsgObj ObtenerListaPorAlumno(Long PerCod)
     {
-        Retorno_MsgObj retorno  =  perCalendario.obtenerByAlumno(PerCod);
+         
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("Calendario.findByAlumno", lstParametros);
         
         List<Object> lstRetorno = new ArrayList<>();
         
@@ -207,7 +235,13 @@ public class LoCalendario implements InABMGenerico{
     
     public Retorno_MsgObj ObtenerListaPendiente(Long PerCod)
     {
-        Retorno_MsgObj retorno  =  perCalendario.obtenerByAlumno(PerCod);
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("Calendario.findByAlumno", lstParametros);
+        
         List<Object> lstRetorno = new ArrayList<>();
         
         if(!retorno.SurgioErrorListaRequerida())
@@ -280,6 +314,33 @@ public class LoCalendario implements InABMGenerico{
         }
         
         return lstEvento;
+    }
+    
+    private Retorno_MsgObj obtenerByMateriaPersona(Long PerCod, Materia materia){
+        PerManejador perManager = new PerManejador();
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+        lstParametros.add(new SDT_Parameters(materia.getMatCod(), "MatCod"));
+
+        return perManager.obtenerLista("Calendario.findMateriaAlumno", lstParametros);
+    }
+    
+    private Retorno_MsgObj obtenerByModuloPersona(Long PerCod, Modulo modulo){
+        PerManejador perManager = new PerManejador();
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+        lstParametros.add(new SDT_Parameters(modulo.getModCod(), "ModCod"));
+
+        return perManager.obtenerLista("Calendario.findModuloAlumno", lstParametros);
+    }
+    
+    private Retorno_MsgObj obtenerByCursoPersona(Long PerCod, Curso curso){
+        PerManejador perManager = new PerManejador();
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+        lstParametros.add(new SDT_Parameters(curso.getCurCod(), "CurCod"));
+
+        return perManager.obtenerLista("Calendario.findCursoAlumno", lstParametros);
     }
     
     //------------------------------------------------------------------------------------
@@ -450,10 +511,12 @@ public class LoCalendario implements InABMGenerico{
     }
     
     public Boolean AlumnoPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso){
+        
         if(materia != null)
         {
-            Retorno_MsgObj retorno = perCalendario.obtenerByMateriaPersona(PerCod, materia.getMatCod());
-
+            
+            Retorno_MsgObj retorno = this.obtenerByMateriaPersona(PerCod, materia);
+            
             if(!retorno.SurgioErrorListaRequerida())
             {
                 Double creditosParciales    = 0.0;
@@ -476,7 +539,7 @@ public class LoCalendario implements InABMGenerico{
         
         if(modulo != null)
         {
-            Retorno_MsgObj retorno = perCalendario.obtenerByModuloPersona(PerCod, modulo.getModCod());
+            Retorno_MsgObj retorno = this.obtenerByModuloPersona(PerCod, modulo);
 
             if(!retorno.SurgioErrorListaRequerida())
             {
@@ -501,8 +564,8 @@ public class LoCalendario implements InABMGenerico{
         
         if(curso != null)
         {
-            Retorno_MsgObj retorno = perCalendario.obtenerByCursoPersona(PerCod, curso.getCurCod());
-
+            Retorno_MsgObj retorno = this.obtenerByCursoPersona(PerCod, curso);
+            
             if(!retorno.SurgioErrorListaRequerida())
             {
                 Double creditosParciales    = 0.0;
@@ -528,10 +591,13 @@ public class LoCalendario implements InABMGenerico{
     }
     
     public Boolean AlumnoExonera(Long PerCod, Materia materia, Modulo modulo, Curso curso){
+        
+        
         if(materia != null)
         {
-            Retorno_MsgObj retorno = perCalendario.obtenerByMateriaPersona(PerCod, materia.getMatCod());
-
+            
+            Retorno_MsgObj retorno = this.obtenerByMateriaPersona(PerCod, materia);
+            
             if(!retorno.SurgioErrorListaRequerida())
             {
                 Double creditosParciales    = 0.0;
@@ -554,7 +620,7 @@ public class LoCalendario implements InABMGenerico{
         
         if(modulo != null)
         {
-            Retorno_MsgObj retorno = perCalendario.obtenerByMateriaPersona(PerCod, modulo.getModCod());
+            Retorno_MsgObj retorno = this.obtenerByModuloPersona(PerCod, modulo);
 
             if(!retorno.SurgioErrorListaRequerida())
             {
@@ -579,7 +645,7 @@ public class LoCalendario implements InABMGenerico{
         
         if(curso != null)
         {
-            Retorno_MsgObj retorno = perCalendario.obtenerByMateriaPersona(PerCod, curso.getCurCod());
+            Retorno_MsgObj retorno = this.obtenerByCursoPersona(PerCod, curso);
 
             if(!retorno.SurgioErrorListaRequerida())
             {
@@ -611,15 +677,15 @@ public class LoCalendario implements InABMGenerico{
          
         if(materia != null)
         {
-            retorno = perCalendario.obtenerByMateriaPersona(PerCod, materia.getMatCod());
+            retorno = this.obtenerByMateriaPersona(PerCod, materia);
         }
         if(modulo != null)
         {
-            retorno = perCalendario.obtenerByModuloPersona(PerCod, modulo.getModCod());
+            retorno = this.obtenerByModuloPersona(PerCod, modulo);
         }
         if(curso != null)
         {
-            retorno = perCalendario.obtenerByCursoPersona(PerCod, curso.getCurCod());
+            retorno = this.obtenerByCursoPersona(PerCod, curso);
         }
         
         if(!retorno.SurgioErrorListaRequerida())
@@ -644,15 +710,15 @@ public class LoCalendario implements InABMGenerico{
          
         if(materia != null)
         {
-            retorno = perCalendario.obtenerByMateriaPersona(PerCod, materia.getMatCod());
+            retorno = this.obtenerByMateriaPersona(PerCod, materia);
         }
         if(modulo != null)
         {
-            retorno = perCalendario.obtenerByModuloPersona(PerCod, modulo.getModCod());
+            retorno = this.obtenerByModuloPersona(PerCod, modulo);
         }
         if(curso != null)
         {
-            retorno = perCalendario.obtenerByCursoPersona(PerCod, curso.getCurCod());
+            retorno = this.obtenerByCursoPersona(PerCod, curso);
         }
         
         if(!retorno.SurgioErrorListaRequerida())

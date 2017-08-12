@@ -14,20 +14,17 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import static javax.servlet.SessionTrackingMode.URL;
 
 /**
  *
  * @author alvar
  */
 public class LoConsumirServicioMdl {
-    private LoParametro loParam;
     private Parametro parametro = new Parametro();
     private static LoConsumirServicioMdl instancia;
     
     private LoConsumirServicioMdl() {
-        loParam     = LoParametro.GetInstancia();
-        parametro   = loParam.obtener(1);
+        parametro   = LoParametro.GetInstancia().obtener();
     }
     
     public static LoConsumirServicioMdl GetInstancia(){

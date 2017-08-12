@@ -92,7 +92,7 @@ public class NotificationManager extends HttpServlet {
         AsyncNotificar xthread = null;
         //Long milliseconds = 10000; // 10 seconds
           try {
-            xthread = new AsyncNotificar(notificacion);
+            xthread = new AsyncNotificar(notificacion, TipoNotificacion.A_DEMANDA);
             xthread.start();
           //  xthread.join(milliseconds);
           } catch (Exception ex) {

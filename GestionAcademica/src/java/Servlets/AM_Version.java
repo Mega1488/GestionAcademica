@@ -90,7 +90,7 @@ public class AM_Version extends HttpServlet {
         String SisCrgDat    = request.getParameter("pSisCrgDat");
         
 
-        Version version     = loVersion.obtener(Integer.valueOf(SisVerCod));
+        Version version     = loVersion.obtener(Long.valueOf(SisVerCod));
         
         
         try

@@ -6,6 +6,7 @@
 package Logica.Notificacion;
 
 import Entidad.Parametro;
+import Enumerado.TipoNotificacion;
 import Logica.LoParametro;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -39,11 +40,28 @@ public class SchNotificar implements SmartLifecycle{
     {
         //instanciaExiste = true;
         System.out.println("Method executed at every 30 seconds. Current time is :: "+ new Date());
-        System.err.println("Notificando");
+        System.err.println("Notificando automaticamente de manera asincrona");
         
         
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacionAutomaticamente();
+        /*
+        AsyncNotificar xthread = null;
+        //Long milliseconds = 10000; // 10 seconds
+          try {
+            xthread = new AsyncNotificar(null, TipoNotificacion.AUTOMATICA);
+            xthread.start();
+          //  xthread.join(milliseconds);
+          } catch (Exception ex) {
+              
+              Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+          } finally {
+            if (xthread != null && xthread.isAlive()) {
+              Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+              xthread.interrupt();
+            }
+          }
+          */
     }
 
     @Override

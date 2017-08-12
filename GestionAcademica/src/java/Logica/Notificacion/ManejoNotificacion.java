@@ -63,7 +63,12 @@ public class ManejoNotificacion {
         {
             for(Object objeto : retorno.getLstObjetos())
             {
-                this.EjecutarNotificacion((Notificacion) objeto);
+                Notificacion notificacion = (Notificacion) objeto;
+                
+                if(notificacion.NotificarAutomaticamente())
+                {
+                    this.EjecutarNotificacion(notificacion);
+                }
             }
         }
         

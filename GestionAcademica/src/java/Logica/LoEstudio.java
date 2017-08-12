@@ -32,8 +32,7 @@ public class LoEstudio {
 
     private LoEstudio() {
         mdlCourse           = new MoodleRestCourse();
-        LoParametro loParam = LoParametro.GetInstancia();
-        param               = loParam.obtener(1);
+        param               = LoParametro.GetInstancia().obtener();
     }
     
     public static LoEstudio GetInstancia(){

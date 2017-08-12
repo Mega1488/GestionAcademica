@@ -31,7 +31,7 @@ public class LoCategoria {
     private LoCategoria() {
         mdlCourse           = new MoodleRestCourse();
         LoParametro loParam = LoParametro.GetInstancia();
-        param               = loParam.obtener(1);
+        param               = loParam.obtener();
     }
     
     public static LoCategoria GetInstancia(){

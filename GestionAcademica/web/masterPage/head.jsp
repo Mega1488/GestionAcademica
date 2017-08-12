@@ -38,20 +38,19 @@
 
 
 
-<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-<script src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+<script src="<%=request.getContextPath()%>/JavaScript/DataTable/media/js/jquery.dataTables.min.js"></script>
+<script src="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Select/js/dataTables.select.min.js"></script>
 
 <link href=<% out.print(css); %>  rel="stylesheet" type="text/css"/>
 <link href=<% out.print(bootstrap); %>  rel="stylesheet">
 <link href=<% out.print(jquery_css); %> rel="stylesheet" type="text/css"/>
 
-<link href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
-<link href="https://cdn.datatables.net/select/1.2.2/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
-<link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/JavaScript/DataTable/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+<link href="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Select/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/JavaScript/FontAwesome/css/font-awesome.min.css">
 
-<link rel="shortcut icon" type="image/png" href="<% out.print(urlSistema); %>Imagenes/ctc_ic.png"/>
+<link rel="shortcut icon" type="image/png" href="<%=request.getContextPath()%>/Imagenes/ctc_ic.png"/>
 
 
 <script>

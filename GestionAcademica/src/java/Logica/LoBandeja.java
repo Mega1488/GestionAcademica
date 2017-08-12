@@ -14,7 +14,8 @@ import Enumerado.ObtenerDestinatario;
 import Enumerado.TipoEnvio;
 import Interfaz.InABMGenerico;
 import Logica.Notificacion.ManejoNotificacion;
-import Persistencia.PerBandeja;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,10 +27,8 @@ import java.util.Date;
 public class LoBandeja implements InABMGenerico{
 
     private static LoBandeja instancia;
-    private final PerBandeja perBandeja;
 
     private LoBandeja() {
-        perBandeja  = new PerBandeja();
     }
     
     public static LoBandeja GetInstancia(){
@@ -48,31 +47,56 @@ public class LoBandeja implements InABMGenerico{
         
         bandeja.setNotBanFch(new Date());
         
-        return perBandeja.guardar(bandeja);
+        PerManejador perManejador   = new PerManejador();
+        Retorno_MsgObj retorno      = perManejador.guardar(bandeja);
+
+        if(!retorno.SurgioError())
+        {
+            bandeja.setNotBanCod((Long) retorno.getObjeto());
+            retorno.setObjeto(bandeja);
+        }
+        
+        return retorno;
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perBandeja.actualizar(pObjeto);
+        
+        PerManejador perManejador   = new PerManejador();
+
+        return perManejador.actualizar(pObjeto);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perBandeja.eliminar(pObjeto);
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perBandeja.obtener(pObjeto);
+        
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.obtener((Long) pObjeto, NotificacionBandeja.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perBandeja.obtenerLista();
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.obtenerLista("NotificacionBandeja.findAll", null);
     }
     
     public Retorno_MsgObj obtenerListaByTipoEstado(Long PerCod, BandejaTipo NotBanTpo, BandejaEstado NotBanEst) {
-        return perBandeja.obtenerListaByTipoEstado(PerCod, NotBanTpo, NotBanEst);
+        PerManejador perManejador   = new PerManejador();
+        
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+        lstParametros.add(new SDT_Parameters(NotBanTpo, "NotBanTpo"));
+        lstParametros.add(new SDT_Parameters(NotBanEst, "NotBanEst"));
+        
+        return perManejador.obtenerLista("NotificacionBandeja.findByTpoEst", lstParametros);
     }
     
     public void NotificarPendientes(Long PerCod){

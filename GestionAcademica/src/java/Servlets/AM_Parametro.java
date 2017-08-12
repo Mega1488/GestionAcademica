@@ -7,8 +7,6 @@ package Servlets;
 
 import Entidad.Parametro;
 import Entidad.ParametroEmail;
-import Entidad.Version;
-import Enumerado.ExpresionesRegulares;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
 import Logica.LoParametro;
@@ -29,7 +27,6 @@ import javax.servlet.http.HttpServletResponse;
 public class AM_Parametro extends HttpServlet {
     
     private final Utilidades utilidades = Utilidades.GetInstancia();
-    private final LoParametro loParametro   = LoParametro.GetInstancia();
     
 
     /**
@@ -73,8 +70,7 @@ public class AM_Parametro extends HttpServlet {
     {
         String retorno = "";
         
-        String ParCod       = request.getParameter("pParCod");
-        Parametro parametro = loParametro.obtener(Integer.valueOf(ParCod));
+        Parametro parametro = LoParametro.GetInstancia().obtener();
         
         try
         {
@@ -97,7 +93,7 @@ public class AM_Parametro extends HttpServlet {
             Boolean error         = false;
             String ParCod         = request.getParameter("pParCod");
             
-            Parametro parametro   = loParametro.obtener(Integer.valueOf(ParCod));
+            Parametro parametro   = LoParametro.GetInstancia().obtener();
             
             String ParEmlCod      = request.getParameter("pParEmlCod");
             String ParSisLocal    = request.getParameter("pParSisLocal");
@@ -180,7 +176,7 @@ public class AM_Parametro extends HttpServlet {
 
             if(!error)
             {
-                loParametro.actualizar(parametro);
+                LoParametro.GetInstancia().actualizar(parametro);
                 mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
             }
             

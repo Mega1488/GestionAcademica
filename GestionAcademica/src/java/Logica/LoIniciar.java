@@ -12,15 +12,12 @@ import Entidad.Version;
 import Enumerado.Constantes;
 import Enumerado.Filial;
 import Enumerado.NombreSesiones;
-import Logica.Notificacion.SchNotificar;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -28,14 +25,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class LoIniciar {
 
-    private final LoParametro loParam = LoParametro.GetInstancia();
     private final LoVersion loVersion = LoVersion.GetInstancia();
     private Version version;
         
         
     
     public LoIniciar() {
-        version     = loVersion.obtener(1);
+        version     = loVersion.obtener(Long.valueOf("1"));
     }
     
     public void Iniciar(HttpServletRequest request){
@@ -50,7 +46,7 @@ public class LoIniciar {
             this.CargarDatosIniciales(request);
         }
         
-        if(loParam.obtener(1).getParUtlMdl())
+        if(LoParametro.GetInstancia().obtener().getParUtlMdl())
         {
             this.SincronizarConMoodle();
         }
@@ -112,7 +108,7 @@ public class LoIniciar {
     
     private void CargarParametros(){
         
-        Parametro parametro = loParam.obtener(1);
+        Parametro parametro = LoParametro.GetInstancia().obtener();
         
         if(parametro == null)
         {
@@ -127,7 +123,7 @@ public class LoIniciar {
             parametro.setParUrlMdl("http://192.168.0.106");
             parametro.setParUrlSrvSnc("");
         
-            loParam.guardar(parametro);
+            LoParametro.GetInstancia().guardar(parametro);
         }
         
     }
@@ -148,9 +144,9 @@ public class LoIniciar {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         
-        Parametro param = loParam.obtener(1);
+        Parametro param = LoParametro.GetInstancia().obtener();
         param.setParUrlSis(urlSistema);
-        loParam.actualizar(param);
+        LoParametro.GetInstancia().actualizar(param);
         
         request.getSession().setAttribute(NombreSesiones.URL_SISTEMA.getValor(), urlSistema);
         

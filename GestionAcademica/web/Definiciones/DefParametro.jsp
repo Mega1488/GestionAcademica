@@ -27,7 +27,7 @@
     }
 
     //----------------------------------------------------------------------------------------------------
-    Parametro parametro = LoParametro.GetInstancia().obtener(Integer.valueOf(1));
+    Parametro parametro = LoParametro.GetInstancia().obtener();
 
 %>
 

@@ -12,11 +12,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -32,8 +35,10 @@ public class Menu implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "MenCod", nullable = false)
-    private Integer MenCod;
+    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
+    @GenericGenerator(name = "native", strategy = "native" )
+    @Column(name = "MenCod")
+    private Long MenCod;
     
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "MenTpo")
@@ -48,11 +53,11 @@ public class Menu implements Serializable {
     @Column(name = "MenOrd")
     private Integer MenOrd;
 
-    public Integer getMenCod() {
+    public Long getMenCod() {
         return MenCod;
     }
 
-    public void setMenCod(Integer menCod) {
+    public void setMenCod(Long menCod) {
         this.MenCod = menCod;
     }
 
@@ -91,8 +96,7 @@ public class Menu implements Serializable {
     public Menu() {
     }
 
-    public Menu(Integer MenCod, TipoMenu MenTpo, String MenUrl, String MenNom, Integer MenOrd) {
-        this.MenCod = MenCod;
+    public Menu(TipoMenu MenTpo, String MenUrl, String MenNom, Integer MenOrd) {
         this.MenTpo = MenTpo;
         this.MenUrl = MenUrl;
         this.MenNom = MenNom;

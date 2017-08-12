@@ -5,8 +5,9 @@
  */
 package Logica;
 
+import Entidad.Menu;
 import Interfaz.InABMGenerico;
-import Persistencia.PerMenu;
+import Persistencia.PerManejador;
 import Utiles.Retorno_MsgObj;
 
 /**
@@ -16,10 +17,8 @@ import Utiles.Retorno_MsgObj;
 public class LoMenu implements InABMGenerico{
 
     private static LoMenu instancia;
-    private PerMenu perMenu;
 
     private LoMenu() {
-        perMenu  = new PerMenu();
     }
     
     public static LoMenu GetInstancia(){
@@ -34,27 +33,49 @@ public class LoMenu implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        return perMenu.guardar(pObjeto);
+        
+        Menu menu = (Menu) pObjeto;
+        
+        PerManejador perManejador   = new PerManejador();
+        Retorno_MsgObj retorno      = perManejador.guardar(menu);
+
+        if(!retorno.SurgioError())
+        {
+            menu.setMenCod((Long) retorno.getObjeto());
+            retorno.setObjeto(menu);
+        }
+        
+        return retorno;
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perMenu.actualizar(pObjeto);
+        
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.actualizar(pObjeto);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perMenu.eliminar(pObjeto);
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perMenu.obtener(pObjeto);
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.obtener((Long) pObjeto, Menu.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perMenu.obtenerLista();
+        
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.obtenerLista("Menu.findAll", null);
     }
     
     

@@ -10,7 +10,6 @@ import Entidad.Carrera;
 import Entidad.Curso;
 import Entidad.Parametro;
 import Entidad.Inscripcion;
-import Entidad.Evaluacion;
 import Entidad.Materia;
 import Entidad.MateriaRevalida;
 import Entidad.Persona;
@@ -21,7 +20,6 @@ import Logica.LoCarrera;
 import Logica.LoCurso;
 import Logica.LoParametro;
 import Logica.LoInscripcion;
-import Logica.LoEvaluacion;
 import Logica.LoPersona;
 import Logica.Seguridad;
 import Utiles.Mensajes;
@@ -41,8 +39,7 @@ import javax.servlet.http.HttpSession;
  * @author alvar
  */
 public class ABM_Inscripcion extends HttpServlet {
-    private final LoParametro loParametro   = LoParametro.GetInstancia();
-    private final Parametro parametro       = loParametro.obtener(1);
+    private final Parametro parametro       = LoParametro.GetInstancia().obtener();
     private final Seguridad seguridad       = Seguridad.GetInstancia();
     private final LoInscripcion loInscripcion           = LoInscripcion.GetInstancia();
     private final Utilidades utilidades     = Utilidades.GetInstancia();

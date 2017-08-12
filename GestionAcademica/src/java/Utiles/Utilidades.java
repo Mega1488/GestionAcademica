@@ -31,7 +31,6 @@ public class Utilidades {
     private final LoParametro loParam;
     private final LoVersion loVersion;
     
-
     private Utilidades() {
         loParam     = LoParametro.GetInstancia();
         loVersion   = LoVersion.GetInstancia();
@@ -120,9 +119,10 @@ public class Utilidades {
     }
     
     public String GetUrlSistema(){
-        Parametro param = loParam.obtener(1);
+        Parametro param = loParam.obtener();
+        if(param != null) return param.getParUrlSis();
         
-        return param.getParUrlSis();
+        return "";
     }
     
     public Boolean ValidarTipoDato(TipoDato tipoDato, String valor)

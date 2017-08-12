@@ -14,8 +14,10 @@ import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Moodle.MoodleCategory;
 import Moodle.MoodleCourse;
-import Persistencia.PerCarrera;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -24,15 +26,12 @@ import java.util.Date;
  */
 public class LoCarrera implements Interfaz.InCarrera{
     private static LoCarrera    instancia;
-    private final PerCarrera    perCarrera;
     private final Parametro     param;
     private final LoCategoria   loCategoria;
     private final LoEstudio     loEstudio;
     
     private LoCarrera(){
-        perCarrera          = new PerCarrera();
-        LoParametro loParam = LoParametro.GetInstancia();
-        param               = loParam.obtener(1);
+        param               = LoParametro.GetInstancia().obtener();
         loCategoria         = LoCategoria.GetInstancia();
         loEstudio           = LoEstudio.GetInstancia();
     }
@@ -67,7 +66,20 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             pCarrera    = (Carrera) retorno.getObjeto();
-            retorno     = (Retorno_MsgObj) perCarrera.guardar(pCarrera);
+            
+            PerManejador perManager = new PerManejador();
+            
+            pCarrera.setObjFchMod(new Date());
+            
+            retorno = perManager.guardar(pCarrera);
+            
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                pCarrera.setCarCod((Long) retorno.getObjeto());
+                retorno.setObjeto(pCarrera);
+            }
+            
+            
         }
         return retorno;
     }
@@ -93,8 +105,13 @@ public class LoCarrera implements Interfaz.InCarrera{
         if (!error)
         {
             pCarrera = (Carrera) retorno.getObjeto();
-            retorno = (Retorno_MsgObj) perCarrera.actualizar(pCarrera);
-        
+            
+            PerManejador perManager = new PerManejador();
+            
+            pCarrera.setObjFchMod(new Date());
+            
+            retorno = perManager.actualizar(pCarrera);
+            
             if(!retorno.SurgioErrorObjetoRequerido())
             {
                 retorno = this.obtener(pCarrera.getCarCod());
@@ -115,14 +132,16 @@ public class LoCarrera implements Interfaz.InCarrera{
 
         if(!error)
         {
-            retorno = (Retorno_MsgObj) perCarrera.eliminar(pCarrera);
+            PerManejador perManager = new PerManejador();
+            retorno = (Retorno_MsgObj) perManager.eliminar(pCarrera);
         }
         return retorno;
     }
 
     @Override
     public Retorno_MsgObj obtener(Long pCarCod) {
-        return perCarrera.obtener(pCarCod);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener(pCarCod, Carrera.class);
     }
 
     @Override
@@ -132,7 +151,11 @@ public class LoCarrera implements Interfaz.InCarrera{
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perCarrera.obtenerLista();
+        
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Carrera.findAll", null);
+        
     }
     
     //----------------------------------------------------------------------------------------------------
@@ -285,12 +308,26 @@ public class LoCarrera implements Interfaz.InCarrera{
     
     public Retorno_MsgObj obtenerPopUp(Long PlaEstCod)
     {
-        return perCarrera.obtenerPopUp(PlaEstCod);
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PlaEstCod, "PlaEstCod"));
+
+        return perManager.obtenerLista("Materia.findByPlan", lstParametros);
+        
     }
     
     public Retorno_MsgObj MateriaPorPeriodo(Long PlaEstCod, TipoPeriodo tpoPer, Double perVal)
     {
-        return perCarrera.MateriaPorPeriodo(PlaEstCod, tpoPer, perVal);
+        
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(tpoPer, "TpoPer"));
+        lstParametros.add(new SDT_Parameters(perVal, "PerVal"));
+        lstParametros.add(new SDT_Parameters(PlaEstCod, "PlaEstCod"));
+
+        return perManager.obtenerLista("Materia.findByPeriodo", lstParametros);
     }
     
     //----------------------------------------------------------------------------------------------------

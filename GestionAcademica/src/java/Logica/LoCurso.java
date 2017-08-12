@@ -14,11 +14,12 @@ import Enumerado.TipoPeriodo;
 import Moodle.MoodleCategory;
 import Moodle.MoodleCourse;
 import Moodle.MoodleRestCourse;
-import Persistencia.PerCurso;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
@@ -29,14 +30,11 @@ public class LoCurso implements Interfaz.InCurso{
     private final MoodleRestCourse  mdlCourse;
     private final LoCategoria       loCategoria;
     private static LoCurso instancia;
-    private PerCurso perCurso;
     private final LoEstudio  loEstudio;
 
     private LoCurso() {
         mdlCourse           = new MoodleRestCourse();
-        LoParametro loParam = LoParametro.GetInstancia();
-        param               = loParam.obtener(1);
-        perCurso            = new PerCurso();
+        param               = LoParametro.GetInstancia().obtener();
         loCategoria         = LoCategoria.GetInstancia();
         loEstudio           = LoEstudio.GetInstancia();
     }
@@ -73,7 +71,18 @@ public class LoCurso implements Interfaz.InCurso{
         if(!error)
         {
             pCurso  = (Curso) retorno.getObjeto();
-            retorno = (Retorno_MsgObj) perCurso.guardar(pCurso);
+            
+            PerManejador perManager = new PerManejador();
+            
+            pCurso.setObjFchMod(new Date());
+            
+            retorno = perManager.guardar(pCurso);
+            
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                pCurso.setCurCod((Long) retorno.getObjeto());
+                retorno.setObjeto(pCurso);
+            }
         }
 
         return retorno;
@@ -102,9 +111,14 @@ public class LoCurso implements Interfaz.InCurso{
         if(!error)
         {
             pCurso  = (Curso) retorno.getObjeto();
-            retorno = (Retorno_MsgObj) perCurso.actualizar(pCurso);
             
-            if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+            PerManejador perManager = new PerManejador();
+            
+            pCurso.setObjFchMod(new Date());
+            
+            retorno = perManager.actualizar(pCurso);
+            
+            if(!retorno.SurgioError())
             {
                 retorno = this.obtener(pCurso.getCurCod());
             }
@@ -127,7 +141,8 @@ public class LoCurso implements Interfaz.InCurso{
 
         if(!error)
         {
-            retorno = (Retorno_MsgObj) perCurso.eliminar(pCurso);
+            PerManejador perManager = new PerManejador();
+            retorno = perManager.eliminar(pCurso);
         }
        
        return retorno;
@@ -135,12 +150,15 @@ public class LoCurso implements Interfaz.InCurso{
 
     @Override
     public Retorno_MsgObj obtener(Long pCurCod) {
-        return perCurso.obtener(pCurCod);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener(pCurCod, Curso.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perCurso.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Curso.findAll", null);
     }
     
     //------------------------------------------------------------------------------------
@@ -149,7 +167,8 @@ public class LoCurso implements Interfaz.InCurso{
     
     public Retorno_MsgObj ModuloObtener(Long ModCod)
     {
-        return perCurso.ModuloObtener(ModCod);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener(ModCod, Modulo.class);
     }
     
     public Object ModuloAgregar(Modulo modulo)
@@ -225,7 +244,15 @@ public class LoCurso implements Interfaz.InCurso{
     }
     
     public Retorno_MsgObj ModuloPorPeriodo(Long CurCod, TipoPeriodo tpoPer, Double perVal) {
-        return perCurso.obtenerModuloPorPeriodo(CurCod, tpoPer, perVal);
+        
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(tpoPer, "TpoPer"));
+        lstParametros.add(new SDT_Parameters(perVal, "PerVal"));
+        lstParametros.add(new SDT_Parameters(CurCod, "CurCod"));
+
+        return perManager.obtenerLista("Modulo.findByPeriodo", lstParametros);
     }
     
     //------------------------------------------------------------------------------------

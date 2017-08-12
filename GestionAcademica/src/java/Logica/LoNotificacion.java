@@ -12,11 +12,11 @@ import Entidad.NotificacionDestinatario;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoNotificacion;
 import Interfaz.InABMGenerico;
-import Persistencia.PerNotificacion;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -25,10 +25,8 @@ import java.util.List;
 public class LoNotificacion implements InABMGenerico{
 
     private static LoNotificacion instancia;
-    private final PerNotificacion perNotificacion;
 
     private LoNotificacion() {
-        perNotificacion  = new PerNotificacion();
     }
     
     public static LoNotificacion GetInstancia(){
@@ -43,31 +41,55 @@ public class LoNotificacion implements InABMGenerico{
 
     @Override
     public Object guardar(Object pObjeto) {
-        return perNotificacion.guardar(pObjeto);
+        Notificacion not = (Notificacion) pObjeto;
+        
+        PerManejador perManager = new PerManejador();
+            
+        Retorno_MsgObj retorno = perManager.guardar(not);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            not.setNotCod((Long) retorno.getObjeto());
+            retorno.setObjeto(not);
+        }
+            
+        return retorno; 
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perNotificacion.actualizar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.actualizar(pObjeto);
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perNotificacion.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perNotificacion.obtener(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener((Long) pObjeto, Notificacion.class);
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perNotificacion.obtenerLista();
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Notificacion.findAll", null);
     }
     
     public Retorno_MsgObj obtenerListaByTipoActiva(Boolean NotAct, TipoNotificacion NotTpo) {
-        return perNotificacion.obtenerListaByTipoActiva(NotAct, NotTpo);
+        
+        PerManejador perManager = new PerManejador();
+        
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(NotAct, "NotAct"));
+        lstParametros.add(new SDT_Parameters(NotTpo, "NotTpo"));
+        
+        return perManager.obtenerLista("Notificacion.findAutoActiva", lstParametros);
     }
     
     public Retorno_MsgObj obtenerResultadosQuery(String query){
@@ -76,7 +98,8 @@ public class LoNotificacion implements InABMGenerico{
         
         if(!retorno.SurgioError())
         {
-            retorno = perNotificacion.obtenerResultadosQuery(query);
+            PerManejador perManager = new PerManejador();
+            retorno = perManager.obtenerResultadosQuery(query);
         }
         
         return retorno;
@@ -295,6 +318,10 @@ public class LoNotificacion implements InABMGenerico{
         {
             Notificacion notificacion = bitacora.getNotificacion();
             int indice  = notificacion.getLstBitacora().indexOf(bitacora);
+            
+            System.err.println("Notificacion: " + notificacion.toString());
+            System.err.println("Bitacora: " + bitacora.toString());
+                        
             notificacion.getLstBitacora().set(indice, bitacora);
             retorno = (Retorno_MsgObj) this.actualizar(notificacion);
         }

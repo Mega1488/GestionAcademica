@@ -6,6 +6,7 @@
 package Logica.Notificacion;
 
 import Entidad.Notificacion;
+import Enumerado.TipoNotificacion;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,14 +17,16 @@ import java.util.logging.Logger;
 public class AsyncNotificar extends Thread {
         /** The command agent to execute. */
         private final Notificacion not;
+        private final TipoNotificacion tpoNot;
  
         /**
          * Constructor
          * 
          * @param pNot - The agent to execute.
          */
-        public AsyncNotificar(Notificacion pNot) {
+        public AsyncNotificar(Notificacion pNot, TipoNotificacion tpoNotificacion) {
             this.not = pNot;
+            this.tpoNot = tpoNotificacion;
         }
  
         /**
@@ -35,7 +38,15 @@ public class AsyncNotificar extends Thread {
                 
                 ManejoNotificacion notManager = new ManejoNotificacion();
         
-                notManager.EjecutarNotificacion(not);
+                if(tpoNot.equals(TipoNotificacion.AUTOMATICA))
+                {
+                    notManager.EjecutarNotificacionAutomaticamente();
+                }
+                if(tpoNot.equals(TipoNotificacion.A_DEMANDA))
+                {
+                    notManager.EjecutarNotificacion(not);                    
+                }
+                
             } catch (Exception e) {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
             }

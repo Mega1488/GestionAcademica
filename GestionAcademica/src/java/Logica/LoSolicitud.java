@@ -9,8 +9,10 @@ import Entidad.Persona;
 import Entidad.Solicitud;
 import Enumerado.EstadoSolicitud;
 import Interfaz.InABMGenerico;
-import Persistencia.PerSolicitud;
+import Persistencia.PerManejador;
+import SDT.SDT_Parameters;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -20,10 +22,8 @@ import java.util.Date;
 public class LoSolicitud implements InABMGenerico{
 
     private static LoSolicitud instancia;
-    private final PerSolicitud perSolicitud;
 
     private LoSolicitud() {
-        perSolicitud  = new PerSolicitud();
     }
     
     public static LoSolicitud GetInstancia(){
@@ -41,31 +41,63 @@ public class LoSolicitud implements InABMGenerico{
         Solicitud solicitud = (Solicitud) pObjeto;
         solicitud.setSolFchIng(new Date());
         solicitud.setSolEst(EstadoSolicitud.SIN_TOMAR);
-        return perSolicitud.guardar(pObjeto);
+        
+        PerManejador perManager = new PerManejador();
+            
+        solicitud.setObjFchMod(new Date());
+
+        Retorno_MsgObj retorno = perManager.guardar(solicitud);
+
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            solicitud.setSolCod((Long) retorno.getObjeto());
+            retorno.setObjeto(solicitud);
+        }
+            
+        return retorno; 
     }
 
     @Override
     public Object actualizar(Object pObjeto) {
-        return perSolicitud.actualizar(pObjeto);
+        
+        Solicitud sol  = (Solicitud) pObjeto;
+            
+        PerManejador perManager = new PerManejador();
+
+        sol.setObjFchMod(new Date());
+        
+        return perManager.actualizar(sol);
+        
     }
 
     @Override
     public Object eliminar(Object pObjeto) {
-        return perSolicitud.eliminar(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.eliminar(pObjeto);
     }
 
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
-        return perSolicitud.obtener(pObjeto);
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener((Long) pObjeto, Solicitud.class);        
     }
 
     @Override
     public Retorno_MsgObj obtenerLista() {
-        return perSolicitud.obtenerLista();
+        
+        PerManejador perManager = new PerManejador();
+
+        return perManager.obtenerLista("Solicitud.findAll", null);
     }
     
     public Retorno_MsgObj obtenerListaByAlumno(Long PerCod) {
-        return perSolicitud.obtenerListaByAlumno(PerCod);
+        
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+
+        return perManager.obtenerLista("Solicitud.findByAlumno", lstParametros);
     }
     
     public Retorno_MsgObj tomarSolicitud(Solicitud solicitud, Persona persona){
