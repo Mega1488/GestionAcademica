@@ -24,7 +24,7 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
        
-        /*
+        
         if(applicationContext == null)
         {
             applicationContext  = new ClassPathXmlApplicationContext("sga_config.xml");
@@ -45,7 +45,7 @@ public class ContextListener implements ServletContextListener {
         System.err.println("--------------------------------------------------------------");
         System.err.println("Contexto iniciado: " + estado);
         System.err.println("--------------------------------------------------------------");
-*/
+
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ContextListener implements ServletContextListener {
         
         if(applicationContext != null)
         {
-           //applicationContext.close();
+           applicationContext.close();
             
             estado = "Cerro: " + scheduler.isRunning();
         }

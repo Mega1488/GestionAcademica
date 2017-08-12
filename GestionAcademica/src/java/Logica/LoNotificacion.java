@@ -319,8 +319,8 @@ public class LoNotificacion implements InABMGenerico{
             Notificacion notificacion = bitacora.getNotificacion();
             int indice  = notificacion.getLstBitacora().indexOf(bitacora);
             
-            System.err.println("Notificacion: " + notificacion.toString());
-            System.err.println("Bitacora: " + bitacora.toString());
+            System.err.println("Notificacion: " + notificacion.getLstBitacora().size());
+            System.err.println("Bitacora: " + bitacora.getNotBitCod());
                         
             notificacion.getLstBitacora().set(indice, bitacora);
             retorno = (Retorno_MsgObj) this.actualizar(notificacion);

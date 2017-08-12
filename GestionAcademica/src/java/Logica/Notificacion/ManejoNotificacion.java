@@ -57,16 +57,21 @@ public class ManejoNotificacion {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     public void EjecutarNotificacionAutomaticamente(){
+    
+        System.err.println("Notificando automaticamente");
         Retorno_MsgObj retorno = loNotificacion.obtenerListaByTipoActiva(Boolean.TRUE, TipoNotificacion.AUTOMATICA);
         
         if(!retorno.SurgioErrorListaRequerida())
         {
+            System.err.println("Notificaciones activas: " + retorno.getLstObjetos().size());
+            
             for(Object objeto : retorno.getLstObjetos())
             {
                 Notificacion notificacion = (Notificacion) objeto;
                 
                 if(notificacion.NotificarAutomaticamente())
                 {
+                    System.err.println("Notificacion automatica: " + notificacion.toString());
                     this.EjecutarNotificacion(notificacion);
                 }
             }
