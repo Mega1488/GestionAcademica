@@ -145,9 +145,12 @@ public class PerManejador{
         
         try {
             iniciaOperacion();
+            
+            sesion.clear();
+            
             Object objRetorno = sesion.get(clase, pCodigo);
             retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), objRetorno);
-            
+                 
         } catch (HibernateException he) {
             
             retorno = manejaExcepcion(he, retorno);
@@ -166,7 +169,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            
+            sesion.clear();
             Query query = sesion.getNamedQuery(namedQuery);
             
             if(parametros != null)
@@ -181,6 +184,7 @@ public class PerManejador{
             
             retorno.setMensaje(new Mensajes("Ok", TipoMensaje.MENSAJE));
             retorno.setLstObjetos(listaRetorno);
+            
             
         } catch (HibernateException he) {
             
@@ -200,6 +204,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
+            sesion.clear();
             Query query = sesion.createSQLQuery(sentencia);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List list = query.list();

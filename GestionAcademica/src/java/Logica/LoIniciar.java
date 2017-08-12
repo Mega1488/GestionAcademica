@@ -36,6 +36,8 @@ public class LoIniciar {
     
     public void Iniciar(HttpServletRequest request){
         
+        Parametro param = LoParametro.GetInstancia().obtener();
+        
         if(version == null)
         {
             this.CargarVersion();
@@ -44,9 +46,10 @@ public class LoIniciar {
         if(!version.getSisCrgDat())
         {
             this.CargarDatosIniciales(request);
+            param = LoParametro.GetInstancia().obtener();
         }
         
-        if(LoParametro.GetInstancia().obtener().getParUtlMdl())
+        if(param.getParUtlMdl())
         {
             this.SincronizarConMoodle();
         }

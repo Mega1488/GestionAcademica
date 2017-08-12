@@ -57,10 +57,12 @@ public class ManejoNotificacion {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
     public void EjecutarNotificacionAutomaticamente(){
+    
         Retorno_MsgObj retorno = loNotificacion.obtenerListaByTipoActiva(Boolean.TRUE, TipoNotificacion.AUTOMATICA);
         
         if(!retorno.SurgioErrorListaRequerida())
         {
+            
             for(Object objeto : retorno.getLstObjetos())
             {
                 Notificacion notificacion = (Notificacion) objeto;

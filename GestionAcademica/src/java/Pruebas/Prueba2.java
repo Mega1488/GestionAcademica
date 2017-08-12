@@ -7,6 +7,7 @@ package Pruebas;
 
 import Entidad.TipoEvaluacion;
 import Logica.LoTipoEvaluacion;
+import Logica.Notificacion.ManejoNotificacion;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionNotification;
 import Utiles.Retorno_MsgObj;
@@ -59,6 +60,12 @@ public class Prueba2 extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
             
+            
+            ManejoNotificacion notManager = new ManejoNotificacion();
+            
+            notManager.EjecutarNotificacionAutomaticamente();
+            
+            
         //    PerCarrera percarrera = new PerCarrera();
         //    PerPersona perPersona = new PerPersona();
             
@@ -69,19 +76,19 @@ public class Prueba2 extends HttpServlet {
          //   out.println("Persona: " + retorno.getMensaje().toString());
          
          
-         LoTipoEvaluacion loTpoEvl = LoTipoEvaluacion.GetInstancia();
+        // LoTipoEvaluacion loTpoEvl = LoTipoEvaluacion.GetInstancia();
          
-         TipoEvaluacion tpoEvl = new TipoEvaluacion();
+        // TipoEvaluacion tpoEvl = new TipoEvaluacion();
          
-         tpoEvl.setTpoEvlNom("A");
-         tpoEvl.setTpoEvlExm(false);
-         tpoEvl.setTpoEvlInsAut(false);
-         tpoEvl.setObjFchMod(new Date());
+        // tpoEvl.setTpoEvlNom("A");
+        // tpoEvl.setTpoEvlExm(false);
+        // tpoEvl.setTpoEvlInsAut(false);
+       //  tpoEvl.setObjFchMod(new Date());
           
          //PerManejador perManejador = new PerManejador();
          
          
-         
+         /*
          Retorno_MsgObj retorno = (Retorno_MsgObj) loTpoEvl.guardar(tpoEvl);
          
          out.println("Alta:  " + retorno.getObjeto().toString());
@@ -95,7 +102,7 @@ public class Prueba2 extends HttpServlet {
          out.println("Obtener Msg:  " + retorno.getMensaje().toString());
          
          out.println("Obtener:  " + retorno.getObjeto().toString());
-        
+        */
          /*
          tpoEvl = (TipoEvaluacion) retorno.getObjeto();
          

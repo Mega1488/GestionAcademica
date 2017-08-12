@@ -382,31 +382,31 @@ public class Notificacion implements Serializable {
         
         fechaUltimaNotificacion.setTime(fchPrevia);
         
-        int diferencia                  = 0;
         
         switch(this.NotRepTpo)
         {
             case ANIOS:
-                diferencia = Calendar.getInstance().get(Calendar.YEAR) - fechaUltimaNotificacion.get(Calendar.YEAR);
+                fechaUltimaNotificacion.add(Calendar.YEAR, this.NotRepVal);
                 break;
             case DIAS:
-                diferencia = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) - fechaUltimaNotificacion.get(Calendar.DAY_OF_MONTH);
+                fechaUltimaNotificacion.add(Calendar.DAY_OF_MONTH, this.NotRepVal);
                 break;
             case HORAS:
-                diferencia = Calendar.getInstance().get(Calendar.HOUR_OF_DAY) - fechaUltimaNotificacion.get(Calendar.HOUR_OF_DAY);
+                fechaUltimaNotificacion.add(Calendar.HOUR_OF_DAY, this.NotRepVal);
                 break;
             case MESES:
-                diferencia = Calendar.getInstance().get(Calendar.MONTH) - fechaUltimaNotificacion.get(Calendar.MONTH);
+                fechaUltimaNotificacion.add(Calendar.MONTH, this.NotRepVal);
                 break;
             case MINUTOS:
-                diferencia = Calendar.getInstance().get(Calendar.MINUTE) - fechaUltimaNotificacion.get(Calendar.MINUTE);
+                fechaUltimaNotificacion.add(Calendar.MINUTE, this.NotRepVal);
                 break;
             case SEMANAS:
-                diferencia = Calendar.getInstance().get(Calendar.WEEK_OF_YEAR) - fechaUltimaNotificacion.get(Calendar.WEEK_OF_YEAR);
+                fechaUltimaNotificacion.add(Calendar.WEEK_OF_MONTH, this.NotRepVal);
                 break;
         }
         
-        if(this.NotRepVal < diferencia)
+        
+        if(Calendar.getInstance().compareTo(fechaUltimaNotificacion) >= 0)
         {
             notificar = true;
         }
