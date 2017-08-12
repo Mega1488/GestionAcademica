@@ -28,6 +28,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
@@ -126,6 +127,7 @@ public class PeriodoEstudioDocumento implements Serializable {
         this.DocCod = DocCod;
     }
 
+    @XmlTransient
     public PeriodoEstudio getPeriodo() {
         return periodoEstudio;
     }

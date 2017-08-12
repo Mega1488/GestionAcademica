@@ -19,6 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -66,6 +67,7 @@ public class MateriaPrevia implements Serializable {
         this.MatPreCod = MatPreCod;
     }
 
+    @XmlTransient
     public Materia getMateria() {
         return materia;
     }

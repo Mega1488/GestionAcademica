@@ -7,13 +7,16 @@ package SDT;
 
 import Entidad.Escolaridad;
 import Entidad.Inscripcion;
+import java.io.Serializable;
 import java.util.ArrayList;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author alvar
  */
-public class SDT_PersonaEstudio {
+@XmlRootElement
+public class SDT_PersonaEstudio implements Serializable{
     private Inscripcion inscripcion;
     private ArrayList<Escolaridad> escolaridad;
 

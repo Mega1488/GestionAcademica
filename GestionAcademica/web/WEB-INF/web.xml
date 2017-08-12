@@ -130,11 +130,16 @@
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>ws_estudios</servlet-name>
+        <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
         <url-pattern>/Prueba</url-pattern>
     </servlet-mapping>
-        <servlet-mapping>
+    <servlet-mapping>
         <servlet-name>Prueba2</servlet-name>
         <url-pattern>/Prueba2</url-pattern>
     </servlet-mapping>
@@ -254,7 +259,10 @@
         <servlet-name>ws_EvaluacionAlumno</servlet-name>
         <url-pattern>/ws_EvaluacionAlumno</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>ws_estudios</servlet-name>
+        <url-pattern>/ws_estudios</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
