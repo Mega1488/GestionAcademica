@@ -26,11 +26,13 @@ public class ws_EvaluacionAlumno {
 
     /**
      * This is a sample web service operation
+     * @param token parametro
+     * @param AluPerCod parametro
+     * @return : Devuelve una lista para determinado alumno con evaluaciones que se encuentran pendientes para inscribirse
      */
-    @WebMethod(operationName = "EvaluacionesPorAlumno")
-    public Retorno_MsgObj EvaluacionesPorAlumno(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
+    @WebMethod(operationName = "EvaluacionesParaInscripcion")
+    public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod)
     {
-        
         LoCalendario loCalendario = LoCalendario.GetInstancia();
         Retorno_MsgObj retorno = new Retorno_MsgObj();
 
@@ -40,20 +42,26 @@ public class ws_EvaluacionAlumno {
         }
         else
         {
-            if(UsuAlumno == null)
+            if(AluPerCod == null)
             {    
                 retorno.setMensaje(new Mensajes("No se recibió un parámetro", TipoMensaje.ERROR));
             }
             else
             {
-                retorno = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(UsuAlumno);
+                retorno = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod);
             }
         }
         return retorno;
     }
     
-    @WebMethod(operationName = "ListaPorAlumno")
-    public Retorno_MsgObj ListaPorAlumno(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
+    /**
+     *
+     * @param token parametro
+     * @param UsuAlumno parametro
+     * @return : Metodo que devuelve la lista de evaluaciones de determinado alumno, que fueron finalizadas.
+     */
+    @WebMethod(operationName = "EvaluacionesFinalizadas")
+    public Retorno_MsgObj EvaluacionesFinalizadas(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
     {
         
         LoCalendario loCalendario = LoCalendario.GetInstancia();
@@ -77,6 +85,12 @@ public class ws_EvaluacionAlumno {
         return retorno;
     }
     
+    /**
+     *
+     * @param token parametro
+     * @param UsuAlumno parametro
+     * @return : Metodo que devuelve una lista de las evaluaciones que el alumno se encuentra inscripto pero estan pendientes para rendír la preuba
+     */
     @WebMethod(operationName = "ListaPendiente")
     public Retorno_MsgObj ListaPendiente(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
     {
@@ -102,6 +116,13 @@ public class ws_EvaluacionAlumno {
         return retorno;
     }
 
+    /**
+     *
+     * @param token parametro
+     * @param AluPerCod parametro
+     * @param CalCod parametro
+     * @return : Metodo que Inscribe un alumno a la evaluacion
+     */
     @WebMethod(operationName = "InscribirAlumno")
     public Retorno_MsgObj InscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "CalCod") Long CalCod)
     {
@@ -156,6 +177,13 @@ public class ws_EvaluacionAlumno {
         return retorno;
     }
     
+    /**
+     *
+     * @param token parametro
+     * @param CalAlCod parametro
+     * @param CalCod parametro
+     * @return : Metodo que Borra un alumno de la evaluación a la que está inscripto
+     */
     @WebMethod(operationName = "DesinscribirAlumno")
     public Retorno_MsgObj DesinscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "CalAlCod") Long CalAlCod, @WebParam(name = "CalCod") Long CalCod)
     {
@@ -210,4 +238,5 @@ public class ws_EvaluacionAlumno {
         }
         return retorno;
     }
+    
 }
