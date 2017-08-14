@@ -10,43 +10,14 @@
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
     
-     <task:scheduler id="taskScheduler" pool-size="10"/>
+
+    <!--
+    
+    <task:scheduler id="taskScheduler" pool-size="10"/>
      <task:annotation-driven scheduler="taskScheduler"/>     
      <bean id="taskNotificacion" class="Logica.Notificacion.SchNotificar" init-method="start"  destroy-method="stop"/>
      <task:scheduled-tasks scheduler="taskScheduler">
      	<task:scheduled ref="taskNotificacion" method="Tarea_Notificar" fixed-rate="30000"/>
      </task:scheduled-tasks>
-    
-     
-    <!--
-        <task:annotation-driven />
-    <util:properties id="applicationProps" location="scheduler.properties" />
-    <context:property-placeholder properties-ref="applicationProps" />
-    <bean id="demoServiceXmlConfig" class="Logica.Notificacion.SchNotificar" />
- 
-    <task:scheduled-tasks>
-        <task:scheduled ref="demoServiceXmlConfig" method="demoServiceMethod" cron="#{applicationProps['cron.expression']}"></task:scheduled>
-    </task:scheduled-tasks>
-
-    
-       <task:annotation-driven />
-    <bean id="SchNotificar" class="Logica.Notificacion.SchNotificar" init-method="start"  destroy-method="stop" >
-        <property name="cronExpression" value="*/5 * * * * ?">
-        </property>
-    </bean>
-    
-    <task:annotation-driven />
-    <bean id="SchNotificar" class="Logica.Notificacion.SchNotificar" init-method="start" destroy-method="stop">
-        <property name="cronExpression">
-            <value>*/5 * * * * ?</value>
-        </property>
-    </bean>
-    <util:properties id="applicationProps" location="classpath*:scheduler.properties" />
-	<context:property-placeholder properties-ref="applicationProps"  />
-    
-    <task:annotation-driven />
-    
-        <context:property-placeholder location="classpath*:scheduler.properties"/>
-    <bean id="schNotificar" class="Logica.Notificacion.SchNotificar" init-method="start" destroy-method="stop"></bean>
-    -->
+     -->
 </beans>

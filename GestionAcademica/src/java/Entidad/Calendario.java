@@ -44,6 +44,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Calendario.findCursoAlumno",    query = "SELECT t FROM Calendario t where t.evaluacion.CurEvl.CurCod =:CurCod and t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioAlumno A WHERE A.calendario.CalCod = t.CalCod AND A.Alumno.PerCod =:PerCod)  order by t.CalFch desc"),
     @NamedQuery(name = "Calendario.findByAlumno",       query = "SELECT t FROM Calendario t where t.CalCod in (SELECT A.calendario.CalCod FROM t.lstAlumnos A WHERE A.Alumno.PerCod =:PerCod)  order by t.CalFch desc"),
     @NamedQuery(name = "Calendario.findByDocente",      query = "SELECT t FROM Calendario t where t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioDocente A WHERE A.calendario.CalCod = t.CalCod AND A.Docente.PerCod =:PerCod)  order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findInscripcion",    query = "SELECT t FROM Calendario t WHERE t.EvlInsFchDsd = curdate() order by t.CalFch desc"),
     @NamedQuery(name = "Calendario.findAll",            query = "SELECT t FROM Calendario t order by t.CalFch desc")})
 
 public class Calendario implements Serializable {

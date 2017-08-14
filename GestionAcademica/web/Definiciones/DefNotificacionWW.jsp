@@ -101,7 +101,7 @@
                                 Notificacion notificacion = (Notificacion) objeto;
                             %>
                             <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
+                                <td><% if(!notificacion.getNotInt()){ %><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/> <% } %> </td>
                                 <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
                                 <td><% out.print( utilidad.NuloToVacio(notificacion.getNotCod())); %> </td>
                                 <td><% out.print( utilidad.NuloToVacio(notificacion.getNotNom())); %> </td>

@@ -5,6 +5,7 @@
  */
 package Logica;
 
+import Entidad.Notificacion;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Entidad.TipoEvaluacion;
@@ -12,6 +13,11 @@ import Entidad.Version;
 import Enumerado.Constantes;
 import Enumerado.Filial;
 import Enumerado.NombreSesiones;
+import Enumerado.NotificacionSistema;
+import Enumerado.ObtenerDestinatario;
+import Enumerado.TipoNotificacion;
+import Enumerado.TipoRepeticion;
+import Logica.Notificacion.NotificacionesInternas;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -70,6 +76,7 @@ public class LoIniciar {
         CargarParametros();
         CargarUrlSistema(request);
         CargarUsuarioAdministrador();
+        CargarNotificaciones();
         
         version.setSisCrgDat(Boolean.TRUE);
         loVersion.actualizar(version);
@@ -184,4 +191,10 @@ public class LoIniciar {
             loPersona.guardar(persona);
         }
     }
+    
+    private void CargarNotificaciones(){
+        NotificacionesInternas notInt = new NotificacionesInternas();
+        notInt.CargarNotificaciones();
+     }
+    
 }

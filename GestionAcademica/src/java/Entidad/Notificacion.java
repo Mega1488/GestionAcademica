@@ -94,6 +94,10 @@ public class Notificacion implements Serializable {
     @Column(name = "NotRepHst", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date NotRepHst;
+    
+    @Column(name = "NotFchDsd", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date NotFchDsd;
 
     @Column(name = "NotEmail")
     private Boolean NotEmail;
@@ -103,6 +107,9 @@ public class Notificacion implements Serializable {
     private Boolean NotWeb;
     @Column(name = "NotAct")
     private Boolean NotAct;
+    
+    @Column(name = "NotInt")
+    private Boolean NotInt;
     
     
     @OneToMany(targetEntity = NotificacionBitacora.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -128,6 +135,7 @@ public class Notificacion implements Serializable {
         this.lstConsulta = new ArrayList<>();
         
         this.NotAct     = false;
+        this.NotInt     = false;
         
         this.NotWeb     = false;
         this.NotApp     = false;
@@ -293,6 +301,24 @@ public class Notificacion implements Serializable {
         this.lstDestinatario = lstDestinatario;
     }
 
+    public Boolean getNotInt() {
+        return NotInt;
+    }
+
+    public void setNotInt(Boolean NotInt) {
+        this.NotInt = NotInt;
+    }
+
+    public Date getNotFchDsd() {
+        return NotFchDsd;
+    }
+
+    public void setNotFchDsd(Date NotFchDsd) {
+        this.NotFchDsd = NotFchDsd;
+    }
+    
+    
+
     public String getMedio(){
         String medio = "";
         
@@ -347,20 +373,41 @@ public class Notificacion implements Serializable {
     }
     
     public Boolean NotificarAutomaticamente(){
-        Date fechaActual    = new Date();
         Boolean notificar   = false;
+        
+        Calendar fchAct = Calendar.getInstance();
+        Calendar fchDsd = Calendar.getInstance();
+        
+        Boolean continuarFchDsd = false;
 
         if(!this.NotRepTpo.equals(TipoRepeticion.SIN_REPETICION))
         {
-            if(this.NotRepHst == null)
+            if(this.NotFchDsd == null)
             {
-                notificar = this.NotificarAutomaticamenteRango();
+                continuarFchDsd = true;
             }
             else
             {
-                if(this.NotRepHst.compareTo(fechaActual) <= 0)
+                fchDsd.setTime(this.NotFchDsd);
+                
+                if(fchDsd.compareTo(fchAct) >= 0)
                 {
-                    notificar = this.NotificarAutomaticamenteRango();                    
+                    continuarFchDsd = true;
+                }
+            }
+            
+            if(continuarFchDsd)
+            {
+                if(this.NotRepHst == null)
+                {
+                    notificar = this.NotificarAutomaticamenteRango();
+                }
+                else
+                {
+                    if(this.NotRepHst.compareTo(fchAct.getTime()) <= 0)
+                    {
+                        notificar = this.NotificarAutomaticamenteRango();                    
+                    }
                 }
             }
         }

@@ -175,8 +175,7 @@ public class LoCalendario implements InABMGenerico{
         
     }
     
-    public Retorno_MsgObj ObtenerListaPorAlumno(Long PerCod)
-    {
+    public Retorno_MsgObj ObtenerListaPorAlumno(Long PerCod){
          
         PerManejador perManager = new PerManejador();
 
@@ -204,8 +203,7 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
-    public Retorno_MsgObj ObtenerListaParaInscripcion(Long PerCod)
-    {
+    public Retorno_MsgObj ObtenerListaParaInscripcion(Long PerCod){
         Retorno_MsgObj retorno  = this.obtenerLista();
         List<Object> lstRetorno = new ArrayList<>();
         
@@ -233,8 +231,13 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
-    public Retorno_MsgObj ObtenerListaPendiente(Long PerCod)
-    {
+    public Retorno_MsgObj ObtenerListaInscripcion(){
+        PerManejador perManejador   = new PerManejador();
+        
+        return perManejador.obtenerLista("Calendario.findInscripcion", null);
+    }
+    
+    public Retorno_MsgObj ObtenerListaPendiente(Long PerCod){
         PerManejador perManager = new PerManejador();
 
         ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();

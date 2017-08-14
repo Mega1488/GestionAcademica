@@ -54,12 +54,10 @@
 
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "";
+    String notInterna       = "";
 
     switch (Mode) {
-        case INSERT:
-            CamposActivos = "enabled";
-            break;
         case DELETE:
             CamposActivos = "disabled";
             break;
@@ -67,7 +65,7 @@
             CamposActivos = "disabled";
             break;
         case UPDATE:
-            CamposActivos = "enabled";
+            notInterna   = (notificacion.getNotInt() == true ? "disabled" : "");
             break;
     }
 
@@ -197,8 +195,8 @@
                         <form id="frm_objeto" name="frm_objeto">
 
                             <div><label>Código</label><input type="text" class="form-control" id="NotCod" name="NotCod" placeholder="NotCod" disabled value="<% out.print(utilidad.NuloToVacio(notificacion.getNotCod())); %>" ></div>
-                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotAct())); %> ></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="NotNom" name="NotNom" placeholder="NotNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotNom())); %>" ></div>
+                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %>  <% out.print(utilidad.BooleanToChecked(notificacion.getNotAct())); %> ></div>
+                            <div><label>Nombre</label><input type="text" class="form-control" id="NotNom" name="NotNom" placeholder="NotNom" <% out.print(CamposActivos); %> <% out.print(notInterna); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotNom())); %>" ></div>
                             <div><label>Descripcion</label><input type="text" class="form-control" id="NotDsc" name="NotDsc" placeholder="NotDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotDsc())); %>" ></div>
 
                             <div><label>Aplicacion</label><input type="checkbox" id="NotApp" name="NotApp" placeholder="NotApp" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotApp())); %> ></div>
@@ -207,7 +205,7 @@
 
                             <div>
                                 <label>Obtener destinatarios</label>
-                                <select class="form-control" id="NotObtDest" name="NotObtDest" <% out.print(CamposActivos); %>>
+                                <select class="form-control" id="NotObtDest" name="NotObtDest" <% out.print(CamposActivos); %> <% out.print(notInterna); %>>
                                     <%
                                         for (ObtenerDestinatario obtDestinatario : ObtenerDestinatario.values()) {
 
@@ -228,7 +226,7 @@
 
                             <div>
                                 <label>Tipo de notificacion</label>
-                                <select class="form-control" id="NotTpo" name="NotTpo" <% out.print(CamposActivos); %>>
+                                <select class="form-control" id="NotTpo" name="NotTpo" <% out.print(CamposActivos); %> <% out.print(notInterna); %> >
                                     <%
                                         for (TipoNotificacion tpoNot : TipoNotificacion.values()) {
 
@@ -248,7 +246,7 @@
 
                             <div>
                                 <label>Tipo de envio</label>
-                                <select class="form-control" id="NotTpoEnv" name="NotTpoEnv" <% out.print(CamposActivos); %>>
+                                <select class="form-control" id="NotTpoEnv" name="NotTpoEnv" <% out.print(CamposActivos); %> <% out.print(notInterna); %>>
                                     <%
                                         for (TipoEnvio tpoEnv : TipoEnvio.values()) {
 
@@ -269,7 +267,7 @@
 
                             <div>
                                 <label>Tipo de repeticion</label>
-                                <select class="form-control" id="NotRepTpo" name="NotRepTpo" <% out.print(CamposActivos); %>>
+                                <select class="form-control" id="NotRepTpo" name="NotRepTpo" <% out.print(CamposActivos); %> >
                                     <%
                                         for (TipoRepeticion tpoRep : TipoRepeticion.values()) {
 
@@ -287,8 +285,8 @@
                                 </select>
                             </div>
 
-                            <div><label>Repetir</label><input type="text" class="form-control" id="NotRepVal" name="NotRepVal" placeholder="NotRepVal" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepVal())); %>" ></div>
-                            <div><label>Repetir hasta</label><input type="date" class="form-control" id="NotRepHst" name="NotRepHst" placeholder="NotRepHst" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepHst())); %>" ></div>
+                            <div><label>Repetir</label><input type="text" class="form-control" id="NotRepVal" name="NotRepVal" placeholder="NotRepVal" <% out.print(CamposActivos); %>  value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepVal())); %>" ></div>
+                            <div><label>Repetir hasta</label><input type="date" class="form-control" id="NotRepHst" name="NotRepHst" placeholder="NotRepHst" <% out.print(CamposActivos); %>  value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepHst())); %>" ></div>
 
 
                             <div><label>Asunto</label><input type="text" class="form-control" id="NotAsu" name="NotAsu" placeholder="NotAsu" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotAsu())); %>" ></div>

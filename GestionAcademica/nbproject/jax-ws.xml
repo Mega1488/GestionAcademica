@@ -10,6 +10,12 @@
     <service name="ws_EvaluacionAlumno">
       <implementation-class>WebService.ws_EvaluacionAlumno</implementation-class>
     </service>
+    <service name="ws_estudios">
+      <implementation-class>WebService.ws_estudios</implementation-class>
+    </service>
+    <service name="ws_solicitudes">
+      <implementation-class>WebService.ws_solicitudes</implementation-class>
+    </service>
   </services>
   <clients/>
   <jsr109>false</jsr109>
