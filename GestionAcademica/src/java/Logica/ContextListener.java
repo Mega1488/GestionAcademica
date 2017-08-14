@@ -25,26 +25,26 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
        
         
-        if(applicationContext == null)
-        {
-            applicationContext  = new ClassPathXmlApplicationContext("sga_config.xml");
-        }
-        
-        scheduler           = applicationContext.getBean(SchNotificar.class);
-
-        String estado = "Scheduler no iniciado";
-        
-        if(applicationContext != null)
-        {
-            if(scheduler!= null)
-            {
-                estado = "Scheduler : " + scheduler.isRunning();
-            }
-        }
-        
-        System.err.println("--------------------------------------------------------------");
-        System.err.println("Contexto iniciado: " + estado);
-        System.err.println("--------------------------------------------------------------");
+//        if(applicationContext == null)
+//        {
+//            applicationContext  = new ClassPathXmlApplicationContext("sga_config.xml");
+//        }
+//        
+//        scheduler           = applicationContext.getBean(SchNotificar.class);
+//
+//        String estado = "Scheduler no iniciado";
+//        
+//        if(applicationContext != null)
+//        {
+//            if(scheduler!= null)
+//            {
+//                estado = "Scheduler : " + scheduler.isRunning();
+//            }
+//        }
+//        
+//        System.err.println("--------------------------------------------------------------");
+//        System.err.println("Contexto iniciado: " + estado);
+//        System.err.println("--------------------------------------------------------------");
 
     }
 
@@ -52,18 +52,18 @@ public class ContextListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
         
         
-         String estado = "No scheduler";
-        
-        if(applicationContext != null)
-        {
-           applicationContext.close();
-            
-            estado = "Cerro: " + scheduler.isRunning();
-        }
-        
-        System.err.println("--------------------------------------------------------------");
-        System.err.println("Contexto detenido: " + estado);
-        System.err.println("--------------------------------------------------------------");
+//         String estado = "No scheduler";
+//        
+//        if(applicationContext != null)
+//        {
+//           applicationContext.close();
+//            
+//            estado = "Cerro: " + scheduler.isRunning();
+//        }
+//        
+//        System.err.println("--------------------------------------------------------------");
+//        System.err.println("Contexto detenido: " + estado);
+//        System.err.println("--------------------------------------------------------------");
     }
     
 }
