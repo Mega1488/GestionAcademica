@@ -6,8 +6,11 @@
 package Logica;
 
 import Logica.Notificacion.SchNotificar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import org.springframework.beans.BeansException;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -30,15 +33,23 @@ public class ContextListener implements ServletContextListener {
             applicationContext  = new ClassPathXmlApplicationContext("sga_config.xml");
         }
         
-        scheduler           = applicationContext.getBean(SchNotificar.class);
+        
 
         String estado = "Scheduler no iniciado";
         
         if(applicationContext != null)
         {
-            if(scheduler!= null)
+            try{
+                scheduler           = applicationContext.getBean(SchNotificar.class);
+
+                if(scheduler!= null)
+                {
+                    estado = "Scheduler : " + scheduler.isRunning();
+                }
+            }
+            catch(BeansException ex)
             {
-                estado = "Scheduler : " + scheduler.isRunning();
+                Logger.getLogger(this.getClass().getName()).log(Level.CONFIG, null, ex);
             }
         }
         
@@ -57,8 +68,10 @@ public class ContextListener implements ServletContextListener {
         if(applicationContext != null)
         {
            applicationContext.close();
-            
-            estado = "Cerro: " + scheduler.isRunning();
+         
+           if(scheduler != null){
+               estado = "Cerro: " + scheduler.isRunning();
+           }
         }
         
         System.err.println("--------------------------------------------------------------");
