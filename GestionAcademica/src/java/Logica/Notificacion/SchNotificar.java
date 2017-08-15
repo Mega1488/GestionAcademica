@@ -5,16 +5,11 @@
  */
 package Logica.Notificacion;
 
-import Entidad.Parametro;
-import Enumerado.TipoNotificacion;
-import Logica.LoParametro;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.scheduling.annotation.Scheduled;
 
 /**
  *
@@ -40,11 +35,16 @@ public class SchNotificar implements SmartLifecycle{
     {
         //instanciaExiste = true;
         System.out.println("Method executed at every 30 seconds. Current time is :: "+ new Date());
-        System.err.println("Notificando automaticamente de manera asincrona");
+        System.err.println("Notificando automaticamente");
         
         
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacionAutomaticamente();
+        
+        System.err.println("Notificaciones de sistema");
+        NotificacionesInternas noInt = new NotificacionesInternas();
+        noInt.EjecutarNotificacionesInternas();
+        
         /*
         AsyncNotificar xthread = null;
         //Long milliseconds = 10000; // 10 seconds

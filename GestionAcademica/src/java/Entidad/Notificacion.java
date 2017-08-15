@@ -390,7 +390,7 @@ public class Notificacion implements Serializable {
             {
                 fchDsd.setTime(this.NotFchDsd);
                 
-                if(fchDsd.compareTo(fchAct) >= 0)
+                if(fchDsd.compareTo(fchAct) <= 0)
                 {
                     continuarFchDsd = true;
                 }

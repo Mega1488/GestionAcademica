@@ -195,6 +195,7 @@ public class ABM_Notificacion extends HttpServlet {
                 String NotTpo= request.getParameter("pNotTpo");
                 String NotTpoEnv= request.getParameter("pNotTpoEnv");
                 String NotWeb= request.getParameter("pNotWeb");
+                String NotFchDsd= request.getParameter("pNotFchDsd");
                 
                 
                 //------------------------------------------------------------------------------------------
@@ -232,6 +233,18 @@ public class ABM_Notificacion extends HttpServlet {
                     else
                     {
                         notificacion.setNotRepHst(null);
+                    }
+                }
+                
+                if(NotFchDsd != null)
+                {
+                    if(!NotFchDsd.isEmpty())
+                    {
+                        notificacion.setNotFchDsd(utilidades.StringToDateTime(NotFchDsd));
+                    }
+                    else
+                    {
+                        notificacion.setNotFchDsd(null);
                     }
                 }
                 

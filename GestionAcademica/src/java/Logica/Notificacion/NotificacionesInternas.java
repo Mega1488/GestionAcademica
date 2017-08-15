@@ -171,7 +171,7 @@ public class NotificacionesInternas {
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.ALUMNOS_INACTIVOS.name());
         notificacion.setNotInt(Boolean.TRUE);       
-        notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+        notificacion.setNotObtDest(ObtenerDestinatario.POR_CADA_REGISTRO);
         notificacion.setNotRepTpo(TipoRepeticion.MESES);
         notificacion.setNotRepVal(1);
         notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
@@ -182,8 +182,38 @@ public class NotificacionesInternas {
         notificacion.setNotWeb(Boolean.TRUE);
         
         notificacion.setNotDsc("Alumnos inactivos");
-        notificacion.setNotAsu("Falta poco para tu titulo!");
+        notificacion.setNotAsu("Falta poco para tu titulo de [%=INSCRIPCION_ESTUDIO]");
         notificacion.setNotCon("<p>Puedes dar las evaluaciones para poder conseguir tu titulo</p>");
+        
+        NotificacionConsulta contenido = new NotificacionConsulta();
+        contenido.setNotCnsTpo(TipoConsulta.CONSULTA);
+        contenido.setNotificacion(notificacion);
+        contenido.setNotCnsSQL("SELECT\n" +
+                                "        I.AluFchInsc AS INSCRIPCION_FECHA\n" +
+                                "        ,I.InsGenAnio AS INSCRIPION_GENERACION\n" +
+                                "        ,I.AluPerCod AS INSCRIPCION_ALUMNO\n" +
+                                "        ,CASE\n" +
+                                "                WHEN CurInsCurCod IS NOT NULL THEN (SELECT CURNOM FROM CURSO WHERE CURSO.CURCOD = CurInsCurCod)\n" +
+                                "                WHEN CarInsPlaEstCod IS NOT NULL THEN (SELECT CONCAT(C.CARNOM, ' - ',  P.PLAESTNOM) FROM PLAN_ESTUDIO P, CARRERA C WHERE P.CARCOD = C.CARCOD AND P.PLAESTCOD = CarInsPlaEstCod)\n" +
+                                "         END AS INSCRIPCION_ESTUDIO\n" +
+                                "        ,E.ULTIMA_ESCOLARIDAD AS ESCOLARIDAD_FECHA\n" +
+                                "FROM\n" +
+                                "        INSCRIPCION I\n" +
+                                "        LEFT OUTER JOIN (SELECT MAX(ESCFCH) AS ULTIMA_ESCOLARIDAD, EscAluPerCod FROM ESCOLARIDAD GROUP BY ESCALUPERCOD) E\n" +
+                                "        ON I.AluPerCod = E.EscAluPerCod\n" +
+                                "WHERE \n" +
+                                "        I.AluFchCert IS NULL\n" +
+                                "        AND E.ULTIMA_ESCOLARIDAD <= DATE_SUB(CURDATE(), INTERVAL (SELECT ParTieIna FROM PARAMETRO WHERE PARCOD = 1) MONTH)");
+        
+        notificacion.getLstConsulta().add(contenido);
+        
+        
+        NotificacionConsulta destinatario = new NotificacionConsulta();
+        destinatario.setNotCnsTpo(TipoConsulta.INC_DESTINATARIO);
+        destinatario.setNotificacion(notificacion);
+        destinatario.setNotCnsSQL("SELECT 1 AS TIPO, [%=INSCRIPCION_ALUMNO] AS DESTINATARIO");
+        
+        notificacion.getLstConsulta().add(destinatario);
         
         return notificacion;
     }
@@ -203,8 +233,10 @@ public class NotificacionesInternas {
                 
                 if(notificacion.getNotAct() && notificacion.getNotInt())
                 {
+                    
                     if(notificacion.NotificarAutomaticamente())
                     {
+                        
                         if(notificacion.getNotNom().equals(NotificacionSistema.EVALUACION_HABILITADA_INSCRIPCION.name()))
                         {
                             this.Notificar_EVALUACION_HABILITADA_INSCRIPCION(notificacion);
@@ -308,13 +340,15 @@ public class NotificacionesInternas {
     //--------------------------------------------------------------------------
     
     private void Notificar_ESCOLARIDAD_ACTUALIZADA(Notificacion notificacion){
-        
+        ManejoNotificacion notManager = new ManejoNotificacion();
+        notManager.EjecutarNotificacion(notificacion);
     }
     
     //--------------------------------------------------------------------------
     
     private void Notificar_ALUMNOS_INACTIVOS(Notificacion notificacion){
-        
+        ManejoNotificacion notManager = new ManejoNotificacion();
+        notManager.EjecutarNotificacion(notificacion);
     }
     
     //--------------------------------------------------------------------------

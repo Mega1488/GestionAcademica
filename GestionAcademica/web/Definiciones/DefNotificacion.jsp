@@ -4,6 +4,8 @@
     Author     : alvar
 --%>
 
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="Enumerado.TipoRepeticion"%>
 <%@page import="Enumerado.TipoEnvio"%>
 <%@page import="Enumerado.ObtenerDestinatario"%>
@@ -23,6 +25,7 @@
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -38,6 +41,8 @@
     }
 
     //----------------------------------------------------------------------------------------------------
+    
+    Date fechaActual = new Date();
     Modo Mode = Modo.valueOf(request.getParameter("MODO"));
     String NotCod = request.getParameter("pNotCod");
     String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefNotificacionWW.jsp');";
@@ -96,6 +101,7 @@
                     var NotNom = $('#NotNom').val();
                     var NotRepHst = $('#NotRepHst').val();
                     var NotRepVal = $('#NotRepVal').val();
+                    var NotFchDsd = $('#NotFchDsd').val();
 
                     var NotWeb = document.getElementById('NotWeb').checked;
                     var NotEmail = document.getElementById('NotEmail').checked;
@@ -135,6 +141,7 @@
                             pNotTpo: NotTpo,
                             pNotTpoEnv: NotTpoEnv,
                             pNotWeb: NotWeb,
+                            pNotFchDsd: NotFchDsd,
                             pAction: Modo
                         }, function (responseText) {
                             var obj = JSON.parse(responseText);
@@ -264,6 +271,7 @@
                                 </select>
                             </div>
 
+                                    <div><label>Enviar a partir de</label><input type="datetime-local" class="form-control" id="NotFchDsd" name="NotFchDsd" placeholder="NotFchDsd" <% out.print(CamposActivos); %>  value="<% out.print((notificacion.getNotFchDsd() != null ? dateFormat.format(notificacion.getNotFchDsd()) : dateFormat.format(fechaActual))); %>" ></div>
 
                             <div>
                                 <label>Tipo de repeticion</label>

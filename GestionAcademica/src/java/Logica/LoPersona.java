@@ -353,8 +353,7 @@ public class LoPersona implements Interfaz.InPersona{
         return error;
     }
     
-    public ArrayList<SDT_PersonaEstudio> ObtenerEstudios(Long PerCod)
-    {
+    public ArrayList<SDT_PersonaEstudio> ObtenerEstudios(Long PerCod){
         ArrayList<SDT_PersonaEstudio> lstEstudios = new ArrayList<>();;
         
         Retorno_MsgObj inscripcion                  = LoInscripcion.GetInstancia().obtenerListaByAlumno(PerCod);
@@ -389,8 +388,7 @@ public class LoPersona implements Interfaz.InPersona{
         return lstEstudios;
     }
     
-    private ArrayList<SDT_PersonaEstudio> PersonaAgregarEstudio(ArrayList<SDT_PersonaEstudio> lstEstudio, Escolaridad escolaridad, Inscripcion inscripcion)
-    {
+    private ArrayList<SDT_PersonaEstudio> PersonaAgregarEstudio(ArrayList<SDT_PersonaEstudio> lstEstudio, Escolaridad escolaridad, Inscripcion inscripcion){
         boolean existe = false;
         
         if(inscripcion == null)
@@ -454,8 +452,7 @@ public class LoPersona implements Interfaz.InPersona{
         return lstEstudio;
     }
     
-    public boolean PersonaAproboEstudio(Long PerCod, Materia materia, Modulo modulo, Curso curso)
-    {
+    public boolean PersonaAproboEstudio(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         
         ArrayList<SDT_PersonaEstudio> lstEstudio = this.ObtenerEstudios(PerCod);
         Boolean estudioAprobado = false;
@@ -475,8 +472,7 @@ public class LoPersona implements Interfaz.InPersona{
         return estudioAprobado;
     }
     
-    public boolean PersonaRevalidaMateria(Long PerCod, Materia materia)
-    {
+    public boolean PersonaRevalidaMateria(Long PerCod, Materia materia){
         if(materia == null)
         {
             return false;
@@ -495,8 +491,7 @@ public class LoPersona implements Interfaz.InPersona{
         return false;
     }
     
-    public Boolean PersonaPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso)
-    {
+    public Boolean PersonaPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         return LoCalendario.GetInstancia().AlumnoPuedeDarExamen(PerCod, materia, modulo, curso);
         
     }

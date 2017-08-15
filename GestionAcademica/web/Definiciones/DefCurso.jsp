@@ -20,7 +20,7 @@
 
 <%
     LoParametro loParam = LoParametro.GetInstancia();
-    Parametro param = loParam.obtener(1);
+    Parametro param = loParam.obtener();
     LoCategoria loCat = LoCategoria.GetInstancia();
     LoCurso loCurso = LoCurso.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
