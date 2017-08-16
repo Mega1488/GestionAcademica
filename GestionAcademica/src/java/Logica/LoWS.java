@@ -245,8 +245,7 @@ public class LoWS implements InABMGenerico{
     //-------------------------------------------------------------------------
     //SERVICIOS
     //-------------------------------------------------------------------------
-    public Object ServicioAgregar(WS_UserServicio usuarioServicio)
-    {
+    public Object ServicioAgregar(WS_UserServicio usuarioServicio){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), usuarioServicio);
         
@@ -261,8 +260,7 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
-    public Object ServicioActualizar(WS_UserServicio usuarioServicio)
-    {
+    public Object ServicioActualizar(WS_UserServicio usuarioServicio){
         
         WS_User usr = usuarioServicio.getUsuario();
         int indice  = usr.getLstServicio().indexOf(usuarioServicio);
@@ -273,8 +271,7 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
-    public Object ServicioEliminar(WS_UserServicio usuarioServicio)
-    {
+    public Object ServicioEliminar(WS_UserServicio usuarioServicio){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), usuarioServicio);
        
@@ -298,8 +295,7 @@ public class LoWS implements InABMGenerico{
     //BITACORA
     //-------------------------------------------------------------------------
 
-    public Object BitacoraAgregar(WS_Bit bitacora)
-    {
+    public Object BitacoraAgregar(WS_Bit bitacora){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), bitacora);
         
@@ -314,8 +310,7 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
-    public Object BitacoraActualizar(WS_Bit bitacora)
-    {
+    public Object BitacoraActualizar(WS_Bit bitacora){
         
         WS_User usr = bitacora.getUsuario();
         int indice  = usr.getLstBitacora().indexOf(bitacora);
@@ -326,8 +321,7 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
-    public Object BitacoraEliminar(WS_Bit bitacora)
-    {
+    public Object BitacoraEliminar(WS_Bit bitacora){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), bitacora);
        
@@ -346,5 +340,12 @@ public class LoWS implements InABMGenerico{
         PerManejador perManager = new PerManejador();
         return perManager.obtener(WsBitCod, WS_Bit.class);
     }
+    
+    public Retorno_MsgObj BitacoraObtenerLista(){
+        PerManejador perManager = new PerManejador();
+        return perManager.obtenerLista("WS_Bit.findAll", null);
+    }
+    
+    
     
 }

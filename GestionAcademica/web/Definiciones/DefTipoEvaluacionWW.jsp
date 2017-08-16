@@ -38,7 +38,7 @@
     List<Object> lstTipoEvl = new ArrayList<>();
 
     Retorno_MsgObj retorno = (Retorno_MsgObj) loTipoEvaluacion.obtenerLista();
-    if (retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR && retorno.getLstObjetos() != null) {
+    if(!retorno.SurgioError()) {
         lstTipoEvl = retorno.getLstObjetos();
     } else {
         out.print(retorno.getMensaje().toString());
