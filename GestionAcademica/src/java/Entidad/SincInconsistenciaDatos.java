@@ -9,14 +9,11 @@ import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -46,14 +43,11 @@ public class SincInconsistenciaDatos implements Serializable {
     @Column(name = "IncObjCod", nullable = false)
     private Long IncObjCod;
     
-    
-    @OneToOne(targetEntity = SincronizacionInconsistencia.class, optional=false)
+    @OneToOne(targetEntity = SincronizacionInconsistencia.class)
     @JoinColumn(name="IncCod", referencedColumnName="IncCod")
     private SincronizacionInconsistencia inconsistencia;
 
-        
-    
-    @ManyToOne(targetEntity = ObjetoCampo.class, optional=false)
+    @OneToOne(targetEntity = ObjetoCampo.class)
     @JoinColumn(name="ObjCmpCod", referencedColumnName="ObjCmpCod")
     private ObjetoCampo objetoCampo;
     

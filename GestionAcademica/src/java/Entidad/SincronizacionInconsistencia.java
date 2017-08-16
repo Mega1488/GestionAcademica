@@ -7,23 +7,25 @@ package Entidad;
 
 import Enumerado.EstadoInconsistencia;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -48,18 +50,21 @@ public class SincronizacionInconsistencia implements Serializable {
     @Column(name = "IncCod", nullable = false)
     private Long  IncCod;
            
-    @OneToOne(targetEntity = Sincronizacion.class, optional=false)
+    @OneToOne(targetEntity = Sincronizacion.class)
     @JoinColumn(name="SncCod", referencedColumnName="SncCod")
     private Sincronizacion sincronizacion;
-
- 
     
-    @OneToOne(targetEntity = SincInconsistenciaDatos.class, optional=false)
+    @OneToOne(targetEntity = SincInconsistenciaDatos.class)
     @JoinColumn(name="IncObjValObjCod", referencedColumnName="IncObjCod")            
     private SincInconsistenciaDatos objetoSeleccionado;
     
     @Column(name = "IncEst")
     private EstadoInconsistencia IncEst;
+    
+    @OneToMany(targetEntity = SincInconsistenciaDatos.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="IncCod", referencedColumnName="IncCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<SincInconsistenciaDatos> lstDatos;
     
     //-CONSTRUCTOR
     public SincronizacionInconsistencia() {
@@ -99,6 +104,16 @@ public class SincronizacionInconsistencia implements Serializable {
     public void setIncEst(EstadoInconsistencia IncEst) {
         this.IncEst = IncEst;
     }
+
+    public List<SincInconsistenciaDatos> getLstDatos() {
+        return lstDatos;
+    }
+
+    public void setLstDatos(List<SincInconsistenciaDatos> lstDatos) {
+        this.lstDatos = lstDatos;
+    }
+    
+    
 
     @Override
     public int hashCode() {
