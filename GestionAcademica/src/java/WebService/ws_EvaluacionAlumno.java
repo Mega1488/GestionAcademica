@@ -13,6 +13,8 @@ import Logica.LoCalendario;
 import Logica.LoPersona;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.ArrayList;
+import java.util.List;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -28,13 +30,18 @@ public class ws_EvaluacionAlumno {
      * This is a sample web service operation
      * @param token parametro
      * @param AluPerCod parametro
+     * @param AlIns parametro (SI/NO, para devolver evaluaciones a las que esté inscripto el alumno)
      * @return : Devuelve una lista para determinado alumno con evaluaciones que se encuentran pendientes para inscribirse
      */
     @WebMethod(operationName = "EvaluacionesParaInscripcion")
-    public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod)
+    public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "AlIns") String AlIns)
     {
         LoCalendario loCalendario = LoCalendario.GetInstancia();
         Retorno_MsgObj retorno = new Retorno_MsgObj();
+        Retorno_MsgObj retCal = new Retorno_MsgObj();
+        Calendario cal = new Calendario();
+        List<Object> lstObjeto = new ArrayList<>();
+        List<Object> lstCalendario = new ArrayList<>();
 
         if(token == null)
         {
@@ -44,11 +51,59 @@ public class ws_EvaluacionAlumno {
         {
             if(AluPerCod == null)
             {    
-                retorno.setMensaje(new Mensajes("No se recibió un parámetro", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("No se recibió un parámetro Alumno", TipoMensaje.ERROR));
             }
             else
             {
-                retorno = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod);
+                if(AlIns == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibió un parámetro AlIns", TipoMensaje.ERROR));
+                }
+                else
+                {
+                    if(AlIns.equals("SI"))
+                    {
+                        retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
+                        
+                        if (!retCal.SurgioErrorListaRequerida()) {
+                            lstObjeto = retCal.getLstObjetos();
+                            for(Object obj : lstObjeto)
+                            {
+                                cal = (Calendario) obj;
+                                if(cal.existeAlumno(cal.getCalCod()) == true)
+                                {
+                                    lstCalendario.add(cal);
+                                }
+                            }
+                            retorno.setLstObjetos(lstCalendario);
+                        } else {
+                            retorno.setMensaje(new Mensajes(retorno.getMensaje().toString(), TipoMensaje.ERROR));
+                        }
+                    }
+                    else if(AlIns.equals("NO"))
+                    {
+                        retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
+                        
+                        if (!retCal.SurgioErrorListaRequerida()) {
+                            lstObjeto = retCal.getLstObjetos();
+                            for(Object obj : lstObjeto)
+                            {
+                                cal = (Calendario) obj;
+                                if(cal.existeAlumno(cal.getCalCod()) == false)
+                                {
+                                    lstCalendario.add(cal);
+                                }
+                            }
+                            retorno.setLstObjetos(lstCalendario);
+                        } else {
+                            retorno.setMensaje(new Mensajes(retorno.getMensaje().toString(), TipoMensaje.ERROR));
+                        }
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("ERROR", TipoMensaje.ERROR));
+                    }
+                }
             }
         }
         return retorno;
