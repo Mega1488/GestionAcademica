@@ -12,12 +12,13 @@
     
 
     <!--
-    
     <task:scheduler id="taskScheduler" pool-size="10"/>
-     <task:annotation-driven scheduler="taskScheduler"/>     
-     <bean id="taskNotificacion" class="Logica.Notificacion.SchNotificar" init-method="start"  destroy-method="stop"/>
-     <task:scheduled-tasks scheduler="taskScheduler">
-     	<task:scheduled ref="taskNotificacion" method="Tarea_Notificar" fixed-rate="30000"/>
-     </task:scheduled-tasks>
-     -->
+    <task:annotation-driven scheduler="taskScheduler"/>     
+    <bean id="tasksSch" class="Scheduler.ScheduledWorks" init-method="start"  destroy-method="stop"/>
+    <task:scheduled-tasks scheduler="taskScheduler">
+        <task:scheduled ref="tasksSch" method="Tarea_Notificar" cron="0/30 * * * * ?"/> 
+        <task:scheduled ref="tasksSch" method="Tarea_BorrarWSBitacora" cron="0 0/1 * * * ?"/> 
+        <task:scheduled ref="tasksSch" method="Tarea_NotificarInterno" cron="0 0/2 * * * ?"/> 
+    </task:scheduled-tasks>
+    -->
 </beans>

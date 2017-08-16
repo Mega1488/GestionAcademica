@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Logica;
+package Scheduler;
 
-import Logica.Notificacion.SchNotificar;
+import Scheduler.ScheduledWorks;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletContextEvent;
@@ -21,7 +21,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 public class ContextListener implements ServletContextListener {
 
     ConfigurableApplicationContext applicationContext = null;
-    SchNotificar scheduler = null;
+    ScheduledWorks scheduler = null;
     
     
     @Override
@@ -40,7 +40,7 @@ public class ContextListener implements ServletContextListener {
         if(applicationContext != null)
         {
             try{
-                scheduler           = applicationContext.getBean(SchNotificar.class);
+                scheduler           = applicationContext.getBean(ScheduledWorks.class);
 
                 if(scheduler!= null)
                 {

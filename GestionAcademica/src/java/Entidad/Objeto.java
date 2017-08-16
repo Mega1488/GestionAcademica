@@ -7,19 +7,26 @@ package Entidad;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -50,6 +57,11 @@ public class Objeto implements Serializable {
     @Column(name = "ObjFchMod", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date ObjFchMod;
+    
+    @OneToMany(targetEntity = ObjetoCampo.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<ObjetoCampo> lstCampo;
     
     //-CONSTRUCTOR
 
@@ -85,6 +97,16 @@ public class Objeto implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    public List<ObjetoCampo> getLstCampo() {
+        return lstCampo;
+    }
+
+    public void setLstCampo(List<ObjetoCampo> lstCampo) {
+        this.lstCampo = lstCampo;
+    }
+
+    
+    
     @Override
     public int hashCode() {
         int hash = 7;

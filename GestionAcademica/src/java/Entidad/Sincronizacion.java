@@ -8,18 +8,25 @@ package Entidad;
 import Enumerado.EstadoSincronizacion;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -59,6 +66,11 @@ public class Sincronizacion implements Serializable {
 
     @Column(name = "SncDur", length = 100)
     private String SncDur;
+    
+    @OneToMany(targetEntity = SincronizacionInconsistencia.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="SncCod", referencedColumnName="SncCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<SincronizacionInconsistencia> lstInconsistencia;
     
 
     //-CONSTRUCTOR
@@ -114,6 +126,14 @@ public class Sincronizacion implements Serializable {
 
     public void setSncDur(String SncDur) {
         this.SncDur = SncDur;
+    }
+
+    public List<SincronizacionInconsistencia> getLstInconsistencia() {
+        return lstInconsistencia;
+    }
+
+    public void setLstInconsistencia(List<SincronizacionInconsistencia> lstInconsistencia) {
+        this.lstInconsistencia = lstInconsistencia;
     }
 
     

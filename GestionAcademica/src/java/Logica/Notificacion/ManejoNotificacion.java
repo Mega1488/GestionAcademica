@@ -5,6 +5,7 @@
  */
 package Logica.Notificacion;
 
+import SDT.SDT_Destinatario;
 import Entidad.Notificacion;
 import Entidad.NotificacionBandeja;
 import Entidad.NotificacionBitacora;

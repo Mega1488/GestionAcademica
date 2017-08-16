@@ -17,9 +17,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
@@ -46,7 +46,7 @@ public class WS_UserServicio implements Serializable {
     @Column(name = "WsSrvCod", nullable = false)
     private Long WsSrvCod;   
     
-    @ManyToOne(targetEntity = WS_User.class)
+    @OneToOne(targetEntity = WS_User.class)
     @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
     private WS_User usuario;
 
