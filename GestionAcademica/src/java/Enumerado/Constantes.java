@@ -13,7 +13,13 @@ public enum Constantes {
     URL_FOLDER_SERVICIO_MDL("/webservice/rest/server.php"), 
     ENCRYPT_VECTOR_INICIO("a#!?d./*@@^^''_a"),
     ENCRYPT_SEMILLA("-KeY!!AD#AM!!KeY"),
-    VERSION("0.1.0");
+    VERSION("0.1.0"),
+    SEPARADOR("#||#"),
+    WS_USR("ws_generico"),
+    WS_USR_MOODLE("ws_mdl"),
+    WS_PSW_MOODLE("$.WSusMdl%"),
+    WS_USR_APP("ws_app"),
+    WS_PSW_APP("$.WSusApp%");
 
     Constantes(){
         

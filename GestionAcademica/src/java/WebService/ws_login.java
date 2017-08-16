@@ -6,14 +6,21 @@
 package WebService;
 
 import Enumerado.Constantes;
+import Enumerado.EstadoServicio;
+import Enumerado.ServicioWeb;
 import Enumerado.TipoMensaje;
 import Logica.LoPersona;
+import Logica.LoWS;
 import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 /**
  *
@@ -22,6 +29,7 @@ import javax.jws.WebParam;
 @WebService(serviceName = "ws_login")
 public class ws_login {
 
+    @Resource WebServiceContext context;
    
     /**
      * Inicia sesión
@@ -34,6 +42,10 @@ public class ws_login {
     public String Login(@WebParam(name = "token") String token, @WebParam(name = "pUser") String pUser, @WebParam(name = "pPassword") String pPassword) {
         //TODO write your implementation code here:
         
+        //OBTENER DIRECCION DE QUIEN LLAMA AL SERVICIO
+        HttpServletRequest request = (HttpServletRequest)context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
+        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+        
         Retorno_MsgObj retorno  = new Retorno_MsgObj();
         Boolean resultado       = false;
         
@@ -42,32 +54,40 @@ public class ws_login {
         if(token == null)
         {
             retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+            LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.LOGIN);
         }
         else
         {
-            if(pUser == null)
+            if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.LOGIN, direccion))
             {
-                retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
             }
             else
             {
-                if(pPassword == null)
+                if(pUser == null)
                 {
                     retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
                 }
                 else
                 {
-                    
-                    
-                    Seguridad seguridad = Seguridad.GetInstancia();
-                    LoPersona loPersona = LoPersona.GetInstancia();
+                    if(pPassword == null)
+                    {
+                        retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+                    }
+                    else
+                    {
 
-                    
-                    String usuarioDecrypt   = seguridad.decrypt(pUser, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
-                    String passwordDecrypt  = seguridad.decrypt(pPassword, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
 
-                    resultado = loPersona.IniciarSesion(usuarioDecrypt, seguridad.cryptWithMD5(passwordDecrypt));
+                        Seguridad seguridad = Seguridad.GetInstancia();
+                        LoPersona loPersona = LoPersona.GetInstancia();
 
+
+                        String usuarioDecrypt   = seguridad.decrypt(pUser, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+                        String passwordDecrypt  = seguridad.decrypt(pPassword, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+
+                        resultado = loPersona.IniciarSesion(usuarioDecrypt, seguridad.cryptWithMD5(passwordDecrypt));
+
+                    }
                 }
             }
         }
@@ -86,28 +106,41 @@ public class ws_login {
     public Retorno_MsgObj LogOut(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") String PerCod) {
         //TODO write your implementation code here:
         
+        //OBTENER DIRECCION DE QUIEN LLAMA AL SERVICIO
+        HttpServletRequest request = (HttpServletRequest)context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
+        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+        
         Retorno_MsgObj retorno  = new Retorno_MsgObj();
                 
         if(token == null)
         {
             retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+            LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.LOGIN);
         }
         else
         {
-            if(PerCod == null)
+            if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.LOGIN, direccion))
             {
-                retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
             }
             else
             {
-                    
-                Seguridad seguridad = Seguridad.GetInstancia();
-                LoPersona loPersona = LoPersona.GetInstancia();
+            
+                if(PerCod == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+                }
+                else
+                {
 
-                String usuarioDecrypt   = seguridad.decrypt(PerCod, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+                    Seguridad seguridad = Seguridad.GetInstancia();
+                    LoPersona loPersona = LoPersona.GetInstancia();
 
-                retorno = loPersona.LimpiarToken(Long.valueOf(usuarioDecrypt));
-                
+                    String usuarioDecrypt   = seguridad.decrypt(PerCod, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+
+                    retorno = loPersona.LimpiarToken(Long.valueOf(usuarioDecrypt));
+
+                }
             }
         }
         

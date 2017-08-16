@@ -10,7 +10,11 @@ package Enumerado;
  * @author Alvaro
  */
 public enum ServicioWeb {
-    SERVICIO_1(1), SERVICIO_2(2);
+    LOGIN(1), 
+    EVALUACION_ALUMNO(2), 
+    ESTUDIOS(3),
+    PERSONA(4),
+    SOLICITUDES(5);
     
     ServicioWeb(){
         

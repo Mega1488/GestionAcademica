@@ -6,16 +6,24 @@
 package Entidad;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -26,6 +34,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "WS_USER")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "WS_User.findByUsrName",       query = "SELECT t FROM WS_User t WHERE t.WsUsr =:WsUsr"),
     @NamedQuery(name = "WS_User.findAll",       query = "SELECT t FROM WS_User t")})
 
 public class WS_User implements Serializable {
@@ -47,8 +56,23 @@ public class WS_User implements Serializable {
     @Column(name = "WsUsrPsw", length = 500)
     private String WsUsrPsw;
     
+    //----------------------------------------------------------------------
+    @OneToMany(targetEntity = WS_UserServicio.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="WsUsrCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<WS_UserServicio> lstServicio;
+    
+    @OneToMany(targetEntity = WS_Bit.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="WsUsrCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<WS_Bit> lstBitacora;
+    //----------------------------------------------------------------------
+    
+    
     //-CONSTRUCTOR
     public WS_User() {
+        this.lstBitacora = new ArrayList<>();
+        this.lstServicio = new ArrayList<>();
     }
     
     
@@ -76,6 +100,22 @@ public class WS_User implements Serializable {
 
     public void setWsUsrPsw(String WsUsrPsw) {
         this.WsUsrPsw = WsUsrPsw;
+    }
+
+    public List<WS_UserServicio> getLstServicio() {
+        return lstServicio;
+    }
+
+    public void setLstServicio(List<WS_UserServicio> lstServicio) {
+        this.lstServicio = lstServicio;
+    }
+
+    public List<WS_Bit> getLstBitacora() {
+        return lstBitacora;
+    }
+
+    public void setLstBitacora(List<WS_Bit> lstBitacora) {
+        this.lstBitacora = lstBitacora;
     }
 
     

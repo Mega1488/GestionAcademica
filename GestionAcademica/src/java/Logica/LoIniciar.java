@@ -77,6 +77,7 @@ public class LoIniciar {
         CargarUrlSistema(request);
         CargarUsuarioAdministrador();
         CargarNotificaciones();
+        CargarUsuariosWS();
         
         version.setSisCrgDat(Boolean.TRUE);
         loVersion.actualizar(version);
@@ -197,4 +198,7 @@ public class LoIniciar {
         notInt.CargarNotificaciones();
      }
     
+    private void CargarUsuariosWS(){
+        LoWS.GetInstancia().CargarUsuariosWS();
+    }
 }

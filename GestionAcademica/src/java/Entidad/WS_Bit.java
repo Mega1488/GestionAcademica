@@ -48,7 +48,7 @@ public class WS_Bit implements Serializable {
     @Column(name = "WsBitCod", nullable = false)
     private Long WsBitCod;
     
-    @ManyToOne(targetEntity = WS_User.class, optional=false)
+    @ManyToOne(targetEntity = WS_User.class)
     @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
     private WS_User usuario;
     
@@ -62,11 +62,24 @@ public class WS_Bit implements Serializable {
     @Column(name = "WsBitEst")
     private EstadoServicio WsBitEst;
     
+    @Column(name = "WsBitDet", length = 4000)
+    private String WsBitDet;
+    
     
     //-CONSTRUCTOR
     
     public WS_Bit() {    
     }
+
+    public WS_Bit(WS_User usuario, ServicioWeb WsSrv, Date WsBitFch, EstadoServicio WsBitEst, String WsBitDet) {
+        this.usuario = usuario;
+        this.WsSrv = WsSrv;
+        this.WsBitFch = WsBitFch;
+        this.WsBitEst = WsBitEst;
+        this.WsBitDet = WsBitDet;
+    }
+    
+    
 
     //-GETTERS Y SETTERS
 
@@ -109,6 +122,15 @@ public class WS_Bit implements Serializable {
     public void setWsBitEst(EstadoServicio WsBitEst) {
         this.WsBitEst = WsBitEst;
     }
+
+    public String getWsBitDet() {
+        return WsBitDet;
+    }
+
+    public void setWsBitDet(String WsBitDet) {
+        this.WsBitDet = WsBitDet;
+    }
+    
     
     
     @Override
