@@ -90,7 +90,7 @@ public class LoWS implements InABMGenerico{
         
         PerManejador perManager = new PerManejador();
 
-        return perManager.obtenerLista("Solicitud.findAll", null);
+        return perManager.obtenerLista("WS_User.findAll", null);
     }
     
     public Retorno_MsgObj obtenerByUsrNom(String usr){
@@ -218,6 +218,28 @@ public class LoWS implements InABMGenerico{
         this.guardar(usuario);
         
         
+    }
+    
+    public void EliminarBitacoraBeforeDate(){
+        Retorno_MsgObj usuarios = this.obtenerLista();
+        
+        PerManejador perManager = new PerManejador();
+        
+        if(!usuarios.SurgioErrorListaRequerida())
+        {
+            for(Object objeto : usuarios.getLstObjetos())
+            {
+                WS_User user = (WS_User) objeto;
+                
+                if(user.getLstBitacora() != null)
+                {
+                    for(WS_Bit bitacora : user.getLstBitacora())
+                    {
+                         perManager.eliminar(bitacora);
+                    }
+                }
+            }
+        }
     }
     
     //-------------------------------------------------------------------------

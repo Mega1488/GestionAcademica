@@ -281,6 +281,6 @@
         <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
     <listener>
-        <listener-class>Logica.ContextListener</listener-class>
+        <listener-class>Scheduler.ContextListener</listener-class>
     </listener>
 </web-app>

@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -33,7 +34,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "WS_BIT")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "WS_Bit.findAll",       query = "SELECT t FROM WS_Bit t")})
+    @NamedQuery(name = "WS_Bit.findAll",       query = "SELECT t FROM WS_Bit t"),
+    @NamedQuery(name = "WS_Bit.findByBeforeDate",    query = "SELECT t FROM WS_Bit t WHERE t.WsBitFch <= :WsBitFch")})
 
 public class WS_Bit implements Serializable {
 
@@ -48,7 +50,7 @@ public class WS_Bit implements Serializable {
     @Column(name = "WsBitCod", nullable = false)
     private Long WsBitCod;
     
-    @ManyToOne(targetEntity = WS_User.class)
+    @OneToOne(targetEntity = WS_User.class)
     @JoinColumn(name="WsUsrCod", referencedColumnName="WsUsrCod")
     private WS_User usuario;
     

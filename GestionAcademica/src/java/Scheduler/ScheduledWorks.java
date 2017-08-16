@@ -3,65 +3,70 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Logica.Notificacion;
+package Scheduler;
 
+import Logica.LoWS;
+import Logica.Notificacion.ManejoNotificacion;
+import Logica.Notificacion.NotificacionesInternas;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  *
  * @author alvar
  */
 
-public class SchNotificar implements SmartLifecycle{
+public class ScheduledWorks implements SmartLifecycle{
+    
+    private Integer diasBefore;
 
+    public Integer getDiasBefore() {
+        return diasBefore;
+    }
+
+    public void setDiasBefore(Integer diasBefore) {
+        this.diasBefore = diasBefore;
+    }
     
     
-    public SchNotificar() {
+
+    public ScheduledWorks() {
         
     }
     
     private boolean isRunning = false;
     
     
-//    @Scheduled(fixedDelay = 30000)
-    //@Scheduled(cron="*/50 * * * * ?")
-    //@Scheduled(fixedRate = 30000)
- //   @Scheduled(cron = "${cronExpression}")
     public void Tarea_Notificar()
     {
-        //instanciaExiste = true;
-        System.out.println("Method executed at every 30 seconds. Current time is :: "+ new Date());
-        System.err.println("Notificando automaticamente");
-        
+        System.out.println("Notificar. Current time is :: "+ new Date());
         
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacionAutomaticamente();
         
-        System.err.println("Notificaciones de sistema");
         NotificacionesInternas noInt = new NotificacionesInternas();
         noInt.EjecutarNotificacionesInternas();
+    }
+    
+    public void Tarea_NotificarInterno()
+    {
+        System.out.println("Notificar interno. Current time is :: "+ new Date());
         
-        /*
-        AsyncNotificar xthread = null;
-        //Long milliseconds = 10000; // 10 seconds
-          try {
-            xthread = new AsyncNotificar(null, TipoNotificacion.AUTOMATICA);
-            xthread.start();
-          //  xthread.join(milliseconds);
-          } catch (Exception ex) {
-              
-              Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
-          } finally {
-            if (xthread != null && xthread.isAlive()) {
-              Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
-              xthread.interrupt();
-            }
-          }
-          */
+        ManejoNotificacion notManager = new ManejoNotificacion();
+        notManager.EjecutarNotificacionAutomaticamente();
+        
+        NotificacionesInternas noInt = new NotificacionesInternas();
+        noInt.EjecutarNotificacionesInternas();
+    }
+    
+    public void Tarea_BorrarWSBitacora()
+    {
+        System.out.println("Borrar WSBitacora. Current time is :: "+ new Date());
+        LoWS.GetInstancia().EliminarBitacoraBeforeDate();
     }
 
     @Override
@@ -117,9 +122,5 @@ public class SchNotificar implements SmartLifecycle{
     public boolean isRunning() {
         return isRunning;
     }
-
-   
-    
-    
     
 }
