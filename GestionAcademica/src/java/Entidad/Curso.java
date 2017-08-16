@@ -25,6 +25,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -145,6 +146,7 @@ public class Curso implements Serializable {
         this.lstModulos = lstModulos;
     }
 
+    @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
     }

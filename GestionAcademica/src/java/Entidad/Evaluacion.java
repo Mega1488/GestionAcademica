@@ -100,7 +100,7 @@ public class Evaluacion implements Serializable {
         this.EvlCod = EvlCod;
     }
     
-    @XmlTransient
+//    @XmlTransient
     public Materia getMatEvl() {
         return MatEvl;
     }
@@ -109,7 +109,7 @@ public class Evaluacion implements Serializable {
         this.MatEvl = MatEvl;
     }
     
-    @XmlTransient
+//    @XmlTransient
     public Modulo getModEvl() {
         return ModEvl;
     }
@@ -154,7 +154,7 @@ public class Evaluacion implements Serializable {
         return ObjFchMod;
     }
     
-    @XmlTransient
+//    @XmlTransient
     public Curso getCurEvl() {
         return CurEvl;
     }

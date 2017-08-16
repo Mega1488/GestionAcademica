@@ -176,6 +176,7 @@ public class Materia implements Serializable {
         this.lstPrevias = lstPrevias;
     }
 
+    @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
     }
