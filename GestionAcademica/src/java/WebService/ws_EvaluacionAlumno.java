@@ -37,7 +37,7 @@ public class ws_EvaluacionAlumno {
     public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "AlIns") String AlIns)
     {
         LoCalendario loCalendario = LoCalendario.GetInstancia();
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("ERROR", TipoMensaje.ERROR));
         Retorno_MsgObj retCal = new Retorno_MsgObj();
         Calendario cal = new Calendario();
         List<Object> lstObjeto = new ArrayList<>();
@@ -65,43 +65,59 @@ public class ws_EvaluacionAlumno {
                     {
                         retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
                         
-                        if (!retCal.SurgioErrorListaRequerida()) {
+                        if (!retCal.SurgioErrorListaRequerida()) 
+                        {
                             lstObjeto = retCal.getLstObjetos();
                             for(Object obj : lstObjeto)
                             {
                                 cal = (Calendario) obj;
-                                if(cal.existeAlumno(cal.getCalCod()) == true)
+                                if(cal.existeAlumno(AluPerCod) == false)
                                 {
                                     lstCalendario.add(cal);
+                                    retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
+                                }
+                                else
+                                {
+                                    retorno.setMensaje(new Mensajes("No se encontraron datos", TipoMensaje.ERROR));
                                 }
                             }
                             retorno.setLstObjetos(lstCalendario);
-                        } else {
-                            retorno.setMensaje(new Mensajes(retorno.getMensaje().toString(), TipoMensaje.ERROR));
+                        }
+                        else
+                        {
+                            retorno.setMensaje(new Mensajes("Surgió error en lista Requerida", TipoMensaje.ERROR));
                         }
                     }
                     else if(AlIns.equals("NO"))
                     {
                         retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
                         
-                        if (!retCal.SurgioErrorListaRequerida()) {
+                        if (!retCal.SurgioErrorListaRequerida())
+                        {
                             lstObjeto = retCal.getLstObjetos();
                             for(Object obj : lstObjeto)
                             {
                                 cal = (Calendario) obj;
-                                if(cal.existeAlumno(cal.getCalCod()) == false)
+                                if(cal.existeAlumno(AluPerCod) == true)
                                 {
                                     lstCalendario.add(cal);
+                                    retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
+                                }
+                                else
+                                {
+                                retorno.setMensaje(new Mensajes("No se encontraron datos", TipoMensaje.ERROR));
                                 }
                             }
                             retorno.setLstObjetos(lstCalendario);
-                        } else {
-                            retorno.setMensaje(new Mensajes(retorno.getMensaje().toString(), TipoMensaje.ERROR));
+                        }
+                        else
+                        {
+                            retorno.setMensaje(new Mensajes("Surgió error en lista Requerida", TipoMensaje.ERROR));
                         }
                     }
                     else
                     {
-                        retorno.setMensaje(new Mensajes("ERROR", TipoMensaje.ERROR));
+                        retorno.setMensaje(new Mensajes("ERROR, el valor de AlIns es incorrecto", TipoMensaje.ERROR));
                     }
                 }
             }
