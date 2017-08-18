@@ -55,7 +55,7 @@ public class LoVersion{
     public Version obtener(Object pCodigo) {
         Version version             = new Version();
         PerManejador perManejador   = new PerManejador();
-
+        
         Retorno_MsgObj retorno      = perManejador.obtener((Long) pCodigo, Version.class);
         if(!retorno.SurgioError())
         {

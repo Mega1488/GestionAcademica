@@ -5,7 +5,9 @@
  */
 package Entidad;
 
+import Enumerado.TipoCampo;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +39,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "OBJETO")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Objeto.findAll",       query = "SELECT t FROM Objeto t")})
+    @NamedQuery(name = "Objeto.findAll",       query = "SELECT t FROM Objeto t"),
+    @NamedQuery(name = "Objeto.findByObjeto",  query = "SELECT t FROM Objeto t WHERE t.ObjNom =:ObjNom")})
 
 public class Objeto implements Serializable {
 
@@ -54,6 +57,9 @@ public class Objeto implements Serializable {
     @Column(name = "ObjNom", length = 100)
     private String ObjNom;
     
+    @Column(name = "ObjNmdQry", length = 100)
+    private String ObjNmdQry;
+    
     @Column(name = "ObjFchMod", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date ObjFchMod;
@@ -66,9 +72,22 @@ public class Objeto implements Serializable {
     //-CONSTRUCTOR
 
     public Objeto() {
+        this.lstCampo = new ArrayList<>();
     }
-    
-    
+
+    public Objeto(String ObjNom, List<ObjetoCampo> lstCampo) {
+        this.ObjNom = ObjNom;
+        this.lstCampo = lstCampo;
+    }
+
+    public Objeto(String ObjNom, String ObjNmdQry, String PrimaryKey) {
+        this.ObjNom = ObjNom;
+        this.ObjNmdQry = ObjNmdQry;
+        this.lstCampo = new ArrayList<>();
+        
+        this.lstCampo.add(new ObjetoCampo(this, PrimaryKey, TipoCampo.LONG, Boolean.TRUE));
+        
+    }
     
 
     //-GETTERS Y SETTERS
@@ -105,7 +124,25 @@ public class Objeto implements Serializable {
         this.lstCampo = lstCampo;
     }
 
-    
+    public String getObjNmdQry() {
+        return ObjNmdQry;
+    }
+
+    public void setObjNmdQry(String ObjNmdQry) {
+        this.ObjNmdQry = ObjNmdQry;
+    }
+
+    public ObjetoCampo getPrimaryKey(){
+        for(ObjetoCampo objCmp : this.getLstCampo())
+        {
+            if(objCmp.getObjCmpPK())
+            {
+                return objCmp;
+            }
+        }
+        
+        return null;
+    }
     
     @Override
     public int hashCode() {

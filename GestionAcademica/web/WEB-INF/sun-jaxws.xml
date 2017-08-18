@@ -6,4 +6,5 @@
   <endpoint implementation="WebService.ws_estudios" name="ws_estudios" url-pattern="/ws_estudios"/>
   <endpoint implementation="WebService.ws_solicitudes" name="ws_solicitudes" url-pattern="/ws_solicitudes"/>
   <endpoint implementation="WebService.ws_solicitudes" name="ws_solicitudes" url-pattern="/ws_solicitudes"/>
+  <endpoint implementation="WebService.ws_sincronizar" name="ws_sincronizar" url-pattern="/ws_sincronizar"/>
 </endpoints>

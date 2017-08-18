@@ -49,7 +49,6 @@ public class ws_login {
         Retorno_MsgObj retorno  = new Retorno_MsgObj();
         Boolean resultado       = false;
         
-        System.err.println("A");
                 
         if(token == null)
         {

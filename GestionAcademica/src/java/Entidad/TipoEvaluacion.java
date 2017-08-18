@@ -30,6 +30,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TipoEvaluacion.findAll", query = "SELECT tpoEvl FROM TipoEvaluacion tpoEvl"),
+    @NamedQuery(name = "TipoEvaluacion.findModAfter", query = "SELECT tpoEvl FROM TipoEvaluacion tpoEvl WHERE tpoEvl.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "TipoEvaluacion.findByTpoEvlCod", query = "SELECT tpoEvl FROM TipoEvaluacion tpoEvl WHERE tpoEvl.TpoEvlCod = :TpoEvlCod"),
     @NamedQuery(name = "TipoEvaluacion.findByTpoEvlNom", query = "SELECT tpoEvl FROM TipoEvaluacion tpoEvl WHERE tpoEvl.TpoEvlNom = :TpoEvlNom"),
     @NamedQuery(name = "TipoEvaluacion.findLastTpoEvl", query = "SELECT  tpoEvl FROM TipoEvaluacion tpoEvl ORDER BY tpoEvl.TpoEvlCod DESC")})

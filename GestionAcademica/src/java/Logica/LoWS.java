@@ -140,7 +140,7 @@ public class LoWS implements InABMGenerico{
                     {
                         WS_User usuario = (WS_User) retorno.getObjeto();
 
-                        if(usuario.getWsUsrPsw().equals(Seguridad.GetInstancia().cryptWithMD5(psw)))
+                        if(usuario.getWsUsrPsw().equals(psw))
                         {
                             for(WS_UserServicio servicio : usuario.getLstServicio())
                             {
@@ -210,6 +210,16 @@ public class LoWS implements InABMGenerico{
         usuario.getLstServicio().add(new WS_UserServicio(usuario, ServicioWeb.PERSONA));
         usuario.getLstServicio().add(new WS_UserServicio(usuario, ServicioWeb.SOLICITUDES));
         
+        this.guardar(usuario);
+        
+        //-Web
+        usuario = new WS_User();
+        usuario.setWsUsr(Constantes.WS_USR_WEB.getValor());
+        usuario.setWsUsrPsw(Seguridad.GetInstancia().cryptWithMD5(Constantes.WS_PSW_WEB.getValor()));
+        usuario.setLstServicio(new ArrayList<WS_UserServicio>());
+        
+        usuario.getLstServicio().add(new WS_UserServicio(usuario, ServicioWeb.SINCRONIZAR));
+
         this.guardar(usuario);
         
         //-Generico

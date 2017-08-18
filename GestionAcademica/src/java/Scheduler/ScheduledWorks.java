@@ -5,6 +5,7 @@
  */
 package Scheduler;
 
+import Logica.LoSincronizacion;
 import Logica.LoWS;
 import Logica.Notificacion.ManejoNotificacion;
 import Logica.Notificacion.NotificacionesInternas;
@@ -13,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.context.SmartLifecycle;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  *
@@ -67,6 +67,12 @@ public class ScheduledWorks implements SmartLifecycle{
     {
         System.out.println("Borrar WSBitacora. Current time is :: "+ new Date());
         LoWS.GetInstancia().EliminarBitacoraBeforeDate();
+    }
+    
+    public void Tarea_Sincronizar()
+    {
+        System.out.println("Sincronizar. Current time is :: "+ new Date());
+        LoSincronizacion.GetInstancia().Sincronizar();
     }
 
     @Override

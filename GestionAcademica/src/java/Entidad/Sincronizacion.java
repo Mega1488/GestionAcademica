@@ -7,6 +7,7 @@ package Entidad;
 
 import Enumerado.EstadoSincronizacion;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -37,6 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "SINCRONIZACION")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "Sincronizacion.findByEst",     query = "SELECT t FROM Sincronizacion t where t.SncEst = :SncEst"),
     @NamedQuery(name = "Sincronizacion.findAll",       query = "SELECT t FROM Sincronizacion t")})
 
 public class Sincronizacion implements Serializable {
@@ -75,8 +77,8 @@ public class Sincronizacion implements Serializable {
 
     //-CONSTRUCTOR
     public Sincronizacion() {
+        this.lstInconsistencia = new ArrayList<>();
     }
-    
     
     //-GETTERS Y SETTERS
 
@@ -136,6 +138,14 @@ public class Sincronizacion implements Serializable {
         this.lstInconsistencia = lstInconsistencia;
     }
 
+    public void addDetalle(String msg){
+        if(this.SncObjDet == null)
+        {
+            this.SncObjDet = "";
+        }
+        
+        this.SncObjDet += msg + "\n";
+    }
     
     
     @Override

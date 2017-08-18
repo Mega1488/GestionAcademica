@@ -5,7 +5,6 @@
  */
 package Logica;
 
-import Entidad.Notificacion;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Entidad.TipoEvaluacion;
@@ -13,10 +12,6 @@ import Entidad.Version;
 import Enumerado.Constantes;
 import Enumerado.Filial;
 import Enumerado.NombreSesiones;
-import Enumerado.NotificacionSistema;
-import Enumerado.ObtenerDestinatario;
-import Enumerado.TipoNotificacion;
-import Enumerado.TipoRepeticion;
 import Logica.Notificacion.NotificacionesInternas;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -71,13 +66,13 @@ public class LoIniciar {
     }
     
     private void CargarDatosIniciales(HttpServletRequest request){
-        
-        CargarTipoEvaluacion();
         CargarParametros();
+        CargarTipoEvaluacion();
         CargarUrlSistema(request);
         CargarUsuarioAdministrador();
         CargarNotificaciones();
         CargarUsuariosWS();
+        CargarObjetosSincronizar();
         
         version.setSisCrgDat(Boolean.TRUE);
         loVersion.actualizar(version);
@@ -123,6 +118,7 @@ public class LoIniciar {
         
         if(parametro == null)
         {
+            
             parametro = new Parametro();
             parametro.setParDiaEvlPrv(7);
             parametro.setParFchUltSinc(new Date());
@@ -200,5 +196,9 @@ public class LoIniciar {
     
     private void CargarUsuariosWS(){
         LoWS.GetInstancia().CargarUsuariosWS();
+    }
+    
+    private void CargarObjetosSincronizar(){
+        LoSincronizacion.GetInstancia().CargaInicialObjetos();
     }
 }

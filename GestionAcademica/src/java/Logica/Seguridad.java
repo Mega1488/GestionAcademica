@@ -7,18 +7,26 @@ package Logica;
 
 import Dominio.Sitios;
 import Entidad.Persona;
+import Entidad.WS_User;
 import Enumerado.Accion;
+import Enumerado.Constantes;
+import Enumerado.ServicioWeb;
 import Enumerado.TipoMensaje;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -149,6 +157,54 @@ public class Seguridad {
 
     }
    
+    public String getTokenWS(ServicioWeb servicioWeb){
 
+        String token = "INVALIDO";
+
+        WS_User usr = (WS_User) LoWS.GetInstancia().obtenerByUsrNom(Constantes.WS_USR_WEB.getValor()).getObjeto();
+        
+        String wsUsr = usr.getWsUsr();
+        String wsPsw = usr.getWsUsrPsw();
+
+        try {
+            wsUsr = this.crypt(wsUsr);
+            wsPsw = this.crypt(wsPsw);
+
+            token = wsUsr + Constantes.SEPARADOR.getValor() + wsPsw;
+
+            token = this.crypt(token);
+
+        } catch (Exception e) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+        }
+
+        return token;
+    }
+
+    public String crypt(String text) throws Exception {
+
+        SecretKeySpec skeySpec          = new SecretKeySpec(Constantes.ENCRYPT_SEMILLA.getValor().getBytes(), "AES");
+        IvParameterSpec initialVector   = new IvParameterSpec(Constantes.ENCRYPT_VECTOR_INICIO.getValor().getBytes());
+
+        if(text == null || text.length() == 0)
+            throw new Exception("Empty string");
+
+        byte[] encrypted = null;
+
+        try {
+            Cipher cipher                   = Cipher.getInstance("AES/CFB8/NoPadding");
+            cipher.init(Cipher.ENCRYPT_MODE, skeySpec, initialVector);
+
+            encrypted = cipher.doFinal(text.getBytes());
+
+            encrypted = (new Base64()).encode(encrypted); 
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e)
+        {
+            throw new Exception("[encrypt] " + e.getMessage());
+        }
+
+        return new String(encrypted, "UTF8");
+
+    }
 
 }

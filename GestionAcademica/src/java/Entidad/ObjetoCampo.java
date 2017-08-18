@@ -20,6 +20,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -63,6 +64,15 @@ public class ObjetoCampo implements Serializable {
     //-CONSTRUCTOR
     public ObjetoCampo() {
     }
+
+    public ObjetoCampo(Objeto objeto, String ObjCmpNom, TipoCampo ObjCmpTpoDat, Boolean ObjCmpPK) {
+        this.objeto = objeto;
+        this.ObjCmpNom = ObjCmpNom;
+        this.ObjCmpTpoDat = ObjCmpTpoDat;
+        this.ObjCmpPK = ObjCmpPK;
+    }
+    
+    
     
     //-GETTERS Y SETTERS
 
@@ -74,6 +84,7 @@ public class ObjetoCampo implements Serializable {
         this.ObjCmpCod = ObjCmpCod;
     }
 
+    @XmlTransient
     public Objeto getObjeto() {
         return objeto;
     }

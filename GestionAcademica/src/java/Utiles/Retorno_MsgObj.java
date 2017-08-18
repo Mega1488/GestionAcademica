@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement
 @XmlSeeAlso({Persona.class, Calendario.class, CalendarioAlumno.class, CalendarioDocente.class, Carrera.class, Curso.class, Escolaridad.class, Evaluacion.class, Inscripcion.class, 
     Materia.class, MateriaPrevia.class, MateriaRevalida.class, Modulo.class, Periodo.class, PeriodoEstudio.class, PeriodoEstudioAlumno.class, PeriodoEstudioDocente.class, 
-    PlanEstudio.class, Solicitud.class, TipoEvaluacion.class, SDT_PersonaEstudio.class})
+    PlanEstudio.class, Solicitud.class, TipoEvaluacion.class, SDT_PersonaEstudio.class, Objeto.class, ObjetoCampo.class, SincRegistroEliminado.class, SincronizacionInconsistencia.class})
 public class Retorno_MsgObj implements Serializable{
 
     private Mensajes mensaje;
@@ -54,6 +54,9 @@ public class Retorno_MsgObj implements Serializable{
     
 
     public ArrayList<Mensajes> getLstMensajes() {
+        if (lstMensajes == null) {
+            lstMensajes = new ArrayList<Mensajes>();
+        }
         return lstMensajes;
     }
 
@@ -84,6 +87,9 @@ public class Retorno_MsgObj implements Serializable{
     }
 
     public List<Object> getLstObjetos() {
+        if (lstObjetos == null) {
+            lstObjetos = new ArrayList<Object>();
+        }
         return lstObjetos;
     }
 
@@ -93,17 +99,26 @@ public class Retorno_MsgObj implements Serializable{
 
     public boolean SurgioError()
     {
+        if(this.getMensaje() == null) return true;
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
     }
     
     public boolean SurgioErrorObjetoRequerido()
     {
+        if(this.getMensaje() == null) return true;
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getObjeto() == null;
     }
  
     public boolean SurgioErrorListaRequerida()
     {
+        if(this.getMensaje() == null) return true;
+        
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getLstObjetos() == null;
+    }
+
+    @Override
+    public String toString() {
+        return "Retorno_MsgObj{" + "mensaje=" + mensaje + ", lstMensajes=" + lstMensajes + ", objeto=" + objeto + ", lstObjetos=" + lstObjetos + '}';
     }
     
     

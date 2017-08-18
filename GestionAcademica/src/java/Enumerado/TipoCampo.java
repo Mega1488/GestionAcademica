@@ -10,7 +10,7 @@ package Enumerado;
  * @author Alvaro
  */
 public enum TipoCampo {
-    INT(1), STRING(2);
+    INT(1), STRING(2), LONG(3);
     
     TipoCampo(){
         

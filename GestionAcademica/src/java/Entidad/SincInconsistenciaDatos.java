@@ -14,12 +14,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -47,16 +47,23 @@ public class SincInconsistenciaDatos implements Serializable {
     @JoinColumn(name="IncCod", referencedColumnName="IncCod")
     private SincronizacionInconsistencia inconsistencia;
 
-    @OneToOne(targetEntity = ObjetoCampo.class)
-    @JoinColumn(name="ObjCmpCod", referencedColumnName="ObjCmpCod")
-    private ObjetoCampo objetoCampo;
+    @OneToOne(targetEntity = Objeto.class)
+    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
+    private Objeto objeto;
     
-    @Column(name = "ObjCmpVal", length = 4000)
-    private String ObjCmpVal;
+    @Column(name = "ObjVal", length = 4000)
+    private String ObjVal;
     
     //-CONSTRUCTOR
     public SincInconsistenciaDatos() {
     }
+
+    public SincInconsistenciaDatos(SincronizacionInconsistencia inconsistencia, Objeto objeto, String ObjVal) {
+        this.inconsistencia = inconsistencia;
+        this.objeto = objeto;
+        this.ObjVal = ObjVal;
+    }
+    
     
     
     //-GETTERS Y SETTERS
@@ -69,6 +76,7 @@ public class SincInconsistenciaDatos implements Serializable {
         this.IncObjCod = IncObjCod;
     }
 
+    @XmlTransient
     public SincronizacionInconsistencia getInconsistencia() {
         return inconsistencia;
     }
@@ -77,21 +85,23 @@ public class SincInconsistenciaDatos implements Serializable {
         this.inconsistencia = inconsistencia;
     }
 
-    public ObjetoCampo getObjetoCampo() {
-        return objetoCampo;
+    public Objeto getObjeto() {
+        return objeto;
     }
 
-    public void setObjetoCampo(ObjetoCampo objetoCampo) {
-        this.objetoCampo = objetoCampo;
+    public void setObjeto(Objeto objeto) {
+        this.objeto = objeto;
     }
 
-    public String getObjCmpVal() {
-        return ObjCmpVal;
+    public String getObjVal() {
+        return ObjVal;
     }
 
-    public void setObjCmpVal(String ObjCmpVal) {
-        this.ObjCmpVal = ObjCmpVal;
+    public void setObjVal(String ObjVal) {
+        this.ObjVal = ObjVal;
     }
+
+    
 
     @Override
     public int hashCode() {
@@ -120,11 +130,8 @@ public class SincInconsistenciaDatos implements Serializable {
 
     @Override
     public String toString() {
-        return "SincInconsistenciaDatos{" + "IncObjCod=" + IncObjCod + ", inconsistencia=" + inconsistencia + ", objetoCampo=" + objetoCampo + ", ObjCmpVal=" + ObjCmpVal + '}';
+        return "SincInconsistenciaDatos{" + "IncObjCod=" + IncObjCod + ", inconsistencia=" + inconsistencia + ", objeto=" + objeto + ", ObjVal=" + ObjVal + '}';
     }
 
-   
-    
-    
 }
 

@@ -223,4 +223,30 @@ public class PerManejador{
         return retorno;
     }
     
+    public Retorno_MsgObj ejecutarUpdateQuery(String sentencia){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al ejecutar custom query", TipoMensaje.ERROR), null);
+        
+        try {
+            iniciaOperacion();
+            
+            Query query = sesion.createQuery(sentencia);
+            int result = query.executeUpdate();
+            
+            tx.commit();
+            
+            retorno.setMensaje(new Mensajes("Objetos afectados: " + result, TipoMensaje.MENSAJE));
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+
+        return retorno;
+        
+    }
+    
+    
 }

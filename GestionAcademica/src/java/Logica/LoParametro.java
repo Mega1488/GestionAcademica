@@ -68,6 +68,10 @@ public class LoParametro{
             {
                 parametro = (Parametro) retorno.getObjeto();
             }
+            else
+            {
+                parametro = null;
+            }
         }
         
         return parametro;

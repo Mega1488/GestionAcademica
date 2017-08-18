@@ -10,5 +10,8 @@ package Enumerado;
  * @author alvar
  */
 public enum TipoRetorno {
-    TIPO_EVALUACION 
+    TIPO_EVALUACION,
+    ELIMINACION,
+    INCONSISTENCIA,
+    INSERT_UPDATE;
 }

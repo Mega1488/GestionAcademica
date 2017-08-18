@@ -19,7 +19,9 @@ public enum Constantes {
     WS_USR_MOODLE("ws_mdl"),
     WS_PSW_MOODLE("$.WSusMdl%"),
     WS_USR_APP("ws_app"),
-    WS_PSW_APP("$.WSusApp%");
+    WS_PSW_APP("$.WSusApp%"),
+    WS_USR_WEB("ws_web"),
+    WS_PSW_WEB("$.WSusWeb%");
 
     Constantes(){
         
