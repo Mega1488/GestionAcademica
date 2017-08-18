@@ -25,7 +25,7 @@ import SDT.SDT_Parameters;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
-import WebServiceClient.SincronizarWSClient;
+import WSClient.SincronizarWSClient;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;

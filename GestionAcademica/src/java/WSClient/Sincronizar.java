@@ -1,26 +1,24 @@
 
-package Pruebas;
+package WSClient;
 
-import WebServiceClient.*;
+import Utiles.Retorno_MsgObj;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Clase Java para update_fecha complex type.
+ * <p>Clase Java para sincronizar complex type.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
- * &lt;complexType name="update_fecha">
+ * &lt;complexType name="sincronizar">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
  *         &lt;element name="token" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="fecha" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/>
+ *         &lt;element name="cambios" type="{http://WebService/}retornoMsgObj" minOccurs="0"/>
  *       &lt;/sequence>
  *     &lt;/restriction>
  *   &lt;/complexContent>
@@ -30,15 +28,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "update_fecha", propOrder = {
+@XmlType(name = "sincronizar", propOrder = {
     "token",
-    "fecha"
+    "cambios"
 })
-public class UpdateFecha {
+public class Sincronizar {
 
     protected String token;
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar fecha;
+    protected Retorno_MsgObj cambios;
 
     /**
      * Obtiene el valor de la propiedad token.
@@ -65,27 +62,27 @@ public class UpdateFecha {
     }
 
     /**
-     * Obtiene el valor de la propiedad fecha.
+     * Obtiene el valor de la propiedad cambios.
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link Retorno_MsgObj }
      *     
      */
-    public XMLGregorianCalendar getFecha() {
-        return fecha;
+    public Retorno_MsgObj getCambios() {
+        return cambios;
     }
 
     /**
-     * Define el valor de la propiedad fecha.
+     * Define el valor de la propiedad cambios.
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link Retorno_MsgObj }
      *     
      */
-    public void setFecha(XMLGregorianCalendar value) {
-        this.fecha = value;
+    public void setCambios(Retorno_MsgObj value) {
+        this.cambios = value;
     }
 
 }

@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package WebServiceClient;
+package WSClient;
 
 import Entidad.Parametro;
 import Enumerado.ServicioWeb;
 import Logica.LoParametro;
 import Logica.Seguridad;
-import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
-import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Date;
@@ -69,8 +67,8 @@ public class SincronizarWSClient {
             
             URL wsUrl = new URL(param.getParUrlSrvSnc());
 
-            WebServiceClient.WsSincronizar_Service service = new WebServiceClient.WsSincronizar_Service(wsUrl);
-            WebServiceClient.WsSincronizar port = service.getWsSincronizarPort();
+            WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
+            WsSincronizar port = service.getWsSincronizarPort();
 
             retorno = port.updateFecha(token, fecha);
 
@@ -94,8 +92,8 @@ public class SincronizarWSClient {
             
             URL wsUrl = new URL(param.getParUrlSrvSnc());
         
-            WebServiceClient.WsSincronizar_Service service = new WebServiceClient.WsSincronizar_Service(wsUrl);
-            WebServiceClient.WsSincronizar port = service.getWsSincronizarPort();
+            WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
+            WsSincronizar port = service.getWsSincronizarPort();
             
             
             retorno = port.sincronizar(token, cambios);

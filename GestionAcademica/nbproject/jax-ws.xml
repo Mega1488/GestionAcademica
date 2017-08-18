@@ -53,7 +53,7 @@
         </wsimport-option>
         <wsimport-option>
           <wsimport-option-name>package</wsimport-option-name>
-          <wsimport-option-value>WebServiceClient</wsimport-option-value>
+          <wsimport-option-value>WSExternalObjects</wsimport-option-value>
         </wsimport-option>
       </wsimport-options>
     </client>

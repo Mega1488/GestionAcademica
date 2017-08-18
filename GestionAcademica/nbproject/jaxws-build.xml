@@ -85,7 +85,7 @@
     </target>
     <target name="wsimport-client-ws_sincronizar" depends="wsimport-init">
         <mkdir dir="${build.generated.dir}/jax-wsCache/ws_sincronizar"/>
-        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ws_sincronizar" destdir="${build.generated.dir}/jax-wsCache/ws_sincronizar" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/ws_sincronizar/wsdl/localhost_8084/GestionAcademica/ws_sincronizar.wsdl" catalog="catalog.xml" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8084/GestionAcademica/ws_sincronizar?wsdl" xnocompile="true" xendorsed="true" package="WebServiceClient">
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ws_sincronizar" destdir="${build.generated.dir}/jax-wsCache/ws_sincronizar" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/ws_sincronizar/wsdl/localhost_8084/GestionAcademica/ws_sincronizar.wsdl" catalog="catalog.xml" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8084/GestionAcademica/ws_sincronizar?wsdl" xnocompile="true" xendorsed="true" package="WSExternalObjects">
             <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/ws_sincronizar/wsdl/localhost_8084/GestionAcademica/ws_sincronizar.wsdl"/>
             <produces dir="${build.generated.dir}/jax-wsCache/ws_sincronizar"/>
         </wsimport>

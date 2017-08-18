@@ -1,7 +1,6 @@
 
-package Pruebas;
+package WSClient;
 
-import WebServiceClient.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import javax.xml.namespace.QName;

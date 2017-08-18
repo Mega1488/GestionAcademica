@@ -1,7 +1,6 @@
 
-package Pruebas;
+package WSClient;
 
-import WebServiceClient.*;
 import Utiles.Retorno_MsgObj;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -10,12 +9,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Clase Java para sincronizarResponse complex type.
+ * <p>Clase Java para update_fechaResponse complex type.
  * 
  * <p>El siguiente fragmento de esquema especifica el contenido que se espera que haya en esta clase.
  * 
  * <pre>
- * &lt;complexType name="sincronizarResponse">
+ * &lt;complexType name="update_fechaResponse">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;sequence>
@@ -29,10 +28,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "sincronizarResponse", propOrder = {
+@XmlType(name = "update_fechaResponse", propOrder = {
     "_return"
 })
-public class SincronizarResponse {
+public class UpdateFechaResponse {
 
     @XmlElement(name = "return")
     protected Retorno_MsgObj _return;
@@ -42,7 +41,7 @@ public class SincronizarResponse {
      * 
      * @return
      *     possible object is
-     *     {@link RetornoMsgObj }
+     *     {@link Retorno_MsgObj }
      *     
      */
     public Retorno_MsgObj getReturn() {
@@ -54,7 +53,7 @@ public class SincronizarResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link RetornoMsgObj }
+     *     {@link Retorno_MsgObj }
      *     
      */
     public void setReturn(Retorno_MsgObj value) {

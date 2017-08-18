@@ -1,7 +1,6 @@
 
-package Pruebas;
+package WSClient;
 
-import WebServiceClient.*;
 import Utiles.Retorno_MsgObj;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -32,12 +31,12 @@ public interface WsSincronizar {
      * @param token
      * @param cambios
      * @return
-     *     returns WebServiceClient.Retorno_MsgObj
+     *     returns Utiles.Retorno_MsgObj
      */
     @WebMethod
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "sincronizar", targetNamespace = "http://WebService/", className = "WebServiceClient.Sincronizar")
-    @ResponseWrapper(localName = "sincronizarResponse", targetNamespace = "http://WebService/", className = "WebServiceClient.SincronizarResponse")
+    @RequestWrapper(localName = "sincronizar", targetNamespace = "http://WebService/", className = "WSClient.Sincronizar")
+    @ResponseWrapper(localName = "sincronizarResponse", targetNamespace = "http://WebService/", className = "WSClient.SincronizarResponse")
     @Action(input = "http://WebService/ws_sincronizar/sincronizarRequest", output = "http://WebService/ws_sincronizar/sincronizarResponse")
     public Retorno_MsgObj sincronizar(
         @WebParam(name = "token", targetNamespace = "")
@@ -50,12 +49,12 @@ public interface WsSincronizar {
      * @param fecha
      * @param token
      * @return
-     *     returns WebServiceClient.Retorno_MsgObj
+     *     returns Utiles.Retorno_MsgObj
      */
     @WebMethod(operationName = "update_fecha")
     @WebResult(targetNamespace = "")
-    @RequestWrapper(localName = "update_fecha", targetNamespace = "http://WebService/", className = "WebServiceClient.UpdateFecha")
-    @ResponseWrapper(localName = "update_fechaResponse", targetNamespace = "http://WebService/", className = "WebServiceClient.UpdateFechaResponse")
+    @RequestWrapper(localName = "update_fecha", targetNamespace = "http://WebService/", className = "WSClient.UpdateFecha")
+    @ResponseWrapper(localName = "update_fechaResponse", targetNamespace = "http://WebService/", className = "WSClient.UpdateFechaResponse")
     @Action(input = "http://WebService/ws_sincronizar/update_fechaRequest", output = "http://WebService/ws_sincronizar/update_fechaResponse")
     public Retorno_MsgObj updateFecha(
         @WebParam(name = "token", targetNamespace = "")
