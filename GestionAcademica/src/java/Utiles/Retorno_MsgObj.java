@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 @XmlRootElement
 @XmlSeeAlso({Persona.class, Calendario.class, CalendarioAlumno.class, CalendarioDocente.class, Carrera.class, Curso.class, Escolaridad.class, Evaluacion.class, Inscripcion.class, 
     Materia.class, MateriaPrevia.class, MateriaRevalida.class, Modulo.class, Periodo.class, PeriodoEstudio.class, PeriodoEstudioAlumno.class, PeriodoEstudioDocente.class, 
-    PlanEstudio.class, Solicitud.class, TipoEvaluacion.class, SDT_PersonaEstudio.class, Objeto.class, ObjetoCampo.class, SincRegistroEliminado.class, SincronizacionInconsistencia.class})
+    PlanEstudio.class, Solicitud.class, TipoEvaluacion.class, SDT_PersonaEstudio.class, Objeto.class, ObjetoCampo.class, SincRegistroEliminado.class, Sincronizacion.class})
 public class Retorno_MsgObj implements Serializable{
 
     private Mensajes mensaje;

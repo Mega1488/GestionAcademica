@@ -21,7 +21,8 @@ public enum Constantes {
     WS_USR_APP("ws_app"),
     WS_PSW_APP("$.WSusApp%"),
     WS_USR_WEB("ws_web"),
-    WS_PSW_WEB("$.WSusWeb%");
+    WS_PSW_WEB("$.WSusWeb%"),
+    METODO_GETPK("GetPrimaryKey");
 
     Constantes(){
         

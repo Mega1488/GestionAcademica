@@ -130,7 +130,7 @@ public class SincInconsistenciaDatos implements Serializable {
 
     @Override
     public String toString() {
-        return "SincInconsistenciaDatos{" + "IncObjCod=" + IncObjCod + ", inconsistencia=" + inconsistencia + ", objeto=" + objeto + ", ObjVal=" + ObjVal + '}';
+        return "SincInconsistenciaDatos{" + "IncObjCod=" + IncObjCod + ", inconsistencia=" + inconsistencia.getIncCod() + ", objeto=" + objeto + ", ObjVal=" + ObjVal + '}';
     }
 
 }

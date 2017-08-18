@@ -14,6 +14,10 @@
 
 <xs:element name="evaluacion" type="tns:evaluacion" />
 
+<xs:element name="impactar_inconsistencia" type="tns:impactar_inconsistencia" />
+
+<xs:element name="impactar_inconsistenciaResponse" type="tns:impactar_inconsistenciaResponse" />
+
 <xs:element name="inscripcion" type="tns:inscripcion" />
 
 <xs:element name="materia" type="tns:materia" />
@@ -23,6 +27,10 @@
 <xs:element name="materiaRevalida" type="tns:materiaRevalida" />
 
 <xs:element name="modulo" type="tns:modulo" />
+
+<xs:element name="objeto" type="tns:objeto" />
+
+<xs:element name="objetoCampo" type="tns:objetoCampo" />
 
 <xs:element name="periodo" type="tns:periodo" />
 
@@ -42,6 +50,14 @@
 
 <xs:element name="sdtPersonaEstudio" type="tns:sdtPersonaEstudio" />
 
+<xs:element name="sincInconsistenciaDatos" type="tns:sincInconsistenciaDatos" />
+
+<xs:element name="sincRegistroEliminado" type="tns:sincRegistroEliminado" />
+
+<xs:element name="sincronizacion" type="tns:sincronizacion" />
+
+<xs:element name="sincronizacionInconsistencia" type="tns:sincronizacionInconsistencia" />
+
 <xs:element name="sincronizar" type="tns:sincronizar" />
 
 <xs:element name="sincronizarResponse" type="tns:sincronizarResponse" />
@@ -54,7 +70,7 @@
 
 <xs:element name="update_fechaResponse" type="tns:update_fechaResponse" />
 
-<xs:complexType name="sincronizar">
+<xs:complexType name="impactar_inconsistencia">
 <xs:sequence>
 <xs:element name="token" type="xs:string" minOccurs="0" />
 <xs:element name="cambios" type="tns:retornoMsgObj" minOccurs="0" />
@@ -236,6 +252,8 @@
 </xs:complexType>
 
 <xs:complexType name="tipoEvaluacion">
+<xs:complexContent>
+<xs:extension base="tns:claseAbstracta">
 <xs:sequence>
 <xs:element name="objFchMod" type="xs:dateTime" minOccurs="0" />
 <xs:element name="tpoEvlCod" type="xs:long" minOccurs="0" />
@@ -243,6 +261,12 @@
 <xs:element name="tpoEvlInsAut" type="xs:boolean" minOccurs="0" />
 <xs:element name="tpoEvlNom" type="xs:string" minOccurs="0" />
 </xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="claseAbstracta" abstract="true">
+<xs:sequence />
 </xs:complexType>
 
 <xs:complexType name="calendarioAlumno">
@@ -355,6 +379,78 @@
 </xs:sequence>
 </xs:complexType>
 
+<xs:complexType name="objeto">
+<xs:sequence>
+<xs:element name="lstCampo" type="tns:objetoCampo" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="objClsNom" type="xs:string" minOccurs="0" />
+<xs:element name="objCod" type="xs:long" minOccurs="0" />
+<xs:element name="objFchMod" type="xs:dateTime" minOccurs="0" />
+<xs:element name="objNmdQry" type="xs:string" minOccurs="0" />
+<xs:element name="objNom" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="objetoCampo">
+<xs:sequence>
+<xs:element name="objCmpCod" type="xs:long" minOccurs="0" />
+<xs:element name="objCmpNom" type="xs:string" minOccurs="0" />
+<xs:element name="objCmpPK" type="xs:boolean" minOccurs="0" />
+<xs:element name="objCmpTpoDat" type="tns:tipoCampo" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sincRegistroEliminado">
+<xs:sequence>
+<xs:element name="objDet" type="xs:string" minOccurs="0" />
+<xs:element name="objeto" type="tns:objeto" minOccurs="0" />
+<xs:element name="sncObjElimCod" type="xs:long" minOccurs="0" />
+<xs:element name="sncObjElimFch" type="xs:dateTime" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sincronizacionInconsistencia">
+<xs:sequence>
+<xs:element name="incCod" type="xs:long" minOccurs="0" />
+<xs:element name="incEst" type="tns:estadoInconsistencia" minOccurs="0" />
+<xs:element name="lstDatos" type="tns:sincInconsistenciaDatos" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="objetoSeleccionado" type="tns:sincInconsistenciaDatos" minOccurs="0" />
+<xs:element name="sincronizacion" type="tns:sincronizacion" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sincInconsistenciaDatos">
+<xs:sequence>
+<xs:element name="incObjCod" type="xs:long" minOccurs="0" />
+<xs:element name="objVal" type="xs:string" minOccurs="0" />
+<xs:element name="objeto" type="tns:objeto" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sincronizacion">
+<xs:sequence>
+<xs:element name="lstInconsistencia" type="tns:sincronizacionInconsistencia" nillable="true" minOccurs="0" maxOccurs="unbounded" />
+<xs:element name="sncCod" type="xs:long" minOccurs="0" />
+<xs:element name="sncDur" type="xs:string" minOccurs="0" />
+<xs:element name="sncEst" type="tns:estadoSincronizacion" minOccurs="0" />
+<xs:element name="sncFch" type="xs:dateTime" minOccurs="0" />
+<xs:element name="sncObjCnt" type="xs:int" minOccurs="0" />
+<xs:element name="sncObjDet" type="xs:string" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="impactar_inconsistenciaResponse">
+<xs:sequence>
+<xs:element name="return" type="tns:retornoMsgObj" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="sincronizar">
+<xs:sequence>
+<xs:element name="token" type="xs:string" minOccurs="0" />
+<xs:element name="cambios" type="tns:retornoMsgObj" minOccurs="0" />
+</xs:sequence>
+</xs:complexType>
+
 <xs:complexType name="sincronizarResponse">
 <xs:sequence>
 <xs:element name="return" type="tns:retornoMsgObj" minOccurs="0" />
@@ -430,6 +526,28 @@
 <xs:enumeration value="ESCOLARIDAD" />
 <xs:enumeration value="CONSTANCIA_ESTUDIO" />
 <xs:enumeration value="DUPLICADO_FACTURA" />
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="tipoCampo">
+<xs:restriction base="xs:string">
+<xs:enumeration value="INT" />
+<xs:enumeration value="STRING" />
+<xs:enumeration value="LONG" />
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="estadoInconsistencia">
+<xs:restriction base="xs:string">
+<xs:enumeration value="CORRECTO" />
+<xs:enumeration value="CON_ERRORES" />
+</xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="estadoSincronizacion">
+<xs:restriction base="xs:string">
+<xs:enumeration value="CORRECTO" />
+<xs:enumeration value="CON_ERRORES" />
 </xs:restriction>
 </xs:simpleType>
 </xs:schema>

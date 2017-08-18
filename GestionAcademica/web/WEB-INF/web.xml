@@ -117,6 +117,10 @@
         <servlet-class>Servlets.ABM_NotificacionBitacora</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ABM_Sincronizacion</servlet-name>
+        <servlet-class>Servlets.ABM_Sincronizacion</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>NotificationManager</servlet-name>
         <servlet-class>Servlets.NotificationManager</servlet-class>
     </servlet>
@@ -256,6 +260,10 @@
     <servlet-mapping>
         <servlet-name>ABM_NotificacionBitacora</servlet-name>
         <url-pattern>/ABM_NotificacionBitacora</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ABM_Sincronizacion</servlet-name>
+        <url-pattern>/ABM_Sincronizacion</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ws_persona</servlet-name>

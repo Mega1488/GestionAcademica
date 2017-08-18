@@ -60,6 +60,9 @@ public class Objeto implements Serializable {
     @Column(name = "ObjNmdQry", length = 100)
     private String ObjNmdQry;
     
+    @Column(name = "ObjClsNom", length = 500)
+    private String ObjClsNom;
+    
     @Column(name = "ObjFchMod", columnDefinition="DATE")
     @Temporal(TemporalType.DATE)
     private Date ObjFchMod;
@@ -80,9 +83,10 @@ public class Objeto implements Serializable {
         this.lstCampo = lstCampo;
     }
 
-    public Objeto(String ObjNom, String ObjNmdQry, String PrimaryKey) {
+    public Objeto(String ObjNom, String ObjNmdQry, String PrimaryKey, String ObjClsNom) {
         this.ObjNom = ObjNom;
         this.ObjNmdQry = ObjNmdQry;
+        this.ObjClsNom = ObjClsNom;
         this.lstCampo = new ArrayList<>();
         
         this.lstCampo.add(new ObjetoCampo(this, PrimaryKey, TipoCampo.LONG, Boolean.TRUE));
@@ -143,6 +147,16 @@ public class Objeto implements Serializable {
         
         return null;
     }
+
+    public String getObjClsNom() {
+        return ObjClsNom;
+    }
+
+    public void setObjClsNom(String ObjClsNom) {
+        this.ObjClsNom = ObjClsNom;
+    }
+    
+    
     
     @Override
     public int hashCode() {

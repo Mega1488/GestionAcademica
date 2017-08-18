@@ -82,7 +82,7 @@
                             <p>Bitácora de servicios</p>
                         </div>  
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a> </a>
+                            <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a>
                         </div>
                         
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>

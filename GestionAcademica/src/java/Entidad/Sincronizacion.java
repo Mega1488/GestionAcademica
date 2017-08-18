@@ -39,7 +39,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Sincronizacion.findByEst",     query = "SELECT t FROM Sincronizacion t where t.SncEst = :SncEst"),
-    @NamedQuery(name = "Sincronizacion.findAll",       query = "SELECT t FROM Sincronizacion t")})
+    @NamedQuery(name = "Sincronizacion.findAll",       query = "SELECT t FROM Sincronizacion t ORDER BY t.SncFch DESC")})
 
 public class Sincronizacion implements Serializable {
 
@@ -147,6 +147,17 @@ public class Sincronizacion implements Serializable {
         this.SncObjDet += msg + "\n";
     }
     
+    public SincronizacionInconsistencia GetInconsistencia(Long IncCod){
+        for(SincronizacionInconsistencia inc : lstInconsistencia)
+        {
+            if(inc.getIncCod().equals(IncCod))
+            {
+                return inc;
+            }
+        }
+
+        return  null;
+    }
     
     @Override
     public int hashCode() {

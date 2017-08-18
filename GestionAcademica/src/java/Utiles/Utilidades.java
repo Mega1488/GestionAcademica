@@ -12,6 +12,7 @@ import Logica.LoParametro;
 import Logica.LoVersion;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -106,6 +107,22 @@ public class Utilidades {
         }
 
         return lstObjeto;
+    }
+    
+    public Object GetObjectByName(String nombre){
+        Object objeto = null;
+        
+        try {
+            Class<?> cls = Class.forName(nombre);
+            objeto = cls.getConstructor().newInstance();
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return objeto;
     }
 
     public String GetUrlSistema() {

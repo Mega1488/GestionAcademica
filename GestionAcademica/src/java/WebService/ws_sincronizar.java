@@ -77,7 +77,7 @@ public class ws_sincronizar {
         
         return retorno;
     }
-    
+
     /**
      * Actualiza fecha de sincronizacion
      * @param token token para validar consumo
@@ -119,6 +119,50 @@ public class ws_sincronizar {
                     LoParametro.GetInstancia().actualizar(param);
                     retorno.setMensaje(new Mensajes("Modificado ok", TipoMensaje.MENSAJE));
 
+                }
+            }
+        }
+        
+        return retorno;
+    }
+
+    /**
+     * Web service operation
+     * @param token validar consumo de servicio
+     * @param cambios recibe inconsistencias
+     * @return retorna el resultado de la operacion 
+     */
+    @WebMethod(operationName = "impactar_inconsistencia")
+    public Retorno_MsgObj impactar_inconsistencia(@WebParam(name = "token") String token, @WebParam(name = "cambios") Retorno_MsgObj cambios) {
+        //OBTENER DIRECCION DE QUIEN LLAMA AL SERVICIO
+        HttpServletRequest request = (HttpServletRequest) context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
+        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+        
+        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+                
+        if(token == null)
+        {
+            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+            LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SINCRONIZAR);
+        }
+        else
+        {
+            if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.SINCRONIZAR, direccion))
+            {
+                retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+            }
+            else
+            {
+                if(cambios == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibieron cambios, objeto nulo", TipoMensaje.ERROR));
+                }
+                else
+                {
+                    if(cambios.getObjeto() != null)
+                    {
+                        retorno = LoSincronizacion.GetInstancia().ProcesarInconsistencia(cambios);
+                    }
                 }
             }
         }

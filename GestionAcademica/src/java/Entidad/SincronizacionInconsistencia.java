@@ -24,6 +24,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -81,6 +82,7 @@ public class SincronizacionInconsistencia implements Serializable {
         this.IncCod = IncCod;
     }
 
+    @XmlTransient
     public Sincronizacion getSincronizacion() {
         return sincronizacion;
     }
@@ -113,7 +115,26 @@ public class SincronizacionInconsistencia implements Serializable {
         this.lstDatos = lstDatos;
     }
     
+    public Objeto getObjeto(){
+       for(SincInconsistenciaDatos dat : lstDatos)
+        {
+            return dat.getObjeto();
+        }
+
+        return  null; 
+    }
     
+    public SincInconsistenciaDatos GetIncDato(Long IncObjCod){
+        for(SincInconsistenciaDatos dat : lstDatos)
+        {
+            if(dat.getIncObjCod().equals(IncObjCod))
+            {
+                return dat;
+            }
+        }
+
+        return  null;
+    }
 
     @Override
     public int hashCode() {

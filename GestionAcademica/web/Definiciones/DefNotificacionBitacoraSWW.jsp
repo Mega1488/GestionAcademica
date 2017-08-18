@@ -102,7 +102,7 @@
                         </div>
 
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a> </a>
+                            <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a>
                         </div>
 
                         <div style="display:none" id="datos_ocultos" name="datos_ocultos">

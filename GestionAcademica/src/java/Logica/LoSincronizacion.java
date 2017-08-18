@@ -7,13 +7,11 @@ package Logica;
 
 import Entidad.Objeto;
 import Entidad.Parametro;
-import Entidad.Persona;
 import Entidad.SincInconsistenciaDatos;
 import Entidad.SincRegistroEliminado;
 import Entidad.Sincronizacion;
-import Entidad.Sincronizacion;
 import Entidad.SincronizacionInconsistencia;
-import Entidad.TipoEvaluacion;
+import Enumerado.Constantes;
 import Enumerado.EstadoInconsistencia;
 import Enumerado.EstadoSincronizacion;
 import Enumerado.Objetos;
@@ -26,9 +24,12 @@ import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import WSClient.SincronizarWSClient;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -37,6 +38,7 @@ import java.util.Date;
 public class LoSincronizacion implements InABMGenerico{
 
     private static LoSincronizacion instancia;
+    private Utilidades util = Utilidades.GetInstancia();
 
     private LoSincronizacion() {
     }
@@ -120,7 +122,37 @@ public class LoSincronizacion implements InABMGenerico{
         return false;
         
     }
-      
+    
+    public Retorno_MsgObj Depurar(){
+        Retorno_MsgObj lst = this.obtenerLista();
+        
+        if(!lst.SurgioError())
+        {
+            if(lst.getLstObjetos() != null)
+            {
+                for(Object objeto : lst.getLstObjetos())
+                {
+                    this.eliminar(objeto);
+                }
+            }
+        }
+        
+        lst.setLstObjetos(null);
+        
+        return lst;
+    }
+    
+    public Retorno_MsgObj InconsistenciaSeleccionarObjeto(Sincronizacion sinc, Long IncCod, Long IncObjCod){
+        
+        SincronizacionInconsistencia inc = sinc.GetInconsistencia(IncCod);
+        
+        inc.setObjetoSeleccionado(inc.GetIncDato(IncObjCod));
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(sinc);
+
+        return retorno;
+    }
+    
     //------------------------------------------------------------------------
     //OBJETO
     //------------------------------------------------------------------------
@@ -192,7 +224,8 @@ public class LoSincronizacion implements InABMGenerico{
         {
             this.ObjetoGuardar(new Objeto(Objetos.TIPO_EVALUACION.name()
                     , Objetos.TIPO_EVALUACION.getNamedQuery()
-                    , Objetos.TIPO_EVALUACION.getPrimaryKey()));
+                    , Objetos.TIPO_EVALUACION.getPrimaryKey()
+                    , Objetos.TIPO_EVALUACION.getClassName()));
         }
     }
     
@@ -223,7 +256,7 @@ public class LoSincronizacion implements InABMGenerico{
                 {
                     System.err.println("Surgio error al sincronizar con el sistema online");
                     sincro.setSncEst(EstadoSincronizacion.CON_ERRORES);
-                    sincro = this.ProcesarInconsistencias(sincro, resulSincOnline);
+                    sincro = this.GenerarInconsistencias(sincro, resulSincOnline);
                     
                 }
                 else
@@ -438,28 +471,28 @@ public class LoSincronizacion implements InABMGenerico{
                     //MODIFICACIONES E INGRESOS                  
                     if(InsertUpdate.getLstObjetos() != null)
                     {
-                        registrosAfectados += InsertUpdate.getLstObjetos().size();
-                        
                         for(Object camb : InsertUpdate.getLstObjetos())
                         {
                             Retorno_MsgObj objetoModificado = (Retorno_MsgObj) camb;
 
                             //Objeto modificado
                             Objeto objMod = (Objeto) objetoModificado.getObjeto();
+                            
+                            registrosAfectados += objetoModificado.getLstObjetos().size();
 
                             for(Object registro : objetoModificado.getLstObjetos())
                             {
-                                if(this.ExisteRegistro(objMod, registro))
+                                if(this.ExisteRegistro(registro))
                                 {
                                     perManager.actualizar(registro);
                                 }
                                 else
                                 {
-                                    Long idOriginal = this.ObtenerPrimaryKey(objMod, registro);
+                                    Long idOriginal = this.ObtenerPrimaryKey(registro);
 
                                     Retorno_MsgObj regNuevo = perManager.guardar(registro);
 
-                                    Long idGenerado = this.ObtenerPrimaryKey(objMod, regNuevo);
+                                    Long idGenerado = (long) regNuevo.getObjeto();
 
                                     this.ActualizarPrimaryKeyManualmente(objMod, idGenerado, idOriginal);
                                 }
@@ -476,22 +509,40 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
-    private Boolean ExisteRegistro(Objeto objMod, Object registro){
+    private Boolean ExisteRegistro(Object registro){
         
-        Objetos objeto = Objetos.valueOf(objMod.getObjNom());
+        PerManejador perManager = new PerManejador();
+        return !perManager.obtener(this.ObtenerPrimaryKey(registro), registro.getClass()).SurgioErrorObjetoRequerido();
         
-        switch(objeto)
-        {
-            case TIPO_EVALUACION:
-                TipoEvaluacion regCast = (TipoEvaluacion) registro;
-                return !LoTipoEvaluacion.GetInstancia().obtener(regCast.getTpoEvlCod()).SurgioErrorObjetoRequerido();
-        }
+                
+        /*
+            Objetos objeto = Objetos.valueOf(objMod.getObjNom());
+
+            switch(objeto)
+            {
+                case TIPO_EVALUACION:
+                    TipoEvaluacion regCast = (TipoEvaluacion) registro;
+                    return !LoTipoEvaluacion.GetInstancia().obtener(regCast.getTpoEvlCod()).SurgioErrorObjetoRequerido();
+            }
+            return false;
+        */
         
-        return false;
     }
     
-    private Long ObtenerPrimaryKey(Objeto objMod, Object registro){
+    private Long ObtenerPrimaryKey(Object registro){
         
+        Long pk = null;
+        try {
+
+            Method metodo   = registro.getClass().getDeclaredMethod(Constantes.METODO_GETPK.getValor());
+            pk = (Long) metodo.invoke(registro);
+
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+            Logger.getLogger(LoSincronizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return pk;
+        /*
         Objetos objeto = Objetos.valueOf(objMod.getObjNom());
         
         switch(objeto)
@@ -502,9 +553,11 @@ public class LoSincronizacion implements InABMGenerico{
         }
         
         return null;
+        */
     }
     
     private void ActualizarPrimaryKeyManualmente(Objeto objMod, Long idOriginal, Long idNuevo){
+        
         String query = "UPDATE " + objMod.getObjNmdQry()
                 + " SET " + objMod.getPrimaryKey().getObjCmpNom() + " = " + idNuevo 
                 + " WHERE " + objMod.getPrimaryKey().getObjCmpNom() + " = " + idOriginal;
@@ -545,7 +598,7 @@ public class LoSincronizacion implements InABMGenerico{
         cliWS.ActualizarFecha(param.getParFchUltSinc());
     }
     
-    private Sincronizacion ProcesarInconsistencias(Sincronizacion sincro, Retorno_MsgObj retorno){
+    private Sincronizacion GenerarInconsistencias(Sincronizacion sincro, Retorno_MsgObj retorno){
         if(retorno.getMensaje().getMensaje().equals(TipoRetorno.INCONSISTENCIA.name()))
         {
             sincro.addDetalle(new Date() + " - Surgio error al sincronizar con el sistema online - Genero inconsistencias que deberan ser corregidas");
@@ -720,7 +773,7 @@ public class LoSincronizacion implements InABMGenerico{
                                 if(objMod.getObjNom().equals(objMd.getObjNom()))
                                 {
                                     //VALIDAR
-                                    if(this.EsInconsistencia(objMd, registro, reg))
+                                    if(this.EsInconsistencia(registro, reg))
                                     {
                                         //ERROR,SIGNIFICA QUE AMBOS MODIFICARON EL MISMO DATO, RETORNA INCONSISTENCIA
                                         retorno.setObjeto(this.ArmarInconsistencia(objMd, registro, reg));
@@ -737,20 +790,13 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
-    private Boolean EsInconsistencia(Objeto objMod, Object objLocal, Object objNuevo){
-        Boolean error = false;
-        Objetos objeto = Objetos.valueOf(objMod.getObjNom());
-        
-        switch(objeto)
-        {
-            case TIPO_EVALUACION:
-                TipoEvaluacion regLocal = (TipoEvaluacion) objLocal;
-                TipoEvaluacion regNuevo = (TipoEvaluacion) objNuevo;
-                error = regLocal.getTpoEvlCod().equals(regNuevo.getTpoEvlCod());
-                break;
-        }
-        
-        return error;
+    //------------------------------------------------------------------------
+    //INCONSISTENCIAS
+    //------------------------------------------------------------------------
+    
+    private Boolean EsInconsistencia(Object objLocal, Object objNuevo){
+        return objLocal.equals(objNuevo);
+
     }
     
     private SincronizacionInconsistencia ArmarInconsistencia(Objeto objeto, Object regUno, Object regDos){
@@ -766,4 +812,120 @@ public class LoSincronizacion implements InABMGenerico{
         
         return inc;
     }
+    
+    public Retorno_MsgObj ProcesarInconsistencia(Sincronizacion sinc){
+        Retorno_MsgObj retorno = this.ValidarInconsistencias(sinc);
+        Parametro param = LoParametro.GetInstancia().obtener();
+        
+        if(!retorno.SurgioError())
+        {
+            PerManejador perManager = new PerManejador();
+
+            if(sinc.getLstInconsistencia() != null)
+            {
+                retorno = this.ImpactarInconsistencia(sinc);
+                
+                if(!retorno.SurgioError())
+                {
+                    //Enviar a ws para impactar forzado
+
+                    Retorno_MsgObj parametro = new Retorno_MsgObj();
+                    parametro.setObjeto(sinc);
+                    
+                    SincronizarWSClient cliWS = new SincronizarWSClient();
+                    retorno = cliWS.ImpactarInconsistencia(parametro);
+                    
+                }
+
+                if(!retorno.SurgioError())
+                {
+                    //Actualizo estado de inconsistencias y de sincronizacion
+                    for(SincronizacionInconsistencia inc : sinc.getLstInconsistencia())
+                    {
+                        inc.setIncEst(EstadoInconsistencia.CORRECTO);
+                        retorno = perManager.actualizar(inc);
+                    }
+
+                    if(!retorno.SurgioError())
+                    {
+                        sinc.setSncEst(EstadoSincronizacion.CORRECTO);
+                        retorno = perManager.actualizar(sinc);
+                        
+                        if(!retorno.SurgioError())
+                        {
+                            //ACTUALIZO FECHAS
+                            this.ActualizarFechaSincronizacion(param);                            
+                        }
+                    }
+                }
+            }
+        }
+
+        return retorno;
+    }
+    
+    public Retorno_MsgObj ProcesarInconsistencia(Retorno_MsgObj objeto){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Impactando inconsistencias", TipoMensaje.MENSAJE));
+        
+        if(objeto.getObjeto() != null)
+        {
+            Sincronizacion sinc = (Sincronizacion) objeto.getObjeto();
+            retorno = this.ImpactarInconsistencia(sinc);
+        }
+        else
+        {
+            retorno.setMensaje(new Mensajes("No se recibio sincronizacion", TipoMensaje.ERROR));
+        }
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ImpactarInconsistencia(Sincronizacion sinc){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Impactando inconsistencia", TipoMensaje.MENSAJE));
+        if(sinc.getLstInconsistencia() != null)
+        {
+            PerManejador perManager = new PerManejador();
+
+            for(SincronizacionInconsistencia inc : sinc.getLstInconsistencia())
+            {
+                SincInconsistenciaDatos dato = inc.getObjetoSeleccionado();
+
+                Object objeto = util.GetObjectByName(dato.getObjeto().getObjClsNom());
+
+                objeto = util.JsonToObject(dato.getObjVal(), objeto);
+
+                retorno = perManager.actualizar(objeto);
+
+                if(retorno.SurgioError())
+                {
+                    return retorno;
+                }
+            }
+        }
+
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ValidarInconsistencias(Sincronizacion sinc){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Inconsistencias", TipoMensaje.MENSAJE));
+        
+        if(sinc.getLstInconsistencia() != null)
+        {
+            for(SincronizacionInconsistencia inc : sinc.getLstInconsistencia())
+            {
+                SincInconsistenciaDatos dato = inc.getObjetoSeleccionado();
+                if(dato == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se ha seleccionado un objeto en todas las inconsistencias"
+                        , TipoMensaje.ERROR));
+
+                    return retorno;
+                }
+            }
+        }
+        
+        return retorno;
+    }
+    
+    
 }

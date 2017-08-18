@@ -5,12 +5,14 @@
  */
 package Enumerado;
 
+import Entidad.TipoEvaluacion;
+
 /**
  *
  * @author Alvaro
  */
 public enum Objetos {
-    TIPO_EVALUACION("TipoEvaluacion", "TpoEvlCod");
+    TIPO_EVALUACION(TipoEvaluacion.class.getSimpleName(), "TpoEvlCod", TipoEvaluacion.class.getName());
     
     Objetos(){
         
@@ -18,10 +20,12 @@ public enum Objetos {
     
     private String namedQuery;
     private String primaryKey;
+    private String className;
 
-    Objetos(String pNombre, String pPrimaryKey) {
+    Objetos(String pNombre, String pPrimaryKey, String pClassName) {
         this.namedQuery = pNombre;
         this.primaryKey = pPrimaryKey;
+        this.className = pClassName;
     }
 
     public String getNamedQuery() {
@@ -31,6 +35,11 @@ public enum Objetos {
     public String getPrimaryKey() {
         return primaryKey;
     }
+
+    public String getClassName() {
+        return className;
+    }
+    
     
    public static Objetos fromQueryName(String upperQueryName) {
         for (Objetos objeto  : Objetos.values()){

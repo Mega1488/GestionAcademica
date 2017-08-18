@@ -24,7 +24,7 @@
     <client name="ws_sincronizar">
       <wsdl-url>http://localhost:8084/GestionAcademica/ws_sincronizar?wsdl</wsdl-url>
       <local-wsdl-file>localhost_8084/GestionAcademica/ws_sincronizar.wsdl</local-wsdl-file>
-      <package-name forceReplace="true">WebServiceClient</package-name>
+      <package-name forceReplace="true">WSExternalObjects</package-name>
       <catalog-file>catalog.xml</catalog-file>
       <wsimport-options>
         <wsimport-option>

@@ -25,6 +25,23 @@ import javax.xml.ws.ResponseWrapper;
 })
 public interface WsSincronizar {
 
+    /**
+     * 
+     * @param token
+     * @param cambios
+     * @return
+     *     returns WSExternalObjects.RetornoMsgObj
+     */
+    @WebMethod(operationName = "impactar_inconsistencia")
+    @WebResult(targetNamespace = "")
+    @RequestWrapper(localName = "impactar_inconsistencia", targetNamespace = "http://WebService/", className = "WSExternalObjects.ImpactarInconsistencia")
+    @ResponseWrapper(localName = "impactar_inconsistenciaResponse", targetNamespace = "http://WebService/", className = "WSExternalObjects.ImpactarInconsistenciaResponse")
+    @Action(input = "http://WebService/ws_sincronizar/impactar_inconsistenciaRequest", output = "http://WebService/ws_sincronizar/impactar_inconsistenciaResponse")
+    public Retorno_MsgObj impactarInconsistencia(
+        @WebParam(name = "token", targetNamespace = "")
+        String token,
+        @WebParam(name = "cambios", targetNamespace = "")
+        Retorno_MsgObj cambios);
 
     /**
      * 

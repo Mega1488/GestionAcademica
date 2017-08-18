@@ -96,7 +96,7 @@
         </copy>
     </target>
     <target name="wsimport-client-clean-ws_sincronizar" depends="-init-project">
-        <delete dir="${build.generated.sources.dir}/jax-ws/WebServiceClient"/>
+        <delete dir="${build.generated.sources.dir}/jax-ws/WSExternalObjects"/>
         <delete dir="${build.generated.dir}/jax-wsCache/ws_sincronizar"/>
     </target>
     <target name="wsimport-client-generate" depends="wsimport-client-ws_sincronizar"/>

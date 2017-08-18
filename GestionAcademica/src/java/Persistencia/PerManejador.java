@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
+import org.hibernate.metadata.ClassMetadata;
 
 /**
  *
@@ -248,5 +249,9 @@ public class PerManejador{
         
     }
     
+    public String GetPrimaryKeyFromObject(Object objeto){
+        ClassMetadata objMeta =  NewHibernateUtil.getSessionFactory().getClassMetadata(objeto.getClass());
+        return objMeta .getIdentifierPropertyName();
+    }
     
 }

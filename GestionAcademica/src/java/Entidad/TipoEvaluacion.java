@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -35,7 +36,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "TipoEvaluacion.findByTpoEvlNom", query = "SELECT tpoEvl FROM TipoEvaluacion tpoEvl WHERE tpoEvl.TpoEvlNom = :TpoEvlNom"),
     @NamedQuery(name = "TipoEvaluacion.findLastTpoEvl", query = "SELECT  tpoEvl FROM TipoEvaluacion tpoEvl ORDER BY tpoEvl.TpoEvlCod DESC")})
 
- public class TipoEvaluacion implements Serializable {
+ public class TipoEvaluacion extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -169,7 +170,12 @@ import org.hibernate.annotations.GenericGenerator;
 
     @Override
     public String toString() {
-        return "entidades.Categoria[ TpoEvlCod=" + TpoEvlCod + " ]";
+        return "TipoEvaluacion{" + "TpoEvlCod=" + TpoEvlCod + ", TpoEvlNom=" + TpoEvlNom + ", TpoEvlExm=" + TpoEvlExm + ", TpoEvlInsAut=" + TpoEvlInsAut + ", ObjFchMod=" + ObjFchMod + '}';
+    }
+
+    @Override
+    public Long GetPrimaryKey() {
+        return this.TpoEvlCod;
     }
     
 }
