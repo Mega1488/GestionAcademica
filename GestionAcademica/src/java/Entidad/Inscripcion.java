@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -47,12 +48,13 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Inscripcion.findAll",       query = "SELECT t FROM Inscripcion t"),
+    @NamedQuery(name = "Inscripcion.findModAfter",  query = "SELECT t FROM Inscripcion t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Inscripcion.findByAlumno",  query = "SELECT t FROM Inscripcion t WHERE t.Alumno.PerCod =:PerCod"),
     @NamedQuery(name = "Inscripcion.findByPlan",    query = "SELECT t FROM Inscripcion t WHERE (t.Alumno.PerCod =:PerCod or :PerCod IS NULL) and t.PlanEstudio.PlaEstCod =:PlaEstCod"),
     @NamedQuery(name = "Inscripcion.findByCurso",   query = "SELECT t FROM Inscripcion t WHERE (t.Alumno.PerCod =:PerCod or :PerCod IS NULL) and t.Curso.CurCod =:CurCod")
 })
 
-public class Inscripcion implements Serializable {
+public class Inscripcion extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -241,7 +243,10 @@ public class Inscripcion implements Serializable {
         return "Inscripcion{" + "InsCod=" + InsCod + ", Persona=" + Alumno + ", PersonaInscribe=" + PersonaInscribe + ", PlanEstudio=" + PlanEstudio + ", Curso=" + Curso + ", AluFchCert=" + AluFchCert + ", AluFchInsc=" + AluFchInsc + ", ObjFchMod=" + ObjFchMod + '}';
     }
 
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.InsCod;
+    }
     
     
 }

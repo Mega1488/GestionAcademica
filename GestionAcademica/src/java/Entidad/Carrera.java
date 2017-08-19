@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,11 +20,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,11 +40,12 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Carrera.findAll",           query = "SELECT c FROM Carrera c"),
+    @NamedQuery(name = "Carrera.findModAfter",      query = "SELECT c FROM Carrera c WHERE c.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Carrera.findByCarCod",      query = "SELECT c FROM Carrera c WHERE c.CarCod = :CarCod"),
     @NamedQuery(name = "Carrera.findByCarNom",      query = "SELECT c FROM Carrera c WHERE c.CarNom = :CarNom"),
     @NamedQuery(name = "Carrera.findLastCarrera",   query = "SELECT c FROM Carrera c ORDER BY c.CarCod DESC")})
 
-public class Carrera implements Serializable {
+public class Carrera extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -151,6 +151,11 @@ public class Carrera implements Serializable {
 
     public void setPlan(List<PlanEstudio> lstPlanEstudio) {
         this.lstPlanEstudio = lstPlanEstudio;
+    }
+    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.CarCod;
     }
 
 //    public Evaluacion getEvaluacionById(Long EvlCod){

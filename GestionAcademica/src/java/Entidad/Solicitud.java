@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import Enumerado.TipoSolicitud;
 import Enumerado.EstadoSolicitud;
 import java.io.Serializable;
@@ -36,10 +37,11 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Solicitud.findAll",       query = "SELECT t FROM Solicitud t order by t.SolFchIng desc"),
-    @NamedQuery(name = "Solicitud.findByAlumno",       query = "SELECT t FROM Solicitud t where t.Alumno.PerCod =:PerCod order by t.SolFchIng desc")
+    @NamedQuery(name = "Solicitud.findModAfter",  query = "SELECT t FROM Solicitud t  WHERE t.ObjFchMod >= :ObjFchMod order by t.SolFchIng desc"),
+    @NamedQuery(name = "Solicitud.findByAlumno",  query = "SELECT t FROM Solicitud t where t.Alumno.PerCod =:PerCod order by t.SolFchIng desc")
 })
 
-public class Solicitud implements Serializable {
+public class Solicitud extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -163,10 +165,6 @@ public class Solicitud implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
     
-
-    
-    
-    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -192,6 +190,9 @@ public class Solicitud implements Serializable {
         return "Solicitud{" + "SolCod=" + SolCod + ", Alumno=" + Alumno + ", Funcionario=" + Funcionario + ", SolTpo=" + SolTpo + ", SolEst=" + SolEst + ", SolFchIng=" + SolFchIng + ", SolFchPrc=" + SolFchPrc + ", SolFchFin=" + SolFchFin + ", ObjFchMod=" + ObjFchMod + '}';
     }
 
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.SolCod;
+    }
     
 }

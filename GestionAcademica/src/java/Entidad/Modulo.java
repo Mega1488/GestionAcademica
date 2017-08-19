@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import Enumerado.TipoPeriodo;
 import java.io.Serializable;
 import java.util.Date;
@@ -45,12 +46,13 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Modulo.findAll", query = "SELECT m FROM Modulo m"),
+    @NamedQuery(name = "Modulo.findModAfter", query = "SELECT m FROM Modulo m  WHERE m.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Modulo.findByPK", query = "SELECT m FROM Modulo m WHERE m.curso.CurCod = :CurCod and m.ModCod = :ModCod"),
     @NamedQuery(name = "Modulo.findByCurso", query = "SELECT m FROM Modulo m WHERE m.curso.CurCod = :CurCod"),
     @NamedQuery(name = "Modulo.findByPeriodo", query = "SELECT m FROM Modulo m WHERE (m.curso.CurCod =:CurCod or :CurCod IS NULL) and m.ModTpoPer = :TpoPer and m.ModPerVal =:PerVal"),
     @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.curso.CurCod = :CurCod ORDER BY m.ModCod desc")})
 
-public class Modulo implements Serializable {
+public class Modulo extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -139,7 +141,7 @@ public class Modulo implements Serializable {
 
     
     
-    
+    @XmlTransient
     public Curso getCurso() {
         return this.curso;
     }
@@ -232,7 +234,10 @@ public class Modulo implements Serializable {
     }
 
     
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.ModCod;
+    }
     
     
 }

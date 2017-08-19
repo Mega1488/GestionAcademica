@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -24,6 +25,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -40,9 +42,10 @@ import org.hibernate.annotations.GenericGenerator;
     )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PeriodoEstudioAlumno.findAll",       query = "SELECT t FROM PeriodoEstudioAlumno t"),
+    @NamedQuery(name = "PeriodoEstudioAlumno.findModAfter",  query = "SELECT t FROM PeriodoEstudioAlumno t  WHERE t.ObjFchMod >= :ObjFchMod"),
+    @NamedQuery(name = "PeriodoEstudioAlumno.findAll",       query = "SELECT t FROM PeriodoEstudioAlumno t")
 })
-public class PeriodoEstudioAlumno implements Serializable {
+public class PeriodoEstudioAlumno extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
    
@@ -94,6 +97,7 @@ public class PeriodoEstudioAlumno implements Serializable {
         this.PeriEstAluCod = PeriEstAluCod;
     }
 
+    @XmlTransient
     public PeriodoEstudio getPeriodoEstudio() {
         return periodoEstudio;
     }
@@ -182,7 +186,10 @@ public class PeriodoEstudioAlumno implements Serializable {
         return "PeriodoEstudioAlumno{" + "PeriEstAluCod=" + PeriEstAluCod + ", PeriodoEstudio=" + periodoEstudio + ", Alumno=" + Alumno + ", InscritoPor=" + InscritoPor + ", PerInsFchInsc=" + PerInsFchInsc + ", PerInsCalFin=" + PerInsCalFin + ", PerInsFrz=" + PerInsFrz + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.PeriEstAluCod;
+    }
     
     
 }

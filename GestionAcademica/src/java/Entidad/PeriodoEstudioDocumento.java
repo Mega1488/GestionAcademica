@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import Enumerado.RutaArchivos;
 import java.io.File;
 import java.io.IOException;
@@ -45,9 +46,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "PERIODO_ESTUDIO_DOCUMENTO")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PeriodoEstudioDocumento.findAll",       query = "SELECT t FROM PeriodoEstudioDocumento t"),
+    @NamedQuery(name = "PeriodoEstudioDocumento.findModAfter",  query = "SELECT t FROM PeriodoEstudioDocumento t  WHERE t.ObjFchMod >= :ObjFchMod"),
+    @NamedQuery(name = "PeriodoEstudioDocumento.findAll",       query = "SELECT t FROM PeriodoEstudioDocumento t")
 })
-public class PeriodoEstudioDocumento implements Serializable {
+public class PeriodoEstudioDocumento extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
    
@@ -191,7 +193,10 @@ public class PeriodoEstudioDocumento implements Serializable {
     }
     
     
-    
+   @Override
+    public Long GetPrimaryKey() {
+        return this.DocCod;
+    } 
 
   
 }

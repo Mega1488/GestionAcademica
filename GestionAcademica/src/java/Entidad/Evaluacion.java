@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -22,7 +23,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -38,6 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Evaluacion.findAll",            query = "SELECT t FROM Evaluacion t"),
+    @NamedQuery(name = "Evaluacion.findModAfter",       query = "SELECT t FROM Evaluacion t where t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Evaluacion.findByPK",           query = "SELECT t FROM Evaluacion t WHERE t.EvlCod =:EvlCod"),
     @NamedQuery(name = "Evaluacion.findByCurso",        query = "SELECT t FROM Evaluacion t WHERE t.CurEvl.CurCod =:CurCod"),
     @NamedQuery(name = "Evaluacion.findByModulo",       query = "SELECT t FROM Evaluacion t WHERE t.ModEvl.curso.CurCod =:CurCod and t.ModEvl.ModCod =:ModCod"),
@@ -46,7 +47,7 @@ import org.hibernate.annotations.GenericGenerator;
         
     @NamedQuery(name = "Evaluacion.findLast",      query = "SELECT t FROM Evaluacion t ORDER BY t.EvlCod DESC")})
 
-public class Evaluacion implements Serializable {
+public class Evaluacion extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -257,6 +258,11 @@ public class Evaluacion implements Serializable {
     @Override
     public String toString() {
         return "Entidad.Evaluacion[ id=" + EvlCod + " ]";
+    }
+    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.EvlCod;
     }
     
 }

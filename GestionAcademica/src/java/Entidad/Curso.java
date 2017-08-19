@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -39,11 +40,12 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Curso.findAll", query = "SELECT c FROM Curso c"),
+    @NamedQuery(name = "Curso.findModAfter", query = "SELECT c FROM Curso c WHERE c.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Curso.findByCurCod", query = "SELECT c FROM Curso c WHERE c.CurCod = :CurCod"),
     @NamedQuery(name = "Curso.findByCurNom", query = "SELECT c FROM Curso c WHERE c.CurNom = :CurNom"),
     @NamedQuery(name = "Curso.findLastCurso", query = "SELECT  c FROM Curso c ORDER BY c.CurCod DESC")})
 
-public class Curso implements Serializable {
+public class Curso extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -213,6 +215,9 @@ public class Curso implements Serializable {
         return true;
     }
    
-  
+   @Override
+    public Long GetPrimaryKey() {
+        return this.CurCod;
+    }
     
 }

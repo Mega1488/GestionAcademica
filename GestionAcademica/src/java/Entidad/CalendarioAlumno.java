@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import Enumerado.EstadoCalendarioEvaluacion;
 import java.io.Serializable;
 import java.util.Date;
@@ -44,9 +45,10 @@ import org.hibernate.annotations.GenericGenerator;
     )
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "CalendarioAlumno.findModAfter",  query = "SELECT t FROM CalendarioAlumno t where t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "CalendarioAlumno.findAll",       query = "SELECT t FROM CalendarioAlumno t")})
 
-public class CalendarioAlumno implements Serializable {
+public class CalendarioAlumno  extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -255,7 +257,10 @@ public class CalendarioAlumno implements Serializable {
         return "CalendarioAlumno{" + "CalAlCod=" + CalAlCod + ", Alumno=" + Alumno + ", EvlCalVal=" + EvlCalVal + ", EvlCalEst=" + EvlCalEst + ", EvlCalObs=" + EvlCalObs + ", EvlValObs=" + EvlValObs + ", EvlCalFch=" + EvlCalFch + ", EvlValFch=" + EvlValFch + ", ObjFchMod=" + ObjFchMod + ", EvlCalPor=" + EvlCalPor + ", EvlValPor=" + EvlValPor + '}';
     }
 
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.CalAlCod;
+    }
     
 }
 

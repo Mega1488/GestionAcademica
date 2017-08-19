@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -23,6 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -41,9 +43,10 @@ import org.hibernate.annotations.GenericGenerator;
         )
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "MateriaRevalida.findModAfter",  query = "SELECT t FROM MateriaRevalida t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "MateriaRevalida.findAll",       query = "SELECT t FROM MateriaRevalida t")})
 
-public class MateriaRevalida implements Serializable {
+public class MateriaRevalida extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -81,6 +84,7 @@ public class MateriaRevalida implements Serializable {
         this.MatRvlCod = MatRvlCod;
     }
 
+    @XmlTransient
     public Inscripcion getInscripcion() {
         return inscripcion;
     }
@@ -136,7 +140,10 @@ public class MateriaRevalida implements Serializable {
     }
 
     
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.MatRvlCod;
+    }
     
     
 }

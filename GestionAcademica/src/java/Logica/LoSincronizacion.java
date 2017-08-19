@@ -226,6 +226,106 @@ public class LoSincronizacion implements InABMGenerico{
                     , Objetos.TIPO_EVALUACION.getNamedQuery()
                     , Objetos.TIPO_EVALUACION.getPrimaryKey()
                     , Objetos.TIPO_EVALUACION.getClassName()));
+            
+            this.ObjetoGuardar(new Objeto(Objetos.PERSONA.name()
+                    , Objetos.PERSONA.getNamedQuery()
+                    , Objetos.PERSONA.getPrimaryKey()
+                    , Objetos.PERSONA.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO.name()
+                    , Objetos.CALENDARIO.getNamedQuery()
+                    , Objetos.CALENDARIO.getPrimaryKey()
+                    , Objetos.CALENDARIO.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO_ALUMNO.name()
+                    , Objetos.CALENDARIO_ALUMNO.getNamedQuery()
+                    , Objetos.CALENDARIO_ALUMNO.getPrimaryKey()
+                    , Objetos.CALENDARIO_ALUMNO.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO_DOCENTE.name()
+                    , Objetos.CALENDARIO_DOCENTE.getNamedQuery()
+                    , Objetos.CALENDARIO_DOCENTE.getPrimaryKey()
+                    , Objetos.CALENDARIO_DOCENTE.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.CARRERA.name()
+                    , Objetos.CARRERA.getNamedQuery()
+                    , Objetos.CARRERA.getPrimaryKey()
+                    , Objetos.CARRERA.getClassName()));
+            
+            this.ObjetoGuardar(new Objeto(Objetos.PLAN_ESTUDIO.name()
+                    , Objetos.PLAN_ESTUDIO.getNamedQuery()
+                    , Objetos.PLAN_ESTUDIO.getPrimaryKey()
+                    , Objetos.PLAN_ESTUDIO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.MATERIA.name()
+                    , Objetos.MATERIA.getNamedQuery()
+                    , Objetos.MATERIA.getPrimaryKey()
+                    , Objetos.MATERIA.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.MATERIA_PREVIA.name()
+                    , Objetos.MATERIA_PREVIA.getNamedQuery()
+                    , Objetos.MATERIA_PREVIA.getPrimaryKey()
+                    , Objetos.MATERIA_PREVIA.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.CURSO.name()
+                    , Objetos.CURSO.getNamedQuery()
+                    , Objetos.CURSO.getPrimaryKey()
+                    , Objetos.CURSO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.MODULO.name()
+                    , Objetos.MODULO.getNamedQuery()
+                    , Objetos.MODULO.getPrimaryKey()
+                    , Objetos.MODULO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.EVALUACION.name()
+                    , Objetos.EVALUACION.getNamedQuery()
+                    , Objetos.EVALUACION.getPrimaryKey()
+                    , Objetos.EVALUACION.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.ESCOLARIDAD.name()
+                    , Objetos.ESCOLARIDAD.getNamedQuery()
+                    , Objetos.ESCOLARIDAD.getPrimaryKey()
+                    , Objetos.ESCOLARIDAD.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.INSCRIPCION.name()
+                    , Objetos.INSCRIPCION.getNamedQuery()
+                    , Objetos.INSCRIPCION.getPrimaryKey()
+                    , Objetos.INSCRIPCION.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.MATERIA_REVALIDA.name()
+                    , Objetos.MATERIA_REVALIDA.getNamedQuery()
+                    , Objetos.MATERIA_REVALIDA.getPrimaryKey()
+                    , Objetos.MATERIA_REVALIDA.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.PERIODO.name()
+                    , Objetos.PERIODO.getNamedQuery()
+                    , Objetos.PERIODO.getPrimaryKey()
+                    , Objetos.PERIODO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.PERIODO_ESTUDIO.name()
+                    , Objetos.PERIODO_ESTUDIO.getNamedQuery()
+                    , Objetos.PERIODO_ESTUDIO.getPrimaryKey()
+                    , Objetos.PERIODO_ESTUDIO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.PERIODO_ESTUDIO_ALUMNO.name()
+                    , Objetos.PERIODO_ESTUDIO_ALUMNO.getNamedQuery()
+                    , Objetos.PERIODO_ESTUDIO_ALUMNO.getPrimaryKey()
+                    , Objetos.PERIODO_ESTUDIO_ALUMNO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.PERIODO_ESTUDIO_DOCENTE.name()
+                    , Objetos.PERIODO_ESTUDIO_DOCENTE.getNamedQuery()
+                    , Objetos.PERIODO_ESTUDIO_DOCENTE.getPrimaryKey()
+                    , Objetos.PERIODO_ESTUDIO_DOCENTE.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.PERIODO_ESTUDIO_DOCUMENTO.name()
+                    , Objetos.PERIODO_ESTUDIO_DOCUMENTO.getNamedQuery()
+                    , Objetos.PERIODO_ESTUDIO_DOCUMENTO.getPrimaryKey()
+                    , Objetos.PERIODO_ESTUDIO_DOCUMENTO.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.SOLICITUD.name()
+                    , Objetos.SOLICITUD.getNamedQuery()
+                    , Objetos.SOLICITUD.getPrimaryKey()
+                    , Objetos.SOLICITUD.getClassName()));
         }
     }
     
@@ -491,10 +591,18 @@ public class LoSincronizacion implements InABMGenerico{
                                     Long idOriginal = this.ObtenerPrimaryKey(registro);
 
                                     Retorno_MsgObj regNuevo = perManager.guardar(registro);
+                                    
+                                    if(!regNuevo.SurgioError())
+                                    {
+                                        Long idGenerado = (long) regNuevo.getObjeto();
+                                        this.ActualizarPrimaryKeyManualmente(objMod, idGenerado, idOriginal);
+                                    }
+                                    else
+                                    {
+                                        retorno.setMensaje(regNuevo.getMensaje());
+                                        return retorno;
+                                    }
 
-                                    Long idGenerado = (long) regNuevo.getObjeto();
-
-                                    this.ActualizarPrimaryKeyManualmente(objMod, idGenerado, idOriginal);
                                 }
                             }
 

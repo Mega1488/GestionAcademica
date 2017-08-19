@@ -5,7 +5,9 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -39,9 +43,10 @@ import org.hibernate.annotations.GenericGenerator;
 )
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "MateriaPrevia.findModAfter",  query = "SELECT t FROM MateriaPrevia t  WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "MateriaPrevia.findAll",       query = "SELECT t FROM MateriaPrevia t")
 })
-public class MateriaPrevia implements Serializable {
+public class MateriaPrevia extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,6 +63,10 @@ public class MateriaPrevia implements Serializable {
     @ManyToOne(targetEntity = Materia.class)
     @JoinColumn(name="PreMatCod", referencedColumnName="MatCod")
     private Materia materiaPrevia;
+    
+    @Column(name = "ObjFchMod", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ObjFchMod;
 
     public Long getMatPreCod() {
         return MatPreCod;
@@ -86,6 +95,16 @@ public class MateriaPrevia implements Serializable {
 
     public MateriaPrevia() {
     }
+
+    public Date getObjFchMod() {
+        return ObjFchMod;
+    }
+
+    public void setObjFchMod(Date ObjFchMod) {
+        this.ObjFchMod = ObjFchMod;
+    }
+    
+    
     
     
     @Override
@@ -111,6 +130,11 @@ public class MateriaPrevia implements Serializable {
     @Override
     public String toString() {
         return "Entidad.MateriaPrevia[ id=" + MatPreCod + " ]";
+    }
+    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.MatPreCod;
     }
     
 }

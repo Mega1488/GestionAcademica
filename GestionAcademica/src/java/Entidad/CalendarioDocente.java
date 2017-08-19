@@ -5,19 +5,17 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -45,9 +43,10 @@ import org.hibernate.annotations.GenericGenerator;
     )
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "CalendarioDocente.findModAfter",  query = "SELECT t FROM CalendarioDocente t where t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "CalendarioDocente.findAll",       query = "SELECT t FROM CalendarioDocente t")})
 
-public class CalendarioDocente implements Serializable {
+public class CalendarioDocente extends ClaseAbstracta  implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -143,7 +142,10 @@ public class CalendarioDocente implements Serializable {
 
    
     
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.CalDocCod;
+    }
     
     
 }

@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import Enumerado.Filial;
 import SDT.SDT_PersonaEstudio;
 import java.io.Serializable;
@@ -35,12 +36,13 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll",           query = "SELECT p FROM Persona p"),
+    @NamedQuery(name = "Persona.findModAfter",      query = "SELECT p FROM Persona p WHERE p.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Persona.findByPerCod",      query = "SELECT p FROM Persona p WHERE p.PerCod     = :PerCod"),
     @NamedQuery(name = "Persona.findLast",          query = "SELECT p FROM Persona p order by p.PerCod     desc"),
     @NamedQuery(name = "Persona.findByMdlUsr",      query = "SELECT p FROM Persona p WHERE p.PerUsrMod  = :MdlUsr"),
     @NamedQuery(name = "Persona.findByPerNom",      query = "SELECT p FROM Persona p WHERE p.PerNom     = :PerNom"),
     @NamedQuery(name = "Persona.findByEmail",       query = "SELECT p FROM Persona p WHERE p.PerEml     = :PerEml"),
-    @NamedQuery(name = "Persona.findByAppTkn",       query = "SELECT p FROM Persona p WHERE p.PerAppTkn   = :PerAppTkn"),
+    @NamedQuery(name = "Persona.findByAppTkn",      query = "SELECT p FROM Persona p WHERE p.PerAppTkn   = :PerAppTkn"),
 
 /*    
     @NamedQuery(name = "Persona.findPopUp",         query = "SELECT p FROM Persona p "
@@ -53,7 +55,7 @@ import org.hibernate.annotations.GenericGenerator;
   */  
     @NamedQuery(name = "Persona.findLastPersona",   query = "SELECT p FROM Persona p ORDER BY p.PerCod DESC")})
 
-public class Persona implements Serializable {
+public class Persona extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -542,4 +544,8 @@ public class Persona implements Serializable {
         return "Entidad.Persona[ id=" + PerCod + " ]";
     }
     
+    @Override
+    public Long GetPrimaryKey() {
+        return this.PerCod;
+    }
 }

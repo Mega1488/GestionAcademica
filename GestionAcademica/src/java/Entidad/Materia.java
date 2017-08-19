@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -48,11 +49,12 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Materia.findAll",       query = "SELECT t FROM Materia t"),
+    @NamedQuery(name = "Materia.findModAfter",  query = "SELECT t FROM Materia t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Materia.findByPlan",    query = "SELECT t FROM Materia t WHERE t.plan.PlaEstCod =:PlaEstCod"),
     @NamedQuery(name = "Materia.findByPeriodo", query = "SELECT m FROM Materia m WHERE (m.plan.PlaEstCod =:PlaEstCod or :PlaEstCod IS NULL) and m.MatTpoPer = :TpoPer and m.MatPerVal =:PerVal")
 })
 
-public class Materia implements Serializable {
+public class Materia extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -291,6 +293,11 @@ public class Materia implements Serializable {
     public String toString() {
         return "Materia{" + "MatCod=" + MatCod + '}';
     } 
+    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.MatCod;
+    }
 }
 
 

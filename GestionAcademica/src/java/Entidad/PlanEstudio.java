@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,9 +45,10 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "PLAN_ESTUDIO")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "PlanEstudio.findModAfter",  query = "SELECT t FROM PlanEstudio t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "PlanEstudio.findAll",       query = "SELECT t FROM PlanEstudio t")})
 
-public class PlanEstudio implements Serializable {
+public class PlanEstudio extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -209,6 +210,11 @@ public class PlanEstudio implements Serializable {
     @Override
     public String toString() {
         return "PlanEstudio{" + "PlaEstCod=" + PlaEstCod + ", carrera=" + carrera + ", PlaEstNom=" + PlaEstNom + ", PlaEstDsc=" + PlaEstDsc + ", PlaEstCreNec=" + PlaEstCreNec + ", PlaEstCatCod=" + PlaEstCatCod + ", ObjFchMod=" + ObjFchMod + ", lstMateria=" + lstMateria + '}';
+    }
+    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.PlaEstCod;
     }
 }
 

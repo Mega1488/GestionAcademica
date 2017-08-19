@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Enumerado.TipoAprobacion;
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -34,9 +34,10 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Escolaridad.findAll",       query = "SELECT t FROM Escolaridad t"),
+    @NamedQuery(name = "Escolaridad.findModAfter",  query = "SELECT t FROM Escolaridad t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Escolaridad.findByAlumno",  query = "SELECT t FROM Escolaridad t WHERE t.alumno.PerCod = :PerCod")
 })
-public class Escolaridad implements Serializable {
+public class Escolaridad extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -238,7 +239,10 @@ public class Escolaridad implements Serializable {
         return "Escolaridad{" + "EscCod=" + EscCod + ", materia=" + materia + ", modulo=" + modulo + ", IngresadaPor=" + IngresadaPor + ", EscCalVal=" + EscCalVal + ", EscFch=" + EscFch + ", ObjFchMod=" + ObjFchMod + '}';
     }
 
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.EscCod;
+    }
   
 }
 

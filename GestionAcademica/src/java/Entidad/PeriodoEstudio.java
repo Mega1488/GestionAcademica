@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,9 +49,10 @@ import org.hibernate.annotations.GenericGenerator;
     )
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t order by t.periodo.PerFchIni desc"),
+    @NamedQuery(name = "PeriodoEstudio.findModAfter",  query = "SELECT t FROM PeriodoEstudio t  WHERE t.ObjFchMod >= :ObjFchMod order by t.periodo.PerFchIni desc"),
+    @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t order by t.periodo.PerFchIni desc")
 })
-public class PeriodoEstudio implements Serializable {
+public class PeriodoEstudio extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -319,6 +321,10 @@ public class PeriodoEstudio implements Serializable {
         return "PeriodoEstudio{" + "PeriEstCod=" + PeriEstCod + ", Periodo=" + periodo + ", Materia=" + Materia + ", Modulo=" + Modulo + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
+    @Override
+    public Long GetPrimaryKey() {
+        return this.PeriEstCod;
+    }
 }
 
 

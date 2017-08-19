@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -45,9 +46,10 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Calendario.findByAlumno",       query = "SELECT t FROM Calendario t where t.CalCod in (SELECT A.calendario.CalCod FROM t.lstAlumnos A WHERE A.Alumno.PerCod =:PerCod)  order by t.CalFch desc"),
     @NamedQuery(name = "Calendario.findByDocente",      query = "SELECT t FROM Calendario t where t.CalCod in (SELECT A.calendario.CalCod FROM CalendarioDocente A WHERE A.calendario.CalCod = t.CalCod AND A.Docente.PerCod =:PerCod)  order by t.CalFch desc"),
     @NamedQuery(name = "Calendario.findInscripcion",    query = "SELECT t FROM Calendario t WHERE t.EvlInsFchDsd = curdate() order by t.CalFch desc"),
+    @NamedQuery(name = "Calendario.findModAfter",       query = "SELECT t FROM Calendario t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Calendario.findAll",            query = "SELECT t FROM Calendario t order by t.CalFch desc")})
 
-public class Calendario implements Serializable {
+public class Calendario  extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -297,7 +299,10 @@ public class Calendario implements Serializable {
     }
 
 
-    
+    @Override
+    public Long GetPrimaryKey() {
+        return this.CalCod;
+    }
     
 
     

@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.ClaseAbstracta;
 import Enumerado.TipoPeriodo;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -43,12 +45,13 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Periodo.findAll",       query = "SELECT t FROM Periodo t"),
+    @NamedQuery(name = "Periodo.findModAfter",  query = "SELECT t FROM Periodo t  WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Periodo.findByPK",      query = "SELECT t FROM Periodo t WHERE t.PeriCod =:PeriCod"),
-    @NamedQuery(name = "Periodo.findLastByMat",     query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.periodo.PeriCod and e.Materia.MatCod =:MatCod order by t.PerFchIni desc"),
-    @NamedQuery(name = "Periodo.findLastByMod",     query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.periodo.PeriCod and e.Modulo.ModCod =:ModCod order by t.PerFchIni desc"),
+    @NamedQuery(name = "Periodo.findLastByMat", query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.periodo.PeriCod and e.Materia.MatCod =:MatCod order by t.PerFchIni desc"),
+    @NamedQuery(name = "Periodo.findLastByMod", query = "SELECT t FROM Periodo t, PeriodoEstudio e WHERE t.PeriCod = e.periodo.PeriCod and e.Modulo.ModCod =:ModCod order by t.PerFchIni desc"),
     @NamedQuery(name = "Periodo.findLast",      query = "SELECT t FROM Periodo t ORDER BY t.PerFchIni DESC")})
 
-public class Periodo implements Serializable {
+public class Periodo extends ClaseAbstracta implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -129,6 +132,7 @@ public class Periodo implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @XmlTransient
     public List<PeriodoEstudio> getLstEstudio() {
         return lstEstudio;
     }
@@ -185,4 +189,8 @@ public class Periodo implements Serializable {
         return "Entidad.Periodo[ id=" + PeriCod + " ]";
     }
     
+    @Override
+    public Long GetPrimaryKey() {
+        return this.PeriCod;
+    }
 }
