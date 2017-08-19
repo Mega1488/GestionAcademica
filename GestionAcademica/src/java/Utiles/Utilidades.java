@@ -23,6 +23,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -79,6 +80,8 @@ public class Utilidades {
         ObjectMapper mapper = new ObjectMapper();
 
         try {
+            mapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            
             // convert user object to json string and return it 
             return mapper.readValue(jsonValue, unObj.getClass());
         } // catch various errors

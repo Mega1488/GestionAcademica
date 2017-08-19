@@ -54,13 +54,18 @@ public class SincInconsistenciaDatos implements Serializable {
     @Column(name = "ObjVal", length = 4000)
     private String ObjVal;
     
+    @Column(name = "ObjSel")
+    private Boolean ObjSel;
+    
     //-CONSTRUCTOR
     public SincInconsistenciaDatos() {
+        this.ObjSel = Boolean.FALSE;
     }
 
     public SincInconsistenciaDatos(SincronizacionInconsistencia inconsistencia, String ObjVal) {
         this.inconsistencia = inconsistencia;
         this.ObjVal = ObjVal;
+        this.ObjSel = Boolean.FALSE;
     }
     
     
@@ -92,6 +97,15 @@ public class SincInconsistenciaDatos implements Serializable {
         this.ObjVal = ObjVal;
     }
 
+    public Boolean getObjSel() {
+        return ObjSel;
+    }
+
+    public void setObjSel(Boolean ObjSel) {
+        this.ObjSel = ObjSel;
+    }
+
+    
     
 
     @Override

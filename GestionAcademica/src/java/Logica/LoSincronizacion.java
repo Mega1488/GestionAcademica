@@ -147,7 +147,7 @@ public class LoSincronizacion implements InABMGenerico{
         
         SincronizacionInconsistencia inc = sinc.GetInconsistencia(IncCod);
         
-        inc.setObjetoSeleccionado(inc.GetIncDato(IncObjCod));
+        inc.GetIncDato(IncObjCod).setObjSel(Boolean.TRUE);
         
         Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(sinc);
 
@@ -399,6 +399,7 @@ public class LoSincronizacion implements InABMGenerico{
         Parametro param                 = LoParametro.GetInstancia().obtener();
         Retorno_MsgObj cambiosLocales   = this.ObtenerCambios(param.getParFchUltSinc());
         
+        System.err.println("Cambios recibidos: " + cambios.getLstObjetos().size());
         System.err.println("Cambios locales: " + cambiosLocales.getLstObjetos().size());
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Iniciando sincronizacion online", TipoMensaje.MENSAJE));
@@ -473,7 +474,6 @@ public class LoSincronizacion implements InABMGenerico{
         Retorno_MsgObj InsertsUpdates = new Retorno_MsgObj(new Mensajes(TipoRetorno.INSERT_UPDATE.name(), TipoMensaje.MENSAJE));
         
         lstObjeto = this.ObjetoObtenerLista();
-
         if(lstObjeto.getLstObjetos() != null)
         {
             if(lstObjeto.getLstObjetos().size() > 0)
@@ -1047,7 +1047,7 @@ public class LoSincronizacion implements InABMGenerico{
                                 {
                                     //ERROR,SIGNIFICA QUE AMBOS MODIFICARON EL MISMO DATO, RETORNA INCONSISTENCIA
                                     SincronizacionInconsistencia inc = this.ArmarInconsistencia(objMd, reg, null);
-                                    inc.setObjetoSeleccionado(inc.getLstDatos().get(0));
+                                    inc.getLstDatos().get(0).setObjSel(Boolean.TRUE);
                                     inc.setIncEst(EstadoInconsistencia.CORRECTO);
                                     lstObjModificados.add(reg);
                                     

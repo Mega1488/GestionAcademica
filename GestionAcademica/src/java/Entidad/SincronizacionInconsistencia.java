@@ -61,10 +61,6 @@ public class SincronizacionInconsistencia implements Serializable {
     @JoinColumn(name="SncCod", referencedColumnName="SncCod")
     private Sincronizacion sincronizacion;
     
-    @OneToOne(targetEntity = SincInconsistenciaDatos.class)
-    @JoinColumn(name="IncObjValObjCod", referencedColumnName="IncObjCod")            
-    private SincInconsistenciaDatos objetoSeleccionado;
-    
     @Column(name = "IncEst")
     private EstadoInconsistencia IncEst;
     
@@ -106,14 +102,6 @@ public class SincronizacionInconsistencia implements Serializable {
         this.sincronizacion = sincronizacion;
     }
 
-    public SincInconsistenciaDatos getObjetoSeleccionado() {
-        return objetoSeleccionado;
-    }
-
-    public void setObjetoSeleccionado(SincInconsistenciaDatos objetoSeleccionado) {
-        this.objetoSeleccionado = objetoSeleccionado;
-    }
-
     public EstadoInconsistencia getIncEst() {
         return IncEst;
     }
@@ -153,6 +141,18 @@ public class SincronizacionInconsistencia implements Serializable {
 
         return  null;
     }
+    
+    public SincInconsistenciaDatos getObjetoSeleccionado(){
+        for(SincInconsistenciaDatos dat : lstDatos)
+        {
+            if(dat.getObjSel())
+            {
+                return dat;
+            }
+        }
+
+        return  null;
+    }
 
     @Override
     public int hashCode() {
@@ -181,7 +181,7 @@ public class SincronizacionInconsistencia implements Serializable {
 
     @Override
     public String toString() {
-        return "SincronizacionInconsistencia{" + "IncCod=" + IncCod + ", objetoSeleccionado=" + objetoSeleccionado + ", IncEst=" + IncEst + ", lstDatos=" + lstDatos + '}';
+        return "SincronizacionInconsistencia{" + "IncCod=" + IncCod + ", IncEst=" + IncEst + ", lstDatos=" + lstDatos + '}';
     }
 
     
