@@ -178,6 +178,7 @@ public class PlanEstudio extends ClaseAbstracta implements Serializable {
     
     public String getCarreraPlanNombre()
     {
+        if(this.getCarrera() == null) return this.getPlaEstNom();
         return this.getCarrera().getCarNom() + " - " + this.getPlaEstNom();
     }
     

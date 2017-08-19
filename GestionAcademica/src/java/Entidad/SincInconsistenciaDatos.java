@@ -20,12 +20,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"inconsistencia"})
+
 @Entity
 @Table(name = "SINC_INCONSITENCIA_DATOS")
 @XmlRootElement
@@ -46,10 +50,6 @@ public class SincInconsistenciaDatos implements Serializable {
     @OneToOne(targetEntity = SincronizacionInconsistencia.class)
     @JoinColumn(name="IncCod", referencedColumnName="IncCod")
     private SincronizacionInconsistencia inconsistencia;
-
-    @OneToOne(targetEntity = Objeto.class)
-    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
-    private Objeto objeto;
     
     @Column(name = "ObjVal", length = 4000)
     private String ObjVal;
@@ -58,9 +58,8 @@ public class SincInconsistenciaDatos implements Serializable {
     public SincInconsistenciaDatos() {
     }
 
-    public SincInconsistenciaDatos(SincronizacionInconsistencia inconsistencia, Objeto objeto, String ObjVal) {
+    public SincInconsistenciaDatos(SincronizacionInconsistencia inconsistencia, String ObjVal) {
         this.inconsistencia = inconsistencia;
-        this.objeto = objeto;
         this.ObjVal = ObjVal;
     }
     
@@ -83,14 +82,6 @@ public class SincInconsistenciaDatos implements Serializable {
 
     public void setInconsistencia(SincronizacionInconsistencia inconsistencia) {
         this.inconsistencia = inconsistencia;
-    }
-
-    public Objeto getObjeto() {
-        return objeto;
-    }
-
-    public void setObjeto(Objeto objeto) {
-        this.objeto = objeto;
     }
 
     public String getObjVal() {
@@ -130,8 +121,10 @@ public class SincInconsistenciaDatos implements Serializable {
 
     @Override
     public String toString() {
-        return "SincInconsistenciaDatos{" + "IncObjCod=" + IncObjCod + ", inconsistencia=" + inconsistencia.getIncCod() + ", objeto=" + objeto + ", ObjVal=" + ObjVal + '}';
+        return "SincInconsistenciaDatos{" + "IncObjCod=" + IncObjCod + ", ObjVal=" + ObjVal + '}';
     }
+
+    
 
 }
 

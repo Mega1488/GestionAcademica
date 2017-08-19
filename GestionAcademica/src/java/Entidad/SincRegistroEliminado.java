@@ -48,7 +48,7 @@ public class SincRegistroEliminado implements Serializable {
     private Long SncObjElimCod;
 
     @OneToOne(targetEntity = Objeto.class)
-    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
+    @JoinColumn(name="ObjNom", referencedColumnName="ObjNom")
     private Objeto objeto;
     
     @Column(name = "SncObjElimFch", columnDefinition="DATETIME")

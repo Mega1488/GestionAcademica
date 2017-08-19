@@ -28,6 +28,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,7 +39,7 @@ import java.util.logging.Logger;
 public class LoSincronizacion implements InABMGenerico{
 
     private static LoSincronizacion instancia;
-    private Utilidades util = Utilidades.GetInstancia();
+    private final Utilidades util = Utilidades.GetInstancia();
 
     private LoSincronizacion() {
     }
@@ -55,6 +56,7 @@ public class LoSincronizacion implements InABMGenerico{
     @Override
     public Object guardar(Object pObjeto) {
         Sincronizacion sincro = (Sincronizacion) pObjeto;
+        
         PerManejador perManager = new PerManejador();
             
         Retorno_MsgObj retorno = perManager.guardar(sincro);
@@ -76,7 +78,6 @@ public class LoSincronizacion implements InABMGenerico{
         PerManejador perManager = new PerManejador();
 
         return perManager.actualizar(sincro);
-        
     }
 
     @Override
@@ -161,14 +162,8 @@ public class LoSincronizacion implements InABMGenerico{
         Objeto objeto = (Objeto) pObjeto;
         PerManejador perManager = new PerManejador();
             
-        Retorno_MsgObj retorno = perManager.guardar(objeto);
-
-        if(!retorno.SurgioErrorObjetoRequerido())
-        {
-            objeto.setObjCod((Long) retorno.getObjeto());
-            retorno.setObjeto(objeto);
-        }
-            
+        Retorno_MsgObj retorno = perManager.guardarPkManual(objeto);
+        
         return retorno; 
     }
 
@@ -231,22 +226,7 @@ public class LoSincronizacion implements InABMGenerico{
                     , Objetos.PERSONA.getNamedQuery()
                     , Objetos.PERSONA.getPrimaryKey()
                     , Objetos.PERSONA.getClassName()));
- 
-            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO.name()
-                    , Objetos.CALENDARIO.getNamedQuery()
-                    , Objetos.CALENDARIO.getPrimaryKey()
-                    , Objetos.CALENDARIO.getClassName()));
- 
-            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO_ALUMNO.name()
-                    , Objetos.CALENDARIO_ALUMNO.getNamedQuery()
-                    , Objetos.CALENDARIO_ALUMNO.getPrimaryKey()
-                    , Objetos.CALENDARIO_ALUMNO.getClassName()));
- 
-            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO_DOCENTE.name()
-                    , Objetos.CALENDARIO_DOCENTE.getNamedQuery()
-                    , Objetos.CALENDARIO_DOCENTE.getPrimaryKey()
-                    , Objetos.CALENDARIO_DOCENTE.getClassName()));
- 
+            
             this.ObjetoGuardar(new Objeto(Objetos.CARRERA.name()
                     , Objetos.CARRERA.getNamedQuery()
                     , Objetos.CARRERA.getPrimaryKey()
@@ -281,22 +261,7 @@ public class LoSincronizacion implements InABMGenerico{
                     , Objetos.EVALUACION.getNamedQuery()
                     , Objetos.EVALUACION.getPrimaryKey()
                     , Objetos.EVALUACION.getClassName()));
-
-            this.ObjetoGuardar(new Objeto(Objetos.ESCOLARIDAD.name()
-                    , Objetos.ESCOLARIDAD.getNamedQuery()
-                    , Objetos.ESCOLARIDAD.getPrimaryKey()
-                    , Objetos.ESCOLARIDAD.getClassName()));
-
-            this.ObjetoGuardar(new Objeto(Objetos.INSCRIPCION.name()
-                    , Objetos.INSCRIPCION.getNamedQuery()
-                    , Objetos.INSCRIPCION.getPrimaryKey()
-                    , Objetos.INSCRIPCION.getClassName()));
-
-            this.ObjetoGuardar(new Objeto(Objetos.MATERIA_REVALIDA.name()
-                    , Objetos.MATERIA_REVALIDA.getNamedQuery()
-                    , Objetos.MATERIA_REVALIDA.getPrimaryKey()
-                    , Objetos.MATERIA_REVALIDA.getClassName()));
-
+            
             this.ObjetoGuardar(new Objeto(Objetos.PERIODO.name()
                     , Objetos.PERIODO.getNamedQuery()
                     , Objetos.PERIODO.getPrimaryKey()
@@ -321,6 +286,36 @@ public class LoSincronizacion implements InABMGenerico{
                     , Objetos.PERIODO_ESTUDIO_DOCUMENTO.getNamedQuery()
                     , Objetos.PERIODO_ESTUDIO_DOCUMENTO.getPrimaryKey()
                     , Objetos.PERIODO_ESTUDIO_DOCUMENTO.getClassName()));
+            
+            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO.name()
+                    , Objetos.CALENDARIO.getNamedQuery()
+                    , Objetos.CALENDARIO.getPrimaryKey()
+                    , Objetos.CALENDARIO.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO_ALUMNO.name()
+                    , Objetos.CALENDARIO_ALUMNO.getNamedQuery()
+                    , Objetos.CALENDARIO_ALUMNO.getPrimaryKey()
+                    , Objetos.CALENDARIO_ALUMNO.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.CALENDARIO_DOCENTE.name()
+                    , Objetos.CALENDARIO_DOCENTE.getNamedQuery()
+                    , Objetos.CALENDARIO_DOCENTE.getPrimaryKey()
+                    , Objetos.CALENDARIO_DOCENTE.getClassName()));
+ 
+            this.ObjetoGuardar(new Objeto(Objetos.ESCOLARIDAD.name()
+                    , Objetos.ESCOLARIDAD.getNamedQuery()
+                    , Objetos.ESCOLARIDAD.getPrimaryKey()
+                    , Objetos.ESCOLARIDAD.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.INSCRIPCION.name()
+                    , Objetos.INSCRIPCION.getNamedQuery()
+                    , Objetos.INSCRIPCION.getPrimaryKey()
+                    , Objetos.INSCRIPCION.getClassName()));
+
+            this.ObjetoGuardar(new Objeto(Objetos.MATERIA_REVALIDA.name()
+                    , Objetos.MATERIA_REVALIDA.getNamedQuery()
+                    , Objetos.MATERIA_REVALIDA.getPrimaryKey()
+                    , Objetos.MATERIA_REVALIDA.getClassName()));
 
             this.ObjetoGuardar(new Objeto(Objetos.SOLICITUD.name()
                     , Objetos.SOLICITUD.getNamedQuery()
@@ -387,7 +382,12 @@ public class LoSincronizacion implements InABMGenerico{
                 sincro.setSncFch(inicioProceso);
                 sincro.setSncDur(this.ObtenerDuracion(inicioProceso));
                 sincro.addDetalle(new Date() + " - Fin del proceso");
+
+                //System.err.println("Guardando sincronizacion: " + sincro.toString());
+                System.err.println("Guardando sincronizacion: " + util.ObjetoToJson(sincro));
                 
+                
+
                 this.guardar(sincro);
                 
             }
@@ -418,6 +418,10 @@ public class LoSincronizacion implements InABMGenerico{
                 
                 System.err.println("Cambios locales 2: " + retorno.getLstObjetos().size());
             }
+        }
+        else
+        {
+            retorno = this.ArmarInconsistenciaRetorno(cambiosLocales, cambios);
         }
         
         return retorno;
@@ -684,7 +688,7 @@ public class LoSincronizacion implements InABMGenerico{
         
         String query = "DELETE FROM " + objEliminado.getObjeto().getObjNmdQry() 
                 + " WHERE "+ objEliminado.getObjeto().getPrimaryKey().getObjCmpNom() 
-                +" = " + objEliminado.getObjeto().getObjCod();
+                +" = " + objEliminado.getSncObjElimCod();
         
         
         PerManejador perManager = new PerManejador();
@@ -773,8 +777,159 @@ public class LoSincronizacion implements InABMGenerico{
     }
     
     private Retorno_MsgObj ValidarSincronizacion(Retorno_MsgObj cambiosLocales, Retorno_MsgObj cambiosNuevos){
+        /*
+        * Verifico que no existan inconsistencias.
+        */
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Importacion valida", TipoMensaje.MENSAJE));
         retorno.setLstObjetos(new ArrayList<>());
+        
+        if(cambiosNuevos.getLstObjetos() != null)
+        {
+            if(cambiosNuevos.getLstObjetos().size() > 0)
+            {
+                if(cambiosNuevos.getLstObjetos().size() > 2)
+                {
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
+                    
+                    System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                }
+                else
+                {
+                    //OBTENGO LISTA MODIFICACIONES Y LISTA DE INGRESOS
+                    Retorno_MsgObj InsertUpdate = new Retorno_MsgObj();
+                    
+                        
+                    for(Object obj : cambiosNuevos.getLstObjetos())
+                    {
+                        Retorno_MsgObj auxiliar = (Retorno_MsgObj) obj;
+                        if(auxiliar.getMensaje().getMensaje().equals(TipoRetorno.INSERT_UPDATE.name()))
+                        {
+                            InsertUpdate = auxiliar;
+                        }
+                    }
+                    
+                    //MODIFICACIONES E INGRESOS                  
+                    if(InsertUpdate.getLstObjetos() != null)
+                    {
+                        
+                        for(Object camb : InsertUpdate.getLstObjetos())
+                        {
+                            Retorno_MsgObj objetoModificado = (Retorno_MsgObj) camb;
+
+                            //Objeto modificado
+                            Objeto objMod = (Objeto) objetoModificado.getObjeto();
+
+                            for(Object registro : objetoModificado.getLstObjetos())
+                            {
+                                //VALIDAR
+                                Retorno_MsgObj validar = this.ValidarSincronizacionNivelDos(objMod, registro, cambiosLocales);
+                                if(validar.SurgioError())
+                                {
+                                    if(validar.getMensaje().getMensaje().equals(TipoRetorno.INCONSISTENCIA.name()))
+                                    {
+                                        //Agrego inconsistencia
+                                        //retorno.getLstObjetos().add(validar.getObjeto());
+                                        retorno.setMensaje(validar.getMensaje());
+                                        return retorno;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ValidarSincronizacionNivelDos(Objeto objMod, Object registro, Retorno_MsgObj cambiosLocales){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Sin inconsistencia", TipoMensaje.MENSAJE));
+        
+        if(cambiosLocales.getLstObjetos() != null)
+        {
+            if(cambiosLocales.getLstObjetos().size() > 0)
+            {
+                if(cambiosLocales.getLstObjetos().size() > 2)
+                {
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
+                    
+                    System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                }
+                else
+                {
+                    //OBTENGO LISTA MODIFICACIONES Y LISTA DE INGRESOS
+                    Retorno_MsgObj InsertUpdate = new Retorno_MsgObj();
+                    
+                        
+                    for(Object obj : cambiosLocales.getLstObjetos())
+                    {
+                        Retorno_MsgObj auxiliar = (Retorno_MsgObj) obj;
+                        if(auxiliar.getMensaje().getMensaje().equals(TipoRetorno.INSERT_UPDATE.name()))
+                        {
+                            InsertUpdate = auxiliar;
+                        }
+                    }
+                    
+                    //MODIFICACIONES E INGRESOS                  
+                    if(InsertUpdate.getLstObjetos() != null && objMod != null)
+                    {
+                        
+                        for(Object camb : InsertUpdate.getLstObjetos())
+                        {
+                            Retorno_MsgObj objetoModificado = (Retorno_MsgObj) camb;
+
+                            //Objeto modificado
+                            Objeto objMd = (Objeto) objetoModificado.getObjeto();
+
+                            for(Object reg : objetoModificado.getLstObjetos())
+                            {
+                                if(objMod.equals(objMd))
+                                {
+                                    //VALIDAR
+                                    if(this.EsInconsistencia(registro, reg))
+                                    {
+                                        //ERROR,SIGNIFICA QUE AMBOS MODIFICARON EL MISMO DATO, RETORNA INCONSISTENCIA
+                                        retorno.setObjeto(this.ArmarInconsistencia(objMd, registro, reg));
+                                        retorno.setMensaje(new Mensajes(TipoRetorno.INCONSISTENCIA.name(), TipoMensaje.ERROR));
+                                        return retorno;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }  
+        
+        return retorno;
+    }
+    
+    //------------------------------------------------------------------------
+    //INCONSISTENCIAS
+    //------------------------------------------------------------------------
+    
+    private Boolean EsInconsistencia(Object objLocal, Object objNuevo){
+        return objLocal.equals(objNuevo);
+
+    }
+    
+    private Retorno_MsgObj ArmarInconsistenciaRetorno(Retorno_MsgObj cambiosLocales, Retorno_MsgObj cambiosNuevos){
+        /*
+            Este procedimiento actua cuando se conoce una inconsistencia, por ello arma un registro de inconsistencias 
+            con los datos duplicados, y un registro individual con todos los cambios, para no perder otras modificaciones 
+            cuando se corrijan las diferencias
+        */
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes(TipoRetorno.INCONSISTENCIA.name(), TipoMensaje.ERROR));
+        List<Object> lstObjModificados = new ArrayList<>();
+        
+        /*
+            Recorro cambios locales
+        */
         
         if(cambiosLocales.getLstObjetos() != null)
         {
@@ -815,6 +970,8 @@ public class LoSincronizacion implements InABMGenerico{
 
                             for(Object registro : objetoModificado.getLstObjetos())
                             {
+                                //lstObjModificados = this.AgregarObjetoModificado(registro);
+                                
                                 //VALIDAR
                                 Retorno_MsgObj validar = this.ValidarSincronizacionNivelDos(objMod, registro, cambiosNuevos);
                                 if(validar.SurgioError())
@@ -823,27 +980,35 @@ public class LoSincronizacion implements InABMGenerico{
                                     {
                                         //Agrego inconsistencia
                                         retorno.getLstObjetos().add(validar.getObjeto());
-                                        retorno.setMensaje(validar.getMensaje());
+                                        lstObjModificados.add(registro);
                                     }
                                 }
                             }
                         }
                     }
                 }
+                
+                retorno = this.ArmarInconsistenciaComun(retorno, lstObjModificados, cambiosLocales, cambiosNuevos);
+                
             }
         }
         
         return retorno;
     }
     
-    private Retorno_MsgObj ValidarSincronizacionNivelDos(Objeto objMod, Object registro, Retorno_MsgObj cambiosNuevos){
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Sin inconsistencia", TipoMensaje.MENSAJE));
+    private Retorno_MsgObj ArmarInconsistenciaComun(Retorno_MsgObj retorno, List<Object> lstObjModificados, Retorno_MsgObj cambiosLocales, Retorno_MsgObj cambiosNuevos){
+        retorno = this.ArmarInconsistenciaAuxiliar(retorno, lstObjModificados, cambiosNuevos);
+        retorno = this.ArmarInconsistenciaAuxiliar(retorno, lstObjModificados, cambiosLocales);
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ArmarInconsistenciaAuxiliar(Retorno_MsgObj retorno, List<Object> lstObjModificados, Retorno_MsgObj cambios){
         
-        if(cambiosNuevos.getLstObjetos() != null)
+        if(cambios.getLstObjetos() != null)
         {
-            if(cambiosNuevos.getLstObjetos().size() > 0)
+            if(cambios.getLstObjetos().size() > 0)
             {
-                if(cambiosNuevos.getLstObjetos().size() > 2)
+                if(cambios.getLstObjetos().size() > 2)
                 {
                     retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
                     retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
@@ -856,7 +1021,7 @@ public class LoSincronizacion implements InABMGenerico{
                     Retorno_MsgObj InsertUpdate = new Retorno_MsgObj();
                     
                         
-                    for(Object obj : cambiosNuevos.getLstObjetos())
+                    for(Object obj : cambios.getLstObjetos())
                     {
                         Retorno_MsgObj auxiliar = (Retorno_MsgObj) obj;
                         if(auxiliar.getMensaje().getMensaje().equals(TipoRetorno.INSERT_UPDATE.name()))
@@ -866,7 +1031,7 @@ public class LoSincronizacion implements InABMGenerico{
                     }
                     
                     //MODIFICACIONES E INGRESOS                  
-                    if(InsertUpdate.getLstObjetos() != null && objMod != null)
+                    if(InsertUpdate.getLstObjetos() != null)
                     {
                         
                         for(Object camb : InsertUpdate.getLstObjetos())
@@ -878,15 +1043,15 @@ public class LoSincronizacion implements InABMGenerico{
 
                             for(Object reg : objetoModificado.getLstObjetos())
                             {
-                                if(objMod.getObjNom().equals(objMd.getObjNom()))
+                                if(!lstObjModificados.contains(reg))
                                 {
-                                    //VALIDAR
-                                    if(this.EsInconsistencia(registro, reg))
-                                    {
-                                        //ERROR,SIGNIFICA QUE AMBOS MODIFICARON EL MISMO DATO, RETORNA INCONSISTENCIA
-                                        retorno.setObjeto(this.ArmarInconsistencia(objMd, registro, reg));
-                                        retorno.setMensaje(new Mensajes(TipoRetorno.INCONSISTENCIA.name(), TipoMensaje.ERROR));
-                                    }
+                                    //ERROR,SIGNIFICA QUE AMBOS MODIFICARON EL MISMO DATO, RETORNA INCONSISTENCIA
+                                    SincronizacionInconsistencia inc = this.ArmarInconsistencia(objMd, reg, null);
+                                    inc.setObjetoSeleccionado(inc.getLstDatos().get(0));
+                                    inc.setIncEst(EstadoInconsistencia.CORRECTO);
+                                    lstObjModificados.add(reg);
+                                    
+                                    retorno.getLstObjetos().add(inc);
                                 }
                             }
                         }
@@ -898,23 +1063,15 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
-    //------------------------------------------------------------------------
-    //INCONSISTENCIAS
-    //------------------------------------------------------------------------
-    
-    private Boolean EsInconsistencia(Object objLocal, Object objNuevo){
-        return objLocal.equals(objNuevo);
-
-    }
-    
     private SincronizacionInconsistencia ArmarInconsistencia(Objeto objeto, Object regUno, Object regDos){
         
-        SincronizacionInconsistencia inc = new SincronizacionInconsistencia();
+        SincronizacionInconsistencia inc = new SincronizacionInconsistencia(objeto);
         inc.setIncEst(EstadoInconsistencia.CON_ERRORES);
 
         ArrayList<SincInconsistenciaDatos> lstDatos = new ArrayList<>();
-        lstDatos.add(new SincInconsistenciaDatos(inc, objeto, Utilidades.GetInstancia().ObjetoToJson(regUno)));
-        lstDatos.add(new SincInconsistenciaDatos(inc, objeto, Utilidades.GetInstancia().ObjetoToJson(regDos)));
+        
+        if(regUno != null) lstDatos.add(new SincInconsistenciaDatos(inc, Utilidades.GetInstancia().ObjetoToJson(regUno)));
+        if(regDos != null) lstDatos.add(new SincInconsistenciaDatos(inc, Utilidades.GetInstancia().ObjetoToJson(regDos)));
         
         inc.setLstDatos(lstDatos);
         
@@ -973,7 +1130,7 @@ public class LoSincronizacion implements InABMGenerico{
     }
     
     public Retorno_MsgObj ProcesarInconsistencia(Retorno_MsgObj objeto){
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Impactando inconsistencias", TipoMensaje.MENSAJE));
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Impactando inconsistencias recibidas por servicio web", TipoMensaje.MENSAJE));
         
         if(objeto.getObjeto() != null)
         {
@@ -998,7 +1155,7 @@ public class LoSincronizacion implements InABMGenerico{
             {
                 SincInconsistenciaDatos dato = inc.getObjetoSeleccionado();
 
-                Object objeto = util.GetObjectByName(dato.getObjeto().getObjClsNom());
+                Object objeto = util.GetObjectByName(inc.getObjeto().getObjClsNom());
 
                 objeto = util.JsonToObject(dato.getObjVal(), objeto);
 

@@ -223,12 +223,12 @@ public class Evaluacion extends ClaseAbstracta implements Serializable {
         
         if(this.getMatEvl() != null)
         {
-            return this.getMatEvl().getPlan().getCarreraPlanNombre();
+            if(this.getMatEvl().getPlan() != null) return this.getMatEvl().getPlan().getCarreraPlanNombre();
         }
         
         if(this.getModEvl() != null)
         {
-            return this.getModEvl().getCurso().getCurNom();
+            if(this.getModEvl().getCurso() != null) return this.getModEvl().getCurso().getCurNom();
         }
         
         return "";

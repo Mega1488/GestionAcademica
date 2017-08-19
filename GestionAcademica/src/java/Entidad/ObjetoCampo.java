@@ -21,12 +21,16 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"objeto"})
+
 @Entity
 @Table(name = "OBJETO_CAMPO")
 @XmlRootElement
@@ -40,20 +44,13 @@ public class ObjetoCampo implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
-    @GenericGenerator(name = "native", strategy = "native" )
-    @Column(name = "ObjCmpCod", nullable = false)
-    private Long ObjCmpCod;
-
-    @OneToOne(targetEntity = Objeto.class)
-    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
-    private Objeto objeto;
-
-    
-    
-    
     @Column(name = "ObjCmpNom", length = 100)
     private String ObjCmpNom;
+
+    @OneToOne(targetEntity = Objeto.class)
+    @JoinColumn(name="ObjNom", referencedColumnName="ObjNom")
+    private Objeto objeto;
+
     
     @Column(name = "ObjCmpTpoDat")
     private TipoCampo ObjCmpTpoDat;
@@ -75,14 +72,6 @@ public class ObjetoCampo implements Serializable {
     
     
     //-GETTERS Y SETTERS
-
-    public Long getObjCmpCod() {
-        return ObjCmpCod;
-    }
-
-    public void setObjCmpCod(Long ObjCmpCod) {
-        this.ObjCmpCod = ObjCmpCod;
-    }
 
     @XmlTransient
     public Objeto getObjeto() {
@@ -119,8 +108,8 @@ public class ObjetoCampo implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 31 * hash + Objects.hashCode(this.ObjCmpCod);
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.ObjCmpNom);
         return hash;
     }
 
@@ -136,15 +125,16 @@ public class ObjetoCampo implements Serializable {
             return false;
         }
         final ObjetoCampo other = (ObjetoCampo) obj;
-        if (!Objects.equals(this.ObjCmpCod, other.ObjCmpCod)) {
+        if (!Objects.equals(this.ObjCmpNom, other.ObjCmpNom)) {
             return false;
         }
         return true;
     }
 
+    
     @Override
     public String toString() {
-        return "ObjetoCampo{" + "ObjCmpCod=" + ObjCmpCod + ", objeto=" + objeto + ", ObjCmpNom=" + ObjCmpNom + ", ObjCmpTpoDat=" + ObjCmpTpoDat + ", ObjCmpPK=" + ObjCmpPK + '}';
+        return "ObjetoCampo{" + "objeto=" + objeto + ", ObjCmpNom=" + ObjCmpNom + ", ObjCmpTpoDat=" + ObjCmpTpoDat + ", ObjCmpPK=" + ObjCmpPK + '}';
     }
 
 

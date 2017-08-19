@@ -16,10 +16,6 @@ public enum Objetos {
     
     PERSONA(Persona.class.getSimpleName(), "PerCod", Persona.class.getName()),
     
-    CALENDARIO(Calendario.class.getSimpleName(), "CalCod", Calendario.class.getName()),
-    CALENDARIO_ALUMNO(CalendarioAlumno.class.getSimpleName(), "CalAlCod", CalendarioAlumno.class.getName()),
-    CALENDARIO_DOCENTE(CalendarioDocente.class.getSimpleName(), "CalDocCod", CalendarioDocente.class.getName()),
-    
     CARRERA(Carrera.class.getSimpleName(), "CarCod", Carrera.class.getName()),
     PLAN_ESTUDIO(PlanEstudio.class.getSimpleName(), "PlaEstCod", PlanEstudio.class.getName()),
     MATERIA(Materia.class.getSimpleName(), "MatCod", Materia.class.getName()),
@@ -30,16 +26,20 @@ public enum Objetos {
     
     EVALUACION(Evaluacion.class.getSimpleName(), "EvlCod", Evaluacion.class.getName()),
     
-    ESCOLARIDAD(Escolaridad.class.getSimpleName(), "EscCod", Escolaridad.class.getName()),
-
-    INSCRIPCION(Inscripcion.class.getSimpleName(), "InsCod", Inscripcion.class.getName()),
-    MATERIA_REVALIDA(MateriaRevalida.class.getSimpleName(), "MatRvlCod", MateriaRevalida.class.getName()),
-    
     PERIODO(Periodo.class.getSimpleName(), "PeriCod", Periodo.class.getName()),
     PERIODO_ESTUDIO(PeriodoEstudio.class.getSimpleName(), "PeriEstCod", PeriodoEstudio.class.getName()),
     PERIODO_ESTUDIO_ALUMNO(PeriodoEstudioAlumno.class.getSimpleName(), "PeriEstAluCod", PeriodoEstudioAlumno.class.getName()),
     PERIODO_ESTUDIO_DOCENTE(PeriodoEstudioDocente.class.getSimpleName(), "PeriEstDocCod", PeriodoEstudioDocente.class.getName()),
     PERIODO_ESTUDIO_DOCUMENTO(PeriodoEstudioDocumento.class.getSimpleName(), "DocCod", PeriodoEstudioDocumento.class.getName()),
+    
+    CALENDARIO(Calendario.class.getSimpleName(), "CalCod", Calendario.class.getName()),
+    CALENDARIO_ALUMNO(CalendarioAlumno.class.getSimpleName(), "CalAlCod", CalendarioAlumno.class.getName()),
+    CALENDARIO_DOCENTE(CalendarioDocente.class.getSimpleName(), "CalDocCod", CalendarioDocente.class.getName()),
+    
+    ESCOLARIDAD(Escolaridad.class.getSimpleName(), "EscCod", Escolaridad.class.getName()),
+
+    INSCRIPCION(Inscripcion.class.getSimpleName(), "InsCod", Inscripcion.class.getName()),
+    MATERIA_REVALIDA(MateriaRevalida.class.getSimpleName(), "MatRvlCod", MateriaRevalida.class.getName()),
     
     SOLICITUD(Solicitud.class.getSimpleName(), "SolCod", Solicitud.class.getName());
     

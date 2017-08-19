@@ -131,6 +131,10 @@ public class Sincronizacion implements Serializable {
     }
 
     public List<SincronizacionInconsistencia> getLstInconsistencia() {
+        if(this.lstInconsistencia == null)
+        {
+            lstInconsistencia = new ArrayList<>();
+        }
         return lstInconsistencia;
     }
 
@@ -181,7 +185,9 @@ public class Sincronizacion implements Serializable {
 
     @Override
     public String toString() {
-        return "Entidad.Sincronizacion[ id=" + SncCod + " ]";
+        return "Sincronizacion{" + "SncCod=" + SncCod + ", SncFch=" + SncFch + ", SncEst=" + SncEst + ", SncObjCnt=" + SncObjCnt + ", SncObjDet=" + SncObjDet + ", SncDur=" + SncDur + ", lstInconsistencia=" + lstInconsistencia + '}';
     }
+
+
     
 }

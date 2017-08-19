@@ -7,6 +7,7 @@ package Entidad;
 
 import Enumerado.EstadoInconsistencia;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Basic;
@@ -18,6 +19,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -25,6 +27,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -33,6 +36,9 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author alvar
  */
+
+@JsonIgnoreProperties({"sincronizacion"})
+
 @Entity
 @Table(name = "SINC_INCONSITENCIA")
 @XmlRootElement
@@ -62,6 +68,10 @@ public class SincronizacionInconsistencia implements Serializable {
     @Column(name = "IncEst")
     private EstadoInconsistencia IncEst;
     
+    @ManyToOne(targetEntity = Objeto.class)
+    @JoinColumn(name="ObjNom", referencedColumnName="ObjNom")
+    private Objeto objeto;
+    
     @OneToMany(targetEntity = SincInconsistenciaDatos.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name="IncCod", referencedColumnName="IncCod")
     @Fetch(FetchMode.SUBSELECT)
@@ -70,6 +80,11 @@ public class SincronizacionInconsistencia implements Serializable {
     //-CONSTRUCTOR
     public SincronizacionInconsistencia() {
     }
+
+    public SincronizacionInconsistencia(Objeto objeto) {
+        this.objeto = objeto;
+    }
+    
     
     
     //-GETTERS Y SETTERS
@@ -108,20 +123,23 @@ public class SincronizacionInconsistencia implements Serializable {
     }
 
     public List<SincInconsistenciaDatos> getLstDatos() {
+        if(this.lstDatos == null)
+        {
+            lstDatos = new ArrayList<>();
+        }
         return lstDatos;
     }
 
     public void setLstDatos(List<SincInconsistenciaDatos> lstDatos) {
         this.lstDatos = lstDatos;
     }
-    
-    public Objeto getObjeto(){
-       for(SincInconsistenciaDatos dat : lstDatos)
-        {
-            return dat.getObjeto();
-        }
 
-        return  null; 
+    public Objeto getObjeto() {
+        return objeto;
+    }
+
+    public void setObjeto(Objeto objeto) {
+        this.objeto = objeto;
     }
     
     public SincInconsistenciaDatos GetIncDato(Long IncObjCod){
@@ -163,13 +181,10 @@ public class SincronizacionInconsistencia implements Serializable {
 
     @Override
     public String toString() {
-        return "SincronizacionInconsistencia{" + "IncCod=" + IncCod + ", sincronizacion=" + sincronizacion + ", objetoSeleccionado=" + objetoSeleccionado + ", IncEst=" + IncEst + '}';
+        return "SincronizacionInconsistencia{" + "IncCod=" + IncCod + ", objetoSeleccionado=" + objetoSeleccionado + ", IncEst=" + IncEst + ", lstDatos=" + lstDatos + '}';
     }
 
     
-    
-    
- 
 
     
 }

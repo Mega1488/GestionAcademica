@@ -93,6 +93,30 @@ public class PerManejador{
         return retorno;
     }
     
+    public Retorno_MsgObj guardarPkManual(Object pObjeto) {
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), pObjeto);
+        
+        try {
+            iniciaOperacion();
+            
+            sesion.save(pObjeto);
+            
+            tx.commit();
+            
+            retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        
+        return retorno;
+    }
+    
     public Retorno_MsgObj actualizar(Object pObjeto) {
         
         //Notificacion notificacion = (Notificacion) pObjeto;

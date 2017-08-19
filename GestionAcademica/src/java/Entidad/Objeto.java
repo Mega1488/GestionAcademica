@@ -16,8 +16,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
@@ -29,7 +27,6 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
@@ -49,11 +46,6 @@ public class Objeto implements Serializable {
     //-ATRIBUTOS
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.AUTO, generator="native")
-    @GenericGenerator(name = "native", strategy = "native" )
-    @Column(name = "ObjCod", nullable = false)
-    private Long ObjCod;
-    
     @Column(name = "ObjNom", length = 100)
     private String ObjNom;
     
@@ -68,7 +60,7 @@ public class Objeto implements Serializable {
     private Date ObjFchMod;
     
     @OneToMany(targetEntity = ObjetoCampo.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name="ObjCod", referencedColumnName="ObjCod")
+    @JoinColumn(name="ObjNom", referencedColumnName="ObjNom")
     @Fetch(FetchMode.SUBSELECT)
     private List<ObjetoCampo> lstCampo;
     
@@ -95,15 +87,6 @@ public class Objeto implements Serializable {
     
 
     //-GETTERS Y SETTERS
-
-    public Long getObjCod() {
-        return ObjCod;
-    }
-
-    public void setObjCod(Long ObjCod) {
-        this.ObjCod = ObjCod;
-    }
-
     public String getObjNom() {
         return ObjNom;
     }
@@ -155,13 +138,11 @@ public class Objeto implements Serializable {
     public void setObjClsNom(String ObjClsNom) {
         this.ObjClsNom = ObjClsNom;
     }
-    
-    
-    
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 97 * hash + Objects.hashCode(this.ObjCod);
+        int hash = 3;
+        hash = 83 * hash + Objects.hashCode(this.ObjNom);
         return hash;
     }
 
@@ -177,15 +158,18 @@ public class Objeto implements Serializable {
             return false;
         }
         final Objeto other = (Objeto) obj;
-        if (!Objects.equals(this.ObjCod, other.ObjCod)) {
+        if (!Objects.equals(this.ObjNom, other.ObjNom)) {
             return false;
         }
         return true;
     }
+    
+
+
 
     @Override
     public String toString() {
-        return "Objeto{" + "ObjCod=" + ObjCod + ", ObjNom=" + ObjNom + ", ObjFchMod=" + ObjFchMod + '}';
+        return "Objeto{" + " ObjNom=" + ObjNom + ", ObjFchMod=" + ObjFchMod + '}';
     }
     
     
