@@ -55,8 +55,8 @@ public class SincRegistroEliminado implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date SncObjElimFch;
     
-    @Column(name = "ObjDet", length = 4000)
-    private String ObjDet;
+    @Column(name = "ObjElimCod")
+    private Long ObjElimCod;
    
     
     //-CONSTRUCTOR
@@ -89,13 +89,15 @@ public class SincRegistroEliminado implements Serializable {
         this.SncObjElimFch = SncObjElimFch;
     }
 
-    public String getObjDet() {
-        return ObjDet;
+    public Long getObjElimCod() {
+        return ObjElimCod;
     }
 
-    public void setObjDet(String ObjDet) {
-        this.ObjDet = ObjDet;
+    public void setObjElimCod(Long ObjElimCod) {
+        this.ObjElimCod = ObjElimCod;
     }
+
+    
 
       
 
@@ -126,7 +128,7 @@ public class SincRegistroEliminado implements Serializable {
 
     @Override
     public String toString() {
-        return "SincRegistroEliminado{" + "SncObjElimCod=" + SncObjElimCod + ", objeto=" + objeto + ", SncObjElimFch=" + SncObjElimFch + ", ObjDet=" + ObjDet + '}';
+        return "SincRegistroEliminado{" + "SncObjElimCod=" + SncObjElimCod + ", objeto=" + objeto + ", SncObjElimFch=" + SncObjElimFch + ", ObjElimCod=" + ObjElimCod + '}';
     }
 
    

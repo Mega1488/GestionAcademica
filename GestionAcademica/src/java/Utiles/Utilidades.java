@@ -6,13 +6,16 @@
 package Utiles;
 
 import Entidad.Parametro;
+import Enumerado.Constantes;
 import Enumerado.ExpresionesRegulares;
 import Enumerado.TipoDato;
 import Logica.LoParametro;
+import Logica.LoSincronizacion;
 import Logica.LoVersion;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -222,6 +225,22 @@ public class Utilidades {
         }
         return fecha;
 
+    }
+    
+    public Long ObtenerPrimaryKey(Object registro){
+        
+        Long pk = null;
+        try {
+
+            Method metodo   = registro.getClass().getDeclaredMethod(Constantes.METODO_GETPK.getValor());
+            pk = (Long) metodo.invoke(registro);
+
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+            Logger.getLogger(LoSincronizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return pk;
+        
     }
 
 }

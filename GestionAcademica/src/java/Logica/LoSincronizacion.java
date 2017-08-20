@@ -592,7 +592,7 @@ public class LoSincronizacion implements InABMGenerico{
                                 }
                                 else
                                 {
-                                    Long idOriginal = this.ObtenerPrimaryKey(registro);
+                                    Long idOriginal = util.ObtenerPrimaryKey(registro);
 
                                     Retorno_MsgObj regNuevo = perManager.guardar(registro);
                                     
@@ -624,48 +624,15 @@ public class LoSincronizacion implements InABMGenerico{
     private Boolean ExisteRegistro(Object registro){
         
         PerManejador perManager = new PerManejador();
-        return !perManager.obtener(this.ObtenerPrimaryKey(registro), registro.getClass()).SurgioErrorObjetoRequerido();
-        
-                
-        /*
-            Objetos objeto = Objetos.valueOf(objMod.getObjNom());
-
-            switch(objeto)
-            {
-                case TIPO_EVALUACION:
-                    TipoEvaluacion regCast = (TipoEvaluacion) registro;
-                    return !LoTipoEvaluacion.GetInstancia().obtener(regCast.getTpoEvlCod()).SurgioErrorObjetoRequerido();
-            }
-            return false;
-        */
+        return !perManager.obtener(util.ObtenerPrimaryKey(registro), registro.getClass()).SurgioErrorObjetoRequerido();
         
     }
     
-    private Long ObtenerPrimaryKey(Object registro){
+    private Boolean ExisteRegistro(Long codigo, Object objeto){
         
-        Long pk = null;
-        try {
-
-            Method metodo   = registro.getClass().getDeclaredMethod(Constantes.METODO_GETPK.getValor());
-            pk = (Long) metodo.invoke(registro);
-
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
-            Logger.getLogger(LoSincronizacion.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        PerManejador perManager = new PerManejador();
+        return !perManager.obtener(codigo, objeto.getClass()).SurgioErrorObjetoRequerido();
         
-        return pk;
-        /*
-        Objetos objeto = Objetos.valueOf(objMod.getObjNom());
-        
-        switch(objeto)
-        {
-            case TIPO_EVALUACION:
-                TipoEvaluacion regCast = (TipoEvaluacion) registro;
-                return regCast.getTpoEvlCod();
-        }
-        
-        return null;
-        */
     }
     
     private void ActualizarPrimaryKeyManualmente(Objeto objMod, Long idOriginal, Long idNuevo){
@@ -686,17 +653,20 @@ public class LoSincronizacion implements InABMGenerico{
     
     private void EliminarRegistro(SincRegistroEliminado objEliminado){
         
-        String query = "DELETE FROM " + objEliminado.getObjeto().getObjNmdQry() 
-                + " WHERE "+ objEliminado.getObjeto().getPrimaryKey().getObjCmpNom() 
-                +" = " + objEliminado.getSncObjElimCod();
-        
-        
-        PerManejador perManager = new PerManejador();
-        Retorno_MsgObj retorno  = perManager.ejecutarUpdateQuery(query);
-        
-        if(retorno.SurgioError())
+        if(this.ExisteRegistro(objEliminado.getObjElimCod(), util.GetObjectByName(objEliminado.getObjeto().getObjClsNom())))
         {
-            System.err.println(retorno.getMensaje().toString());
+            String query = "DELETE FROM " + objEliminado.getObjeto().getObjNmdQry() 
+                        + " WHERE "+ objEliminado.getObjeto().getPrimaryKey().getObjCmpNom() 
+                        +" = " + objEliminado.getObjElimCod();
+
+
+            PerManejador perManager = new PerManejador();
+            Retorno_MsgObj retorno  = perManager.ejecutarUpdateQuery(query);
+
+            if(retorno.SurgioError())
+            {
+                System.err.println(retorno.getMensaje().toString());
+            }
         }
         
     }
@@ -1158,8 +1128,28 @@ public class LoSincronizacion implements InABMGenerico{
                 Object objeto = util.GetObjectByName(inc.getObjeto().getObjClsNom());
 
                 objeto = util.JsonToObject(dato.getObjVal(), objeto);
+                
+                if(this.ExisteRegistro(objeto))
+                {
+                    retorno = perManager.actualizar(objeto);
+                }
+                else
+                {
+                    Long idOriginal = util.ObtenerPrimaryKey(objeto);
 
-                retorno = perManager.actualizar(objeto);
+                    Retorno_MsgObj regNuevo = perManager.guardar(objeto);
+
+                    if(!regNuevo.SurgioError())
+                    {
+                        Long idGenerado = (long) regNuevo.getObjeto();
+                        this.ActualizarPrimaryKeyManualmente(inc.getObjeto(), idGenerado, idOriginal);
+                    }
+                    else
+                    {
+                        retorno.setMensaje(regNuevo.getMensaje());
+                        return retorno;
+                    }
+                }
 
                 if(retorno.SurgioError())
                 {

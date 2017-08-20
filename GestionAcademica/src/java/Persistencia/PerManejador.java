@@ -5,18 +5,25 @@
  */
 package Persistencia;
 
+import Entidad.SincRegistroEliminado;
+import Enumerado.Objetos;
 import Enumerado.TipoMensaje;
+import Logica.LoParametro;
+import Logica.LoSincronizacion;
 import SDT.SDT_Parameters;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import Utiles.Utilidades;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Table;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.metadata.ClassMetadata;
@@ -161,6 +168,11 @@ public class PerManejador{
             sesion.close();
         }
         
+        if(!retorno.SurgioError())
+        {
+            this.SincronizarEliminado(pObjeto);
+        }
+        
         return retorno;
     }
 
@@ -275,7 +287,30 @@ public class PerManejador{
     
     public String GetPrimaryKeyFromObject(Object objeto){
         ClassMetadata objMeta =  NewHibernateUtil.getSessionFactory().getClassMetadata(objeto.getClass());
-        return objMeta .getIdentifierPropertyName();
+        return objMeta.getIdentifierPropertyName();
+    }
+    
+    public String GetTableNameFromObject(Object objeto){
+        Table table = objeto.getClass().getAnnotation(Table.class);
+        return table.name();
+    }
+    
+    private void SincronizarEliminado(Object objeto){
+        String tabla = this.GetTableNameFromObject(objeto);
+        
+        if(LoParametro.GetInstancia().obtener().getParSncAct())
+        {
+            if(Objetos.contains(tabla))
+            {
+                //DEBE GUARDAR LA SINCRONIZACION.
+                SincRegistroEliminado elim = new SincRegistroEliminado();
+                
+                elim.setObjElimCod(Utilidades.GetInstancia().ObtenerPrimaryKey(objeto));
+                elim.setSncObjElimFch(new Date());
+                elim.setObjeto(LoSincronizacion.GetInstancia().ObjetoObtenerByNombre(tabla));
+                this.guardar(elim);
+            }
+        }
     }
     
 }

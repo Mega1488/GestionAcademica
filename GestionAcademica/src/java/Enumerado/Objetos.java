@@ -69,6 +69,14 @@ public enum Objetos {
         return className;
     }
     
+    public static Boolean contains(String name){
+        for (Objetos objeto  : Objetos.values()){
+            if (objeto.name().toUpperCase().equals(name)){
+                return true;
+            }
+        }
+        return false;
+    }
     
    public static Objetos fromQueryName(String upperQueryName) {
         for (Objetos objeto  : Objetos.values()){
