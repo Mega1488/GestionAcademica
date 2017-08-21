@@ -26,6 +26,7 @@ import Utiles.Utilidades;
 import WSClient.SincronizarWSClient;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +39,7 @@ import java.util.logging.Logger;
  */
 public class LoSincronizacion implements InABMGenerico{
 
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static LoSincronizacion instancia;
     private final Utilidades util = Utilidades.GetInstancia();
 
@@ -337,7 +339,7 @@ public class LoSincronizacion implements InABMGenerico{
                 Date inicioProceso = new Date();
                 
                 Sincronizacion sincro = new Sincronizacion();
-                sincro.addDetalle(inicioProceso.getTime() + " - Inicio el proceso de sincronización");
+                sincro.addDetalle(dateFormat.format(inicioProceso)  + " - Inicio el proceso de sincronización");
         
                 Date fechaUltimaSincronizacion  = param.getParFchUltSinc();
 
@@ -356,6 +358,7 @@ public class LoSincronizacion implements InABMGenerico{
                 }
                 else
                 {
+                    sincro.addDetalle(dateFormat.format(new Date()) + " - " + resulSincOnline.getMensaje().getMensaje());
 
                     /*
                         Impactar modificaciones en sistema local
@@ -381,12 +384,8 @@ public class LoSincronizacion implements InABMGenerico{
                 
                 sincro.setSncFch(inicioProceso);
                 sincro.setSncDur(this.ObtenerDuracion(inicioProceso));
-                sincro.addDetalle(new Date() + " - Fin del proceso");
+                sincro.addDetalle(dateFormat.format(new Date()) + " - Fin del proceso");
 
-                //System.err.println("Guardando sincronizacion: " + sincro.toString());
-                System.err.println("Guardando sincronizacion: " + util.ObjetoToJson(sincro));
-                
-                
 
                 this.guardar(sincro);
                 
@@ -412,6 +411,7 @@ public class LoSincronizacion implements InABMGenerico{
         if(!retorno.SurgioError())
         {
             retorno = this.ImpactarCambios(cambios);
+            
             if(!retorno.SurgioError())
             {
                 cambiosLocales.setMensaje(retorno.getMensaje());
@@ -522,7 +522,7 @@ public class LoSincronizacion implements InABMGenerico{
         
         Integer registrosAfectados = 0;
 
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes(new Date() + " - Impactando cambios", TipoMensaje.MENSAJE), registrosAfectados);
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes(dateFormat.format(new Date()) + " - Impactando cambios", TipoMensaje.MENSAJE), registrosAfectados);
         
         if(cambios.getLstObjetos() != null)
         {
@@ -532,7 +532,7 @@ public class LoSincronizacion implements InABMGenerico{
             {
                 if(cambios.getLstObjetos().size() > 2)
                 {
-                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + dateFormat.format(new Date()) + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
                     retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
                     
                     System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
@@ -550,6 +550,7 @@ public class LoSincronizacion implements InABMGenerico{
                         if(auxiliar.getMensaje().getMensaje().equals(TipoRetorno.ELIMINACION.name()))
                         {
                             Deletes = auxiliar;
+                            registrosAfectados += Deletes.getLstObjetos().size();
                         }
                         if(auxiliar.getMensaje().getMensaje().equals(TipoRetorno.INSERT_UPDATE.name()))
                         {
@@ -561,7 +562,6 @@ public class LoSincronizacion implements InABMGenerico{
                     //ELIMINACIONES
                     if(Deletes.getLstObjetos() != null)
                     {
-                        registrosAfectados += Deletes.getLstObjetos().size();
                         
                         for(Object deleted : Deletes.getLstObjetos())
                         {
@@ -588,10 +588,12 @@ public class LoSincronizacion implements InABMGenerico{
                             {
                                 if(this.ExisteRegistro(registro))
                                 {
-                                    perManager.actualizar(registro);
+                                    perManager.ejecutarUpdateQuery(util.ObtenerUpdateQuery(registro));
                                 }
                                 else
                                 {
+                                    perManager.ejecutarQuery(util.ObtenerInsertQuery(registro));
+                                    /*
                                     Long idOriginal = util.ObtenerPrimaryKey(registro);
 
                                     Retorno_MsgObj regNuevo = perManager.guardar(registro);
@@ -606,6 +608,7 @@ public class LoSincronizacion implements InABMGenerico{
                                         retorno.setMensaje(regNuevo.getMensaje());
                                         return retorno;
                                     }
+                                    */
 
                                 }
                             }
@@ -683,7 +686,7 @@ public class LoSincronizacion implements InABMGenerico{
     private Sincronizacion GenerarInconsistencias(Sincronizacion sincro, Retorno_MsgObj retorno){
         if(retorno.getMensaje().getMensaje().equals(TipoRetorno.INCONSISTENCIA.name()))
         {
-            sincro.addDetalle(new Date() + " - Surgio error al sincronizar con el sistema online - Genero inconsistencias que deberan ser corregidas");
+            sincro.addDetalle(dateFormat.format(new Date()) + " - Surgio error al sincronizar con el sistema online - Genero inconsistencias que deberan ser corregidas");
             
             if(retorno.getLstObjetos() != null)
             {
@@ -697,7 +700,7 @@ public class LoSincronizacion implements InABMGenerico{
         }
         else
         {
-            sincro.addDetalle(new Date() + " - " + retorno.getMensaje().toString());
+            sincro.addDetalle(dateFormat.format(new Date()) + " - " + retorno.getMensaje().toString());
         }
         
         return sincro;
@@ -760,7 +763,7 @@ public class LoSincronizacion implements InABMGenerico{
             {
                 if(cambiosNuevos.getLstObjetos().size() > 2)
                 {
-                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + dateFormat.format(new Date()) + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
                     retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
                     
                     System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
@@ -824,7 +827,7 @@ public class LoSincronizacion implements InABMGenerico{
             {
                 if(cambiosLocales.getLstObjetos().size() > 2)
                 {
-                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + dateFormat.format(new Date()) + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
                     retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
                     
                     System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
@@ -907,7 +910,7 @@ public class LoSincronizacion implements InABMGenerico{
             {
                 if(cambiosLocales.getLstObjetos().size() > 2)
                 {
-                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + dateFormat.format(new Date()) + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
                     retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
                     
                     System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
@@ -980,7 +983,7 @@ public class LoSincronizacion implements InABMGenerico{
             {
                 if(cambios.getLstObjetos().size() > 2)
                 {
-                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + new Date() + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
+                    retorno.getMensaje().setMensaje(retorno.getMensaje().getMensaje() + "\n" + dateFormat.format(new Date()) + " - Solo se pueden recibir dos elementos, registros y eliminaciones.");
                     retorno.getMensaje().setTipoMensaje(TipoMensaje.ERROR);
                     
                     System.err.println("ERROR: Solo se pueden recibir dos elementos, registros y eliminaciones.");
@@ -1040,8 +1043,8 @@ public class LoSincronizacion implements InABMGenerico{
 
         ArrayList<SincInconsistenciaDatos> lstDatos = new ArrayList<>();
         
-        if(regUno != null) lstDatos.add(new SincInconsistenciaDatos(inc, Utilidades.GetInstancia().ObjetoToJson(regUno)));
-        if(regDos != null) lstDatos.add(new SincInconsistenciaDatos(inc, Utilidades.GetInstancia().ObjetoToJson(regDos)));
+        if(regUno != null) lstDatos.add(new SincInconsistenciaDatos(inc, util.ObjetoToJson(regUno)));
+        if(regDos != null) lstDatos.add(new SincInconsistenciaDatos(inc, util.ObjetoToJson(regDos)));
         
         inc.setLstDatos(lstDatos);
         
@@ -1083,6 +1086,7 @@ public class LoSincronizacion implements InABMGenerico{
 
                     if(!retorno.SurgioError())
                     {
+                        sinc.addDetalle(dateFormat.format(new Date()) + " - " + retorno.getMensaje().getMensaje());
                         sinc.setSncEst(EstadoSincronizacion.CORRECTO);
                         retorno = perManager.actualizar(sinc);
                         
@@ -1131,10 +1135,14 @@ public class LoSincronizacion implements InABMGenerico{
                 
                 if(this.ExisteRegistro(objeto))
                 {
-                    retorno = perManager.actualizar(objeto);
+                    retorno = perManager.ejecutarUpdateQuery(util.ObtenerUpdateQuery(objeto));
                 }
                 else
                 {
+                    
+                   retorno = perManager.ejecutarQuery(util.ObtenerInsertQuery(objeto));
+                   
+                    /*
                     Long idOriginal = util.ObtenerPrimaryKey(objeto);
 
                     Retorno_MsgObj regNuevo = perManager.guardar(objeto);
@@ -1149,6 +1157,7 @@ public class LoSincronizacion implements InABMGenerico{
                         retorno.setMensaje(regNuevo.getMensaje());
                         return retorno;
                     }
+                    */
                 }
 
                 if(retorno.SurgioError())

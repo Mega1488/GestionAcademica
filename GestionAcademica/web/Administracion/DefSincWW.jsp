@@ -95,7 +95,7 @@
                                     Sincronizacion sinc = (Sincronizacion) objeto;
                             %>
                             <tr>
-                                <td><a href="#" data-id="<%=sinc.getSncCod()%>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                <td><a href="#" data-id="<%=sinc.getSncCod()%>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash btn_eliminar"></a></td>
                                 <td><a href="<% out.print(urlSistema); %>Administracion/DefSincIncSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(sinc.getSncCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
                                 <td><% out.print(utilidad.NuloToVacio(sinc.getSncCod())); %> </td>
                                 <td><% out.print(utilidad.NuloToVacio(sinc.getSncFch())); %> </td>
@@ -163,33 +163,26 @@
                         
                     });
                     
-                    $('#btn_eliminar').click(function (event) {
+                    $('.btn_eliminar').click(function (event) {
 
 
                         var SncCod = $(this).data('id');
                         
-                        alert(SncCod);
-                        /*
-
-
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('ABM_Sincronizacion', {
+                        $.post('<% out.print(urlSistema); %>ABM_Sincronizacion', {
                                 pSncCod: SncCod,
-                                pAction: 'INC_PROCESAR'
+                                pAction: 'DELETE'
                             }, function (responseText) {
                                 var obj = JSON.parse(responseText);
 
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
-                                   
+                                    location.reload();
                                 } else
                                 {
                                     MostrarMensaje(obj.tipoMensaje, obj.mensaje);
                                 }
 
                             });
-                            
-                            */
 
                         
                     });

@@ -306,7 +306,8 @@ public class LoPersona implements Interfaz.InPersona{
                     persona.setPerCntIntLgn((persona.getPerCntIntLgn() != null ? persona.getPerCntIntLgn() + 1 : 1));
                 }
 
-                this.actualizar(persona);
+                PerManejador perManager = new PerManejador();
+                perManager.actualizar(persona);
             }
             
         

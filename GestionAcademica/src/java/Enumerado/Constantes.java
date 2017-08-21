@@ -22,7 +22,9 @@ public enum Constantes {
     WS_PSW_APP("$.WSusApp%"),
     WS_USR_WEB("ws_web"),
     WS_PSW_WEB("$.WSusWeb%"),
-    METODO_GETPK("GetPrimaryKey");
+    METODO_GETPK("GetPrimaryKey"),
+    METODO_GETINSQ("getInsertQuery"),
+    METODO_GETUPDQ("getUpdateQuery");
 
     Constantes(){
         

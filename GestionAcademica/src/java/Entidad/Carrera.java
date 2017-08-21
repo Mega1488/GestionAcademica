@@ -6,11 +6,16 @@
 package Entidad;
 
 import Dominio.ClaseAbstracta;
+import Enumerado.Objetos;
 import java.io.Serializable;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -153,10 +158,7 @@ public class Carrera extends ClaseAbstracta implements Serializable {
         this.lstPlanEstudio = lstPlanEstudio;
     }
     
-    @Override
-    public Long GetPrimaryKey() {
-        return this.CarCod;
-    }
+   
 
 //    public Evaluacion getEvaluacionById(Long EvlCod){
 //        
@@ -221,6 +223,6 @@ public class Carrera extends ClaseAbstracta implements Serializable {
         return "Carrera{" + "CarCod=" + CarCod + ", CarNom=" + CarNom + ", CarDsc=" + CarDsc + '}';
     }
 
-
+    
    
 }

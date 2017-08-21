@@ -115,21 +115,7 @@ public class Utilidades {
         return lstObjeto;
     }
     
-    public Object GetObjectByName(String nombre){
-        Object objeto = null;
-        
-        try {
-            Class<?> cls = Class.forName(nombre);
-            objeto = cls.getConstructor().newInstance();
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        return objeto;
-    }
+    
 
     public String GetUrlSistema() {
         Parametro param = loParam.obtener();
@@ -227,12 +213,28 @@ public class Utilidades {
 
     }
     
+    public Object GetObjectByName(String nombre){
+        Object objeto = null;
+        
+        try {
+            Class<?> cls = Class.forName(nombre);
+            objeto = cls.getConstructor().newInstance();
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return objeto;
+    }
+    
     public Long ObtenerPrimaryKey(Object registro){
         
         Long pk = null;
         try {
 
-            Method metodo   = registro.getClass().getDeclaredMethod(Constantes.METODO_GETPK.getValor());
+            Method metodo   = registro.getClass().getMethod(Constantes.METODO_GETPK.getValor());
             pk = (Long) metodo.invoke(registro);
 
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
@@ -240,6 +242,38 @@ public class Utilidades {
         }
         
         return pk;
+        
+    }
+    
+    public String ObtenerInsertQuery(Object registro){
+        
+        String query = null;
+        try {
+
+            Method metodo   = registro.getClass().getMethod(Constantes.METODO_GETINSQ.getValor());
+            query = (String) metodo.invoke(registro);
+
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+            Logger.getLogger(LoSincronizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return query;
+        
+    }
+    
+    public String ObtenerUpdateQuery(Object registro){
+        
+        String query = null;
+        try {
+
+            Method metodo   = registro.getClass().getMethod(Constantes.METODO_GETUPDQ.getValor());
+            query = (String) metodo.invoke(registro);
+
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException ex) {
+            Logger.getLogger(LoSincronizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return query;
         
     }
 

@@ -77,82 +77,81 @@ public class ABM_Carrera extends HttpServlet {
     
     private String IngresarCarrera(HttpServletRequest request)
     {
-        String nom          = request.getParameter("pNom");
-        String Dsc          = request.getParameter("pDsc");
-        String Fac          = request.getParameter("pfac");
-        String Crt          = request.getParameter("pCrt");
-        
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al ingresar la Carrera", TipoMensaje.ERROR));
-        
-        if (nom != "")
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+
+        try
         {
-            Carrera pC = new Carrera();
-            pC.setCarNom(nom);
-            pC.setCarDsc(Dsc);
-            pC.setCarFac(Fac);
-            pC.setCarCrt(Crt);
-            
-            retorno = (Retorno_MsgObj)loCarrera.guardar(pC);
-            
-            mensaje = retorno.getMensaje();
+
+            error           = false;
+
+            Carrera car = this.ValidarCarrera(request, null);
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) loCarrera.guardar(car);
+                mensaje    = retornoObj.getMensaje();
+            }
         }
-        else
+        catch(Exception ex)
         {
-            mensaje = retorno.getMensaje();
+            mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
         }
+
         return utiles.ObjetoToJson(mensaje);
     } 
     
     private String ModificarCarrera(HttpServletRequest request)
     {
-        String cod  = request.getParameter("pCod");
-        String nom  = request.getParameter("pNom");
-        String Dsc  = request.getParameter("pDsc");
-        String Fac  = request.getParameter("pfac");
-        String Crt  = request.getParameter("pCrt");
-        
-        if (nom != "")
+        mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
+        try
         {
-            Carrera pC = new Carrera();
-            pC.setCarCod(Long.valueOf(cod));
-            pC.setCarNom(nom);
-            pC.setCarDsc(Dsc);
-            pC.setCarFac(Fac);
-            pC.setCarCrt(Crt);
+
+            error           = false;
             
-            loCarrera.actualizar(pC);
+            Carrera car = this.ValidarCarrera(request, null);
+
+            //------------------------------------------------------------------------------------------
+            //Guardar cambios
+            //------------------------------------------------------------------------------------------
+
+            if(!error)
+            {
+                Retorno_MsgObj ret     = (Retorno_MsgObj) loCarrera.actualizar(car);
+                mensaje = ret.getMensaje();
+            }
+
+             
             
-            mensaje = new Mensajes("Los nuevos datos de la Carrera fueron guardados", TipoMensaje.MENSAJE);
         }
-        else
+        catch(Exception ex)
         {
-            mensaje = new Mensajes("La carrera debe tener un Nombre", TipoMensaje.ERROR);
+            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
         }
-        retorno = utiles.ObjetoToJson(mensaje);
-        
-        return retorno;
+
+       
+        return utiles.ObjetoToJson(mensaje);
+       
     } 
     
     private String EliminarCarrera(HttpServletRequest request)
     {   
-        String cod              = request.getParameter("pCod");
+        error       = false;
+        mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         
-        Retorno_MsgObj retorno = loCarrera.obtener(Long.valueOf(cod));
-        error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
+        Carrera car = this.ValidarCarrera(request, null);
         
-        if (cod != "")
+        if(!error)
         {
-            if(!error)
-            {
-                retorno = (Retorno_MsgObj)loCarrera.eliminar((Carrera)retorno.getObjeto());
-            }
-            mensaje = retorno.getMensaje();
+            Retorno_MsgObj ret  = (Retorno_MsgObj) loCarrera.eliminar(car);
+            mensaje             = ret.getMensaje();
         }
-        else
-        {
-            mensaje = retorno.getMensaje();
-//            mensaje = new Mensajes("No se logró eliminar la carrera", TipoMensaje.ERROR);
-        }
+
         return utiles.ObjetoToJson(mensaje);
     }
     
@@ -173,18 +172,42 @@ public class ABM_Carrera extends HttpServlet {
         return retorno;
     }
     
-//    private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)
-//    {
-//        if(!car.getCarNom().isEmpty())
-//        {
-//            
-//        }
-//        else
-//        {
-//            
-//        }        
-//        return car;
-//    }
+    private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)
+    {
+        if(car == null)
+        {
+            car   = new Carrera();
+        }
+
+            
+                String cod  = request.getParameter("pCod");
+                String nom  = request.getParameter("pNom");
+                String Dsc  = request.getParameter("pDsc");
+                String Fac  = request.getParameter("pfac");
+                String Crt  = request.getParameter("pCrt");
+                
+                
+                //------------------------------------------------------------------------------------------
+                //Validaciones
+                //------------------------------------------------------------------------------------------
+
+                //TIPO DE DATO
+
+                
+
+
+                //Sin validacion
+                if(cod != null) if(!cod.isEmpty()) car = (Carrera) loCarrera.obtener(Long.valueOf(cod)).getObjeto();
+                
+                if(nom != null) if(!nom.isEmpty()) car.setCarNom(nom);
+                if(Dsc != null) if(!Dsc.isEmpty()) car.setCarDsc(Dsc);
+                if(Fac != null) if(!Fac.isEmpty()) car.setCarFac(Fac);
+                if(Crt != null) if(!Crt.isEmpty()) car.setCarCrt(Crt);
+
+                
+                
+        return car;
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

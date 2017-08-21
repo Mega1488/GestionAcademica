@@ -90,7 +90,7 @@ public class PerManejador{
             retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
             
         } catch (HibernateException he) {
-            
+            System.err.println("Objeto: " + pObjeto.toString());
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
@@ -138,7 +138,7 @@ public class PerManejador{
             retorno.setMensaje(new Mensajes("Modificado correctamente", TipoMensaje.MENSAJE));
             
         } catch (HibernateException he) {
-            
+            System.err.println("Objeto: " + pObjeto.toString());
             retorno = manejaExcepcion(he, retorno);
             
         } finally {
@@ -147,7 +147,31 @@ public class PerManejador{
         
         return retorno;
     }
+    
+    public Retorno_MsgObj merge(Object pObjeto) {
+        
+        //Notificacion notificacion = (Notificacion) pObjeto;
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al merge", TipoMensaje.ERROR), pObjeto);
 
+        try {
+            iniciaOperacion();
+            sesion.merge(pObjeto);
+            tx.commit();
+            
+            retorno.setMensaje(new Mensajes("Modificado merge", TipoMensaje.MENSAJE));
+            
+        } catch (HibernateException he) {
+            System.err.println("Objeto: " + pObjeto.toString());
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+        
+        return retorno;
+    }
+    
     public Retorno_MsgObj eliminar(Object pObjeto) {
         
         //Notificacion notificacion = (Notificacion) pObjeto;
@@ -285,6 +309,31 @@ public class PerManejador{
         
     }
     
+    public Retorno_MsgObj ejecutarQuery(String sentencia){
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al ejecutar custom query", TipoMensaje.ERROR), null);
+        
+        try {
+            iniciaOperacion();
+            
+            Query query = sesion.createSQLQuery(sentencia);
+            int result = query.executeUpdate();
+            
+            tx.commit();
+            
+            retorno.setMensaje(new Mensajes("Objetos afectados: " + result, TipoMensaje.MENSAJE));
+            
+        } catch (HibernateException he) {
+            
+            retorno = manejaExcepcion(he, retorno);
+            
+        } finally {
+            sesion.close();
+        }
+
+        return retorno;
+        
+    }
+    
     public String GetPrimaryKeyFromObject(Object objeto){
         ClassMetadata objMeta =  NewHibernateUtil.getSessionFactory().getClassMetadata(objeto.getClass());
         return objMeta.getIdentifierPropertyName();
@@ -294,6 +343,7 @@ public class PerManejador{
         Table table = objeto.getClass().getAnnotation(Table.class);
         return table.name();
     }
+    
     
     private void SincronizarEliminado(Object objeto){
         String tabla = this.GetTableNameFromObject(objeto);
