@@ -214,7 +214,7 @@ public class LoCalendario implements InABMGenerico{
                 Calendario calendar = (Calendario) objeto;
                 if(calendar.getEvaluacion().getTpoEvl().getTpoEvlExm() && calendar.getCalFch().after(new Date())) 
                 {
-                    if(!LoPersona.GetInstancia().PersonaAproboEstudio(PerCod, calendar.getEvaluacion().getMatEvl(), calendar.getEvaluacion().getModEvl(), calendar.getEvaluacion().getCurEvl()) || !LoPersona.GetInstancia().PersonaRevalidaMateria(PerCod, calendar.getEvaluacion().getMatEvl()))
+                    if(!LoPersona.GetInstancia().PersonaAproboEstudio(PerCod, calendar.getEvaluacion().getMatEvl(), calendar.getEvaluacion().getModEvl(), calendar.getEvaluacion().getCurEvl()) && !LoPersona.GetInstancia().PersonaRevalidaMateria(PerCod, calendar.getEvaluacion().getMatEvl()))
                     {
                         if(AlumnoPuedeDarExamen(PerCod, calendar.getEvaluacion().getMatEvl(), calendar.getEvaluacion().getModEvl(), calendar.getEvaluacion().getCurEvl()))
                         {
