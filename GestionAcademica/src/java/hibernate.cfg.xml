@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://192.168.0.103:3306/sga_ctc?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.url">jdbc:mysql://192.168.0.103:3306/sga_ctc_local?zeroDateTimeBehavior=convertToNull</property>
     <property name="hibernate.connection.username">root</property>
     <property name="hibernate.connection.password">admin</property>
     <property name="hibernate.connection.pool_size">10</property>
@@ -37,7 +37,7 @@
     <mapping class="Entidad.Objeto"/>
     <mapping class="Entidad.ObjetoCampo"/>
     <mapping class="Entidad.SincInconsistenciaDatos"/>
-    <mapping class="Entidad.SincRegistroELiminado"/>
+    <mapping class="Entidad.SincRegistroEliminado"/>
     <mapping class="Entidad.ParametroEmail"/>
     <mapping class="Entidad.Parametro"/>
     <mapping class="Entidad.SincronizacionInconsistencia"/>
@@ -45,5 +45,8 @@
     <mapping class="Entidad.WS_User"/>
     <mapping class="Entidad.WS_UserServicio"/>
     <mapping class="Entidad.WS_Bit"/>
+    <mapping class="Entidad.Menu"/>
+    <mapping class="Entidad.MateriaPrevia"/>
+    <mapping class="Entidad.NotificacionBandeja"/>
   </session-factory>
 </hibernate-configuration>
