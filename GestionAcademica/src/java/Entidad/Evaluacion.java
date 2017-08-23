@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -31,8 +31,6 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"modEvl", "matEvl", "curEvl"})
-
 @Entity
 @Table(name = "EVALUACION")
 @XmlRootElement
@@ -47,7 +45,7 @@ import org.hibernate.annotations.GenericGenerator;
         
     @NamedQuery(name = "Evaluacion.findLast",      query = "SELECT t FROM Evaluacion t ORDER BY t.EvlCod DESC")})
 
-public class Evaluacion extends ClaseAbstracta implements Serializable {
+public class Evaluacion extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -101,7 +99,6 @@ public class Evaluacion extends ClaseAbstracta implements Serializable {
         this.EvlCod = EvlCod;
     }
     
-//    @XmlTransient
     public Materia getMatEvl() {
         return MatEvl;
     }
@@ -110,7 +107,6 @@ public class Evaluacion extends ClaseAbstracta implements Serializable {
         this.MatEvl = MatEvl;
     }
     
-//    @XmlTransient
     public Modulo getModEvl() {
         return ModEvl;
     }
@@ -155,7 +151,6 @@ public class Evaluacion extends ClaseAbstracta implements Serializable {
         return ObjFchMod;
     }
     
-//    @XmlTransient
     public Curso getCurEvl() {
         return CurEvl;
     }

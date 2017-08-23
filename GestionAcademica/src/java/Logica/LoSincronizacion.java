@@ -24,6 +24,7 @@ import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import WSClient.SincronizarWSClient;
+import com.mchange.v1.util.UIterator;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
@@ -514,7 +515,6 @@ public class LoSincronizacion implements InABMGenerico{
     private Retorno_MsgObj SincronizarSistemaOnline(Retorno_MsgObj modificaciones){
         
         SincronizarWSClient cliWS = new SincronizarWSClient();
-        
         return cliWS.Sincronizar(modificaciones);
     }
     
@@ -592,11 +592,12 @@ public class LoSincronizacion implements InABMGenerico{
                                 }
                                 else
                                 {
+                                    System.err.println("---" + registro.toString());
                                     perManager.ejecutarQuery(util.ObtenerInsertQuery(registro));
                                     /*
                                     Long idOriginal = util.ObtenerPrimaryKey(registro);
 
-                                    Retorno_MsgObj regNuevo = perManager.guardar(registro);
+                                    SincRetorno regNuevo = perManager.guardar(registro);
                                     
                                     if(!regNuevo.SurgioError())
                                     {
@@ -1145,7 +1146,7 @@ public class LoSincronizacion implements InABMGenerico{
                     /*
                     Long idOriginal = util.ObtenerPrimaryKey(objeto);
 
-                    Retorno_MsgObj regNuevo = perManager.guardar(objeto);
+                    SincRetorno regNuevo = perManager.guardar(objeto);
 
                     if(!regNuevo.SurgioError())
                     {

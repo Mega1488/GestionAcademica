@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +27,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -45,7 +46,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Curso.findByCurNom", query = "SELECT c FROM Curso c WHERE c.CurNom = :CurNom"),
     @NamedQuery(name = "Curso.findLastCurso", query = "SELECT  c FROM Curso c ORDER BY c.CurCod DESC")})
 
-public class Curso extends ClaseAbstracta implements Serializable {
+public class Curso extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -140,6 +141,8 @@ public class Curso extends ClaseAbstracta implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<Modulo> getLstModulos() {
         return lstModulos;
     }
@@ -148,6 +151,7 @@ public class Curso extends ClaseAbstracta implements Serializable {
         this.lstModulos = lstModulos;
     }
 
+    @JsonIgnore
     @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;

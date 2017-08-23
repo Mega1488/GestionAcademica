@@ -14,6 +14,7 @@ import Logica.LoSincronizacion;
 import Logica.LoVersion;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
@@ -277,4 +278,33 @@ public class Utilidades {
         
     }
 
+    public Object CastFromObject(Object fromObjeto, Object toObject)
+    {
+        
+        try{
+
+            for (Field field : toObject.getClass().getDeclaredFields()) 
+            {
+                field.setAccessible(true);
+                
+                for (Field fld : fromObjeto.getClass().getDeclaredFields()) 
+                {
+                    fld.setAccessible(true);
+
+                    if(field.getType().equals(fld.getType()) && field.getName().equals(fld.getName()))
+                    {
+                        field.set(toObject, fld.get(fromObjeto));
+                    }
+                }                
+            }
+        }
+        catch(SecurityException | IllegalArgumentException | IllegalAccessException ex)
+        {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return toObject;
+        
+    }
+    
 }

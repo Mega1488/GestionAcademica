@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -36,7 +36,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "TipoEvaluacion.findByTpoEvlNom", query = "SELECT tpoEvl FROM TipoEvaluacion tpoEvl WHERE tpoEvl.TpoEvlNom = :TpoEvlNom"),
     @NamedQuery(name = "TipoEvaluacion.findLastTpoEvl", query = "SELECT  tpoEvl FROM TipoEvaluacion tpoEvl ORDER BY tpoEvl.TpoEvlCod DESC")})
 
- public class TipoEvaluacion extends ClaseAbstracta implements Serializable {
+ public class TipoEvaluacion extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id

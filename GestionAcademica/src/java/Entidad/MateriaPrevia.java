@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -23,8 +23,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -32,7 +30,6 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"materia"})
 
 @Entity
 @Table(
@@ -46,7 +43,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "MateriaPrevia.findModAfter",  query = "SELECT t FROM MateriaPrevia t  WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "MateriaPrevia.findAll",       query = "SELECT t FROM MateriaPrevia t")
 })
-public class MateriaPrevia extends ClaseAbstracta implements Serializable {
+public class MateriaPrevia extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -76,7 +73,6 @@ public class MateriaPrevia extends ClaseAbstracta implements Serializable {
         this.MatPreCod = MatPreCod;
     }
 
-    @XmlTransient
     public Materia getMateria() {
         return materia;
     }

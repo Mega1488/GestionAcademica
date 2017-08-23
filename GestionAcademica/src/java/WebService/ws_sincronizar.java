@@ -14,6 +14,7 @@ import Logica.LoSincronizacion;
 import Logica.LoWS;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+//import Utiles.SincRetorno;
 import java.util.Date;
 import javax.annotation.Resource;
 import javax.jws.WebService;
@@ -74,7 +75,7 @@ public class ws_sincronizar {
                 }
             }
         }
-        
+
         return retorno;
     }
 

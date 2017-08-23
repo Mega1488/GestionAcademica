@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -25,8 +25,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -34,7 +32,6 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"periodoEstudio"})
 
 @Entity
 @Table(
@@ -46,7 +43,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "PeriodoEstudioDocente.findModAfter",  query = "SELECT t FROM PeriodoEstudioDocente t  WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "PeriodoEstudioDocente.findAll",       query = "SELECT t FROM PeriodoEstudioDocente t")
 })
-public class PeriodoEstudioDocente extends ClaseAbstracta implements Serializable {
+public class PeriodoEstudioDocente extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
    
@@ -92,7 +89,6 @@ public class PeriodoEstudioDocente extends ClaseAbstracta implements Serializabl
         this.PeriEstDocCod = PeriEstDocCod;
     }
 
-    @XmlTransient
     public PeriodoEstudio getPeriodoEstudio() {
         return periodoEstudio;
     }

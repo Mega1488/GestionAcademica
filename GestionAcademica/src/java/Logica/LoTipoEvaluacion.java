@@ -20,6 +20,7 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
     private static LoTipoEvaluacion instancia;
 
     private LoTipoEvaluacion() {
+        System.err.println("Se crea instancia");
     }
     
     public static LoTipoEvaluacion GetInstancia(){
@@ -45,7 +46,6 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
             pTipoEvaluacion.setTpoEvlCod((Long) retorno.getObjeto());
             retorno.setObjeto(pTipoEvaluacion);
             
-            System.err.println("Guardar codigo: " + pTipoEvaluacion.getTpoEvlCod());
         }
         
         return retorno;
@@ -69,7 +69,6 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
 
     @Override
     public Retorno_MsgObj obtener(Long pTpoEvlCod) {
-        System.err.println("Obtener codigo: " + pTpoEvlCod);
         PerManejador perManejador   = new PerManejador();
         return perManejador.obtener(pTpoEvlCod, TipoEvaluacion.class);
     }

@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import Enumerado.TipoPeriodo;
 import java.io.Serializable;
 import java.util.Date;
@@ -29,7 +29,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -38,8 +38,6 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author alvar
  */
-
-@JsonIgnoreProperties({"curso"})
 
 @Entity
 @Table(name = "MODULO")
@@ -52,7 +50,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Modulo.findByPeriodo", query = "SELECT m FROM Modulo m WHERE (m.curso.CurCod =:CurCod or :CurCod IS NULL) and m.ModTpoPer = :TpoPer and m.ModPerVal =:PerVal"),
     @NamedQuery(name = "Modulo.findLast", query = "SELECT  m FROM Modulo m WHERE m.curso.CurCod = :CurCod ORDER BY m.ModCod desc")})
 
-public class Modulo extends ClaseAbstracta implements Serializable {
+public class Modulo extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -98,6 +96,7 @@ public class Modulo extends ClaseAbstracta implements Serializable {
     public Modulo() {
     }
 
+    @JsonIgnore
     @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
@@ -139,9 +138,6 @@ public class Modulo extends ClaseAbstracta implements Serializable {
         this.ModEstCod = ModEstCod;
     }
 
-    
-    
-    @XmlTransient
     public Curso getCurso() {
         return this.curso;
     }

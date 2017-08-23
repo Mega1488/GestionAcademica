@@ -127,7 +127,11 @@
             $(document).ready(function () {
                     $('input[class="jquery_data"]').each(function() {
                         // `this` is the div
+        
+        
                         var jsonValor = $(this).data('value');
+
+                        //var jsonValor = $(this).val();
                         var codigoPre = "#jquery_viewer_" + $(this).data("id");
                         
                         $(codigoPre).jsonViewer(jsonValor);

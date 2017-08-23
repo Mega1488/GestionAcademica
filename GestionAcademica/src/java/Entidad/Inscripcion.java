@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +29,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -54,7 +56,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Inscripcion.findByCurso",   query = "SELECT t FROM Inscripcion t WHERE (t.Alumno.PerCod =:PerCod or :PerCod IS NULL) and t.Curso.CurCod =:CurCod")
 })
 
-public class Inscripcion extends ClaseAbstracta implements Serializable {
+public class Inscripcion extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -191,6 +193,8 @@ public class Inscripcion extends ClaseAbstracta implements Serializable {
         this.InsGenAnio = InsGenAnio;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<MateriaRevalida> getLstRevalidas() {
         return lstRevalidas;
     }

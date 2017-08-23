@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import Enumerado.TipoSolicitud;
 import Enumerado.EstadoSolicitud;
 import java.io.Serializable;
@@ -41,7 +41,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Solicitud.findByAlumno",  query = "SELECT t FROM Solicitud t where t.Alumno.PerCod =:PerCod order by t.SolFchIng desc")
 })
 
-public class Solicitud extends ClaseAbstracta implements Serializable {
+public class Solicitud extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

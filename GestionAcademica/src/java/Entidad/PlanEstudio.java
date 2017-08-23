@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,7 +29,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -39,7 +39,6 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"carrera"})
 
 @Entity
 @Table(name = "PLAN_ESTUDIO")
@@ -48,7 +47,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "PlanEstudio.findModAfter",  query = "SELECT t FROM PlanEstudio t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "PlanEstudio.findAll",       query = "SELECT t FROM PlanEstudio t")})
 
-public class PlanEstudio extends ClaseAbstracta implements Serializable {
+public class PlanEstudio extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -103,7 +102,6 @@ public class PlanEstudio extends ClaseAbstracta implements Serializable {
         this.PlaEstCod = PlaEstCod;
     }
 
-    @XmlTransient
     public Carrera getCarrera() {
         return carrera;
     }
@@ -152,6 +150,8 @@ public class PlanEstudio extends ClaseAbstracta implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<Materia> getLstMateria() {
         return lstMateria;
     }
@@ -212,11 +212,7 @@ public class PlanEstudio extends ClaseAbstracta implements Serializable {
     public String toString() {
         return "PlanEstudio{" + "PlaEstCod=" + PlaEstCod + ", carrera=" + carrera + ", PlaEstNom=" + PlaEstNom + ", PlaEstDsc=" + PlaEstDsc + ", PlaEstCreNec=" + PlaEstCreNec + ", PlaEstCatCod=" + PlaEstCatCod + ", ObjFchMod=" + ObjFchMod + ", lstMateria=" + lstMateria + '}';
     }
-    
-    @Override
-    public Long GetPrimaryKey() {
-        return this.PlaEstCod;
-    }
+   
 }
 
 

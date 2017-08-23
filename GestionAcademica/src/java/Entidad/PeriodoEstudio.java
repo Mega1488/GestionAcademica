@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +29,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -52,7 +54,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "PeriodoEstudio.findModAfter",  query = "SELECT t FROM PeriodoEstudio t  WHERE t.ObjFchMod >= :ObjFchMod order by t.periodo.PerFchIni desc"),
     @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t order by t.periodo.PerFchIni desc")
 })
-public class PeriodoEstudio extends ClaseAbstracta implements Serializable {
+public class PeriodoEstudio extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -149,6 +151,8 @@ public class PeriodoEstudio extends ClaseAbstracta implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<PeriodoEstudioAlumno> getLstAlumno() {
         return lstAlumno;
     }
@@ -157,6 +161,8 @@ public class PeriodoEstudio extends ClaseAbstracta implements Serializable {
         this.lstAlumno = lstAlumno;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<PeriodoEstudioDocente> getLstDocente() {
         return lstDocente;
     }
@@ -165,6 +171,8 @@ public class PeriodoEstudio extends ClaseAbstracta implements Serializable {
         this.lstDocente = lstDocente;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<PeriodoEstudioDocumento> getLstDocumento() {
         return lstDocumento;
     }

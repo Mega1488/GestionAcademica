@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,6 +28,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -49,7 +51,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Calendario.findModAfter",       query = "SELECT t FROM Calendario t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Calendario.findAll",            query = "SELECT t FROM Calendario t order by t.CalFch desc")})
 
-public class Calendario  extends ClaseAbstracta implements Serializable {
+public class Calendario  extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -149,6 +151,8 @@ public class Calendario  extends ClaseAbstracta implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<CalendarioAlumno> getLstAlumnos() {
         return lstAlumnos;
     }
@@ -157,6 +161,8 @@ public class Calendario  extends ClaseAbstracta implements Serializable {
         this.lstAlumnos = lstAlumnos;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<CalendarioDocente> getLstDocentes() {
         return lstDocentes;
     }

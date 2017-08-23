@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -25,16 +25,12 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
  *
  * @author alvar
  */
-
-@JsonIgnoreProperties({"calendario"})
 
 @Entity
 @Table(
@@ -46,7 +42,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "CalendarioDocente.findModAfter",  query = "SELECT t FROM CalendarioDocente t where t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "CalendarioDocente.findAll",       query = "SELECT t FROM CalendarioDocente t")})
 
-public class CalendarioDocente extends ClaseAbstracta  implements Serializable {
+public class CalendarioDocente extends SincHelper  implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -93,7 +89,6 @@ public class CalendarioDocente extends ClaseAbstracta  implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
-    @XmlTransient
     public Calendario getCalendario() {
         return calendario;
     }

@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Table;
 import org.hibernate.Criteria;
+import org.hibernate.FlushMode;
 import org.hibernate.Query;
 import org.hibernate.metadata.ClassMetadata;
 
@@ -45,7 +46,7 @@ public class PerManejador{
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ec);
         }
     }
-
+   
     private Retorno_MsgObj manejaExcepcion(HibernateException he, Retorno_MsgObj retorno) throws HibernateException {
         tx.rollback();
         String mensaje;
@@ -85,7 +86,11 @@ public class PerManejador{
             iniciaOperacion();
             retorno.setObjeto((Long) sesion.save(pObjeto));
             
+            sesion.flush(); 
+            sesion.refresh(pObjeto); 
+            
             tx.commit();
+            
             
             retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
             
@@ -108,7 +113,8 @@ public class PerManejador{
             iniciaOperacion();
             
             sesion.save(pObjeto);
-            
+            sesion.flush(); 
+            sesion.refresh(pObjeto);
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
@@ -133,6 +139,8 @@ public class PerManejador{
         try {
             iniciaOperacion();
             sesion.update(pObjeto);
+            sesion.flush(); 
+            sesion.refresh(pObjeto);
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Modificado correctamente", TipoMensaje.MENSAJE));
@@ -157,6 +165,8 @@ public class PerManejador{
         try {
             iniciaOperacion();
             sesion.merge(pObjeto);
+            sesion.flush(); 
+            sesion.refresh(pObjeto);
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Modificado merge", TipoMensaje.MENSAJE));
@@ -182,7 +192,6 @@ public class PerManejador{
             iniciaOperacion();
             sesion.delete(pObjeto);
             tx.commit();
-            
             retorno = new Retorno_MsgObj(new Mensajes("Eliminado correctamente", TipoMensaje.MENSAJE), null);
             
         } catch (HibernateException he) {
@@ -207,9 +216,10 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            tx.commit();
+            if(tx.isActive()) tx.commit();
             
             Object objRetorno = sesion.get(clase, pCodigo);
+            
             retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE), objRetorno);
                  
         } catch (HibernateException he) {
@@ -230,7 +240,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            tx.commit();
+            //tx.commit();
             Query query = sesion.getNamedQuery(namedQuery);
             
             if(parametros != null)
@@ -265,7 +275,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            tx.commit();
+            //tx.commit();
             Query query = sesion.createSQLQuery(sentencia);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List list = query.list();
@@ -323,7 +333,6 @@ public class PerManejador{
             retorno.setMensaje(new Mensajes("Objetos afectados: " + result, TipoMensaje.MENSAJE));
             
         } catch (HibernateException he) {
-            
             retorno = manejaExcepcion(he, retorno);
             
         } finally {

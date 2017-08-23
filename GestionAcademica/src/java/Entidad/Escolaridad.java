@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
@@ -37,7 +37,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Escolaridad.findModAfter",  query = "SELECT t FROM Escolaridad t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Escolaridad.findByAlumno",  query = "SELECT t FROM Escolaridad t WHERE t.alumno.PerCod = :PerCod")
 })
-public class Escolaridad extends ClaseAbstracta implements Serializable {
+public class Escolaridad extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -49,10 +49,6 @@ public class Escolaridad extends ClaseAbstracta implements Serializable {
     @GenericGenerator(name = "native", strategy = "native" )
     @Column(name = "EscCod", nullable = false)
     private Long EscCod;
-    
-//    @ManyToOne(targetEntity = Inscripcion.class)        
-//    @JoinColumn(name="InsCod", referencedColumnName="InsCod")
-//    private Inscripcion inscripcion;
     
     @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="EscAluPerCod", referencedColumnName="PerCod")

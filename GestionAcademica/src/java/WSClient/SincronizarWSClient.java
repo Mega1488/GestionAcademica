@@ -99,7 +99,6 @@ public class SincronizarWSClient {
             WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
             WsSincronizar port = service.getWsSincronizarPort();
             
-            
             retorno = port.sincronizar(token, cambios);
             
         } catch (MalformedURLException ex) {

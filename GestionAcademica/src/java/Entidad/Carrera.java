@@ -5,17 +5,12 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
-import Enumerado.Objetos;
+import Dominio.SincHelper;
 import java.io.Serializable;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -32,6 +27,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -40,6 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author alvar
  */
+
 @Entity
 @Table(name = "CARRERA")
 @XmlRootElement
@@ -50,7 +49,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Carrera.findByCarNom",      query = "SELECT c FROM Carrera c WHERE c.CarNom = :CarNom"),
     @NamedQuery(name = "Carrera.findLastCarrera",   query = "SELECT c FROM Carrera c ORDER BY c.CarCod DESC")})
 
-public class Carrera extends ClaseAbstracta implements Serializable {
+public class Carrera extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -150,32 +149,16 @@ public class Carrera extends ClaseAbstracta implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<PlanEstudio> getPlan() {
+        if(lstPlanEstudio == null) lstPlanEstudio = new ArrayList<>();
         return lstPlanEstudio;
     }
 
     public void setPlan(List<PlanEstudio> lstPlanEstudio) {
         this.lstPlanEstudio = lstPlanEstudio;
     }
-    
-   
-
-//    public Evaluacion getEvaluacionById(Long EvlCod){
-//        
-//        Evaluacion evaluacion = new Evaluacion();
-//        
-//        for(Evaluacion evl : this.lstEvaluacion)
-//        {
-//            System.err.println("Evaluacion: " + evl.toString());
-//            if(evl.getEvlCod().equals(EvlCod))
-//            {
-//                evaluacion = evl;
-//                break;
-//            }
-//        }
-//        
-//        return evaluacion;
-//    }
     
     public PlanEstudio getPlanEstudioById(Long PlaEstCod){
         
@@ -220,7 +203,7 @@ public class Carrera extends ClaseAbstracta implements Serializable {
 
     @Override
     public String toString() {
-        return "Carrera{" + "CarCod=" + CarCod + ", CarNom=" + CarNom + ", CarDsc=" + CarDsc + '}';
+        return "Carrera{" + "CarCod=" + CarCod + ", CarNom=" + CarNom + ", CarDsc=" + CarDsc + ' ' + (lstPlanEstudio!= null ? lstPlanEstudio.size() : "") + '}';
     }
 
     

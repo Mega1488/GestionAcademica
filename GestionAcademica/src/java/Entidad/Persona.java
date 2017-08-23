@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import Enumerado.Filial;
 import SDT.SDT_PersonaEstudio;
 import java.io.Serializable;
@@ -24,7 +24,9 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -55,7 +57,7 @@ import org.hibernate.annotations.GenericGenerator;
   */  
     @NamedQuery(name = "Persona.findLastPersona",   query = "SELECT p FROM Persona p ORDER BY p.PerCod DESC")})
 
-public class Persona extends ClaseAbstracta implements Serializable {
+public class Persona extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -125,6 +127,8 @@ public class Persona extends ClaseAbstracta implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
+    @JsonIgnore
+    @Transient
     private ArrayList<SDT_PersonaEstudio> lstEstudios;
 
     public Persona() {

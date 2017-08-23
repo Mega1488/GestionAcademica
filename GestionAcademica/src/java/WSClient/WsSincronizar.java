@@ -66,7 +66,7 @@ public interface WsSincronizar {
      * @param fecha
      * @param token
      * @return
-     *     returns Utiles.Retorno_MsgObj
+     *     returns Utiles.SincRetorno
      */
     @WebMethod(operationName = "update_fecha")
     @WebResult(targetNamespace = "")

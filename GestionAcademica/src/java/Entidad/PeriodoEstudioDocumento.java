@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import Enumerado.RutaArchivos;
 import java.io.File;
 import java.io.IOException;
@@ -29,10 +29,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -40,7 +38,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 
-@JsonIgnoreProperties({"periodoEstudio"})
+
 
 @Entity
 @Table(name = "PERIODO_ESTUDIO_DOCUMENTO")
@@ -49,7 +47,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "PeriodoEstudioDocumento.findModAfter",  query = "SELECT t FROM PeriodoEstudioDocumento t  WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "PeriodoEstudioDocumento.findAll",       query = "SELECT t FROM PeriodoEstudioDocumento t")
 })
-public class PeriodoEstudioDocumento extends ClaseAbstracta implements Serializable {
+public class PeriodoEstudioDocumento extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
    
@@ -129,7 +127,6 @@ public class PeriodoEstudioDocumento extends ClaseAbstracta implements Serializa
         this.DocCod = DocCod;
     }
 
-    @XmlTransient
     public PeriodoEstudio getPeriodo() {
         return periodoEstudio;
     }

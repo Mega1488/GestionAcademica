@@ -5,7 +5,7 @@
  */
 package Entidad;
 
-import Dominio.ClaseAbstracta;
+import Dominio.SincHelper;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -32,7 +32,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.codehaus.jackson.annotate.JsonIgnoreProperties;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -41,8 +41,6 @@ import org.hibernate.annotations.GenericGenerator;
  *
  * @author alvar
  */
-
-@JsonIgnoreProperties({"plan"})
 
 @Entity
 @Table(name = "MATERIA")
@@ -54,7 +52,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Materia.findByPeriodo", query = "SELECT m FROM Materia m WHERE (m.plan.PlaEstCod =:PlaEstCod or :PlaEstCod IS NULL) and m.MatTpoPer = :TpoPer and m.MatPerVal =:PerVal")
 })
 
-public class Materia extends ClaseAbstracta implements Serializable {
+public class Materia extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
@@ -113,7 +111,6 @@ public class Materia extends ClaseAbstracta implements Serializable {
         this.MatCod = MatCod;
     }
 
-    @XmlTransient
     public PlanEstudio getPlan() {
         return plan;
     }
@@ -170,6 +167,8 @@ public class Materia extends ClaseAbstracta implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public List<MateriaPrevia> getLstPrevias() {
         return lstPrevias;
     }
@@ -178,6 +177,7 @@ public class Materia extends ClaseAbstracta implements Serializable {
         this.lstPrevias = lstPrevias;
     }
 
+    @JsonIgnore
     @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
