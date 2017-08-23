@@ -542,52 +542,12 @@ public class LoCalendario implements InABMGenerico{
         
         if(modulo != null)
         {
-            Retorno_MsgObj retorno = this.obtenerByModuloPersona(PerCod, modulo);
-
-            if(!retorno.SurgioErrorListaRequerida())
-            {
-                Double creditosParciales    = 0.0;
-
-                for(Object objeto : retorno.getLstObjetos())
-                {
-                    Calendario calendar = (Calendario) objeto;
-
-                    if(!calendar.getEvaluacion().getTpoEvl().getTpoEvlExm() && calendar.getAlumnoByPersona(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
-                    {
-                        creditosParciales += calendar.getAlumnoCalificacion(PerCod);
-                    }
-
-                }
-
-                //if(modulo.ModuloPuedeDarExamen(creditosParciales)) return true;
                 return true;
-
-            }
         }
         
         if(curso != null)
         {
-            Retorno_MsgObj retorno = this.obtenerByCursoPersona(PerCod, curso);
-            
-            if(!retorno.SurgioErrorListaRequerida())
-            {
-                Double creditosParciales    = 0.0;
-
-                for(Object objeto : retorno.getLstObjetos())
-                {
-                    Calendario calendar = (Calendario) objeto;
-
-                    if(!calendar.getEvaluacion().getTpoEvl().getTpoEvlExm() && calendar.getAlumnoByPersona(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
-                    {
-                        creditosParciales += calendar.getAlumnoCalificacion(PerCod);
-                    }
-
-                }
-
-                //if(modulo.ModuloPuedeDarExamen(creditosParciales)) return true;
                 return true;
-
-            }
         }
         
         return false;
@@ -623,52 +583,12 @@ public class LoCalendario implements InABMGenerico{
         
         if(modulo != null)
         {
-            Retorno_MsgObj retorno = this.obtenerByModuloPersona(PerCod, modulo);
-
-            if(!retorno.SurgioErrorListaRequerida())
-            {
-                Double creditosParciales    = 0.0;
-
-                for(Object objeto : retorno.getLstObjetos())
-                {
-                    Calendario calendar = (Calendario) objeto;
-
-                    if(!calendar.getEvaluacion().getTpoEvl().getTpoEvlExm() && calendar.getAlumnoByPersona(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
-                    {
-                        creditosParciales += calendar.getAlumnoCalificacion(PerCod);
-                    }
-
-                }
-
-                //if(materia.MateriaExonera(creditosParciales)) return true;
-                return true;
-
-            }
+            return false;
         }
         
         if(curso != null)
         {
-            Retorno_MsgObj retorno = this.obtenerByCursoPersona(PerCod, curso);
-
-            if(!retorno.SurgioErrorListaRequerida())
-            {
-                Double creditosParciales    = 0.0;
-
-                for(Object objeto : retorno.getLstObjetos())
-                {
-                    Calendario calendar = (Calendario) objeto;
-
-                    if(!calendar.getEvaluacion().getTpoEvl().getTpoEvlExm() && calendar.getAlumnoByPersona(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
-                    {
-                        creditosParciales += calendar.getAlumnoCalificacion(PerCod);
-                    }
-
-                }
-
-                //if(materia.MateriaExonera(creditosParciales)) return true;
-                return true;
-
-            }
+            return false;
         }
         
         return false;

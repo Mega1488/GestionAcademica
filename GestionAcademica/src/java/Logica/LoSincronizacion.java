@@ -152,7 +152,9 @@ public class LoSincronizacion implements InABMGenerico{
         
         inc.GetIncDato(IncObjCod).setObjSel(Boolean.TRUE);
         
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(sinc);
+        PerManejador perManager = new PerManejador();
+        
+        Retorno_MsgObj retorno = (Retorno_MsgObj) perManager.actualizar(inc);
 
         return retorno;
     }
@@ -449,7 +451,6 @@ public class LoSincronizacion implements InABMGenerico{
         
         ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
         lstParametros.add(new SDT_Parameters(fecha, "ObjFchMod"));
-        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Obtener cambios", TipoMensaje.MENSAJE));
         retorno.setLstObjetos(new ArrayList<>());
         
@@ -490,12 +491,13 @@ public class LoSincronizacion implements InABMGenerico{
                     */
                     
                     Retorno_MsgObj modObjects = perManager.obtenerLista(objeto.getObjNmdQry() + ".findModAfter", lstParametros);
-                    
                     if(modObjects.getLstObjetos() != null)
                     {
                         if(modObjects.getLstObjetos().size() > 0)
                         {
                             Retorno_MsgObj objetoModificado = new Retorno_MsgObj();
+                            
+                            System.err.println("Modificacion: " + modObjects.getLstObjetos().size());
                             
                             objetoModificado.setObjeto(obj);
                             objetoModificado.setLstObjetos(modObjects.getLstObjetos());
@@ -513,12 +515,13 @@ public class LoSincronizacion implements InABMGenerico{
     }
     
     private Retorno_MsgObj SincronizarSistemaOnline(Retorno_MsgObj modificaciones){
-        
         SincronizarWSClient cliWS = new SincronizarWSClient();
         return cliWS.Sincronizar(modificaciones);
     }
     
     private Retorno_MsgObj ImpactarCambios(Retorno_MsgObj cambios){
+        
+        ForeignKeyControl(false);
         
         Integer registrosAfectados = 0;
 
@@ -592,7 +595,6 @@ public class LoSincronizacion implements InABMGenerico{
                                 }
                                 else
                                 {
-                                    System.err.println("---" + registro.toString());
                                     perManager.ejecutarQuery(util.ObtenerInsertQuery(registro));
                                     /*
                                     Long idOriginal = util.ObtenerPrimaryKey(registro);
@@ -620,6 +622,8 @@ public class LoSincronizacion implements InABMGenerico{
             }
         }
         
+        ForeignKeyControl(true);
+        
         retorno.setObjeto(registrosAfectados);
         
         return retorno;
@@ -639,14 +643,12 @@ public class LoSincronizacion implements InABMGenerico{
         
     }
     
-    private void ActualizarPrimaryKeyManualmente(Objeto objMod, Long idOriginal, Long idNuevo){
+    private void ForeignKeyControl(Boolean activo){
         
-        String query = "UPDATE " + objMod.getObjNmdQry()
-                + " SET " + objMod.getPrimaryKey().getObjCmpNom() + " = " + idNuevo 
-                + " WHERE " + objMod.getPrimaryKey().getObjCmpNom() + " = " + idOriginal;
+        String query = "SET foreign_key_checks = " + activo;
         
         PerManejador perManager = new PerManejador();
-        Retorno_MsgObj retorno  = perManager.ejecutarUpdateQuery(query);
+        Retorno_MsgObj retorno  = perManager.ejecutarQuery(query);
         
         if(retorno.SurgioError())
         {
@@ -1096,8 +1098,20 @@ public class LoSincronizacion implements InABMGenerico{
                             //ACTUALIZO FECHAS
                             this.ActualizarFechaSincronizacion(param);                            
                         }
+                        else
+                        {
+                            System.err.println("Error " + retorno.getMensaje().toString());
+                        }
+                    }
+                    else
+                    {
+                        System.err.println("Error " + retorno.getMensaje().toString());
                     }
                 }
+            }
+            else 
+            {
+                System.err.println("Error " + retorno.getMensaje().toString());
             }
         }
 
@@ -1121,6 +1135,8 @@ public class LoSincronizacion implements InABMGenerico{
     }
     
     private Retorno_MsgObj ImpactarInconsistencia(Sincronizacion sinc){
+        ForeignKeyControl(false);
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Impactando inconsistencia", TipoMensaje.MENSAJE));
         if(sinc.getLstInconsistencia() != null)
         {
@@ -1168,6 +1184,8 @@ public class LoSincronizacion implements InABMGenerico{
             }
         }
 
+        ForeignKeyControl(true);
+        
         return retorno;
     }
     

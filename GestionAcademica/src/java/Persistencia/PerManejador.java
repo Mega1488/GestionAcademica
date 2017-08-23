@@ -91,7 +91,6 @@ public class PerManejador{
             
             tx.commit();
             
-            
             retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
             
         } catch (HibernateException he) {

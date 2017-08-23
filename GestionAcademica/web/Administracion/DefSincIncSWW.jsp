@@ -104,7 +104,7 @@
                                <td><% out.print(utilidad.NuloToCero(inc.getIncCod())); %></td>
                                 <td><% out.print(utilidad.NuloToVacio(inc.getObjeto().getObjNom())); %></td>
                                 <td><% out.print(utilidad.NuloToVacio(inc.getIncEst())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(inc.getObjetoSeleccionado())); %></td>
+                                <td><% out.print(utilidad.BooleanToSiNo(inc.TieneObjetoSeleccionado())); %></td>
                             </tr>
                             <%
                                 }

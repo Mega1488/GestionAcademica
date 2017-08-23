@@ -154,6 +154,18 @@ public class SincronizacionInconsistencia implements Serializable {
         return  null;
     }
 
+    public Boolean TieneObjetoSeleccionado(){
+        for(SincInconsistenciaDatos dat : lstDatos)
+        {
+            if(dat.getObjSel())
+            {
+                return true;
+            }
+        }
+
+        return  false;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 3;
