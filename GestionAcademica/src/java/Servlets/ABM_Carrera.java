@@ -68,6 +68,10 @@ public class ABM_Carrera extends HttpServlet {
                     retorno = this.PopUp_ObtenerDatos();
                 break;
 
+                case "POPUP_OBTENER_PLANES":
+                    retorno = this.PopUp_ObtenerPlanesDatos(request);
+                break;
+
                 default:
                     break;
             }
@@ -170,6 +174,12 @@ public class ABM_Carrera extends HttpServlet {
             ex.printStackTrace();
         }
         return retorno;
+    }
+    
+    private String PopUp_ObtenerPlanesDatos(HttpServletRequest request)
+    {
+        Carrera car = this.ValidarCarrera(request, null);
+        return utiles.ObjetoToJson(car.getPlan());
     }
     
     private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)

@@ -94,7 +94,7 @@
                                         out.println("</td>");
 
                                         out.println("<td>");
-                                        out.println(esc.getEscFch());
+                                        out.println(utilidad.NuloToVacio(esc.getEscFch()));
                                         out.println("</td>");
 
                                         out.println("<td class='texto_derecha'>");

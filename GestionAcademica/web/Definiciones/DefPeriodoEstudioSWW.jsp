@@ -280,38 +280,43 @@
                     {
 
 
-                        $.each(carrera.plan, function (f, plan) {
-                            plan.plaEstCod = "<td> <a href='#' data-codigo='" + plan.plaEstCod + "' data-nombre='" + plan.plaEstNom + "' class='Pop_Seleccionar'>" + plan.plaEstCod + " </a> </td>";
+                        $.post('<% out.print(urlSistema); %>ABM_Carrera', {
+                            pCod: carrera.carCod,
+                            pAccion: "POPUP_OBTENER_PLANES"
+                        }, function (responseText) {
+                            var planes = JSON.parse(responseText);
+
+                            $.each(planes, function (f, plan) {
+                                plan.plaEstCod = "<td> <a href='#' data-codigo='" + plan.plaEstCod + "' data-nombre='" + plan.plaEstNom + "' class='Pop_Seleccionar'>" + plan.plaEstCod + " </a> </td>";
+                            });
+
+                            $('#PopUpTblEstudio').DataTable({
+                                data: planes,
+                                deferRender: true,
+                                destroy: true,
+                                bLengthChange: false, //thought this line could hide the LengthMenu
+                                pageLength: 10,
+                                language: {
+                                    "lengthMenu": "Mostrando _MENU_ registros por página",
+                                    "zeroRecords": "No se encontraron registros",
+                                    "info": "Página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No hay registros",
+                                    "search": "Buscar:",
+                                    "paginate": {
+                                        "first": "Primera",
+                                        "last": "Ultima",
+                                        "next": "Siguiente",
+                                        "previous": "Anterior"
+                                    },
+                                    "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                }
+                                , columns: [
+                                    {"data": "plaEstCod"},
+                                    {"data": "plaEstNom"}
+                                ]
+
+                            });
                         });
-
-                        $('#PopUpTblEstudio').DataTable({
-                            data: carrera.plan,
-                            deferRender: true,
-                            destroy: true,
-                            bLengthChange: false, //thought this line could hide the LengthMenu
-                            pageLength: 10,
-                            language: {
-                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                "zeroRecords": "No se encontraron registros",
-                                "info": "Página _PAGE_ de _PAGES_",
-                                "infoEmpty": "No hay registros",
-                                "search": "Buscar:",
-                                "paginate": {
-                                    "first": "Primera",
-                                    "last": "Ultima",
-                                    "next": "Siguiente",
-                                    "previous": "Anterior"
-                                },
-                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                            }
-                            , columns: [
-                                {"data": "plaEstCod"},
-                                {"data": "plaEstNom"}
-                            ]
-
-                        });
-
-                    }
 
                     $('#pop_FltrCarCod').on('change', function () {
 
@@ -333,7 +338,7 @@
 
                             });
                         });
-                    })
+                    });
 
                     $(document).on('click', ".Pop_Seleccionar", function () {
 
@@ -378,9 +383,8 @@
                         });
 
                     });
-
-
-                });
+                }
+            });
             </script>
 
         </div>

@@ -190,11 +190,6 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     }
     
     
-   @Override
-    public Long GetPrimaryKey() {
-        return this.DocCod;
-    } 
-
   
 }
 

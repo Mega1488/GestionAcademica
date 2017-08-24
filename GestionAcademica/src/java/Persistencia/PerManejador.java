@@ -25,9 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Table;
 import org.hibernate.Criteria;
-import org.hibernate.FlushMode;
 import org.hibernate.Query;
-import org.hibernate.metadata.ClassMetadata;
 
 /**
  *

@@ -11,7 +11,6 @@ import Entidad.SincInconsistenciaDatos;
 import Entidad.SincRegistroEliminado;
 import Entidad.Sincronizacion;
 import Entidad.SincronizacionInconsistencia;
-import Enumerado.Constantes;
 import Enumerado.EstadoInconsistencia;
 import Enumerado.EstadoSincronizacion;
 import Enumerado.Objetos;
@@ -24,15 +23,10 @@ import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import WSClient.SincronizarWSClient;
-import com.mchange.v1.util.UIterator;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

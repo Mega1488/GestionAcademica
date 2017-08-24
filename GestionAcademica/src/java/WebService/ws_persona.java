@@ -5,12 +5,16 @@
  */
 package WebService;
 
+import Entidad.Periodo;
+import Entidad.PeriodoEstudioDocumento;
 import Entidad.Persona;
 import Enumerado.TipoMensaje;
+import Enumerado.TipoPeriodo;
 import Logica.LoCalendario;
 import Logica.LoPersona;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.util.Date;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -135,6 +139,26 @@ public class ws_persona {
         return retorno;
     }
 
+
+    /**
+     * Prueba
+     * @return Resultado
+     */
+    @WebMethod(operationName = "Prueba")
+    public Retorno_MsgObj Prueba() {
+        //TODO write your implementation code here:
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        
+        PeriodoEstudioDocumento doc = new PeriodoEstudioDocumento();
+        
+        doc.setDocNom("asd");
+        doc.setDocFch(new Date());
+        
+        
+        retorno.setObjeto(doc);
+        return retorno;
+    }
 
 
 }
