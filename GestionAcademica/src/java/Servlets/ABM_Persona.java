@@ -71,8 +71,12 @@ public class ABM_Persona extends HttpServlet {
                 break;
                 
                 case "POPUP_OBTENER":
-                    retorno = this.POPUP_ObtenerDatos(request);
+                    retorno = this.POPUP_ObtenerDatos();
                 break;
+                
+                case "POPUP_OBTENER_ESTUDIOS":
+                    retorno = this.POPUP_ObtenerEstudiosDatos(request);
+                    break;
                         
             }
 
@@ -189,7 +193,7 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
-    private String POPUP_ObtenerDatos(HttpServletRequest request)
+    private String POPUP_ObtenerDatos()
     {
         List<Object> lstPersona;
         
@@ -197,6 +201,13 @@ public class ABM_Persona extends HttpServlet {
         lstPersona = loPersona.obtenerPopUp().getLstObjetos();
 
         return utilidades.ObjetoToJson(lstPersona);
+    }
+    
+    private String POPUP_ObtenerEstudiosDatos(HttpServletRequest request)
+    {
+        Persona persona = this.ValidarPersona(request, null);
+
+        return utilidades.ObjetoToJson(persona.getLstEstudios());
     }
 
     private Persona ValidarPersona(HttpServletRequest request, Persona persona)
@@ -206,6 +217,7 @@ public class ABM_Persona extends HttpServlet {
             persona   = new Persona();
         }
 
+            String PerCod   = request.getParameter("pPerCod");
             String PerNom= request.getParameter("pPerNom");
             String PerApe= request.getParameter("pPerApe");
             String PerDoc= request.getParameter("pPerDoc");
@@ -231,20 +243,25 @@ public class ABM_Persona extends HttpServlet {
 
 
             //Sin validacion
-            persona.setPerNom(PerNom);
-            persona.setPerApe(PerApe);
-            persona.setPerUsrMod(PerUsrMod);
-            persona.setPerEsDoc(Boolean.valueOf(PerEsDoc));
-            persona.setPerEsAdm(Boolean.valueOf(PerEsAdm));
-            persona.setPerEsAlu(Boolean.valueOf(PerEsAlu));
-            persona.setPerNroLib(Integer.valueOf(PerNroLib));
-            persona.setPerNroEstOrt(Integer.valueOf(PerNroEstOrt));
-            persona.setPerFil(Filial.fromCode(Integer.valueOf(PerFil)));
-            persona.setPerEml(PerEml);
-            persona.setPerNotEml(Boolean.valueOf(PerNotEml));
-            persona.setPerNotApp(Boolean.valueOf(PerNotApp));
             
-            if(PerDoc != null) if(!PerDoc.isEmpty()) persona.setPerDoc(PerDoc);
+            
+
+            if(PerCod != null) if(!PerCod.isEmpty()) persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
+            
+            if(PerNom != null) persona.setPerNom(PerNom);
+            if(PerApe != null) persona.setPerApe(PerApe);
+            if(PerUsrMod != null) persona.setPerUsrMod(PerUsrMod);
+            if(PerEsDoc != null) persona.setPerEsDoc(Boolean.valueOf(PerEsDoc));
+            if(PerEsAdm != null) persona.setPerEsAdm(Boolean.valueOf(PerEsAdm));
+            if(PerEsAlu != null) persona.setPerEsAlu(Boolean.valueOf(PerEsAlu));
+            if(PerNroLib != null) persona.setPerNroLib(Integer.valueOf(PerNroLib));
+            if(PerNroEstOrt != null) persona.setPerNroEstOrt(Integer.valueOf(PerNroEstOrt));
+            if(PerFil != null) persona.setPerFil(Filial.fromCode(Integer.valueOf(PerFil)));
+            if(PerEml != null) persona.setPerEml(PerEml);
+            if(PerNotEml != null) persona.setPerNotEml(Boolean.valueOf(PerNotEml));
+            if(PerNotApp != null) persona.setPerNotApp(Boolean.valueOf(PerNotApp));
+            
+            if(PerDoc != null) persona.setPerDoc(PerDoc);
 
             if(!PerPass.isEmpty())
             {

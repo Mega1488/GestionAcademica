@@ -279,7 +279,7 @@
                         $.each(d.lstEstudios, function (f, estudio) {
                             retorno += "<div>";
 
-                            retorno += "<div class='contenedor_titulo_escolaridad'><label>" + estudio.tituloEstudio + "</label></div>";
+                            retorno += "<div class='contenedor_titulo_escolaridad'><label>" + estudio.inscripcion.nombreEstudio + "</label></div>";
 
                             retorno += "<div class='contenedor_tabla_escolaridad'>";
                             retorno += "<table class='table table-hover eliminar_margen_tabla'>";

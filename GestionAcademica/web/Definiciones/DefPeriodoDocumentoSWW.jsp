@@ -71,7 +71,7 @@
                     //--------------------------------
 
                 } else {
-                    fichero = new File("C:/librerias", item.getName());
+                    fichero = new File(utilidad.getPrivateTempStorage(), item.getName());
                     item.write(fichero);
                 }
             }

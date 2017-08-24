@@ -127,7 +127,6 @@ public class Persona extends SincHelper implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
-    @JsonIgnore
     @Transient
     private ArrayList<SDT_PersonaEstudio> lstEstudios;
 
