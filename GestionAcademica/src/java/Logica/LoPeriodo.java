@@ -267,48 +267,25 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object EstudioAgregar(PeriodoEstudio periEstudio)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), periEstudio);
-        
-        if(!error)
-        {
-            Periodo periodo = periEstudio.getPeriodo();
-            periEstudio.setObjFchMod(new Date());
-            periodo.getLstEstudio().add(periEstudio);
-            retorno = (Retorno_MsgObj) this.actualizar(periodo);
-        }
-       
-        
-        return retorno;
+        periEstudio.setObjFchMod(new Date());
+
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.guardar(periEstudio);
     }
     
     public Object EstudioActualizar(PeriodoEstudio periEstudio)
     {
         
-        Periodo periodo = periEstudio.getPeriodo();
-        int indice  = periodo.getLstEstudio().indexOf(periEstudio);
         periEstudio.setObjFchMod(new Date());
-        periodo.getLstEstudio().set(indice, periEstudio);
         
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(periodo);
-
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.actualizar(periEstudio);
     }
     
     public Object EstudioEliminar(PeriodoEstudio periEstudio)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), periEstudio);
-       
-        if(!error)
-        {
-            Periodo periodo = periEstudio.getPeriodo();
-            int indice  = periodo.getLstEstudio().indexOf(periEstudio);
-            periodo.getLstEstudio().remove(indice);
-       
-            retorno = (Retorno_MsgObj) this.actualizar(periodo);
-        }
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(periEstudio);
     }
     
     public Retorno_MsgObj EstudioObtener(Long PeriEstCod){
@@ -318,9 +295,7 @@ public class LoPeriodo implements InABMGenerico{
     
     public Retorno_MsgObj EstudioObtenerTodos()
     {
-        
         PerManejador perManager = new PerManejador();
-
         return perManager.obtenerLista("PeriodoEstudio.findAll", null);
     }
     
@@ -352,11 +327,10 @@ public class LoPeriodo implements InABMGenerico{
         
         if(!error)
         {
-            PeriodoEstudio periEst = alumno.getPeriodoEstudio();
             alumno.setObjFchMod(new Date());
             
-            periEst.getLstAlumno().add(alumno);
-            retorno = (Retorno_MsgObj) this.EstudioActualizar(periEst);
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.guardar(alumno);
         }
        
         
@@ -365,33 +339,15 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object AlumnoActualizar(PeriodoEstudioAlumno alumno)
     {
-        
-        PeriodoEstudio periEst = alumno.getPeriodoEstudio();
-        int indice  = periEst.getLstAlumno().indexOf(alumno);
         alumno.setObjFchMod(new Date());
-        periEst.getLstAlumno().set(indice, alumno);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.EstudioActualizar(periEst);
-
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.actualizar(alumno);
     }
     
     public Object AlumnoEliminar(PeriodoEstudioAlumno alumno)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), alumno);
-       
-        if(!error)
-        {
-            PeriodoEstudio periodo = alumno.getPeriodoEstudio();
-            
-            int indice  = periodo.getLstAlumno().indexOf(alumno);
-            
-            periodo.getLstAlumno().remove(indice);
-
-            retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-        }
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(alumno);
     }
    
     public Retorno_MsgObj GeneracionAgregar(Long PeriCod, Integer InsGenAnio)
@@ -449,49 +405,24 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object DocenteAgregar(PeriodoEstudioDocente docente)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), docente);
-        
-        if(!error)
-        {
-            PeriodoEstudio periodo = docente.getPeriodoEstudio();
-            docente.setObjFchMod(new Date());
-            
-            periodo.getLstDocente().add(docente);
-            retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-        }
-       
-        
-        return retorno;
+        docente.setObjFchMod(new Date());
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.guardar(docente);
+
     }
     
     public Object DocenteActualizar(PeriodoEstudioDocente docente)
     {
         
-        PeriodoEstudio periodo = docente.getPeriodoEstudio();
-        int indice  = periodo.getLstDocente().indexOf(docente);
         docente.setObjFchMod(new Date());
-        periodo.getLstDocente().set(indice, docente);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.actualizar(docente);
     }
     
     public Object DocenteEliminar(PeriodoEstudioDocente docente)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), docente);
-       
-        if(!error)
-        {
-            PeriodoEstudio periodo = docente.getPeriodoEstudio();
-            int indice  = periodo.getLstDocente().indexOf(docente);
-            periodo.getLstDocente().remove(indice);
-
-            retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-        }
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(docente);
     }
     
     //------------------------------------------------------------------------------------
@@ -500,49 +431,23 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object DocumentoAgregar(PeriodoEstudioDocumento documento)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), documento);
-        
-        if(!error)
-        {
-            PeriodoEstudio periodo = documento.getPeriodo();
-            documento.setObjFchMod(new Date());
-            
-            periodo.getLstDocumento().add(documento);
-            retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-        }
-       
-        
-        return retorno;
+        documento.setObjFchMod(new Date());
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.guardar(documento);
     }
     
     public Object DocumentoActualizar(PeriodoEstudioDocumento documento)
     {
         
-        PeriodoEstudio periodo = documento.getPeriodo();
-        int indice  = periodo.getLstDocumento().indexOf(documento);
         documento.setObjFchMod(new Date());
-        periodo.getLstDocumento().set(indice, documento);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.actualizar(documento);
     }
     
     public Object DocumentoEliminar(PeriodoEstudioDocumento documento)
     {
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), documento);
-       
-        if(!error)
-        {
-            PeriodoEstudio periodo = documento.getPeriodo();
-            int indice  = periodo.getLstDocumento().indexOf(documento);
-            periodo.getLstDocumento().remove(indice);
-            
-            retorno = (Retorno_MsgObj) this.EstudioActualizar(periodo);
-        }
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(documento);
     }
     
     

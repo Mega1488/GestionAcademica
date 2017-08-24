@@ -86,9 +86,6 @@ public class PerManejador{
             iniciaOperacion();
             retorno.setObjeto((Long) sesion.save(pObjeto));
             
-            sesion.flush(); 
-            sesion.refresh(pObjeto); 
-            
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
@@ -112,8 +109,6 @@ public class PerManejador{
             iniciaOperacion();
             
             sesion.save(pObjeto);
-            sesion.flush(); 
-            sesion.refresh(pObjeto);
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Guardado correctamente", TipoMensaje.MENSAJE));
@@ -138,8 +133,6 @@ public class PerManejador{
         try {
             iniciaOperacion();
             sesion.update(pObjeto);
-            sesion.flush(); 
-            sesion.refresh(pObjeto);
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Modificado correctamente", TipoMensaje.MENSAJE));
@@ -164,8 +157,6 @@ public class PerManejador{
         try {
             iniciaOperacion();
             sesion.merge(pObjeto);
-            sesion.flush(); 
-            sesion.refresh(pObjeto);
             tx.commit();
             
             retorno.setMensaje(new Mensajes("Modificado merge", TipoMensaje.MENSAJE));
@@ -239,7 +230,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            //tx.commit();
+            if(tx.isActive()) tx.commit();
             Query query = sesion.getNamedQuery(namedQuery);
             
             if(parametros != null)
@@ -274,7 +265,7 @@ public class PerManejador{
         try {
             iniciaOperacion();
             
-            //tx.commit();
+            if(tx.isActive()) tx.commit();
             Query query = sesion.createSQLQuery(sentencia);
             query.setResultTransformer(Criteria.ALIAS_TO_ENTITY_MAP);
             List list = query.list();
@@ -340,11 +331,6 @@ public class PerManejador{
 
         return retorno;
         
-    }
-    
-    public String GetPrimaryKeyFromObject(Object objeto){
-        ClassMetadata objMeta =  NewHibernateUtil.getSessionFactory().getClassMetadata(objeto.getClass());
-        return objMeta.getIdentifierPropertyName();
     }
     
     public String GetTableNameFromObject(Object objeto){

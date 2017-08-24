@@ -495,9 +495,9 @@ public class LoSincronizacion implements InABMGenerico{
                     {
                         if(modObjects.getLstObjetos().size() > 0)
                         {
+                            System.err.println("Objeto: " + objeto.getObjNmdQry());
+                            System.err.println("Cambios: " + modObjects.getLstObjetos().toString());
                             Retorno_MsgObj objetoModificado = new Retorno_MsgObj();
-                            
-                            System.err.println("Modificacion: " + modObjects.getLstObjetos().size());
                             
                             objetoModificado.setObjeto(obj);
                             objetoModificado.setLstObjetos(modObjects.getLstObjetos());

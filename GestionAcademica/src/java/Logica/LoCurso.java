@@ -185,10 +185,10 @@ public class LoCurso implements Interfaz.InCurso{
         if(!error)
         {
             modulo = (Modulo) retorno.getObjeto();
-            Curso curso = modulo.getCurso();
             modulo.setObjFchMod(new Date());
-            curso.getLstModulos().add(modulo);
-            retorno = (Retorno_MsgObj) this.actualizar(curso);
+            
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.guardar(modulo);
         }
        
         
@@ -209,12 +209,10 @@ public class LoCurso implements Interfaz.InCurso{
         if(!error)
         {
             modulo = (Modulo) retorno.getObjeto();
-            Curso curso = modulo.getCurso();
-            int indice  = curso.getLstModulos().indexOf(modulo);
             modulo.setObjFchMod(new Date());
-            curso.getLstModulos().set(indice, modulo);
-
-            retorno = (Retorno_MsgObj) this.actualizar(curso);
+            
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.actualizar(modulo);
         }
 
         return retorno;
@@ -234,11 +232,9 @@ public class LoCurso implements Interfaz.InCurso{
         if(!error)
         {
             modulo = (Modulo) retorno.getObjeto();
-            Curso curso = modulo.getCurso();
-            int indice  = curso.getLstModulos().indexOf(modulo);
-            curso.getLstModulos().remove(indice);
-
-            retorno = (Retorno_MsgObj) this.actualizar(curso);
+            
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.eliminar(modulo);
         }
         return retorno;
     }
@@ -254,88 +250,6 @@ public class LoCurso implements Interfaz.InCurso{
 
         return perManager.obtenerLista("Modulo.findByPeriodo", lstParametros);
     }
-    
-    //------------------------------------------------------------------------------------
-    //-MANEJO DE EVALUACION CURSO
-    //------------------------------------------------------------------------------------
-    public Object CursoEvaluacionAgregar(Evaluacion evaluacion)
-    {
-        evaluacion.setObjFchMod(new Date());
-        
-        Curso curso = evaluacion.getCurEvl();
-        curso.getLstEvaluacion().add(evaluacion);
-        
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
-        
-        return retorno;
-    }
-    
-    public Object CursoEvaluacionActualizar(Evaluacion evaluacion)
-    {
-        evaluacion.setObjFchMod(new Date());
-        
-        Curso curso = evaluacion.getCurEvl();
-        int indice  = curso.getLstEvaluacion().indexOf(evaluacion);
-        
-        curso.getLstEvaluacion().set(indice, evaluacion);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
-        
-        return retorno;
-    }
-    
-    public Object CursoEvaluacionEliminar(Evaluacion evaluacion)
-    {
-        Curso curso = evaluacion.getCurEvl();
-        int indice  = curso.getLstEvaluacion().indexOf(evaluacion);
-        
-        curso.getLstEvaluacion().remove(indice);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(curso);
-        
-        return retorno;
-    }
-    
-        //------------------------------------------------------------------------------------
-    //-MANEJO DE EVALUACION MODULO
-    //------------------------------------------------------------------------------------
-    public Object ModuloEvaluacionAgregar(Evaluacion evaluacion)
-    {
-        evaluacion.setObjFchMod(new Date());
-        
-        Modulo modulo = evaluacion.getModEvl();
-        modulo.getLstEvaluacion().add(evaluacion);
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.ModuloActualizar(modulo);
-        
-        return retorno;
-    }
-    
-    public Object ModuloEvaluacionActualizar(Evaluacion evaluacion)
-    {
-        evaluacion.setObjFchMod(new Date());
-        
-        Modulo modulo = evaluacion.getModEvl();
-        int indice  = modulo.getLstEvaluacion().indexOf(evaluacion);
-        
-        modulo.getLstEvaluacion().set(indice, evaluacion);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.ModuloActualizar(modulo);
-        
-        return retorno;
-    }
-    
-    public Object ModuloEvaluacionEliminar(Evaluacion evaluacion)
-    {
-        Modulo modulo = evaluacion.getModEvl();
-        int indice  = modulo.getLstEvaluacion().indexOf(evaluacion);
-        
-        modulo.getLstEvaluacion().remove(indice);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.ModuloActualizar(modulo);
-        
-        return retorno;
-    }
-    
     
     //--------------------------------------------------------------------------------------------------------
     //Moodle

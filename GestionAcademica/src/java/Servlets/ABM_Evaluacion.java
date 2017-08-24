@@ -103,29 +103,8 @@ public class ABM_Evaluacion extends HttpServlet {
 
             if(!error)
             {
-                System.err.println("x");
-                
-                if(evaluacion.getCurEvl() != null)
-                {
-                    System.err.println("b");
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionAgregar(evaluacion);
-                    
-                    mensaje    = retornoObj.getMensaje();
-                }
-                
-                if(evaluacion.getModEvl()!= null)
-                {
-                    System.err.println("c");
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEvaluacionAgregar(evaluacion);
-                    
-                    mensaje    = retornoObj.getMensaje();
-                }
-                
-                if(evaluacion.getMatEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().guardar(evaluacion);
-                    mensaje    = retornoObj.getMensaje();
-                }
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().guardar(evaluacion);
+                mensaje    = retornoObj.getMensaje();
             }
         }
         catch(Exception ex)
@@ -154,25 +133,8 @@ public class ABM_Evaluacion extends HttpServlet {
                 String EvlCod= request.getParameter("pEvlCod");
                 evaluacion.setEvlCod(Long.valueOf(EvlCod));
                 
-                if(evaluacion.getCurEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionActualizar(evaluacion);
-                    
-                    mensaje    = retornoObj.getMensaje();
-                }
-                
-                if(evaluacion.getModEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEvaluacionActualizar(evaluacion);
-                    
-                    mensaje    = retornoObj.getMensaje();
-                }
-                
-                if(evaluacion.getMatEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().actualizar(evaluacion);
-                    mensaje    = retornoObj.getMensaje();
-                }
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().actualizar(evaluacion);
+                mensaje    = retornoObj.getMensaje();
             }
             
         }
@@ -200,25 +162,9 @@ public class ABM_Evaluacion extends HttpServlet {
                 String EvlCod= request.getParameter("pEvlCod");
                 evaluacion.setEvlCod(Long.valueOf(EvlCod));
                 
-                if(evaluacion.getCurEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().CursoEvaluacionEliminar(evaluacion);
-                    
-                    mensaje    = retornoObj.getMensaje();
-                }
+                Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().eliminar(evaluacion);
+                mensaje    = retornoObj.getMensaje();
                 
-                if(evaluacion.getModEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCurso.GetInstancia().ModuloEvaluacionEliminar(evaluacion);
-                    
-                    mensaje    = retornoObj.getMensaje();
-                }
-                
-                if(evaluacion.getMatEvl() != null)
-                {
-                    Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoEvaluacion.GetInstancia().eliminar(evaluacion);
-                    mensaje    = retornoObj.getMensaje();
-                }
             }
         }
         catch(Exception ex)
@@ -300,13 +246,10 @@ public class ABM_Evaluacion extends HttpServlet {
 
                 //Sin validacion
                 if(!MatEvlMatCod.equals("null"))
-                {           
-                    Carrera car = new Carrera();
-                    car = (Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(MatEvlCarCod)).getObjeto();
-                    PlanEstudio plan = new PlanEstudio();
-                    plan = car.getPlanEstudioById(Long.valueOf(MatEvlPlaEstCod));
-                    Materia mat = new Materia();
-                    mat = plan.getMateriaById(Long.valueOf(MatEvlMatCod));
+                {
+                    Carrera car = (Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(MatEvlCarCod)).getObjeto();
+                    PlanEstudio plan = car.getPlanEstudioById(Long.valueOf(MatEvlPlaEstCod));
+                    Materia mat = plan.getMateriaById(Long.valueOf(MatEvlMatCod));
                     
                     evaluacion.setMatEvl(mat);
                 }
@@ -336,8 +279,6 @@ public class ABM_Evaluacion extends HttpServlet {
                         evaluacion.setTpoEvl((TipoEvaluacion) retorno.getObjeto());
                     }
                 }
-        
-           
                 
             return evaluacion;
         }

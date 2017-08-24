@@ -176,11 +176,10 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             plan = (PlanEstudio) retorno.getObjeto();
-            Carrera car = plan.getCarrera();
             plan.setObjFchMod(new Date());
-            car.getPlan().add(plan);
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.guardar(plan);
             
-            retorno = (Retorno_MsgObj) this.actualizar(car);
         }
         return retorno;
     }
@@ -199,12 +198,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             plan = (PlanEstudio) retorno.getObjeto();
-            Carrera car = plan.getCarrera();
-            int indice  = car.getPlan().indexOf(plan);
             plan.setObjFchMod(new Date());
-            car.getPlan().set(indice, plan);
-
-            retorno = (Retorno_MsgObj) this.actualizar(car);
+            
+            PerManejador perManejador   = new PerManejador();
+     
+            retorno = (Retorno_MsgObj) perManejador.actualizar(plan);
         }
         return retorno;
     }
@@ -223,11 +221,9 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             plan = (PlanEstudio) retorno.getObjeto();
-            Carrera car = plan.getCarrera();
-            int indice  = car.getPlan().indexOf(plan);
-            car.getPlan().remove(indice);
-
-            retorno = (Retorno_MsgObj) this.actualizar(car);
+            
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.eliminar(plan);
         }
         return retorno;
     }
@@ -250,11 +246,10 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             mat = (Materia) retorno.getObjeto();
-            PlanEstudio plan = mat.getPlan();
             mat.setObjFchMod(new Date());
-            plan.getLstMateria().add(mat);
             
-            retorno = (Retorno_MsgObj) this.PlanEstudioActualizar(plan);
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.guardar(mat);
         } 
         return retorno;
     }
@@ -273,12 +268,10 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             mat = (Materia) retorno.getObjeto();
-            PlanEstudio plan = mat.getPlan();
-            int indice  = plan.getLstMateria().indexOf(mat);
             mat.setObjFchMod(new Date());
-            plan.getLstMateria().set(indice, mat);
-
-            retorno = (Retorno_MsgObj) this.PlanEstudioActualizar(plan);
+            
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.actualizar(mat);
         }
         return retorno;
     }
@@ -297,11 +290,9 @@ public class LoCarrera implements Interfaz.InCarrera{
         if(!error)
         {
             mat = (Materia) retorno.getObjeto();
-            PlanEstudio plan = mat.getPlan();
-            int indice  = plan.getLstMateria().indexOf(mat);
-            plan.getLstMateria().remove(indice);
-
-            retorno = (Retorno_MsgObj) this.PlanEstudioActualizar(plan);
+            
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.eliminar(mat);
         }
         return retorno;
     }

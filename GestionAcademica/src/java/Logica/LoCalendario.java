@@ -370,11 +370,11 @@ public class LoCalendario implements InABMGenerico{
         
         if(!error)
         {
-            Calendario calendario = alumno.getCalendario();
             alumno.setObjFchMod(new Date());
             alumno.setEvlCalEst(EstadoCalendarioEvaluacion.SIN_CALIFICAR);
-            calendario.getLstAlumnos().add(alumno);
-            retorno = (Retorno_MsgObj) this.actualizar(calendario);
+
+            PerManejador perManejador   = new PerManejador();
+            retorno = (Retorno_MsgObj) perManejador.guardar(alumno);
         }
        
         
@@ -383,29 +383,15 @@ public class LoCalendario implements InABMGenerico{
     
     public Object AlumnoActualizar(CalendarioAlumno alumno){
         
-        Calendario calendario = alumno.getCalendario();
-        int indice  = calendario.getLstAlumnos().indexOf(alumno);
         alumno.setObjFchMod(new Date());
-        calendario.getLstAlumnos().set(indice, alumno);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(calendario);
-
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.actualizar(alumno);
+        
     }
     
     public Object AlumnoEliminar(CalendarioAlumno alumno){
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), alumno);
-       
-        if(!error)
-        {
-            Calendario calendario = alumno.getCalendario();
-            int indice  = calendario.getLstAlumnos().indexOf(alumno);
-            calendario.getLstAlumnos().remove(indice);
-       
-            retorno = (Retorno_MsgObj) this.actualizar(calendario);
-        }
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return perManejador.eliminar(alumno);
     }
     
     public List<CalendarioAlumno> AlumnoObtenerListaPorUsuario(Calendario calendario, String usuario){
@@ -657,47 +643,22 @@ public class LoCalendario implements InABMGenerico{
     //------------------------------------------------------------------------------------
     
     public Object DocenteAgregar(CalendarioDocente docente){
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), docente);
+        docente.setObjFchMod(new Date());
         
-        if(!error)
-        {
-            Calendario calendario = docente.getCalendario();
-            docente.setObjFchMod(new Date());
-            
-            calendario.getLstDocentes().add(docente);
-            retorno = (Retorno_MsgObj) this.actualizar(calendario);
-        }
-       
-        
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return  perManejador.guardar(docente);
     }
     
     public Object DocenteActualizar(CalendarioDocente docente){
         
-        Calendario calendario = docente.getCalendario();
-        int indice  = calendario.getLstDocentes().indexOf(docente);
         docente.setObjFchMod(new Date());
-        calendario.getLstDocentes().set(indice, docente);
-
-        Retorno_MsgObj retorno = (Retorno_MsgObj) this.actualizar(calendario);
-
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return  perManejador.actualizar(docente);
     }
     
     public Object DocenteEliminar(CalendarioDocente docente){
-        boolean error           = false;
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), docente);
-       
-        if(!error)
-        {
-            Calendario calendario = docente.getCalendario();
-            int indice  = calendario.getLstDocentes().indexOf(docente);
-            calendario.getLstDocentes().remove(indice);
-
-            retorno = (Retorno_MsgObj) this.actualizar(calendario);
-        }
-        return retorno;
+        PerManejador perManejador   = new PerManejador();
+        return  perManejador.eliminar(docente);
     }
     
     public Retorno_MsgObj DocenteAgregarPorPeriodo(Long CalCod, Long PeriEstCod){
