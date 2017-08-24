@@ -27,7 +27,6 @@ public interface WsSincronizar {
 
     /**
      * 
-     * @param token
      * @param cambios
      * @return
      *     returns WSExternalObjects.RetornoMsgObj
@@ -38,14 +37,11 @@ public interface WsSincronizar {
     @ResponseWrapper(localName = "impactar_inconsistenciaResponse", targetNamespace = "http://WebService/", className = "WSClient.ImpactarInconsistenciaResponse")
     @Action(input = "http://WebService/ws_sincronizar/impactar_inconsistenciaRequest", output = "http://WebService/ws_sincronizar/impactar_inconsistenciaResponse")
     public Retorno_MsgObj impactarInconsistencia(
-        @WebParam(name = "token", targetNamespace = "")
-        String token,
         @WebParam(name = "cambios", targetNamespace = "")
         Retorno_MsgObj cambios);
 
     /**
      * 
-     * @param token
      * @param cambios
      * @return
      *     returns Utiles.Retorno_MsgObj
@@ -56,15 +52,12 @@ public interface WsSincronizar {
     @ResponseWrapper(localName = "sincronizarResponse", targetNamespace = "http://WebService/", className = "WSClient.SincronizarResponse")
     @Action(input = "http://WebService/ws_sincronizar/sincronizarRequest", output = "http://WebService/ws_sincronizar/sincronizarResponse")
     public Retorno_MsgObj sincronizar(
-        @WebParam(name = "token", targetNamespace = "")
-        String token,
         @WebParam(name = "cambios", targetNamespace = "")
         Retorno_MsgObj cambios);
 
     /**
      * 
      * @param fecha
-     * @param token
      * @return
      *     returns Utiles.SincRetorno
      */
@@ -74,8 +67,6 @@ public interface WsSincronizar {
     @ResponseWrapper(localName = "update_fechaResponse", targetNamespace = "http://WebService/", className = "WSClient.UpdateFechaResponse")
     @Action(input = "http://WebService/ws_sincronizar/update_fechaRequest", output = "http://WebService/ws_sincronizar/update_fechaResponse")
     public Retorno_MsgObj updateFecha(
-        @WebParam(name = "token", targetNamespace = "")
-        String token,
         @WebParam(name = "fecha", targetNamespace = "")
         XMLGregorianCalendar fecha);
 

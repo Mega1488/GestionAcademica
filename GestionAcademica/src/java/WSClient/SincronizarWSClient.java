@@ -12,13 +12,19 @@ import Logica.Seguridad;
 import Utiles.Retorno_MsgObj;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.BindingProvider;
+import javax.xml.ws.handler.MessageContext;
 
 /**
  *
@@ -74,7 +80,7 @@ public class SincronizarWSClient {
             WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
             WsSincronizar port = service.getWsSincronizarPort();
 
-            retorno = port.updateFecha(token, fecha);
+            retorno = port.updateFecha(fecha);
 
         } catch (MalformedURLException ex) {
             
@@ -99,7 +105,18 @@ public class SincronizarWSClient {
             WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
             WsSincronizar port = service.getWsSincronizarPort();
             
-            retorno = port.sincronizar(token, cambios);
+            //-----------------------------------------------------------------
+            //WS SECURITY
+            //-----------------------------------------------------------------
+            Map<String, Object> reqMap = ((BindingProvider) port).getRequestContext();
+            reqMap.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, param.getParUrlSrvSnc());
+            Map<String, List<String>> header = new HashMap<>();
+            header.put("token", Collections.singletonList(token));
+            
+            reqMap.put(MessageContext.HTTP_REQUEST_HEADERS, header);
+            //-----------------------------------------------------------------
+            
+            retorno = port.sincronizar(cambios);
             
         } catch (MalformedURLException ex) {
             
@@ -124,7 +141,7 @@ public class SincronizarWSClient {
             WsSincronizar port = service.getWsSincronizarPort();
             
             
-            retorno = port.impactarInconsistencia(token, cambios);
+            retorno = port.impactarInconsistencia(cambios);
             
         } catch (MalformedURLException ex) {
             

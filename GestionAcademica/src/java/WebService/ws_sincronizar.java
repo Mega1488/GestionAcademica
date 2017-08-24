@@ -16,6 +16,8 @@ import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 //import Utiles.SincRetorno;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
@@ -35,44 +37,26 @@ public class ws_sincronizar {
     
     /**
      * Servicio de sincronizacion
-     * @param token token para validar consumo
      * @param cambios recibe los cambios a impactar
      * @return retorna los cambios nuevos, o las inconsistencias
      */
     @WebMethod(operationName = "sincronizar")
-    public Retorno_MsgObj sincronizar(@WebParam(name = "token") String token, @WebParam(name = "cambios") Retorno_MsgObj cambios) {
+    public Retorno_MsgObj sincronizar(@WebParam(name = "cambios") Retorno_MsgObj cambios) {
 
         System.err.println("Consumiendo sincronizar");
         
-
-        //OBTENER DIRECCION DE QUIEN LLAMA AL SERVICIO
-        HttpServletRequest request = (HttpServletRequest) context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
-        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
-        
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+        Retorno_MsgObj retorno  = this.isAuthenticated();
                 
-        if(token == null)
+        if(!retorno.SurgioError())
         {
-            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
-            LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SINCRONIZAR);
-        }
-        else
-        {
-            if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.SINCRONIZAR, direccion))
+            
+            if(cambios == null)
             {
-                retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("No se recibieron cambios, objeto nulo", TipoMensaje.ERROR));
             }
             else
             {
-                if(cambios == null)
-                {
-                    retorno.setMensaje(new Mensajes("No se recibieron cambios, objeto nulo", TipoMensaje.ERROR));
-                }
-                else
-                {
-                    retorno = LoSincronizacion.GetInstancia().Sincronizar(cambios);
-                    //retorno.setMensaje(new Mensajes("Chacha", TipoMensaje.ERROR));
-                }
+                retorno = LoSincronizacion.GetInstancia().Sincronizar(cambios);
             }
         }
 
@@ -81,93 +65,102 @@ public class ws_sincronizar {
 
     /**
      * Actualiza fecha de sincronizacion
-     * @param token token para validar consumo
      * @param fecha fecha a impactar
      * @return retorna los cambios nuevos, o las inconsistencias
      */
     @WebMethod(operationName = "update_fecha")
-    public Retorno_MsgObj update_fecha(@WebParam(name = "token") String token, @WebParam(name = "fecha") Date fecha) {
+    public Retorno_MsgObj update_fecha(@WebParam(name = "fecha") Date fecha) {
         
-        System.err.println("Consumiendo update_fecha");
-
-        //OBTENER DIRECCION DE QUIEN LLAMA AL SERVICIO
-        HttpServletRequest request = (HttpServletRequest) context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
-        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
-        
-        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Actualizar fecha", TipoMensaje.MENSAJE));
+        Retorno_MsgObj retorno  = this.isAuthenticated();
                 
-        if(token == null)
+        if(!retorno.SurgioError())
         {
-            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
-            LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SINCRONIZAR);
-        }
-        else
-        {
-            if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.SINCRONIZAR, direccion))
+            if(fecha == null)
             {
-                retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("No se recibio fecha, objeto nulo", TipoMensaje.ERROR));
             }
             else
             {
-                if(fecha == null)
-                {
-                    retorno.setMensaje(new Mensajes("No se recibio fecha, objeto nulo", TipoMensaje.ERROR));
-                }
-                else
-                {
-                    Parametro param = LoParametro.GetInstancia().obtener();
-                    param.setParFchUltSinc(fecha);
-                    LoParametro.GetInstancia().actualizar(param);
-                    retorno.setMensaje(new Mensajes("Modificado ok", TipoMensaje.MENSAJE));
+                Parametro param = LoParametro.GetInstancia().obtener();
+                param.setParFchUltSinc(fecha);
+                LoParametro.GetInstancia().actualizar(param);
+                retorno.setMensaje(new Mensajes("Modificado ok", TipoMensaje.MENSAJE));
 
-                }
             }
         }
+        
         
         return retorno;
     }
 
     /**
      * Web service operation
-     * @param token validar consumo de servicio
      * @param cambios recibe inconsistencias
      * @return retorna el resultado de la operacion 
      */
     @WebMethod(operationName = "impactar_inconsistencia")
-    public Retorno_MsgObj impactar_inconsistencia(@WebParam(name = "token") String token, @WebParam(name = "cambios") Retorno_MsgObj cambios) {
-        //OBTENER DIRECCION DE QUIEN LLAMA AL SERVICIO
-        HttpServletRequest request = (HttpServletRequest) context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
-        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
-        
-        Retorno_MsgObj retorno  = new Retorno_MsgObj();
+    public Retorno_MsgObj impactar_inconsistencia(@WebParam(name = "cambios") Retorno_MsgObj cambios) {
+        Retorno_MsgObj retorno  = this.isAuthenticated();
                 
-        if(token == null)
+        if(!retorno.SurgioError())
         {
-            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
-            LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SINCRONIZAR);
-        }
-        else
-        {
-            if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.SINCRONIZAR, direccion))
+            if(cambios == null)
             {
-                retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("No se recibieron cambios, objeto nulo", TipoMensaje.ERROR));
             }
             else
             {
-                if(cambios == null)
+                if(cambios.getObjeto() != null)
                 {
-                    retorno.setMensaje(new Mensajes("No se recibieron cambios, objeto nulo", TipoMensaje.ERROR));
+                    retorno = LoSincronizacion.GetInstancia().ProcesarInconsistencia(cambios);
+                }
+            }
+        }
+        
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj isAuthenticated() {
+        
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Autenticando", TipoMensaje.ERROR));
+
+        MessageContext messageContext = context.getMessageContext();
+        Map httpHeaders = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
+        List tknList = (List) httpHeaders.get("token");
+
+        if (tknList != null)
+        {
+            if(tknList.size() > 0)
+            {
+                String token = (String) tknList.get(0);
+                
+                HttpServletRequest request = (HttpServletRequest)context.getMessageContext().get(MessageContext.SERVLET_REQUEST);
+                String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+
+                
+
+                if(token == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+                    LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SINCRONIZAR);
                 }
                 else
                 {
-                    if(cambios.getObjeto() != null)
+                    if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.SINCRONIZAR, direccion))
                     {
-                        retorno = LoSincronizacion.GetInstancia().ProcesarInconsistencia(cambios);
+                        retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("Token valido, puede consumir el servicio", TipoMensaje.MENSAJE));                        
                     }
                 }
             }
         }
+
         
         return retorno;
+
     }
 }
