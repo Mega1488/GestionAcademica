@@ -12,9 +12,14 @@ import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Logica.LoCalendario;
 import Logica.LoPersona;
+import Persistencia.PerManejador;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -147,16 +152,16 @@ public class ws_persona {
     @WebMethod(operationName = "Prueba")
     public Retorno_MsgObj Prueba() {
         //TODO write your implementation code here:
+        String path = Utiles.Utilidades.GetInstancia().getAppPath();
         
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        System.err.println("Path: " + path);
         
-        PeriodoEstudioDocumento doc = new PeriodoEstudioDocumento();
+        PerManejador perManager = new PerManejador();
+        Retorno_MsgObj retorno = perManager.obtener(1L, PeriodoEstudioDocumento.class);
         
-        doc.setDocNom("asd");
-        doc.setDocFch(new Date());
+        PeriodoEstudioDocumento doc = (PeriodoEstudioDocumento) retorno.getObjeto();
+        System.err.println("Sentencia: " + doc.getUpdateQuery());
         
-        
-        retorno.setObjeto(doc);
         return retorno;
     }
 

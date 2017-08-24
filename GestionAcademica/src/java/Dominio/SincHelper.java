@@ -9,6 +9,7 @@ import Enumerado.Objetos;
 import Utiles.Utilidades;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -18,6 +19,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 /**
@@ -193,6 +195,14 @@ public abstract class SincHelper{
                 }
                 else
                 {
+                    
+                    if(campo.getType().isArray())
+                    {
+                        if(campo.getType().getComponentType().equals(Byte.TYPE))
+                        {
+                            value = "FROM_BASE64('" + new String(Base64.encodeBase64((byte[]) campo.get(this)), StandardCharsets.UTF_8) + "')";
+                        }
+                    }
 
                     if(campo.getType().equals(String.class))
                     {

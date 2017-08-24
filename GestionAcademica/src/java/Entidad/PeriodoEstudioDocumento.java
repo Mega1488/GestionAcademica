@@ -28,9 +28,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.xml.bind.annotation.XmlInlineBinaryData;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -94,11 +97,14 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
         this.DocFch = DocFch;
     }
 
+    @JsonIgnore
+    @XmlTransient
     public File getArchivo(){
        if(this.DocAdj != null)
        {
-           String nombreArchivo = RutaArchivos.CARPETA_PRIVADA.getRuta() + File.pathSeparator + this.getDocNom() + "." + this.DocExt;
-       
+           String nombreArchivo = Utiles.Utilidades.GetInstancia().getPrivateTempStorage() + "/" + this.getDocNom() + "." + this.DocExt;
+      
+           System.err.println("Descargando archivo: " + nombreArchivo);
         try {
             FileUtils.writeByteArrayToFile(new File(nombreArchivo), this.DocAdj);
          } catch (IOException ex) {
@@ -124,6 +130,15 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
         }
     }
 
+    @XmlInlineBinaryData
+    public byte[] getDocAdj() {
+        return DocAdj;
+    }
+
+    public void setDocAdj(byte[] DocAdj) {
+        this.DocAdj = DocAdj;
+    }
+    
     public Long getDocCod() {
         return DocCod;
     }

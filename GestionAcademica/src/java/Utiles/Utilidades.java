@@ -8,6 +8,7 @@ package Utiles;
 import Entidad.Parametro;
 import Enumerado.Constantes;
 import Enumerado.ExpresionesRegulares;
+import Enumerado.RutaArchivos;
 import Enumerado.TipoDato;
 import Logica.LoParametro;
 import Logica.LoSincronizacion;
@@ -17,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -278,8 +280,7 @@ public class Utilidades {
         
     }
 
-    public Object CastFromObject(Object fromObjeto, Object toObject)
-    {
+    public Object CastFromObject(Object fromObjeto, Object toObject){
         
         try{
 
@@ -306,5 +307,33 @@ public class Utilidades {
         return toObject;
         
     }
+   
+    public String getAppPath(){
+        try {
+            String path = this.getClass().getClassLoader().getResource("").getPath();
+            String fullPath = URLDecoder.decode(path, "UTF-8");
+            String pathArr[] = fullPath.split("/WEB-INF/classes/");
+            fullPath = pathArr[0];
+            
+            return fullPath;
+        } catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(Utilidades.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return null;
+    }
     
+    public String getPrivateTempStorage(){
+        String path = this.getAppPath();
+        path += RutaArchivos.CARPETA_PRIVADA.getRuta();
+        
+        return path;
+    }
+    
+    public String getPublicTempStorage(){
+        String path = this.getAppPath();
+        path += RutaArchivos.CARPETA_PUBLICA.getRuta();
+        
+        return path;
+    }
 }
