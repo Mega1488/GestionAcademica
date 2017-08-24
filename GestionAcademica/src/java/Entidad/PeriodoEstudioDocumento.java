@@ -95,17 +95,22 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     }
 
     public File getArchivo(){
-       String nombreArchivo = RutaArchivos.CARPETA_PRIVADA.getRuta() + File.pathSeparator + this.getDocNom() + "." + this.DocExt;
-
-       try {
-           FileUtils.writeByteArrayToFile(new File(nombreArchivo), this.DocAdj);
-        } catch (IOException ex) {
-            Logger.getLogger(PeriodoEstudioDocumento.class.getName()).log(Level.SEVERE, null, ex);
-        }
+       if(this.DocAdj != null)
+       {
+           String nombreArchivo = RutaArchivos.CARPETA_PRIVADA.getRuta() + File.pathSeparator + this.getDocNom() + "." + this.DocExt;
        
-        File archivo = new File(nombreArchivo);
-        
-        return archivo;
+        try {
+            FileUtils.writeByteArrayToFile(new File(nombreArchivo), this.DocAdj);
+         } catch (IOException ex) {
+             Logger.getLogger(PeriodoEstudioDocumento.class.getName()).log(Level.SEVERE, null, ex);
+         }
+
+         File archivo = new File(nombreArchivo);
+
+         return archivo;
+       }
+       
+       return null;
     }
 
     public void setArchivo(File pArchivo) {

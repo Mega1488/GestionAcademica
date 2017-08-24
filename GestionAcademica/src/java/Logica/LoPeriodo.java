@@ -65,6 +65,7 @@ public class LoPeriodo implements InABMGenerico{
                 PeriodoEstudio periEstudio = new PeriodoEstudio();
                 periEstudio.setModulo(mdl);
                 periEstudio.setPeriodo(periodo);
+                periEstudio.setObjFchMod(new Date());
                 periodo.getLstEstudio().add(periEstudio);
             }
         }
@@ -83,6 +84,7 @@ public class LoPeriodo implements InABMGenerico{
                 PeriodoEstudio periEstudio = new PeriodoEstudio();
                 periEstudio.setMateria(mat);
                 periEstudio.setPeriodo(periodo);
+                periEstudio.setObjFchMod(new Date());
                 periodo.getLstEstudio().add(periEstudio);
             }
         }
