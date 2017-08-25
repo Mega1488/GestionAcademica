@@ -528,12 +528,14 @@ public class LoCalendario implements InABMGenerico{
         
         if(modulo != null)
         {
-                return true;
+            Retorno_MsgObj aux = LoInscripcion.GetInstancia().obtenerInscByCurso(PerCod, modulo.getCurso().getCurCod());
+            return !aux.SurgioErrorObjetoRequerido();
         }
         
         if(curso != null)
         {
-                return true;
+            Retorno_MsgObj aux = LoInscripcion.GetInstancia().obtenerInscByCurso(PerCod, curso.getCurCod());
+            return !aux.SurgioErrorObjetoRequerido();
         }
         
         return false;
