@@ -696,5 +696,31 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
-    
+    public Retorno_MsgObj ObtenerEvaluacionesDocentes(Long PerCod)
+    {
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+
+        Retorno_MsgObj retorno = perManager.obtenerLista("Calendario.findByDocente", lstParametros);
+        
+        List<Object> lstRetorno = new ArrayList<>();
+        
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                Calendario calendar = (Calendario) objeto;
+//                if(!calendar.getDocenteById(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
+//                {
+                    lstRetorno.add(objeto);
+//                }
+            }
+        }
+        
+        retorno.setLstObjetos(lstRetorno);
+        
+        return retorno;
+    }
 }
