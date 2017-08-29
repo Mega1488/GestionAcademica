@@ -45,6 +45,8 @@
     }
     Integer cantidad = lstBandeja.size() + lstVistos.size();
 
+    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+
 %>
 
 <div  class="col-lg-12" style="text-align: right;">
@@ -80,6 +82,7 @@
     </p>
     <p>
         <a href="#" id="cerrar_sesion" name="cerrar_sesion">Cerrar sesion</a>
+        <a href="<%=urlSistema%>pswChange.jsp" >Cambiar contraseña</a>
     </p>
     </div>
 </div>

@@ -20,6 +20,8 @@ import Logica.LoNotificacion;
 import Logica.LoPersona;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -41,6 +43,12 @@ public class NotificacionesInternas {
         //ALUMNOS INACTIVOS
         LoNotificacion.GetInstancia().guardar(this.ALUMNOS_INACTIVOS());
         
+        //RESTABLECER PASSWORD
+        LoNotificacion.GetInstancia().guardar(this.RESTABLECER_PASSWORD());
+        
+        //CAMBIAR PASSWORD
+        LoNotificacion.GetInstancia().guardar(this.CAMBIAR_PASSWORD());
+        
      }
     
     private Notificacion EVALUACION_HABILITADA_INSCRIPCION(){
@@ -50,7 +58,7 @@ public class NotificacionesInternas {
         notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
         notificacion.setNotRepTpo(TipoRepeticion.DIAS);
         notificacion.setNotRepVal(1);
-        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+        notificacion.setNotTpo(TipoNotificacion.AUTOMATICA);
 
         notificacion.setNotAct(Boolean.TRUE);
         notificacion.setNotApp(Boolean.TRUE);
@@ -71,7 +79,7 @@ public class NotificacionesInternas {
         notificacion.setNotObtDest(ObtenerDestinatario.POR_CADA_REGISTRO);
         notificacion.setNotRepTpo(TipoRepeticion.DIAS);
         notificacion.setNotRepVal(1);
-        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+        notificacion.setNotTpo(TipoNotificacion.AUTOMATICA);
 
         notificacion.setNotAct(Boolean.TRUE);
         notificacion.setNotApp(Boolean.TRUE);
@@ -126,7 +134,7 @@ public class NotificacionesInternas {
         notificacion.setNotObtDest(ObtenerDestinatario.POR_CADA_REGISTRO);
         notificacion.setNotRepTpo(TipoRepeticion.DIAS);
         notificacion.setNotRepVal(1);
-        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+        notificacion.setNotTpo(TipoNotificacion.AUTOMATICA);
 
         notificacion.setNotAct(Boolean.TRUE);
         notificacion.setNotApp(Boolean.TRUE);
@@ -174,7 +182,7 @@ public class NotificacionesInternas {
         notificacion.setNotObtDest(ObtenerDestinatario.POR_CADA_REGISTRO);
         notificacion.setNotRepTpo(TipoRepeticion.MESES);
         notificacion.setNotRepVal(1);
-        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+        notificacion.setNotTpo(TipoNotificacion.AUTOMATICA);
 
         notificacion.setNotAct(Boolean.TRUE);
         notificacion.setNotApp(Boolean.TRUE);
@@ -214,6 +222,48 @@ public class NotificacionesInternas {
         destinatario.setNotCnsSQL("SELECT 1 AS TIPO, [%=INSCRIPCION_ALUMNO] AS DESTINATARIO");
         
         notificacion.getLstConsulta().add(destinatario);
+        
+        return notificacion;
+    }
+    
+    private Notificacion RESTABLECER_PASSWORD(){
+        Notificacion notificacion = new Notificacion();
+        notificacion.setNotNom(NotificacionSistema.PASSWORD_RESTABLECER.name());
+        notificacion.setNotInt(Boolean.TRUE);       
+        notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+        notificacion.setNotRepTpo(TipoRepeticion.SIN_REPETICION);
+        notificacion.setNotRepVal(0);
+        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+
+        notificacion.setNotAct(Boolean.TRUE);
+        notificacion.setNotApp(Boolean.FALSE);
+        notificacion.setNotEmail(Boolean.TRUE);
+        notificacion.setNotWeb(Boolean.FALSE);
+        
+        notificacion.setNotDsc("Restablecer contraseña");
+        notificacion.setNotAsu("Solicitud para restablecer contraseña");
+        notificacion.setNotCon("<p>Se ha solicitado restablecer la contraseña, haga click en el siguiente enlace: [%=ENLACE_CORTO] para ingresar una nueva. Si el enlace no funciona, copie y pegue en su navegador el siguiente enlace: [%=ENLACE_LARGO]</p>");
+        
+        return notificacion;
+    }
+    
+    private Notificacion CAMBIAR_PASSWORD(){
+        Notificacion notificacion = new Notificacion();
+        notificacion.setNotNom(NotificacionSistema.PASSWORD_CAMBIAR.name());
+        notificacion.setNotInt(Boolean.TRUE);       
+        notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+        notificacion.setNotRepTpo(TipoRepeticion.SIN_REPETICION);
+        notificacion.setNotRepVal(0);
+        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+
+        notificacion.setNotAct(Boolean.TRUE);
+        notificacion.setNotApp(Boolean.FALSE);
+        notificacion.setNotEmail(Boolean.TRUE);
+        notificacion.setNotWeb(Boolean.FALSE);
+        
+        notificacion.setNotDsc("Cambió la contraseña");
+        notificacion.setNotAsu("Su contraseña ha cambiado");
+        notificacion.setNotCon("<p>Su contraseña ha sido modificada</p>");
         
         return notificacion;
     }
@@ -349,6 +399,59 @@ public class NotificacionesInternas {
     private void Notificar_ALUMNOS_INACTIVOS(Notificacion notificacion){
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacion(notificacion);
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public void Notificar_CAMBIAR_PASSWORD(Persona persona){
+        
+        Retorno_MsgObj retorno = LoNotificacion.GetInstancia().obtenerByNom(NotificacionSistema.PASSWORD_CAMBIAR.name());
+        
+        Notificacion not = (Notificacion) retorno.getObjeto();
+        
+        not = this.ArmarDestinatario(not, persona);
+        
+        AsyncNotificar xthread = null;
+        try {
+          xthread = new AsyncNotificar(not, TipoNotificacion.A_DEMANDA);
+          xthread.start();
+        } catch (Exception ex) {
+
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+        } finally {
+          if (xthread != null && xthread.isAlive()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+            xthread.interrupt();
+          }
+        }
+        
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public void Notificar_RESTABLECER_PASSWORD(Persona persona, String enlaceCorto, String enlaceLargo){
+        Retorno_MsgObj retorno = LoNotificacion.GetInstancia().obtenerByNom(NotificacionSistema.PASSWORD_RESTABLECER.name());
+        
+        Notificacion not = (Notificacion) retorno.getObjeto();
+        
+        not = this.ArmarDestinatario(not, persona);
+        
+        not.setNotCon(not.getNotCon().replace("[%=ENLACE_CORTO]", enlaceCorto));
+        not.setNotCon(not.getNotCon().replace("[%=ENLACE_LARGO]", enlaceLargo));
+        
+        AsyncNotificar xthread = null;
+        try {
+          xthread = new AsyncNotificar(not, TipoNotificacion.A_DEMANDA);
+          xthread.start();
+        } catch (Exception ex) {
+
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+        } finally {
+          if (xthread != null && xthread.isAlive()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+            xthread.interrupt();
+          }
+        }
     }
     
     //--------------------------------------------------------------------------

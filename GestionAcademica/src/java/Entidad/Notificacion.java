@@ -47,6 +47,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Notificacion.findAll",       query = "SELECT t FROM Notificacion t"),
+    @NamedQuery(name = "Notificacion.findByNom",       query = "SELECT t FROM Notificacion t WHERE t.NotNom =:NotNom"),
     @NamedQuery(name = "Notificacion.findAutoActiva",       query = "SELECT t FROM Notificacion t WHERE t.NotAct =:NotAct AND t.NotTpo =:NotTpo")
 
 })

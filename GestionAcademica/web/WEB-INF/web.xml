@@ -289,6 +289,25 @@
         <servlet-name>ws_sincronizar</servlet-name>
         <url-pattern>/ws_sincronizar</url-pattern>
     </servlet-mapping>
+   
+    <servlet>
+        <servlet-name>jersey-serlvet</servlet-name>
+        
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>WSRest.resources</param-value>
+        </init-param>
+        
+        <load-on-startup>1</load-on-startup>
+    </servlet> 
+    
+    <servlet-mapping>
+        <servlet-name>jersey-serlvet</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
+   
     <session-config>
         <session-timeout>
             30

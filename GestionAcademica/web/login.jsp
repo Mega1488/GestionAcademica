@@ -15,6 +15,9 @@
 <%@page import="java.net.HttpURLConnection"%>
 <%@page import="java.net.URL"%>
 <%@page import="javax.sound.midi.SysexMessage"%>
+<%
+    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 
@@ -64,7 +67,7 @@
 
 <div  class="col-sm-8" style="text-align: right;">
 
-        
+        <a href="<%=urlSistema%>pswSolRecovery.jsp" >Recuperar contraseña</a>
         <form name="login">
 
             <label>Usuario:</label><input size="10" name="username" id="username" />

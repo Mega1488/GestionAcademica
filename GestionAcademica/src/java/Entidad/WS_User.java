@@ -22,6 +22,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
@@ -102,6 +104,8 @@ public class WS_User implements Serializable {
         this.WsUsrPsw = WsUsrPsw;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public List<WS_UserServicio> getLstServicio() {
         return lstServicio;
     }
@@ -110,6 +114,8 @@ public class WS_User implements Serializable {
         this.lstServicio = lstServicio;
     }
 
+    @XmlTransient
+    @JsonIgnore
     public List<WS_Bit> getLstBitacora() {
         return lstBitacora;
     }

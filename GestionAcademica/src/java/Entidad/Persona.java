@@ -26,7 +26,6 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -112,6 +111,9 @@ public class Persona extends SincHelper implements Serializable {
     
     @Column(name = "PerPass", length = 500)
     private String PerPass;
+    
+    @Column(name = "PerPassAux", length = 500)
+    private String PerPassAux;
     
     @Column(name = "PerAppTkn", length = 500)
     private String PerAppTkn;
@@ -475,6 +477,14 @@ public class Persona extends SincHelper implements Serializable {
      */
     public void setPerAppTkn(String PerAppTkn) {
         this.PerAppTkn = PerAppTkn;
+    }
+
+    public String getPerPassAux() {
+        return PerPassAux;
+    }
+
+    public void setPerPassAux(String PerPassAux) {
+        this.PerPassAux = PerPassAux;
     }
 
     

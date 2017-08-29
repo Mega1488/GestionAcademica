@@ -76,7 +76,19 @@ public class ABM_Persona extends HttpServlet {
                 
                 case "POPUP_OBTENER_ESTUDIOS":
                     retorno = this.POPUP_ObtenerEstudiosDatos(request);
-                    break;
+                break;
+                
+                case "CAMBIAR_PSW":
+                    retorno = this.CambiarPsw(request);
+                break;
+                
+                case "SOL_PSW_RECOVERY":
+                    retorno = this.SolRecoveryPsw(request);
+                break;
+                
+                case "PSW_RECOVERY":
+                    retorno = this.RecoveryPsw(request);
+                break;
                         
             }
 
@@ -208,6 +220,36 @@ public class ABM_Persona extends HttpServlet {
         Persona persona = this.ValidarPersona(request, null);
 
         return utilidades.ObjetoToJson(persona.getLstEstudios());
+    }
+    
+    private String CambiarPsw(HttpServletRequest request){
+        String usuario    = request.getParameter("usuario");
+        String pswActual  = request.getParameter("pswActual");
+        String pswNueva   = request.getParameter("pswNueva");
+        String pswConf    = request.getParameter("pswConfirmacion");
+        
+        Retorno_MsgObj retorno = loPersona.CambiarPassword(usuario, pswActual, pswNueva, pswConf);
+        
+        return utilidades.ObjetoToJson(retorno.getMensaje());
+    }
+    
+    private String SolRecoveryPsw(HttpServletRequest request){
+        String usuario    = request.getParameter("usuario");
+        
+        Retorno_MsgObj retorno = loPersona.SolicitaRestablecerPassword(usuario);
+        
+        return utilidades.ObjetoToJson(retorno.getMensaje());
+    }
+    
+    private String RecoveryPsw(HttpServletRequest request){
+        String PerCod       = request.getParameter("PerCod");
+        String tkn          = request.getParameter("tkn");
+        String pswNueva     = request.getParameter("pswNueva");
+        String pswConf      = request.getParameter("pswConfirmacion");
+        
+        Retorno_MsgObj retorno = loPersona.RestablecerPassword(Long.valueOf(PerCod), tkn, pswNueva, pswConf);
+        
+        return utilidades.ObjetoToJson(retorno.getMensaje());
     }
 
     private Persona ValidarPersona(HttpServletRequest request, Persona persona)

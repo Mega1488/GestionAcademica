@@ -81,6 +81,25 @@ public class LoNotificacion implements InABMGenerico{
         return perManager.obtenerLista("Notificacion.findAll", null);
     }
     
+    public Retorno_MsgObj obtenerByNom(String nombre) {
+        
+        PerManejador perManager = new PerManejador();
+        
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        lstParametros.add(new SDT_Parameters(nombre, "NotNom"));
+        
+        Retorno_MsgObj retorno = perManager.obtenerLista("Notificacion.findByNom", lstParametros);
+        if(!retorno.SurgioErrorListaRequerida())
+        {
+            if(retorno.getLstObjetos().size()>0)
+            {
+                retorno.setObjeto(retorno.getLstObjetos().get(0));
+                retorno.setLstObjetos(null);
+            }
+        }
+        return retorno;
+    }
+    
     public Retorno_MsgObj obtenerListaByTipoActiva(Boolean NotAct, TipoNotificacion NotTpo) {
         
         PerManejador perManager = new PerManejador();

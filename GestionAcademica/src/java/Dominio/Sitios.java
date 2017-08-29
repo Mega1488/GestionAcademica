@@ -47,6 +47,7 @@ public class Sitios {
         lstAlumno.add("Evaluaciones.jsp");
         lstAlumno.add("Solicitudes.jsp");
         lstAlumno.add("Escolaridad.jsp");
+        lstAlumno.add("pswChange.jsp");
     }
 
     private void CargarDocente(){
@@ -54,6 +55,7 @@ public class Sitios {
         lstDocente.add("EstudioDocumentos.jsp");
         lstDocente.add("EvalPendientes.jsp");
         lstDocente.add("CalificarAlumnos.jsp");
+        lstDocente.add("pswChange.jsp");
     }
 
     public ArrayList<String> getLstSinSeguridad() {

@@ -16,6 +16,7 @@ import Entidad.Persona;
 import Enumerado.Constantes;
 import Enumerado.TipoMensaje;
 import Logica.Notificacion.AsyncBandeja;
+import Logica.Notificacion.NotificacionesInternas;
 import Moodle.Criteria;
 import Moodle.MoodleCourse;
 import Moodle.MoodleRestCourse;
@@ -31,11 +32,13 @@ import SDT.SDT_PersonaEstudio;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -270,89 +273,7 @@ public class LoPersona implements Interfaz.InPersona{
         
     }
     
-    public Boolean IniciarSesion(String usuario, String password){
-        boolean resultado = false;
-        
-            Persona persona = new Persona();
-            
-            Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
-            
-            if(!retorno.SurgioErrorObjetoRequerido())
-            {
-                    persona = (Persona) retorno.getObjeto();
-            }
-            else
-            {
-                retorno = this.obtenerByEmail(usuario);
-                
-                if(!retorno.SurgioErrorObjetoRequerido())
-                {
-                    persona = (Persona) retorno.getObjeto();
-                }
-            }
-            
-            if(persona.getPerCod() != null)
-            {
-            
-                resultado = persona.getPerPass().equals(password);
-
-                if(resultado)
-                {
-                    persona.setPerFchLog(new Date());
-                    persona.setPerCntIntLgn(0);
-                }
-                else
-                {
-                    persona.setPerCntIntLgn((persona.getPerCntIntLgn() != null ? persona.getPerCntIntLgn() + 1 : 1));
-                }
-
-                PerManejador perManager = new PerManejador();
-                perManager.actualizar(persona);
-            }
-            
-        
-        return resultado;
-    }
-    
-    private boolean ValidarEmail(String email, Long idOriginal){
-        boolean error = false;
-
-        Retorno_MsgObj retorno = this.obtenerByEmail(email);
-        
-        if(idOriginal == null)
-        {
-            error = retorno.getObjeto() != null;
-        }
-        else
-        {
-            if(retorno.getObjeto() != null)
-            {
-                error = !((Persona) retorno.getObjeto()).getPerCod().equals(idOriginal);
-            }
-        }
-        
-        return error;
-    }
-    
-    private boolean ValidarUsuario(String usuario, Long idOriginal){
-        boolean error = false;
-
-        Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
-        
-        if(idOriginal == null)
-        {
-            error = retorno.getObjeto() != null;
-        }
-        else
-        {
-            if(retorno.getObjeto() != null)
-            {
-                error = !((Persona) retorno.getObjeto()).getPerCod().equals(idOriginal);
-            }
-        }
-        
-        return error;
-    }
+    //----------------------------------------------------------------------------------------------------
     
     public ArrayList<SDT_PersonaEstudio> ObtenerEstudios(Long PerCod){
         ArrayList<SDT_PersonaEstudio> lstEstudios = new ArrayList<>();;
@@ -496,6 +417,8 @@ public class LoPersona implements Interfaz.InPersona{
         return LoCalendario.GetInstancia().AlumnoPuedeDarExamen(PerCod, materia, modulo, curso);
         
     }
+
+    //----------------------------------------------------------------------------------------------------
     
     public Retorno_MsgObj ActualizarToken(Long PerCod, String PerAppTkn){
         
@@ -578,6 +501,241 @@ public class LoPersona implements Interfaz.InPersona{
         
         return retorno;
     }
+    
+    //----------------------------------------------------------------------------------------------------
+    
+    public Boolean IniciarSesion(String usuario, String password){
+        boolean resultado = false;
+        
+            Persona persona = new Persona();
+            
+            Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+            
+            if(!retorno.SurgioErrorObjetoRequerido())
+            {
+                    persona = (Persona) retorno.getObjeto();
+            }
+            else
+            {
+                retorno = this.obtenerByEmail(usuario);
+                
+                if(!retorno.SurgioErrorObjetoRequerido())
+                {
+                    persona = (Persona) retorno.getObjeto();
+                }
+            }
+            
+            if(persona.getPerCod() != null)
+            {
+            
+                resultado = persona.getPerPass().equals(password);
+
+                if(resultado)
+                {
+                    persona.setPerFchLog(new Date());
+                    persona.setPerCntIntLgn(0);
+                }
+                else
+                {
+                    persona.setPerCntIntLgn((persona.getPerCntIntLgn() != null ? persona.getPerCntIntLgn() + 1 : 1));
+                }
+
+                PerManejador perManager = new PerManejador();
+                perManager.actualizar(persona);
+            }
+            
+        
+        return resultado;
+    }
+    
+    public Retorno_MsgObj CambiarPassword(String usuario, String pswActual, String pswNueva, String pswConf){
+
+        Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            Persona persona = (Persona) retorno.getObjeto();
+            if(seguridad.cryptWithMD5(pswActual).equals(persona.getPerPass()))
+            {
+                boolean error = false;
+                
+                if(param.getParPswValExp() != null)
+                {
+                    if(!pswNueva.matches(param.getParPswValExp()))
+                    {
+                        retorno.setMensaje(new Mensajes(param.getParPswValMsg(), TipoMensaje.ERROR));
+                        error = true;
+                    }
+                }   
+                
+                if(!pswConf.equals(pswNueva))
+                {
+                    error = true;
+                    retorno.setMensaje(new Mensajes("No coincide la confirmación", TipoMensaje.ERROR));
+                }
+
+                if(!error)
+                {
+                    
+                    persona.setPerPass(seguridad.cryptWithMD5(pswNueva));
+                    retorno = (Retorno_MsgObj) this.actualizar(persona);
+
+                    if(!retorno.SurgioError())
+                    {
+                        NotificacionesInternas notInt = new NotificacionesInternas();
+                        notInt.Notificar_CAMBIAR_PASSWORD(persona);
+                    }
+                }
+            }
+            else
+            {
+                retorno.setMensaje(new Mensajes("Contraseña actual no es valida", TipoMensaje.ERROR));
+            }
+        }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj SolicitaRestablecerPassword(String usuario){
+        Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            Persona persona = (Persona) retorno.getObjeto();
+            String psw      = this.GenerarPassword(10);
+            
+            try {
+                
+                String token    =  URLEncoder.encode(seguridad.crypt(persona.getPerCod().toString()
+                                + Constantes.SEPARADOR.getValor()
+                                + psw), "UTF-8");
+                
+                String url = Utiles.Utilidades.GetInstancia().GetUrlSistema()
+                        + "pswRecovery.jsp?tkn=" + token;
+                
+                String urlCorta = "<a href='" + url
+                        + "' > Recuperar contraseña </a>";
+                
+                String urlLarga = "<a href='" + url
+                        + "' >" + url + "</a>";
+                
+                persona.setPerPassAux(seguridad.cryptWithMD5(psw));
+                
+                this.actualizar(persona);
+            
+                NotificacionesInternas notInt = new NotificacionesInternas();
+                notInt.Notificar_RESTABLECER_PASSWORD(persona, urlCorta, urlLarga);
+            
+            } catch (Exception ex) {
+                Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+        }
+        else
+        {
+            retorno.setMensaje(new Mensajes("El usuario que indico no existe", TipoMensaje.ERROR));
+        }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj RestablecerPassword(Long PerCod, String tkn, String pswNueva, String pswConf){
+        Retorno_MsgObj retorno = this.obtener(PerCod);
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            if(!pswConf.equals(pswNueva))
+            {
+                retorno.setMensaje(new Mensajes("Las contraseñas no coinciden", TipoMensaje.ERROR));
+            }
+            else
+            {
+                
+                Persona persona = (Persona) retorno.getObjeto();
+                
+                String pswTknCrypt      = seguridad.cryptWithMD5(tkn);
+                String pswNuevaCrypt    = seguridad.cryptWithMD5(pswNueva);
+
+                if(pswTknCrypt.equals(persona.getPerPassAux()))
+                {
+                    if(!persona.getPerPass().equals(pswNuevaCrypt))
+                    {
+                        persona.setPerPass(pswNuevaCrypt);
+                        persona.setPerPassAux(null);
+                        retorno = (Retorno_MsgObj) this.actualizar(persona);
+
+                        if(!retorno.SurgioError())
+                        {
+                            NotificacionesInternas notInt = new NotificacionesInternas();
+                            notInt.Notificar_CAMBIAR_PASSWORD(persona);
+                        }
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("Ingreso la misma contraseña", TipoMensaje.ERROR));
+                    }
+                }
+                else
+                {
+                    retorno.setMensaje(new Mensajes("Token invalido, puede que su cuenta ya haya sido recuperada", TipoMensaje.ERROR));
+                }
+            }
+        }
+        return retorno;
+    }
+    
+    private String GenerarPassword(Integer longitud){
+        String psw = "";
+        
+        long milis = new java.util.GregorianCalendar().getTimeInMillis();
+        Random r = new Random(milis);
+        int i = 0;
+        while ( i < longitud){
+            char c = (char)r.nextInt(255);
+            if ( (c >= '0' && c <='9') || (c >='A' && c <='Z') ){
+                psw += c;
+                i ++;
+            }
+        }
+        
+        return psw;
+    }
+    
+    private boolean ValidarEmail(String email, Long idOriginal){
+        boolean error = false;
+
+        Retorno_MsgObj retorno = this.obtenerByEmail(email);
+        
+        if(idOriginal == null)
+        {
+            error = retorno.getObjeto() != null;
+        }
+        else
+        {
+            if(retorno.getObjeto() != null)
+            {
+                error = !((Persona) retorno.getObjeto()).getPerCod().equals(idOriginal);
+            }
+        }
+        
+        return error;
+    }
+    
+    private boolean ValidarUsuario(String usuario, Long idOriginal){
+        boolean error = false;
+
+        Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+        
+        if(idOriginal == null)
+        {
+            error = retorno.getObjeto() != null;
+        }
+        else
+        {
+            if(retorno.getObjeto() != null)
+            {
+                error = !((Persona) retorno.getObjeto()).getPerCod().equals(idOriginal);
+            }
+        }
+        
+        return error;
+    }
+
     
     //----------------------------------------------------------------------------------------------------
     //-Modle
