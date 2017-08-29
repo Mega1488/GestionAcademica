@@ -4,10 +4,11 @@
     Author     : aa
 --%>
 
+<%@page import="Logica.LoCalendario"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Entidad.Calendario"%>
 <%@page import="Entidad.Persona"%>
-<%@page import="Persistencia.PerCalendario"%>
+<%--<%@page import="Persistencia.PerCalendario"%>--%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
@@ -17,8 +18,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    PerCalendario perCal = new PerCalendario();
+//    PerCalendario perCal = new PerCalendario();
     LoPersona lopersona = LoPersona.GetInstancia();
+    LoCalendario loCalendario = LoCalendario.GetInstancia();
 //    LoPeriodo loPer             = LoPeriodo.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
@@ -44,7 +46,7 @@
 
     List<Object> lstObjeto = new ArrayList<>();
 
-    Retorno_MsgObj retorno = perCal.obtenerByDocente(persona.getPerCod());
+    Retorno_MsgObj retorno = loCalendario.ObtenerEvaluacionesDocentes(persona.getPerCod());
 
     if (!retorno.SurgioErrorListaRequerida()) {
         lstObjeto = retorno.getLstObjetos();

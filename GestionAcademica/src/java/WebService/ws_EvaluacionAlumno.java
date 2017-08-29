@@ -182,6 +182,7 @@ public class ws_EvaluacionAlumno {
             else
             {
                 retorno = (Retorno_MsgObj) loCalendario.ObtenerListaPendiente(UsuAlumno);
+                retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
             }
         }
         return retorno;
