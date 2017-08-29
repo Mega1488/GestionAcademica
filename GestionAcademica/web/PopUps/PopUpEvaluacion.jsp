@@ -35,188 +35,103 @@
 
 %>
 
-<!-- Modal -->
-<div class="modal-dialog">
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Evaluaciones</h4>
-      </div>
-      <div class="modal-body">
-        
-          <div class="row">
-              <div class="col-lg-2"> <label>Curso:</label> </div>
-              <div class="col-lg-3"> <select class="form-control" id="popCurCod" name="popCurCod"></select> </div>
-              <div class="col-lg-2"> <label>Módulo:</label> </div>
-              <div class="col-lg-3"> <select class="form-control" id="popModCod" name="popModCod"></select></div>
-          </div>
-          
-          <div class="row">
-              <div style="text-align: right;">
-                <button class="btn btn-default" id="PopEvl_btnBuscar" name="PopEvl_btnBuscar">Buscar</button>
-              </div>
-          </div>
- 
-            <div>
-                <table class="table">
-                            <tr>
-                                <th>Código</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                                <th>Tipo</th>
-                                <th>Nota toal</th>
+            <div class="modal-dialog modal-lg" style="width: 983px;">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Evaluaciones</h4>
+                    </div>
 
-                            </tr>
-                            <tbody  id="PopUp_TblEvaluacion" name="PopUp_TblEvaluacion">
+                    <div class="modal-body">
 
-                            </tbody>
-                        </table>
+                        <div>
+                            <table name="PopUpTblEvaluaciones" id="PopUpTblEvaluaciones" class="table table-striped" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Carrera / Curso</th>
+                                        <th>Estudio</th>
+                                        <th>Evaluación</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" value="Cancelar" data-dismiss="modal" />
+                    </div>
+                </div>
             </div>
 
-            <div style="display:none">
-                <%
-                        out.println("<input type='hidden' id='popCursos' name='popCursos' value='"+utilidad.ObjetoToJson(lstCurso)+"'>");
-                %>
-            </div>
-          
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-</div>
-    
-    
-    
-    <script type="text/javascript">
+
+ <script type="text/javascript">
         
         $(document).ready(function() {
             
-            var cursos = JSON.parse($('#popCursos').val());
-            
-            $.each(cursos, function (i, objeto) {
-                //alert(objeto.curNom);
-                
-                
-                 $('#popCurCod').append($('<option>', { 
-                    value: objeto.curCod,
-                    text : objeto.curNom 
-                }));
-                
-                if(i == 0)
-                {
-                    CargarModulo(objeto.curCod);
-                }
-                
+           
+            $(document).on('click', ".Pop_Seleccionar", function() {
+
+                    $('#EvlCod').val($(this).data("codigo"));
+                    $('#EvlNom').val($(this).data("nombre"));
+
+                    $(function () {
+                        $('#PopUpEvaluacion').modal('toggle');
+                     });
+                    //$("#PopUpEvaluacion").dialog("close");       
             });
- 
-            $('#popCurCod').on('change', function() {
-                 CargarModulo($('select[name=popCurCod]').val());
-              })
-              
-            function CargarModulo(codigo){
-                
-                $('#popModCod').empty();
-                
-                $('#popModCod').append($('<option>', { 
-                                text : "" 
-                            }));
-                            
-                
-                $.each(cursos, function (e, objeto) {
-                    if(objeto.curCod == codigo)
-                    {
+            
+            $.post('<% out.print(urlSistema); %>ABM_Evaluacion', {
+                        pAction: "POPUP_LISTAR"
+                    }, function (responseText) {
+
+                        var evaluaciones = JSON.parse(responseText);
                         
-                        var modulos = objeto.lstModulos;
-                        $.each(modulos, function (i, modulo) {
-                         
-                             $('#popModCod').append($('<option>', { 
-                                value: modulo.modCod,
-                                text : modulo.modNom 
-                            }));
+                        $.each(evaluaciones, function (f, evl) {
+                                evl.estudioNombre = "<a href='#' data-codigo='" + evl.evlCod + "' data-nombre='" + evl.evlNom + "' class='Pop_Seleccionar'>" + evl.estudioNombre + " </a> ";
+                            });
+
+                        $('#PopUpTblEvaluaciones').DataTable({
+                            data: evaluaciones,
+                            deferRender: true,
+                            bLengthChange: false, //thought this line could hide the LengthMenu
+                            pageLength: 10,
+                            destroy: true,
+                            select: {
+                                style: 'multi',
+                                selector: 'td:last-child'
+                            },
+                            language: {
+                                "lengthMenu": "Mostrando _MENU_ registros por página",
+                                "zeroRecords": "No se encontraron registros",
+                                "info": "Página _PAGE_ de _PAGES_",
+                                "infoEmpty": "No hay registros",
+                                "search": "Buscar:",
+                                select: {
+                                    rows: {
+                                        _: "%d filas seleccionadas",
+                                        0: "",
+                                        1: "1 fila seleccionada"
+                                    }
+                                },
+                                "paginate": {
+                                    "first": "Primera",
+                                    "last": "Ultima",
+                                    "next": "Siguiente",
+                                    "previous": "Anterior"
+                                },
+                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                            },
+                            columns: [
+                                {"data": "carreraCursoNombre"},
+                                {"data": "estudioNombre"},
+                                {"data": "evlNom"}
+                            ]
 
                         });
-                        
-                        return false;
-                    }
-                });
-            }
-            
 
-
-            $("#PopEvl_btnBuscar").click(function(){
-               
-                var odd_even    = false;
-                var tbl_row     = "";
-                var tbl_body    = "";
-                
-                var CurCod= $('select[name=popCurCod]').val();
-                var ModCod= $('select[name=popModCod]').val();
-                
-                var evaluaciones;
-                
-                
-                $.each(cursos, function (e, objeto) {
-                    if(objeto.curCod == CurCod)
-                    {
-                        
-                        if(ModCod != "")
-                        {
-                            var modulos = objeto.lstModulos;
-                            $.each(modulos, function (i, modulo) {
-
-                                if(modulo.modCod == ModCod)
-                                {
-                                    evaluaciones = modulo.lstEvaluacion;
-                                    return false;
-                                }
-                            });
-                        }
-                        
-                        else
-                        {
-                            evaluaciones = objeto.lstEvaluacion;
-                        }
-                        
-                         return false;
-                    }
-                });
-                
-                
-                $.each(evaluaciones, function(f , evaluacion) {
-                        
-                        tbl_row = "<td> <a href='#' data-codigo='"+evaluacion.evlCod+"' data-nombre='"+evaluacion.evlNom+"' class='PopEvl_Seleccionar'>"+evaluacion.evlCod+" </a> </td>";
-                        tbl_row += "<td>"+evaluacion.evlNom+"</td>";
-                        tbl_row += "<td>"+evaluacion.evlDsc+"</td>";
-                        tbl_row += "<td>"+"</td>";
-                        tbl_row += "<td>"+evaluacion.evlNotTot+"</td>";
-                        
-                        tbl_body += "<tr class=\""+( odd_even ? "odd" : "even")+"\">"+tbl_row+"</tr>";
-                        odd_even = !odd_even;            
                     });
-                       
-                $("#PopUp_TblEvaluacion").html(tbl_body);
-                
-            });
-
-        
-        $(document).on('click', ".PopEvl_Seleccionar", function() {
-                
-                $('#EvlCod').val($(this).data("codigo"));
-                $('#EvlNom').val($(this).data("nombre"));
-                
-                $(function () {
-                    $('#PopUpEvaluacion').modal('toggle');
-                 });
-                //$("#PopUpEvaluacion").dialog("close");       
-        });
         
 
         });
         </script>
-        
-        
-        
-        
-       
