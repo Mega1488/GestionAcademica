@@ -30,6 +30,10 @@ public class ws_solicitudes {
 
     /**
      * This is a sample web service operation
+     * @param token
+     * @param SolTpo
+     * @param AluPerCod
+     * @return 
      */
     @WebMethod(operationName = "realizarSolicitud")
     public Retorno_MsgObj realizarSolicitud(@WebParam(name = "token") String token, @WebParam(name = "SolTpo") int SolTpo, @WebParam(name = "AluPerCod") Long AluPerCod)
@@ -72,9 +76,9 @@ public class ws_solicitudes {
                             break;
                     }
                     sol.setAlumno((Persona) retPer.getObjeto());
-
+                    
                     loSolicitud.guardar(sol);
-                    retorno.setObjeto(new Mensajes("Solicitud enviada", TipoMensaje.MENSAJE));
+                    retorno.setMensaje(new Mensajes("Solicitud enviada", TipoMensaje.MENSAJE));
                 }
             }
         }
@@ -83,9 +87,12 @@ public class ws_solicitudes {
     
     /**
      * This is a sample web service operation
+     * @param token
+     * @param PerCod
+     * @return 
      */
     @WebMethod(operationName = "lstSolicitudesActivas")
-    public Retorno_MsgObj lstSolicitudesActivas(@WebParam(name = "token") String token)
+    public Retorno_MsgObj lstSolicitudesActivas(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod)
     {
         Retorno_MsgObj retorno = new Retorno_MsgObj();
         Retorno_MsgObj ret = new Retorno_MsgObj();
@@ -99,22 +106,30 @@ public class ws_solicitudes {
         }
         else
         {
-            ret = loSolicitud.obtenerLista();
-            if (!ret.SurgioErrorListaRequerida()) {
-                lstObject   = ret.getLstObjetos();
-                for(Object objeto : lstObject)
-                {
-                    Solicitud sol = (Solicitud) objeto;
-                    if(sol.getSolEst().equals(EstadoSolicitud.SIN_TOMAR) || sol.getSolEst().equals(EstadoSolicitud.TOMADA))
-                    {
-                        lstSolicitud.add(sol);
-                    }
-                }
-                retorno.setLstObjetos(lstSolicitud);
+            if(PerCod == null)
+            {
+                retorno.setObjeto(new Mensajes("No se recibió parametro Alumno", TipoMensaje.ERROR));
             }
             else
             {
-                retorno.setObjeto(new Mensajes("No se pudo obtener la lista de Solicitudes Activas", TipoMensaje.ERROR));
+                ret = loSolicitud.obtenerLista();
+                if (!ret.SurgioErrorListaRequerida()) {
+                    lstObject   = ret.getLstObjetos();
+                    for(Object objeto : lstObject)
+                    {
+                        Solicitud sol = (Solicitud) objeto;
+                        if( sol.getAlumno().getPerCod() == PerCod && (sol.getSolEst().equals(EstadoSolicitud.SIN_TOMAR) || sol.getSolEst().equals(EstadoSolicitud.TOMADA)))
+                        {
+                            lstSolicitud.add(sol);
+                        }
+                    }
+                    retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
+                    retorno.setLstObjetos(lstSolicitud);
+                }
+                else
+                {
+                    retorno.setObjeto(new Mensajes("No se pudo obtener los Datos", TipoMensaje.ERROR));
+                }
             }
         }
         

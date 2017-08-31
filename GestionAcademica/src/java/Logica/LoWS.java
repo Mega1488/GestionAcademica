@@ -115,7 +115,6 @@ public class LoWS implements InABMGenerico{
     
     public Boolean ValidarConsumo(String token, ServicioWeb ws_metodo, String direccion){
         String tokenDes = Seguridad.GetInstancia().decrypt(token, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
-        
         try
         {
             if(tokenDes.indexOf(Constantes.SEPARADOR.getValor()) < 1)

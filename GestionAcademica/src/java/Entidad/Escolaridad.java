@@ -173,10 +173,11 @@ public class Escolaridad extends SincHelper implements Serializable {
     
     
 
-    public String getAprobacion() {
+    public String getAprobacion() 
+    {
         if(this.Revalida()) return "Revalida";
         
-        if(this.materia.MateriaExonera(EscCurVal)) return "Exonera";
+        if(this.getMateria() != null) if(this.materia.MateriaExonera(EscCurVal)) return "Exonera";
         
         if(this.EscCalVal >= 70) return "Aprobado";
         if(this.EscCalVal < 70) return "Eliminado";
