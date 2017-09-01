@@ -480,6 +480,10 @@ public class MoodleRestEnrol implements Serializable {
                 if (user[i].getInstanceId()!=null) data.append("&").append(URLEncoder.encode("unassignments["+i+"][instanceid]", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+user[i].getInstanceId(), MoodleServices.ENCODING.toString()));
             }
             data.trimToSize();
+            
+            System.err.println("Url: " + url);
+            System.err.println("Data: " + data.toString());
+            
             (new MoodleCallRestWebService()).__call(url,data.toString());
          }  catch (UnsupportedEncodingException ex) {
             Logger.getLogger(MoodleRestEnrol.class.getName()).log(Level.SEVERE, null, ex);
@@ -841,5 +845,36 @@ public class MoodleRestEnrol implements Serializable {
       }
       data.trimToSize();
       MoodleCallRestWebService.call(data.toString());
+    }
+    
+    public void __enrolManualUnenrolUsers(String url, String token, UserList user) throws UnsupportedEncodingException, MoodleRestEnrolException, MoodleRestException {
+        UserList[] a=new UserList[1];
+        a[0]=user;
+        _enrolManualUnenrolUsers(url, token, a);
+    }
+    
+    public void _enrolManualUnenrolUsers(String url, String token, UserList[] users) throws UnsupportedEncodingException, MoodleRestEnrolException, MoodleRestException {
+      String functionCall=MoodleServices.ENROL_MANUAL_UNENROL_USERS.toString();
+
+      try {
+            StringBuilder data=new StringBuilder();
+            data.append(URLEncoder.encode("wstoken", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(token, MoodleServices.ENCODING.toString()));
+            data.append("&").append(URLEncoder.encode("wsfunction", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(functionCall, MoodleServices.ENCODING.toString()));
+            for (int i=0;i<users.length;i++) {
+                if (users[i].getUserId()<1 || users[i].getUserId()==null) throw new MoodleRestEnrolException(MoodleRestException.REQUIRED_PARAMETER+" userid"); data.append("&").append(URLEncoder.encode("enrolments["+i+"][userid]", MoodleServices.ENCODING.toString())).append("=").append(users[i].getUserId());
+                if (users[i].getCourseId()<1 || users[i].getCourseId()==null) throw new MoodleRestEnrolException(MoodleRestException.REQUIRED_PARAMETER+" courseid"); data.append("&").append(URLEncoder.encode("enrolments["+i+"][courseid]", MoodleServices.ENCODING.toString())).append("=").append(users[i].getCourseId());
+                if (users[i].getRoleId()!=null) data.append("&").append(URLEncoder.encode("enrolments["+i+"][roleid]", MoodleServices.ENCODING.toString())).append("=").append(users[i].getRoleId());
+              }
+            data.trimToSize();
+            
+            System.err.println("Url: " + url);
+            System.err.println("Data: " + data.toString());
+            
+            (new MoodleCallRestWebService()).__call(url,data.toString());
+         }  catch (UnsupportedEncodingException ex) {
+            Logger.getLogger(MoodleRestEnrol.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+      
     }
 }

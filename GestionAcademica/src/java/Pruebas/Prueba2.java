@@ -6,6 +6,7 @@
 package Pruebas;
 
 import Entidad.TipoEvaluacion;
+import Logica.LoPeriodo;
 import Logica.LoTipoEvaluacion;
 import Logica.Notificacion.ManejoNotificacion;
 import SDT.SDT_Notificacion;
@@ -21,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -61,9 +63,12 @@ public class Prueba2 extends HttpServlet {
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
             
             
-            ManejoNotificacion notManager = new ManejoNotificacion();
+            LoPeriodo.GetInstancia().DocumentoImportarMoodle();
             
-            notManager.EjecutarNotificacionAutomaticamente();
+            
+         //   ManejoNotificacion notManager = new ManejoNotificacion();
+            
+           // notManager.EjecutarNotificacionAutomaticamente();
             
             
         //    PerCarrera percarrera = new PerCarrera();

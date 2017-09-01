@@ -34,6 +34,10 @@ public enum Role implements Serializable {
     return value.longValue();
   }
   
+  public Integer toIntegerValue(){
+      return Integer.valueOf(value.toString());
+  }
+  
   public Role toEnum() throws MoodleRoleException {
     boolean flag=false;
     Role role=null;

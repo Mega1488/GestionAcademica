@@ -9,6 +9,7 @@ import Entidad.Curso;
 import Entidad.Inscripcion;
 import Entidad.Materia;
 import Entidad.Modulo;
+import Entidad.Parametro;
 import Entidad.Periodo;
 import Entidad.PeriodoEstudio;
 import Entidad.PeriodoEstudioAlumno;
@@ -17,6 +18,11 @@ import Entidad.PeriodoEstudioDocumento;
 import Entidad.PlanEstudio;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
+import Moodle.MoodleCourse;
+import Moodle.MoodleCourseContent;
+import Moodle.MoodleModule;
+import Moodle.MoodleModuleContent;
+import Moodle.Role;
 import Persistencia.PerManejador;
 import SDT.SDT_Parameters;
 import Utiles.Mensajes;
@@ -32,8 +38,12 @@ import java.util.List;
 public class LoPeriodo implements InABMGenerico{
 
     private static LoPeriodo instancia;
+    private LoEstudio loEstudio;
+    private final Parametro         param;
 
     private LoPeriodo() {
+        loEstudio = LoEstudio.GetInstancia();
+        param     = LoParametro.GetInstancia().obtener();
     }
     
     public static LoPeriodo GetInstancia(){
@@ -100,6 +110,16 @@ public class LoPeriodo implements InABMGenerico{
         {
             periodo.setPeriCod((Long) retorno.getObjeto());
             retorno.setObjeto(periodo);
+            
+            
+                if(periodo.getLstEstudio() != null && param.getParUtlMdl())
+                {
+                    for(PeriodoEstudio periEstudio : periodo.getLstEstudio())
+                    {
+                        this.EstudioActualizar(periEstudio);
+                    }
+                }
+            
         }
             
         return retorno;
@@ -197,6 +217,14 @@ public class LoPeriodo implements InABMGenerico{
         
         if(!retorno.SurgioError())
         {
+            if(modAgregados > 0 || matAgregadas > 0 && param.getParUtlMdl())
+            {
+                for(PeriodoEstudio periEstudio : periodo.getLstEstudio())
+                {
+                    this.EstudioActualizar(periEstudio);
+                }
+            }
+
             retorno.setMensaje(new Mensajes("Se ingresaron " + modAgregados + " modulos, " + matAgregadas + " materias", TipoMensaje.MENSAJE));
         }
 
@@ -269,23 +297,99 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object EstudioAgregar(PeriodoEstudio periEstudio)
     {
-        periEstudio.setObjFchMod(new Date());
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Guardando estudio", TipoMensaje.MENSAJE), periEstudio);
+        
+        if(param.getParUtlMdl())
+        {
+            
+            Long parent = 0L;
 
-        PerManejador perManejador   = new PerManejador();
-        return perManejador.guardar(periEstudio);
+            if(periEstudio.getMateria() != null) parent = periEstudio.getMateria().getMdlCod();
+            if(periEstudio.getModulo() != null) parent = periEstudio.getModulo().getModEstCod();
+
+            if(periEstudio.getMdlCod() == null)
+            {
+                retorno = this.Mdl_AgregarEstudio(parent
+                        ,periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni() 
+                        ,periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal() 
+                        ,periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarEstudio(parent
+                        , periEstudio.getMdlCod()
+                        , periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni()
+                        , periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal()
+                        , periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+            }
+            
+            periEstudio.setMdlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(periEstudio);
+        }
+        
+        if(!retorno.SurgioError())
+        {
+            periEstudio = (PeriodoEstudio) retorno.getObjeto();
+            periEstudio.setObjFchMod(new Date());
+            PerManejador perManejador   = new PerManejador();
+            retorno = perManejador.guardar(periEstudio);
+            
+        }
+
+        return retorno;
     }
     
     public Object EstudioActualizar(PeriodoEstudio periEstudio)
     {
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Actualizando estudio", TipoMensaje.MENSAJE), periEstudio);
         
-        periEstudio.setObjFchMod(new Date());
+        if(param.getParUtlMdl())
+        {
+            Long parent = 0L;
+
+            if(periEstudio.getMateria() != null) parent = periEstudio.getMateria().getMdlCod();
+            if(periEstudio.getModulo() != null) parent = periEstudio.getModulo().getModEstCod();
+
+            if(periEstudio.getMdlCod() == null)
+            {
+                retorno = this.Mdl_AgregarEstudio(parent
+                        ,periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni() 
+                        ,periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal() 
+                        ,periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarEstudio(parent
+                        , periEstudio.getMdlCod()
+                        , periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni()
+                        , periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal()
+                        , periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+            }
+            
+            periEstudio.setMdlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(periEstudio);
+        }
         
-        PerManejador perManejador   = new PerManejador();
-        return perManejador.actualizar(periEstudio);
+        if(!retorno.SurgioError())
+        {
+            periEstudio = (PeriodoEstudio) retorno.getObjeto();
+            periEstudio.setObjFchMod(new Date());
+
+            PerManejador perManejador   = new PerManejador();
+            retorno = perManejador.actualizar(periEstudio);
+        }
+        
+        return retorno;
     }
     
     public Object EstudioEliminar(PeriodoEstudio periEstudio)
     {
+        if(param.getParUtlMdl() && periEstudio.getMdlCod() != null)
+        {
+            Retorno_MsgObj retorno = this.Mdl_EliminarEstudio(periEstudio.getMdlCod());
+            if(retorno.SurgioError()) return retorno;
+        }
+
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(periEstudio);
     }
@@ -329,6 +433,11 @@ public class LoPeriodo implements InABMGenerico{
         
         if(!error)
         {
+            retorno = loEstudio.Mdl_AsignUserCourse(alumno.getAlumno().getPerUsrModID(), 
+                    alumno.getPeriodoEstudio().getMdlCod(), Role.STUDENT);
+
+            if(retorno.SurgioError()) return retorno;
+            
             alumno.setObjFchMod(new Date());
             
             PerManejador perManejador   = new PerManejador();
@@ -348,6 +457,11 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object AlumnoEliminar(PeriodoEstudioAlumno alumno)
     {
+        Retorno_MsgObj retorno = loEstudio.Mdl_UnAsignUserCourse(alumno.getAlumno().getPerUsrModID(), 
+                    alumno.getPeriodoEstudio().getMdlCod(), Role.STUDENT);
+
+        if(retorno.SurgioError()) return retorno;
+            
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(alumno);
     }
@@ -407,6 +521,11 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object DocenteAgregar(PeriodoEstudioDocente docente)
     {
+        Retorno_MsgObj retorno = loEstudio.Mdl_AsignUserCourse(docente.getDocente().getPerUsrModID(), 
+                    docente.getPeriodoEstudio().getMdlCod(), Role.TEACHER);
+
+        if(retorno.SurgioError()) return retorno;
+            
         docente.setObjFchMod(new Date());
         PerManejador perManejador   = new PerManejador();
         return perManejador.guardar(docente);
@@ -423,6 +542,11 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object DocenteEliminar(PeriodoEstudioDocente docente)
     {
+        Retorno_MsgObj retorno = loEstudio.Mdl_UnAsignUserCourse(docente.getDocente().getPerUsrModID(), 
+                    docente.getPeriodoEstudio().getMdlCod(), Role.TEACHER);
+
+        if(retorno.SurgioError()) return retorno;
+            
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(docente);
     }
@@ -452,5 +576,105 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.eliminar(documento);
     }
     
+    public void DocumentoImportarMoodle(){
+        if(param.getParUtlMdl())
+        {
+            Retorno_MsgObj retorno = this.EstudioObtenerTodos();
+            
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                PeriodoEstudio estudio = (PeriodoEstudio) objeto;
+                
+                if(estudio.getMdlCod() != null)
+                {
+                    MoodleCourseContent[] courseContent = loEstudio.Mdl_ObtenerEstudioContent(estudio.getMdlCod());
+                    
+                    //Busco archivos
+                    
+                    if(courseContent != null)
+                    {
+                        //Recorro cada contenido
+                        for(MoodleCourseContent content : courseContent) {
+                            if(content.getMoodleModules() != null)
+                            {
+                                //Recorro los modulos del curso
+                                for (MoodleModule modulo : content.getMoodleModules()) {
+                                    if(modulo.getContent() != null)
+                                    {
+                                        //Recorro el contenido de cada modulo
+                                        for (MoodleModuleContent modContent : modulo.getContent()) {
+                                            //Controlo fecha.
+                                            Date fechaCreado = new Date(modContent.getTimeCreated() * 1000);
+                                            if(estudio.getFchSincMdl() != null)
+                                            {
+                                                if(fechaCreado.after(estudio.getFchSincMdl()))
+                                                {
+                                                    PeriodoEstudioDocumento documento = loEstudio.Mdl_ObtenerEstudioArchivo(modContent);
+                                                    documento.setPeriodo(estudio);
+
+                                                    this.DocumentoAgregar(documento);
+                                                }
+                                            }
+                                            else
+                                            {
+                                                PeriodoEstudioDocumento documento = loEstudio.Mdl_ObtenerEstudioArchivo(modContent);
+                                                documento.setPeriodo(estudio);
+
+                                                this.DocumentoAgregar(documento);
+                                                
+                                            }
+                                            
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    estudio.setFchSincMdl(new Date());
+                    this.EstudioActualizar(estudio);
+                }
+            }                        
+        
+        }
+    }
+
+    
+    
+    //--------------------------------------------------------------------------------------------------------
+    //Moodle
+    //--------------------------------------------------------------------------------------------------------
+    
+    private Retorno_MsgObj Mdl_AgregarEstudio(Long parent, String mdlFullNom, String mdlShrtNom, String mdlDsc)
+    {
+        Retorno_MsgObj retorno = loEstudio.Mdl_AgregarEstudio(parent, mdlFullNom, mdlShrtNom, mdlDsc);
+        
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            MoodleCourse mdlEstudio = (MoodleCourse) retorno.getObjeto();
+            retorno.setObjeto(mdlEstudio.getId());
+        }
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_ActualizarEstudio(Long parent, Long mdlCod, String mdlFullNom, String mdlShrtNom, String mdlDsc)
+    {
+        Retorno_MsgObj retorno = loEstudio.Mdl_ActualizarEstudio(mdlCod, parent, mdlFullNom, mdlShrtNom, mdlDsc);
+        
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            MoodleCourse mdlEstudio = (MoodleCourse) retorno.getObjeto();
+            retorno.setObjeto(mdlEstudio.getId());
+        }
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj Mdl_EliminarEstudio(Long mdlCod)
+    {
+        return loEstudio.Mdl_EliminarEstudio(mdlCod);
+    }
     
 }

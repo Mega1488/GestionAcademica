@@ -68,6 +68,8 @@ public class Materia extends SincHelper implements Serializable {
     @JoinColumn(name="PlaEstCod", referencedColumnName="PlaEstCod")
     private PlanEstudio plan;
 
+    @Column(name = "MdlCod")
+    private Long MdlCod;
            
     @Column(name = "MatNom", length = 100)
     private String MatNom;
@@ -162,6 +164,16 @@ public class Materia extends SincHelper implements Serializable {
     public Date getObjFchMod() {
         return ObjFchMod;
     }
+
+    public Long getMdlCod() {
+        return MdlCod;
+    }
+
+    public void setMdlCod(Long MdlCod) {
+        this.MdlCod = MdlCod;
+    }
+    
+    
 
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;

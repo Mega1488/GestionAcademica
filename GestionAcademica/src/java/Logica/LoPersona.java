@@ -146,7 +146,15 @@ public class LoPersona implements Interfaz.InPersona{
         
         if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_ActualizarUsuario(pObjeto);
+            if(pObjeto.getPerUsrModID() == null)
+            {
+                retorno = this.Mdl_AgregarUsuario(pObjeto);
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarUsuario(pObjeto);
+            }
+            
             error = retorno.SurgioErrorObjetoRequerido();
         }
 

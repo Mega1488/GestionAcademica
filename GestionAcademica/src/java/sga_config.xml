@@ -20,6 +20,7 @@
         <task:scheduled ref="tasksSch" method="Tarea_BorrarWSBitacora" cron="0 0/1 * * * ?"/> 
         <task:scheduled ref="tasksSch" method="Tarea_NotificarInterno" cron="0 0/2 * * * ?"/>
         <task:scheduled ref="tasksSch" method="Tarea_Sincronizar" cron="0 0/5 * * * ?"/> 
+        <task:scheduled ref="tasksSch" method="Tarea_ImportarAdjuntos" cron="0 0/5 * * * ?"/> 
     </task:scheduled-tasks>
     -->
 </beans>

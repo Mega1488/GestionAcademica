@@ -6,7 +6,6 @@
 package Logica;
 
 import Entidad.Curso;
-import Entidad.Evaluacion;
 import Entidad.Modulo;
 import Entidad.Parametro;
 import Enumerado.TipoMensaje;
@@ -27,13 +26,11 @@ import java.util.Date;
  */
 public class LoCurso implements Interfaz.InCurso{
     private final Parametro         param;
-    private final MoodleRestCourse  mdlCourse;
     private final LoCategoria       loCategoria;
     private static LoCurso instancia;
     private final LoEstudio  loEstudio;
 
     private LoCurso() {
-        mdlCourse           = new MoodleRestCourse();
         param               = LoParametro.GetInstancia().obtener();
         loCategoria         = LoCategoria.GetInstancia();
         loEstudio           = LoEstudio.GetInstancia();
@@ -56,16 +53,20 @@ public class LoCurso implements Interfaz.InCurso{
         
         if(param.getParUtlMdl())
         {
+            
             if(pCurso.getCurCatCod() == null)
             {
-                retorno = this.Mdl_AgregarCategoria(pCurso);
+                retorno = this.Mdl_AgregarCategoria(0L, pCurso.getCurNom(), pCurso.getCurDsc());
             }
             else
             {
-               retorno = this.Mdl_ActualizarCategoria(pCurso); 
+               retorno = this.Mdl_ActualizarCategoria(0L, pCurso.getCurCatCod(), pCurso.getCurNom(), pCurso.getCurDsc()); 
             }
 
-            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            error   =  retorno.SurgioError();
+            
+            pCurso.setCurCatCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pCurso);
         }
             
         if(!error)
@@ -96,16 +97,19 @@ public class LoCurso implements Interfaz.InCurso{
        
         if(param.getParUtlMdl())
         {
-            if(pCurso.getCurCatCod() != null)
+            if(pCurso.getCurCatCod() == null)
             {
-                retorno = this.Mdl_ActualizarCategoria(pCurso);
+                retorno = this.Mdl_AgregarCategoria(0L, pCurso.getCurNom(), pCurso.getCurDsc());
             }
             else
             {
-                retorno = this.Mdl_AgregarCategoria(pCurso);
+               retorno = this.Mdl_ActualizarCategoria(0L, pCurso.getCurCatCod(), pCurso.getCurNom(), pCurso.getCurDsc()); 
             }
+
+            error   =  retorno.SurgioError();
             
-            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            pCurso.setCurCatCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pCurso);
         }
         
         if(!error)
@@ -135,8 +139,8 @@ public class LoCurso implements Interfaz.InCurso{
        
         if(param.getParUtlMdl() && pCurso.getCurCatCod() != null)
         {
-            retorno = this.Mdl_EliminarCategoria(pCurso);
-            error   = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            retorno = this.Mdl_EliminarCategoria(pCurso.getCurCatCod());
+            error   = retorno.SurgioError();
         }
 
         if(!error)
@@ -178,8 +182,19 @@ public class LoCurso implements Interfaz.InCurso{
        
         if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_AgregarEstudio(modulo);
-            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            if(modulo.getModEstCod() == null)
+            {
+                retorno = this.Mdl_AgregarCategoria(modulo.getCurso().getCurCatCod(), modulo.getModNom(), modulo.getModDsc());
+            }
+            else
+            {
+               retorno = this.Mdl_ActualizarCategoria(modulo.getCurso().getCurCatCod(), modulo.getModEstCod(), modulo.getModNom(), modulo.getModDsc()); 
+            }
+
+            error   =  retorno.SurgioError();
+            
+            modulo.setModEstCod((Long) retorno.getObjeto());
+            retorno.setObjeto(modulo);
         }        
         
         if(!error)
@@ -200,11 +215,22 @@ public class LoCurso implements Interfaz.InCurso{
         boolean error           = false;
         Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error al actualizar el modulo", TipoMensaje.ERROR), modulo);
        
-        if(param.getParUtlMdl() && modulo.getModEstCod() != null)
+        if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_ActualizarEstudio(modulo);
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
-        }
+            if(modulo.getModEstCod() == null)
+            {
+                retorno = this.Mdl_AgregarCategoria(modulo.getCurso().getCurCatCod(), modulo.getModNom(), modulo.getModDsc());
+            }
+            else
+            {
+               retorno = this.Mdl_ActualizarCategoria(modulo.getCurso().getCurCatCod(), modulo.getModEstCod(), modulo.getModNom(), modulo.getModDsc()); 
+            }
+
+            error   =  retorno.SurgioError();
+            
+            modulo.setModEstCod((Long) retorno.getObjeto());
+            retorno.setObjeto(modulo);
+        }  
         
         if(!error)
         {
@@ -225,8 +251,8 @@ public class LoCurso implements Interfaz.InCurso{
        
         if(param.getParUtlMdl() && modulo.getModEstCod() != null)
         {
-            retorno = this.Mdl_EliminarEstudio(modulo);
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            retorno = this.Mdl_EliminarCategoria(modulo.getModEstCod());
+            error = retorno.SurgioError();
         }
         
         if(!error)
@@ -255,37 +281,40 @@ public class LoCurso implements Interfaz.InCurso{
     //Moodle
     //--------------------------------------------------------------------------------------------------------
     
-    private Retorno_MsgObj Mdl_AgregarCategoria(Curso curso)
+    private Retorno_MsgObj Mdl_AgregarCategoria(Long parent, String mdlNom, String mdlDsc)
     {
-        Retorno_MsgObj retorno = loCategoria.Mdl_AgregarCategoria(curso.getCurDsc(), curso.getCurNom(), Boolean.TRUE);
+        Retorno_MsgObj retorno = loCategoria.Mdl_AgregarCategoria(mdlDsc, mdlNom, Boolean.TRUE, parent);
         
-        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        if(!retorno.SurgioErrorObjetoRequerido())
         {
             MoodleCategory mdlCategoria = (MoodleCategory) retorno.getObjeto();
-            curso.setCurCatCod(mdlCategoria.getId());
+            Long mdlCod = mdlCategoria.getId();
+            
+            retorno.setObjeto(mdlCod);
         }
-        
-        retorno.setObjeto(curso);
         
         return retorno;
 
     }
     
-    private Retorno_MsgObj Mdl_ActualizarCategoria(Curso pCurso)
+    private Retorno_MsgObj Mdl_ActualizarCategoria(Long parent, Long mdlCod, String mdlNom, String mdlDsc)
     {
-        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pCurso.getCurCatCod(), pCurso.getCurDsc(), pCurso.getCurNom(), Boolean.TRUE);
-        retorno.setObjeto(pCurso);
+        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(mdlCod, mdlDsc, mdlNom, Boolean.TRUE, parent);
+        
+        MoodleCategory mdlCategoria = (MoodleCategory) retorno.getObjeto();
+        retorno.setObjeto(mdlCategoria.getId());
+
         return retorno;
     }
     
-    private Retorno_MsgObj Mdl_EliminarCategoria(Curso pCurso)
+    private Retorno_MsgObj Mdl_EliminarCategoria(Long mdlCod)
     {
-        return loCategoria.Mdl_EliminarCategoria(pCurso.getCurCatCod());
+        return loCategoria.Mdl_EliminarCategoria(mdlCod);
     }
     
     //--------------------------------------------------------------------------------------------------------    
     
-    private Retorno_MsgObj Mdl_AgregarEstudio(Modulo pModulo){
+    private Retorno_MsgObj dpr_Mdl_AgregarEstudio(Modulo pModulo){
         Retorno_MsgObj retorno = loEstudio.Mdl_AgregarEstudio(pModulo.getCurso().getCurCatCod(), pModulo.getModNom(), pModulo.getModNom(), pModulo.getModDsc());
         
         if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
@@ -299,13 +328,13 @@ public class LoCurso implements Interfaz.InCurso{
 
     }
     
-    private Retorno_MsgObj Mdl_ActualizarEstudio(Modulo pModulo){
+    private Retorno_MsgObj dpr_Mdl_ActualizarEstudio(Modulo pModulo){
         Retorno_MsgObj retorno = loEstudio.Mdl_ActualizarEstudio(pModulo.getModEstCod(), pModulo.getCurso().getCurCatCod(), pModulo.getModNom(), pModulo.getModNom(), pModulo.getModDsc());
         retorno.setObjeto(pModulo);
         return retorno;
     }
     
-    private Retorno_MsgObj Mdl_EliminarEstudio(Modulo pModulo){
+    private Retorno_MsgObj dpr_Mdl_EliminarEstudio(Modulo pModulo){
         Retorno_MsgObj retorno = loEstudio.Mdl_EliminarEstudio(pModulo.getModEstCod());
         retorno.setObjeto(pModulo);
         return retorno;

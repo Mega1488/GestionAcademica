@@ -57,7 +57,14 @@ public class MoodleRestUserEnrolment implements Serializable {
         }
     }
 
-    public void __enrolUsers(String url, String token, MoodleUserEnrolment[] users) throws MoodleRestUserEnrolmentException, MoodleRestException {
+  
+  public void __enrolUser(String url, String token, MoodleUserEnrolment user) throws UnsupportedEncodingException, MoodleRestUserEnrolmentException, MoodleRestException {
+        MoodleUserEnrolment[] a=new MoodleUserEnrolment[1];
+        a[0]=user;
+        __enrolUsers(url, token, a);
+    }
+  
+  public void __enrolUsers(String url, String token, MoodleUserEnrolment[] users) throws MoodleRestUserEnrolmentException, MoodleRestException {
         if (MoodleCallRestWebService.isLegacy()) throw new MoodleRestUserEnrolmentException(MoodleRestException.NO_LEGACY);
         Hashtable hash=new Hashtable();
         String functionCall=MoodleServices.ENROL_MANUAL_ENROL_USERS.toString();
@@ -75,6 +82,9 @@ public class MoodleRestUserEnrolment implements Serializable {
                 if (users[i].getSuspend()!=null) data.append("&").append(URLEncoder.encode("enrolments["+i+"][suspend]", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(users[i].getSuspend().toString(), MoodleServices.ENCODING.toString()));
             }
             data.trimToSize();
+            System.err.println("Url: " + url);
+            System.err.println("Data: " + data.toString());
+            
             NodeList elements=(new MoodleCallRestWebService()).__call(url,data.toString());
             for (int j=0;j<elements.getLength();j+=2) {
                 hash.put(elements.item(j+1).getTextContent(), elements.item(j).getTextContent());

@@ -52,16 +52,18 @@ public class LoCarrera implements Interfaz.InCarrera{
         {   
             if(pCarrera.getCarCatCod() == null)
             {
-                retorno = this.Mdl_AgregarCategoria(pCarrera);
-                pCarrera    = (Carrera) retorno.getObjeto();
+                retorno = this.Mdl_AgregarCategoria(0L, pCarrera.getCarNom(), pCarrera.getCarDsc());
             }
             else
             {
-                retorno = this.Mdl_ActualizarCategoria(pCarrera);
-                pCarrera    = (Carrera) retorno.getObjeto();
+                retorno = this.Mdl_ActualizarCategoria(0L, pCarrera.getCarCatCod(), pCarrera.getCarNom(), pCarrera.getCarDsc());
             }
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            error = retorno.SurgioError();
+            
+            pCarrera.setCarCatCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pCarrera);
         }
+        
 
         if(!error)
         {
@@ -91,15 +93,18 @@ public class LoCarrera implements Interfaz.InCarrera{
         
         if (param.getParUtlMdl())
         {
-            if(pCarrera.getCarCatCod() != null)
+            if(pCarrera.getCarCatCod() == null)
             {
-                retorno = this.Mdl_AgregarCategoria(pCarrera);
+                retorno = this.Mdl_AgregarCategoria(0L, pCarrera.getCarNom(), pCarrera.getCarDsc());
             }
             else
             {
-                retorno = this.Mdl_ActualizarCategoria(pCarrera);
+                retorno = this.Mdl_ActualizarCategoria(0L, pCarrera.getCarCatCod(), pCarrera.getCarNom(), pCarrera.getCarDsc());
             }
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            error = retorno.SurgioError();
+            
+            pCarrera.setCarCatCod((Long) retorno.getObjeto());
+            retorno.setObjeto(pCarrera);
         }
         
         if (!error)
@@ -126,8 +131,8 @@ public class LoCarrera implements Interfaz.InCarrera{
         Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));        
         if(param.getParUtlMdl() && pCarrera.getCarCatCod() != null)
         {
-            retorno = this.Mdl_EliminarCategoria(pCarrera);
-            error   = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            retorno = this.Mdl_EliminarCategoria(pCarrera.getCarCatCod());
+            error   = retorno.SurgioError();
         }
 
         if(!error)
@@ -169,8 +174,18 @@ public class LoCarrera implements Interfaz.InCarrera{
        
         if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_AgregarSubCategoria(plan);
-            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            if(plan.getPlaEstCatCod() == null)
+            {
+                retorno = this.Mdl_AgregarCategoria(plan.getCarrera().getCarCatCod(), plan.getPlaEstNom(), plan.getPlaEstDsc());
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarCategoria(plan.getCarrera().getCarCatCod(), plan.getPlaEstCatCod(), plan.getPlaEstNom(), plan.getPlaEstDsc());
+            }
+            error = retorno.SurgioError();
+            
+            plan.setPlaEstCatCod((Long) retorno.getObjeto());
+            retorno.setObjeto(plan);
         }        
         
         if(!error)
@@ -191,8 +206,18 @@ public class LoCarrera implements Interfaz.InCarrera{
        
         if(param.getParUtlMdl() && plan.getPlaEstCatCod()!= null)
         {
-            retorno = this.Mdl_ActualizarSubCategoria(plan);
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            if(plan.getPlaEstCatCod() == null)
+            {
+                retorno = this.Mdl_AgregarCategoria(plan.getCarrera().getCarCatCod(), plan.getPlaEstNom(), plan.getPlaEstDsc());
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarCategoria(plan.getCarrera().getCarCatCod(), plan.getPlaEstCatCod(), plan.getPlaEstNom(), plan.getPlaEstDsc());
+            }
+            error = retorno.SurgioError();
+            
+            plan.setPlaEstCatCod((Long) retorno.getObjeto());
+            retorno.setObjeto(plan);
         }
         
         if(!error)
@@ -214,8 +239,8 @@ public class LoCarrera implements Interfaz.InCarrera{
        
         if(param.getParUtlMdl() && plan.getPlaEstCatCod()!= null)
         {
-            retorno = this.Mdl_EliminarSubCategoria(plan);
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            retorno = this.Mdl_EliminarCategoria(plan.getPlaEstCatCod());
+            error = retorno.SurgioError();
         }
         
         if(!error)
@@ -239,8 +264,18 @@ public class LoCarrera implements Interfaz.InCarrera{
        
         if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_AgregarEstudio(mat);
-            error   =  retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            if(mat.getMdlCod() == null)
+            {
+                retorno = this.Mdl_AgregarCategoria(mat.getPlan().getPlaEstCatCod(), mat.getMatNom(), mat.getMatNom());
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarCategoria(mat.getPlan().getPlaEstCatCod(), mat.getMdlCod(), mat.getMatNom(), mat.getMatNom());
+            }
+            error = retorno.SurgioError();
+            
+            mat.setMdlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(mat);
         }        
         
         if(!error)
@@ -261,9 +296,19 @@ public class LoCarrera implements Interfaz.InCarrera{
        
         if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_ActualizarEstudio(mat);
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
-        }
+            if(mat.getMdlCod() == null)
+            {
+                retorno = this.Mdl_AgregarCategoria(mat.getPlan().getPlaEstCatCod(), mat.getMatNom(), mat.getMatNom());
+            }
+            else
+            {
+                retorno = this.Mdl_ActualizarCategoria(mat.getPlan().getPlaEstCatCod(), mat.getMdlCod(), mat.getMatNom(), mat.getMatNom());
+            }
+            error = retorno.SurgioError();
+            
+            mat.setMdlCod((Long) retorno.getObjeto());
+            retorno.setObjeto(mat);
+        } 
         
         if(!error)
         {
@@ -283,8 +328,8 @@ public class LoCarrera implements Interfaz.InCarrera{
        
         if(param.getParUtlMdl())
         {
-            retorno = this.Mdl_EliminarEstudio(mat);
-            error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
+            retorno = this.Mdl_EliminarCategoria(mat.getMdlCod());
+            error = retorno.SurgioError();
         }
         
         if(!error)
@@ -321,104 +366,40 @@ public class LoCarrera implements Interfaz.InCarrera{
         return perManager.obtenerLista("Materia.findByPeriodo", lstParametros);
     }
     
-    //----------------------------------------------------------------------------------------------------
-    //-Modle_Categoría
-    //----------------------------------------------------------------------------------------------------
-
-    public Retorno_MsgObj Mdl_AgregarCategoria(Carrera pCarrera)
-    {
-        Retorno_MsgObj retorno  = loCategoria.Mdl_AgregarCategoria(pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
-        
-        if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
-        {
-            MoodleCategory mdlCat= (MoodleCategory) retorno.getObjeto();
-            pCarrera.setCarCatCod(mdlCat.getId());
-        }
-        retorno.setObjeto(pCarrera);
-        return retorno;
-    }
     
-    private Retorno_MsgObj Mdl_ActualizarCategoria(Carrera pCarrera)
-    {
-        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pCarrera.getCarCatCod(), pCarrera.getCarDsc(), pCarrera.getCarNom(), Boolean.TRUE);
-        retorno.setObjeto(pCarrera);
-        return retorno;
-    }
-    
-    private Retorno_MsgObj Mdl_EliminarCategoria(Carrera pCarrera)
-    {
-        return loCategoria.Mdl_EliminarCategoria(pCarrera.getCarCatCod());
-    }
-    
-    //----------------------------------------------------------------------------------------------------
-    //-Modle_SubCategoría
-    //----------------------------------------------------------------------------------------------------
-
-    public Retorno_MsgObj Mdl_AgregarSubCategoria(PlanEstudio pPlan)
-    {
-        Retorno_MsgObj retorno  = loCategoria.Mdl_AgregarCategoria(pPlan.getPlaEstDsc(), pPlan.getPlaEstNom(), Boolean.TRUE);
-        
-        if(retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR)
-        {
-            MoodleCategory mdlCat= (MoodleCategory) retorno.getObjeto();
-            pPlan.setPlaEstCatCod(mdlCat.getId());
-        }
-        retorno.setObjeto(pPlan);
-        return retorno;
-    }
-    
-    private Retorno_MsgObj Mdl_ActualizarSubCategoria(PlanEstudio pPlan)
-    {
-        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(pPlan.getPlaEstCatCod(), pPlan.getPlaEstDsc(), pPlan.getPlaEstNom(), Boolean.TRUE);
-        retorno.setObjeto(pPlan);
-        return retorno;
-    }
-    
-    private Retorno_MsgObj Mdl_EliminarSubCategoria(PlanEstudio pPlan)
-    {
-        return loCategoria.Mdl_EliminarCategoria(pPlan.getPlaEstCatCod());
-    }
-    
-    //----------------------------------------------------------------------------------------------------
-    //-Modle_Estudio
+    //--------------------------------------------------------------------------------------------------------
+    //Moodle
     //--------------------------------------------------------------------------------------------------------
     
-    private Retorno_MsgObj Mdl_AgregarEstudio(Materia pMateria)
+    private Retorno_MsgObj Mdl_AgregarCategoria(Long parent, String mdlNom, String mdlDsc)
     {
-        Retorno_MsgObj retorno = loEstudio.Mdl_AgregarEstudio(pMateria.getPlan().getPlaEstCatCod(), pMateria.getMatNom(), pMateria.getMatNom(), pMateria.getMatNom());
+        Retorno_MsgObj retorno = loCategoria.Mdl_AgregarCategoria(mdlDsc, mdlNom, Boolean.TRUE, parent);
         
-        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
+        if(!retorno.SurgioErrorObjetoRequerido())
         {
-            MoodleCourse mdlEstudio = (MoodleCourse) retorno.getObjeto();
-            pMateria.setMatCod(mdlEstudio.getId());
+            MoodleCategory mdlCategoria = (MoodleCategory) retorno.getObjeto();
+            Long mdlCod = mdlCategoria.getId();
+            
+            retorno.setObjeto(mdlCod);
         }
         
-        retorno.setObjeto(pMateria);
+        return retorno;
+
+    }
+    
+    private Retorno_MsgObj Mdl_ActualizarCategoria(Long parent, Long mdlCod, String mdlNom, String mdlDsc)
+    {
+        Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(mdlCod, mdlDsc, mdlNom, Boolean.TRUE, parent);
+        
+        MoodleCategory mdlCategoria = (MoodleCategory) retorno.getObjeto();
+        retorno.setObjeto(mdlCategoria.getId());
+
         return retorno;
     }
     
-    private Retorno_MsgObj Mdl_ActualizarEstudio(Materia pMateria)
+    private Retorno_MsgObj Mdl_EliminarCategoria(Long mdlCod)
     {
-        Retorno_MsgObj retorno = loEstudio.Mdl_ActualizarEstudio(pMateria.getMatCod(), pMateria.getPlan().getPlaEstCod(), pMateria.getMatNom(), pMateria.getMatNom(), pMateria.getMatNom());
-        retorno.setObjeto(pMateria);
-        return retorno;
-    }
-    
-    private Retorno_MsgObj Mdl_EliminarEstudio(Materia pMateria)
-    {
-        Retorno_MsgObj retorno = loEstudio.Mdl_EliminarEstudio(pMateria.getMatCod());
-        retorno.setObjeto(pMateria);
-        return retorno;
-    }
-    
-//----------------------------------------------------------------------------------------------------
-    //-Funcionalidades en Común
-    //----------------------------------------------------------------------------------------------------
-    
-    public Boolean Mdl_ValidarCategoria(Long cod)
-    {
-        MoodleCategory category = loCategoria.Mdl_ObtenerCategoria(cod);
-        return (category != null);
+        return loCategoria.Mdl_EliminarCategoria(mdlCod);
     }
 
 }

@@ -5,6 +5,7 @@
  */
 package Scheduler;
 
+import Logica.LoPeriodo;
 import Logica.LoSincronizacion;
 import Logica.LoWS;
 import Logica.Notificacion.ManejoNotificacion;
@@ -73,6 +74,11 @@ public class ScheduledWorks implements SmartLifecycle{
     {
         System.out.println("Sincronizar. Current time is :: "+ new Date());
         LoSincronizacion.GetInstancia().Sincronizar();
+    }
+    
+    public void Tarea_ImportarAdjuntos(){
+        System.out.println("Importar adjuntos de moodle. Current time is :: "+ new Date());
+        LoPeriodo.GetInstancia().DocumentoImportarMoodle();
     }
 
     @Override

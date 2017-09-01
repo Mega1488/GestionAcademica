@@ -722,6 +722,11 @@ public class MoodleRestCourse implements Serializable {
           data.append("&").append(URLEncoder.encode("options["+i+"][name]", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+options[i].getName(), MoodleServices.ENCODING.toString()));
           data.append("&").append(URLEncoder.encode("options["+i+"][value]", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+options[i].getValue(), MoodleServices.ENCODING.toString()));
         }
+      
+      data.trimToSize();
+      
+        System.err.println("Data: " + data.toString());
+      
       NodeList elements=(new MoodleCallRestWebService()).__call(url,data.toString());
       MoodleCourseContent result=null;
       MoodleModule module=null;

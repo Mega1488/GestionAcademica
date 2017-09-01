@@ -182,6 +182,24 @@ public class MoodleFileParent implements Serializable {
         return filename;
     }
 
+    public String getContextlevel() {
+        return contextlevel;
+    }
+
+    public void setContextlevel(String contextlevel) {
+        this.contextlevel = contextlevel;
+    }
+
+    public Long getInstanceid() {
+        return instanceid;
+    }
+
+    public void setInstanceid(Long instanceid) {
+        this.instanceid = instanceid;
+    }
+
+    
+    
     /**
      * <p>Method to set an attribute of a MoodleFileParent object given its field name and value as strings from data returned by a call to MoodleRestFile.getfiles.</p>
      *
@@ -196,6 +214,8 @@ public class MoodleFileParent implements Serializable {
         if (field.equals("itemid") && !value.isEmpty()) setItemId(Long.valueOf(value));
         if (field.equals("filepath") && !value.isEmpty()) setFilePath(value);
         if (field.equals("filename") && !value.isEmpty()) setFileName(value);
+        if (field.equals("contextlevel") && !value.isEmpty()) setFileName(value);
+        if (field.equals("instanceid") && !value.isEmpty()) setFileName(value);
     }
     
 }

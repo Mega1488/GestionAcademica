@@ -142,7 +142,7 @@
                         </div>
 
                         <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                            <!--<a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>-->
                         </div>
 
                         <table style=' <% out.print(tblVisible); %>' class='table table-hover'>

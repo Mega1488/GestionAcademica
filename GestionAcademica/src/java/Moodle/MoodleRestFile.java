@@ -203,13 +203,20 @@ public class MoodleRestFile implements Serializable {
     String functionCall=MoodleCallRestWebService.isLegacy()?MoodleServices.MOODLE_FILE_UPLOAD.toString():MoodleServices.CORE_FILES_UPLOAD.toString();
     data.append(URLEncoder.encode("wstoken", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(token, MoodleServices.ENCODING.toString()));
     data.append("&").append(URLEncoder.encode("wsfunction", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(functionCall, MoodleServices.ENCODING.toString()));
-    if (params.contextid!=null) data.append("&").append(URLEncoder.encode("contextid", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+params.contextid, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": contextid");
+    if (params.contextid!=null) data.append("&").append(URLEncoder.encode("contextid", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+params.contextid, MoodleServices.ENCODING.toString())); //else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": contextid");
     if (params.component!=null) data.append("&").append(URLEncoder.encode("component", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.component, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": component");
     if (params.filearea!=null) data.append("&").append(URLEncoder.encode("filearea", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.filearea, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": filearea");
     if (params.itemid!=null) data.append("&").append(URLEncoder.encode("itemid", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+params.itemid, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": itemid");
     if (params.filepath!=null) data.append("&").append(URLEncoder.encode("filepath", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.filepath, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": filepath");
     if (params.filename!=null) data.append("&").append(URLEncoder.encode("filename", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.filename, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": filename");
-    if (params.filecontent!=null) data.append("&").append(URLEncoder.encode("filecontent", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.filecontent, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": filecontent");
+    if (params.filecontent!=null) data.append("&").append(URLEncoder.encode("filecontent", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.filecontent, MoodleServices.ENCODING.toString())); ///else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": filecontent");
+    
+    if (params.contextlevel!=null) data.append("&").append(URLEncoder.encode("contextlevel", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(params.contextlevel, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": contextlevel");
+    if (params.instanceid!=null) data.append("&").append(URLEncoder.encode("instanceid", MoodleServices.ENCODING.toString())).append("=").append(URLEncoder.encode(""+params.instanceid, MoodleServices.ENCODING.toString())); else throw new MoodleRestFileException(MoodleRestException.REQUIRED_PARAMETER+": instanceid");
+
+    System.err.println("Url: " + url);
+    System.err.println("Data: " + data.toString());
+    
     NodeList elements=(new MoodleCallRestWebService()).__call(url,data.toString());
     MoodleFileFile fileFile=null;
     for (int j=0;j<elements.getLength();j++) {

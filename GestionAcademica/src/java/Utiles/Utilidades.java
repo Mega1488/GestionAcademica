@@ -10,9 +10,11 @@ import Enumerado.Constantes;
 import Enumerado.ExpresionesRegulares;
 import Enumerado.RutaArchivos;
 import Enumerado.TipoDato;
+import Enumerado.TipoMensaje;
 import Logica.LoParametro;
 import Logica.LoSincronizacion;
 import Logica.LoVersion;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
@@ -335,5 +337,34 @@ public class Utilidades {
         path += RutaArchivos.CARPETA_PUBLICA.getRuta();
         
         return path;
+    }
+    
+    public Retorno_MsgObj eliminarArchivo(String ruta){
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Eliminando archivo: " + ruta, TipoMensaje.MENSAJE));
+        
+        try{
+    		File file = new File(ruta);
+
+                if(file.exists())
+                {
+                    if(file.delete()){
+                            retorno.setMensaje(new Mensajes("Eliminación correcta: " + ruta, TipoMensaje.MENSAJE));
+                    }else{
+                            retorno.setMensaje(new Mensajes("Eliminación fallida: " + ruta, TipoMensaje.ERROR));
+                    }
+                }
+                else
+                {
+                    retorno.setMensaje(new Mensajes("Archivo no existe: " + ruta, TipoMensaje.ERROR));
+                }
+
+    	}catch(Exception e){
+
+    		retorno.setMensaje(new Mensajes("Error al eliminar el archivo: " + ruta + "\n" + e, TipoMensaje.ERROR));
+
+    	}
+        
+        return retorno;
     }
 }

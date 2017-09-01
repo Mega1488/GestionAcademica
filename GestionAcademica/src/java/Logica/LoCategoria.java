@@ -45,7 +45,7 @@ public class LoCategoria {
     }
     
     
-    public Retorno_MsgObj Mdl_AgregarCategoria(String pDsc, String pNom, Boolean pVisible)
+    public Retorno_MsgObj Mdl_AgregarCategoria(String pDsc, String pNom, Boolean pVisible, Long parent)
     {
         Mensajes mensaje;
         
@@ -54,7 +54,7 @@ public class LoCategoria {
         mdlCategoria.setDescription(pDsc);
         mdlCategoria.setName(pNom);
         mdlCategoria.setVisible(pVisible);
-        mdlCategoria.setParent(Long.valueOf("0"));
+        mdlCategoria.setParent(parent);
         
         try {
             mdlCategoria    = mdlCourse.__createCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlCategoria);
@@ -71,7 +71,7 @@ public class LoCategoria {
     }
     
     
-    public Retorno_MsgObj Mdl_ActualizarCategoria(Long codigo, String pDsc, String pNom, Boolean pVisible)
+    public Retorno_MsgObj Mdl_ActualizarCategoria(Long codigo, String pDsc, String pNom, Boolean pVisible, Long parent)
     {
         Mensajes mensaje;
         
@@ -80,6 +80,7 @@ public class LoCategoria {
         mdlCategoria.setDescription(pDsc);
         mdlCategoria.setName(pNom);
         mdlCategoria.setVisible(pVisible);
+        mdlCategoria.setParent(parent);
         
         try {
             mdlCourse.__updateCategory(param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor(), param.getParMdlTkn(), mdlCategoria);

@@ -10,6 +10,7 @@ import Enumerado.RutaArchivos;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Date;
 import java.util.Objects;
@@ -35,6 +36,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
  *
@@ -102,7 +104,7 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     public File getArchivo(){
        if(this.DocAdj != null)
        {
-           String nombreArchivo = Utiles.Utilidades.GetInstancia().getPrivateTempStorage() + "/" + this.getDocNom() + "." + this.DocExt;
+           String nombreArchivo = Utiles.Utilidades.GetInstancia().getPublicTempStorage() + "/" + this.getDocNom() + "." + this.DocExt;
       
            System.err.println("Descargando archivo: " + nombreArchivo);
         try {
@@ -179,6 +181,14 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
         this.ObjFchMod = ObjFchMod;
     }
 
+    public String getFileBase64(){
+        if(this.DocAdj != null)
+        {
+            return new String(Base64.encodeBase64(this.DocAdj), StandardCharsets.UTF_8);
+        }
+        return null;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;

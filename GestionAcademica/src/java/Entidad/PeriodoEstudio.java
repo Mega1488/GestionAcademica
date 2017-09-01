@@ -82,6 +82,12 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
     
+    @Column(name = "MdlCod")
+    private Long MdlCod;
+   
+    @Column(name = "FchSincMdl", columnDefinition="DATETIME")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date FchSincMdl;
     
     //----------------------------------------------------------------------
     @OneToMany(targetEntity = PeriodoEstudioAlumno.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -142,6 +148,25 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     public void setModulo(Modulo Modulo) {
         this.Modulo = Modulo;
     }
+
+    public Long getMdlCod() {
+        return MdlCod;
+    }
+
+    public void setMdlCod(Long MdlCod) {
+        this.MdlCod = MdlCod;
+    }
+
+    public Date getFchSincMdl() {
+        return FchSincMdl;
+    }
+
+    public void setFchSincMdl(Date FchSincMdl) {
+        this.FchSincMdl = FchSincMdl;
+    }
+    
+    
+    
 
     public Date getObjFchMod() {
         return ObjFchMod;
