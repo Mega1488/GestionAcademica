@@ -375,6 +375,12 @@ public class LoCalendario implements InABMGenerico{
 
             PerManejador perManejador   = new PerManejador();
             retorno = (Retorno_MsgObj) perManejador.guardar(alumno);
+            
+            if(!retorno.SurgioError())
+            {
+                alumno.setCalAlCod((Long) retorno.getObjeto());
+                retorno.setObjeto(alumno);
+            }
         }
        
         
@@ -711,11 +717,7 @@ public class LoCalendario implements InABMGenerico{
         {
             for(Object objeto : retorno.getLstObjetos())
             {
-                Calendario calendar = (Calendario) objeto;
-//                if(!calendar.getDocenteById(PerCod).getEvlCalEst().equals(EstadoCalendarioEvaluacion.VALIDADO))
-//                {
-                    lstRetorno.add(objeto);
-//                }
+                lstRetorno.add(objeto);
             }
         }
         

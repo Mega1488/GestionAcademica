@@ -61,6 +61,7 @@ public class ws_EvaluacionAlumno {
                 }
                 else
                 {
+                    //Lista de Calendarios donde el alumno NO esta inscripto
                     if(AlIns.equals("SI"))
                     {
                         retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
@@ -76,10 +77,6 @@ public class ws_EvaluacionAlumno {
                                     lstCalendario.add(cal);
                                     retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
                                 }
-                                else
-                                {
-                                    retorno.setMensaje(new Mensajes("No se encontraron datos", TipoMensaje.ERROR));
-                                }
                             }
                             retorno.setLstObjetos(lstCalendario);
                         }
@@ -88,6 +85,7 @@ public class ws_EvaluacionAlumno {
                             retorno.setMensaje(new Mensajes("Surgió error en lista Requerida", TipoMensaje.ERROR));
                         }
                     }
+                    //lista de Calendarios donde el alumno SI esta inscripto
                     else if(AlIns.equals("NO"))
                     {
                         retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
@@ -102,10 +100,6 @@ public class ws_EvaluacionAlumno {
                                 {
                                     lstCalendario.add(cal);
                                     retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
-                                }
-                                else
-                                {
-                                retorno.setMensaje(new Mensajes("No se encontraron datos", TipoMensaje.ERROR));
                                 }
                             }
                             retorno.setLstObjetos(lstCalendario);
@@ -257,7 +251,7 @@ public class ws_EvaluacionAlumno {
      * @return : Metodo que Borra un alumno de la evaluación a la que está inscripto
      */
     @WebMethod(operationName = "DesinscribirAlumno")
-    public Retorno_MsgObj DesinscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "CalAlCod") Long CalAlCod, @WebParam(name = "CalCod") Long CalCod)
+    public Retorno_MsgObj DesinscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod, @WebParam(name = "CalCod") Long CalCod)
     {
         LoCalendario loCalendario   = LoCalendario.GetInstancia();
         LoPersona loPersona         = LoPersona.GetInstancia();
@@ -269,9 +263,9 @@ public class ws_EvaluacionAlumno {
         }
         else
         {
-            if(CalAlCod == null)
+            if(PerCod == null)
             {    
-                retorno.setMensaje(new Mensajes("No se recibió el parámetro CalendarioAlumno", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("No se recibió el parámetro Alumno", TipoMensaje.ERROR));
             }
             else
             {
@@ -281,14 +275,12 @@ public class ws_EvaluacionAlumno {
                 }
                 else
                 {
-                    CalendarioAlumno CalAlumno  = new CalendarioAlumno();
-                    
-                    CalAlumno.setCalendario((Calendario)loCalendario.obtener(CalCod).getObjeto());
-                    CalAlumno.setCalAlCod(CalAlCod);
-                    
-                    if(CalAlumno.getCalendario() != null)
+                    Calendario cal = (Calendario)loCalendario.obtener(CalCod).getObjeto();
+
+                    if(cal != null)
                     {
-                        if(CalAlumno.getCalAlCod() != null)
+                        CalendarioAlumno CalAlumno = cal.getAlumnoByPersona(PerCod);
+                        if(CalAlumno != null)
                         {
                             CalAlumno.setEvlCalFch(new java.util.Date());
                             
@@ -298,7 +290,7 @@ public class ws_EvaluacionAlumno {
                         }
                         else
                         {
-                            retorno.setMensaje(new Mensajes("No existe el CalendarioAlumno", TipoMensaje.ERROR));
+                            retorno.setMensaje(new Mensajes("No existe el Alumno", TipoMensaje.ERROR));
                         }
                     }
                     else
