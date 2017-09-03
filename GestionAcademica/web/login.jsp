@@ -1,81 +1,120 @@
 <%-- 
     Document   : login
-    Created on : 18-jun-2017, 12:50:32
+    Created on : 01-sep-2017, 20:21:58
     Author     : alvar
 --%>
 
-<%@page import="Entidad.Persona"%>
-<%@page import="Logica.LoPersona"%>
-<%@page import="java.security.SecureRandom"%>
-<%@page import="java.io.InputStreamReader"%>
-<%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Entidad.Parametro"%>
+<%@page import="Logica.LoParametro"%>
 <%@page import="Utiles.Utilidades"%>
-<%@page import="java.io.BufferedReader"%>
-<%@page import="java.io.OutputStreamWriter"%>
-<%@page import="java.net.HttpURLConnection"%>
-<%@page import="java.net.URL"%>
-<%@page import="javax.sound.midi.SysexMessage"%>
+<%@page import="Enumerado.NombreSesiones"%>
+<%@page import="Logica.LoIniciar"%>
 <%
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    LoIniciar iniciar_sistema = new LoIniciar();
+    iniciar_sistema.Iniciar(request);
+
+    Utilidades util = Utilidades.GetInstancia();
+
+    session.setAttribute(NombreSesiones.URL_SISTEMA.getValor(), util.GetUrlSistema());
+
+    String urlSistema = util.GetInstancia().GetUrlSistema();
+    
+    String js_redirect = "window.location.replace('" + urlSistema + "');";
+
+    Parametro param = LoParametro.GetInstancia().obtener();
+
 %>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Sistema de Gestión Académica - CTC</title>
+        <jsp:include page="/masterPage/head.jsp"/>
+    </head>
+    <body class="body_clase">
+        <div class="login_fondo">		
+            <div class="login_contenedor">
+                <%                        if (param.getParUtlMdl()) {
+                        out.println("<div class='login_aulas'>"
+                                + "<a href='" + param.getParUrlMdl() + "'>"
+                                + "AULAS <span class='ti-arrow-right'>"
+                                + "</span></a></div>");
+                    }
+                %>
+
+
+
+                <div class="login_contenedorImg"><img src="Imagenes/ctc.png" /></div>
+                <h1 class="login_titulo">LOGIN</h1>
+                <p class="login_texto">Bienvenido a Gestión, el servicio a estudiantes del Instituto CTC - Colonia.</p>
+                <form>
+                    <div class="login_form">
+                        <input type="text" class="form-control login_inputBorde login_inputNumero" id="username" name="username" placeholder="Usuario">
+                        <input type="password" class="form-control login_inputPass" id="password" name="password" placeholder="Contraseña">
+                    </div>
+
+                    <button type="button" name="btnLogin" id="btnLogin" class="login_boton">INGRESAR</button>
+                </form>
+
+
+                <a href="pswSolRecovery.jsp" class="login_olvideContrasena">¿Olvidaste tu contraseña?</a>		
+
+            </div>
+        </div>
+
+        <div>
+            <div id="div_pop_bkgr" name="div_pop_bkgr"></div>
+
+            <div id="div_cargando" name="div_cargando">
+                <div class="loading"></div>
+            </div>
+
+        </div>
+
+        <div id="msgError" name="msgError" class="alert alert-success div_msg" style="display: none;"> 
+            <label id="txtError" name="txtError">Error</label>
+        </div>
 
         <script>
-                $(document).ready(function() {
-                    var urlAct = $('#sga_url').val();
-                    
-                    MostrarCargando(false);
-                        
-                        $('#submit').click(function(event) {
-                            MostrarCargando(true);                       
-                    
-                                var userVar = $('#username').val();
-                                var passVar = $('#password').val();
-                                
-                                if(userVar == '' || passVar == '')
-                                {
-                                    MostrarMensaje("ERROR", "Completa los datos papa");
-                                    MostrarCargando(false);
-                                }
-                                else
-                                {
-                                
-                                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                                        $.post('Login', {
-                                                pUser   : userVar,
-                                                pPass   : passVar,
-                                                pAction : "INICIAR"
-                                        }, function(responseText) {
-                                                var obj = JSON.parse(responseText);
+            $(document).ready(function () {
+                MostrarCargando(false);
 
-                                                if(obj.tipoMensaje == 'ERROR')
-                                                {
-                                                    MostrarMensaje("ERROR", obj.mensaje);
-                                                    MostrarCargando(false);
-                                                }
-                                                else
-                                                {
-                                                   window.location.replace(urlAct); 
-                                                }
-                                        });
-                                }
+                $('#btnLogin').click(function (event) {
+                    MostrarCargando(true);
+
+                    var userVar = $('#username').val();
+                    var passVar = $('#password').val();
+
+                    if (userVar == '' || passVar == '')
+                    {
+                        MostrarMensaje("ERROR", "Debe ingresar usuario y contraseña");
+                        MostrarCargando(false);
+                    } else
+                    {
+
+                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                        $.post('Login', {
+                            pUser: userVar,
+                            pPass: passVar,
+                            pAction: "INICIAR"
+                        }, function (responseText) {
+                            var obj = JSON.parse(responseText);
+
+                            if (obj.tipoMensaje == 'ERROR')
+                            {
+                                MostrarMensaje("ERROR", obj.mensaje);
+                                MostrarCargando(false);
+                            } else
+                            {
+                                <%=js_redirect%>
+                            }
                         });
-                    
+                    }
                 });
+
+            });
         </script>
-
-<div  class="col-sm-8" style="text-align: right;">
-
-        <a href="<%=urlSistema%>pswSolRecovery.jsp" >Recuperar contraseña</a>
-        <form name="login">
-
-            <label>Usuario:</label><input size="10" name="username" id="username" />
-            <label>Contraseña:</label><input size="10" name="password" id="password" type="password" />
-
-            <input name="submit" id="submit" value="Login" type="button" />
-
-        </form>
-        
-        
-</div>       
+    </body>
+</html>

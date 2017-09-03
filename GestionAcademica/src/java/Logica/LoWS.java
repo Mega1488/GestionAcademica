@@ -115,6 +115,7 @@ public class LoWS implements InABMGenerico{
     
     public Boolean ValidarConsumo(String token, ServicioWeb ws_metodo, String direccion){
         String tokenDes = Seguridad.GetInstancia().decrypt(token, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+        
         try
         {
             if(tokenDes.indexOf(Constantes.SEPARADOR.getValor()) < 1)
@@ -132,14 +133,14 @@ public class LoWS implements InABMGenerico{
 
                     usr = Seguridad.GetInstancia().decrypt(usr, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
                     psw = Seguridad.GetInstancia().decrypt(psw, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
-
+                    
                     Retorno_MsgObj retorno = this.obtenerByUsrNom(usr);
 
                     if(!retorno.SurgioErrorObjetoRequerido())
                     {
                         WS_User usuario = (WS_User) retorno.getObjeto();
 
-                        if(usuario.getWsUsrPsw().equals(psw))
+                        if(usuario.getWsUsrPsw().equals(Seguridad.GetInstancia().cryptWithMD5(psw)))
                         {
                             for(WS_UserServicio servicio : usuario.getLstServicio())
                             {

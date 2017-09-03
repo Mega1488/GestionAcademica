@@ -14,6 +14,7 @@ import Entidad.Modulo;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Constantes;
+import Enumerado.MoodleAuth;
 import Enumerado.TipoMensaje;
 import Logica.Notificacion.AsyncBandeja;
 import Logica.Notificacion.NotificacionesInternas;
@@ -38,7 +39,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -542,6 +542,13 @@ public class LoPersona implements Interfaz.InPersona{
                 {
                     persona.setPerFchLog(new Date());
                     persona.setPerCntIntLgn(0);
+                        
+                    try {
+                        persona.setPerLgnTkn(seguridad.crypt(Utiles.Utilidades.GetInstancia().GenerarToken(20)));
+                    } catch (Exception ex) {
+                        Logger.getLogger(LoPersona.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                   
                 }
                 else
                 {
@@ -557,6 +564,7 @@ public class LoPersona implements Interfaz.InPersona{
     }
     
     public Retorno_MsgObj CambiarPassword(String usuario, String pswActual, String pswNueva, String pswConf){
+        
 
         Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
         if(!retorno.SurgioErrorObjetoRequerido())
@@ -597,6 +605,28 @@ public class LoPersona implements Interfaz.InPersona{
             else
             {
                 retorno.setMensaje(new Mensajes("Contraseña actual no es valida", TipoMensaje.ERROR));
+            }
+        }
+        return retorno;
+    }
+    
+    public Retorno_MsgObj ValCambiarPasswordExterno(String usr, String tkn){
+
+        String usuario = seguridad.decrypt(usr
+                , Constantes.ENCRYPT_VECTOR_INICIO.getValor()
+                , Constantes.ENCRYPT_SEMILLA.getValor());
+        
+        Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
+        if(!retorno.SurgioErrorObjetoRequerido())
+        {
+            Persona persona = (Persona) retorno.getObjeto();
+            if(tkn.equals(persona.getPerLgnTkn()))
+            {
+                retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
+            }
+            else
+            {
+                retorno.setMensaje(new Mensajes("Token invalido, posiblemente acceso ilegal o finalizo sesion", TipoMensaje.ERROR));
             }
         }
         return retorno;
@@ -688,20 +718,7 @@ public class LoPersona implements Interfaz.InPersona{
     }
     
     private String GenerarPassword(Integer longitud){
-        String psw = "";
-        
-        long milis = new java.util.GregorianCalendar().getTimeInMillis();
-        Random r = new Random(milis);
-        int i = 0;
-        while ( i < longitud){
-            char c = (char)r.nextInt(255);
-            if ( (c >= '0' && c <='9') || (c >='A' && c <='Z') ){
-                psw += c;
-                i ++;
-            }
-        }
-        
-        return psw;
+        return Utiles.Utilidades.GetInstancia().GenerarToken(longitud);
     }
     
     private boolean ValidarEmail(String email, Long idOriginal){
@@ -888,6 +905,7 @@ public class LoPersona implements Interfaz.InPersona{
         usr.setLastname(persona.getPerApe());
         usr.setFirstname(persona.getPerNom());
         usr.setPassword("21!_646?adD.09Ajku");
+        usr.setAuth(MoodleAuth.WEBSERVICE.getValor());
         
         try {
 

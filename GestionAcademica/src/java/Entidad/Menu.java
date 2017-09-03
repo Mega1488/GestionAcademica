@@ -7,18 +7,27 @@ package Entidad;
 
 import Enumerado.TipoMenu;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -29,7 +38,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "MENU")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m")})
+    @NamedQuery(name = "Menu.findAll", query = "SELECT m FROM Menu m"),
+    @NamedQuery(name = "Menu.findOnlyFirstLevel", query = "SELECT m FROM Menu m WHERE m.superior is null")})
 public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,6 +62,18 @@ public class Menu implements Serializable {
     
     @Column(name = "MenOrd")
     private Integer MenOrd;
+    
+    @Column(name = "MenIsParent")
+    private Boolean MenIsParent;
+    
+    @OneToOne(targetEntity = Menu.class)
+    @JoinColumn(name="MenCodSup", referencedColumnName="MenCod")
+    private Menu superior;
+    
+    @OneToMany(targetEntity = Menu.class, cascade= CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name="MenCodSup", referencedColumnName = "MenCod")
+    @Fetch(FetchMode.SUBSELECT)
+    private List<Menu> lstSubMenu;
 
     public Long getMenCod() {
         return MenCod;
@@ -102,6 +124,25 @@ public class Menu implements Serializable {
         this.MenNom = MenNom;
         this.MenOrd = MenOrd;
     }
+
+    public List<Menu> getLstSubMenu() {
+        if(this.lstSubMenu == null) lstSubMenu = new ArrayList<>();
+        return lstSubMenu;
+    }
+
+    public void setLstSubMenu(List<Menu> lstSubMenu) {
+        this.lstSubMenu = lstSubMenu;
+    }
+
+    public Boolean getMenIsParent() {
+        if(MenIsParent == null) MenIsParent = false;
+        return MenIsParent;
+    }
+
+    public void setMenIsParent(Boolean MenIsParent) {
+        this.MenIsParent = MenIsParent;
+    }
+    
     
     
 

@@ -7,6 +7,7 @@ package Entidad;
 
 import Dominio.SincHelper;
 import Enumerado.RutaArchivos;
+import Enumerado.TipoArchivo;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -68,17 +69,9 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     @JoinColumn(name="PeriEstCod", referencedColumnName="PeriEstCod")
     private PeriodoEstudio periodoEstudio;
     
-    @Column(name = "DocFch", columnDefinition="DATE")
-    @Temporal(TemporalType.DATE)
-    private Date DocFch;
-    
-    @Column(name = "DocAdj", columnDefinition = "LONGBLOB")
-    private byte[] DocAdj;
-    
-    @Column(name = "DocNom", length = 100)
-    private String DocNom;
-    @Column(name = "DocExt", length = 10)
-    private String DocExt;
+    @OneToOne(targetEntity = Archivo.class)
+    @JoinColumn(name="ArcCod")
+    private Archivo archivo;
   
     @Column(name = "ObjFchMod", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -91,54 +84,28 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     
     //-GETTERS Y SETTERS
 
-    public Date getDocFch() {
-        return DocFch;
-    }
-
-    public void setDocFch(Date DocFch) {
-        this.DocFch = DocFch;
-    }
 
     @JsonIgnore
     @XmlTransient
     public File getArchivo(){
-       if(this.DocAdj != null)
-       {
-           String nombreArchivo = Utiles.Utilidades.GetInstancia().getPublicTempStorage() + "/" + this.getDocNom() + "." + this.DocExt;
-      
-           System.err.println("Descargando archivo: " + nombreArchivo);
-        try {
-            FileUtils.writeByteArrayToFile(new File(nombreArchivo), this.DocAdj);
-         } catch (IOException ex) {
-             Logger.getLogger(PeriodoEstudioDocumento.class.getName()).log(Level.SEVERE, null, ex);
-         }
-
-         File archivo = new File(nombreArchivo);
-
-         return archivo;
-       }
-       
-       return null;
+        if(this.archivo == null) return null;
+        return this.archivo.getArchivo();
     }
 
     public void setArchivo(File pArchivo) {
-        try{
-            this.DocAdj = Files.readAllBytes(pArchivo.toPath());
-            this.DocExt = FilenameUtils.getExtension(pArchivo.getName());
-            this.DocNom = FilenameUtils.getBaseName(pArchivo.getName());
-        }
-        catch(IOException ex) {
-            Logger.getLogger(PeriodoEstudioDocumento.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        archivo = new Archivo();
+        this.archivo.setArchivo(pArchivo, TipoArchivo.PERIODO_DOCUMENTO);
     }
 
     @XmlInlineBinaryData
     public byte[] getDocAdj() {
-        return DocAdj;
+        if(this.archivo == null) return null;
+        return archivo.getDocAdj();
     }
 
     public void setDocAdj(byte[] DocAdj) {
-        this.DocAdj = DocAdj;
+        archivo = new Archivo();
+        this.archivo.setArcAdj(DocAdj);
     }
     
     public Long getDocCod() {
@@ -158,19 +125,21 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     }
 
     public String getDocNom() {
-        return DocNom;
+        if(this.archivo == null) return null;
+        return this.archivo.getArcNom();
     }
 
     public void setDocNom(String DocNom) {
-        this.DocNom = DocNom;
+        this.archivo.setArcNom(DocNom);
     }
 
     public String getDocExt() {
-        return DocExt;
+        if(this.archivo == null) return null;
+        return this.archivo.getArcExt();
     }
 
     public void setDocExt(String DocExt) {
-        this.DocExt = DocExt;
+        this.archivo.setArcExt(DocExt);
     }
 
     public Date getObjFchMod() {
@@ -182,11 +151,8 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     }
 
     public String getFileBase64(){
-        if(this.DocAdj != null)
-        {
-            return new String(Base64.encodeBase64(this.DocAdj), StandardCharsets.UTF_8);
-        }
-        return null;
+        if(this.archivo == null) return null;
+        return this.archivo.getFileBase64();
     }
     
     @Override
@@ -216,10 +182,13 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
 
     @Override
     public String toString() {
-        return "PeriodoEstudioDocumento{" + "DocCod=" + DocCod + ", periodo=" + periodoEstudio + ", DocFch=" + DocFch + ", DocAdj=" + DocAdj + ", DocNom=" + DocNom + ", DocExt=" + DocExt + ", ObjFchMod=" + ObjFchMod + '}';
+        return "PeriodoEstudioDocumento{" + "DocCod=" + DocCod + ", periodoEstudio=" + periodoEstudio + ", archivo=" + archivo + ", ObjFchMod=" + ObjFchMod + '}';
     }
-    
-    
+
+    public void setDocFch(Date date) {
+        this.archivo.setArcFch(date);
+    }
+
   
 }
 

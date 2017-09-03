@@ -7,7 +7,10 @@ package Entidad;
 
 import Dominio.SincHelper;
 import Enumerado.Filial;
+import Enumerado.Genero;
+import Enumerado.TipoArchivo;
 import SDT.SDT_PersonaEstudio;
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -19,13 +22,17 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -71,6 +78,9 @@ public class Persona extends SincHelper implements Serializable {
     
     @Column(name = "PerApe", length = 100)
     private String PerApe;
+    
+    @Column(name = "PerApe2", length = 100)
+    private String PerApe2;
     
     @Column(name = "PerDoc", length = 15)
     private String PerDoc;
@@ -118,8 +128,48 @@ public class Persona extends SincHelper implements Serializable {
     @Column(name = "PerAppTkn", length = 500)
     private String PerAppTkn;
     
+    @Column(name = "PerLgnTkn", length = 500)
+    private String PerLgnTkn;
+    
     @Column(name = "PerCntIntLgn")
     private Integer PerCntIntLgn;
+    
+    @Column(name = "PerBeca", precision=10, scale=2)
+    private Double PerBeca;
+    
+    @Column(name = "PerTpoBeca", length = 255)
+    private String PerTpoBeca;
+    
+    @Column(name = "PerDir", length = 255)
+    private String PerDir;
+    
+    @Column(name = "PerCiudad", length = 255)
+    private String PerCiudad;
+    
+    @Column(name = "PerDto", length = 255)
+    private String PerDto;
+    
+    @Column(name = "PerPais", length = 255)
+    private String PerPais;
+    
+    @Column(name = "PerTel", length = 500)
+    private String PerTel;
+    
+    @Column(name = "PerSecApr", length = 255)
+    private String PerSecApr;
+    
+    @Column(name = "PerProf", length = 255)
+    private String PerProf;
+    
+    @Column(name = "PerObs", length = 4000)
+    private String PerObs;
+    
+    @Column(name = "PerGen")
+    private Genero PerGen;
+    
+    @Column(name = "PerFchNac", columnDefinition="DATE")
+    @Temporal(TemporalType.DATE)
+    private Date PerFchNac;
     
     @Column(name = "PerFchLog", columnDefinition="DATETIME")
     @Temporal(TemporalType.TIMESTAMP)
@@ -131,6 +181,13 @@ public class Persona extends SincHelper implements Serializable {
 
     @Transient
     private ArrayList<SDT_PersonaEstudio> lstEstudios;
+    
+    @Transient
+    private Date FechaInicio;
+    
+    @OneToOne(targetEntity = Archivo.class)
+    @JoinColumn(name="ArcCod")
+    private Archivo archivo;
 
     public Persona() {
         PerCntIntLgn    = 0;
@@ -180,6 +237,7 @@ public class Persona extends SincHelper implements Serializable {
      * @return Nombre de persona
      */
     public String getPerNom() {
+        if(PerNom == null) PerNom = "";
         return PerNom;
     }
 
@@ -196,6 +254,7 @@ public class Persona extends SincHelper implements Serializable {
      * @return Apellido
      */
     public String getPerApe() {
+        if(PerApe == null) PerApe = "";
         return PerApe;
     }
 
@@ -207,6 +266,23 @@ public class Persona extends SincHelper implements Serializable {
         this.PerApe = PerApe;
     }
 
+    /**
+     *
+     * @return Segundo apellido
+     */
+    public String getPerApe2() {
+        if(PerApe2 == null) PerApe2 = "";
+        return PerApe2;
+    }
+
+    /**
+     *
+     * @param PerApe2 Segundo apellido
+     */
+    public void setPerApe2(String PerApe2) {
+        this.PerApe2 = PerApe2;
+    }
+    
     /**
      *
      * @return Usuario en moodle
@@ -479,6 +555,251 @@ public class Persona extends SincHelper implements Serializable {
         this.PerAppTkn = PerAppTkn;
     }
 
+    /**
+     *
+     * @return Login token
+     */
+    public String getPerLgnTkn() {
+        return PerLgnTkn;
+    }
+
+    /**
+     *
+     * @param PerLgnTkn Login token
+     */
+    public void setPerLgnTkn(String PerLgnTkn) {
+        this.PerLgnTkn = PerLgnTkn;
+    }
+
+    /**
+     *
+     * @return Porcentaje de beca
+     */
+    public Double getPerBeca() {
+        return PerBeca;
+    }
+
+    /**
+     *
+     * @param PerBeca Porcentaje de beca
+     */
+    public void setPerBeca(Double PerBeca) {
+        this.PerBeca = PerBeca;
+    }
+
+    /**
+     *
+     * @return Tipo de beca
+     */
+    public String getPerTpoBeca() {
+        return PerTpoBeca;
+    }
+
+    /**
+     *
+     * @param PerTpoBeca  Tipo de beca
+     */
+    public void setPerTpoBeca(String PerTpoBeca) {
+        this.PerTpoBeca = PerTpoBeca;
+    }
+
+    /**
+     *
+     * @return Direccion
+     */
+    public String getPerDir() {
+        return PerDir;
+    }
+
+    /**
+     *
+     * @param PerDir Direccion
+     */
+    public void setPerDir(String PerDir) {
+        this.PerDir = PerDir;
+    }
+
+    /**
+     *
+     * @return Ciudad
+     */
+    public String getPerCiudad() {
+        return PerCiudad;
+    }
+
+    /**
+     *
+     * @param PerCiudad Ciudad
+     */
+    public void setPerCiudad(String PerCiudad) {
+        this.PerCiudad = PerCiudad;
+    }
+
+    /**
+     *
+     * @return Departamento
+     */
+    public String getPerDto() {
+        if(PerDto == null) PerDto = "Colonia";
+        return PerDto;
+    }
+
+    /**
+     *
+     * @param PerDto Departamento
+     */
+    public void setPerDto(String PerDto) {
+        this.PerDto = PerDto;
+    }
+
+    /**
+     *
+     * @return Pais
+     */
+    public String getPerPais() {
+        if(PerPais == null) PerPais = "Uruguay";
+        return PerPais;
+    }
+
+    /**
+     *
+     * @param PerPais Pais
+     */
+    public void setPerPais(String PerPais) {
+        this.PerPais = PerPais;
+    }
+
+    /**
+     *
+     * @return Telefono
+     */
+    public String getPerTel() {
+        return PerTel;
+    }
+
+    /**
+     *
+     * @param PerTel Telefono
+     */
+    public void setPerTel(String PerTel) {
+        this.PerTel = PerTel;
+    }
+
+    /**
+     *
+     * @return Fecha de nacimiento
+     */
+    public Date getPerFchNac() {
+        return PerFchNac;
+    }
+
+    /**
+     *
+     * @param PerFchNac Fecha de nacimiento
+     */
+    public void setPerFchNac(Date PerFchNac) {
+        this.PerFchNac = PerFchNac;
+    }
+
+    /**
+     *
+     * @return Secundaria aprobado
+     */
+    public String getPerSecApr() {
+        return PerSecApr;
+    }
+
+    /**
+     *
+     * @param PerSecApr Secundaria aprobado
+     */
+    public void setPerSecApr(String PerSecApr) {
+        this.PerSecApr = PerSecApr;
+    }
+
+    /**
+     *
+     * @return Genero
+     */
+    public Genero getPerGen() {
+        return PerGen;
+    }
+
+    /**
+     *
+     * @param PerGen Genero
+     */
+    public void setPerGen(Genero PerGen) {
+        this.PerGen = PerGen;
+    }
+
+    /**
+     *
+     * @return Profesion
+     */
+    public String getPerProf() {
+        return PerProf;
+    }
+
+    /**
+     *
+     * @param PerProf Profesion
+     */
+    public void setPerProf(String PerProf) {
+        this.PerProf = PerProf;
+    }
+
+    /**
+     *
+     * @return Observaciones
+     */
+    public String getPerObs() {
+        return PerObs;
+    }
+
+    /**
+     *
+     * @param PerObs Observaciones
+     */
+    public void setPerObs(String PerObs) {
+        this.PerObs = PerObs;
+    }
+    
+    /**
+     *
+     * @return Foto de perfil
+     */
+    @JsonIgnore
+    @XmlTransient
+    public File getFoto(){
+        if(this.archivo == null) return null;
+        return this.archivo.getArchivo();
+    }
+
+    /**
+     *
+     * @param pArchivo Foto de perfil
+     */
+    public void setFoto(File pArchivo) {
+        this.archivo = new Archivo();
+        this.archivo.setArchivo(pArchivo, TipoArchivo.FOTO_PERFIL);
+    }
+    
+    @JsonIgnore
+    /**
+     *
+     * @return Foto en base64
+     */
+    public String getFotoBase64(){
+        if(this.archivo == null) return null;
+        return this.archivo.getFileBase64();
+    }
+    
+    @JsonIgnore
+    public String getFotoExtension(){
+        return this.archivo.getArcExt();
+    }
+
     public String getPerPassAux() {
         return PerPassAux;
     }
@@ -496,7 +817,7 @@ public class Persona extends SincHelper implements Serializable {
      */
     public String getNombreCompleto()
     {
-        return this.PerNom + " " + this.PerApe;
+        return getPerNom() + " " + getPerApe()+ " " + getPerApe2();
     }
     
     /**
@@ -530,6 +851,25 @@ public class Persona extends SincHelper implements Serializable {
         this.lstEstudios = lstEstudios;
     }
 
+    /**
+     * Fecha de inicio.
+     * No se almacena en base de datos, solo para importacion
+     * @return Fecha de inicio
+     */
+    public Date getFechaInicio() {
+        if(FechaInicio == null) FechaInicio = new Date();
+        return FechaInicio;
+    }
+
+    /**
+     * Fecha de inicio.
+     * No se almacena en base de datos, solo para importacion
+     * @param FechaInicio Fecha de inicio
+     */
+    public void setFechaInicio(Date FechaInicio) {
+        this.FechaInicio = FechaInicio;
+    }
+    
     
 
     @Override

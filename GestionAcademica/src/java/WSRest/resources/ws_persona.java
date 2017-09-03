@@ -5,6 +5,7 @@
  */
 package WSRest.resources;
 
+import Entidad.Persona;
 import Entidad.TipoEvaluacion;
 import Enumerado.Constantes;
 import Enumerado.EstadoServicio;
@@ -39,7 +40,9 @@ public class ws_persona {
     @Path("login")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     //public Retorno_MsgObj login(@PathParam("tkn") String tkn, @PathParam("usr") String usr, @PathParam("psw")String psw) {
-    public String login(@QueryParam("tkn") String tkn, @QueryParam("usr") String usr, @QueryParam("psw")String psw) {
+    public Retorno_MsgObj login(@QueryParam("tkn") String tkn, @QueryParam("usr") String usr, @QueryParam("psw")String psw) {
+       
+        System.err.println("Service login rest");
         
         Retorno_MsgObj retorno  = this.isAuthenticated(tkn);
 
@@ -81,11 +84,54 @@ public class ws_persona {
             }
         }
         
-        TipoEvaluacion tpoEvl = new TipoEvaluacion();
-        tpoEvl.setTpoEvlNom("asdasd");
-        retorno.setObjeto(tpoEvl);
-        return Utiles.Utilidades.GetInstancia().ObjetoToJson(retorno);
+        System.err.println("Retorno: " + retorno);
+        
+        return retorno;
     }
+    
+    @GET
+    @Path("token")
+    @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
+    public Retorno_MsgObj getToken(@QueryParam("tkn") String tkn, @QueryParam("usr") String usr) {
+       
+        
+        Retorno_MsgObj retorno  = this.isAuthenticated(tkn);
+
+        if(!retorno.SurgioError())
+        {
+            if(usr == null)
+            {
+                retorno.setMensaje(new Mensajes("No se recibió parametro", TipoMensaje.ERROR));
+            }
+            else
+            {
+                Seguridad seguridad = Seguridad.GetInstancia();
+                LoPersona loPersona = LoPersona.GetInstancia();
+
+
+                String usuarioDecrypt   = seguridad.decrypt(usr, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
+
+                Retorno_MsgObj perRet = loPersona.obtenerByMdlUsr(usuarioDecrypt);
+                  
+                if(!perRet.SurgioErrorObjetoRequerido())
+                {
+                    Persona persona = (Persona) perRet.getObjeto();
+                
+                    retorno.setObjeto(persona.getPerLgnTkn());
+                    retorno.setMensaje(new Mensajes("ok", TipoMensaje.MENSAJE));
+                }
+                else
+                {
+                    retorno.setMensaje(perRet.getMensaje());
+                }
+                
+            }
+        }
+        
+        
+        return retorno;
+    }
+        
     
     private Retorno_MsgObj isAuthenticated(String token) {
        

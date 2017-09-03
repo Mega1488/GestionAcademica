@@ -38,7 +38,7 @@ import java.util.List;
 public class LoPeriodo implements InABMGenerico{
 
     private static LoPeriodo instancia;
-    private LoEstudio loEstudio;
+    private final LoEstudio loEstudio;
     private final Parametro         param;
 
     private LoPeriodo() {

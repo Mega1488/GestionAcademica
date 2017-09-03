@@ -4,7 +4,17 @@
     Author     : alvar
 --%>
 
+
 <div style="clear:both;"></div>
+
+<div>
+       <div id="div_pop_bkgr" name="div_pop_bkgr"></div>
+
+       <div id="div_cargando" name="div_cargando">
+           <div class="loading"></div>
+       </div>
+
+   </div>    
 
 <div id="div_footer" class="panel-footer" style="text-align: right">
     <p>CTC Colonia - SGAPP</p>

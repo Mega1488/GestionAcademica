@@ -41,7 +41,9 @@ public enum Objetos {
     INSCRIPCION(Inscripcion.class.getSimpleName(), "InsCod", Inscripcion.class.getName()),
     MATERIA_REVALIDA(MateriaRevalida.class.getSimpleName(), "MatRvlCod", MateriaRevalida.class.getName()),
     
-    SOLICITUD(Solicitud.class.getSimpleName(), "SolCod", Solicitud.class.getName());
+    SOLICITUD(Solicitud.class.getSimpleName(), "SolCod", Solicitud.class.getName()),
+    
+    ARCHIVO(Archivo.class.getSimpleName(), "ArcCod", Archivo.class.getName());
     
     Objetos(){
         

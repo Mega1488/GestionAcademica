@@ -6,10 +6,14 @@
 package Dominio;
 
 import Enumerado.Objetos;
+import Enumerado.TipoMensaje;
+import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
@@ -32,6 +36,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 public abstract class SincHelper{
     
     private final SimpleDateFormat dtFrmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+    private final SimpleDateFormat dMy = new SimpleDateFormat("dd/MM/yyyy");
     
     public String GetNamePrimaryKey(){
         for (Field field : this.getClass().getDeclaredFields()) 
@@ -131,6 +136,84 @@ public abstract class SincHelper{
         System.err.println("Query: " + update);
         
         return update;
+    }
+    
+    @JsonIgnore
+    /**
+     * Funcion para setear campos de manera dinamica. 
+     * Recibe campo y valor, realiza la validacion del tipo de dato, y si 
+     * existe un campo con el mismo nombre se lo setea al objeto.
+     * 
+     * @param fldName Nombre del campo
+     * @param fldValue Valor del campo
+     * @return Retorna el resultado y un mensaje
+     */
+    public Retorno_MsgObj setField(String fldName, String fldValue){
+       Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Set field success", TipoMensaje.MENSAJE));
+       
+       for (Field field : this.getClass().getDeclaredFields()) 
+        {
+            if(field.getName().equals(fldName))
+            {
+                try {
+                    
+                    field.setAccessible(true);
+                    //field.set(this, field.getType().cast(fldValue));
+                    
+                    if(field.getType().equals(String.class))
+                    {
+                        field.set(this, fldValue);
+                    }
+
+                    if(field.getType().equals(Date.class))
+                    {
+                        field.set(this, dMy.parse(fldValue));
+                    }
+                    
+                    if(field.getType().equals(Boolean.class))
+                    {
+                        field.set(this, Boolean.valueOf(fldValue));
+                    }
+                    
+                    if(field.getType().equals(Integer.class))
+                    {
+                        
+                        field.set(this, Integer.parseInt(fldValue));
+                    }
+                    
+                    if(field.getType().equals(Long.class))
+                    {
+                        field.set(this, Long.valueOf(fldValue));
+                    }
+                    
+                    if(field.getType() instanceof Class && ((Class<?>)field.getType()).isEnum())
+                    {
+                        //Enum en = (Enum).valueOf(field.getType(), fldValue);
+                        
+                        //Class<?> clase = field.getType().getClass();
+
+                        //Object objeto = Enum.valueOf((Class<Enum>) clase, fldValue);
+                        
+                        Enum<?> enumerado = Enum.valueOf((Class<Enum>) field.getType(), fldValue);
+                        
+                        field.set(this, enumerado);
+                        
+                    }
+
+                    
+                    
+                } catch (IllegalArgumentException | IllegalAccessException | ClassCastException ex) {
+                    
+                    retorno.setMensaje(new Mensajes("Set field failed: \n" + ex, TipoMensaje.ERROR));
+                    
+                    Logger.getLogger(SincHelper.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ParseException ex) {
+                    Logger.getLogger(SincHelper.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+       }
+       
+       return retorno;
     }
     
     private Boolean fieldIsColumn(Field campo){

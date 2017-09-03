@@ -526,6 +526,7 @@ public class MoodleRestUser implements Serializable {
             }
                                   
             data.trimToSize();
+            
             NodeList elements=(new MoodleCallRestWebService()).__call(url,data.toString());
             user=null;
             for (int j=0;j<elements.getLength();j++) {

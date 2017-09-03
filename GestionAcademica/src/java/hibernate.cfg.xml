@@ -48,5 +48,8 @@
     <mapping class="Entidad.Menu"/>
     <mapping class="Entidad.MateriaPrevia"/>
     <mapping class="Entidad.NotificacionBandeja"/>
+    <mapping class="Entidad.BitacoraDetalle"/>
+    <mapping class="Entidad.BitacoraProceso"/>
+    <mapping class="Entidad.Archivo"/>
   </session-factory>
 </hibernate-configuration>

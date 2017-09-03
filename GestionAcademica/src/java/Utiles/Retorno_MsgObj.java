@@ -115,6 +115,15 @@ public class Retorno_MsgObj implements Serializable{
         
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getLstObjetos() == null;
     }
+    
+    public boolean SurgioErrorListaMensajes(){
+        for(Mensajes msg : getLstMensajes())
+        {
+            if(msg.getTipoMensaje().equals(TipoMensaje.ERROR)) return true;
+        }
+        
+        return false;
+    }
 
     @Override
     public String toString() {

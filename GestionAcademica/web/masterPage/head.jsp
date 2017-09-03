@@ -45,6 +45,9 @@
 <link href=<% out.print(bootstrap); %>  rel="stylesheet">
 <link href=<% out.print(jquery_css); %> rel="stylesheet" type="text/css"/>
 
+<!-- Fuente -->
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+
 <link href="<%=request.getContextPath()%>/JavaScript/DataTable/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
 <link href="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Select/css/select.dataTables.min.css" rel="stylesheet" type="text/css"/>
 
@@ -52,6 +55,8 @@
 
 <link rel="shortcut icon" type="image/png" href="<%=request.getContextPath()%>/Imagenes/ctc_ic.png"/>
 
+<link href="<%=request.getContextPath()%>/Estilos/themify-icons.css" rel="stylesheet">
+<script src="<%=request.getContextPath()%>/JavaScript/menu.js"></script>
 
 <script>
     
@@ -61,6 +66,8 @@
 
                 function MostrarMensaje(tipoMensaje, mensaje)
                 {
+                    
+                    MostrarCargando(false);
 
                     $('#txtError').text(mensaje);
 
@@ -99,5 +106,9 @@
                         $("#div_cargando").attr('class', 'div_cargando');
                     }
                 }
+                
+                $(document).ready(function () {
+                    MostrarCargando(false);
+                });
 
 </script>

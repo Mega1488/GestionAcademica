@@ -131,7 +131,14 @@ public class NotificacionBandeja implements Serializable {
         this.NotBanFch = NotBanFch;
     }
 
-    
+    public String getAsuntoRecortado(int longitud){
+        if(this.getNotBanAsu().length() > longitud)
+        {
+            return this.getNotBanAsu().substring(0, longitud) + "...";
+        }
+        
+        return this.getNotBanAsu();
+    }
     
     //-----------------------------------------------------------------
     

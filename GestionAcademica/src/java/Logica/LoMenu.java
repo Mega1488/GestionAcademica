@@ -75,7 +75,7 @@ public class LoMenu implements InABMGenerico{
         
         PerManejador perManejador   = new PerManejador();
         
-        return perManejador.obtenerLista("Menu.findAll", null);
+        return perManejador.obtenerLista("Menu.findOnlyFirstLevel", null);
     }
     
     

@@ -14,6 +14,7 @@ import Enumerado.Filial;
 import Enumerado.NombreSesiones;
 import Logica.Notificacion.NotificacionesInternas;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
 import java.util.Date;
 import java.util.logging.Level;
@@ -136,20 +137,9 @@ public class LoIniciar {
     }
     
     private void CargarUrlSistema(HttpServletRequest request){
-        String urlSistema = "";
-
-        try
-        {
-            URL reconstructedURL = new URL(request.getScheme(),
-                                       request.getServerName(),
-                                       request.getServerPort(),
-                                       request.getRequestURI());
-            urlSistema = reconstructedURL.toString();
-        }
-        catch(MalformedURLException ex)
-        {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        URI contextUrl = URI.create(request.getRequestURL().toString()).resolve(request.getContextPath());
+        String urlSistema = contextUrl.toString();
         
         Parametro param = LoParametro.GetInstancia().obtener();
         param.setParUrlSis(urlSistema);

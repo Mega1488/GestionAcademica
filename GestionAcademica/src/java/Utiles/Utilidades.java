@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -366,5 +367,22 @@ public class Utilidades {
     	}
         
         return retorno;
+    }
+    
+    public String GenerarToken(Integer longitud){
+        String psw = "";
+        
+        long milis = new java.util.GregorianCalendar().getTimeInMillis();
+        Random r = new Random(milis);
+        int i = 0;
+        while ( i < longitud){
+            char c = (char)r.nextInt(255);
+            if ( (c >= '0' && c <='9') || (c >='A' && c <='Z') ){
+                psw += c;
+                i ++;
+            }
+        }
+        
+        return psw;
     }
 }

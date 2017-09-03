@@ -27,7 +27,6 @@
     }
 
     //----------------------------------------------------------------------------------------------------
-    
     String js_redirect = "window.location.replace('" + urlSistema + "');";
 
 %>
@@ -42,33 +41,72 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Cambiar contraseña</p>
-                        </div>
-                        <div style="height: 30px;"></div>
-                        <form>
-                            <input type="hidden" name="usuario" id="usuario" value="<%=usuario%>">
-                            <div>Contraseña actual: <input type="password" required="true" name="pswActual" id="pswActual"></div>
-                            <div>Contraseña nueva: <input type="password" required="true" name="pswNueva" id="pswNueva"></div>
-                            <div>Confirme contraseña: <input type="password" required="true" name="pswConfirmacion" id="pswConfirmacion"></div>
-                            <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
-                        </form>
-                        
+           <!--  <form>
+                <input type="hidden" name="usuario" id="usuario" value="<%=usuario%>">
+                <input type="password" class="form-control login_inputPass" required="true" name="pswActual" id="pswActual" placeholder="Contraseña actual">
+                <input type="password" class="form-control login_inputPass" required="true" name="pswNueva" id="pswNueva" placeholder="Contraseña nueva">
+                <input type="password" class="form-control login_inputPass" required="true" name="pswConfirmacion" id="pswConfirmacion" placeholder="Confirmar contraseña">
+               
+                <button type="submit" name="btn_guardar" id="btn_guardar" class="login_boton">CONFIRMAR</button>
+
+            </form> -->
+                
+                 <div class="row">
+                    <div class="col-lg-12">
+                        <section class="panel">
+                            <header class="panel-heading">
+                                CAMBIAR CONTRASEÑA
+                                <!--
+                                <span class="tools pull-right">
+                                    <a class="fa fa-chevron-down" href="javascript:;"></a>
+                                 </span>
+                                -->
+                            </header>
+                            <div class="panel-body">
+                                <div class=" form">
+                                    <form class="cmxform form-horizontal " >
+                
+                                        <input type="hidden" name="usuario" id="usuario" value="<%=usuario%>">
+                
+                                        <div class="form-group ">
+                                            <label for="cname" class="control-label col-lg-3">Contraseña Actual</label>
+                                            <div class="col-lg-6">
+                                                <input class=" form-control inputs_generales" name="pswActual" id="pswActual" minlength="2" type="password" required="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="cemail" class="control-label col-lg-3">Contraseña Nueva</label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control inputs_generales"  type="password" name="pswNueva" id="pswNueva" required="">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="curl" class="control-label col-lg-3">Confirmar Contraseña</label>
+                                            <div class="col-lg-6">
+                                                <input class="form-control inputs_generales " name="pswConfirmacion" id="pswConfirmacion" type="password">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="col-lg-offset-3 col-lg-6">
+                                                <button class="btn btn-primary" name="btn_guardar" id="btn_guardar" type="button">CONFIRMAR</button>
+                                                <!--<button class="btn btn-default" type="button" >CANCELAR</button>-->
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                        </section>
                     </div>
-                </div>
-            </div>
+                 </div>
         </div>
+
         <script>
             $(document).ready(function () {
                 $('#btn_guardar').click(function (event) {
@@ -76,10 +114,10 @@
                     var pswActual = $('#pswActual').val();
                     var pswNueva = $('#pswNueva').val();
                     var pswConfirmacion = $('#pswConfirmacion').val();
-                    
-                    
-                    // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                    $.post('<% out.print(urlSistema); %>ABM_Persona', {
+
+
+// Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                    $.post('<% out.print(urlSistema);%>ABM_Persona', {
                         usuario: usuario,
                         pswActual: pswActual,
                         pswNueva: pswNueva,
@@ -92,13 +130,15 @@
 
                         if (obj.tipoMensaje != 'ERROR')
                         {
-                            <%=js_redirect%>
-                        } 
+            <%=js_redirect%>
+                        }
 
                     });
-                    
+
                 });
             });
         </script>
+        
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>

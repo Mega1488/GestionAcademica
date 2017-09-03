@@ -5,10 +5,17 @@
  */
 package Pruebas;
 
+import Entidad.Parametro;
 import Entidad.TipoEvaluacion;
+import Enumerado.Constantes;
+import Logica.LoImportacion;
+import Logica.LoParametro;
 import Logica.LoPeriodo;
 import Logica.LoTipoEvaluacion;
 import Logica.Notificacion.ManejoNotificacion;
+import Moodle.MoodleRestException;
+import Moodle.MoodleRestUser;
+import Moodle.MoodleUser;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionNotification;
 import Utiles.Retorno_MsgObj;
@@ -17,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
@@ -62,8 +70,13 @@ public class Prueba2 extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
             
+            LoImportacion imp = LoImportacion.GetInstancia();
             
-            LoPeriodo.GetInstancia().DocumentoImportarMoodle();
+            Retorno_MsgObj ret = imp.ImportarPersonasPlan(1L, "C:/tmp/imp.xlsx");
+            
+            
+            out.println(Utiles.Utilidades.GetInstancia().ObjetoToJson(ret));
+            
             
             
          //   ManejoNotificacion notManager = new ManejoNotificacion();

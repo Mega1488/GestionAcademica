@@ -133,9 +133,7 @@ public class Seguridad {
         {
             if(!Sitios.GetInstancia().getLstSinSeguridad().contains(sitioActual))
             {
-                String texto = "Debe iniciar sesion para ver esta página";
-                texto = Utilidades.GetInstancia().GetUrlSistema() + "Error.jsp?pMensaje=" + Utilidades.GetInstancia().UrlEncode(texto);
-                retorno.setObjeto(texto);
+                retorno.setObjeto(Utilidades.GetInstancia().GetUrlSistema() + "login.jsp");
                 return retorno;
             }
         }

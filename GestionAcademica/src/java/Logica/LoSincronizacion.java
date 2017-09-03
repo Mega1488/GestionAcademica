@@ -320,6 +320,11 @@ public class LoSincronizacion implements InABMGenerico{
                     , Objetos.SOLICITUD.getNamedQuery()
                     , Objetos.SOLICITUD.getPrimaryKey()
                     , Objetos.SOLICITUD.getClassName()));
+            
+            this.ObjetoGuardar(new Objeto(Objetos.ARCHIVO.name()
+                    , Objetos.ARCHIVO.getNamedQuery()
+                    , Objetos.ARCHIVO.getPrimaryKey()
+                    , Objetos.ARCHIVO.getClassName()));
         }
     }
     

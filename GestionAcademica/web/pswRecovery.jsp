@@ -46,47 +46,57 @@
         <title>Sistema de Gestión Académica - Recuperar contraseña</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
-    <body>
-        <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Recuperar contraseña</p>
-                        </div>
-                        <div style="height: 30px;"></div>
-                        <form>
-                            <div>
-                                <input type="hidden" required="true" name="PerCod" id="PerCod" value='<%=perCod%>'>
-                                <input type="hidden" required="true" name="tkn" id="tkn" value='<%=tkn%>'>
-                            </div>
-                            <div>Contraseña nueva: <input type="password" required="true" name="pswNueva" id="pswNueva"></div>
-                            <div>Confirme contraseña: <input type="password" required="true" name="pswConfirmacion" id="pswConfirmacion"></div>
-                            <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
-                        </form>
-                        
+    <body class="body_clase">
+        <div class="login_fondo">		
+            <div class="login_contenedor">
+                
+                <div class="login_contenedorImg"><img src="Imagenes/ctc.png" /></div>
+                <h1 class="login_titulo">RECUPERAR CONTRASEÑA</h1>
+                <p class="login_texto">Bienvenido a Gestión, el servicio a estudiantes del Instituto CTC - Colonia. Indique su nueva contraseña</p>
+                <form>
+                    <div>
+                        <input type="hidden" required="true" name="PerCod" id="PerCod" value='<%=perCod%>'>
+                        <input type="hidden" required="true" name="tkn" id="tkn" value='<%=tkn%>'>
                     </div>
-                </div>
+                    
+                    <div class="login_form">
+                        <input type="password" class="form-control login_inputBorde login_inputPass" required="true" name="pswNueva" id="pswNueva" placeholder="Contraseña nueva">
+                        <input type="password" class="form-control login_inputPass" required="true" name="pswConfirmacion" id="pswConfirmacion" placeholder="Confirmar contraseña">
+                    </div>
+
+                    <button type="submit" name="btnRecuperar" id="btnRecuperar" class="login_boton">RECUPERAR</button>
+                </form>
+
+
             </div>
         </div>
+
+        <div>
+            <div id="div_pop_bkgr" name="div_pop_bkgr"></div>
+
+            <div id="div_cargando" name="div_cargando">
+                <div class="loading"></div>
+            </div>
+
+        </div>
+
+        <div id="msgError" name="msgError" class="alert alert-success div_msg" style="display: none;"> 
+            <label id="txtError" name="txtError">Error</label>
+        </div>
+
         <script>
             $(document).ready(function () {
-                
+                MostrarCargando(false);
+
                 var PerCod = $('#PerCod').val();
                 if(PerCod == null)
                 {
                     MostrarMensaje("ERROR", "Token incorrecto");
                 }
                 
-                $('#btn_guardar').click(function (event) {
+                $('#btnRecuperar').click(function (event) {
+                    MostrarCargando(true);
+                    
                     var PerCod = $('#PerCod').val();
                     var tkn = $('#tkn').val();
                     var pswNueva = $('#pswNueva').val();
@@ -112,6 +122,7 @@
                     });
                     
                 });
+
             });
         </script>
     </body>

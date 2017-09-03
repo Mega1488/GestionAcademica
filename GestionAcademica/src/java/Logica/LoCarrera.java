@@ -253,6 +253,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    public Retorno_MsgObj PlanEstudioObtener(Long pPlaEstCod) {
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener(pPlaEstCod, PlanEstudio.class);
+    }
+    
     //----------------------------------------------------------------------------------------------------
     //-Manejo de Materia
     //----------------------------------------------------------------------------------------------------
@@ -340,6 +345,11 @@ public class LoCarrera implements Interfaz.InCarrera{
             retorno = (Retorno_MsgObj) perManejador.eliminar(mat);
         }
         return retorno;
+    }
+    
+    public Retorno_MsgObj MateriaObtener(Long pMatCod) {
+        PerManejador perManager = new PerManejador();
+        return perManager.obtener(pMatCod, Materia.class);
     }
     
     public Retorno_MsgObj obtenerPopUp(Long PlaEstCod)
