@@ -123,7 +123,7 @@
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
             <%
-                                                                 out.print(js_redirect);
+                out.print(js_redirect);
             %>
                                 } else
                                 {
@@ -161,7 +161,7 @@
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
             <%
-                                                            out.print(js_redirect);
+                out.print(js_redirect);
             %>
                                 } else
                                 {
@@ -182,7 +182,7 @@
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
             <%
-                                                            out.print(js_redirect);
+                out.print(js_redirect);
             %>
                                 } else
                                 {
@@ -201,73 +201,81 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
-                        </div>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
 
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
 
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                        </div>
-                        <form id="frm_Version" name="frm_Version">
-                            <div><label>Código:</label><input type="text" class="form-control" id="PerCod" name="PerCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(persona.getPerCod())); %>" ></div>
-                            <div><label>Nombre:</label><input type="text" class="form-control" id="PerNom" name="PerNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerNom())); %>" ></div>
-                            <div><label>Apellido:</label><input type="text" class="form-control" id="PerApe" name="PerApe" placeholder="Apellido" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerApe())); %>" ></div>
-                            <div><label>Documento:</label><input type="text" class="form-control" id="PerDoc" name="PerDoc" placeholder="Documento" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerDoc())); %>" ></div>
-                            <div><label>Usuario en moodle:</label><input type="text" class="form-control" id="PerUsrMod" name="PerUsrMod" placeholder="Usuario" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerUsrMod())); %>" ></div>
-                            <div><label>Password:</label><input type="password" class="form-control" id="PerPass" name="PerPass"  <% out.print(CamposActivos); %> value="" ></div>
+                                                        <form class="cmxform form-horizontal " >
+                                                            <div><label>Código:</label><input type="text" class="form-control" id="PerCod" name="PerCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(persona.getPerCod())); %>" ></div>
+                                                            <div><label>Nombre:</label><input type="text" class="form-control" id="PerNom" name="PerNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerNom())); %>" ></div>
+                                                            <div><label>Apellido:</label><input type="text" class="form-control" id="PerApe" name="PerApe" placeholder="Apellido" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerApe())); %>" ></div>
+                                                            <div><label>Documento:</label><input type="text" class="form-control" id="PerDoc" name="PerDoc" placeholder="Documento" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerDoc())); %>" ></div>
+                                                            <div><label>Usuario en moodle:</label><input type="text" class="form-control" id="PerUsrMod" name="PerUsrMod" placeholder="Usuario" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerUsrMod())); %>" ></div>
+                                                            <div><label>Password:</label><input type="password" class="form-control" id="PerPass" name="PerPass"  <% out.print(CamposActivos); %> value="" ></div>
 
-                            <div class="checkbox"><label><input type="checkbox" id="PerEsDoc" name="PerEsDoc"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsDoc())); %> > Es docente</label></div>
-                            <div class="checkbox"><label><input type="checkbox"  id="PerEsAdm" name="PerEsAdm" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsAdm())); %>> Es administrador</label></div>
-                            <div class="checkbox"><label><input type="checkbox"  id="PerEsAlu" name="PerEsAlu"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsAlu())); %>> Es alumno</label></div>
+                                                            <div class="checkbox"><label><input type="checkbox" id="PerEsDoc" name="PerEsDoc"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsDoc())); %> > Es docente</label></div>
+                                                            <div class="checkbox"><label><input type="checkbox"  id="PerEsAdm" name="PerEsAdm" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsAdm())); %>> Es administrador</label></div>
+                                                            <div class="checkbox"><label><input type="checkbox"  id="PerEsAlu" name="PerEsAlu"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsAlu())); %>> Es alumno</label></div>
 
-                            <div><label>Número en libra:</label><input type="number" class="form-control" id="PerNroLib" name="PerNroLib" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(persona.getPerNroLib())); %>" ></div>
-                            <div><label>Número estudiante:</label><input type="number" class="form-control" id="PerNroEstOrt" name="PerNroEstOrt" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(persona.getPerNroEstOrt())); %>" ></div>
-                            <div>
-                                <label>Filial:</label>
-                                <select class="form-control" id="PerFil" name="PerFil" <% out.print(CamposActivos); %>>
-                                    <%
-                                        for (Filial filial : Filial.values()) {
-                                            if (filial == persona.getPerFil()) {
-                                                //return filial;
-                                                out.println("<option selected value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
+                                                            <div><label>Número en libra:</label><input type="number" class="form-control" id="PerNroLib" name="PerNroLib" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(persona.getPerNroLib())); %>" ></div>
+                                                            <div><label>Número estudiante:</label><input type="number" class="form-control" id="PerNroEstOrt" name="PerNroEstOrt" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(persona.getPerNroEstOrt())); %>" ></div>
+                                                            <div>
+                                                                <label>Filial:</label>
+                                                                <select class="form-control" id="PerFil" name="PerFil" <% out.print(CamposActivos); %>>
+                                                                    <%
+                                                                        for (Filial filial : Filial.values()) {
+                                                                            if (filial == persona.getPerFil()) {
+                                                                                //return filial;
+                                                                                out.println("<option selected value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
+                                                                            } else {
+                                                                                out.println("<option value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
+                                                                            }
+                                                                        }
+                                                                    %>
+                                                                </select>
+                                                            </div>
+                                                            <div><label>Email:</label><input type="email" class="form-control" id="PerEml" name="PerEml" placeholder="Email" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerEml())); %>" ></div>
+                                                            <div class="checkbox"><label><input type="checkbox"  id="PerNotEml" name="PerNotEml"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerNotEml())); %> > Notificar por email</label></div>
+                                                            <div class="checkbox"><label><input type="checkbox"  id="PerNotApp" name="PerNotApp"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerNotApp())); %> > Notificar por aplicación</label></div>
+
+                                                            <div>
+                                                                <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
+                                                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                            </div>
+                                                        </form>
+
+
+                                                    </div>
+
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div><label>Email:</label><input type="email" class="form-control" id="PerEml" name="PerEml" placeholder="Email" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerEml())); %>" ></div>
-                            <div class="checkbox"><label><input type="checkbox"  id="PerNotEml" name="PerNotEml"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerNotEml())); %> > Notificar por email</label></div>
-                            <div class="checkbox"><label><input type="checkbox"  id="PerNotApp" name="PerNotApp"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerNotApp())); %> > Notificar por aplicación</label></div>
-
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+
 
     </body>
 </html>

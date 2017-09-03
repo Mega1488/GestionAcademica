@@ -56,74 +56,69 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-            <div id="contenido" name="contenido"  class="main-panel">
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-                <div class="contenedor-principal">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            PERSONAS
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table class='table table-hover' style=' <% out.print(tblPersonaVisible); %>'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>Documento</th>
+                                            <th>Email</th>
+                                            <th>Filial</th>
+                                            <th>Número en libra</th>
+                                            <th>Docente</th>
+                                            <th>Alumno</th>
+                                            <th>Administrador</th>
+                                        </tr>
+                                    </thead>
+                                    <% for (Object objeto : lstObjeto) {
+                                            Persona persona = (Persona) objeto;
 
-
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-
-                        <div class="contenedor-titulo">    
-                            <p>Personas</p>
-                        </div>    
-
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                                    %>
+                                    <tr>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
+                                        <td><% out.print(utilidad.NuloToCero(persona.getPerCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(persona.getPerNom())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(persona.getPerApe())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(persona.getPerDoc())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(persona.getPerEml())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(persona.getPerFil().getFilialNom())); %></td>
+                                        <td><% out.print(utilidad.NuloToCero(persona.getPerNroLib())); %></td>
+                                        <td><% out.print(utilidad.BooleanToSiNo(persona.getPerEsDoc())); %></td>
+                                        <td><% out.print(utilidad.BooleanToSiNo(persona.getPerEsAlu())); %></td>
+                                        <td><% out.print(utilidad.BooleanToSiNo(persona.getPerEsAdm())); %></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
                         </div>
-
-                        <table class='table table-hover' style=' <% out.print(tblPersonaVisible); %>'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Apellido</th>
-                                    <th>Documento</th>
-                                    <th>Email</th>
-                                    <th>Filial</th>
-                                    <th>Número en libra</th>
-                                    <th>Docente</th>
-                                    <th>Alumno</th>
-                                    <th>Administrador</th>
-                                </tr>
-                            </thead>
-                            <% for (Object objeto : lstObjeto) {
-                                    Persona persona = (Persona) objeto;
-
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash"></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
-                                <td><% out.print(utilidad.NuloToCero(persona.getPerCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(persona.getPerNom())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(persona.getPerApe())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(persona.getPerDoc())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(persona.getPerEml())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(persona.getPerFil().getFilialNom())); %></td>
-                                <td><% out.print(utilidad.NuloToCero(persona.getPerNroLib())); %></td>
-                                <td><% out.print(utilidad.BooleanToSiNo(persona.getPerEsDoc())); %></td>
-                                <td><% out.print(utilidad.BooleanToSiNo(persona.getPerEsAlu())); %></td>
-                                <td><% out.print(utilidad.BooleanToSiNo(persona.getPerEsAdm())); %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+
     </body>
 </html>

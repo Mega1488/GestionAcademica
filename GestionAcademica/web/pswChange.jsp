@@ -47,16 +47,6 @@
         <!-- CONTENIDO -->
         <div class="contenido" id="contenedor">
 
-           <!--  <form>
-                <input type="hidden" name="usuario" id="usuario" value="<%=usuario%>">
-                <input type="password" class="form-control login_inputPass" required="true" name="pswActual" id="pswActual" placeholder="Contraseña actual">
-                <input type="password" class="form-control login_inputPass" required="true" name="pswNueva" id="pswNueva" placeholder="Contraseña nueva">
-                <input type="password" class="form-control login_inputPass" required="true" name="pswConfirmacion" id="pswConfirmacion" placeholder="Confirmar contraseña">
-               
-                <button type="submit" name="btn_guardar" id="btn_guardar" class="login_boton">CONFIRMAR</button>
-
-            </form> -->
-                
                  <div class="row">
                     <div class="col-lg-12">
                         <section class="panel">
