@@ -60,74 +60,71 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-            <div id="contenido" name="contenido" class="main-panel">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <div class=""> 
+                                    <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
+                                </div>
+                                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                                    <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                                    <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(PerCod); %>">
+                                </div>
+                                
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Estudio</th>
+                                            <th>Fecha de inscripción</th>
+                                            <th>Fecha de certificación</th>
+                                            <th>Generación</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                                    <tbody>
+                                        <% for (Object objeto : lstObjeto) {
+                                                Inscripcion insc = (Inscripcion) objeto;
+
+                                        %>
+                                        <tr>
+                                            <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() + "' data-alumno='" + insc.getAlumno().getNombreCompleto() + "' data-fecha='" + insc.getAluFchCert() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                            <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() + "' data-alumno='" + insc.getAlumno().getNombreCompleto() + "' data-fecha='" + insc.getAluFchCert() + "' data-toggle='modal' data-target='#PopUpFechaCert' name='btn_editar' id='btn_editar' title='Fecha de certificación' class='glyphicon glyphicon-edit btn_editar'/>"); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(insc.getInsCod())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(insc.getNombreEstudio())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(insc.getInsGenAnio())); %> </td>
+                                            <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaRevalidaWW.jsp?pInsCod=<% out.print(insc.getInsCod()); %>" name="btn_revalida" id="btn_revalida" title="Revalidas" class="fa fa-flag"></a></td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
+                                
+                            </div>
+                        </div>
+                    </section>
                 </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(PerCod); %>">
-                        </div>
-
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Estudio</th>
-                                    <th>Fecha de inscripción</th>
-                                    <th>Fecha de certificación</th>
-                                    <th>Generación</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (Object objeto : lstObjeto) {
-                                        Inscripcion insc = (Inscripcion) objeto;
-
-                                %>
-                                <tr>
-                                    <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() + "' data-alumno='" + insc.getAlumno().getNombreCompleto() + "' data-fecha='" + insc.getAluFchCert() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                    <td><% out.print("<a href='#' data-codigo='" + insc.getInsCod() + "' data-nombre='" + insc.getNombreEstudio() + "' data-alumno='" + insc.getAlumno().getNombreCompleto() + "' data-fecha='" + insc.getAluFchCert() + "' data-toggle='modal' data-target='#PopUpFechaCert' name='btn_editar' id='btn_editar' title='Fecha de certificación' class='glyphicon glyphicon-edit btn_editar'/>"); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(insc.getInsCod())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(insc.getNombreEstudio())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(insc.getInsGenAnio())); %> </td>
-                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaRevalidaWW.jsp?pInsCod=<% out.print(insc.getInsCod()); %>" name="btn_revalida" id="btn_revalida" title="Revalidas" class="fa fa-flag"></a></td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
         <!-- PopUp para Agregar -->
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
