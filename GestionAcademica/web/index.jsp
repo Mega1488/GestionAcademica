@@ -11,12 +11,12 @@
 
 <%
     String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
-    RequestDispatcher dispatch = request.getRequestDispatcher("login.jsp");
-    
+    String web = "login.jsp";
     if(usuario == null)
     {
+        web = "login.jsp";
         //response.sendRedirect("login.jsp");
-        dispatch.forward(request, response);
+        //request.getRequestDispatcher("login.jsp").forward(request, response);
     }
     else
     {
@@ -25,13 +25,33 @@
         Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
         
         
-        if(esAdm) request.getRequestDispatcher("Definiciones/DefCalendarioGrid.jsp").forward(request, response);//response.sendRedirect("Definiciones/DefCalendarioGrid.jsp");
-        if(esDoc) request.getRequestDispatcher("Docente/EstudiosDictados.jsp").forward(request, response);//response.sendRedirect("Docente/EstudiosDictados.jsp");
-        if(esAlu) request.getRequestDispatcher("Alumno/Evaluaciones.jsp").forward(request, response);//response.sendRedirect("Alumno/Evaluaciones.jsp");
+        
+        if(esAdm)
+        {
+            web = "Definiciones/DefCalendarioGrid.jsp";
+            //request.getRequestDispatcher("Definiciones/DefCalendarioGrid.jsp").forward(request, response);
+            //response.sendRedirect("Definiciones/DefCalendarioGrid.jsp");
+        }else if(esDoc)
+        {
+            web = "Docente/EstudiosDictados.jsp";
+            //response.sendRedirect("Docente/EstudiosDictados.jsp");
+            //request.getRequestDispatcher("Docente/EstudiosDictados.jsp").forward(request, response);
+        }else if(esAlu)
+        { 
+            web = "Alumno/Evaluaciones.jsp";
+            
+            //response.sendRedirect("Alumno/Evaluaciones.jsp");
+            //request.getRequestDispatcher("Alumno/Evaluaciones.jsp").forward(request, response);
+        }
+        
+        
         
         //dispatch.forward(request, response);
         
     }
+    
+
+        request.getRequestDispatcher(web).forward(request, response);
     
     
 %>

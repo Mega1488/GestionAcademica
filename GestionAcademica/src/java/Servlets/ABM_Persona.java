@@ -29,6 +29,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -61,6 +62,21 @@ public class ABM_Persona extends HttpServlet {
             String action   = request.getParameter("pAction");
             String retorno  = "";
 
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            HttpSession session=request.getSession(); 
+            String usuario = (String) session.getAttribute(Enumerado.NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Logica.Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(request));
+
+            if (acceso.SurgioError()) {
+                response.sendRedirect((String) acceso.getObjeto());
+            }
+
+            //----------------------------------------------------------------------------------------------------
             
             switch(action)
             {

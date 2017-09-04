@@ -100,7 +100,7 @@ public class OpcionesDeMenu {
     
     private void LevantarMenu(List<Object> lstMenu)
     {
-        if(lstMenu.size() < 22)
+        if(lstMenu.size() < 14)
         {
             for(Object objeto : lstMenu)
             {
@@ -131,19 +131,20 @@ public class OpcionesDeMenu {
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefCursoWW.jsp", "Cursos", 3));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefCalendarioGrid.jsp", "Calendario", 5));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefTipoEvaluacionWW.jsp", "Tipos de evaluación", 6));
-        lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametro.jsp", "Parámetros", 98));
-        lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametroEmailWW.jsp", "Parámetros de email", 97));
-        lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefVersion.jsp", "Versión", 99));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefPeriodoWW.jsp", "Periodos", 4));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefSolicitudWW.jsp", "Solicitudes", 7));
-        lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefNotificacionWW.jsp", "Notificaciones", 8));
         
         Menu sistema = new Menu(TipoMenu.ADMINISTRADOR, "#", "Sistema", 100);
         sistema.setMenIsParent(Boolean.TRUE);
-        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefSincWW.jsp", "Sincronización", 1));
-        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefWS_UserWW.jsp", "Web Services", 2));
-        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/Importacion.jsp", "Importación", 3));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametro.jsp", "Parámetros", 1));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametroEmailWW.jsp", "Parámetros de email", 2));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefNotificacionWW.jsp", "Notificaciones", 3));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/Reportes.jsp", "Reportes", 4));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefSincWW.jsp", "Sincronización", 5));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/Importacion.jsp", "Importación", 6));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefWS_UserWW.jsp", "Web Services", 7));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefVersion.jsp", "Versión", 8));
+        
         lstAdministrador.add(sistema);
         
     }
