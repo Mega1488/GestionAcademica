@@ -12,6 +12,13 @@ and open the template in the editor.
     outline: none !important;
 }
 
+input[required]{ 
+    background-image: url(../Imagenes/requerido.png) !important;
+    background-repeat: no-repeat;
+    background-position: right; 
+    background-size: 8px;
+}
+
 body{
     font-family: 'Open Sans', sans-serif !important;
     background-color: #f1f2f7 !important;

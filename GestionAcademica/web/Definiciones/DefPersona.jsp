@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.Genero"%>
 <%@page import="Utiles.Retorno_MsgObj"%>
 <%@page import="Enumerado.Filial"%>
 <%@page import="Logica.LoPersona"%>
@@ -33,7 +34,7 @@
     //----------------------------------------------------------------------------------------------------
     Modo Mode = Modo.valueOf(request.getParameter("MODO"));
     String PerCod = request.getParameter("pPerCod");
-    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefPersonaWW.jsp');";
+    String js_redirect = "location.replace('" + urlSistema + "Definiciones/DefPersonaWW.jsp');";
 
     Persona persona = new Persona();
 
@@ -41,20 +42,21 @@
         persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -69,130 +71,112 @@
 
         <script>
             $(document).ready(function () {
+                
                 $('#btn_guardar').click(function (event) {
-
-
-                    var PerCod = $('#PerCod').val();
-                    var PerNom = $('#PerNom').val();
-                    var PerApe = $('#PerApe').val();
-                    var PerDoc = $('#PerDoc').val();
-                    var PerUsrMod = $('#PerUsrMod').val();
-                    var PerEsDoc = document.getElementById('PerEsDoc').checked;
-                    var PerEsAdm = document.getElementById('PerEsAdm').checked;
-                    var PerEsAlu = document.getElementById('PerEsAlu').checked;
-                    var PerNroLib = $('#PerNroLib').val();
-                    var PerNroEstOrt = $('#PerNroEstOrt').val();
-                    var PerFil = $('select[name=PerFil]').val();
-                    var PerEml = $('#PerEml').val();
-                    var ObjFchMod = $('#ObjFchMod').val();
-                    var PerPass = $('#PerPass').val();
-                    var PerNotEml = document.getElementById('PerNotEml').checked;
-                    var PerNotApp = document.getElementById('PerNotApp').checked;
-
-                    if (PerNom == '')
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
                     {
-                        MostrarMensaje("ERROR", "Completa los datos papa");
-                    } else
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
                     {
-
-                        if ($('#MODO').val() == "INSERT")
+                        if(validarDatos())
                         {
-
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_Persona', {
-                                pPerCod: PerCod,
-                                pPerNom: PerNom,
-                                pPerApe: PerApe,
-                                pPerDoc: PerDoc,
-                                pPerUsrMod: PerUsrMod,
-                                pPerEsDoc: PerEsDoc,
-                                pPerEsAdm: PerEsAdm,
-                                pPerEsAlu: PerEsAlu,
-                                pPerNroLib: PerNroLib,
-                                pPerNroEstOrt: PerNroEstOrt,
-                                pPerFil: PerFil,
-                                pPerEml: PerEml,
-                                pObjFchMod: ObjFchMod,
-                                pPerNotEml: PerNotEml,
-                                pPerNotApp: PerNotApp,
-                                pPerPass: PerPass,
-                                pAction: "INSERTAR"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
-
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-            <%
-                out.print(js_redirect);
-            %>
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-
-                            });
-                        }
-
-
-                        if ($('#MODO').val() == "UPDATE")
-                        {
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_Persona', {
-                                pPerCod: PerCod,
-                                pPerNom: PerNom,
-                                pPerApe: PerApe,
-                                pPerDoc: PerDoc,
-                                pPerUsrMod: PerUsrMod,
-                                pPerEsDoc: PerEsDoc,
-                                pPerEsAdm: PerEsAdm,
-                                pPerEsAlu: PerEsAlu,
-                                pPerNroLib: PerNroLib,
-                                pPerNroEstOrt: PerNroEstOrt,
-                                pPerFil: PerFil,
-                                pPerEml: PerEml,
-                                pObjFchMod: ObjFchMod,
-                                pPerNotEml: PerNotEml,
-                                pPerNotApp: PerNotApp,
-                                pPerPass: PerPass,
-                                pAction: "ACTUALIZAR"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
-
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-            <%
-                out.print(js_redirect);
-            %>
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-
-                            });
-                        }
-
-                        if ($('#MODO').val() == "DELETE")
-                        {
-                            $.post('<% out.print(urlSistema); %>ABM_Persona', {
-                                pPerCod: PerCod,
-                                pAction: "ELIMINAR"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
-
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-            <%
-                out.print(js_redirect);
-            %>
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-
-                            });
+                            procesarDatos();
                         }
                     }
                 });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                function procesarDatos(){
+                    var PerCod= $('#PerCod').val();
+                    var PerApe= $('#PerApe').val();
+                    var PerDoc= $('#PerDoc').val();
+                    var PerEml= $('#PerEml').val();
+                    var PerEsAdm= $('#PerEsAdm').is(':checked');
+                    var PerEsAlu= $('#PerEsAlu').is(':checked');
+                    var PerEsDoc= $('#PerEsDoc').is(':checked');
+                    var PerFil= $('select[name=PerFil]').val();
+                    var PerNom= $('#PerNom').val();
+                    var PerNotApp= $('#PerNotApp').is(':checked');
+                    var PerNotEml= $('#PerNotEml').is(':checked');
+                    var PerNroEstOrt= $('#PerNroEstOrt').val();
+                    var PerNroLib= $('#PerNroLib').val();
+                    var PerPass= $('#PerPass').val();
+                    var PerUsrMod= $('#PerUsrMod').val();
+                    var PerApe2= $('#PerApe2').val();
+                    var PerBeca= $('#PerBeca').val();
+                    var PerCiudad= $('#PerCiudad').val();
+                    var PerDir= $('#PerDir').val();
+                    var PerDto= $('#PerDto').val();
+                    var PerFchNac= $('#PerFchNac').val();
+                    var PerGen= $('select[name=PerGen]').val();
+                    var PerObs= $('#PerObs').val();
+                    var PerPais= $('#PerPais').val();
+                    var PerProf= $('#PerProf').val();
+                    var PerSecApr= $('#PerSecApr').val();
+                    var PerTel= $('#PerTel').val();
+                    var PerTpoBeca= $('#PerTpoBeca').val();
+
+                    var modo = $('#MODO').val();
+
+                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                        $.post('<%=urlSistema%>ABM_Persona', {
+                            pPerCod: PerCod,
+                            pPerApe: PerApe,
+                            pPerDoc: PerDoc,
+                            pPerEml: PerEml,
+                            pPerEsAdm: PerEsAdm,
+                            pPerEsAlu: PerEsAlu,
+                            pPerEsDoc: PerEsDoc,
+                            pPerFil: PerFil,
+                            pPerNom: PerNom,
+                            pPerNotApp: PerNotApp,
+                            pPerNotEml: PerNotEml,
+                            pPerNroEstOrt: PerNroEstOrt,
+                            pPerNroLib: PerNroLib,
+                            pPerPass: PerPass,
+                            pPerUsrMod: PerUsrMod,
+                            pPerApe2: PerApe2,
+                            pPerBeca: PerBeca,
+                            pPerCiudad: PerCiudad,
+                            pPerDir: PerDir,
+                            pPerDto: PerDto,
+                            pPerFchNac: PerFchNac,
+                            pPerGen: PerGen,
+                            pPerObs: PerObs,
+                            pPerPais: PerPais,
+                            pPerProf: PerProf,
+                            pPerSecApr: PerSecApr,
+                            pPerTel: PerTel,
+                            pPerTpoBeca: PerTpoBeca,
+                            //pArcCod: ArcCod,
+                            pAction: modo
+                        }, function (responseText) {
+                            var obj = JSON.parse(responseText);
+
+                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                            if (obj.tipoMensaje != 'ERROR')
+                            {
+                                <%=js_redirect%>
+                            } 
+
+                        });
+                    
+                }
 
             });
 
@@ -220,48 +204,88 @@
                                                 <div class="panel-body">
                                                     <div class=" form">
 
-                                                        <form class="cmxform form-horizontal " >
-                                                            <div><label>Código:</label><input type="text" class="form-control" id="PerCod" name="PerCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(persona.getPerCod())); %>" ></div>
-                                                            <div><label>Nombre:</label><input type="text" class="form-control" id="PerNom" name="PerNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerNom())); %>" ></div>
-                                                            <div><label>Apellido:</label><input type="text" class="form-control" id="PerApe" name="PerApe" placeholder="Apellido" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerApe())); %>" ></div>
-                                                            <div><label>Documento:</label><input type="text" class="form-control" id="PerDoc" name="PerDoc" placeholder="Documento" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerDoc())); %>" ></div>
-                                                            <div><label>Usuario en moodle:</label><input type="text" class="form-control" id="PerUsrMod" name="PerUsrMod" placeholder="Usuario" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerUsrMod())); %>" ></div>
-                                                            <div><label>Password:</label><input type="password" class="form-control" id="PerPass" name="PerPass"  <% out.print(CamposActivos); %> value="" ></div>
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            
+                                                            <!-- DATOS PERSONALES -->
+                                                            <div name="campos_ocultos">
+                                                                <input type="hidden" name="MODO" id="MODO" value="<%=Mode%>">                                                                
+                                                            </div>
 
-                                                            <div class="checkbox"><label><input type="checkbox" id="PerEsDoc" name="PerEsDoc"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsDoc())); %> > Es docente</label></div>
-                                                            <div class="checkbox"><label><input type="checkbox"  id="PerEsAdm" name="PerEsAdm" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsAdm())); %>> Es administrador</label></div>
-                                                            <div class="checkbox"><label><input type="checkbox"  id="PerEsAlu" name="PerEsAlu"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerEsAlu())); %>> Es alumno</label></div>
-
-                                                            <div><label>Número en libra:</label><input type="number" class="form-control" id="PerNroLib" name="PerNroLib" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(persona.getPerNroLib())); %>" ></div>
-                                                            <div><label>Número estudiante:</label><input type="number" class="form-control" id="PerNroEstOrt" name="PerNroEstOrt" placeholder="Número" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(persona.getPerNroEstOrt())); %>" ></div>
-                                                            <div>
-                                                                <label>Filial:</label>
-                                                                <select class="form-control" id="PerFil" name="PerFil" <% out.print(CamposActivos); %>>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="PerCod" name="PerCod" disabled value="<%=utilidad.NuloToVacio(persona.getPerCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="PerNom" name="PerNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Primer apellido</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="PerApe" name="PerApe" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerApe())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Segundo apellido</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerApe2" name="PerApe2" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerApe2())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Documento</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="PerDoc" name="PerDoc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerDoc())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Fecha de nacimiento</label><div class="col-lg-6"><input type="date" required class=" form-control inputs_generales" id="PerFchNac" name="PerFchNac" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerFchNac())%>" ></div></div>
+                                                            
+                                                            <div class="form-group ">
+                                                                <label for="cname" class="control-label col-lg-3">Género</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class=" form-control inputs_generales" id="PerGen" name="PerGen" <%=CamposActivos%> >
                                                                     <%
-                                                                        for (Filial filial : Filial.values()) {
-                                                                            if (filial == persona.getPerFil()) {
-                                                                                //return filial;
-                                                                                out.println("<option selected value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
-                                                                            } else {
-                                                                                out.println("<option value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
-                                                                            }
+                                                                        for (Genero genero : Genero.values()) {
+                                                                            out.println("<option " + (genero == persona.getPerGen() ? "selected" : "") + " value='" + genero.name() + "'>" + genero.getValor() + "</option>");
                                                                         }
                                                                     %>
-                                                                </select>
+                                                                    </select>
+                                                                </div>
                                                             </div>
-                                                            <div><label>Email:</label><input type="email" class="form-control" id="PerEml" name="PerEml" placeholder="Email" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(persona.getPerEml())); %>" ></div>
-                                                            <div class="checkbox"><label><input type="checkbox"  id="PerNotEml" name="PerNotEml"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerNotEml())); %> > Notificar por email</label></div>
-                                                            <div class="checkbox"><label><input type="checkbox"  id="PerNotApp" name="PerNotApp"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(persona.getPerNotApp())); %> > Notificar por aplicación</label></div>
+                                                            
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Profesión</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerProf" name="PerProf" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerProf())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Secundaria aprobado</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerSecApr" name="PerSecApr" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerSecApr())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Teléfono</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerTel" name="PerTel" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerTel())%>" ></div></div>
 
-                                                            <div>
-                                                                <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
-                                                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                            <!-- DIRECCION -->
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Dirección</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerDir" name="PerDir" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerDir())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Ciudad</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerCiudad" name="PerCiudad" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerCiudad())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Departamento</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerDto" name="PerDto" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerDto())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Pais</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerPais" name="PerPais" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerPais())%>" ></div></div>
+
+                                                            <!-- TIPO DE USUARIO -->
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Administrador</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerEsAdm" name="PerEsAdm" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerEsAdm())%> ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Alumno</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerEsAlu" name="PerEsAlu" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerEsAlu())%> ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Docente</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerEsDoc" name="PerEsDoc" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerEsDoc())%> ></div></div>
+
+                                                            <!-- NOTIFICACION -->
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Aplicación</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerNotApp" name="PerNotApp" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerNotApp())%> ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerNotEml" name="PerNotEml" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerNotEml())%> ></div></div>
+
+                                                            <div class="form-group ">
+                                                                <label for="cname" class="control-label col-lg-3">Filial</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class=" form-control inputs_generales" id="PerFil" name="PerFil" <%=CamposActivos%>>
+                                                                    <%
+                                                                        for (Filial filial : Filial.values()) {
+                                                                            out.println("<option " + (filial == persona.getPerFil() ? "selected" : "") + " value='" + filial.getFilial() + "'>" + filial.getFilialNom() + "</option>");
+                                                                        }
+                                                                    %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Número de estudiante (ORT)</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="PerNroEstOrt" name="PerNroEstOrt" <%=CamposActivos%> value="<%=utilidad.NuloToCero(persona.getPerNroEstOrt())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Número de libra</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="PerNroLib" name="PerNroLib" <%=CamposActivos%> value="<%=utilidad.NuloToCero(persona.getPerNroLib())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Porcentaje de beca</label><div class="col-lg-6"><input type="number" step="0.01" max="100" min="0" class=" form-control inputs_generales" id="PerBeca" name="PerBeca" <%=CamposActivos%> value="<%=utilidad.NuloToCero(persona.getPerBeca())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Tipo de beca</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerTpoBeca" name="PerTpoBeca" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerTpoBeca())%>" ></div></div>
+
+                                                            <!-- DATOS DE USUARIO -->
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="email" class=" form-control inputs_generales" id="PerEml" name="PerEml" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerEml())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Usuario</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerUsrMod" name="PerUsrMod" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerUsrMod())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Contraseña</label><div class="col-lg-6"><input type="password" class=" form-control inputs_generales" id="PerPass" name="PerPass" <%=CamposActivos%> value="" ></div></div>
+
+                                                            <!-- OBSERVACIONES -->
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Observaciones</label><div class="col-lg-6"><textarea rows="10" class=" form-control inputs_generales" id="PerObs" name="PerObs" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerObs())%>" ></textarea></div></div>
+
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input type="button" class="btn <%=nameClass%>" data-accion="<%=Mode%>" name="btn_guardar" id="btn_guardar" value="<%=nameButton%>">
+                                                                    <input type="button" class="btn btn-default" onclick="<%=js_redirect%>" value="CANCELAR">
+                                                                </div>
                                                             </div>
                                                         </form>
 
-
                                                     </div>
-
                                                 </div>
                                             </section>
                                         </div>
@@ -275,7 +299,29 @@
         </div>
 
         <jsp:include page="/masterPage/footer.jsp"/>
-
+        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div>  
 
     </body>
 </html>

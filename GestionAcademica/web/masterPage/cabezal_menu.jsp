@@ -83,7 +83,7 @@
 
                     if(persona.getFotoBase64() == null)
                     {
-                        out.println("<img class='cabezal_logo' src='" + urlSistema + " /Imagenes/logo_ctc_1.png'/>");
+                        out.println("<img class='cabezal_logo' src='" + urlSistema + "Imagenes/logo_ctc_1.png'/>");
                     }
                     else
                     {
@@ -118,7 +118,7 @@
                                       
                                       out.println("<li>");
                                         out.println("<a href='#'>");
-                                            out.println("<div data-toggle='modal' data-target='#PopUpMensaje' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"'>");
+                                            out.println("<div data-toggle='modal' data-target='#PopUpMensaje' class='btn_ver_msg' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"'>");
                                                 out.println("<div class='cabezal_notificacionAsunto'>" + bandeja.getAsuntoRecortado(30) + "</div>");
                                                 out.println("<div class='cabezal_notificacionFecha'>" + bandeja.getNotBanFch() + "</div>");
                                             out.println("</div>");
@@ -137,7 +137,7 @@
                                        
                                       out.println("<li>");
                                         out.println("<a href='#'>");
-                                            out.println("<div data-toggle='modal' data-target='#PopUpMensaje' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"'>");
+                                            out.println("<div data-toggle='modal' class='btn_ver_msg'  data-target='#PopUpMensaje' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"'>");
                                                 out.println("<div class=''>" + bandeja.getAsuntoRecortado(30) + "</div>");
                                                 out.println("<div class='cabezal_notificacionFecha'>" + bandeja.getNotBanFch() + "</div>");
                                             out.println("</div>");

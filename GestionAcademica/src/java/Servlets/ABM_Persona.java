@@ -9,6 +9,7 @@ package Servlets;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Filial;
+import Enumerado.Genero;
 import Enumerado.TipoMensaje;
 import Logica.LoParametro;
 import Logica.LoPersona;
@@ -18,7 +19,10 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -58,15 +62,15 @@ public class ABM_Persona extends HttpServlet {
             switch(action)
             {
                 
-                case "INSERTAR":
+                case "INSERT":
                     retorno = this.AgregarDatos(request);
                 break;
                 
-                case "ACTUALIZAR":
+                case "UPDATE":
                     retorno = this.ActualizarDatos(request);
                 break;
                 
-                case "ELIMINAR":
+                case "DELETE":
                     retorno = this.EliminarDatos(request);
                 break;
                 
@@ -106,7 +110,6 @@ public class ABM_Persona extends HttpServlet {
         {
 
             error           = false;
-
             Persona persona = this.ValidarPersona(request, null);
 
             //------------------------------------------------------------------------------------------
@@ -121,7 +124,7 @@ public class ABM_Persona extends HttpServlet {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
         String retorno = utilidades.ObjetoToJson(mensaje);
@@ -137,20 +140,7 @@ public class ABM_Persona extends HttpServlet {
         {
 
             error           = false;
-            String PerCod   = request.getParameter("pPerCod");
-
-            Persona persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
-
-            if(persona != null)
-            {
-                persona = this.ValidarPersona(request, persona);
-                persona.setPerCod(Long.valueOf(PerCod));
-            }
-           else
-            {
-                mensaje = new Mensajes("La persona que quiere actualizar, no existe", TipoMensaje.ERROR); 
-                error   = true;
-            }
+            Persona persona = this.ValidarPersona(request, null);
 
             //------------------------------------------------------------------------------------------
             //Guardar cambios
@@ -164,7 +154,7 @@ public class ABM_Persona extends HttpServlet {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
         String retorno = utilidades.ObjetoToJson(mensaje);
@@ -174,18 +164,11 @@ public class ABM_Persona extends HttpServlet {
 
     private String EliminarDatos(HttpServletRequest request)
     {
-        error       = false;
+        error      = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         try
         {
-            String PerCod    = request.getParameter("pPerCod");
-            Persona persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
-
-            if(persona == null)
-            {
-                mensaje = new Mensajes("La persona que quiere eliminar, no existe", TipoMensaje.ERROR); 
-                error   = true;
-            }
+            Persona persona = this.ValidarPersona(request, null);
 
             if(!error)
             {
@@ -197,7 +180,7 @@ public class ABM_Persona extends HttpServlet {
         }
         catch(Exception ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
 
@@ -258,22 +241,39 @@ public class ABM_Persona extends HttpServlet {
         {
             persona   = new Persona();
         }
+        
+        try
+        {
 
-            String PerCod   = request.getParameter("pPerCod");
-            String PerNom= request.getParameter("pPerNom");
+            String PerCod= request.getParameter("pPerCod");
             String PerApe= request.getParameter("pPerApe");
             String PerDoc= request.getParameter("pPerDoc");
-            String PerUsrMod= request.getParameter("pPerUsrMod");
-            String PerEsDoc= request.getParameter("pPerEsDoc");
+            String PerEml= request.getParameter("pPerEml");
             String PerEsAdm= request.getParameter("pPerEsAdm");
             String PerEsAlu= request.getParameter("pPerEsAlu");
-            String PerNroLib= request.getParameter("pPerNroLib");
-            String PerNroEstOrt= request.getParameter("pPerNroEstOrt");
+            String PerEsDoc= request.getParameter("pPerEsDoc");
             String PerFil= request.getParameter("pPerFil");
-            String PerEml= request.getParameter("pPerEml");
-            String PerNotEml= request.getParameter("pPerNotEml");
+            String PerNom= request.getParameter("pPerNom");
             String PerNotApp= request.getParameter("pPerNotApp");
-            String PerPass = request.getParameter("pPerPass");
+            String PerNotEml= request.getParameter("pPerNotEml");
+            String PerNroEstOrt= request.getParameter("pPerNroEstOrt");
+            String PerNroLib= request.getParameter("pPerNroLib");
+            String PerPass= request.getParameter("pPerPass");
+            String PerUsrMod= request.getParameter("pPerUsrMod");
+            String PerApe2= request.getParameter("pPerApe2");
+            String PerBeca= request.getParameter("pPerBeca");
+            String PerCiudad= request.getParameter("pPerCiudad");
+            String PerDir= request.getParameter("pPerDir");
+            String PerDto= request.getParameter("pPerDto");
+            String PerFchNac= request.getParameter("pPerFchNac");
+            String PerGen= request.getParameter("pPerGen");
+            String PerObs= request.getParameter("pPerObs");
+            String PerPais= request.getParameter("pPerPais");
+            String PerProf= request.getParameter("pPerProf");
+            String PerSecApr= request.getParameter("pPerSecApr");
+            String PerTel= request.getParameter("pPerTel");
+            String PerTpoBeca= request.getParameter("pPerTpoBeca");
+            //String ArcCod= request.getParameter("pArcCod");
 
             //------------------------------------------------------------------------------------------
             //Validaciones
@@ -286,25 +286,26 @@ public class ABM_Persona extends HttpServlet {
 
             //Sin validacion
             
+            if(PerCod!= null) if(!PerCod.isEmpty()) persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
             
-
-            if(PerCod != null) if(!PerCod.isEmpty()) persona = (Persona) loPersona.obtener(Long.valueOf(PerCod)).getObjeto();
+            if(PerApe!= null)persona.setPerApe(PerApe);
+            if(PerDoc!= null)persona.setPerDoc(PerDoc);
+            if(PerEml!= null)persona.setPerEml(PerEml);
             
-            if(PerNom != null) persona.setPerNom(PerNom);
-            if(PerApe != null) persona.setPerApe(PerApe);
-            if(PerUsrMod != null) persona.setPerUsrMod(PerUsrMod);
-            if(PerEsDoc != null) persona.setPerEsDoc(Boolean.valueOf(PerEsDoc));
-            if(PerEsAdm != null) persona.setPerEsAdm(Boolean.valueOf(PerEsAdm));
-            if(PerEsAlu != null) persona.setPerEsAlu(Boolean.valueOf(PerEsAlu));
-            if(PerNroLib != null) persona.setPerNroLib(Integer.valueOf(PerNroLib));
-            if(PerNroEstOrt != null) persona.setPerNroEstOrt(Integer.valueOf(PerNroEstOrt));
-            if(PerFil != null) persona.setPerFil(Filial.fromCode(Integer.valueOf(PerFil)));
-            if(PerEml != null) persona.setPerEml(PerEml);
-            if(PerNotEml != null) persona.setPerNotEml(Boolean.valueOf(PerNotEml));
-            if(PerNotApp != null) persona.setPerNotApp(Boolean.valueOf(PerNotApp));
             
-            if(PerDoc != null) persona.setPerDoc(PerDoc);
-
+            if(PerNom!= null)persona.setPerNom(PerNom);
+            if(PerUsrMod!= null)persona.setPerUsrMod(PerUsrMod);
+            if(PerApe2!= null)persona.setPerApe2(PerApe2);
+            if(PerCiudad!= null)persona.setPerCiudad(PerCiudad);
+            if(PerDir!= null)persona.setPerDir(PerDir);
+            if(PerDto!= null)persona.setPerDto(PerDto);
+            if(PerObs!= null)persona.setPerObs(PerObs);
+            if(PerPais!= null)persona.setPerPais(PerPais);
+            if(PerProf!= null)persona.setPerProf(PerProf);
+            if(PerSecApr!= null)persona.setPerSecApr(PerSecApr);
+            if(PerTel!= null)persona.setPerTel(PerTel);
+            if(PerTpoBeca!= null)persona.setPerTpoBeca(PerTpoBeca);
+            
             if(!PerPass.isEmpty())
             {
                 if(parametro.getParPswValExp() != null)
@@ -321,7 +322,34 @@ public class ABM_Persona extends HttpServlet {
                     persona.setPerPass(seguridad.cryptWithMD5(PerPass));
                 }
             }
+            
+            if(PerEsAdm!= null)persona.setPerEsAdm(Boolean.valueOf(PerEsAdm));
+            if(PerEsAlu!= null)persona.setPerEsAlu(Boolean.valueOf(PerEsAlu));
+            if(PerEsDoc!= null)persona.setPerEsDoc(Boolean.valueOf(PerEsDoc));
+            
+            if(PerNotApp!= null)persona.setPerNotApp(Boolean.valueOf(PerNotApp));
+            if(PerNotEml!= null)persona.setPerNotEml(Boolean.valueOf(PerNotEml));
+            
+            
+            if(PerFil!= null)persona.setPerFil(Filial.fromCode(Integer.valueOf(PerFil)));
+            if(PerGen!= null)persona.setPerGen(Genero.valueOf(PerGen));
+            
+            
+            if(PerNroEstOrt!= null)persona.setPerNroEstOrt(Integer.valueOf(PerNroEstOrt));
+            if(PerNroLib!= null)persona.setPerNroLib(Integer.valueOf(PerNroLib));
+            if(PerBeca!= null)persona.setPerBeca(Double.valueOf(PerBeca));
 
+            
+            if(PerFchNac!= null)persona.setPerFchNac(Date.valueOf(PerFchNac));
+
+        }
+        catch(NumberFormatException ex)
+        {
+            mensaje = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
+            error   = true;
+        }
+
+            
         return persona;
     }
 
