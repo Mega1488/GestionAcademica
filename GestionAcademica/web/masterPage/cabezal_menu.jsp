@@ -78,19 +78,7 @@
         <div class="col-xs-12 cabezal_contenedor">
             <!-- Botón Menú y Logo -->
             <div class="cabezal_contenedorLogoBoton">
-                <%
-                    Persona persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
-
-                    if(persona.getFotoBase64() == null)
-                    {
-                        out.println("<img class='cabezal_logo' src='" + urlSistema + "Imagenes/logo_ctc_1.png'/>");
-                    }
-                    else
-                    {
-                        out.println("<img class='cabezal_logo' src='data:image/" + persona.getFotoExtension() + ";base64, " + persona.getFotoBase64() + "'/>");
-                    }
-
-                %>
+                <img class='cabezal_logo' src='<%=urlSistema%>Imagenes/logo_ctc_1.png'/>
                 						
                 
                 <div id="content" class="cabezal_contenedorBotonResponsive">
@@ -109,7 +97,7 @@
                                 <i class="ti-bell"></i>
                                 <span class="cabezal_notificacionesNumero"><%=cantidad%></span>
                             </button>
-                            <ul class="dropdown-menu cabezal_notificacionSubMenu">
+                            <ul class="dropdown-menu dropdown_arreglado cabezal_notificacionSubMenu">
                                 
                                 <%
                                     for(Object objeto : lstBandeja)
@@ -151,8 +139,24 @@
                     </li>
 
                     <li>
-                        <div class="dropdown">
-                            <button class="cabezal_botonMenuUsuario dropdown-toggle" type="button" data-toggle="dropdown"><div class="cabezal_contenedorAvatar"><img class="cabezal_avatar" src="<%=urlSistema%>/Imagenes/avatar.png" /></div><div class="cabezal_nombre"><%=usuarioNombre%></div></span></button>
+                        <div class="dropdown hidden-xs">
+                            <button class="cabezal_botonMenuUsuario dropdown-toggle" type="button" data-toggle="dropdown"><div class="cabezal_contenedorAvatar">
+                                    <img class="cabezal_avatar" src="<%=urlSistema%>/Imagenes/avatar.png" />
+                               
+                                    <%
+                                        Persona persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
+
+                                        if(persona.getFotoBase64() == null)
+                                        {
+                                            out.println("<img class='cabezal_avatar' src='" + urlSistema + "Imagenes/avatar.png'/>");
+                                        }
+                                        else
+                                        {
+                                            out.println("<img class='cabezal_avatar' src='data:image/" + persona.getFotoExtension() + ";base64, " + persona.getFotoBase64() + "'/>");
+                                        }
+
+                                    %>
+                                </div><div class="cabezal_nombre"><%=usuarioNombre%></div><span class="glyphicon glyphicon-triangle-bottom menu_alinearFlecha"></span></button>
                             <ul class="dropdown-menu cabezal_menuUsuario">
                                 <li><a href="<%=urlSistema%>pswChange.jsp"><span class="ti-power-off cabezal_menuUsuarioIconos"></span> Cambiar contraseña</a></li>
                                 <li><a href="#" class="cerrar_sesion"><span class="ti-settings cabezal_menuUsuarioIconos"></span> Cerrar Sesión</a></li>	
@@ -172,7 +176,7 @@
 
 <!-- MENU -->
 
-<nav id="sidebar">		
+<nav id="sidebar" class="menu_lateral">		
     <!-- Usuario -->			
     <div class="menu_contenedorUsuario">
         <div class="menu_contenedorAvatar"><img class="menu_avatar" src="<%=urlSistema%>/Imagenes/avatar.png" /></div>
@@ -198,7 +202,7 @@
                 if(menu.getMenIsParent())
                 {
                     out.println("<li>");
-                        out.println("<li><a href='#sub_" + menu.getMenCod() + "' data-toggle='collapse' aria-expanded='false'>" + menu.getMenNom() + "</a>");
+                        out.println("<li><a href='#sub_" + menu.getMenCod() + "' data-toggle='collapse' aria-expanded='false'>" + menu.getMenNom() + "<span class='ti-angle-right'></span></a>");
                         
                         out.println("<ul class='collapse list-unstyled menu_submenu' id='sub_" + menu.getMenCod() + "'>");
                             for(Menu subMenu : menu.getLstSubMenu())

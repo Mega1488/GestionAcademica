@@ -43,7 +43,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
  */
 public class LoImportacion {
     private static LoImportacion instancia;
-    private final SimpleDateFormat dMy = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat yMd_HMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     private LoImportacion() {
     }
@@ -265,6 +265,7 @@ public class LoImportacion {
     }
     
     private Retorno_MsgObj ProcesarXLSX(File archivo) throws FileNotFoundException, IOException{
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
         
         FileInputStream file = new FileInputStream(archivo);
@@ -307,7 +308,7 @@ public class LoImportacion {
                     if( DateUtil.isCellDateFormatted(celda) ){
                        System.out.println(celda.getDateCellValue());
                        valorAux=celda.getDateCellValue();
-                       value = dMy.format(valorAux);
+                       value = yMd_HMS.format(valorAux);
                        
                     }else{
                        System.out.println(celda.getNumericCellValue());
@@ -377,6 +378,7 @@ public class LoImportacion {
     }
     
     private Retorno_MsgObj ProcesarXLS(File archivo) throws FileNotFoundException, IOException{
+        
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
         
         FileInputStream file = new FileInputStream(archivo);
@@ -418,7 +420,7 @@ public class LoImportacion {
                     if( DateUtil.isCellDateFormatted(celda) ){
                        System.out.println(celda.getDateCellValue());
                        valorAux=celda.getDateCellValue();
-                       value = dMy.format(valorAux);
+                       value = yMd_HMS.format(valorAux);
                        
                     }else{
                        System.out.println(celda.getNumericCellValue());

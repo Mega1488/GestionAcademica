@@ -20,6 +20,8 @@ import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,6 +41,7 @@ public class ABM_Persona extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -340,12 +343,15 @@ public class ABM_Persona extends HttpServlet {
             if(PerBeca!= null)persona.setPerBeca(Double.valueOf(PerBeca));
 
             
-            if(PerFchNac!= null)persona.setPerFchNac(Date.valueOf(PerFchNac));
+            if(PerFchNac!= null)persona.setPerFchNac(yMd.parse(PerFchNac));
 
         }
-        catch(NumberFormatException ex)
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
         {
-            mensaje = new Mensajes("Error: " + ex.getMessage(), TipoMensaje.ERROR);
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
             error   = true;
         }
 

@@ -73,6 +73,9 @@ public class Parametro implements Serializable {
     @Column(name = "ParPswValMsg", length = 500)
     private String ParPswValMsg;
     
+    @Column(name = "ParImpDateFormat", length = 100)
+    private String ParImpDateFormat;
+    
     @Column(name = "ParDiaEvlPrv")
     private Integer ParDiaEvlPrv;
     
@@ -206,6 +209,16 @@ public class Parametro implements Serializable {
         this.ParUtlMdl = ParUtlMdl;
     }
 
+    public String getParImpDateFormat() {
+        if(ParImpDateFormat == null) ParImpDateFormat = "dd/MM/yyyy";
+        return ParImpDateFormat;
+    }
+
+    public void setParImpDateFormat(String ParImpDateFormat) {
+        this.ParImpDateFormat = ParImpDateFormat;
+    }
+
+    
     
     
     

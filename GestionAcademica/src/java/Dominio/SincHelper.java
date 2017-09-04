@@ -37,6 +37,7 @@ public abstract class SincHelper{
     
     private final SimpleDateFormat dtFrmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private final SimpleDateFormat dMy = new SimpleDateFormat("dd/MM/yyyy");
+    private final SimpleDateFormat yMd_HMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     public String GetNamePrimaryKey(){
         for (Field field : this.getClass().getDeclaredFields()) 
@@ -184,6 +185,11 @@ public abstract class SincHelper{
                     if(field.getType().equals(Long.class))
                     {
                         field.set(this, Long.valueOf(fldValue));
+                    }
+                    
+                    if(field.getType().equals(Double.class))
+                    {
+                        field.set(this, Double.valueOf(fldValue));
                     }
                     
                     if(field.getType() instanceof Class && ((Class<?>)field.getType()).isEnum())

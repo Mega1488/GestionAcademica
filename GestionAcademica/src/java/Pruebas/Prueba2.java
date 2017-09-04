@@ -5,33 +5,20 @@
  */
 package Pruebas;
 
-import Entidad.Parametro;
-import Entidad.TipoEvaluacion;
-import Enumerado.Constantes;
-import Logica.LoImportacion;
-import Logica.LoParametro;
-import Logica.LoPeriodo;
-import Logica.LoTipoEvaluacion;
-import Logica.Notificacion.ManejoNotificacion;
-import Moodle.MoodleRestException;
-import Moodle.MoodleRestUser;
-import Moodle.MoodleUser;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionNotification;
-import Utiles.Retorno_MsgObj;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,14 +56,39 @@ public class Prueba2 extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
-            
+           /* 
             LoImportacion imp = LoImportacion.GetInstancia();
             
             Retorno_MsgObj ret = imp.ImportarPersonasPlan(1L, "C:/tmp/imp.xlsx");
             
             
             out.println(Utiles.Utilidades.GetInstancia().ObjetoToJson(ret));
-            
+            */
+           SimpleDateFormat dMy = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+           String mensaje ="";
+           
+           String valor1 ="05/10/1992";
+           
+           try
+           {
+               String texto = valor1;
+              boolean valor = Boolean.valueOf(valor1);
+               
+               out.println(valor);
+               
+           }
+           catch(Exception ex)
+           {
+               mensaje = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+               mensaje = mensaje.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+               Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+           }
+           
+           
+           out.println(mensaje);
+           
+           
+           
             
             
          //   ManejoNotificacion notManager = new ManejoNotificacion();

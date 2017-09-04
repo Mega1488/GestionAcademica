@@ -34,6 +34,8 @@
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body class="body_clase">
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
+        
         <div class="login_fondo">		
             <div class="login_contenedor">
                 <%                        if (param.getParUtlMdl()) {
@@ -73,9 +75,7 @@
 
         </div>
 
-        <div id="msgError" name="msgError" class="alert alert-success div_msg" style="display: none;"> 
-            <label id="txtError" name="txtError">Error</label>
-        </div>
+       
 
         <script>
             $(document).ready(function () {
