@@ -974,7 +974,7 @@ input[type=search]{
 
 .contenido{
 	width:calc(100% - 250px);
-	height:200px;
+	height:100%;
         margin-top:20px;
 	float:left;
 	transition:1s;
@@ -982,6 +982,13 @@ input[type=search]{
 
 .sinMenu{
 	width:100%;
+}
+
+.menu_subTitulo{
+    height:20px;
+    color:#ccc;
+    display:block;
+    background-color:#efefef;
 }
 
 /* pswCHANGE */
@@ -1128,6 +1135,20 @@ input[type=search]{
     color: #898989;
 }
 
+.panel_contenedorTitulo{
+    margin-top: 20px;
+    margin-bottom:30px;
+}
+
+.panel_contenedorTitulo h2{
+    font-size:20px;
+}
+
+.formulario_borde{
+    border-bottom: 1px solid #eff2f7;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
 
 /* MEDIA QUERIES */
 

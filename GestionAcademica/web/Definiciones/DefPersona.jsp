@@ -210,6 +210,10 @@
                                                             <div name="campos_ocultos">
                                                                 <input type="hidden" name="MODO" id="MODO" value="<%=Mode%>">                                                                
                                                             </div>
+                                                            
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2 class="">Datos Personales</h2>
+                                                            </div>
 
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="PerCod" name="PerCod" disabled value="<%=utilidad.NuloToVacio(persona.getPerCod())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="PerNom" name="PerNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerNom())%>" ></div></div>
@@ -229,24 +233,42 @@
                                                                     %>
                                                                     </select>
                                                                 </div>
-                                                            </div>
+                                                            </div>      
                                                             
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Profesión</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerProf" name="PerProf" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerProf())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Secundaria aprobado</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerSecApr" name="PerSecApr" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerSecApr())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Teléfono</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerTel" name="PerTel" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerTel())%>" ></div></div>
-
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Dirección</h2>
+                                                            </div>
+                                                            
                                                             <!-- DIRECCION -->
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Dirección</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerDir" name="PerDir" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerDir())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Ciudad</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerCiudad" name="PerCiudad" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerCiudad())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Departamento</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerDto" name="PerDto" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerDto())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Pais</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerPais" name="PerPais" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerPais())%>" ></div></div>
 
+                                                            <div class="formulario_borde"></div>
+                                                            
                                                             <!-- TIPO DE USUARIO -->
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Tipo de Usuario</h2>
+                                                            </div>                                                            
+                                                            
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Administrador</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerEsAdm" name="PerEsAdm" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerEsAdm())%> ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Alumno</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerEsAlu" name="PerEsAlu" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerEsAlu())%> ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Docente</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerEsDoc" name="PerEsDoc" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerEsDoc())%> ></div></div>
 
+                                                            <div class="formulario_borde"></div>
+                                                            
                                                             <!-- NOTIFICACION -->
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Notificación</h2>
+                                                            </div>
+                                                            
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Aplicación</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerNotApp" name="PerNotApp" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerNotApp())%> ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="checkbox" class=" inputs_generales" id="PerNotEml" name="PerNotEml" <%=CamposActivos%> <%=utilidad.BooleanToChecked(persona.getPerNotEml())%> ></div></div>
 
@@ -267,12 +289,24 @@
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Porcentaje de beca</label><div class="col-lg-6"><input type="number" step="0.01" max="100" min="0" class=" form-control inputs_generales" id="PerBeca" name="PerBeca" <%=CamposActivos%> value="<%=utilidad.NuloToCero(persona.getPerBeca())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Tipo de beca</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerTpoBeca" name="PerTpoBeca" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerTpoBeca())%>" ></div></div>
 
+                                                            <div class="formulario_borde"></div>
+                                                            
                                                             <!-- DATOS DE USUARIO -->
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Datos de Usuario</h2>
+                                                            </div>
+                                                            
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="email" class=" form-control inputs_generales" id="PerEml" name="PerEml" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerEml())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Usuario</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerUsrMod" name="PerUsrMod" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerUsrMod())%>" ></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Contraseña</label><div class="col-lg-6"><input type="password" class=" form-control inputs_generales" id="PerPass" name="PerPass" <%=CamposActivos%> value="" ></div></div>
-
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            
                                                             <!-- OBSERVACIONES -->
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Observaciones</h2>
+                                                            </div>                                                            
+                                                            
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Observaciones</label><div class="col-lg-6"><textarea rows="10" class=" form-control inputs_generales" id="PerObs" name="PerObs" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerObs())%>" ></textarea></div></div>
 
                                                             
