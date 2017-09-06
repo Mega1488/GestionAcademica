@@ -180,7 +180,7 @@
     <!-- Usuario -->			
     <div class="menu_contenedorUsuario">
         <div class="menu_contenedorAvatar">
-            <a href="<%=urlSistema%>uploadFoto.jsp">
+            
             <%
                 
 
@@ -193,7 +193,11 @@
                     out.println("<img class='menu_avatar' src='data:image/" + persona.getFotoExtension() + ";base64, " + persona.getFotoBase64() + "'/>");
                 }
 
-            %></a>
+            %>
+            
+            <div class="overlay">
+                <a class="texto_cambiarFoto" href="<%=urlSistema%>uploadFoto.jsp">CAMBIAR</a>
+            </div>
         </div>
         <div class="menu_usuarioEnMenu">
             <span class="menu_usuarioNombre"><%=usuarioNombre%></span>
