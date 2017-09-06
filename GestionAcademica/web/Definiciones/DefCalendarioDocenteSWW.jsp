@@ -67,64 +67,56 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlRet); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
+                        <div class="contenedor_agregar">
                             <a href="#" title="Inscribir periodo" name='btn_inscribirPeriodo' id='btn_inscribirPeriodo' class="fa fa-group" data-toggle="modal" data-target="#PopUpInscPeriodo"> </a>
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
                             <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
                             <input type="hidden" name="popFiltro" id="popFiltro" value="<% out.print(((Calendario) retorno.getObjeto()).getEvaluacion().getEstudioNombre()); %>">
                         </div>
+                        <div class="panel-body">
+                            <div class=" form">
+                                   <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                        <thead><tr>
+                                                <th></th>
+                                                <th>Código</th>
+                                                <th>Docente</th>
+                                                <th>Documento</th>
+                                            </tr>
+                                        </thead>
 
+                                        <tbody>
+                                            <% for (CalendarioDocente calDocente : lstObjeto) {
 
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead><tr>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Docente</th>
-                                    <th>Documento</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (CalendarioDocente calDocente : lstObjeto) {
-
-                                %>
-                                <tr>
-                                    <td><% out.print("<a href='#' data-codigo='" + calDocente.getCalDocCod() + "' data-nombre='" + calDocente.getDocente().getNombreCompleto() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calDocente.getCalDocCod())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio((calDocente.getDocente() != null ? calDocente.getDocente().getNombreCompleto() : ""))); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio((calDocente.getDocente() != null ? calDocente.getDocente().getPerDoc() : ""))); %> </td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
+                                            %>
+                                            <tr>
+                                                <td><% out.print("<a href='#' data-codigo='" + calDocente.getCalDocCod() + "' data-nombre='" + calDocente.getDocente().getNombreCompleto() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                                <td><% out.print(utilidad.NuloToVacio(calDocente.getCalDocCod())); %> </td>
+                                                <td><% out.print(utilidad.NuloToVacio((calDocente.getDocente() != null ? calDocente.getDocente().getNombreCompleto() : ""))); %> </td>
+                                                <td><% out.print(utilidad.NuloToVacio((calDocente.getDocente() != null ? calDocente.getDocente().getPerDoc() : ""))); %> </td>
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
 
         <!-- PopUp para Agregar docentes al calendario -->
 

@@ -10,12 +10,21 @@
 <%@page import="Logica.LoCalendario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<header class="panel-heading tab-bg-dark-navy-blue ">
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CalCod       = request.getParameter("pCalCod");
+    
+    String ret = request.getParameter("RET");
+    String urlRet = urlSistema + "Definiciones/DefCalendarioWW.jsp";
+    if (ret != null) {
+        if (!ret.isEmpty()) {
+            urlRet = urlSistema + "Definiciones/DefCalendarioGrid.jsp";
+        }
+    }
    
     String urlActual = utilidad.GetPaginaActual(request);
     
@@ -28,3 +37,10 @@
     out.println("</ul>");
 %>
     
+    <span class="tools pull-right">
+        <div class="hidden-xs">
+            <a class="tabs_regresar" href="<% out.print(urlRet); %>">Regresar</a>
+        </div>
+    </span>
+        
+</header>

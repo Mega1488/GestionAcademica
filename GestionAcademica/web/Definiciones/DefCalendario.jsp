@@ -52,20 +52,21 @@
         }
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -90,7 +91,36 @@
 
         <script>
             $(document).ready(function () {
+                
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                function procesarDatos() {
 
 
                     var CalCod = $('#CalCod').val();
@@ -121,9 +151,7 @@
 
                             if (obj.tipoMensaje != 'ERROR')
                             {
-            <%
-                                                    out.print(js_redirect);
-            %>
+                                <%=js_redirect%>
                             } else
                             {
                                 MostrarMensaje(obj.tipoMensaje, obj.mensaje);
@@ -132,7 +160,7 @@
                         });
 
                     }
-                });
+                }
 
             });
 
@@ -141,75 +169,99 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
+            		<div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            <!-- CONTENIDO -->
+                                                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                            </div>
+                                                            
+                                                            <div class="form-group "><label for="CalCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="CalCod" name="CalCod" disabled value="<%=utilidad.NuloToVacio(calendario.getCalCod())%>" ></div></div>
+                                                            <div class="form-group ">
+                                                                <label for="EvlCod" class="control-label col-lg-3">Evaluación</label>
+                                                                 
+                                                                    <div class="col-lg-1">
+                                                                        <input type="number" required class="form-control inputs_generales" id="EvlCod" name="EvlCod" disabled value="<% out.print(utilidad.NuloToVacio((calendario.getEvaluacion() == null ? "" : calendario.getEvaluacion().getEvlCod()))); %>" >
+                                                                    </div>
+                                                                    <div class="col-lg-3">
+                                                                        <input type="text" class="form-control inputs_generales" id="EvlNom" name="EvlNom"  disabled value="<% out.print(utilidad.NuloToVacio((calendario.getEvaluacion() == null ? "" : calendario.getEvaluacion().getEvlNom()))); %>" >
+                                                                    </div>
+                                                                    <div class="col-lg-2">
+                                                                        <a href="#" id="btnEvlCod" name="btnEvlCod" class="glyphicon glyphicon-search" data-toggle="modal" data-target="#PopUpEvaluacion"></a>
+                                                                    </div>
+                                                              
+                                                            </div>
+                                                            
+                                                            <div class="form-group "><label for="CalFch" class="control-label col-lg-3">Fecha</label><div class="col-lg-6"><input type="date" required class="form-control inputs_generales" id="CalFch" name="CalFch"<% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %>" ></div></div>
+                                                            <div class="form-group "><label for="EvlInsFchDsd" class="control-label col-lg-3">Inscripcion desde</label><div class="col-lg-6"><input type="date" class="form-control inputs_generales" id="EvlInsFchDsd" name="EvlInsFchDsd"  <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %>" ></div></div>
+                                                            <div class="form-group "><label for="EvlInsFchHst" class="control-label col-lg-3">Inscripcion hasta</label><div class="col-lg-6"><input type="date" class="form-control inputs_generales" id="EvlInsFchHst" name="EvlInsFchHst"  <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %>" ></div></div>
 
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
 
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlRet); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div class="row">
-                                <div class="col-lg-1"><label>Código</label><input type="text" class="form-control" id="CalCod" name="CalCod" placeholder="CalCod" disabled value="<% out.print(utilidad.NuloToVacio(calendario.getCalCod())); %>" ></div>
-                            </div>
-
-                            <label>Evaluación:</label>
-                            <div class="row"> 
-                                <div class="col-lg-1">
-                                    <input type="text" class="form-control" id="EvlCod" name="EvlCod" placeholder="EvlCod" disabled value="<% out.print(utilidad.NuloToVacio((calendario.getEvaluacion() == null ? "" : calendario.getEvaluacion().getEvlCod()))); %>" >
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-lg-3">
-                                    <input type="text" class="form-control" id="EvlNom" name="EvlNom" placeholder="EvlNom" disabled value="<% out.print(utilidad.NuloToVacio((calendario.getEvaluacion() == null ? "" : calendario.getEvaluacion().getEvlNom()))); %>" >
-                                </div>
-                                <div class="col-lg-3">
-                                    <a href="#" id="btnEvlCod" name="btnEvlCod" class="glyphicon glyphicon-search" data-toggle="modal" data-target="#PopUpEvaluacion"></a>
-                                </div>
                             </div>
-
-
-                            <div class="row">
-                                <div class="col-lg-2">
-                                    <label>Fecha:</label>
-                                    <input type="date" class="form-control" id="CalFch" name="CalFch" placeholder="CalFch" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %>" >
-                                </div>                            
-                                <div class="col-lg-2"><label>Inscripción desde:</label><input type="date" class="form-control" id="EvlInsFchDsd" name="EvlInsFchDsd" placeholder="EvlInsFchDsd" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %>" ></div>                       
-                                <div class="col-lg-2"><label>Inscripción hasta:</label><input type="date" class="form-control" id="EvlInsFchHst" name="EvlInsFchHst" placeholder="EvlInsFchHst" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %>" ></div>
-                            </div>
-
-
-                            <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button"  class="btn btn-success" />
-                            <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                        </form>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
         <div id="PopUpEvaluacion"  class="modal fade" role="dialog">
             <jsp:include page="/PopUps/PopUpEvaluacion.jsp"/>
         </div>
+        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </div> 
 
     </body>
 </html>

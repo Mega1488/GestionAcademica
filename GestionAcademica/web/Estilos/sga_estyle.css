@@ -1190,7 +1190,6 @@ input[type=search]{
 }
 
 .contenedor_agregar a{
-    display:block;
     margin-top:10px;
     margin-right:25px;
 }

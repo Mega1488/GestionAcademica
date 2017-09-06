@@ -80,7 +80,7 @@
         <div class="col-xs-12 cabezal_contenedor">
             <!-- Botón Menú y Logo -->
             <div class="cabezal_contenedorLogoBoton">
-                <img class='cabezal_logo' src='<%=urlSistema%>Imagenes/logo_ctc_1.png'/>
+                <a href="<%=urlSistema%>" ><img class='cabezal_logo' src='<%=urlSistema%>Imagenes/logo_ctc_1.png'/></a>
                 						
                 
                 <div id="content" class="cabezal_contenedorBotonResponsive">

@@ -63,9 +63,10 @@
                 <div class="col-lg-12">
                     <section class="panel">
                         <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
-                        <span class="tools pull-right">
+                        <div class="contenedor_agregar">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                        </span>
+                        </div>
+                        
                         <div class="panel-body">
                             <div class="tab-content">
                                 <div id="inicio" class="tab-pane active">
