@@ -18,8 +18,9 @@
     String urlActual = utilidad.GetPaginaActual(request);
 %>
 
-<ul class="nav nav-tabs">
-    <li class="<% out.print((urlActual.equals("DefCalendarioGrid.jsp") ? "active" : "")); %>"><a href='<% out.print(urlSistema); %>Definiciones/DefCalendarioGrid.jsp'>Calendario</a></li>
-    <li class="<% out.print((urlActual.equals("DefCalendarioWW.jsp") ? "active" : "")); %>"><a href='<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp'>Listado</a></li>
-</ul>
-    
+<header class="panel-heading tab-bg-dark-navy-blue ">
+    <ul class="nav nav-tabs">
+        <li class="<% out.print((urlActual.equals("DefCalendarioGrid.jsp") ? "active" : "")); %>"><a class='tabs' aria-expanded='<%out.print((urlActual.equals("DefCalendarioGrid.jsp") ? "true" : "false"));%>' href='<% out.print(urlSistema); %>Definiciones/DefCalendarioGrid.jsp'>Calendario</a></li>
+        <li class="<% out.print((urlActual.equals("DefCalendarioWW.jsp") ? "active" : "")); %>"><a class='tabs' aria-expanded='<%out.print((urlActual.equals("DefCalendarioWW.jsp") ? "true" : "false"));%>' href='<% out.print(urlSistema); %>Definiciones/DefCalendarioWW.jsp'>Listado</a></li>
+    </ul>
+</header>    

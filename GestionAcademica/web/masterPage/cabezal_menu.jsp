@@ -64,6 +64,8 @@
         }
     }
     Integer cantidad = lstBandeja.size() + lstVistos.size();
+    
+    Persona persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
 
 %>
 
@@ -141,11 +143,9 @@
                     <li>
                         <div class="dropdown hidden-xs">
                             <button class="cabezal_botonMenuUsuario dropdown-toggle" type="button" data-toggle="dropdown"><div class="cabezal_contenedorAvatar">
-                                    <img class="cabezal_avatar" src="<%=urlSistema%>/Imagenes/avatar.png" />
-                               
+                                   
                                     <%
-                                        Persona persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
-
+                           
                                         if(persona.getFotoBase64() == null)
                                         {
                                             out.println("<img class='cabezal_avatar' src='" + urlSistema + "Imagenes/avatar.png'/>");
@@ -179,7 +179,22 @@
 <nav id="sidebar" class="menu_lateral">		
     <!-- Usuario -->			
     <div class="menu_contenedorUsuario">
-        <div class="menu_contenedorAvatar"><img class="menu_avatar" src="<%=urlSistema%>/Imagenes/avatar.png" /></div>
+        <div class="menu_contenedorAvatar">
+            <a href="<%=urlSistema%>uploadFoto.jsp">
+            <%
+                
+
+                if(persona.getFotoBase64() == null)
+                {
+                    out.println("<img class='menu_avatar' src='" + urlSistema + "Imagenes/avatar.png'/>");
+                }
+                else
+                {
+                    out.println("<img class='menu_avatar' src='data:image/" + persona.getFotoExtension() + ";base64, " + persona.getFotoBase64() + "'/>");
+                }
+
+            %></a>
+        </div>
         <div class="menu_usuarioEnMenu">
             <span class="menu_usuarioNombre"><%=usuarioNombre%></span>
             <ul>

@@ -6,16 +6,13 @@
 package Logica;
 
 import Dominio.Sitios;
-import Entidad.Persona;
 import Entidad.WS_User;
-import Enumerado.Accion;
 import Enumerado.Constantes;
 import Enumerado.ServicioWeb;
 import Enumerado.TipoMensaje;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;

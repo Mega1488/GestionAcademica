@@ -780,9 +780,8 @@ public class Persona extends SincHelper implements Serializable {
      *
      * @param pArchivo Foto de perfil
      */
-    public void setFoto(File pArchivo) {
-        this.archivo = new Archivo();
-        this.archivo.setArchivo(pArchivo, TipoArchivo.FOTO_PERFIL);
+    public void setFoto(Archivo pArchivo) {
+        this.archivo = pArchivo;
     }
     
     @JsonIgnore

@@ -55,70 +55,78 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
+                        <span class="tools pull-right">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                        </span>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Código</th>
+                                                                    <th>Evaluación</th>
+                                                                    <th>Carrera / Curso</th>
+                                                                    <th>Estudio</th>
+                                                                    <th>Fecha</th>
+                                                                    <th>Inscripción desde</th>
+                                                                    <th>Inscripcion hasta</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <% for (Object objeto : lstObjeto) {
+                                                                    Calendario calendario = (Calendario) objeto;
+                                                            %>
+                                                            <tr>
+                                                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCalendario.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
+                                                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCalendario.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getCalCod())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
+                                                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Alumnos' class='fa fa-group'/>"); %></td>
+                                                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioDocenteSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Docentes' class='fa fa-group'/>"); %></td>
+
+                                                            </tr>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </table>
+                                                    </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Evaluación</th>
-                                    <th>Carrera / Curso</th>
-                                    <th>Estudio</th>
-                                    <th>Fecha</th>
-                                    <th>Inscripción desde</th>
-                                    <th>Inscripcion hasta</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <% for (Object objeto : lstObjeto) {
-                                    Calendario calendario = (Calendario) objeto;
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCalendario.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCalendario.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getCalCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
-                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Alumnos' class='fa fa-group'/>"); %></td>
-                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioDocenteSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Docentes' class='fa fa-group'/>"); %></td>
-
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
 
         <!-- Agregar calendario ---------------------------------------------------------------------------------------------------------------------------------------->
 

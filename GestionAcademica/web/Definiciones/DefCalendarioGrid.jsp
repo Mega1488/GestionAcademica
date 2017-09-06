@@ -399,32 +399,40 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefCalendarioWWTabs.jsp"/>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div id='calendar' style="width: 80%; margin-top: 20px;"></div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <div id='calendar' style="width: 80%; margin-top: 20px;"></div>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
-
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
         <!-- Ver alumno ---------------------------------------------------------------------------------------------------------------------------------------->
 
         <div id="PopUpVerCalendario" class="modal fade" role="dialog">

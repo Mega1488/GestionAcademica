@@ -149,7 +149,10 @@
         <servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-    
+    <servlet>
+        <servlet-name>UploadArchivo</servlet-name>
+        <servlet-class>Servlets.UploadArchivo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
         <url-pattern>/Prueba</url-pattern>
@@ -293,17 +296,13 @@
     <!-- REST WS -->
     <servlet>
         <servlet-name>jersey-serlvet</servlet-name>
-        
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
-        
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
             <param-value>WSRest.resources</param-value>
         </init-param>
-        
         <load-on-startup>1</load-on-startup>
-    </servlet> 
-    
+    </servlet>
     <servlet-mapping>
         <servlet-name>jersey-serlvet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
@@ -348,7 +347,10 @@
         <url-pattern>/webresources/*</url-pattern>
     </servlet-mapping>
     -->
-
+    <servlet-mapping>
+        <servlet-name>UploadArchivo</servlet-name>
+        <url-pattern>/UploadArchivo</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30

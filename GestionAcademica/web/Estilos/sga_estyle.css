@@ -1153,6 +1153,10 @@ input[type=search]{
 /* MEDIA QUERIES */
 
 @media (max-width: 600px) {
+   .login_fondo{
+        margin-top:0px;
+    }
+    
   .cabezal_menu {
     margin-right:0px !important;
   }

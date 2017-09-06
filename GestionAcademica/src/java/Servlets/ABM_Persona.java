@@ -6,11 +6,13 @@
 package Servlets;
 
 
+import Entidad.Archivo;
 import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Filial;
 import Enumerado.Genero;
 import Enumerado.TipoMensaje;
+import Logica.LoArchivo;
 import Logica.LoParametro;
 import Logica.LoPersona;
 import Logica.Seguridad;
@@ -111,6 +113,10 @@ public class ABM_Persona extends HttpServlet {
                 
                 case "PSW_RECOVERY":
                     retorno = this.RecoveryPsw(request);
+                break;
+                
+                case "SUBIR_FOTO":
+                    retorno = this.SubirFoto(request);
                 break;
                         
             }
@@ -253,6 +259,20 @@ public class ABM_Persona extends HttpServlet {
         
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
+    
+    private String SubirFoto(HttpServletRequest request){
+        Persona persona = this.ValidarPersona(request, null);
+        
+        if(!error)
+        {
+            String ArcCod          = request.getParameter("pArcCod");
+            persona.setFoto((Archivo)LoArchivo.GetInstancia().obtener(Long.valueOf(ArcCod)).getObjeto());
+            Retorno_MsgObj retorno = (Retorno_MsgObj) loPersona.actualizar(persona);
+            mensaje = retorno.getMensaje();
+        }
+        
+        return utilidades.ObjetoToJson(mensaje);
+    }
 
     private Persona ValidarPersona(HttpServletRequest request, Persona persona)
     {
@@ -324,21 +344,23 @@ public class ABM_Persona extends HttpServlet {
             if(PerSecApr!= null)persona.setPerSecApr(PerSecApr);
             if(PerTel!= null)persona.setPerTel(PerTel);
             if(PerTpoBeca!= null)persona.setPerTpoBeca(PerTpoBeca);
-            
-            if(!PerPass.isEmpty())
+            if(PerPass != null)
             {
-                if(parametro.getParPswValExp() != null)
+                if(!PerPass.isEmpty())
                 {
-                    if(!PerPass.matches(parametro.getParPswValExp()))
+                    if(parametro.getParPswValExp() != null)
                     {
-                        error = true;
-                        mensaje = new Mensajes(parametro.getParPswValMsg(), TipoMensaje.ERROR);
-                    }
-                }    
+                        if(!PerPass.matches(parametro.getParPswValExp()))
+                        {
+                            error = true;
+                            mensaje = new Mensajes(parametro.getParPswValMsg(), TipoMensaje.ERROR);
+                        }
+                    }    
 
-                if(!error)
-                {
-                    persona.setPerPass(seguridad.cryptWithMD5(PerPass));
+                    if(!error)
+                    {
+                        persona.setPerPass(seguridad.cryptWithMD5(PerPass));
+                    }
                 }
             }
             
