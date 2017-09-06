@@ -193,7 +193,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <section class="panel">
-                        <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
                         <div class="panel-body">
                             <div class="tab-content">
                                 <div id="inicio" class="tab-pane active">

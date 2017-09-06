@@ -45,5 +45,10 @@
 
         %>
     </ul>
+    
+    <span class="tools pull-right">
+        <div class="hidden-xs">
+            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a>
+        </div>
+    </span>
 </header>
-

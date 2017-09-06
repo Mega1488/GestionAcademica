@@ -70,16 +70,14 @@
                 <div class="col-lg-12">
                     <section class="panel">
                         <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                        <div class="contenedor_agregar">
+                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                        </div>
                         <div class="panel-body">
                             <div class=" form">
                                 <div class=""> 
-                                    <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
-                                </div>
-                                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                                    <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
                                     <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(PerCod); %>">
                                 </div>
-                                
                                 <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                                     <thead>
                                         <tr>

@@ -62,12 +62,9 @@
             <div class="row">
                 <div class="col-lg-12">
                     <section class="panel">
-                        <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
+                            <jsp:include page="/Definiciones/DefPersonaTabs.jsp"/>
                         <div class="panel-body">
                             <div class=" form">
-                                <div class=""> 
-                                    <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaWW.jsp">Regresar</a></div>
-                                </div>
                                 
                                 <div name="cont_estudio" class="col-sm-8" style=' <% out.print(tblVisible); %>'>
                                     <%
