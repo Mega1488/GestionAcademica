@@ -67,56 +67,65 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            BITÁCORA DE SERVICIOS
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <!-- CONTENIDO -->
+                                
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Fecha</th>
+                                            <th>Usuario</th>
+                                            <th>Servicio</th>
+                                            <th>Estado</th>
+                                            <th>Detalle</th>
+                                        </tr>
+                                    </thead>
 
-                        <div class="contenedor-titulo">    
-                            <p>Bitácora de servicios</p>
-                        </div>  
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a>
+                                    <% for (Object objeto : lstObjeto) {
+                                            WS_Bit bitacora = (WS_Bit) objeto;
+                                    %>
+                                    <tr>
+                                        <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitFch())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(bitacora.getUsuario().getWsUsr())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(bitacora.getWsSrv())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitEst())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitDet())); %> </td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                                
+                            </div>
                         </div>
-                        
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Fecha</th>
-                                    <th>Usuario</th>
-                                    <th>Servicio</th>
-                                    <th>Estado</th>
-                                    <th>Detalle</th>
-                                </tr>
-                            </thead>
-
-                            <% for (Object objeto : lstObjeto) {
-                                    WS_Bit bitacora = (WS_Bit) objeto;
-                            %>
-                            <tr>
-                                <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitFch())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(bitacora.getUsuario().getWsUsr())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(bitacora.getWsSrv())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitEst())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(bitacora.getWsBitDet())); %> </td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
+        
         
         <!-- PopUp para depurar -->
 
