@@ -100,7 +100,12 @@
                     return true;
                 }
                 
-                function procesarDatos(){
+                
+
+            });
+
+
+function procesarDatos(){
                     var PerCod= $('#PerCod').val();
                     var PerApe= $('#PerApe').val();
                     var PerDoc= $('#PerDoc').val();
@@ -177,8 +182,6 @@
                         });
                     
                 }
-
-            });
 
         </script>
 
