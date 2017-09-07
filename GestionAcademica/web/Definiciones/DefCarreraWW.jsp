@@ -14,7 +14,6 @@
 <%@page import="Entidad.Carrera"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
@@ -47,6 +46,7 @@
     String tblCarreraVisible = (lstCarrera.size() > 0 ? "" : "display: none;");
 %>
 
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -55,55 +55,56 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido"  class="main-panel">
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Carreras</p>
-                        </div>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            CARRERAS
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table class='table table-hover' style=' <% out.print(tblCarreraVisible); %>'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Facultad</th>
+                                            <th>Categoría</th>
+                                        </tr>    
+                                    </thead>
+                                    <% 
+                                        for (Object obj : lstCarrera) {
+                                            Carrera car = (Carrera) obj;
+                                    %>
+                                    <tr>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
+                                        <td><% out.print(utilidad.NuloToCero(car.getCarCod())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(car.getCarNom())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(car.getCarDsc())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(car.getCarFac())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(car.getCarCrt())); %></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
                         </div>
-
-                        <table style=' <% out.print(tblCarreraVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Facultad</th>
-                                    <th>Categoría</th>
-                                </tr>    
-                            </thead>
-                            <%
-                                for (Object obj : lstCarrera) {
-                                    Carrera car = (Carrera) obj;
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefCarrera.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(car.getCarCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
-                                <td><% out.print(utilidad.NuloToCero(car.getCarCod())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(car.getCarNom())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(car.getCarDsc())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(car.getCarFac())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(car.getCarCrt())); %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div> 
+        </div>
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>

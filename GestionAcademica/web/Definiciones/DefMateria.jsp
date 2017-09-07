@@ -48,9 +48,7 @@
     String MatCod = request.getParameter("pMatCod");
     Modo mode = Modo.valueOf(request.getParameter("MODO"));
     String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefMateriaSWW.jsp?MODO=" + mode.DISPLAY + "&pPlaEstCod=" + PlaEstCod + "&pCarCod=" + CarCod + "');";
-    String CamposActivos = "disabled";
-    String boton = "";
-
+ 
     if (mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE)) {
         Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(CarCod));
         if (!retorno.SurgioErrorObjetoRequerido()) {
@@ -61,23 +59,22 @@
             out.print(retorno.getMensaje().toString());
         }
     }
+    
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (mode) {
         case INSERT:
             CamposActivos = "enabled";
-            boton = "<input name='BtnAceMat' id='BtnAceMat' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            boton = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimMateria'/>";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
-            boton = "<input name='BtnAceMat' id='BtnAceMat' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
-            boton = "<input name='BtnAceMat' id='BtnAceMat' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton    = "MODIFICAR";
             break;
     }
 %>
@@ -91,7 +88,41 @@
         <script>
             $(document).ready(function ()
             {
-                $('#BtnAceMat').click(function ()
+                $('#btn_guardar').click(function ()
+                {
+                    if($(this).data("accion") == "<%=mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                $('#btn_conf_eliminar').click(function()
+                {
+                    procesarDatos();
+                });
+                    
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                function procesarDatos()
                 {
                     var vCarCod = $('#CarCod').val();
                     var PlaEstCod = $('#PlaEstCod').val();
@@ -102,137 +133,152 @@
                     var MatTpoPer = $('select[name=MatTpoPer]').val();
                     var MatPerVal = $('#MatPerVal').val();
                     var PreMatCod = $('#PreMatCod').val();
-                    var accion = $('#MODO').val();
+                    
+                    var modo = $('#MODO').val();
 
-                    if (MatNom == '' && $('#MODO').val() != "DELETE")
+                    // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                    $.post('<% out.print(urlSistema); %>ABM_Materia',
                     {
-                        MostrarMensaje("ERROR", "Deberá asignar un nombre a la Materia");
-                    } else
-                    {
-                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                        $.post('<% out.print(urlSistema); %>ABM_Materia', {
-                            pCarCod: vCarCod,
-                            pPlaEstCod: PlaEstCod,
-                            pMatCod: MatCod,
-                            pMatNom: MatNom,
-                            pMatCntHor: MatCntHor,
-                            pMatTpoApr: MatTpoApr,
-                            pMatTpoPer: MatTpoPer,
-                            pMatPerVal: MatPerVal,
-                            pPreMatCod: PreMatCod,
-                            pAccion: accion
-                        }, function (responseText) {
-                            var obj = JSON.parse(responseText);
+                        pCarCod: vCarCod,
+                        pPlaEstCod: PlaEstCod,
+                        pMatCod: MatCod,
+                        pMatNom: MatNom,
+                        pMatCntHor: MatCntHor,
+                        pMatTpoApr: MatTpoApr,
+                        pMatTpoPer: MatTpoPer,
+                        pMatPerVal: MatPerVal,
+                        pPreMatCod: PreMatCod,
+                        pAction: modo
+                    }, function (responseText) {
+                        var obj = JSON.parse(responseText);
 
-                            if (obj.tipoMensaje != 'ERROR')
-                            {
-            <%out.print(js_redirect);%>
-                            } else
-                            {
-                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                            }
-                        });
-                    }
-                });
+                        if (obj.tipoMensaje != 'ERROR')
+                        {
+                            <%=js_redirect%>
+                        } 
+                    });
+                }
             });
         </script>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
                             <jsp:include page="/Definiciones/DefMateriaTabs.jsp"/>
-                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
 
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>">Regresar</a></div>
-                        </div>
+                                                            <!-- DATOS PERSONALES -->
+                                                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                                                                <input type="hidden" name="PlaEstCod" id="PlaEstCod" value="<% out.print(PlaEstCod); %>">
+                                                                <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
+                                                            </div>
 
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
-                            <input type="hidden" name="PlaEstCod" id="PlaEstCod" value="<% out.print(PlaEstCod); %>">
-                            <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
-                        </div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2 class="">Datos de la Materia</h2>
+                                                            </div>
 
-                        <form id="frm_objeto" name="frm_objeto">
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="MatCod" name="MatCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(mat.getMatCod())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="MatNom" name="MatName" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Cantidad de horas</label><div class="col-lg-6"><input type="number" required step="0.5" class=" form-control inputs_generales" id="MatCntHor" name="MatCntHor" placeholder="Cantidad de horas" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatCntHor())); %>"></div></div>
 
-                            <div><label>Código</label><input type="number" class="form-control" id="MatCod" name="MatCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(mat.getMatCod())); %>"></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="MatNom" name="MatName" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>"></div>
-                            <div><label>Cantidad de horas</label><input type="number" step="0.5" class="form-control" id="MatCntHor" name="MatCntHor" placeholder="Cantidad de horas" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatCntHor())); %>"></div>
-                            <div><label>Tipo de aprobación</label> 
-                                <select class="form-control" id="MatTpoApr" name="MatTpoApr" <%out.print(CamposActivos);%>>
-                                    <%
-                                        for(TipoAprobacion tpoApr : TipoAprobacion.values())
-                                        {
-                                            if(mat.getMatTpoApr() == tpoApr)
-                                            {
-                                                out.println("<option selected value='" + tpoApr.getTipoAprobacionC() + "'>" + tpoApr.getTipoAprobacionN() + "</option>");
-                                            }
-                                            else
-                                            {
-                                                out.println("<option value='" + tpoApr.getTipoAprobacionC() + "'>" + tpoApr.getTipoAprobacionN() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
+                                                            <div class="form-group ">
+                                                                <label for="cname" class="control-label col-lg-3">Tipo de aprobación</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control" id="MatTpoApr" name="MatTpoApr" <%out.print(CamposActivos);%>>
+                                                                        <%
+                                                                            for(TipoAprobacion tpoApr : TipoAprobacion.values())
+                                                                            {
+                                                                                if(mat.getMatTpoApr() == tpoApr)
+                                                                                {
+                                                                                    out.println("<option selected value='" + tpoApr.getTipoAprobacionC() + "'>" + tpoApr.getTipoAprobacionN() + "</option>");
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    out.println("<option value='" + tpoApr.getTipoAprobacionC() + "'>" + tpoApr.getTipoAprobacionN() + "</option>");
+                                                                                }
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group ">
+                                                                <label for="cname" class="control-label col-lg-3">Tipo de Período</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control" id="MatTpoPer" name="MatTpoPer" <%out.print(CamposActivos);%>>
+                                                                        <%
+                                                                            for(TipoPeriodo tpoPer : TipoPeriodo.values())
+                                                                            {
+                                                                                if(mat.getMatTpoPer() == tpoPer)
+                                                                                {
+                                                                                    out.println("<option selected value='" + tpoPer.getTipoPeriodo() + "'>" + tpoPer.getTipoPeriodoNombre() + "</option>");
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                    out.println("<option value='" + tpoPer.getTipoPeriodo() + "'>" + tpoPer.getTipoPeriodoNombre() + "</option>");
+                                                                                }
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Valor del Período</label><div class="col-lg-6"><input type="number" required step="0.5" class="form-control" id="MatPerVal" name="MatPerVal" placeholder="Valor del Período" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %>"></div></div>
+
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input type="button" class="btn <%=nameClass%>" data-accion="<%=mode%>" name="btn_guardar" id="btn_guardar" value="<%=nameButton%>">
+                                                                    <input type="button" class="btn btn-default" onclick="<%=js_redirect%>" value="CANCELAR">
+                                                                </div>
+                                                            </div>              
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <label>Tipo de Período</label>      
-                            <select class="form-control" id="MatTpoPer" name="MatTpoPer" <%out.print(CamposActivos);%>>
-                                <%
-                                    for(TipoPeriodo tpoPer : TipoPeriodo.values())
-                                    {
-                                        if(mat.getMatTpoPer() == tpoPer)
-                                        {
-                                            out.println("<option selected value='" + tpoPer.getTipoPeriodo() + "'>" + tpoPer.getTipoPeriodoNombre() + "</option>");
-                                        }
-                                        else
-                                        {
-                                            out.println("<option value='" + tpoPer.getTipoPeriodo() + "'>" + tpoPer.getTipoPeriodoNombre() + "</option>");
-                                        }
-                                    }
-                                %>
-                            </select>
-                            <div><label>Valor del Período</label><input type="number" step="0.5" class="form-control" id="MatPerVal" name="MatPerVal" placeholder="Valor del Período" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %>"></div>
-
-                            <div>
-                                <%out.print(boton);%>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href = '<%out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>'"/>
-                            </div>                
-                        </form>
-                    </div>                                            
+                        </div>
+                    </section>                                           
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
-
+        <jsp:include page="/masterPage/footer.jsp"/>
+                                
         <!--Popup Confirmar Eliminación-->
-        <div id="PopUpElimMateria" class="modal fade" role="dialog">
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Eliminar Materia</h4>
+                        <h4 class="modal-title">Eliminar</h4>
                     </div>
                     <div class="modal-body">
                         <div>
-                            <h4>¿Seguro que quiere eliminar la Materia: <% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>?</h4>
-                            <h4>Se eliminará tambien las Evaluaciones que contenga</h4>
+                            <h4>Confirma eliminación?</h4>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input name="BtnAceMat" id="BtnAceMat" value="Confirmar" type="button" class="btn btn-success"/>
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>

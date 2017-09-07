@@ -22,7 +22,6 @@
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     LoCarrera loCar = LoCarrera.GetInstancia();
-    Carrera car = new Carrera();
     String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -41,9 +40,9 @@
     //----------------------------------------------------------------------------------------------------
     String CarCod = request.getParameter("pCarCod");
     Modo mode = Modo.valueOf(request.getParameter("MODO"));
-    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefCarreraWW.jsp');";
-    String CamposActivos = "disabled";
-    String boton = "";
+    String js_redirect = "location.replace('" + urlSistema + "Definiciones/DefCarreraWW.jsp');";
+    
+    Carrera car = new Carrera();
 
     if (mode.equals(Modo.UPDATE) || mode.equals(Modo.DISPLAY) || mode.equals(Modo.DELETE)) {
         Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(CarCod));
@@ -53,24 +52,22 @@
             out.print(retorno.getMensaje().toString());
         }
     }
-
+    
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
+    
     switch (mode) {
         case INSERT:
             CamposActivos = "enabled";
-            boton = "<input name='BtnAceCar' id='BtnAceCar' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            boton = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimCarrera'/>";
-//            boton           = "btn btn-danger";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
-            boton = "<input name='BtnAceCar' id='BtnAceCar' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
-            boton = "<input name='BtnAceCar' id='BtnAceCar' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton    = "MODIFICAR";
             break;
     }
 %>
@@ -82,9 +79,43 @@
         <jsp:include page="/masterPage/head.jsp"/>
 
         <script>
-            $(document).ready(function () {
-
-                $('#BtnAceCar').click(function ()
+            $(document).ready(function () 
+            {
+                $('#btn_guardar').click(function ()
+                {
+                    if($(this).data("accion") == "<%=mode.DELETE%>")
+                    {
+                        $(function () 
+                        {
+                            $('#PopUpConfEliminar').modal('show');
+                        })
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                $('#btn_conf_eliminar').click(function()
+                {
+                    procesarDatos();
+                });
+                
+                function validarDatos()
+                {    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+                    return true;
+                }
+                
+                function procesarDatos()
                 {
                     var codVar = $('#CarCod').val();
                     var nomVar = $('#CarNom').val();
@@ -92,145 +123,117 @@
                     var facVar = $('#CarFac').val();
                     var crtVar = $('#CarCrt').val();
 
-                    if (nomVar == '' && $('#MODO').val() != "DELETE")
+                    var modo = $('#MODO').val();
+
+                    // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                    $.post('<%=urlSistema%>ABM_Carrera', 
                     {
-                        MostrarMensaje("ERROR", "Deberá asignar un nombre a la Carrera");
-                    } else
-                    {
-                        if ($('#MODO').val() == "INSERT")
-                        {
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                                pNom: nomVar,
-                                pDsc: dscVar,
-                                pfac: facVar,
-                                pCrt: crtVar,
-                                pAccion: "INGRESAR"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
+                        pCod: codVar,
+                        pNom: nomVar,
+                        pDsc: dscVar,
+                        pfac: facVar,
+                        pCrt: crtVar,
 
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-            <%out.print(js_redirect);%>
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-                            });
-                        }
-
-                        if ($('#MODO').val() == "UPDATE")
-                        {
-                            // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                                pCod: codVar,
-                                pNom: nomVar,
-                                pDsc: dscVar,
-                                pfac: facVar,
-                                pCrt: crtVar,
-                                pAccion: "MODIFICAR"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
-
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-            <%out.print(js_redirect);%>
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-                            });
-                        }
-
-                        if ($('#MODO').val() == "DELETE")
-                        {
-                            $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                                pCod: codVar,
-                                pAccion: "ELIMINAR"
-                            }, function (responseText) {
-                                var obj = JSON.parse(responseText);
-
-                                if (obj.tipoMensaje != 'ERROR')
-                                {
-            <%out.print(js_redirect);%>
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
-                            });
-                        }
+                        pAction: modo
                     }
-                });
+                    , function (responseText) 
+                    {
+                        var obj = JSON.parse(responseText);
+
+                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                        if (obj.tipoMensaje != 'ERROR')
+                        {
+                            <%=js_redirect%>
+                        } 
+
+                    });
+                }
             });
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
                             <jsp:include page="/Definiciones/DefCarreraTabs.jsp"/>
-                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
 
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>">Regresar</a></div>
-                        </div>
+                                                            <!-- DATOS PERSONALES -->
+                                                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                                                            </div>
 
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
-                        </div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2 class="">Datos de la Carrera</h2>
+                                                            </div>
 
-                        <form id="frm_objeto" name="frm_objeto">
-                            <div><label>Código</label><input type="number" class="form-control" id="CarCod" name="CarCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(car.getCarCod())); %>"></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="CarNom" name="CarNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(car.getCarNom())); %>"></div>
-                            <div><label>Descripción</label><input type="text" class="form-control" id="CarDsc" name="CarDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(car.getCarDsc())); %>"></div>
-                            <div><label>Facultad</label><input type="text" class="form-control" id="CarFac" name="CarFac" placeholder="Facultad" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(car.getCarFac())); %>"></div>
-                            <div><label>Certificación</label><input type="text" class="form-control" id="CarCrt" name="CarCrt" placeholder="Certificación" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(car.getCarCrt())); %>"></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="CarCod" name="CarCod" disabled value="<%=utilidad.NuloToVacio(car.getCarCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="CarNom" name="CarNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(car.getCarNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Descripción</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="CarDsc" name="CarDsc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(car.getCarDsc())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Facultad</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="CarFac" name="CarFac" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(car.getCarFac())%>" ></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Certificación</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="CarCrt" name="CarCrt" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(car.getCarCrt())%>" ></div></div>
 
-                            <br>
-                            <div>
-                                <%out.print(boton);%> 
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href = '<%out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp'"/>
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input type="button" class="btn <%=nameClass%>" data-accion="<%=mode%>" name="btn_guardar" id="btn_guardar" value="<%=nameButton%>">
+                                                                    <input type="button" class="btn btn-default" onclick="<%=js_redirect%>" value="CANCELAR">
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                                
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>   
+                    </section>        
                 </div>
-            </div>   
-
-            <jsp:include page="/masterPage/footer.jsp"/>
+            </div>
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+                            
         <!--Popup Confirmar Eliminación-->
-        <div id="PopUpElimCarrera" class="modal fade" role="dialog">
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Eliminar Carrera</h4>
+                        <h4 class="modal-title">Eliminar</h4>
                     </div>
                     <div class="modal-body">
                         <div>
-                            <h4>¿Desea eliminar la Carrera: <% out.print(utilidad.NuloToVacio(car.getCarNom()));%>?</h4>
-                            <h4>Se eliminará tambien los Planes, Materias y Evaluaciones que contenga</h4>
+                            <h4>Confirma eliminación?</h4>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input name="BtnAceCar" id="BtnAceCar" value="Confirmar" type="button" class="btn btn-success" />
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-        </div>                       
+        </div> 
     </body>
 </html>

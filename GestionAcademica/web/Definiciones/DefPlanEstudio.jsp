@@ -17,7 +17,7 @@
 <%@page import="Entidad.PlanEstudio"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     PlanEstudio plan = new PlanEstudio();
@@ -42,8 +42,7 @@
     String PlaEstCod = request.getParameter("pPlaEstCod");
     String CarCod = request.getParameter("pCarCod");
     Modo mode = Modo.valueOf(request.getParameter("MODO"));
-    String js_redirect = "window.location.replace('" + urlSistema + "Definiciones/DefPlanEstudioSWW.jsp?MODO=" + Enumerado.Modo.DISPLAY + "&pCarCod=" + CarCod + "');";
-    String CamposActivos = "disabled";
+    String js_redirect = "location.replace('" + urlSistema + "Definiciones/DefPlanEstudioSWW.jsp?MODO=" + Enumerado.Modo.DISPLAY + "&pCarCod=" + CarCod + "');";
     String boton = "";
 
     Carrera car = new Carrera();
@@ -60,26 +59,26 @@
         plan = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
     }
 
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
+    
     switch (mode) {
         case INSERT:
-            CamposActivos = "enabled";
-            boton = "<input name='BtnAcePla' id='BtnAcePla' value='Guardar' type='button' class='btn btn-success' />";
+            CamposActivos   = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            boton = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimPlan'/>";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
-            boton = "<input name='BtnAcePla' id='BtnAcePla' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton      = "ELIMINAR";
+            nameClass       = "btn-danger";
             break;
         case UPDATE:
-            CamposActivos = "enabled";
-            boton = "<input name='BtnAcePla' id='BtnAcePla' value='Guardar' type='button' class='btn btn-success' />";
+            CamposActivos   = "enabled";
+            nameButton      = "MODIFICAR";
             break;
     }
 %>
 
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -89,117 +88,152 @@
         <script>
             $(document).ready(function ()
             {
-                MostrarCargando(false);
-
-                $('#BtnAcePla').click(function ()
+                $('#btn_guardar').click(function ()
                 {
-                    MostrarCargando(true);
+                    if($(this).data("accion") == "<%=mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                $('#btn_conf_eliminar').click(function()
+                {
+                    procesarDatos();
+                });
+            
+                function validarDatos()
+                {
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                function procesarDatos()
+                {                    
                     var PlaEstCod = $('#PlaEstCod').val();
                     var PlaEstNom = $('#PlaEstNom').val();
                     var PlaEstDsc = $('#PlaEstDsc').val();
                     var PlaEstCre = $('#PlaEstCre').val();
                     var CarCod = $('#CarCod').val();
-                    var accion = $('#MODO').val();
 
-                    if (PlaEstNom == '' && $('#MODO').val() != "DELETE")
+                    var modo = $('#MODO').val();
+
+                    // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
+                    $.post('<% out.print(urlSistema); %>ABM_PlanEstudio', 
                     {
-                        MostrarMensaje("ERROR", "Deberá asignar un nombre al Plan de Estudio");
-                        MostrarCargando(false);
-                    } else
-                    {
-                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                        $.post('<% out.print(urlSistema); %>ABM_PlanEstudio', {
-                            pPlaEstCod: PlaEstCod,
-                            pPlaEstNom: PlaEstNom,
-                            pPlaEstDsc: PlaEstDsc,
-                            pPlaEstCreNec: PlaEstCre,
-                            pCarCod: CarCod,
-                            pAccion: accion
-                        }, function (responseText) {
-                            var obj = JSON.parse(responseText);
-                            MostrarCargando(false);
-                            if (obj.tipoMensaje != 'ERROR')
-                            {
-            <%out.print(js_redirect);%>
-                            } else
-                            {
-                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                            }
-                        });
-                    }
-                });
+                        pPlaEstCod: PlaEstCod,
+                        pPlaEstNom: PlaEstNom,
+                        pPlaEstDsc: PlaEstDsc,
+                        pPlaEstCreNec: PlaEstCre,
+                        pCarCod: CarCod,
+                        pAction: modo
+                    }, function (responseText) {
+                        var obj = JSON.parse(responseText);
+
+                        MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                        if (obj.tipoMensaje != 'ERROR')
+                        {
+                            <%=js_redirect%>
+                        } 
+                    });
+                }
             });
         </script>
-
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefPlanEstudioTabs.jsp"/>                        
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+                                                            <!-- DATOS PERSONALES -->
+                                                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                                <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
+                                                                <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
+                                                            </div>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2 class="">Datos del Plan</h2>
+                                                            </div>
 
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPlanEstudioTabs.jsp"/>
-                        </div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class="form-control" id="PlaEstCod" name="PlaEstCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(plan.getPlaEstCod())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" class="form-control" required class=" form-control inputs_generales" id="PlaEstNom" name="PlaEstNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(plan.getPlaEstNom())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Descripción</label><div class="col-lg-6"><input type="text" class="form-control" required id="PlaEstDsc" name="PlaEstDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(plan.getPlaEstDsc())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Creditos Necesarios</label><div class="col-lg-6"><input type="text" class="form-control" required class=" form-control inputs_generales" id="PlaEstCre" name="PlaEstCre" placeholder="Creditos Necesarios" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(plan.getPlaEstCreNec())); %>"></div></div>                                    
 
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod);%>">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
-                            <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>Código</label><input type="text" class="form-control" id="PlaEstCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(plan.getPlaEstCod())); %>"></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="PlaEstNom" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(plan.getPlaEstNom())); %>"></div>
-                            <div><label>Descripción</label><input type="text" class="form-control" id="PlaEstDsc" placeholder="Descripción" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(plan.getPlaEstDsc())); %>"></div>
-                            <div><label>Creditos Necesarios</label><input type="text" class="form-control" id="PlaEstCre" placeholder="Creditos Necesarios" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToCero(plan.getPlaEstCreNec())); %>"></div>                                    
-
-                            <br>
-                            <div>
-                                <%out.print(boton);%>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="self.location.href = '<%out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<% out.print(Enumerado.Modo.DISPLAY); %>&pCarCod=<%out.print(CarCod.toString());%>'"/>
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input type="button" class="btn <%=nameClass%>" data-accion="<%=mode%>" name="btn_guardar" id="btn_guardar" value="<%=nameButton%>">
+                                                                    <input type="button" class="btn btn-default" onclick="<%=js_redirect%>" value="CANCELAR">
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+
         <!--Popup Confirmar Eliminación-->
-        <div id="PopUpElimPlan" class="modal fade" role="dialog">
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Eliminar Plan</h4>
+                        <h4 class="modal-title">Eliminar</h4>
                     </div>
                     <div class="modal-body">
                         <div>
-                            <h4>¿Seguro que quiere eliminar el Plan: <% out.print(utilidad.NuloToVacio(plan.getPlaEstNom()));%>?</h4>
-                            <h4>Se eliminará tambien las Materias y Evaluaciones que contenga</h4>
+                            <h4>Confirma eliminación?</h4>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input name="BtnAcePla" id="BtnAcePla" value="Confirmar" type="button" class="btn btn-success" />
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-        </div>          
+        </div>         
     </body>
 </html>

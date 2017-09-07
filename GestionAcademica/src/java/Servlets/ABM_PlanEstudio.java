@@ -15,6 +15,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +46,7 @@ public class ABM_PlanEstudio extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            String action   = request.getParameter("pAccion");
+            String action   = request.getParameter("pAction");
             String retorno  = "";
             
             switch(action)
@@ -83,18 +85,16 @@ public class ABM_PlanEstudio extends HttpServlet {
 
             if(!error)
             {
-                System.out.println("1");
                 Retorno_MsgObj retornoObj = (Retorno_MsgObj) LoCarrera.GetInstancia().PlanEstudioAgregar(plan);
                 mensaje    = retornoObj.getMensaje();
             }
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
-        System.out.println("RETORNO EN ABM_PlanEstudio: "+mensaje);
         String retorno = utilidades.ObjetoToJson(mensaje);
+        
         return retorno;
     }
     
@@ -144,8 +144,7 @@ public class ABM_PlanEstudio extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         String retorno = utilidades.ObjetoToJson(mensaje);
         return retorno;
@@ -184,8 +183,7 @@ public class ABM_PlanEstudio extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return utilidades.ObjetoToJson(mensaje);
     }
@@ -196,6 +194,9 @@ public class ABM_PlanEstudio extends HttpServlet {
         {
             plan = new PlanEstudio();
         }
+        
+        try
+        {
             String PlaEstNom    = request.getParameter("pPlaEstNom");
             String PlaEstDsc    = request.getParameter("pPlaEstDsc");
             String PlaEstCreNec = request.getParameter("pPlaEstCreNec");
@@ -209,8 +210,17 @@ public class ABM_PlanEstudio extends HttpServlet {
             plan.setPlaEstDsc(PlaEstDsc);
             plan.setPlaEstCreNec(Double.valueOf(PlaEstCreNec).doubleValue());
             plan.setCarrera((Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod)).getObjeto());
+        }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
             
-            return plan;
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+        }
+        
+        return plan;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

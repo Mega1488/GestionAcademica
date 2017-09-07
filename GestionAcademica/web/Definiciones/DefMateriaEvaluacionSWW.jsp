@@ -67,70 +67,66 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefMateriaTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=DISPLAY&pCarCod=<% out.print(CarCod); %>&pPlaEstCod=<% out.print(PlaEstCod); %>&pMatCod=<% out.print(MatCod); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                            
+                        <jsp:include page="/Definiciones/DefMateriaTabs.jsp"/>
+                            
+                        <div class="contenedor_agregar">
                             <a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pRelacion=MATERIA&pCarCod=<% out.print(car.getCarCod()); %>&pPlaEstCod=<% out.print(plan.getPlaEstCod()); %>&pMatCod=<% out.print(mat.getMatCod()); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="CarCod" id="CurCod" value="<% out.print(car.getCarCod()); %>">
-                            <input type="hidden" name="PlaEstCod" id="ModCod" value="<% out.print(plan.getPlaEstCod()); %>">
-                            <input type="hidden" name="MatCod" id="ModCod" value="<% out.print(mat.getMatCod()); %>">
                         </div>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <div class=""> 
+                                    <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                    <input type="hidden" name="CarCod" id="CurCod" value="<% out.print(car.getCarCod()); %>">
+                                    <input type="hidden" name="PlaEstCod" id="ModCod" value="<% out.print(plan.getPlaEstCod()); %>">
+                                    <input type="hidden" name="MatCod" id="ModCod" value="<% out.print(mat.getMatCod()); %>">
+                                </div>
 
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Tipo</th>
-                                    <th>Nota toal</th>
-                                </tr>
-                            </thead>
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                            <th>Tipo</th>
+                                            <th>Nota toal</th>
+                                        </tr>
+                                    </thead>
 
-                            <% for (Evaluacion evaluacion : mat.getLstEvaluacion()) {
+                                    <% for (Evaluacion evaluacion : mat.getLstEvaluacion()) {
 
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pRelacion=MATERIA&pCarCod=<% out.print(car.getCarCod()); %>&pPlaEstCod=<% out.print(plan.getPlaEstCod()); %>&pMatCod=<% out.print(mat.getMatCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_eliminar" id="btn_eliminar" title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pRelacion=MATERIA&pCarCod=<% out.print(car.getCarCod()); %>&pPlaEstCod=<% out.print(plan.getPlaEstCod()); %>&pMatCod=<% out.print(mat.getMatCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_editar" id="btn_editar" title='Editar' class='glyphicon glyphicon-edit btn_editar'></a></td>
+                                    %>
+                                    <tr>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pRelacion=MATERIA&pCarCod=<% out.print(car.getCarCod()); %>&pPlaEstCod=<% out.print(plan.getPlaEstCod()); %>&pMatCod=<% out.print(mat.getMatCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_eliminar" id="btn_eliminar" title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefEvaluacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pRelacion=MATERIA&pCarCod=<% out.print(car.getCarCod()); %>&pPlaEstCod=<% out.print(plan.getPlaEstCod()); %>&pMatCod=<% out.print(mat.getMatCod()); %>&pEvlCod=<% out.print(evaluacion.getEvlCod()); %>" name="btn_editar" id="btn_editar" title='Editar' class='glyphicon glyphicon-edit btn_editar'></a></td>
 
-                                <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlNom())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlDsc())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(evaluacion.getTpoEvl().getTpoEvlNom())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlNotTot())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlNom())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlDsc())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(evaluacion.getTpoEvl().getTpoEvlNom())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(evaluacion.getEvlNotTot())); %> </td>
 
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
+            </div>  
         </div>
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>
