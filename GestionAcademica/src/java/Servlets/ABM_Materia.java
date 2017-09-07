@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -51,7 +53,7 @@ public class ABM_Materia extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            String action   = request.getParameter("pAccion");
+            String action   = request.getParameter("pAction");
             String retorno  = "";
             
             switch(action)
@@ -100,8 +102,7 @@ public class ABM_Materia extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         String retorno = utilidades.ObjetoToJson(mensaje);
         return retorno;
@@ -159,8 +160,7 @@ public class ABM_Materia extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         String retorno = utilidades.ObjetoToJson(mensaje);
         return retorno;
@@ -182,7 +182,7 @@ public class ABM_Materia extends HttpServlet {
             
             Retorno_MsgObj retorno = LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod));
             error = retorno.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || retorno.getObjeto() == null;
-            
+
             if(!error)
             {
                 plan = ((Carrera) retorno.getObjeto()).getPlanEstudioById(Long.valueOf(PlaEstCod));
@@ -203,8 +203,7 @@ public class ABM_Materia extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al Eliminar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         return utilidades.ObjetoToJson(mensaje);
     }

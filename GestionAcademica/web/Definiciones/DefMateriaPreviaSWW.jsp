@@ -70,73 +70,63 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefMateriaTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefMateriaSWW.jsp?MODO=DISPLAY&pCarCod=<% out.print(CarCod); %>&pPlaEstCod=<% out.print(PlaEstCod); %>&pMatCod=<% out.print(MatCod); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefMateriaTabs.jsp"/>
+                        <div class="contenedor_agregar">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
-                            <input type="hidden" name="PlaEstCod" id="PlaEstCod" value="<% out.print(PlaEstCod); %>">
-                            <input type="hidden" name="MatCod" id="MatCod" value="<% out.print(MatCod); %>">
                         </div>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+                                    <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                    <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
+                                    <input type="hidden" name="PlaEstCod" id="PlaEstCod" value="<% out.print(PlaEstCod); %>">
+                                    <input type="hidden" name="MatCod" id="MatCod" value="<% out.print(MatCod); %>">
+                                </div>
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad de Horas</th>
+                                            <th>Tipo de Aprobación</th>
+                                            <th>Tipo de Período</th>
+                                            <th>Valor del Período</th>
+                                            <th>Materias Previas</th>
+                                        </tr>
+                                    </thead>
 
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Cantidad de Horas</th>
-                                    <th>Tipo de Aprobación</th>
-                                    <th>Tipo de Período</th>
-                                    <th>Valor del Período</th>
-                                    <th>Materias Previas</th>
-                                </tr>
-                            </thead>
-
-                            <%
-                                for (MateriaPrevia matPrevia : lstMatPrevia) {
-                            %>
-                            <tr>
-                                <td><% out.print("<a href='#' data-codigo='" + matPrevia.getMatPreCod() + "' data-nombre='" + matPrevia.getMateriaPrevia().getMatNom() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatNom())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatCntHor())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatTpoApr().getTipoAprobacionN())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatTpoPer().getTipoPeriodoNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatPerVal())); %> </td>
-                                <td><%out.print(utilidad.NuloToCero(matPrevia.getMateriaPrevia().getLstPrevias().size())); %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                                    <%
+                                        for (MateriaPrevia matPrevia : lstMatPrevia) {
+                                    %>
+                                    <tr>
+                                        <td><% out.print("<a href='#' data-codigo='" + matPrevia.getMatPreCod() + "' data-nombre='" + matPrevia.getMateriaPrevia().getMatNom() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatNom())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatCntHor())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatTpoApr().getTipoAprobacionN())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatTpoPer().getTipoPeriodoNombre())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(matPrevia.getMateriaPrevia().getMatPerVal())); %> </td>
+                                        <td><%out.print(utilidad.NuloToCero(matPrevia.getMateriaPrevia().getLstPrevias().size())); %></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
-
+        <jsp:include page="/masterPage/footer.jsp"/>
 
         <!-- PopUp para Eliminar -->
 

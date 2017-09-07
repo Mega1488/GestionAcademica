@@ -65,69 +65,58 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido"  class="main-panel">
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPlanEstudioTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefPlanEstudioTabs.jsp"/>
+                        <div class="contenedor_agregar">
                             <a href="<% out.print(urlSistema); %>Definiciones/DefMateria.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pPlaEstCod=<%out.print(PlaEstCod.toString());%>&pCarCod=<%out.print(CarCod.toString());%>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
                         </div>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table class='table table-hover' style=' <% out.print(tblMateriaVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad de Horas</th>
+                                            <th>Tipo de Aprobación</th>
+                                            <th>Tipo de Período</th>
+                                            <th>Valor del Período</th>
+                                            <th>Materias Previas</th>
+                                        </tr>
+                                    </thead>
 
-                        <table style=' <% out.print(tblMateriaVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Cantidad de Horas</th>
-                                    <th>Tipo de Aprobación</th>
-                                    <th>Tipo de Período</th>
-                                    <th>Valor del Período</th>
-                                    <th>Materias Previas</th>
-                                </tr>
-                            </thead>
-
-                            <%
-                                for (Materia mat : lstMaterias) {
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefMateria.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPlaEstCod=<% out.print(PlaEstCod.toString()); %>&pCarCod=<% out.print(CarCod.toString()); %>&pMatCod=<% out.print(mat.getMatCod().toString()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefMateria.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPlaEstCod=<% out.print(PlaEstCod.toString()); %>&pCarCod=<% out.print(CarCod.toString()); %>&pMatCod=<% out.print(mat.getMatCod().toString()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
-                                <td><% out.print(utilidad.NuloToVacio(mat.getMatCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(mat.getMatNom())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(mat.getMatCntHor())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(mat.getMatTpoApr().getTipoAprobacionN())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(mat.getMatTpoPer().getTipoPeriodoNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(mat.getMatPerVal())); %> </td>
-                                <td><%out.print(utilidad.NuloToCero(mat.getLstPrevias().size())); %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-
-                        </table>
-                    </div>
-                </div>    
+                                    <%
+                                        for (Materia mat : lstMaterias) {
+                                    %>
+                                    <tr>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefMateria.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPlaEstCod=<% out.print(PlaEstCod.toString()); %>&pCarCod=<% out.print(CarCod.toString()); %>&pMatCod=<% out.print(mat.getMatCod().toString()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefMateria.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPlaEstCod=<% out.print(PlaEstCod.toString()); %>&pCarCod=<% out.print(CarCod.toString()); %>&pMatCod=<% out.print(mat.getMatCod().toString()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
+                                        <td><% out.print(utilidad.NuloToVacio(mat.getMatCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(mat.getMatNom())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(mat.getMatCntHor())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(mat.getMatTpoApr().getTipoAprobacionN())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(mat.getMatTpoPer().getTipoPeriodoNombre())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(mat.getMatPerVal())); %> </td>
+                                        <td><%out.print(utilidad.NuloToCero(mat.getLstPrevias().size())); %></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
+                        </div>  
+                    </section>
+                </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>

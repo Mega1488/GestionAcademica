@@ -15,7 +15,6 @@
 <%@page import="Entidad.PlanEstudio"%>
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
 
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
@@ -51,7 +50,7 @@
 
     String tblPlanEstudioVisible = (lstPlanEstudio.size() > 0 ? "" : "display: none;");
 %>
-
+<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -60,57 +59,52 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido"  class="main-panel">
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCarreraTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <jsp:include page="/Definiciones/DefCarreraTabs.jsp"/>
+                        <div class="contenedor_agregar">
                             <a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pCarCod=<%out.print(CarCod.toString());%>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                        </div>                     
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table class='table table-hover' style=' <% out.print(tblPlanEstudioVisible); %>'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Descripción</th>
+                                            <th>Creditos Necesarios</th>
+                                        </tr>
+                                    </thead>
+                                    <%
+                                        for (PlanEstudio PE : lstPlanEstudio) {
+                                    %>
+                                    <tr>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(CarCod.toString()); %>&pPlaEstCod=<% out.print(PE.getPlaEstCod()); %>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(CarCod.toString()); %>&pPlaEstCod=<% out.print(PE.getPlaEstCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
+                                        <td><% out.print(utilidad.NuloToCero(PE.getPlaEstCod())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstNom())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstDsc())); %></td>
+                                        <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstCreNec())); %></td>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
                         </div>
-
-                        <table style='<% out.print(tblPlanEstudioVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Creditos Necesarios</th>
-                                </tr>
-                            </thead>
-                            <%
-                                for (PlanEstudio PE : lstPlanEstudio) {
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCarCod=<% out.print(CarCod.toString()); %>&pPlaEstCod=<% out.print(PE.getPlaEstCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudio.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCarCod=<% out.print(CarCod.toString()); %>&pPlaEstCod=<% out.print(PE.getPlaEstCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class="glyphicon glyphicon-edit"></a></td>
-                                <td><% out.print(utilidad.NuloToCero(PE.getPlaEstCod())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstNom())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstDsc())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(PE.getPlaEstCreNec())); %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>

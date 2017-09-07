@@ -13,12 +13,16 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -47,20 +51,35 @@ public class ABM_Carrera extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             
-            String action   = request.getParameter("pAccion");
+            String action   = request.getParameter("pAction");
             String retorno  = "";
             
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            HttpSession session=request.getSession(); 
+            String usuario = (String) session.getAttribute(Enumerado.NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Logica.Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utiles.GetPaginaActual(request));
+
+            if (acceso.SurgioError()) {
+                response.sendRedirect((String) acceso.getObjeto());
+            }
+            
+            System.out.println("ACTION: " + action);
             switch(action)
             {
-                case "INGRESAR":
+                case "INSERT":
                     retorno = this.IngresarCarrera(request);
                 break;
 
-                case "MODIFICAR":
+                case "UPDATE":
                     retorno = this.ModificarCarrera(request);
                 break;
 
-                case "ELIMINAR":
+                case "DELETE":
                     retorno = this.EliminarCarrera(request);
                 break;
                 
@@ -102,11 +121,12 @@ public class ABM_Carrera extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al guardar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
-        return utiles.ObjetoToJson(mensaje);
+        String retorno = utiles.ObjetoToJson(mensaje);
+        
+        return retorno;
     } 
     
     private String ModificarCarrera(HttpServletRequest request)
@@ -134,12 +154,12 @@ public class ABM_Carrera extends HttpServlet {
         }
         catch(Exception ex)
         {
-            mensaje = new Mensajes("Error al actualizar: " + ex.getMessage(), TipoMensaje.ERROR);
-            throw ex;
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
-
+        
+        String retorno = utiles.ObjetoToJson(mensaje);
        
-        return utiles.ObjetoToJson(mensaje);
+        return retorno;
        
     } 
     
@@ -148,14 +168,21 @@ public class ABM_Carrera extends HttpServlet {
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
         
-        Carrera car = this.ValidarCarrera(request, null);
-        
-        if(!error)
+        try
         {
-            Retorno_MsgObj ret  = (Retorno_MsgObj) loCarrera.eliminar(car);
-            mensaje             = ret.getMensaje();
-        }
+            Carrera car = this.ValidarCarrera(request, null);
 
+            if(!error)
+            {
+                Retorno_MsgObj ret  = (Retorno_MsgObj) loCarrera.eliminar(car);
+                mensaje             = ret.getMensaje();
+            }
+        }
+        catch(Exception ex)
+        {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        
         return utiles.ObjetoToJson(mensaje);
     }
     
@@ -189,33 +216,31 @@ public class ABM_Carrera extends HttpServlet {
             car   = new Carrera();
         }
 
+        try
+        {
+            String cod  = request.getParameter("pCod");
+            String nom  = request.getParameter("pNom");
+            String Dsc  = request.getParameter("pDsc");
+            String Fac  = request.getParameter("pfac");
+            String Crt  = request.getParameter("pCrt");
+
+            //Sin validacion
+            if(cod != null) if(!cod.isEmpty()) car = (Carrera) loCarrera.obtener(Long.valueOf(cod)).getObjeto();
+
+            if(nom != null) if(!nom.isEmpty()) car.setCarNom(nom);
+            if(Dsc != null) if(!Dsc.isEmpty()) car.setCarDsc(Dsc);
+            if(Fac != null) if(!Fac.isEmpty()) car.setCarFac(Fac);
+            if(Crt != null) if(!Crt.isEmpty()) car.setCarCrt(Crt);
+
+        }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
             
-                String cod  = request.getParameter("pCod");
-                String nom  = request.getParameter("pNom");
-                String Dsc  = request.getParameter("pDsc");
-                String Fac  = request.getParameter("pfac");
-                String Crt  = request.getParameter("pCrt");
-                
-                
-                //------------------------------------------------------------------------------------------
-                //Validaciones
-                //------------------------------------------------------------------------------------------
-
-                //TIPO DE DATO
-
-                
-
-
-                //Sin validacion
-                if(cod != null) if(!cod.isEmpty()) car = (Carrera) loCarrera.obtener(Long.valueOf(cod)).getObjeto();
-                
-                if(nom != null) if(!nom.isEmpty()) car.setCarNom(nom);
-                if(Dsc != null) if(!Dsc.isEmpty()) car.setCarDsc(Dsc);
-                if(Fac != null) if(!Fac.isEmpty()) car.setCarFac(Fac);
-                if(Crt != null) if(!Crt.isEmpty()) car.setCarCrt(Crt);
-
-                
-                
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+        }
         return car;
     }
 
