@@ -58,65 +58,69 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div class="contenedor-titulo">    
-                            <p>Inconsistencias</p>
-                        </div>
-                        
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            INCONSISTENCIAS
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Administracion/DefSincWW.jsp">Regresar</a>
+                            </span>
+                        </header>
+                        <span class="contenedor_agregar">
                             <a href="#" title="Procesar" class="glyphicon glyphicon-play" id="btn_procesar"> </a>
-                        </div>
+                        </span>
+                        <div class="panel-body">
+                            <div class=" form">
+                                    <!-- CONTENIDO -->
+                                    
+                                    <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                        <input type="hidden" name="SncCod" id="SncCod" value="<%=SncCod%>">
+                                    </div>
 
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Administracion/DefSincWW.jsp">Regresar</a></div>
+                                    <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Codigo</th>
+                                                <th>Registro</th>
+                                                <th>Estado</th>
+                                                <th>Objeto seleccionado</th>
+                                            </tr>    
+                                        </thead>
+                                        <%
+                                            for (SincronizacionInconsistencia inc : sincronizacion.getLstInconsistencia()) {
+                                        %>
+                                        <tr>
+                                            <td><a href="<% out.print(urlSistema); %>Administracion/DefSincInc.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(SncCod); %>&pIncCod=<% out.print(inc.getIncCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
+                                           <td><% out.print(utilidad.NuloToCero(inc.getIncCod())); %></td>
+                                            <td><% out.print(utilidad.NuloToVacio(inc.getObjeto().getObjNom())); %></td>
+                                            <td><% out.print(utilidad.NuloToVacio(inc.getIncEst())); %></td>
+                                            <td><% out.print(utilidad.BooleanToSiNo(inc.TieneObjetoSeleccionado())); %></td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </table>
+                            </div>
                         </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="SncCod" id="SncCod" value="<%=SncCod%>">
-                        </div>
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Codigo</th>
-                                    <th>Registro</th>
-                                    <th>Estado</th>
-                                    <th>Objeto seleccionado</th>
-                                </tr>    
-                            </thead>
-                            <%
-                                for (SincronizacionInconsistencia inc : sincronizacion.getLstInconsistencia()) {
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Administracion/DefSincInc.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(SncCod); %>&pIncCod=<% out.print(inc.getIncCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
-                               <td><% out.print(utilidad.NuloToCero(inc.getIncCod())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(inc.getObjeto().getObjNom())); %></td>
-                                <td><% out.print(utilidad.NuloToVacio(inc.getIncEst())); %></td>
-                                <td><% out.print(utilidad.BooleanToSiNo(inc.TieneObjetoSeleccionado())); %></td>
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
         
+        
+
         <script>
             $(document).ready(function () {
                     $('#btn_procesar').click(function (event) {

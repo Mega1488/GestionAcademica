@@ -58,62 +58,67 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            BITÁCORA DE SINCRONIZACION
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="#" title="Ejecutar" class="glyphicon glyphicon-play" id="ejecutar"> </a>
+                                <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <!-- CONTENIDO -->
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Fecha</th>
+                                            <th>Duración</th>
+                                            <th>Estado</th>
+                                            <th>Registros afectados</th>
+                                            <th>Detalle</th>
+                                        </tr>
+                                    </thead>
 
-                        <div class="contenedor-titulo">    
-                            <p>Bitácora de sincronización</p>
-                        </div>  
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Ejecutar" class="glyphicon glyphicon-play" id="ejecutar"> </a>
-                            <a href="#" title="Depurar" class="glyphicon glyphicon-trash" data-toggle="modal" data-target="#PopUpDepurar"> </a>
+                                    <% for (Object objeto : lstObjeto) {
+                                            Sincronizacion sinc = (Sincronizacion) objeto;
+                                    %>
+                                    <tr>
+                                        <td><a href="#" data-id="<%=sinc.getSncCod()%>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash btn_eliminar"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Administracion/DefSincIncSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(sinc.getSncCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
+                                        <td><% out.print(utilidad.NuloToVacio(sinc.getSncCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(sinc.getSncFch())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(sinc.getSncDur())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(sinc.getSncEst())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(sinc.getSncObjCnt())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(sinc.getSncObjDet())); %> </td>
+
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
                         </div>
-                        
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Fecha</th>
-                                    <th>Duración</th>
-                                    <th>Estado</th>
-                                    <th>Registros afectados</th>
-                                    <th>Detalle</th>
-                                </tr>
-                            </thead>
-
-                            <% for (Object objeto : lstObjeto) {
-                                    Sincronizacion sinc = (Sincronizacion) objeto;
-                            %>
-                            <tr>
-                                <td><a href="#" data-id="<%=sinc.getSncCod()%>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash btn_eliminar"></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Administracion/DefSincIncSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(sinc.getSncCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
-                                <td><% out.print(utilidad.NuloToVacio(sinc.getSncCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(sinc.getSncFch())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(sinc.getSncDur())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(sinc.getSncEst())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(sinc.getSncObjCnt())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(sinc.getSncObjDet())); %> </td>
-                                
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
         
         <!-- PopUp para depurar -->
 

@@ -62,67 +62,97 @@
         <script src="<% out.print(urlSistema); %>JavaScript/JsonViewer/jquery.json-viewer.js"></script>
     </head>
     <body>
+        
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            INCONSISTENCIA
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Administracion/DefSincIncSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(SncCod); %>">Regresar</a>
+                            </span>
+                        </header>
+                        
+			<div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                        </div>
+                                                        
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                        <!-- CONTENIDO -->
+                                                        
+                                                            <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                                <input type="hidden" name="MODO" id="MODO" value="<%=Mode%>">
+                                                                <input type="hidden" id="SncCod" name="SncCod" value="<%=SncCod%>">
+                                                                <input type="hidden" id="IncCod" name="IncCod" value="<%=IncCod%>">
+                                                                <input type="hidden" id="IncObjCod" name="IncObjCod" value="">
+                                                            </div>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+                                                            <div>
+                                                                <div>Código: <label><% out.print(inc.getIncCod()); %></label></div>
+                                                                <div>Registro: <label><% out.print(inc.getObjeto().getObjNom()); %></label></div>
+                                                                <div>Estado: <label><% out.print(inc.getIncEst()); %></label></div>
+                                                                <div>Objeto valido: <label id="lbl_IncObjCod"><% out.print((inc.getObjetoSeleccionado() == null ? "" : inc.getObjetoSeleccionado().getIncObjCod())); %></label></div>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                                                                <label>Objetos</label>                            
+                                                                <div class="row">
+                                                                    <%
+                                                                        for(SincInconsistenciaDatos dat : inc.getLstDatos())
+                                                                        {
+                                                                            String dato = "<div class='col-lg-6'>"
+                                                                                    + "<pre id='jquery_viewer_"+dat.getIncObjCod()+"'></pre>"
+                                                                                    + "<input type='hidden' name='jquery_data_"+dat.getIncObjCod()+"' id='jquery_data_"+dat.getIncObjCod()+"' class='jquery_data' data-value='"+dat.getObjVal()+"' data-id='"+dat.getIncObjCod()+"'/>"
+                                                                                    + "<button data-id='"+dat.getIncObjCod()+"' class='btn btn-default jquery_select'>Seleccionar</button>"
+                                                                                    + "</div>";
 
-                        <div class="contenedor-titulo">    
-                            <p>Inconsistencia</p>
-                        </div>
+                                                                            out.println(dato);
+                                                                        }
+                                                                    %>
 
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Administracion/DefSincIncSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pSncCod=<% out.print(SncCod); %>">Regresar</a></div>
-                        </div>
+                                                                </div>
+                                                                    
+                                                                    <div class="form-group">
+                                                                        <div class="col-lg-offset-3 col-lg-6">
+                                                                            <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn btn-primary"  value="CONFIRMAR" />
+                                                                            <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                        </div>
+                                                                    </div>
 
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<%=Mode%>">
-                            <input type="hidden" id="SncCod" name="SncCod" value="<%=SncCod%>">
-                            <input type="hidden" id="IncCod" name="IncCod" value="<%=IncCod%>">
-                            <input type="hidden" id="IncObjCod" name="IncObjCod" value="">
-                        </div>
-
-                        <div>
-                            <div>Código: <label><% out.print(inc.getIncCod()); %></label></div>
-                            <div>Registro: <label><% out.print(inc.getObjeto().getObjNom()); %></label></div>
-                            <div>Estado: <label><% out.print(inc.getIncEst()); %></label></div>
-                            <div>Objeto valido: <label id="lbl_IncObjCod"><% out.print((inc.getObjetoSeleccionado() == null ? "" : inc.getObjetoSeleccionado().getIncObjCod())); %></label></div>
-
-                            <label>Objetos</label>                            
-                            <div class="row">
-                                <%
-                                    for(SincInconsistenciaDatos dat : inc.getLstDatos())
-                                    {
-                                        String dato = "<div class='col-lg-6'>"
-                                                + "<pre id='jquery_viewer_"+dat.getIncObjCod()+"'></pre>"
-                                                + "<input type='hidden' name='jquery_data_"+dat.getIncObjCod()+"' id='jquery_data_"+dat.getIncObjCod()+"' class='jquery_data' data-value='"+dat.getObjVal()+"' data-id='"+dat.getIncObjCod()+"'/>"
-                                                + "<button data-id='"+dat.getIncObjCod()+"' class='btn btn-default jquery_select'>Seleccionar</button>"
-                                                + "</div>";
-                                        
-                                        out.println(dato);
-                                    }
-                                %>
-                                
-                            </div>
-
-                                <div style="margin-top: 10px;">
-                                    <button id='btn_guardar' class='btn btn-success'>Guardar</button>
-                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                   
+                                                            </div>
+                                                        
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+      
         <script>
             $(document).ready(function () {
                     $('input[class="jquery_data"]').each(function() {

@@ -80,6 +80,17 @@ public class SincronizarWSClient {
             WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
             WsSincronizar port = service.getWsSincronizarPort();
 
+            //-----------------------------------------------------------------
+            //WS SECURITY
+            //-----------------------------------------------------------------
+            Map<String, Object> reqMap = ((BindingProvider) port).getRequestContext();
+            reqMap.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, param.getParUrlSrvSnc());
+            Map<String, List<String>> header = new HashMap<>();
+            header.put("token", Collections.singletonList(token));
+            
+            reqMap.put(MessageContext.HTTP_REQUEST_HEADERS, header);
+            //-----------------------------------------------------------------
+            
             retorno = port.updateFecha(fecha);
 
         } catch (MalformedURLException ex) {
@@ -140,6 +151,16 @@ public class SincronizarWSClient {
             WsSincronizar_Service service = new WsSincronizar_Service(wsUrl);
             WsSincronizar port = service.getWsSincronizarPort();
             
+            //-----------------------------------------------------------------
+            //WS SECURITY
+            //-----------------------------------------------------------------
+            Map<String, Object> reqMap = ((BindingProvider) port).getRequestContext();
+            reqMap.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, param.getParUrlSrvSnc());
+            Map<String, List<String>> header = new HashMap<>();
+            header.put("token", Collections.singletonList(token));
+            
+            reqMap.put(MessageContext.HTTP_REQUEST_HEADERS, header);
+            //-----------------------------------------------------------------
             
             retorno = port.impactarInconsistencia(cambios);
             

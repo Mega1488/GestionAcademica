@@ -205,6 +205,14 @@
                 }
 
         </script>
+        
+        <style>
+            .btn-default{
+                color: #333 !important;
+                background-color: #fff !important;
+                border-color: #ccc !important;
+            }
+        </style>
 
     </head>
     <body>

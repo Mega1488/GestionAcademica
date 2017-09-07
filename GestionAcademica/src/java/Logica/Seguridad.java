@@ -158,12 +158,10 @@ public class Seguridad {
 
         WS_User usr = (WS_User) LoWS.GetInstancia().obtenerByUsrNom(Constantes.WS_USR_WEB.getValor()).getObjeto();
         
-        String wsUsr = usr.getWsUsr();
-        String wsPsw = usr.getWsUsrPsw();
 
         try {
-            wsUsr = this.crypt(wsUsr);
-            wsPsw = this.crypt(wsPsw);
+            String wsUsr = this.crypt(Constantes.WS_USR_WEB.getValor());
+            String wsPsw = this.crypt(Constantes.WS_PSW_WEB.getValor());
 
             token = wsUsr + Constantes.SEPARADOR.getValor() + wsPsw;
 
