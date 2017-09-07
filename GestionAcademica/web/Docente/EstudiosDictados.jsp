@@ -27,7 +27,8 @@
     LoPersona lopersona = LoPersona.GetInstancia();
     LoPeriodo loPer = LoPeriodo.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    
+    String urlSistema = utilidad.GetUrlSistema();
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -83,61 +84,59 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            ESTUDIOS
+                            <span class="tools pull-right">
+                                <div class="hidden-xs">
+                                    <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>">Regresar</a></div>
+                                </div>
+                            </span>
+                        </header>
+                
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table class='table table-hover' style=' <% out.print(tblVisible); %>'>
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Nombre</th>
+                                            <th>Tipo de Estudio</th>
+                                            <th>Alumnos</th>
+                                            <th>Docentes</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div class="contenedor-titulo">    
-                            <p>Estudios</p>
+                                    <tbody>
+                                        <% for (PeriodoEstudio perEstudio : lstObjeto) {
+                                        %>
+                                        <tr>
+                                            <td><%out.print(utilidad.NuloToVacio(perEstudio.getPeriEstCod())); %> </td>
+                                            <td><%out.print(utilidad.NuloToVacio(perEstudio.getEstudioNombre())); %> </td>
+                                            <td><%out.print(utilidad.NuloToVacio(perEstudio.getEstudioTipo()));%></td>
+                                            <td><% out.print(utilidad.NuloToVacio(perEstudio.getCantidadAlumnos())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio((perEstudio.getCantidadDocente())));%> </td>
+                                            <td><a href="<% out.print(urlSistema); %>Docente/EvalPendientes.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(perEstudio.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluaciones" class="glyphicon glyphicon-paste"/></td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>">Regresar</a></div>
-                        </div>
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Tipo de Estudio</th>
-                                    <th>Alumnos</th>
-                                    <th>Docentes</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (PeriodoEstudio perEstudio : lstObjeto) {
-                                %>
-                                <tr>
-                                    <td><%out.print(utilidad.NuloToVacio(perEstudio.getPeriEstCod())); %> </td>
-                                    <td><%out.print(utilidad.NuloToVacio(perEstudio.getEstudioNombre())); %> </td>
-                                    <td><%out.print(utilidad.NuloToVacio(perEstudio.getEstudioTipo()));%></td>
-                                    <td><% out.print(utilidad.NuloToVacio(perEstudio.getCantidadAlumnos())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio((perEstudio.getCantidadDocente())));%> </td>
-                                    <td><a href="<% out.print(urlSistema); %>Docente/EstudioDocumentos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(perEstudio.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-file"/></td>
-                                    <td><a href="<% out.print(urlSistema); %>Docente/EvalPendientes.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(perEstudio.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluaciones" class="glyphicon glyphicon-paste"/></td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div>                             
+        </div>   
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>

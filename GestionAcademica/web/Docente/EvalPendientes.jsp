@@ -18,12 +18,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-//    PerCalendario perCal = new PerCalendario();
     LoPersona lopersona = LoPersona.GetInstancia();
     LoCalendario loCalendario = LoCalendario.GetInstancia();
-//    LoPeriodo loPer             = LoPeriodo.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    
+    String urlSistema = utilidad.GetUrlSistema();
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -67,65 +66,65 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            CALENDARIO
+                            <span class="tools pull-right">
+                                <div class="hidden-xs">
+                                    <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>">Regresar</a></div>
+                                </div>
+                            </span>
+                        </header>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table class='table table-hover' style=' <% out.print(tblVisible); %>'>
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Evaluación</th>
+                                            <th>Carrera/Curso</th>
+                                            <th>Estudio</th>
+                                            <th>Fecha</th>
+                                            <th>Fecha Desde</th>
+                                            <th>Fecha Hasta</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
 
-                        <div class="contenedor-titulo">    
-                            <p>Calendario</p>
+                                    <tbody>
+                                        <% for (Object objeto : lstObjeto) {
+                                                Calendario calendario = (Calendario) objeto;
+                                        %>
+                                        <tr>
+                                            <td><%out.print(utilidad.NuloToVacio(calendario.getCalCod())); %> </td>
+                                            <td><%out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
+                                            <td><%out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre()));%></td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch()));%> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd()));%></td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst()));%></td>
+                                            <td><a href="<% out.print(urlSistema); %>Docente/CalificarAlumnos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluar" class="glyphicon glyphicon-paste"/></td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>">Regresar</a></div>
-                        </div>
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Evaluación</th>
-                                    <th>Carrera/Curso</th>
-                                    <th>Estudio</th>
-                                    <th>Fecha</th>
-                                    <th>Fecha Desde</th>
-                                    <th>Fecha Hasta</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (Object objeto : lstObjeto) {
-                                        Calendario calendario = (Calendario) objeto;
-                                %>
-                                <tr>
-                                    <td><%out.print(utilidad.NuloToVacio(calendario.getCalCod())); %> </td>
-                                    <td><%out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
-                                    <td><%out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre()));%></td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch()));%> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd()));%></td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst()));%></td>
-                                    <td><a href="<% out.print(urlSistema); %>Docente/CalificarAlumnos.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCalCod=<% out.print(calendario.getCalCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Evaluar" class="glyphicon glyphicon-paste"/></td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
+                    </section>
                 </div>
-            </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div>                             
+            </div>            
+        </div>
+        <jsp:include page="/masterPage/footer.jsp"/>
     </body>
 </html>
