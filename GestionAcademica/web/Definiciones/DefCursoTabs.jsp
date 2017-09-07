@@ -11,6 +11,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
+    Utilidades utilidad = Utilidades.GetInstancia();
     String urlSistema = utilidad.GetUrlSistema();
     String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));

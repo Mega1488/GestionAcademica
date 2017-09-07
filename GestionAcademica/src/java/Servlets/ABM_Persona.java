@@ -11,6 +11,7 @@ import Entidad.Parametro;
 import Entidad.Persona;
 import Enumerado.Filial;
 import Enumerado.Genero;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoArchivo;
 import Logica.LoParametro;
@@ -67,62 +68,66 @@ public class ABM_Persona extends HttpServlet {
             //----------------------------------------------------------------------------------------------------
             //CONTROL DE ACCESO
             //----------------------------------------------------------------------------------------------------
-            HttpSession session=request.getSession(); 
-            String usuario = (String) session.getAttribute(Enumerado.NombreSesiones.USUARIO.getValor());
-            Boolean esAdm = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ADM.getValor());
-            Boolean esAlu = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ALU.getValor());
-            Boolean esDoc = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_DOC.getValor());
-            Retorno_MsgObj acceso = Logica.Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(request));
+            String referer = request.getHeader("referer");
+                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-            if (acceso.SurgioError()) {
-                response.sendRedirect((String) acceso.getObjeto());
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
-
-            //----------------------------------------------------------------------------------------------------
-            
-            switch(action)
+            else
             {
-                
-                case "INSERT":
-                    retorno = this.AgregarDatos(request);
-                break;
-                
-                case "UPDATE":
-                    retorno = this.ActualizarDatos(request);
-                break;
-                
-                case "DELETE":
-                    retorno = this.EliminarDatos(request);
-                break;
-                
-                case "POPUP_OBTENER":
-                    retorno = this.POPUP_ObtenerDatos();
-                break;
-                
-                case "POPUP_OBTENER_ESTUDIOS":
-                    retorno = this.POPUP_ObtenerEstudiosDatos(request);
-                break;
-                
-                case "CAMBIAR_PSW":
-                    retorno = this.CambiarPsw(request);
-                break;
-                
-                case "SOL_PSW_RECOVERY":
-                    retorno = this.SolRecoveryPsw(request);
-                break;
-                
-                case "PSW_RECOVERY":
-                    retorno = this.RecoveryPsw(request);
-                break;
-                
-                case "SUBIR_FOTO":
-                    retorno = this.SubirFoto(request);
-                break;
-                        
-            }
-
-            out.println(retorno);
             
+                switch(action)
+                {
+
+                    case "INSERT":
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case "UPDATE":
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case "DELETE":
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+                    case "POPUP_OBTENER":
+                        retorno = this.POPUP_ObtenerDatos();
+                    break;
+
+                    case "POPUP_OBTENER_ESTUDIOS":
+                        retorno = this.POPUP_ObtenerEstudiosDatos(request);
+                    break;
+
+                    case "CAMBIAR_PSW":
+                        retorno = this.CambiarPsw(request);
+                    break;
+
+                    case "SOL_PSW_RECOVERY":
+                        retorno = this.SolRecoveryPsw(request);
+                    break;
+
+                    case "PSW_RECOVERY":
+                        retorno = this.RecoveryPsw(request);
+                    break;
+
+                    case "SUBIR_FOTO":
+                        retorno = this.SubirFoto(request);
+                    break;
+
+                }
+
+                out.println(retorno);
+            }
         }
         
     }

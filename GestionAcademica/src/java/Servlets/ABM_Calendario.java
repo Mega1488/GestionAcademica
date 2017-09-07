@@ -66,12 +66,8 @@ public class ABM_Calendario extends HttpServlet {
             //----------------------------------------------------------------------------------------------------
             //CONTROL DE ACCESO
             //----------------------------------------------------------------------------------------------------
-            String referer = "";
-            try {
-                referer = new URI(request.getHeader("referer")).getPath();
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(ABM_Calendario.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            String referer = request.getHeader("referer");
+                
             HttpSession session=request.getSession();
             String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
             Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
@@ -79,7 +75,7 @@ public class ABM_Calendario extends HttpServlet {
             Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
             Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-            if (acceso.SurgioError()) {
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
                 mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
                 System.err.println("Acceso no autorizado - " + this.getServletName());
                 out.println(utilidades.ObjetoToJson(mensaje));

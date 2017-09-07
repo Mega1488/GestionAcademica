@@ -6,9 +6,11 @@
 package Servlets;
 
 import Entidad.Archivo;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoArchivo;
 import Enumerado.TipoMensaje;
 import Logica.LoArchivo;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -23,6 +25,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -51,74 +54,97 @@ public class UploadArchivo extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            System.err.println("Subiendo archivo");
-            Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Upload file", TipoMensaje.MENSAJE));
             
-            String tipoArch = request.getParameter("pTpoArc");
-            File fichero    = null;
-
-            if(tipoArch == null)
-            {
-                //Verifico si recibo archivo
-                try {
-                    List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
-                    for (FileItem item : items) {
-                        if (item.isFormField()) {
-                            // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
-                            String fieldName = item.getFieldName();
-                            String fieldValue = item.getString();
-
-                            //--------------------------------
-                            //CARGAR VARIABLES
-                            //--------------------------------
-                            switch (fieldName) {
-                                case "pTpoArc":
-                                    tipoArch = fieldValue;
-                                    break;
-                            }
-                            //--------------------------------
-
-                        } else {
-                            fichero = new File(utilidad.getPrivateTempStorage(), item.getName());
-                            item.write(fichero);
-                        }
-                    }
-                } 
-                catch (FileUploadException ex) {
-                    retorno.setMensaje(new Mensajes("Error: " + ex, TipoMensaje.ERROR));
-                    Logger.getLogger(UploadArchivo.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (Exception ex) {
-                    retorno.setMensaje(new Mensajes("Error: " + ex, TipoMensaje.ERROR));
-                    Logger.getLogger(UploadArchivo.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
                 
-                if(fichero!= null)
-                {
-                    TipoArchivo tpoArch = TipoArchivo.valueOf(tipoArch);
-                    Archivo archivo = new Archivo();
-                    archivo.setArchivo(fichero, tpoArch);
-                    archivo.setArcFch(new Date());
-                    retorno = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(archivo);
-                    
-                    if(!retorno.SurgioError())
-                    {
-                        archivo = (Archivo) retorno.getObjeto();
-                        retorno.setObjeto(archivo.getArcCod());
-                    }
-                }
-                else
-                {
-                    retorno.setMensaje(new Mensajes("Error: No se recibió archivo", TipoMensaje.ERROR));
-                }
-                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidad.GetPaginaActual(referer));
+
+            if (acceso.SurgioError() && !utilidad.GetPaginaActual(referer).isEmpty()) {
+                Mensajes mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidad.ObjetoToJson(mensaje));
             }
             else
             {
-                retorno.setMensaje(new Mensajes("Error: No se recibió archivo " + tipoArch, TipoMensaje.ERROR));
-            }
             
-            System.err.println("Resultado " +retorno.toString());
-            out.println(utilidad.ObjetoToJson(retorno));
+                System.err.println("Subiendo archivo");
+                Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Upload file", TipoMensaje.MENSAJE));
+
+                String tipoArch = request.getParameter("pTpoArc");
+                File fichero    = null;
+
+                if(tipoArch == null)
+                {
+                    //Verifico si recibo archivo
+                    try {
+                        List<FileItem> items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+                        for (FileItem item : items) {
+                            if (item.isFormField()) {
+                                // Process regular form field (input type="text|radio|checkbox|etc", select, etc).
+                                String fieldName = item.getFieldName();
+                                String fieldValue = item.getString();
+
+                                //--------------------------------
+                                //CARGAR VARIABLES
+                                //--------------------------------
+                                switch (fieldName) {
+                                    case "pTpoArc":
+                                        tipoArch = fieldValue;
+                                        break;
+                                }
+                                //--------------------------------
+
+                            } else {
+                                fichero = new File(utilidad.getPrivateTempStorage(), item.getName());
+                                item.write(fichero);
+                            }
+                        }
+                    } 
+                    catch (FileUploadException ex) {
+                        retorno.setMensaje(new Mensajes("Error: " + ex, TipoMensaje.ERROR));
+                        Logger.getLogger(UploadArchivo.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (Exception ex) {
+                        retorno.setMensaje(new Mensajes("Error: " + ex, TipoMensaje.ERROR));
+                        Logger.getLogger(UploadArchivo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    if(fichero!= null)
+                    {
+                        TipoArchivo tpoArch = TipoArchivo.valueOf(tipoArch);
+                        Archivo archivo = new Archivo();
+                        archivo.setArchivo(fichero, tpoArch);
+                        archivo.setArcFch(new Date());
+                        retorno = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(archivo);
+
+                        if(!retorno.SurgioError())
+                        {
+                            archivo = (Archivo) retorno.getObjeto();
+                            retorno.setObjeto(archivo.getArcCod());
+                        }
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("Error: No se recibió archivo", TipoMensaje.ERROR));
+                    }
+
+                }
+                else
+                {
+                    retorno.setMensaje(new Mensajes("Error: No se recibió archivo " + tipoArch, TipoMensaje.ERROR));
+                }
+
+                System.err.println("Resultado " +retorno.toString());
+                out.println(utilidad.ObjetoToJson(retorno));
+                
+            }
         }
     }
 

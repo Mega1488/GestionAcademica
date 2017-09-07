@@ -416,7 +416,7 @@
                                                 
                                                 <div class="panel-body">
                                                     <div class=" form">
-                                                        <div id='calendar' style="width: 80%; margin-top: 20px;"></div>
+                                                        <div id="calendar" style="width: 80%; margin-top: 20px;"></div>
                                                     </div>
                                                 </div>
                                             </section>

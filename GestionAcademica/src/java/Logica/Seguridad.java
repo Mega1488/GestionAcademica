@@ -120,6 +120,8 @@ public class Seguridad {
     
     public Retorno_MsgObj ControlarAcceso(String usuario, Boolean esAdm, Boolean esDoc, Boolean esAlu, String sitioActual)
     {
+        
+        System.err.println("Sitio actual " + sitioActual);
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error", TipoMensaje.ERROR));
         
         esAdm = (esAdm == null ? false : esAdm);

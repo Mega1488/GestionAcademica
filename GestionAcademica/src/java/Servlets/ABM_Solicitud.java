@@ -54,45 +54,63 @@ public class ABM_Solicitud extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
-            HttpSession session=request.getSession(); 
-            String usuario  = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());            
-            if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
-            
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
 
-            switch(action)
-            {
-
-                case "INSERT":
-                    retorno = this.AgregarDatos(request);
-                break;
-
-                case "UPDATE":
-                    retorno = this.ActualizarDatos(request);
-                break;
-
-                case "DELETE":
-                    retorno = this.EliminarDatos(request);
-                break;
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
                 
-                case "TOMAR":
-                    retorno = this.TomarSolicitud(request);
-                break;
-                
-                case "LIBERAR":
-                    retorno = this.LiberarSolicitud(request);
-                break;
-                
-                case "FINALIZAR":
-                    retorno = this.FinalizarSolicitud(request);
-                break;
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
-
-            out.println(retorno);
+            else
+            {
             
+                if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
+
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
+
+                switch(action)
+                {
+
+                    case "INSERT":
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case "UPDATE":
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case "DELETE":
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+                    case "TOMAR":
+                        retorno = this.TomarSolicitud(request);
+                    break;
+
+                    case "LIBERAR":
+                        retorno = this.LiberarSolicitud(request);
+                    break;
+
+                    case "FINALIZAR":
+                        retorno = this.FinalizarSolicitud(request);
+                    break;
+
+                }
+
+                out.println(retorno);
+            } 
         }
         
     }
