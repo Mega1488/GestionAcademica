@@ -312,6 +312,9 @@
                             <!-- TITULO -->
                                 EVALUACIÓN
                             <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlRetorno); %>">Regresar</a>
+                            </span>
                         </header>
         
                         <div class="panel-body">
