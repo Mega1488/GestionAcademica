@@ -16,7 +16,7 @@
 <%
     LoPersona loPersona = LoPersona.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO

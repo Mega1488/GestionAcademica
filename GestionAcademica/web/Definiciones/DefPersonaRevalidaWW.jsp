@@ -16,7 +16,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
@@ -47,66 +47,69 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            REVALIDAS
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefPersonaInscripcionSWW.jsp?MODO=UPDATE&pPerCod=<% out.print(inscripcion.getAlumno().getPerCod()); %>">Regresar</a>
+                            </span>
+                            
+                            <span class="contenedor_agregar">
+                                <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                    <!-- CONTENIDO -->
+                                    
+                                    <div name="datos_ocultos">
+                                        <input type="hidden" name="InsCod" id="InsCod" value="<% out.print(InsCod); %>">
+                                        <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(inscripcion.getPlanEstudio().getCarrera().getCarCod()); %>">
+                                        <input type="hidden" name="PlaEstCod" id="PlaEstCod" value="<% out.print(inscripcion.getPlanEstudio().getPlaEstCod()); %>">
+                                    </div>
+                                    
+                                    
+                                    <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Código</th>
+                                                <th>Materia</th>
+                                            </tr>
+                                        </thead>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Revalidas</p>
+                                        <tbody>
+                                            <% for (MateriaRevalida matRvl : inscripcion.getLstRevalidas()) {
+
+                                            %>
+                                            <tr>
+                                                <td><% out.print("<a href='#' data-codigo='" + matRvl.getMatRvlCod() + "' data-nombre='" + matRvl.getMateria().getMatNom() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                                <td><% out.print(utilidad.NuloToVacio(matRvl.getMatRvlCod())); %> </td>
+                                                <td><% out.print(utilidad.NuloToVacio(matRvl.getMateria().getMatNom())); %> </td>
+                                            </tr>
+                                            <%
+                                                }
+                                            %>
+                                        </tbody>
+                                    </table>
+                                    
+                            </div>
                         </div>
-
-                        <div class=""> 
-                            <div style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaInscripcionSWW.jsp?MODO=UPDATE&pPerCod=<% out.print(inscripcion.getAlumno().getPerCod()); %>">Regresar</a></div>
-                        </div>
-
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="InsCod" id="InsCod" value="<% out.print(InsCod); %>">
-                            <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(inscripcion.getPlanEstudio().getCarrera().getCarCod()); %>">
-                            <input type="hidden" name="PlaEstCod" id="PlaEstCod" value="<% out.print(inscripcion.getPlanEstudio().getPlaEstCod()); %>">
-                        </div>
-
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Materia</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (MateriaRevalida matRvl : inscripcion.getLstRevalidas()) {
-
-                                %>
-                                <tr>
-                                    <td><% out.print("<a href='#' data-codigo='" + matRvl.getMatRvlCod() + "' data-nombre='" + matRvl.getMateria().getMatNom() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(matRvl.getMatRvlCod())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(matRvl.getMateria().getMatNom())); %> </td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
-
+        <jsp:include page="/masterPage/footer.jsp"/>
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->

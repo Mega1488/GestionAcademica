@@ -145,8 +145,6 @@ public class LoIniciar {
         param.setParUrlSis(urlSistema);
         LoParametro.GetInstancia().actualizar(param);
         
-        request.getSession().setAttribute(NombreSesiones.URL_SISTEMA.getValor(), urlSistema);
-        
     }
     
     private void SincronizarConMoodle(){

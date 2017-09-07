@@ -12,7 +12,6 @@ package Enumerado;
 public enum NombreSesiones {
     USUARIO("SGA_USUARIO"), 
     TOKEN("SGA_TOKEN"), 
-    URL_SISTEMA("URL_SISTEMA"),
     USUARIO_NOMBRE("USUARIO_NOMBRE"),
     USUARIO_ADM("USUARIO_ADM"),
     USUARIO_PER("USUARIO_PER"),

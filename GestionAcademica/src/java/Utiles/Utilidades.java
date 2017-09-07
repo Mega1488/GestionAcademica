@@ -166,8 +166,11 @@ public class Utilidades {
     }
 
     public String GetPaginaActual(HttpServletRequest request) {
-        String url = request.getRequestURL().toString();
-
+        return this.GetPaginaActual(request.getRequestURL().toString());
+    }
+    
+    public String GetPaginaActual(String url) {
+ 
         if (!url.isEmpty()) {
             url = url.substring(url.lastIndexOf("/") + 1, url.length());
         }

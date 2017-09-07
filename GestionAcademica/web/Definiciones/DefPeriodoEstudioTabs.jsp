@@ -17,7 +17,7 @@
     
     
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
     
     String mostrarTabs     = request.getParameter("MostrarTabs");
     String PeriEstCod      = request.getParameter("Codigo");

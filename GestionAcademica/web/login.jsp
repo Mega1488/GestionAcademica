@@ -15,8 +15,6 @@
 
     Utilidades util = Utilidades.GetInstancia();
 
-    session.setAttribute(NombreSesiones.URL_SISTEMA.getValor(), util.GetUrlSistema());
-
     String urlSistema = util.GetInstancia().GetUrlSistema();
     
     String js_redirect = "window.location.replace('" + urlSistema + "');";

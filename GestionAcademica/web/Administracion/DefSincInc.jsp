@@ -13,7 +13,7 @@
 <%@page import="Utiles.Utilidades"%>
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
     
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
