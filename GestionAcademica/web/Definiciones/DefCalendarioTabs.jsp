@@ -13,7 +13,7 @@
 <header class="panel-heading tab-bg-dark-navy-blue ">
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CalCod       = request.getParameter("pCalCod");

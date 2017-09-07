@@ -13,7 +13,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO

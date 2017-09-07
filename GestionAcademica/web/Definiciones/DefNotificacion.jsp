@@ -24,7 +24,7 @@
 <%@page import="Logica.LoParametro"%>
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = (String) session.getAttribute(Enumerado.NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 
     //----------------------------------------------------------------------------------------------------

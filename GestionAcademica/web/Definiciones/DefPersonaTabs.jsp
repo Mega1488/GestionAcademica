@@ -12,7 +12,7 @@
 <%
 
     LoPersona loPersona = LoPersona.GetInstancia();
-    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = Utilidades.GetInstancia().GetUrlSistema();
     String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
    
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
