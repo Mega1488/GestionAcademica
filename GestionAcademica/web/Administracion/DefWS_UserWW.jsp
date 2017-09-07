@@ -62,7 +62,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Bitacora</title>
+        <title>Sistema de Gestión Académica - Bitácora</title>
         <jsp:include page="/masterPage/head.jsp"/>
     </head>
     <body>

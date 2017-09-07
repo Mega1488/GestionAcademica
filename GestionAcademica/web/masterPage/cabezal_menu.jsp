@@ -39,7 +39,9 @@
     Long PerCod             = (Long) session.getAttribute(NombreSesiones.USUARIO_PER.getValor());    
 
     List<Object> lstBandeja = new ArrayList<>();
-    List<Object> lstVistos = new ArrayList<>();
+    List<Object> lstVistos  = new ArrayList<>();
+    
+    Persona persona         = new Persona();
     
     if(PerCod != null)
     {
@@ -62,10 +64,11 @@
         {
             out.print(retorno.getMensaje().toString());
         }
+        
+        persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
     }
-    Integer cantidad = lstBandeja.size() + lstVistos.size();
     
-    Persona persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
+    Integer cantidad = lstBandeja.size() + lstVistos.size();
 
 %>
 
@@ -73,7 +76,16 @@
 <!DOCTYPE html>
 <input type="hidden" name="sga_url" id="sga_url" value="<% out.print(urlSistema); %>">
 <input type="hidden" name="sga_sitioactual" id="sga_sitioactual" value="<% out.print(sitioActual); %>">
-
+<input type="hidden" name="PerCod" id="PerCod" value="<%=PerCod%>">
+<script>
+    $(document).ready(function () {
+       if($('#btn_guardar').val() == "")
+       {
+           <%=js_redirect%>
+       }
+    }); 
+</script>
+    
 <!-- CABEZAL -->
 <div class="container_fluid">
     <div class="row">

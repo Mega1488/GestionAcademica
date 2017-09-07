@@ -55,7 +55,7 @@ public class Retorno_MsgObj implements Serializable{
 
     public ArrayList<Mensajes> getLstMensajes() {
         if (lstMensajes == null) {
-            lstMensajes = new ArrayList<Mensajes>();
+            lstMensajes = new ArrayList<>();
         }
         return lstMensajes;
     }
@@ -88,7 +88,7 @@ public class Retorno_MsgObj implements Serializable{
 
     public List<Object> getLstObjetos() {
         if (lstObjetos == null) {
-            lstObjetos = new ArrayList<Object>();
+            lstObjetos = new ArrayList<>();
         }
         return lstObjetos;
     }
