@@ -46,23 +46,6 @@
         out.print(retorno.getMensaje().toString());
     }
 
-    String CamposActivos = "disabled";
-
-    switch (Mode) {
-        case INSERT:
-            CamposActivos = "enabled";
-            break;
-        case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
-            break;
-        case UPDATE:
-            CamposActivos = "enabled";
-            break;
-    }
-
     String tblModuloVisible = (curso.getLstModulos().size() > 0 ? "" : "display: none;");
 
 %>
@@ -77,73 +60,78 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoWW.jsp">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
+                        <span class="contenedor_agregar">
                             <a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>&pCurCod=<% out.print(curso.getCurCod()); %>" title="Ingresar" class="glyphicon glyphicon-plus"></a>
+                        </span>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                            <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
+                                                        </div>
+
+                                                        <table style=' <% out.print(tblModuloVisible); %>' class='table table-hover'>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th>Código</th>
+                                                                    <th>Nombre</th>
+                                                                    <th>Descripción</th>
+                                                                    <th>Período</th>
+                                                                    <th>Horas</th>
+
+                                                                </tr>
+                                                            </thead>
+
+                                                            <% for (Modulo modulo : curso.getLstModulos()) {
+
+                                                            %>
+                                                            <tr>
+                                                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCurCod=<% out.print(curso.getCurCod()); %>&pModCod=<% out.print(modulo.getModCod()); %>" name="btn_eliminar" id="btn_eliminar"  title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
+                                                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCurCod=<% out.print(curso.getCurCod()); %>&pModCod=<% out.print(modulo.getModCod()); %>" name="btn_editar" id="btn_editar" title="Editar"  class="glyphicon glyphicon-edit"></a></td>
+
+                                                                <td><% out.print(utilidad.NuloToVacio(modulo.getModCod())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(modulo.getModNom())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(modulo.getModDsc())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(modulo.getModTpoPer().getTipoPeriodoNombre())); %> </td>
+                                                                <td><% out.print(utilidad.NuloToVacio(modulo.getModCntHor())); %> </td>
+
+                                                            </tr>
+                                                            <%
+                                                                }
+                                                            %>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-
-                        <table style=' <% out.print(tblModuloVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Período</th>
-                                    <th>Horas</th>
-
-                                </tr>
-                            </thead>
-
-                            <% for (Modulo modulo : curso.getLstModulos()) {
-
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pCurCod=<% out.print(curso.getCurCod()); %>&pModCod=<% out.print(modulo.getModCod()); %>" name="btn_eliminar" id="btn_eliminar"  title="Eliminar" class="glyphicon glyphicon-trash"></a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefModulo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pCurCod=<% out.print(curso.getCurCod()); %>&pModCod=<% out.print(modulo.getModCod()); %>" name="btn_editar" id="btn_editar" title="Editar"  class="glyphicon glyphicon-edit"></a></td>
-
-                                <td><% out.print(utilidad.NuloToVacio(modulo.getModCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(modulo.getModNom())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(modulo.getModDsc())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(modulo.getModTpoPer().getTipoPeriodoNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(modulo.getModCntHor())); %> </td>
-
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+
+
     </body>
 </html>

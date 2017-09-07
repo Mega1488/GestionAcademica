@@ -113,73 +113,82 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Periodo Estudio | Documentos</title>
         <jsp:include page="/masterPage/head.jsp"/>
-
-
     </head>
     <body>
+        
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp">
-                                <jsp:param name="MostrarTabs" value="SI" />
-                                <jsp:param name="Codigo" value="<%= PeriEstCod%>" />
-                            </jsp:include>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefPeriodoEstudioTabs.jsp">
+                            <jsp:param name="MostrarTabs" value="SI" />
+                            <jsp:param name="Codigo" value="<%= PeriEstCod%>" />
+                        </jsp:include>
+                        <span class="contenedor_agregar">
                             <!--<a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>-->
+                        </span>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                            <input type="hidden" name="PeriEstCod" id="PeriEstCod" value="<% out.print(PeriEstCod); %>">
+                                                        </div>
+                                                        
+                                                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                                            <thead><tr>
+                                                                    <th></th>
+                                                                    <th>Código</th>
+                                                                    <th>Nombre</th>
+                                                                    <th>Extension</th>
+                                                                    <th>Fecha</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+                                                                <% for (PeriodoEstudioDocumento periDocumento : lstObjeto) {
+
+                                                                %>
+                                                                <tr>
+                                                                    <td><% out.print("<a href='#' data-codigo='" + periDocumento.getDocCod() + "' data-nombre='" + periDocumento.getDocNom() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocCod())); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocNom())); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocExt())); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getObjFchMod())); %> </td>
+                                                                    <td><% out.print("<a  target='_blank' href='" + urlSistema + "DescargarArchivo?pPeriEstCod=" + PeriEstCod + "&pDocCod=" + periDocumento.getDocCod() + "' name='btn_descargar' id='btn_descargar' title='Descargar' class='glyphicon glyphicon-save btn_descargar'/>"); %> </td>
+                                                                </tr>
+                                                                <%
+                                                                    }
+                                                                %>
+                                                            </tbody>
+                                                        </table>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead><tr>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Extension</th>
-                                    <th>Fecha</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (PeriodoEstudioDocumento periDocumento : lstObjeto) {
-
-                                %>
-                                <tr>
-                                    <td><% out.print("<a href='#' data-codigo='" + periDocumento.getDocCod() + "' data-nombre='" + periDocumento.getDocNom() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocCod())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocNom())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocExt())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocFch())); %> </td>
-                                    <td><% out.print("<a  target='_blank' href='" + urlSistema + "DescargarArchivo?pPeriEstCod=" + PeriEstCod + "&pDocCod=" + periDocumento.getDocCod() + "' name='btn_descargar' id='btn_descargar' title='Descargar' class='glyphicon glyphicon-save btn_descargar'/>"); %> </td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+                                                        
+               
         <!-- PopUp para Agregar personas del calendario -->
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">

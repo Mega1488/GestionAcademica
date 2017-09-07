@@ -64,74 +64,86 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPeriodoTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoWW.jsp">Regresar</a></div>
-                        </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefPeriodoTabs.jsp"/>
+                        <span class="contenedor_agregar">
                             <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="PeriCod" id="PeriCod" value="<% out.print(PeriCod); %>">
+                        </span>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                            <input type="hidden" name="PeriCod" id="PeriCod" value="<% out.print(PeriCod); %>">
+                                                        </div>
+                                                        
+                                                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th>Código</th>
+                                                                    <th>Carrera / Curso</th>
+                                                                    <th>Estudio</th>
+                                                                    <th>Alumnos</th>
+                                                                    <th></th>
+                                                                    <th>Docentes</th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+
+                                                            <tbody>
+                                                                <% for (PeriodoEstudio periEst : lstObjeto) {
+                                                                %>
+                                                                <tr>
+                                                                    <td><% out.print("<a href='#' data-codigo='" + periEst.getPeriEstCod() + "' data-nombre='" + periEst.getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %></td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getPeriEstCod())); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCarreraCursoNombre())); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getEstudioNombre())); %> </td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCantidadAlumnos())); %> </td>
+                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_alm" id="btn_edit_alm" title="Alumnos" class="glyphicon glyphicon-edit"/></td>
+                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCantidadDocente())); %> </td>
+                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocenteSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_dct" id="btn_edit_dct" title="Docentes" class="glyphicon glyphicon-edit"/></td>
+                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-file"/></td>
+
+                                                                </tr>
+                                                                <%
+                                                                    }
+                                                                %>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Carrera / Curso</th>
-                                    <th>Estudio</th>
-                                    <th>Alumnos</th>
-                                    <th></th>
-                                    <th>Docentes</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <% for (PeriodoEstudio periEst : lstObjeto) {
-                                %>
-                                <tr>
-                                    <td><% out.print("<a href='#' data-codigo='" + periEst.getPeriEstCod() + "' data-nombre='" + periEst.getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %></td>
-                                    <td><% out.print(utilidad.NuloToVacio(periEst.getPeriEstCod())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCarreraCursoNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periEst.getEstudioNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCantidadAlumnos())); %> </td>
-                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_alm" id="btn_edit_alm" title="Alumnos" class="glyphicon glyphicon-edit"/></td>
-                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCantidadDocente())); %> </td>
-                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocenteSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_dct" id="btn_edit_dct" title="Docentes" class="glyphicon glyphicon-edit"/></td>
-                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-file"/></td>
-
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </tbody>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
+        
+        
+        
+
+                        
 
         <!-- PopUp para Agregar -->
 

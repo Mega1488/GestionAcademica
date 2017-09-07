@@ -140,6 +140,7 @@ public class Evaluacion extends SincHelper implements Serializable {
     }
 
     public TipoEvaluacion getTpoEvl() {
+        if(tipoEvaluacion == null)  tipoEvaluacion = new TipoEvaluacion();
         return tipoEvaluacion;
     }
 

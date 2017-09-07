@@ -54,20 +54,21 @@
         }
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -83,6 +84,36 @@
         <script>
             $(document).ready(function () {
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+            });
+            
+            function procesarDatos() {
 
 
                     var PerCod = $('#PerCod').val();
@@ -122,68 +153,106 @@
                         });
 
                     }
-                });
-
-            });
+                }
 
         </script>
 
     </head>
     <body>
-        <jsp:include page="/masterPage/NotificacionError.jsp"/>   
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefPeriodoTabs.jsp"/>
+			<div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        
+                                                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                        </div>
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            <!-- CONTENIDO -->
+                                                            <div class="form-group "><label for="PeriCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="PeriCod" name="PeriCod" disabled value="<%=utilidad.NuloToVacio(periodo.getPeriCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="PerFchIni" class="control-label col-lg-3">Inicio</label><div class="col-lg-6"><input type="date" required class=" form-control inputs_generales" id="PerFchIni" name="PerFchIni" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(periodo.getPerFchIni())%>" ></div></div>
+                                                            <div class="form-group ">
+                                                                <label for="PerVal" class="control-label col-lg-3">Periodo</label>
+                                                                <div class="col-lg-2">
+                                                                    <input type="number" required step="0.1" class=" form-control inputs_generales" id="PerVal" name="PerVal" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(periodo.getPerVal())%>" >
+                                                                </div>
+                                                                <div class="col-lg-4">
+                                                                    <select class="form-control inputs_generales" <%=CamposActivos%> id="PerTpo" name="PerTpo" placeholder="PerTpo">
+                                                                        <%
+                                                                            for (TipoPeriodo tpoPer : TipoPeriodo.values()) {
+                                                                                if (tpoPer.equals(periodo.getPerTpo())) {
+                                                                                    out.println("<option value='" + tpoPer.getTipoPeriodo() + "' selected>" + tpoPer.getTipoPeriodoNombre() + "</option>");
+                                                                                } else {
+                                                                                    out.println("<option value='" + tpoPer.getTipoPeriodo() + "'>" + tpoPer.getTipoPeriodoNombre() + "</option>");
+                                                                                }
+                                                                            }
+                                                                        %>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefPeriodoTabs.jsp"/>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoWW.jsp">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>Código</label><input type="text" class="form-control" id="PerCod" name="PerCod" placeholder="PerCod" disabled value="<% out.print(utilidad.NuloToVacio(periodo.getPeriCod())); %>" ></div>
-
-                            <div><label>Tipo</label>
-                                <select class="form-control" id="PerTpo" name="PerTpo" placeholder="PerTpo">
-                                    <%
-                                        for (TipoPeriodo tpoPer : TipoPeriodo.values()) {
-                                            if (tpoPer.equals(periodo.getPerTpo())) {
-                                                out.println("<option value='" + tpoPer.getTipoPeriodo() + "' selected>" + tpoPer.getTipoPeriodoNombre() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + tpoPer.getTipoPeriodo() + "'>" + tpoPer.getTipoPeriodoNombre() + "</option>");
-                                            }
-                                        }
-                                    %>
-
-                                </select> 
+                                                                    </select> 
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
 
-                            <div><label>Valor</label><input type="text" class="form-control" id="PerVal" name="PerVal" placeholder="PerVal" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(periodo.getPerVal())); %>" ></div>
-                            <div><label>Fecha de inicio</label><input type="text" class="form-control" id="PerFchIni" name="PerFchIni" placeholder="PerFchIni" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(periodo.getPerFchIni())); %>" ></div>
-
-
-                            <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button"  class="btn btn-success" />
-                            <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                        </form>
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+        
+        
     </body>
 </html>

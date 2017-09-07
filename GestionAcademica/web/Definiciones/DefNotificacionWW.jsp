@@ -59,75 +59,75 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            
-            <div id="contenido" name="contenido" class="main-panel">
-                
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-                
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        
-                       <div class="contenedor-titulo">    
-                            <p>Notificaciones</p>
-                        </div> 
-                        
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
-                        </div>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            NOTIFICACIONES
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <!-- CONTENIDO -->
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th></th>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Tipo</th>
+                                        <th>Medio</th>
+                                        <th>Activa</th>
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+
+                                <% for(Object objeto : lstObjeto)
+                                {
+                                    Notificacion notificacion = (Notificacion) objeto;
+                                %>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                    <th>Descripción</th>
-                                    <th>Tipo</th>
-                                    <th>Medio</th>
-                                    <th>Activa</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
+                                    <td><% if(!notificacion.getNotInt()){ %><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/> <% } %> </td>
+                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
+                                    <td><% out.print( utilidad.NuloToVacio(notificacion.getNotCod())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(notificacion.getNotNom())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(notificacion.getNotDsc())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(notificacion.getNotTpo().getNombre())); %> </td>
+                                    <td><% out.print( utilidad.NuloToVacio(notificacion.getMedio())); %> </td>
+                                    <td><% out.print( utilidad.BooleanToSiNo(notificacion.getNotAct())); %> </td>
+                                    <td><a href="#" title="Ejecutar" class="glyphicon glyphicon-play btn_ejecutar" data-toggle="modal" data-target="#PopUpEjecutar" data-codigo="<% out.print(notificacion.getNotCod()); %>"> </a></td>
+                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Destinatarios" class='fa fa-address-book'/></td>
+                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionConsultaSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Consultas" class='fa fa-database'/></td>
+                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionBitacoraSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Bitacora" class='fa fa-folder-open'/></td>
+
                                 </tr>
-                            </thead>
-
-                            <% for(Object objeto : lstObjeto)
-                            {
-                                Notificacion notificacion = (Notificacion) objeto;
-                            %>
-                            <tr>
-                                <td><% if(!notificacion.getNotInt()){ %><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/> <% } %> </td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacion.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
-                                <td><% out.print( utilidad.NuloToVacio(notificacion.getNotCod())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(notificacion.getNotNom())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(notificacion.getNotDsc())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(notificacion.getNotTpo().getNombre())); %> </td>
-                                <td><% out.print( utilidad.NuloToVacio(notificacion.getMedio())); %> </td>
-                                <td><% out.print( utilidad.BooleanToSiNo(notificacion.getNotAct())); %> </td>
-                                <td><a href="#" title="Ejecutar" class="glyphicon glyphicon-play btn_ejecutar" data-toggle="modal" data-target="#PopUpEjecutar" data-codigo="<% out.print(notificacion.getNotCod()); %>"> </a></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Destinatarios" class='fa fa-address-book'/></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionConsultaSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Consultas" class='fa fa-database'/></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionBitacoraSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pNotCod=<% out.print(notificacion.getNotCod()); %>" title="Bitacora" class='fa fa-folder-open'/></td>
-
-                            </tr>
-                            <%
-                            }
-                            %>
-                        </table>
-
-                    </div>
+                                <%
+                                }
+                                %>
+                            </table>
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-                        
-                        <jsp:include page="/masterPage/footer.jsp"/>
-                        
         </div>
-             
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
         
         <!-- PopUp para ejecutar tarea -->
                                 

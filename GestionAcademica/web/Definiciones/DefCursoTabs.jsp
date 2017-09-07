@@ -19,12 +19,20 @@
     
 %>
     
-<ul class="nav nav-tabs">
-    <% 
-        out.println("<li class='" + (urlActual.equals("DefCurso.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCurso.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Curso</a></li>");
-        
-        if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoModuloSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCursoModuloSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Modulos</a></li>");
-        if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoEvaluacionSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Evaluaciones</a></li>");
+<header class="panel-heading tab-bg-dark-navy-blue ">
+    <ul class="nav nav-tabs">
+        <% 
+            out.println("<li class='" + (urlActual.equals("DefCurso.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefCurso.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefCurso.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Curso</a></li>");
+
+            if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoModuloSWW.jsp") ? "active" : "") + "'><a  class='tabs' aria-expanded='"+(urlActual.equals("DefCursoModuloSWW.jsp") ? "true" : "false")+"'  href='"+ urlSistema + "Definiciones/DefCursoModuloSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Modulos</a></li>");
+            if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefCursoEvaluacionSWW.jsp") ? "active" : "") + "'><a  class='tabs' aria-expanded='"+(urlActual.equals("DefCursoEvaluacionSWW.jsp") ? "true" : "false")+"'  href='"+ urlSistema + "Definiciones/DefCursoEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "'>Evaluaciones</a></li>");
+
+        %>
+    </ul>
     
-    %>
-</ul>
+    <span class="tools pull-right">
+        <div class="hidden-xs">
+            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefCursoWW.jsp">Regresar</a>
+        </div>
+    </span>
+</header>

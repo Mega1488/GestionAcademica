@@ -42,20 +42,21 @@
         paramEml = lPrmEml.obtener(Long.valueOf(ParEmlCod));
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -72,6 +73,38 @@
             $(document).ready(function () {
 
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+
+            });
+
+            
+                function procesarDatos() {
 
 
                     var ParEmlCod = $('#ParEmlCod').val();
@@ -193,163 +226,164 @@
                             });
                         }
                     }
-                });
-
-            });
-
+                }
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                                PARAMETRO EMAIL
+                            <!-- BOTONES -->
+                        </header>
+        
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        
+                                                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                        </div>
+                                                        
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            
+                                                            <div class="form-group "><label for="ParEmlCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ParEmlCod" name="ParEmlCod" disabled value="<%=utilidad.NuloToVacio(paramEml.getParEmlCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParEmlNom" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="ParEmlNom" name="ParEmlNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlNom())%>" ></div></div>
 
-            <div id="contenido" name="contenido" class="main-panel">
+                                                            <div class="form-group ">
+                                                                <label for="ParEmlPro" class="control-label col-lg-3">Protocolo</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control inputs_generales" id="ParEmlPro" name="ParEmlPro" <% out.print(CamposActivos); %>>
+                                                                        <%
+                                                                                for (ProtocoloEmail protocolo : ProtocoloEmail.values()) {
+                                                                                        if (protocolo == paramEml.getParEmlPro()) {
+                                                                                                out.println("<option selected value='" + protocolo.getCod() + "'>" + protocolo.getNom() + "</option>");
+                                                                                        } else {
+                                                                                                out.println("<option value='" + protocolo.getCod() + "'>" + protocolo.getNom() + "</option>");
+                                                                                        }
+                                                                                }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                                    
+                                                            <div class="form-group "><label for="ParEmlSrv" class="control-label col-lg-3">Servidor de correo</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="ParEmlSrv" name="ParEmlSrv" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlSrv())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParEmlPrt" class="control-label col-lg-3">Puerto</label><div class="col-lg-6"><input type="number" required class=" form-control inputs_generales" id="ParEmlPrt" name="ParEmlPrt" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlPrt())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParEmlDom" class="control-label col-lg-3">Dominio</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="ParEmlDom" name="ParEmlDom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlDom())%>" ></div></div>
+                                                          
+                                                            <div class="form-group "><label for="ParEmlDeNom" class="control-label col-lg-3">De nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="ParEmlDeNom" name="ParEmlDeNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlDeNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParEmlDeEml" class="control-label col-lg-3">De email</label><div class="col-lg-6"><input type="email" required class=" form-control inputs_generales" id="ParEmlDeEml" name="ParEmlDeEml" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlDeEml())%>" ></div></div>
+                                                            
+                                                            <div class="form-group ">
+                                                                <label for="ParEmlTpoAut" class="control-label col-lg-3">Tipo de autenticación</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control inputs_generales" id="ParEmlTpoAut" name="ParEmlTpoAut" <% out.print(CamposActivos); %>>
+                                                                        <%
+                                                                            for (TipoAutenticacion tpoAut : TipoAutenticacion.values()) {
+                                                                                if (tpoAut == paramEml.getParEmlTpoAut()) {
+                                                                                        out.println("<option selected value='" + tpoAut.getCod() + "'>" + tpoAut.getNom() + "</option>");
+                                                                                } else {
+                                                                                        out.println("<option value='" + tpoAut.getCod() + "'>" + tpoAut.getNom() + "</option>");
+                                                                                }
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                                        
+                                                            <div class="form-group "><label for="ParEmlUsr" class="control-label col-lg-3">Usuario</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="ParEmlUsr" name="ParEmlUsr" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlUsr())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParEmlPsw" class="control-label col-lg-3">Contraseña</label><div class="col-lg-6"><input type="password" required class=" form-control inputs_generales" id="ParEmlPsw" name="ParEmlPsw" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlPsw())%>" ></div></div>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                                                            <div class="form-group ">
+                                                                <label for="ParEmlSSL" class="control-label col-lg-3">SSL</label>
+                                                                <div class="col-lg-6">
+                                                                    
+                                                                    <select class="form-control inputs_generales" id="ParEmlSSL" name="ParEmlSSL" <% out.print(CamposActivos); %>>
+                                                                            <%
+                                                                                for (TipoSSL tpoSSL : TipoSSL.values()) {
+                                                                                    if (tpoSSL == paramEml.getParEmlSSL()) {
+                                                                                            out.println("<option selected value='" + tpoSSL.getCod() + "'>" + tpoSSL.getNom() + "</option>");
+                                                                                    } else {
+                                                                                            out.println("<option value='" + tpoSSL.getCod() + "'>" + tpoSSL.getNom() + "</option>");
+                                                                                    }
+                                                                                }
+                                                                            %>
+                                                                    </select>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group "><label for="ParEmlTmpEsp" class="control-label col-lg-3">Tiempo de espera en segundos</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ParEmlTmpEsp" name="ParEmlTmpEsp" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlTmpEsp())%>" ></div></div>
+                                                            
+
+                                                            <div class="form-group "><label for="ParEmlUtlAut" class="control-label col-lg-3">Utiliza autenticación</label><div class="col-lg-6"><input type="checkbox" id="ParEmlUtlAut" name="ParEmlUtlAut" <%=CamposActivos%> <%=utilidad.BooleanToChecked(paramEml.getParEmlUtlAut())%> ></div></div>
+                                                            <div class="form-group "><label for="ParEmlReqConf" class="control-label col-lg-3">Requiere confirmación</label><div class="col-lg-6"><input type="checkbox" id="ParEmlReqConf" name="ParEmlReqConf" <%=CamposActivos%> <%=utilidad.BooleanToChecked(paramEml.getParEmlReqConf())%> ></div></div>
+
+                                                            
+                                                            <div class="form-group "><label for="ParEmlDebug" class="control-label col-lg-3">Debug</label><div class="col-lg-6"><input type="checkbox"  id="ParEmlDebug" name="ParEmlDebug" <%=CamposActivos%> <%=utilidad.BooleanToChecked(paramEml.getParEmlDebug())%> ></div></div>
+                                                            
+                                                            
+                                                                                                                        
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
+            </div>
+        </div>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
 
-                        <div class="contenedor-titulo">    
-                            <p>Parametro email</p>
-                        </div> 
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefParametroEmailWW.jsp">Regresar</a></div>
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
                         </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                        </div>
-
-                        <form id="frm_Version" name="frm_Version">
-
-                            <!------------------------------------------------------------------------------------------>
-                            <div>
-                                <label>Código:</label>
-                                <input type="num" class="form-control" id="ParEmlCod" name="ParEmlCod" placeholder="Código" value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlCod())); %>" disabled>
-                            </div>
-
-                            <!------------------------------------------------------------------------------------------> 
-
-                            <div>
-                                <label>Nombre</label>
-                                <input type="text" class="form-control" id="ParEmlNom" name="ParEmlNom" placeholder="ParEmlNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlNom())); %>" >
-                            </div>
-
-                            <div>
-                                <label>Protocolo</label>
-                                <select class="form-control" id="ParEmlPro" name="ParEmlPro" <% out.print(CamposActivos); %>>
-                                    <%
-                                        for (ProtocoloEmail protocolo : ProtocoloEmail.values()) {
-                                            if (protocolo == paramEml.getParEmlPro()) {
-                                                out.println("<option selected value='" + protocolo.getCod() + "'>" + protocolo.getNom() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + protocolo.getCod() + "'>" + protocolo.getNom() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label>Servidor de correo</label>
-                                <input type="text" class="form-control" id="ParEmlSrv" name="ParEmlSrv" placeholder="ParEmlSrv" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlSrv())); %>">
-                            </div>
-
-                            <div>
-                                <label>Puerto</label>
-                                <input type="number" class="form-control" id="ParEmlPrt" name="ParEmlPrt" placeholder="ParEmlPrt" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlPrt())); %>">
-                            </div>
-
-                            <div>
-                                <label>De nombre:</label>
-                                <input type="text" class="form-control" id="ParEmlDeNom" name="ParEmlDeNom" placeholder="ParEmlDeNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlDeNom())); %>">
-                            </div>
-
-                            <div>
-                                <label>De email:</label>
-                                <input type="email" class="form-control" id="ParEmlDeEml" name="ParEmlDeEml" placeholder="ParEmlDeEml"  <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlDeEml())); %>">
-                            </div>
-
-                            <div>
-                                <label>Tipo autenticación</label>
-                                <select class="form-control" id="ParEmlTpoAut" name="ParEmlTpoAut" <% out.print(CamposActivos); %>>
-                                    <%
-                                        for (TipoAutenticacion tpoAut : TipoAutenticacion.values()) {
-                                            if (tpoAut == paramEml.getParEmlTpoAut()) {
-                                                out.println("<option selected value='" + tpoAut.getCod() + "'>" + tpoAut.getNom() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + tpoAut.getCod() + "'>" + tpoAut.getNom() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label>Dominio</label>
-                                <input type="text" class="form-control" id="ParEmlDom" name="ParEmlDom" placeholder="ParEmlDom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlDom())); %>">
-                            </div>
-
-                            <div>
-                                <label>Usuario</label>
-                                <input type="text" class="form-control" id="ParEmlUsr" name="ParEmlUsr" placeholder="ParEmlUsr" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlUsr())); %>">
-                            </div>
-
-                            <div>
-                                <label>Contraseña</label>
-                                <input type="text" class="form-control" id="ParEmlPsw" name="ParEmlPsw" placeholder="ParEmlPsw" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlPsw())); %>">
-                            </div>
-
-                            <div>
-                                <label>SSL</label>
-                                <select class="form-control" id="ParEmlSSL" name="ParEmlSSL" <% out.print(CamposActivos); %>>
-                                    <%
-                                        for (TipoSSL tpoSSL : TipoSSL.values()) {
-                                            if (tpoSSL == paramEml.getParEmlSSL()) {
-                                                out.println("<option selected value='" + tpoSSL.getCod() + "'>" + tpoSSL.getNom() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + tpoSSL.getCod() + "'>" + tpoSSL.getNom() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label>Tiempo de espera en segundos</label>
-                                <input type="number" class="form-control" id="ParEmlTmpEsp" name="ParEmlTmpEsp" placeholder="ParEmlTmpEsp" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(paramEml.getParEmlTmpEsp())); %>">
-                            </div>
-
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="ParEmlUtlAut" name="ParEmlUtlAut"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(paramEml.getParEmlUtlAut())); %>> Utiliza autenticación</label>
-                            </div>
-
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="ParEmlDebug" name="ParEmlDebug"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(paramEml.getParEmlDebug())); %>> Debug</label>
-                            </div>
-
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="ParEmlReqConf" name="ParEmlReqConf"  <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(paramEml.getParEmlReqConf())); %>> Requiere confirmacion</label>
-                            </div>
-
-                            <!------------------------------------------------------------------------------------------>
-
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                            </div>
-                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div>
+        </div> 
+        
     </body>
 </html>

@@ -42,6 +42,25 @@
             $(document).ready(function () {
 
                 $('#btn_guardar').click(function (event) {
+                    if(validarDatos())
+                    {
+                        procesarDatos();
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                function procesarDatos() {
 
 
                     var ParCod = $('#ParCod').val();
@@ -81,7 +100,7 @@
 
                     });
 
-                });
+                }
 
             });
         </script>
@@ -89,130 +108,104 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                                PARAMETROS
+                            <!-- BOTONES -->
+                        </header>
+        
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            
+                                                            <input type="hidden" id="ParCod" name="ParCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(parametro.getParCod())); %>">
 
-            <div id="contenido" name="contenido" class="main-panel">
+                                                            <div class="form-group "><label for="ParUrlSis" class="control-label col-lg-3">URL del sistema</label><div class="col-lg-6"><input type="url" disabled class=" form-control inputs_generales" id="ParUrlSis" name="ParUrlSis"  value="<%=utilidad.NuloToVacio(parametro.getParUrlSis())%>" ></div></div>
+                                                            
+                                                            <div class="form-group "><label for="ParPswValExp" class="control-label col-lg-3">Expresión regular para validar contraseña</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="ParPswValExp" name="ParPswValExp"  value="<%=utilidad.NuloToVacio(parametro.getParPswValExp())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParPswValMsg" class="control-label col-lg-3">Mensaje en caso de contraseña incorrecta</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="ParPswValMsg" name="ParPswValMsg"  value="<%=utilidad.NuloToVacio(parametro.getParPswValMsg())%>" ></div></div>
+                                                            
+                                                            
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Notificación</h2>
+                                                            </div>
+                                                            
+                                                            <div class="form-group ">
+                                                                <label for="ParEmlCod" class="control-label col-lg-3">Email</label>
+                                                                <div class="col-lg-1">
+                                                                    <input type="number" class=" form-control inputs_generales" id="ParEmlCod" name="ParEmlCod"  value="<% out.print(utilidad.NuloToVacio((parametro.getParametroEmail() != null ? parametro.getParametroEmail().getParEmlCod() : ""))); %>" disabled >
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <a href="#" id="btnParEmlCod" name="btnParEmlCod" class="glyphicon glyphicon-search" data-toggle="modal" data-target="#PopUpParamEml"></a>
+                                                                </div>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div class="contenedor-titulo">    
-                            <p>Parámetros</p>
-                        </div> 
-
-                        <div style="height: 30px;"></div>
-
-                        <form id="frm_Version" name="frm_Version">
-                            <div>
-                                <input type="hidden" id="ParCod" name="ParCod" placeholder="Código" disabled value="<% out.print(utilidad.NuloToVacio(parametro.getParCod())); %>">
-                            </div>
-
-                            <div>
-                                <label>URL Sistema:</label>
-                                <input type="text" class="form-control" id="ParUrlSis" name="ParUrlSis" placeholder="URL" disabled value="<% out.print(utilidad.NuloToVacio(parametro.getParUrlSis())); %>">
-                            </div>
-
-                            <div class="row">
-
-                                <div class="col-lg-2">
-                                    <label>Parámetro de email:</label>
+                                                                <div class="col-lg-3">
+                                                                    <label name="ParEmlNom" id="ParEmlNom" > <% out.print(utilidad.NuloToVacio((parametro.getParametroEmail() != null ? parametro.getParametroEmail().getParEmlNom() : null))); %></label>
+                                                                </div>
+                                                            </div>
+                                                                
+                                                            <div class="form-group "><label for="ParDiaEvlPrv" class="control-label col-lg-3">Dias de anticipación para notificar fecha proxima de evaluacion</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ParDiaEvlPrv" name="ParDiaEvlPrv"  value="<%=utilidad.NuloToVacio(parametro.getParDiaEvlPrv())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParTieIna" class="control-label col-lg-3">Tiempo de inactividad en meses, para notificacion de materias previas (Not. Motivacional)</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ParTieIna" name="ParTieIna"  value="<%=utilidad.NuloToVacio(parametro.getParTieIna())%>" ></div></div>
+                                                            
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Moodle</h2>
+                                                            </div>
+                                                            <div class="form-group "><label for="ParUtlMdl" class="control-label col-lg-3">Utiliza Moodle</label><div class="col-lg-6"><input type="checkbox"  id="ParUtlMdl" name="ParUtlMdl"  <%=utilidad.BooleanToChecked(parametro.getParUtlMdl())%> ></div></div>
+                                                            <div class="form-group "><label for="ParUrlMdl" class="control-label col-lg-3">URL de Moodle</label><div class="col-lg-6"><input type="url" class=" form-control inputs_generales" id="ParUrlMdl" name="ParUrlMdl"  value="<%=utilidad.NuloToVacio(parametro.getParUrlMdl())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParMdlTkn" class="control-label col-lg-3">Token de Moodle</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="ParMdlTkn" name="ParMdlTkn"  value="<%=utilidad.NuloToVacio(parametro.getParMdlTkn())%>" ></div></div>
+                                                            
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Sincronización</h2>
+                                                            </div>
+                                                            
+                                                            <div class="form-group "><label for="ParSncAct" class="control-label col-lg-3">Sincronización activa</label><div class="col-lg-6"><input type="checkbox" id="ParSncAct" name="ParSncAct"  <%=utilidad.BooleanToChecked(parametro.getParSncAct())%> ></div></div>
+                                                            <div class="form-group "><label for="ParSisLocal" class="control-label col-lg-3">Sistema local</label><div class="col-lg-6"><input type="checkbox"  id="ParSisLocal" name="ParSisLocal"  <%=utilidad.BooleanToChecked(parametro.getParSisLocal())%> ></div></div>
+                                                            <div class="form-group "><label for="ParUrlSrvSnc" class="control-label col-lg-3">URL Sistema Online</label><div class="col-lg-6"><input type="url" class=" form-control inputs_generales" id="ParUrlSrvSnc" name="ParUrlSrvSnc"  value="<%=utilidad.NuloToVacio(parametro.getParUrlSrvSnc())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParFchUltSinc" class="control-label col-lg-3">Última sincronización</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="ParFchUltSinc" name="ParFchUltSinc"  disabled value="<%=utilidad.NuloToVacio(parametro.getParFchUltSinc())%>" ></div></div>
+                                                                                                                        
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn btn-primary" value="MODIFICAR" />
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
                                 </div>
-
-                                <div class="col-lg-1">
-                                    <input type="num" class="form-control" id="ParEmlCod" name="ParEmlCod" value="<% out.print(utilidad.NuloToVacio((parametro.getParametroEmail() != null ? parametro.getParametroEmail().getParEmlCod() : ""))); %>" disabled>                                
-                                </div>
-                                <div class="col-lg-2">
-                                    <a href="#" id="btnParEmlCod" name="btnParEmlCod" class="glyphicon glyphicon-search" data-toggle="modal" data-target="#PopUpParamEml"></a>
-                                </div>
-
-                                <div class="col-lg-3">
-                                    <label name="ParEmlNom" id="ParEmlNom" > <% out.print(utilidad.NuloToVacio((parametro.getParametroEmail() != null ? parametro.getParametroEmail().getParEmlNom() : null))); %></label>
-                                </div>
-
-
                             </div>
-
-                            <!--------------------------------------------------------------------------------------------------------------->
-
-                            <div class="checkbox">
-                                <label> <input type="checkbox" id="ParUtlMdl" name="ParUtlMdl" <% out.print(utilidad.BooleanToChecked(parametro.getParUtlMdl())); %>> Sincronizar con Moodle: </label>
-                            </div>
-
-                            <div>
-                                <label>URL de Moodle:</label>
-                                <input type="text" class="form-control" id="ParUrlMdl" name="ParUrlMdl" placeholder="URL" value="<% out.print(utilidad.NuloToVacio(parametro.getParUrlMdl())); %>">
-                            </div>
-
-                            <div>
-                                <label>Token de Moodle:</label>
-                                <input type="text" class="form-control" id="ParMdlTkn" name="ParMdlTkn" placeholder="Token" value="<% out.print(utilidad.NuloToVacio(parametro.getParMdlTkn())); %>">
-                            </div>
-
-                            <!--------------------------------------------------------------------------------------------------------------->
-
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="ParSncAct" name="ParSncAct" <% out.print(utilidad.BooleanToChecked(parametro.getParSncAct())); %>> Sincronización activa</label>
-                            </div>
-                            <div>
-                                <label>Última sincronización:</label>
-                                <input type="datetime" id="ParFchUltSinc" class="form-control" name="ParFchUltSinc" disabled value="<% out.print(utilidad.NuloToVacio(parametro.getParFchUltSinc())); %>">
-                            </div>
-
-                            <div class="checkbox">
-                                <label><input type="checkbox" id="ParSisLocal" name="ParSisLocal" <% out.print(utilidad.BooleanToChecked(parametro.getParSisLocal())); %>> Sistema local</label>
-                            </div>
-
-                            <div>
-                                <label>URL Sistema Online:</label>
-                                <input type="text" class="form-control" id="ParUrlSrvSnc" name="ParUrlSrvSnc" placeholder="URL" value="<% out.print(utilidad.NuloToVacio(parametro.getParUrlSrvSnc())); %>">
-                            </div>
-
-                            <!--------------------------------------------------------------------------------------------------------------->
-
-                            <div>
-                                <label>Expresión regular para validar contraseña:</label>
-                                <input type="text" class="form-control" id="ParPswValExp" name="ParPswValExp" placeholder="Expresión regular" value="<% out.print(utilidad.NuloToVacio(parametro.getParPswValExp())); %>">
-                            </div>
-
-                            <div>
-                                <label>Mensaje en caso de contraseña incorrecta:</label>
-                                <input type="text" class="form-control" id="ParPswValMsg" name="ParPswValMsg" placeholder="Mensaje" value="<% out.print(utilidad.NuloToVacio(parametro.getParPswValMsg())); %>">
-                            </div>
-
-                            <!--------------------------------------------------------------------------------------------------------------->
-
-                            <div>
-                                <label>Dias de anticipación para notificar fecha proxima de evaluacion:</label>
-                                <input type="number" class="form-control" id="ParDiaEvlPrv" name="ParDiaEvlPrv" placeholder="Días" value="<% out.print(utilidad.NuloToVacio(parametro.getParDiaEvlPrv())); %>">
-                            </div>
-
-                            <div>
-                                <label>Tiempo de inactividad en meses, para notificacion de materias previas (Not. Motivacional):</label>
-                                <input type="num" class="form-control" id="ParTieIna" name="ParTieIna" placeholder="Meses" value="<% out.print(utilidad.NuloToVacio(parametro.getParTieIna())); %>">
-                            </div>
-
-
-                            <!---------------------------------------------------------------------------------------------------------------
-                            Fin del formulario
-                            --------------------------------------------------------------------------------------------------------------->
-
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
-
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
         <div id="PopUpParamEml" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog">

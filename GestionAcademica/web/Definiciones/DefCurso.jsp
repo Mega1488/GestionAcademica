@@ -55,20 +55,21 @@
         }
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -89,6 +90,38 @@
         <script>
             $(document).ready(function () {
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                
+
+            });
+            
+            function procesarDatos() {
 
 
                     var CurCod = $('#CurCod').val();
@@ -121,9 +154,7 @@
 
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
-            <%
-                                                                 out.print(js_redirect);
-            %>
+                                    <%=js_redirect%>
                                 } else
                                 {
                                     MostrarMensaje(obj.tipoMensaje, obj.mensaje);
@@ -149,9 +180,7 @@
 
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
-            <%
-                                                            out.print(js_redirect);
-            %>
+                                    <%=js_redirect%>
                                 } else
                                 {
                                     MostrarMensaje(obj.tipoMensaje, obj.mensaje);
@@ -170,9 +199,7 @@
 
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
-            <%
-                                                            out.print(js_redirect);
-            %>
+                                    <%=js_redirect%>
                                 } else
                                 {
                                     MostrarMensaje(obj.tipoMensaje, obj.mensaje);
@@ -181,81 +208,115 @@
                             });
                         }
                     }
-                });
-
-            });
+                }
 
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
+			<div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                        <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                        </div>
+                                                        
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                        <!-- CONTENIDO -->
+                                                            <div class="form-group "><label for="CurCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="CurCod" name="CurCod" disabled value="<%=utilidad.NuloToVacio(curso.getCurCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="CurNom" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="CurNom" name="CurNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(curso.getCurNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="CurDsc" class="control-label col-lg-3">Descripción</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="CurDsc" name="CurDsc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(curso.getCurDsc())%>" ></div></div>
+                                                            <div class="form-group "><label for="CurFac" class="control-label col-lg-3">Facultad</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="CurFac" name="CurFac" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(curso.getCurFac())%>" ></div></div>
+                                                            <div class="form-group "><label for="CurCrt" class="control-label col-lg-3">Certificación</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="CurCrt" name="CurCrt" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(curso.getCurCrt())%>" ></div></div>
+                                                            
+                                                            <%
+                                                                if (param.getParUtlMdl()) {
+                                                            %>
+                                                            <div class="form-group ">
+                                                                <label for="CurCatCod" class="control-label col-lg-3">Categoría (Moodle)</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control inputs_generales" id="CurCatCod" name="CurCatCod" <%=CamposActivos%>>
+                                                                        <option value=''>Nueva</option>
+                                                                        <%
+                                                                            if(lstCategorias != null)
+                                                                            {
+                                                                                for (int i = 0; i < lstCategorias.length; i++) {
+                                                                                    MoodleCategory mdlCat = lstCategorias[i];
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                                                                                    out.println("<option " + (mdlCat.getId() == curso.getCurCatCod() ? "selected" : "") + " value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
+
+                                                                                }
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <%
+                                                                }
+                                                            %>
+                                                            
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
+            </div>
+        </div>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefCursoTabs.jsp"/>
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
                         </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoWW.jsp">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>Código</label><input type="text" class="form-control" id="CurCod" name="CurCod" placeholder="CurCod" disabled value="<% out.print(utilidad.NuloToVacio(curso.getCurCod())); %>" ></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="CurNom" name="CurNom" placeholder="CurNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(curso.getCurNom())); %>" ></div>
-                            <div><label>Descripción</label><input type="text" class="form-control" id="CurDsc" name="CurDsc" placeholder="CurDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(curso.getCurDsc())); %>" ></div>
-                            <div><label>Facultad</label><input type="text" class="form-control" id="CurFac" name="CurFac" placeholder="CurFac" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(curso.getCurFac())); %>" ></div>
-                            <div><label>Certificación</label><input type="text" class="form-control" id="CurCrt" name="CurCrt" placeholder="CurCrt" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(curso.getCurCrt())); %>" ></div>
-
-                            <%
-                                if (param.getParUtlMdl()) {
-                            %>
-                            <div>
-                                <label>Categoría en moodle</label>
-                                <select class="form-control" id="CurCatCod" name="CurCatCod" <% out.print(CamposActivos); %>>
-                                    <option value=''>Nueva</option>
-                                    <%
-                                        for (int i = 0; i < lstCategorias.length; i++) {
-                                            MoodleCategory mdlCat = lstCategorias[i];
-
-                                            if (mdlCat.getId() == curso.getCurCatCod()) {
-                                                //return filial;
-                                                out.println("<option selected value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + mdlCat.getId() + "'>" + mdlCat.getName() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                            <%
-                                }
-                            %>
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success" />
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                            </div>
-                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div>
+        </div> 
     </body>
 </html>

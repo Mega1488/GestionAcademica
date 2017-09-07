@@ -59,18 +59,23 @@
 
     }
 
-    String CamposActivos    = "";
-    String notInterna       = "";
+    String notInterna       = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
-        case DELETE:
-            CamposActivos = "disabled";
+        case INSERT:
+            CamposActivos = "enabled";
             break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+        case DELETE:
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
-            notInterna   = (notificacion.getNotInt() == true ? "disabled" : "");
+            CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
+            notInterna    = (notificacion.getNotInt() == true ? "disabled" : "");
             break;
     }
 
@@ -93,6 +98,44 @@
 
 
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                
+
+
+                $('#NotCon').summernote({
+                    lang: 'es-ES',
+                    height: 300
+                });
+
+            });
+            
+            function procesarDatos() {
 
                     var NotCod = $('#NotCod').val();
                     var NotAsu = $('#NotAsu').val();
@@ -159,161 +202,219 @@
 
 
                     }
-                });
-
-
-                $(document).ready(function () {
-                    $('#NotCon').summernote({
-                        lang: 'es-ES',
-                        height: 300
-                    });
-                });
-
-            });
+                }
 
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+	
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefNotificacionTabs.jsp"/>
+			<div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                          <input type="hidden" name="MODO" id="MODO" value="<%=Mode%>">
+                                                        </div>
+                              
+                                                        
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            <!-- CONTENIDO -->
+                                                        
+                                                            <div class="form-group "><label for="NotCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="NotCod" name="NotCod" disabled value="<%=utilidad.NuloToVacio(notificacion.getNotCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="NotNom" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input required type="text" class=" form-control inputs_generales" id="NotNom" name="NotNom" <%=notInterna%> value="<%=utilidad.NuloToVacio(notificacion.getNotNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="NotDsc" class="control-label col-lg-3">Descripción</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="NotDsc" name="NotDsc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(notificacion.getNotDsc())%>" ></div></div>
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                                                            <div class="form-group "><label for="NotInt" class="control-label col-lg-3">Notificación de sistema</label><div class="col-lg-6"><input type="checkbox"  id="NotInt" name="NotInt" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotInt())%> ></div></div>
+                                                            <div class="form-group "><label for="NotAct" class="control-label col-lg-3">Activa</label><div class="col-lg-6"><input type="checkbox"  id="NotAct" name="NotAct" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotAct())%> ></div></div>
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Detalle de notificacion</h2>
+                                                            </div>
+
+                                                            <div class="form-group "><label for="NotFchDsd" class="control-label col-lg-3">Ejecutar desde</label><div class="col-lg-6"><input type="datetime-local" class=" form-control inputs_generales" id="NotFchDsd" name="NotFchDsd" <%=CamposActivos%> value="<% out.print((notificacion.getNotFchDsd() != null ? dateFormat.format(notificacion.getNotFchDsd()) : dateFormat.format(fechaActual))); %>" ></div></div>
+                                                            <div class="form-group ">
+                                                                <label for="NotTpo" class="control-label col-lg-3">Tipo</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control inputs_generales" id="NotTpo" name="NotTpo" <% out.print(notInterna); %> >
+                                                                        <%
+                                                                            for (TipoNotificacion tpoNot : TipoNotificacion.values()) {
+
+                                                                                String seleccionado = "";
+                                                                                if (notificacion.getNotTpo() != null) {
+                                                                                    if (notificacion.getNotTpo().equals(tpoNot)) {
+                                                                                        seleccionado = "selected";
+                                                                                    }
+                                                                                }
+
+                                                                                out.println("<option " + seleccionado + " value='" + tpoNot.getValor() + "'>" + tpoNot.getNombre() + "</option>");
+
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group ">
+                                                                <label for="NotTpoEnv" class="control-label col-lg-3">Tipo de envío</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control inputs_generales" id="NotTpoEnv" name="NotTpoEnv" <% out.print(notInterna); %>>
+                                                                        <%
+                                                                            for (TipoEnvio tpoEnv : TipoEnvio.values()) {
+
+                                                                                String seleccionado = "";
+                                                                                if (notificacion.getNotTpoEnv() != null) {
+                                                                                    if (notificacion.getNotTpoEnv().equals(tpoEnv)) {
+                                                                                        seleccionado = "selected";
+                                                                                    }
+                                                                                }
+
+                                                                                out.println("<option " + seleccionado + " value='" + tpoEnv.getValor() + "'>" + tpoEnv.getNombre() + "</option>");
+
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group ">
+                                                                <label for="NotObtDest" class="control-label col-lg-3">Obtener destinatario</label>
+                                                                <div class="col-lg-6">
+                                                                    
+                                                                        <select class="form-control inputs_generales" id="NotObtDest" name="NotObtDest"  <% out.print(notInterna); %>>
+                                                                        <%
+                                                                            for (ObtenerDestinatario obtDestinatario : ObtenerDestinatario.values()) {
+
+                                                                                String seleccionado = "";
+                                                                                if (notificacion.getNotObtDest() != null) {
+                                                                                    if (notificacion.getNotObtDest().equals(obtDestinatario)) {
+                                                                                        seleccionado = "selected";
+                                                                                    }
+                                                                                }
+
+                                                                                out.println("<option " + seleccionado + " value='" + obtDestinatario.getValor() + "'>" + obtDestinatario.getNombre() + "</option>");
+
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Repetición</h2>
+                                                            </div>
+
+                                                            <div class="form-group ">
+                                                                <label for="NotRepVal" class="control-label col-lg-3">Cada</label>
+                                                                <div class="col-lg-2">
+                                                                    <input type="number" class=" form-control inputs_generales" id="NotRepVal" name="NotRepVal" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(notificacion.getNotRepVal())%>" >
+                                                                </div>
+                                                                
+                                                                <div class="col-lg-4">
+                                                                    <select class="form-control inputs_generales" id="NotRepTpo" name="NotRepTpo" <% out.print(CamposActivos); %> >
+                                                                        <%
+                                                                            for (TipoRepeticion tpoRep : TipoRepeticion.values()) {
+
+                                                                                String seleccionado = "";
+                                                                                if (notificacion.getNotRepTpo() != null) {
+                                                                                    if (notificacion.getNotRepTpo().equals(tpoRep)) {
+                                                                                        seleccionado = "selected";
+                                                                                    }
+                                                                                }
+
+                                                                                out.println("<option " + seleccionado + " value='" + tpoRep.getValor() + "'>" + tpoRep.getNombre() + "</option>");
+
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            
+                                                            <div class="form-group "><label for="NotRepHst" class="control-label col-lg-3">Hasta</label><div class="col-lg-6"><input type="datetime-local" class=" form-control inputs_generales" id="NotRepHst" name="NotRepHst" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(notificacion.getNotRepHst())%>" ></div></div>
+                                                            
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Medios</h2>
+                                                            </div>
+
+                                                            <div class="form-group "><label for="NotEmail" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="checkbox" id="NotEmail" name="NotEmail" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotEmail())%> ></div></div>
+                                                            <div class="form-group "><label for="NotApp" class="control-label col-lg-3">Aplicación</label><div class="col-lg-6"><input type="checkbox"  id="NotApp" name="NotApp" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotApp())%> ></div></div>
+                                                            <div class="form-group "><label for="NotWeb" class="control-label col-lg-3">Web</label><div class="col-lg-6"><input type="checkbox"  id="NotWeb" name="NotWeb" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotWeb())%> ></div></div>
+
+                                                            <div class="formulario_borde"></div>
+                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
+                                                                <h2>Mensaje</h2>
+                                                            </div>
+                                                            
+                                                            <div class="form-group "><label for="NotAsu" class="control-label col-lg-3">Asunto</label><div class="col-lg-6"><input required type="text" class=" form-control inputs_generales" id="NotAsu" name="NotAsu" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(notificacion.getNotAsu())%>" ></div></div>
+                                                            <div class="form-group ">
+                                                                <label for="NotCon" class="control-label col-lg-3">Contenido</label>
+                                                                <div class="col-lg-6">
+                                                                    <div class=" form-control inputs_generales" id="NotCon" name="NotCon"><% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %></div>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
+            </div>
+        </div>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefNotificacionTabs.jsp"/>
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
                         </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionWW.jsp">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>Código</label><input type="text" class="form-control" id="NotCod" name="NotCod" placeholder="NotCod" disabled value="<% out.print(utilidad.NuloToVacio(notificacion.getNotCod())); %>" ></div>
-                            <div><label>Activa</label><input type="checkbox"  id="NotAct" name="NotAct" placeholder="NotAct" <% out.print(CamposActivos); %>  <% out.print(utilidad.BooleanToChecked(notificacion.getNotAct())); %> ></div>
-                            <div><label>Nombre</label><input type="text" class="form-control" id="NotNom" name="NotNom" placeholder="NotNom" <% out.print(CamposActivos); %> <% out.print(notInterna); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotNom())); %>" ></div>
-                            <div><label>Descripcion</label><input type="text" class="form-control" id="NotDsc" name="NotDsc" placeholder="NotDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotDsc())); %>" ></div>
-
-                            <div><label>Aplicacion</label><input type="checkbox" id="NotApp" name="NotApp" placeholder="NotApp" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotApp())); %> ></div>
-                            <div><label>Email</label><input type="checkbox"  id="NotEmail" name="NotEmail" placeholder="NotEmail" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotEmail())); %> ></div>
-                            <div><label>Web</label><input type="checkbox"  id="NotWeb" name="NotWeb" placeholder="NotWeb" <% out.print(CamposActivos); %> <% out.print(utilidad.BooleanToChecked(notificacion.getNotWeb())); %> ></div>
-
-                            <div>
-                                <label>Obtener destinatarios</label>
-                                <select class="form-control" id="NotObtDest" name="NotObtDest" <% out.print(CamposActivos); %> <% out.print(notInterna); %>>
-                                    <%
-                                        for (ObtenerDestinatario obtDestinatario : ObtenerDestinatario.values()) {
-
-                                            String seleccionado = "";
-                                            if (notificacion.getNotObtDest() != null) {
-                                                if (notificacion.getNotObtDest().equals(obtDestinatario)) {
-                                                    seleccionado = "selected";
-                                                }
-                                            }
-
-                                            out.println("<option " + seleccionado + " value='" + obtDestinatario.getValor() + "'>" + obtDestinatario.getNombre() + "</option>");
-
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-
-                            <div>
-                                <label>Tipo de notificacion</label>
-                                <select class="form-control" id="NotTpo" name="NotTpo" <% out.print(CamposActivos); %> <% out.print(notInterna); %> >
-                                    <%
-                                        for (TipoNotificacion tpoNot : TipoNotificacion.values()) {
-
-                                            String seleccionado = "";
-                                            if (notificacion.getNotTpo() != null) {
-                                                if (notificacion.getNotTpo().equals(tpoNot)) {
-                                                    seleccionado = "selected";
-                                                }
-                                            }
-
-                                            out.println("<option " + seleccionado + " value='" + tpoNot.getValor() + "'>" + tpoNot.getNombre() + "</option>");
-
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label>Tipo de envio</label>
-                                <select class="form-control" id="NotTpoEnv" name="NotTpoEnv" <% out.print(CamposActivos); %> <% out.print(notInterna); %>>
-                                    <%
-                                        for (TipoEnvio tpoEnv : TipoEnvio.values()) {
-
-                                            String seleccionado = "";
-                                            if (notificacion.getNotTpoEnv() != null) {
-                                                if (notificacion.getNotTpoEnv().equals(tpoEnv)) {
-                                                    seleccionado = "selected";
-                                                }
-                                            }
-
-                                            out.println("<option " + seleccionado + " value='" + tpoEnv.getValor() + "'>" + tpoEnv.getNombre() + "</option>");
-
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                                    <div><label>Enviar a partir de</label><input type="datetime-local" class="form-control" id="NotFchDsd" name="NotFchDsd" placeholder="NotFchDsd" <% out.print(CamposActivos); %>  value="<% out.print((notificacion.getNotFchDsd() != null ? dateFormat.format(notificacion.getNotFchDsd()) : dateFormat.format(fechaActual))); %>" ></div>
-
-                            <div>
-                                <label>Tipo de repeticion</label>
-                                <select class="form-control" id="NotRepTpo" name="NotRepTpo" <% out.print(CamposActivos); %> >
-                                    <%
-                                        for (TipoRepeticion tpoRep : TipoRepeticion.values()) {
-
-                                            String seleccionado = "";
-                                            if (notificacion.getNotRepTpo() != null) {
-                                                if (notificacion.getNotRepTpo().equals(tpoRep)) {
-                                                    seleccionado = "selected";
-                                                }
-                                            }
-
-                                            out.println("<option " + seleccionado + " value='" + tpoRep.getValor() + "'>" + tpoRep.getNombre() + "</option>");
-
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-                            <div><label>Repetir</label><input type="text" class="form-control" id="NotRepVal" name="NotRepVal" placeholder="NotRepVal" <% out.print(CamposActivos); %>  value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepVal())); %>" ></div>
-                            <div><label>Repetir hasta</label><input type="date" class="form-control" id="NotRepHst" name="NotRepHst" placeholder="NotRepHst" <% out.print(CamposActivos); %>  value="<% out.print(utilidad.NuloToVacio(notificacion.getNotRepHst())); %>" ></div>
-
-
-                            <div><label>Asunto</label><input type="text" class="form-control" id="NotAsu" name="NotAsu" placeholder="NotAsu" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(notificacion.getNotAsu())); %>" ></div>
-                            <div>
-                                <label>Contenido</label>
-                                <div id="NotCon" name="NotCon"><% out.print(utilidad.NuloToVacio(notificacion.getNotCon())); %></div>
-                            </div>
-
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                            </div>
-                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div>
+        </div> 
 
     </body>
 </html>

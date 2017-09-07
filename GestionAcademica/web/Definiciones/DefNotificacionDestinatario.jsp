@@ -63,20 +63,21 @@
 
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -95,6 +96,39 @@
 
 
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                
+
+            });
+            
+            
+            function procesarDatos(){
 
                     var NotCod = $('#NotCod').val();
                     var NotDstCod = $('#NotDstCod').val();
@@ -134,54 +168,95 @@
 
 
                     }
-                });
-
-            });
+                }
 
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
-
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div class="contenedor-titulo">    
-                            <p>Destinatario</p>
-                        </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=UPDATE&pNotCod=<% out.print(NotCod); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="NotCod" id="NotCod" value="<% out.print(NotCod); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>Código</label><input type="number" class="form-control" id="NotDstCod" name="NotDstCod" placeholder="NotDstCod" disabled value="<% out.print(utilidad.NuloToVacio(destinatario.getNotDstCod())); %>" ></div>
-                            <div><label>Email</label><input type="email" class="form-control" id="NotEmail" name="NotEmail" placeholder="NotEmail" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(destinatario.getNotEmail())); %>" ></div>
-                            <div><label>Persona</label><input type="number" class="form-control" id="NotPerCod" name="NotPerCod" placeholder="NotPerCod" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getPerCod() : ""))); %>" ></div>
-
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                                DESTINATARIO
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=UPDATE&pNotCod=<% out.print(NotCod); %>">Regresar</a>
+                            </span>
+                        </header>
+        
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        
+                                                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                            <input type="hidden" name="NotCod" id="NotCod" value="<% out.print(NotCod); %>">
+                                                        </div>
+                                                        
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            <div class="form-group "><label for="NotDstCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="NotDstCod" name="NotDstCod" disabled value="<%=utilidad.NuloToVacio(destinatario.getNotDstCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="NotEmail" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="email" class=" form-control inputs_generales" id="NotEmail" name="NotEmail" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(destinatario.getNotEmail())%>" ></div></div>
+                                                            <div class="form-group "><label for="NotPerCod" class="control-label col-lg-3">Persona</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="NotPerCod" name="NotPerCod" <%=CamposActivos%> value="<% out.print(utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getPerCod() : ""))); %>" ></div></div>
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input type="button" class="btn <%=nameClass%>" data-accion="<%=Mode%>" name="btn_guardar" id="btn_guardar" value="<%=nameButton%>">
+                                                                    <input type="button" class="btn btn-default" onclick="<%=js_redirect%>" value="CANCELAR">
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </form>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
-        </div>
+        </div> 
+        
     </body>
 </html>

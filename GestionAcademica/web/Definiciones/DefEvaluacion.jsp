@@ -117,24 +117,21 @@
     }
 
     String js_redirect = "window.location.replace('" + urlRetorno + "');";;
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
-            boton = "<input name='btn_guardar' id='btn_guardar' value='Guardar' type='button' class='btn btn-success' />";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            boton = "<input href='#' value='Eliminar' class='btn btn-danger' type='button' data-toggle='modal' data-target='#PopUpElimEvaluacion'/>";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
-            boton = "<input name='btn_guardar' id='btn_guardar' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
-            boton = "<input name='btn_guardar' id='btn_guardar' value='Guardar' type='button' class='btn btn-success' />";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -151,6 +148,37 @@
         <script>
             $(document).ready(function () {
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+            });
+            
+            
+            function procesarDatos() {
 
                     var EvlCod = $('#EvlCod').val();
                     var MatEvlCarCod = $('#MatEvlCarCod').val();
@@ -267,107 +295,115 @@
                             });
                         }
                     }
-                });
-
-            });
+                }
 
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                                EVALUACIÓN
+                            <!-- BOTONES -->
+                        </header>
+        
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
+                                                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                            <input type="hidden" name="MatEvlCarCod" id="MatEvlCarCod" value="<% out.print(MatEvlCarCod); %>">
+                                                            <input type="hidden" name="MatEvlPlaEstCod" id="MatEvlPlaEstCod" value="<% out.print(MatEvlPlaEstCod); %>">
+                                                            <input type="hidden" name="MatEvlMatCod" id="MatEvlMatCod" value="<% out.print(MatEvlMatCod); %>">
+                                                            <input type="hidden" name="CurEvlCurCod" id="CurEvlCurCod" value="<% out.print(CurEvlCurCod); %>">
+                                                            <input type="hidden" name="ModEvlCurCod" id="ModEvlCurCod" value="<% out.print(ModEvlCurCod); %>">
+                                                            <input type="hidden" name="ModEvlModCod" id="ModEvlModCod" value="<% out.print(ModEvlModCod); %>">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+                                                        </div>
+                                                                
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            <div class="form-group "><label for="EvlCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="EvlCod" name="EvlCod" disabled value="<%=utilidad.NuloToVacio(evaluacion.getEvlCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="EvlNom" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="EvlNom" name="EvlNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(evaluacion.getEvlNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="EvlDsc" class="control-label col-lg-3">Descripción</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="EvlDsc" name="EvlDsc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(evaluacion.getEvlDsc())%>" ></div></div>
+                                                            <div class="form-group "><label for="EvlNotTot" class="control-label col-lg-3">Nota total</label><div class="col-lg-6"><input type="number" step="0.1" class=" form-control inputs_generales" id="EvlNotTot" name="EvlNotTot" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(evaluacion.getEvlNotTot())%>" ></div></div>
+                                                            <div class="form-group ">
+                                                                <label for="TpoEvlCod" class="control-label col-lg-3">Tipo de evaluación</label>
+                                                                <div class="col-lg-6">
+                                                                    <select class="form-control inputs_generales" id="TpoEvlCod" name="TpoEvlCod" <% out.print(CamposActivos); %>>
+                                                                    <%
+                                                                        for (Object tpoEvalOb : lstTpoEvaluacion) {
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div class="contenedor-titulo">    
-                            <p>Evaluación</p>
-                        </div>  
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlRetorno); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="MatEvlCarCod" id="MatEvlCarCod" value="<% out.print(MatEvlCarCod); %>">
-                            <input type="hidden" name="MatEvlPlaEstCod" id="MatEvlPlaEstCod" value="<% out.print(MatEvlPlaEstCod); %>">
-                            <input type="hidden" name="MatEvlMatCod" id="MatEvlMatCod" value="<% out.print(MatEvlMatCod); %>">
-                            <input type="hidden" name="CurEvlCurCod" id="CurEvlCurCod" value="<% out.print(CurEvlCurCod); %>">
-                            <input type="hidden" name="ModEvlCurCod" id="ModEvlCurCod" value="<% out.print(ModEvlCurCod); %>">
-                            <input type="hidden" name="ModEvlModCod" id="ModEvlModCod" value="<% out.print(ModEvlModCod); %>">
-
-                        </div>
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>EvlCod</label><input type="text" class="form-control" id="EvlCod" name="EvlCod" placeholder="EvlCod" disabled value="<% out.print(utilidad.NuloToVacio(evaluacion.getEvlCod())); %>" ></div>
-                            <div><label>EvlNom</label><input type="text" class="form-control" id="EvlNom" name="EvlNom" placeholder="EvlNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(evaluacion.getEvlNom())); %>" ></div>
-                            <div><label>EvlDsc</label><input type="text" class="form-control" id="EvlDsc" name="EvlDsc" placeholder="EvlDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(evaluacion.getEvlDsc())); %>" ></div>
-                            <div><label>EvlNotTot</label><input type="number" class="form-control" id="EvlNotTot" name="EvlNotTot" placeholder="EvlNotTot" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(evaluacion.getEvlNotTot())); %>" ></div>
-
-                            <div>
-                                <label>Tipo Evaluacion</label>
-                                <select class="form-control" id="TpoEvlCod" name="TpoEvlCod" <% out.print(CamposActivos); %>>
-                                    <%
-                                        for (Object tpoEvalOb : lstTpoEvaluacion) {
-
-                                            TipoEvaluacion tpoEval = (TipoEvaluacion) tpoEvalOb;
-
-                                            if (evaluacion.getTpoEvl() == null) {
-                                                out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
-                                            } else if (tpoEval.getTpoEvlCod() == evaluacion.getTpoEvl().getTpoEvlCod()) {
-                                                //return filial;
-                                                out.println("<option selected value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
+                                                                            TipoEvaluacion tpoEval = (TipoEvaluacion) tpoEvalOb;
+                                                                            
+                                                                            out.println("<option " + (tpoEval.getTpoEvlCod() == evaluacion.getTpoEvl().getTpoEvlCod() ? "selected" :  "") + " value='" + tpoEval.getTpoEvlCod() + "'>" + tpoEval.getTpoEvlNom() + "</option>");
+                                                                            
+                                                                        }
+                                                                    %>
+                                                                </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                                
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                                
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <br>
-                            <div>
-                                <%out.print(boton);%>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect); %>"/>
-                            </div>
-                        </form>
-                    </div>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+
         <!--Popup Confirmar Eliminación-->
-        <div id="PopUpElimEvaluacion" class="modal fade" role="dialog">
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
             <!-- Modal -->
             <div class="modal-dialog modal-lg">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <h4 class="modal-title">Eliminar Evaluación</h4>
+                        <h4 class="modal-title">Eliminar</h4>
                     </div>
                     <div class="modal-body">
                         <div>
-                            <h4>¿Seguro que quiere eliminar la Evaluación: <% out.print(utilidad.NuloToVacio(evaluacion.getEvlNom())); %> del Estudio: <% out.print(evaluacion.getEstudioNombre());%>?</h4>
-                            <!--                            <h4>Se eliminará tambien las Evaluaciones que contenga</h4>-->
+                            <h4>Confirma eliminación?</h4>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <input name="btn_guardar" id="btn_guardar" value="Confirmar" type="button" class="btn btn-success"/>
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-        </div>
+        </div> 
 
     </body>
 </html>

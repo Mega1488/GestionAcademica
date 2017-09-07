@@ -53,20 +53,21 @@
         modulo = curso.getModuloById(Long.valueOf(ModCod));
     }
 
-    String CamposActivos = "disabled";
+    String CamposActivos    = "disabled";
+    String nameButton       = "CONFIRMAR";
+    String nameClass        = "btn-primary";
 
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
             break;
         case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
+            nameButton    = "ELIMINAR";
+            nameClass     = "btn-danger";
             break;
         case UPDATE:
             CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
             break;
     }
 
@@ -83,6 +84,38 @@
         <script>
             $(document).ready(function () {
                 $('#btn_guardar').click(function (event) {
+                    if($(this).data("accion") == "<%=Mode.DELETE%>")
+                    {
+                        $(function () {
+                            $('#PopUpConfEliminar').modal('show');
+                        });
+                    }
+                    else
+                    {
+                        if(validarDatos())
+                        {
+                            procesarDatos();
+                        }
+                    }
+                });
+                
+                function validarDatos(){
+                    
+                    if(!$('#frm_general')[0].checkValidity())
+                    {
+                        var $myForm = $('#frm_general');
+                        $myForm.find(':submit').click();
+                        return false;
+                    }
+
+                    return true;
+                }
+                
+                
+
+            });
+            
+            function procesarDatos() {
 
 
                     var CurCod = $('#CurCod').val();
@@ -179,75 +212,105 @@
                             });
                         }
                     }
-                });
-
-            });
+                }
 
         </script>
 
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
-            <div id="contenido" name="contenido" class="main-panel">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <!-- TABS -->
+                        <jsp:include page="/Definiciones/DefModuloTabs.jsp"/>
+			<div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div name="datos_ocultos">
+                                                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
+                                                            <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
+                                                        </div>
+                                                        
+                                                        <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
+                                                            
+                                                            <div class="form-group "><label for="ModCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ModCod" name="ModCod" disabled value="<%=utilidad.NuloToVacio(modulo.getModCod())%>" ></div></div>
+                                                            <div class="form-group "><label for="ModNom" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="ModNom" name="ModNom" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(modulo.getModNom())%>" ></div></div>
+                                                            <div class="form-group "><label for="ModDsc" class="control-label col-lg-3">Descripcion</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="ModDsc" name="ModDsc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(modulo.getModDsc())%>" ></div></div>
+                                                            <div class="form-group "><label for="ModCntHor" class="control-label col-lg-3">Carga horaria</label><div class="col-lg-6"><input type="number" step="0.1" class=" form-control inputs_generales" id="ModCntHor" name="ModCntHor" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(modulo.getModCntHor())%>" ></div></div>
+                                                            
+                                                            <div class="form-group ">
+                                                                <label for="ModPerVal" class="control-label col-lg-3">Periodo</label>
+                                                                <div class="col-lg-1">
+                                                                    <input type="number" step="0.1" required class=" form-control inputs_generales" id="ModPerVal" name="ModPerVal" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(modulo.getModPerVal())%>" >
+                                                                </div>
+                                                                <div class="col-lg-5">
+                                                                    <select class="form-control inputs_generales" id="ModTpoPer" name="ModTpoPer" <% out.print(CamposActivos); %>>
+                                                                        <%
+                                                                            for (TipoPeriodo tpoPeriodo : TipoPeriodo.values()) {
+                                                                                
+                                                                                out.println("<option " + (modulo.getModTpoPer() == tpoPeriodo ? "selected" : "") + " value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
+                                                                            }
+                                                                        %>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="form-group">
+                                                                <div class="col-lg-offset-3 col-lg-6">
+                                                                    <input type="submit" style="display:none;">
+                                                                    <input name="btn_guardar" id="btn_guardar"  type="button"  class="btn <%=nameClass%>" data-accion="<%=Mode%>" value="<%=nameButton%>" />
+                                                                    <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
+            </div>
+        </div>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-                        <div id="tabs" name="tabs" class="contenedor-tabs">
-                            <jsp:include page="/Definiciones/DefModuloTabs.jsp"/>
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        <!--Popup Confirmar Eliminación-->
+        <div id="PopUpConfEliminar" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog modal-lg">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Eliminar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h4>Confirma eliminación?</h4>
                         </div>
-
-                        <div class=""> 
-                            <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>Definiciones/DefCursoModuloSWW.jsp?MODO=UPDATE&pCurCod=<% out.print(CurCod); %>">Regresar</a></div>
-                        </div>
-
-                        <div style="display:none" id="datos_ocultos" name="datos_ocultos">
-                            <input type="hidden" name="MODO" id="MODO" value="<% out.print(Mode); %>">
-                            <input type="hidden" name="CurCod" id="CurCod" value="<% out.print(curso.getCurCod()); %>">
-                        </div>
-
-                        <form id="frm_objeto" name="frm_objeto">
-
-                            <div><label>ModCod</label><input type="text" class="form-control" id="ModCod" name="ModCod" placeholder="ModCod" disabled value="<% out.print(utilidad.NuloToVacio(modulo.getModCod())); %>" ></div>
-                            <div><label>ModNom</label><input type="text" class="form-control" id="ModNom" name="ModNom" placeholder="ModNom" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(modulo.getModNom())); %>" ></div>
-                            <div><label>ModDsc</label><input type="text" class="form-control" id="ModDsc" name="ModDsc" placeholder="ModDsc" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(modulo.getModDsc())); %>" ></div>
-
-                            <div>
-                                <label>ModTpoPer</label>
-                                <select class="form-control" id="ModTpoPer" name="ModTpoPer" <% out.print(CamposActivos); %>>
-                                    <%
-                                        for (TipoPeriodo tpoPeriodo : TipoPeriodo.values()) {
-
-                                            if (modulo.getModTpoPer() == tpoPeriodo) {
-                                                //return filial;
-                                                out.println("<option selected value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
-                                            } else {
-                                                out.println("<option value='" + tpoPeriodo.getTipoPeriodo() + "'>" + tpoPeriodo.getTipoPeriodoNombre() + "</option>");
-                                            }
-                                        }
-                                    %>
-                                </select>
-                            </div>
-
-
-                            <div><label>MotPerVal</label><input type=number step=0.5 class="form-control" id="MotPerVal" name="MotPerVal" placeholder="MotPerVal" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(modulo.getModPerVal())); %>" ></div>
-                            <div><label>ModCntHor</label><input type=number step=0.5 class="form-control" id="ModCntHor" name="ModCntHor" placeholder="ModCntHor" <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(modulo.getModCntHor())); %>" ></div>
-
-                            <div>
-                                <input name="btn_guardar" id="btn_guardar" value="Guardar" type="button" class="btn btn-success"/>
-                                <input value="Cancelar" class="btn btn-default" type="button" onclick="<% out.print(js_redirect);%>"/>
-                            </div>
-                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button name="btn_conf_eliminar" id="btn_conf_eliminar" class="btn btn-danger" data-dismiss="modal" onclick="procesarDatos()">Eliminar</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+        
     </body>
 </html>

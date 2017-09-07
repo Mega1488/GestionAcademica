@@ -59,65 +59,65 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-            <div id="contenido" name="contenido"  class="main-panel">
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
-                <div class="contenedor-principal">
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            PERIODOS
+                            <!-- BOTONES -->
+                            <span class="tools pull-right">
+                                <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <!-- CONTENIDO -->
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Tipo</th>
+                                            <th>Valor</th>
+                                            <th>Fecha de inicio</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
 
+                                    <% for (Object objeto : lstObjeto) {
+                                            Periodo periodo = (Periodo) objeto;
+                                    %>
+                                    <tr>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
+                                        <td><% out.print(utilidad.NuloToVacio(periodo.getPeriCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(periodo.getPerTpo().getTipoPeriodoNombre())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(periodo.getPerVal())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(periodo.getPerFchIni())); %> </td>
+                                        <td><% out.print("<a href='#' data-codigo='" + periodo.getPeriCod() + "' data-toggle='modal' data-target='#PopUpInscGeneracion' name='btn_generacion' id='btn_generacion' title='Agregar por generación' class='fa fa-group btn_generacion'/>"); %></td>
 
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-
-
-                        <div class="contenedor-titulo">    
-                            <p>Periodos</p>
-                        </div>        
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                                
+                            </div>
                         </div>
-
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Tipo</th>
-                                    <th>Valor</th>
-                                    <th>Fecha de inicio</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <% for (Object objeto : lstObjeto) {
-                                    Periodo periodo = (Periodo) objeto;
-                            %>
-                            <tr>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_eliminar" id="btn_eliminar" title="Eliminar" class="glyphicon glyphicon-trash"/></td>
-                                <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodo.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriCod=<% out.print(periodo.getPeriCod()); %>" name="btn_editar" id="btn_editar" title="Editar" class='glyphicon glyphicon-edit'/></td>
-                                <td><% out.print(utilidad.NuloToVacio(periodo.getPeriCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(periodo.getPerTpo().getTipoPeriodoNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(periodo.getPerVal())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(periodo.getPerFchIni())); %> </td>
-                                <td><% out.print("<a href='#' data-codigo='" + periodo.getPeriCod() + "' data-toggle='modal' data-target='#PopUpInscGeneracion' name='btn_generacion' id='btn_generacion' title='Agregar por generación' class='fa fa-group btn_generacion'/>"); %></td>
-
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->

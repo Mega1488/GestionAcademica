@@ -11,6 +11,8 @@
 <%@page import="Utiles.Utilidades"%>
 
 
+<header class="panel-heading tab-bg-dark-navy-blue ">
+
 <%
     String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
     String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
@@ -21,9 +23,16 @@
     
     out.println("<ul class='nav nav-tabs'>");
     
-    out.println("<li class='" + (urlActual.equals("DefModulo.jsp") ? "active" : "") + "'><a href='" + urlSistema + "Definiciones/DefModulo.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Modulo</a></li>");
-    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefModuloEvaluacionSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Evaluaciones</a></li>");
+    out.println("<li class='" + (urlActual.equals("DefModulo.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefModulo.jsp") ? "true" : "false")+"' href='" + urlSistema + "Definiciones/DefModulo.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Modulo</a></li>");
+    if(!Mode.equals(Modo.INSERT)) out.println("<li class='" + (urlActual.equals("DefModuloEvaluacionSWW.jsp") ? "active" : "")+"'><a class='tabs' aria-expanded='"+(urlActual.equals("DefModuloEvaluacionSWW.jsp") ? "true" : "false")+"' href='" + urlSistema + "Definiciones/DefModuloEvaluacionSWW.jsp?MODO=" + Mode + "&pCurCod=" + CurCod + "&pModCod=" + ModCod + "'>Evaluaciones</a></li>");
     
     out.println("</ul>");
 %>
     
+    <span class="tools pull-right">
+        <div class="hidden-xs">
+            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefCursoModuloSWW.jsp?MODO=UPDATE&pCurCod=<% out.print(CurCod); %>">Regresar</a>
+        </div>
+    </span>
+        
+</header>

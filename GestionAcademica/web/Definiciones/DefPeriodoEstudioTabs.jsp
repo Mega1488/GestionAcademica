@@ -10,6 +10,9 @@
 <%@page import="Logica.LoCalendario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+
+<header class="panel-heading tab-bg-dark-navy-blue ">
+
 <%
     
     
@@ -23,9 +26,15 @@
    
     out.println("<ul class='nav nav-tabs'>");
     
-    if(mostrarTabs.equals("SI")) out.println("<li class='" + (urlActual.equals("DefPeriodoAlumnoSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=" +Modo.UPDATE + "&pPeriEstCod=" + PeriEstCod + "'>Alumnos</a></li>");
-    if(mostrarTabs.equals("SI")) out.println("<li class='" + (urlActual.equals("DefPeriodoDocenteSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefPeriodoDocenteSWW.jsp?MODO=" +Modo.UPDATE + "&pPeriEstCod=" + PeriEstCod + "'>Docentes</a></li>");
-    if(mostrarTabs.equals("SI")) out.println("<li class='" + (urlActual.equals("DefPeriodoDocumentoSWW.jsp") ? "active" : "")+"'><a href='" + urlSistema + "Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=" +Modo.UPDATE+ "&pPeriEstCod=" + PeriEstCod + "'>Documentos</a></li>");
+    if(mostrarTabs.equals("SI")) out.println("<li class='" + (urlActual.equals("DefPeriodoAlumnoSWW.jsp") ? "active" : "")+"'><a class='tabs' aria-expanded='"+(urlActual.equals("DefPeriodoAlumnoSWW.jsp") ? "true" : "false")+"' href='" + urlSistema + "Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=" +Modo.UPDATE + "&pPeriEstCod=" + PeriEstCod + "'>Alumnos</a></li>");
+    if(mostrarTabs.equals("SI")) out.println("<li class='" + (urlActual.equals("DefPeriodoDocenteSWW.jsp") ? "active" : "")+"'><a class='tabs' aria-expanded='"+(urlActual.equals("DefPeriodoDocenteSWW.jsp") ? "true" : "false")+"' href='" + urlSistema + "Definiciones/DefPeriodoDocenteSWW.jsp?MODO=" +Modo.UPDATE + "&pPeriEstCod=" + PeriEstCod + "'>Docentes</a></li>");
+    if(mostrarTabs.equals("SI")) out.println("<li class='" + (urlActual.equals("DefPeriodoDocumentoSWW.jsp") ? "active" : "")+"'><a class='tabs' aria-expanded='"+(urlActual.equals("DefPeriodoDocumentoSWW.jsp") ? "true" : "false")+"' href='" + urlSistema + "Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=" +Modo.UPDATE+ "&pPeriEstCod=" + PeriEstCod + "'>Documentos</a></li>");
     out.println("</ul>");
 %>
     
+    <span class="tools pull-right">
+        <div class="hidden-xs">
+            <a class="tabs_regresar"  href="<% out.print(urlSistema); %>Definiciones/DefPeriodoWW.jsp">Regresar</a>
+        </div>
+    </span>
+</header>

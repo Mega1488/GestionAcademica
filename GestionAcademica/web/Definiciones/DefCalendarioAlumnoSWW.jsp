@@ -79,14 +79,15 @@
                 <div class="col-lg-12">
                     <section class="panel">
                         <jsp:include page="/Definiciones/DefCalendarioTabs.jsp"/>
+                        <div class="contenedor_agregar">
+                            <a href="#" title="Inscribir periodo" name='btn_inscribirPeriodo' id='btn_inscribirPeriodo' class="fa fa-group" data-toggle="modal" data-target="#PopUpInscPeriodo"> </a>
+                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpPersona"> </a>
+                            <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
+                            <input type="hidden" name="popFiltro" id="popFiltro" value="<% out.print(((Calendario) retorno.getObjeto()).getEvaluacion().getEstudioNombre()); %>">
+                        </div>
                         <div class="panel-body">
                             <div class=" form">
-                                <div class="contenedor_agregar">
-                                    <a href="#" title="Inscribir periodo" name='btn_inscribirPeriodo' id='btn_inscribirPeriodo' class="fa fa-group" data-toggle="modal" data-target="#PopUpInscPeriodo"> </a>
-                                    <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpPersona"> </a>
-                                    <input type="hidden" name="CalCod" id="CalCod" value="<% out.print(CalCod); %>">
-                                    <input type="hidden" name="popFiltro" id="popFiltro" value="<% out.print(((Calendario) retorno.getObjeto()).getEvaluacion().getEstudioNombre()); %>">
-                                </div>
+                                
                                 
                                 <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
                                 <thead><tr>

@@ -204,7 +204,7 @@ public class ABM_ParametroEmail extends HttpServlet {
 
             if(utilidades.ValidarTipoDato(TipoDato.NUMERO_ENTERO, ParEmlCod))
                 {
-                    parametroEmail = loParamEmail.obtener(Integer.valueOf(ParEmlCod)); 
+                    parametroEmail = loParamEmail.obtener(Long.valueOf(ParEmlCod)); 
 
                     if(parametroEmail == null)
                     {

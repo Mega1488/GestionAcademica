@@ -120,7 +120,9 @@
                     return true;
                 }
                 
-                function procesarDatos() {
+            });
+            
+            function procesarDatos() {
 
 
                     var CalCod = $('#CalCod').val();
@@ -161,8 +163,6 @@
 
                     }
                 }
-
-            });
 
         </script>
 
