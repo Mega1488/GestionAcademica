@@ -49,82 +49,84 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            ESCOLARIDAD
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <div name="cont_estudio" class="col-sm-8" style=' <% out.print(tblVisible); %>'>
+                                    <%
+                                        for (SDT_PersonaEstudio est : lstEstudio) {
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Escolaridad</p>
+                                            if (est.getInscripcion().getInsCod() == Long.valueOf("0")) {
+                                                out.println("<div class='contenedor_titulo_escolaridad'><label>Sin inscripción</label></div>");
+                                            } else {
+                                                out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getNombreEstudio() + "</label></div>");
+                                            }
+
+                                            out.println("<div class='contenedor_tabla_escolaridad'>");
+                                            out.println("<table class='table table-hover eliminar_margen_tabla'>");
+                                            out.println("<thead><tr>");
+                                            out.println("<th>Materia</th>");
+                                            out.println("<th>Fecha</th>");
+                                            out.println("<th class='texto_derecha'>Curso</th>");
+                                            out.println("<th class='texto_derecha'>Examen</th>");
+                                            out.println("<th class='texto_derecha'>Estado</th>");
+                                            out.println("</tr>");
+                                            out.println("</thead>");
+                                            out.println("<tbody>");
+
+                                            for (Escolaridad esc : est.getEscolaridad()) {
+                                                out.println("<tr>");
+
+                                                out.println("<td>");
+                                                out.println(esc.getNombreEstudio());
+                                                out.println("</td>");
+
+                                                out.println("<td>");
+                                                out.println(utilidad.NuloToVacio(esc.getEscFch()));
+                                                out.println("</td>");
+
+                                                out.println("<td class='texto_derecha'>");
+                                                out.println("<label>" + (esc.Revalida() ? "0" : utilidad.NuloToCero(esc.getEscCurVal())) + "</label>");
+                                                out.println("</td>");
+
+                                                out.println("<td class='texto_derecha'>");
+                                                out.println("<label>" + (esc.Revalida() ? "0" : utilidad.NuloToCero(esc.getEscCalVal())) + "</label>");
+                                                out.println("</td>");
+
+                                                out.println("<td class='texto_derecha'>");
+                                                out.println("<label>" + esc.getAprobacion() + "</label>");
+                                                out.println("</td>");
+
+                                                out.println("</tr>");
+                                            }
+
+                                            out.println("</tbody>");
+                                            out.println("</table>");
+
+                                            out.println("</div>");
+                                        }
+                                    %>
+                                </div>
+                            </div>
                         </div>
-
-                        <div name="cont_estudio" class="col-sm-8" style=' <% out.print(tblVisible); %>'>
-                            <%
-                                for (SDT_PersonaEstudio est : lstEstudio) {
-
-                                    if (est.getInscripcion().getInsCod() == Long.valueOf("0")) {
-                                        out.println("<div class='contenedor_titulo_escolaridad'><label>Sin inscripción</label></div>");
-                                    } else {
-                                        out.println("<div class='contenedor_titulo_escolaridad'><label>Inscripto a: " + est.getInscripcion().getNombreEstudio() + "</label></div>");
-                                    }
-
-                                    out.println("<div class='contenedor_tabla_escolaridad'>");
-                                    out.println("<table class='table table-hover eliminar_margen_tabla'>");
-                                    out.println("<thead><tr>");
-                                    out.println("<th>Materia</th>");
-                                    out.println("<th>Fecha</th>");
-                                    out.println("<th class='texto_derecha'>Curso</th>");
-                                    out.println("<th class='texto_derecha'>Examen</th>");
-                                    out.println("<th class='texto_derecha'>Estado</th>");
-                                    out.println("</tr>");
-                                    out.println("</thead>");
-                                    out.println("<tbody>");
-
-                                    for (Escolaridad esc : est.getEscolaridad()) {
-                                        out.println("<tr>");
-
-                                        out.println("<td>");
-                                        out.println(esc.getNombreEstudio());
-                                        out.println("</td>");
-
-                                        out.println("<td>");
-                                        out.println(utilidad.NuloToVacio(esc.getEscFch()));
-                                        out.println("</td>");
-
-                                        out.println("<td class='texto_derecha'>");
-                                        out.println("<label>" + (esc.Revalida() ? "0" : utilidad.NuloToCero(esc.getEscCurVal())) + "</label>");
-                                        out.println("</td>");
-
-                                        out.println("<td class='texto_derecha'>");
-                                        out.println("<label>" + (esc.Revalida() ? "0" : utilidad.NuloToCero(esc.getEscCalVal())) + "</label>");
-                                        out.println("</td>");
-
-                                        out.println("<td class='texto_derecha'>");
-                                        out.println("<label>" + esc.getAprobacion() + "</label>");
-                                        out.println("</td>");
-
-                                        out.println("</tr>");
-                                    }
-
-                                    out.println("</tbody>");
-                                    out.println("</table>");
-
-                                    out.println("</div>");
-                                }
-                            %>
-                        </div>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
     </body>
 </html>

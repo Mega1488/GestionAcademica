@@ -113,165 +113,165 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            ESTUDIOS
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <div name="cont_estudio" class="col-lg-12" style='margin-top:15px; <% out.print(tblVisible); %>'>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Estudios</p>
-                        </div>
+                                    <svg name="lines" id="lines" width="100%" height="100%" style="position: absolute; left: 0; top:0">
 
-                        <div name="cont_estudio" class="col-lg-12" style='margin-top:15px; <% out.print(tblVisible); %>'>
+                                    </svg>
 
-                            <svg name="lines" id="lines" width="100%" height="100%" style="position: absolute; left: 0; top:0">
-
-                            </svg>
-
-                            <%
-                                for (SDT_PersonaEstudio est : lstEstudio) {
-                                    //--------------------------------------------------------------------------------------------------------
-                                    //INICIAMOS DIV INSCRIPCION
-                                    //--------------------------------------------------------------------------------------------------------
-                                    out.println("<div name='div_inscripcion' class='row'>");
-
-                                    if (est.getInscripcion().getPlanEstudio() != null) {
-                                        //--------------------------------------------------------------------------------------------------------
-                                        //INSCRIPCION NOMBRE
-                                        //--------------------------------------------------------------------------------------------------------
-
-                                        PlanEstudio plan = est.getInscripcion().getPlanEstudio();
-                                        //MOSTRAR TODAS LAS MATERIAS DEL PLAN.
-
-                                        out.println("<div name='div_inscripcion_nombre' class='col-lg-12'><h2>" + plan.getCarreraPlanNombre() + "</h2></div>");
-
-                                        Double periodo = 0.0;
-                                        boolean cerrarDivPeriodo = false;
-
-                                        for (Materia materia : plan.getLstMateria()) {
+                                    <%
+                                        for (SDT_PersonaEstudio est : lstEstudio) {
                                             //--------------------------------------------------------------------------------------------------------
-                                            //MANEJAMOS DIV CONTENEDOR SEMESTRE
+                                            //INICIAMOS DIV INSCRIPCION
                                             //--------------------------------------------------------------------------------------------------------
-                                            if (!materia.getMatPerVal().equals(periodo)) {
-                                                periodo = materia.getMatPerVal();
+                                            out.println("<div name='div_inscripcion' class='row'>");
 
-                                                if (cerrarDivPeriodo) {
+                                            if (est.getInscripcion().getPlanEstudio() != null) {
+                                                //--------------------------------------------------------------------------------------------------------
+                                                //INSCRIPCION NOMBRE
+                                                //--------------------------------------------------------------------------------------------------------
+
+                                                PlanEstudio plan = est.getInscripcion().getPlanEstudio();
+                                                //MOSTRAR TODAS LAS MATERIAS DEL PLAN.
+
+                                                out.println("<div name='div_inscripcion_nombre' class='col-lg-12'><h2>" + plan.getCarreraPlanNombre() + "</h2></div>");
+
+                                                Double periodo = 0.0;
+                                                boolean cerrarDivPeriodo = false;
+
+                                                for (Materia materia : plan.getLstMateria()) {
                                                     //--------------------------------------------------------------------------------------------------------
-                                                    //FINALIZAMOS DIV CONTENEDOR SEMESTRE
+                                                    //MANEJAMOS DIV CONTENEDOR SEMESTRE
                                                     //--------------------------------------------------------------------------------------------------------
+                                                    if (!materia.getMatPerVal().equals(periodo)) {
+                                                        periodo = materia.getMatPerVal();
 
-                                                    out.println("</div>");
-                                                }
-
-                                                //--------------------------------------------------------------------------------------------------------
-                                                //INICIAMOS DIV CONTENEDOR SEMESTRE
-                                                //--------------------------------------------------------------------------------------------------------
-                                                out.println("<div name='div_semestre' class='col-lg-12'> ");
-                                                out.println("<div class='col-lg-12'><h3>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</h3></div>");
-                                                cerrarDivPeriodo = true;
-                                            }
-
-                                            //--------------------------------------------------------------------------------------------------------
-                                            //INICIO DIV MATERIA
-                                            //--------------------------------------------------------------------------------------------------------
-                                            out.println("<div class='col-lg-3' id='dv_mat_" + materia.getMatCod() + "' data-materia='" + materia.getMatNom() + "' data-id='" + materia.getMatCod() + "' data-previas='" + materia.ObtenerPreviasCodigos() + "'><div class='caja_estudio'>");
-
-                                            String progreso = "";
-                                            String escolaridad = "<div name='escolaridad'>";
-
-                                            if (LoCalendario.GetInstancia().AlumnoCursoEstudio(persona.getPerCod(), materia, null, null)) {
-                                                //--------------------------------------------------------------------------------------------------------
-                                                //ALUMNO CURSO MATERIA
-                                                //--------------------------------------------------------------------------------------------------------
-                                                progreso = "En curso";
-
-                                                for (Escolaridad esc : est.getEscolaridad()) {
-                                                    if (esc.getMateria() != null) {
-                                                        if (esc.getMateria().getMatCod().equals(materia.getMatCod())) {
+                                                        if (cerrarDivPeriodo) {
                                                             //--------------------------------------------------------------------------------------------------------
-                                                            //SE APLICA ESTADO DE MATERIA
+                                                            //FINALIZAMOS DIV CONTENEDOR SEMESTRE
                                                             //--------------------------------------------------------------------------------------------------------
-                                                            if (esc.Revalida()) {
-                                                                progreso = "Revalida";
-                                                            } else if (esc.getAprobado()) {
-                                                                progreso = "Cursada";
-                                                            }
 
-                                                            //--------------------------------------------------------------------------------------------------------
-                                                            //SE AGREGA DATO DE ESCOLARIDAD
-                                                            //--------------------------------------------------------------------------------------------------------
-                                                            escolaridad += "<div name='una_escolaridad'>";
-                                                            escolaridad += "<div>Fecha: <label>" + esc.getEscFch() + "</label></div>\n";
-                                                            escolaridad += "<div>Curso: <label>" + esc.getEscCurVal() + "</label></div>\n";
-                                                            escolaridad += "<div>Examen: <label>" + esc.getEscCalVal() + "</label></div>\n";
-                                                            escolaridad += "<div>Estado: <label>" + esc.getAprobacion() + "</label></div>\n";
-                                                            escolaridad += "</div>";
+                                                            out.println("</div>");
                                                         }
+
+                                                        //--------------------------------------------------------------------------------------------------------
+                                                        //INICIAMOS DIV CONTENEDOR SEMESTRE
+                                                        //--------------------------------------------------------------------------------------------------------
+                                                        out.println("<div name='div_semestre' class='col-lg-12'> ");
+                                                        out.println("<div class='col-lg-12'><h3>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</h3></div>");
+                                                        cerrarDivPeriodo = true;
                                                     }
 
+                                                    //--------------------------------------------------------------------------------------------------------
+                                                    //INICIO DIV MATERIA
+                                                    //--------------------------------------------------------------------------------------------------------
+                                                    out.println("<div class='col-lg-3' id='dv_mat_" + materia.getMatCod() + "' data-materia='" + materia.getMatNom() + "' data-id='" + materia.getMatCod() + "' data-previas='" + materia.ObtenerPreviasCodigos() + "'><div class='caja_estudio'>");
+
+                                                    String progreso = "";
+                                                    String escolaridad = "<div name='escolaridad'>";
+
+                                                    if (LoCalendario.GetInstancia().AlumnoCursoEstudio(persona.getPerCod(), materia, null, null)) {
+                                                        //--------------------------------------------------------------------------------------------------------
+                                                        //ALUMNO CURSO MATERIA
+                                                        //--------------------------------------------------------------------------------------------------------
+                                                        progreso = "En curso";
+
+                                                        for (Escolaridad esc : est.getEscolaridad()) {
+                                                            if (esc.getMateria() != null) {
+                                                                if (esc.getMateria().getMatCod().equals(materia.getMatCod())) {
+                                                                    //--------------------------------------------------------------------------------------------------------
+                                                                    //SE APLICA ESTADO DE MATERIA
+                                                                    //--------------------------------------------------------------------------------------------------------
+                                                                    if (esc.Revalida()) {
+                                                                        progreso = "Revalida";
+                                                                    } else if (esc.getAprobado()) {
+                                                                        progreso = "Cursada";
+                                                                    }
+
+                                                                    //--------------------------------------------------------------------------------------------------------
+                                                                    //SE AGREGA DATO DE ESCOLARIDAD
+                                                                    //--------------------------------------------------------------------------------------------------------
+                                                                    escolaridad += "<div name='una_escolaridad'>";
+                                                                    escolaridad += "<div>Fecha: <label>" + esc.getEscFch() + "</label></div>\n";
+                                                                    escolaridad += "<div>Curso: <label>" + esc.getEscCurVal() + "</label></div>\n";
+                                                                    escolaridad += "<div>Examen: <label>" + esc.getEscCalVal() + "</label></div>\n";
+                                                                    escolaridad += "<div>Estado: <label>" + esc.getAprobacion() + "</label></div>\n";
+                                                                    escolaridad += "</div>";
+                                                                }
+                                                            }
+
+                                                        }
+
+                                                    } else {
+                                                        //--------------------------------------------------------------------------------------------------------
+                                                        //ALUMNO NO CURSO MATERIA
+                                                        //--------------------------------------------------------------------------------------------------------
+                                                        progreso = "No cursada";
+                                                    }
+
+                                                    escolaridad += "</div>";
+
+                                                    //-NOMBRE
+                                                    out.println("<div>" + materia.getMatNom() + "</div>");
+
+                                                    //-PROGRESO
+                                                    out.println("<div>Progreso: <label>" + progreso + "</label></div>");
+
+                                                    out.println(escolaridad);
+
+                                                    //--------------------------------------------------------------------------------------------------------
+                                                    //FIN DIV MATERIA
+                                                    //--------------------------------------------------------------------------------------------------------
+                                                    out.println("</div></div>");
                                                 }
 
-                                            } else {
                                                 //--------------------------------------------------------------------------------------------------------
-                                                //ALUMNO NO CURSO MATERIA
+                                                //FINALIZAMOS DIV CONTENEDOR SEMESTRE SI QUEDO ABIERTO
                                                 //--------------------------------------------------------------------------------------------------------
-                                                progreso = "No cursada";
+                                                if (plan.getLstMateria() != null) {
+                                                    if (plan.getLstMateria().size() > 0) {
+                                                        out.println("</div>");
+                                                    }
+                                                }
+
                                             }
 
-                                            escolaridad += "</div>";
-
-                                            //-NOMBRE
-                                            out.println("<div>" + materia.getMatNom() + "</div>");
-
-                                            //-PROGRESO
-                                            out.println("<div>Progreso: <label>" + progreso + "</label></div>");
-
-                                            out.println(escolaridad);
-
-                                            //--------------------------------------------------------------------------------------------------------
-                                            //FIN DIV MATERIA
-                                            //--------------------------------------------------------------------------------------------------------
-                                            out.println("</div></div>");
-                                        }
-
-                                        //--------------------------------------------------------------------------------------------------------
-                                        //FINALIZAMOS DIV CONTENEDOR SEMESTRE SI QUEDO ABIERTO
-                                        //--------------------------------------------------------------------------------------------------------
-                                        if (plan.getLstMateria() != null) {
-                                            if (plan.getLstMateria().size() > 0) {
-                                                out.println("</div>");
+                                            if (est.getInscripcion().getCurso() != null) {
+                                                //MOSTRAR TODAS LOS MODULOS DEL PLAN.
                                             }
+
+                                            //--------------------------------------------------------------------------------------------------------
+                                            //FIN DIV INSCRIPCION
+                                            //--------------------------------------------------------------------------------------------------------
+                                            out.println("</div>");
+
                                         }
-
-                                    }
-
-                                    if (est.getInscripcion().getCurso() != null) {
-                                        //MOSTRAR TODAS LOS MODULOS DEL PLAN.
-                                    }
-
-                                    //--------------------------------------------------------------------------------------------------------
-                                    //FIN DIV INSCRIPCION
-                                    //--------------------------------------------------------------------------------------------------------
-                                    out.println("</div>");
-
-                                }
-                            %>
+                                    %>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
 
-        <!-- <div name="lines" id="lines">
- 
-         </div> -->
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
+        
     </body>
 </html>

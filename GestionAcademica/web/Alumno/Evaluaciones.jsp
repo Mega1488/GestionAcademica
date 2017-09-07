@@ -87,132 +87,135 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            EVALUACIONES
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(persona.getPerCod()); %>">
+                                
+                                <div name="InscripcionDisponible">
+                                    <h2 style=' <% out.print(tblVisible); %>'>Inscripciones</h2>
+                                    <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                        <thead>
+                                            <tr>
+                                                <th>Carrera / Curso</th>
+                                                <th>Estudio</th>
+                                                <th>Evaluación</th>
+                                                <th>Fecha</th>
+                                                <th>Inscripción desde</th>
+                                                <th>Inscripcion hasta</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Evaluaciones</p>
-                        </div>
-
-                        <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(persona.getPerCod()); %>">
-
-                        <div name="InscripcionDisponible">
-                            <h2 style=' <% out.print(tblVisible); %>'>Inscripciones</h2>
-                            <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                                <thead>
-                                    <tr>
-                                        <th>Carrera / Curso</th>
-                                        <th>Estudio</th>
-                                        <th>Evaluación</th>
-                                        <th>Fecha</th>
-                                        <th>Inscripción desde</th>
-                                        <th>Inscripcion hasta</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-
-                                <% for (Object objeto : lstObjeto) {
-                                        Calendario calendario = (Calendario) objeto;
-                                %>
-                                <tr>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
-                                    <td><%
-                                        if ((calendario.getEvlInsFchDsd().before(fechaActual) && calendario.getEvlInsFchHst().after(fechaActual)) || sdf.format(calendario.getEvlInsFchDsd()).equals(sdf.format(fechaActual))) {
-                                            if (calendario.existeAlumno(persona.getPerCod())) {
-                                                out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-persona='" + calendario.getAlumnoByPersona(persona.getPerCod()).getCalAlCod() + "' data-nombre='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpDesInsc' name='btn_desInscribirAlumno' id='btn_desInscribirAlumno' title='Salir' class='glyphicon glyphicon-remove-circle btn_desInscribirAlumno'/>");
-                                            } else {
-                                                out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-persona='" + calendario.getAlumnoByPersona(persona.getPerCod()).getCalAlCod() + "' data-nombre='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpInsc' name='btn_inscribirAlumno' id='btn_inscribirAlumno' title='Inscribir' class='glyphicon glyphicon-ok-circle btn_inscribirAlumno'/>");
-                                            }
-                                        }
+                                        <% for (Object objeto : lstObjeto) {
+                                                Calendario calendario = (Calendario) objeto;
                                         %>
-                                    </td>
+                                        <tr>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
+                                            <td><%
+                                                if ((calendario.getEvlInsFchDsd().before(fechaActual) && calendario.getEvlInsFchHst().after(fechaActual)) || sdf.format(calendario.getEvlInsFchDsd()).equals(sdf.format(fechaActual))) {
+                                                    if (calendario.existeAlumno(persona.getPerCod())) {
+                                                        out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-persona='" + calendario.getAlumnoByPersona(persona.getPerCod()).getCalAlCod() + "' data-nombre='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpDesInsc' name='btn_desInscribirAlumno' id='btn_desInscribirAlumno' title='Salir' class='glyphicon glyphicon-remove-circle btn_desInscribirAlumno'/>");
+                                                    } else {
+                                                        out.print("<a href='#' data-codigo='" + calendario.getCalCod() + "' data-persona='" + calendario.getAlumnoByPersona(persona.getPerCod()).getCalAlCod() + "' data-nombre='" + calendario.getEvaluacion().getEstudioNombre() + "' data-toggle='modal' data-target='#PopUpInsc' name='btn_inscribirAlumno' id='btn_inscribirAlumno' title='Inscribir' class='glyphicon glyphicon-ok-circle btn_inscribirAlumno'/>");
+                                                    }
+                                                }
+                                                %>
+                                            </td>
 
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </table>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </table>
+                                </div>
+
+                                <div name="EvaluacionPendiente">
+                                    <h2 style=' <% out.print(tblEvlPendVisible); %>'>Pendientes</h2>
+                                    <table style=' <% out.print(tblEvlPendVisible); %>' class='table table-hover'>
+                                        <thead>
+                                            <tr>
+                                                <th>Carrera / Curso</th>
+                                                <th>Estudio</th>
+                                                <th>Evaluación</th>
+                                                <th>Fecha</th>
+                                                <th>Inscripción desde</th>
+                                                <th>Inscripcion hasta</th>
+                                            </tr>
+                                        </thead>
+
+                                        <% for (Object objeto : lstEvlPend) {
+                                                Calendario calendario = (Calendario) objeto;
+                                        %>
+                                        <tr>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
+
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </table>
+                                </div>    
+
+                                <div name="EvaluacionesRealizadas"> 
+                                    <h2 style=' <% out.print(tblEvlVisible); %>'>Evaluaciones realizadas</h2>
+                                    <table style=' <% out.print(tblEvlVisible); %>' class='table table-hover'>
+                                        <thead>
+                                            <tr>
+                                                <th>Carrera / Curso</th>
+                                                <th>Estudio</th>
+                                                <th>Evaluación</th>
+                                                <th>Fecha</th>
+                                                <th>Calificación</th>
+                                            </tr>
+                                        </thead>
+
+                                        <% for (Object objeto : lstEvl) {
+                                                Calendario calendario = (Calendario) objeto;
+                                        %>
+                                        <tr>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
+                                            <td><% out.print(utilidad.NuloToVacio(calendario.getAlumnoCalificacion(persona.getPerCod()))); %> </td>
+                                        </tr>
+                                        <%
+                                            }
+                                        %>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
-
-                        <div name="EvaluacionPendiente">
-                            <h2 style=' <% out.print(tblEvlPendVisible); %>'>Pendientes</h2>
-                            <table style=' <% out.print(tblEvlPendVisible); %>' class='table table-hover'>
-                                <thead>
-                                    <tr>
-                                        <th>Carrera / Curso</th>
-                                        <th>Estudio</th>
-                                        <th>Evaluación</th>
-                                        <th>Fecha</th>
-                                        <th>Inscripción desde</th>
-                                        <th>Inscripcion hasta</th>
-                                    </tr>
-                                </thead>
-
-                                <% for (Object objeto : lstEvlPend) {
-                                        Calendario calendario = (Calendario) objeto;
-                                %>
-                                <tr>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
-
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </table>
-                        </div>    
-
-                        <div name="EvaluacionesRealizadas"> 
-                            <h2 style=' <% out.print(tblEvlVisible); %>'>Evaluaciones realizadas</h2>
-                            <table style=' <% out.print(tblEvlVisible); %>' class='table table-hover'>
-                                <thead>
-                                    <tr>
-                                        <th>Carrera / Curso</th>
-                                        <th>Estudio</th>
-                                        <th>Evaluación</th>
-                                        <th>Fecha</th>
-                                        <th>Calificación</th>
-                                    </tr>
-                                </thead>
-
-                                <% for (Object objeto : lstEvl) {
-                                        Calendario calendario = (Calendario) objeto;
-                                %>
-                                <tr>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getCarreraCursoNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEstudioNombre())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getEvaluacion().getEvlNom())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
-                                    <td><% out.print(utilidad.NuloToVacio(calendario.getAlumnoCalificacion(persona.getPerCod()))); %> </td>
-                                </tr>
-                                <%
-                                    }
-                                %>
-                            </table>
-                        </div>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
 
         <!-- PopUp para Inscribir -->
 

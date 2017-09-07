@@ -61,68 +61,70 @@
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
-        <div class="wrapper">
-            <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
 
-            <div id="contenido" name="contenido" class="main-panel">
+        <!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">
 
-                <div class="contenedor-cabezal">
-                    <jsp:include page="/masterPage/cabezal.jsp"/>
-                </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                            SOLICITUDES
+                            
+                            <span class="tools pull-right">
+                                <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                                <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(persona.getPerCod()); %>">
+                            </span>
+                        </header>
+                        <div class="panel-body">
+                            <div class=" form">
+                                <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Código</th>
+                                            <th>Alumno</th>
+                                            <th>Tipo</th>
+                                            <th>Estado</th>
+                                            <th>Ingresada</th>
+                                            <th>Procesada</th>
+                                            <th>Finalizada</th>
+                                        </tr>
+                                    </thead>
 
-                <div class="contenedor-principal">
-                    <div class="col-sm-11 contenedor-texto-titulo-flotante">
-                        <div class="contenedor-titulo">    
-                            <p>Solicitudes</p>
+                                    <% for (Object objeto : lstObjeto) {
+
+                                            Solicitud solicitud = (Solicitud) objeto;
+
+                                    %>
+                                    <tr>
+                                        <td><% out.print("<a href='#' data-codigo='" + solicitud.getSolCod() + "' data-nombre='" + solicitud.getSolTpo().getNombre() + "' data-alumno='" + solicitud.getAlumno().getNombreCompleto() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(solicitud.getSolCod())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(solicitud.getAlumno().getNombreCompleto())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(solicitud.getSolTpo().getNombre())); %> </td>
+                                        <td class="<%  out.print(RetornaClase(solicitud.getSolEst())); %>"><% out.print(utilidad.NuloToVacio(solicitud.getSolEst().getNombre())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(solicitud.getSolFchIng())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(solicitud.getSolFchPrc())); %> </td>
+                                        <td><% out.print(utilidad.NuloToVacio(solicitud.getSolFchFin())); %> </td>
+
+                                    </tr>
+                                    <%
+                                        }
+                                    %>
+                                </table>
+                            </div>
                         </div>
-
-                        <div style="text-align: right; padding-top: 6px; padding-bottom: 6px;">
-                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            <input type="hidden" name="PerCod" id="PerCod" value="<% out.print(persona.getPerCod()); %>">
-                        </div>
-
-                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Código</th>
-                                    <th>Alumno</th>
-                                    <th>Tipo</th>
-                                    <th>Estado</th>
-                                    <th>Ingresada</th>
-                                    <th>Procesada</th>
-                                    <th>Finalizada</th>
-                                </tr>
-                            </thead>
-
-                            <% for (Object objeto : lstObjeto) {
-
-                                    Solicitud solicitud = (Solicitud) objeto;
-
-                            %>
-                            <tr>
-                                <td><% out.print("<a href='#' data-codigo='" + solicitud.getSolCod() + "' data-nombre='" + solicitud.getSolTpo().getNombre() + "' data-alumno='" + solicitud.getAlumno().getNombreCompleto() + "' data-toggle='modal' data-target='#PopUpEliminar' name='btn_eliminar' id='btn_eliminar' title='Eliminar' class='glyphicon glyphicon-trash btn_eliminar'/>"); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(solicitud.getSolCod())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(solicitud.getAlumno().getNombreCompleto())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(solicitud.getSolTpo().getNombre())); %> </td>
-                                <td class="<%  out.print(RetornaClase(solicitud.getSolEst())); %>"><% out.print(utilidad.NuloToVacio(solicitud.getSolEst().getNombre())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(solicitud.getSolFchIng())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(solicitud.getSolFchPrc())); %> </td>
-                                <td><% out.print(utilidad.NuloToVacio(solicitud.getSolFchFin())); %> </td>
-
-                            </tr>
-                            <%
-                                }
-                            %>
-                        </table>
-
-                    </div>
+                    </section>
                 </div>
             </div>
-
-            <jsp:include page="/masterPage/footer.jsp"/>
         </div>
-    </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+        
+        
+       
 
 
     <!-- PopUp para Eliminar -->
