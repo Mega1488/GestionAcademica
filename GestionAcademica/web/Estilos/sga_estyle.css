@@ -1194,6 +1194,64 @@ input[type=search]{
     margin-right:25px;
 }
 
+/* ESTUDIOS */
+.estudios_contenedorPrincipal{
+    height:200px;
+    width:100%;
+    margin: 20px 0 !important;
+    display:inline-block;
+    clear:both;
+    position:relative;
+}
+
+.estudios_contenedorSemestre{ 
+    height:200px;
+    padding:0px !important;
+    background-color: #fbfbfb;
+    box-shadow: 0 1px 5px rgba(0,0,0,.08) !important;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,.08) !important;
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,.08) !important;
+    transition:0.5s;
+}
+
+.estudios_textoSemestre{
+    height:100%;
+    width:25px !important;
+    text-orientation: mixed;
+    writing-mode: tb-rl;
+    background-color:#ff2a2a;
+    color:white;
+    text-align:center;
+    padding:3px !important;
+    font-size:15px;
+    position: absolute;
+    top:0;
+    left:-27px;
+    z-index:1;
+}
+
+.estudios_contenedorMaterias{
+    margin-top:14px;
+}
+
+.caja_estudio{
+    background-color: #FFF;
+    border:none;
+    padding: 7px !important ;
+    box-shadow: 0 1px 5px rgba(0,0,0,.08) !important;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,.08) !important;
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,.08) !important;
+}
+
+.estudios_tituloMateria{
+    height: 30px;
+    line-height: 27px;
+    font-size: 16px;
+    border-bottom: 1px solid #e8e8e8;
+    margin-bottom:5px;
+}
+
+
 /* MEDIA QUERIES */
 
 @media (max-width: 600px) {
