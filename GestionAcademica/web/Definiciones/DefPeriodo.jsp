@@ -116,23 +116,18 @@
             function procesarDatos() {
 
 
-                    var PerCod = $('#PerCod').val();
+                    var PeriCod = $('#PeriCod').val();
                     var PerTpo = $('select[name=PerTpo]').val();
                     var PerVal = $('#PerVal').val();
                     var PerFchIni = $('#PerFchIni').val();
 
                     var modo = $('#MODO').val();
 
-                    if (PerVal == '')
-                    {
-                        MostrarMensaje("ERROR", "Completa los datos papa");
-                    } else
-                    {
-
+                   
 
                         // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
                         $.post('<% out.print(urlSistema); %>ABM_Periodo', {
-                            pPerCod: PerCod,
+                            pPeriCod: PeriCod,
                             pPerTpo: PerTpo,
                             pPerVal: PerVal,
                             pPerFchIni: PerFchIni,
@@ -152,7 +147,7 @@
 
                         });
 
-                    }
+                    
                 }
 
         </script>

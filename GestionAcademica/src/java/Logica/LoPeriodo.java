@@ -433,11 +433,13 @@ public class LoPeriodo implements InABMGenerico{
         
         if(!error)
         {
-            retorno = loEstudio.Mdl_AsignUserCourse(alumno.getAlumno().getPerUsrModID(), 
-                    alumno.getPeriodoEstudio().getMdlCod(), Role.STUDENT);
+            if(this.param.getParUtlMdl())
+            {
+                retorno = loEstudio.Mdl_AsignUserCourse(alumno.getAlumno().getPerUsrModID(), 
+                        alumno.getPeriodoEstudio().getMdlCod(), Role.STUDENT);
 
-            if(retorno.SurgioError()) return retorno;
-            
+                if(retorno.SurgioError()) return retorno;
+            }
             alumno.setObjFchMod(new Date());
             
             PerManejador perManejador   = new PerManejador();
@@ -521,11 +523,15 @@ public class LoPeriodo implements InABMGenerico{
     
     public Object DocenteAgregar(PeriodoEstudioDocente docente)
     {
-        Retorno_MsgObj retorno = loEstudio.Mdl_AsignUserCourse(docente.getDocente().getPerUsrModID(), 
-                    docente.getPeriodoEstudio().getMdlCod(), Role.TEACHER);
-
-        if(retorno.SurgioError()) return retorno;
-            
+   
+        if(this.param.getParUtlMdl())
+        { 
+           Retorno_MsgObj retorno = loEstudio.Mdl_AsignUserCourse(docente.getDocente().getPerUsrModID(), 
+                        docente.getPeriodoEstudio().getMdlCod(), Role.TEACHER);
+            if(retorno.SurgioError()) return retorno;
+        }
+        
+         
         docente.setObjFchMod(new Date());
         PerManejador perManejador   = new PerManejador();
         return perManejador.guardar(docente);

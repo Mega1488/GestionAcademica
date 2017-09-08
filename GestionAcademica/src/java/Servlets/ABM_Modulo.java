@@ -243,7 +243,7 @@ public class ABM_Modulo extends HttpServlet {
             String ModNom= request.getParameter("pModNom");
             String ModDsc= request.getParameter("pModDsc");
             String ModTpoPer= request.getParameter("pModTpoPer");
-            String MotPerVal= request.getParameter("pMotPerVal");
+            String ModPerVal= request.getParameter("pModPerVal");
             String ModCntHor= request.getParameter("pModCntHor");
 
             //Sin validacion
@@ -252,7 +252,7 @@ public class ABM_Modulo extends HttpServlet {
             if(ModNom!= null) modulo.setModNom(ModNom);
             if(ModDsc!= null) modulo.setModDsc(ModDsc);
             if(ModTpoPer!= null) modulo.setModTpoPer(TipoPeriodo.fromCode(Integer.valueOf(ModTpoPer)));
-            if(MotPerVal!= null) modulo.setModPerVal(Double.valueOf(MotPerVal));
+            if(ModPerVal!= null) modulo.setModPerVal(Double.valueOf(ModPerVal));
             if(ModCntHor!= null) modulo.setModCntHor(Double.valueOf(ModCntHor));
         }
         catch(NumberFormatException | UnsupportedOperationException  ex)

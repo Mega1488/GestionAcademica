@@ -123,7 +123,7 @@
                     var ModNom = $('#ModNom').val();
                     var ModDsc = $('#ModDsc').val();
                     var ModTpoPer = $('select[name=ModTpoPer]').val();
-                    var MotPerVal = $('#MotPerVal').val();
+                    var ModPerVal = $('#ModPerVal').val();
                     var ModCntHor = $('#ModCntHor').val();
 
                     if (ModNom == '')
@@ -142,7 +142,7 @@
                                 pModNom: ModNom,
                                 pModDsc: ModDsc,
                                 pModTpoPer: ModTpoPer,
-                                pMotPerVal: MotPerVal,
+                                pModPerVal: ModPerVal,
                                 pModCntHor: ModCntHor,
                                 pAction: "INSERTAR"
                             }, function (responseText) {
@@ -171,7 +171,7 @@
                                 pModNom: ModNom,
                                 pModDsc: ModDsc,
                                 pModTpoPer: ModTpoPer,
-                                pMotPerVal: MotPerVal,
+                                pModPerVal: ModPerVal,
                                 pModCntHor: ModCntHor,
                                 pAction: "ACTUALIZAR"
                             }, function (responseText) {

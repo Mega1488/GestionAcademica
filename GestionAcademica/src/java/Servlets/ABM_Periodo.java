@@ -202,7 +202,7 @@ public class ABM_Periodo extends HttpServlet {
         }
 
             
-                String 	PerCod      = request.getParameter("pPerCod");
+                String 	PeriCod      = request.getParameter("pPeriCod");
                 String 	PerTpo      = request.getParameter("pPerTpo");
                 String 	PerVal      = request.getParameter("pPerVal");
                 String 	PerFchIni   = request.getParameter("pPerFchIni");
@@ -219,7 +219,7 @@ public class ABM_Periodo extends HttpServlet {
 
                 //Sin validacion
                 
-                if(PerCod != null) periodo = ((Periodo) loPeriodo.obtener(Long.valueOf(PerCod)).getObjeto());
+                if(PeriCod != null) periodo = ((Periodo) loPeriodo.obtener(Long.valueOf(PeriCod)).getObjeto());
                 
                 if(PerTpo != null) periodo.setPerTpo(TipoPeriodo.fromCode(Integer.valueOf(PerTpo)));
                 
