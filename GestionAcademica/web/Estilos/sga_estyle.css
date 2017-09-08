@@ -1244,15 +1244,32 @@ input[type=search]{
 }
 
 .estudios_tituloMateria{
-    height: 30px;
     line-height: 27px;
     font-size: 16px;
     border-bottom: 1px solid #e8e8e8;
     margin-bottom:5px;
 }
 
+.estudios_semestreMobile{
+    height:25px;
+    color:#FFF;
+    text-align: center;
+    line-height:23px;
+    background-color: red;
+    display:none;
+}
+
+/* IMPORTACIÓN */
+
+.importancion_contenedorProgresBar{
+    clear:both;
+    margin:10px 0px;
+}
+
 
 /* MEDIA QUERIES */
+
+/* MOBILE */
 
 @media (max-width: 600px) {
    .login_fondo{
@@ -1302,4 +1319,36 @@ input[type=search]{
   .texto_cambiarFoto, .texto_cambiarFoto:hover, .texto_cambiarFoto:focus{
         color:transparent;
     }
+    
+    .estudios_semestreMobile{
+        display:block;
+    }
+    
+    .estudios_contenedorSemestre{
+        height:auto;
+    }
+}
+
+/* IPAD */
+
+@media (max-width: 768px) {
+
+    #sidebar{
+      position:absolute;
+      left:0;
+      top:60px;
+      z-index:4;
+  }
+  
+  #sidebar.active{
+      margin-left: 0px !important;
+  }
+  
+  .menu_lateral{
+      margin-left: -250px;
+  }
+  
+  .contenido{
+      width:100%;
+  }
 }

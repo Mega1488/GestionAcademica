@@ -269,23 +269,24 @@
                                     </div>
 
                                     <!-- ARCHIVO -->
+                                    <div class="row">
+                                        <form id="imp_alumno_plan" action="<%=urlSistema%>UploadArchivo" method="POST" class="col-lg-offset-3 cmxform form-horizontal " enctype="multipart/form-data">
 
-                                    <form id="imp_alumno_plan" action="<%=urlSistema%>UploadArchivo" method="POST" class="cmxform form-horizontal " enctype="multipart/form-data">
+                                            <div class="col-lg-4">
+                                                <input type="hidden" name="pTpoArc" value="<%=TipoArchivo.IMP_ALUMNO_CARRERA%>">
 
-                                        <input type="hidden" name="pTpoArc" value="<%=TipoArchivo.IMP_ALUMNO_CARRERA%>">
-
-                                        <span class="btn btn-success fileinput-button">
-                                            <i class="glyphicon glyphicon-plus"></i>
-                                            <span>Seleccione un documento...</span>
-                                            <!-- The file input field used as target for the file upload widget -->
-                                            <input type="file" name="files[]" >
-                                        </span>
-
-
-                                    </form>
-
-                                    <div id="imp_alumno_plan_progress" class="progress">
-                                        <div class="progress-bar progress-bar-success"></div>
+                                                <span class="btn btn-success fileinput-button">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                    <span>Seleccione un documento...</span>
+                                                    <!-- The file input field used as target for the file upload widget -->
+                                                    <input type="file" name="files[]" >
+                                                </span>
+                                            </div>
+                                            <div id="imp_alumno_plan_progress" class="progress col-lg-4">
+                                                    <div class="progress-bar progress-bar-success "></div>
+                                            </div>
+                                        </form>
+  
                                     </div>
 
                                 </div>
@@ -313,25 +314,30 @@
                                     </div>
 
                                     <!-- ARCHIVO -->
+                                    
+                                    <div class="row">
 
-                                    <form id="imp_alumno_curso" action="<%=urlSistema%>UploadArchivo" method="POST" class="cmxform form-horizontal " enctype="multipart/form-data">
+                                        <form id="imp_alumno_curso" action="<%=urlSistema%>UploadArchivo" method="POST" class="col-lg-offset-3 cmxform form-horizontal " enctype="multipart/form-data">
 
-                                        <input type="hidden" name="pTpoArc" value="<%=TipoArchivo.IMP_ALUMNO_CURSO%>">
+                                            <div class="col-lg-4">
+                                                <input type="hidden" name="pTpoArc" value="<%=TipoArchivo.IMP_ALUMNO_CURSO%>">
 
-                                        <span class="btn btn-success fileinput-button">
-                                            <i class="glyphicon glyphicon-plus"></i>
-                                            <span>Seleccione un documento...</span>
-                                            <!-- The file input field used as target for the file upload widget -->
-                                            <input type="file" name="files[]" >
-                                        </span>
+                                                <span class="btn btn-success fileinput-button">
+                                                    <i class="glyphicon glyphicon-plus"></i>
+                                                    <span>Seleccione un documento...</span>
+                                                    <!-- The file input field used as target for the file upload widget -->
+                                                    <input type="file" name="files[]" >
+                                                </span>
+                                            </div>
 
+                                            <div id="imp_alumno_curso_progress" class="progress col-lg-4">
+                                                <div class="progress-bar progress-bar-success"></div>
+                                            </div>
+                                        </form>
 
-                                    </form>
+                                        
 
-                                    <div id="imp_alumno_curso_progress" class="progress">
-                                        <div class="progress-bar progress-bar-success"></div>
                                     </div>
-
                                 </div>
 
                                 <div class="formulario_borde"></div>
@@ -341,9 +347,10 @@
 
 
                                 <!-- ARCHIVO -->
+<div class="row">
+                                <form id="imp_alumno_escolaridad" action="<%=urlSistema%>UploadArchivo" method="POST" class="col-lg-offset-3 cmxform form-horizontal " enctype="multipart/form-data">
 
-                                <form id="imp_alumno_escolaridad" action="<%=urlSistema%>UploadArchivo" method="POST" class="cmxform form-horizontal " enctype="multipart/form-data">
-
+                                    <div class="col-lg-4">
                                     <input type="hidden" name="pTpoArc" value="<%=TipoArchivo.IMP_ALUMNO_ESCOLARIDAD%>">
 
                                     <span class="btn btn-success fileinput-button">
@@ -352,13 +359,17 @@
                                         <!-- The file input field used as target for the file upload widget -->
                                         <input type="file" name="files[]" >
                                     </span>
+                                    </div>
 
-
-                                </form>
-
-                                <div id="imp_alumno_escolaridad_progress" class="progress">
+                                     <div id="imp_alumno_escolaridad_progress" class="progress col-lg-4">
                                     <div class="progress-bar progress-bar-success"></div>
                                 </div>
+
+                                </form>
+                                    
+</div>
+
+                               
 
                             </div>
 

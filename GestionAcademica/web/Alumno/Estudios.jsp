@@ -172,8 +172,9 @@
                                                         //INICIAMOS DIV CONTENEDOR SEMESTRE
                                                         //--------------------------------------------------------------------------------------------------------
                                                         out.println("<div class='estudios_contenedorPrincipal'>");
-                                                        out.println("<div class='estudios_textoSemestre'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
+                                                        out.println("<div class='estudios_textoSemestre hidden-xs'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
                                                         out.println("<div name='div_semestre' class='estudios_contenedorSemestre col-lg-12'> ");
+                                                        out.println("<div class='estudios_semestreMobile'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
                                                         cerrarDivPeriodo = true;
                                                     }
 

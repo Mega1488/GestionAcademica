@@ -494,7 +494,7 @@
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
-            <div class="modal-dialog modal-lg" style="width: 983px;">
+            <div class="modal-dialog modal-lg" style="width: 1000px;">
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
