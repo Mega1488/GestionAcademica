@@ -171,18 +171,19 @@
                                                         //--------------------------------------------------------------------------------------------------------
                                                         //INICIAMOS DIV CONTENEDOR SEMESTRE
                                                         //--------------------------------------------------------------------------------------------------------
-                                                        out.println("<div name='div_semestre' class='col-lg-12'> ");
-                                                        out.println("<div class='col-lg-12'><h3>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</h3></div>");
+                                                        out.println("<div class='estudios_contenedorPrincipal'>");
+                                                        out.println("<div class='estudios_textoSemestre'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
+                                                        out.println("<div name='div_semestre' class='estudios_contenedorSemestre col-lg-12'> ");
                                                         cerrarDivPeriodo = true;
                                                     }
 
                                                     //--------------------------------------------------------------------------------------------------------
                                                     //INICIO DIV MATERIA
                                                     //--------------------------------------------------------------------------------------------------------
-                                                    out.println("<div class='col-lg-3' id='dv_mat_" + materia.getMatCod() + "' data-materia='" + materia.getMatNom() + "' data-id='" + materia.getMatCod() + "' data-previas='" + materia.ObtenerPreviasCodigos() + "'><div class='caja_estudio'>");
+                                                    out.println("<div class='estudios_contenedorMaterias col-lg-3' id='dv_mat_" + materia.getMatCod() + "' data-materia='" + materia.getMatNom() + "' data-id='" + materia.getMatCod() + "' data-previas='" + materia.ObtenerPreviasCodigos() + "'><div class='caja_estudio'>");
 
                                                     String progreso = "";
-                                                    String escolaridad = "<div name='escolaridad'>";
+                                                    String escolaridad = "<div class='estudios_contenedorEscolaridad' name='escolaridad'>";
 
                                                     if (LoCalendario.GetInstancia().AlumnoCursoEstudio(persona.getPerCod(), materia, null, null)) {
                                                         //--------------------------------------------------------------------------------------------------------
@@ -244,6 +245,7 @@
                                                 //--------------------------------------------------------------------------------------------------------
                                                 if (plan.getLstMateria() != null) {
                                                     if (plan.getLstMateria().size() > 0) {
+                                                        out.println("</div>");
                                                         out.println("</div>");
                                                     }
                                                 }
