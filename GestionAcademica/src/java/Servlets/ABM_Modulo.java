@@ -18,6 +18,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -235,6 +237,8 @@ public class ABM_Modulo extends HttpServlet {
             modulo   = new Modulo();
         }
 
+        try
+        {
             String CurCod= request.getParameter("pCurCod");
             String ModNom= request.getParameter("pModNom");
             String ModDsc= request.getParameter("pModDsc");
@@ -242,25 +246,23 @@ public class ABM_Modulo extends HttpServlet {
             String MotPerVal= request.getParameter("pMotPerVal");
             String ModCntHor= request.getParameter("pModCntHor");
 
-            //------------------------------------------------------------------------------------------
-            //Validaciones
-            //------------------------------------------------------------------------------------------
-
-            //TIPO DE DATO
-
-
-
-
             //Sin validacion
-
-            modulo.setCurso((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto());
-            modulo.setModNom(ModNom);
-            modulo.setModDsc(ModDsc);
-            modulo.setModTpoPer(TipoPeriodo.fromCode(Integer.valueOf(ModTpoPer)));
-            modulo.setModPerVal(Double.valueOf(MotPerVal));
-            modulo.setModCntHor(Double.valueOf(ModCntHor));
-
-
+            if(CurCod != null) if(!CurCod.isEmpty()) modulo.setCurso((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(CurCod)).getObjeto());
+            
+            if(ModNom!= null) modulo.setModNom(ModNom);
+            if(ModDsc!= null) modulo.setModDsc(ModDsc);
+            if(ModTpoPer!= null) modulo.setModTpoPer(TipoPeriodo.fromCode(Integer.valueOf(ModTpoPer)));
+            if(MotPerVal!= null) modulo.setModPerVal(Double.valueOf(MotPerVal));
+            if(ModCntHor!= null) modulo.setModCntHor(Double.valueOf(ModCntHor));
+        }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+        }
         return modulo;
     }
 

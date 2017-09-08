@@ -14,7 +14,7 @@
 <header class="panel-heading tab-bg-dark-navy-blue ">
 
 <%
-    String urlSistema = utilidad.GetUrlSistema();
+    String urlSistema = Utilidades.GetInstancia().GetUrlSistema();
     String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
     
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
