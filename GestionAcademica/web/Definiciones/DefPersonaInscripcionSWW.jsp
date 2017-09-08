@@ -140,7 +140,8 @@
                                 <label id="lbl_carrera" name="lbl_carrera" class="unchecked"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" class="hide" value="carrera">Carrera</label>
                                 <label id="lbl_curso" name="lbl_curso"  class="unchecked"><input type="radio" name="pop_TpoEst" id="pop_TpoEst" class="hide" value="curso">Curso</label>
                                 <div style="display: inline;">
-                                    <label>Generación:</label> <input type="number" name="InsGenAnio" id="InsGenAnio" min="1" step="1" class="" max="2049">
+                                    <label class="inscripcion_labelGeneracion">Generación:</label> 
+                                    <input class="inscripcion_inputAnos" type="number" name="InsGenAnio" id="InsGenAnio" min="1" step="1" max="2049">
                                 </div>
                             </div>
 

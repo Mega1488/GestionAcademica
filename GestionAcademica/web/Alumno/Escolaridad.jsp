@@ -63,7 +63,7 @@
                         </header>
                         <div class="panel-body">
                             <div class=" form">
-                                <div name="cont_estudio" class="col-sm-8" style=' <% out.print(tblVisible); %>'>
+                                <div name="cont_estudio" class="col-lg-8 col-lg-offset-2" style=' <% out.print(tblVisible); %>'>
                                     <%
                                         for (SDT_PersonaEstudio est : lstEstudio) {
 
