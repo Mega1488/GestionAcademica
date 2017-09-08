@@ -77,7 +77,7 @@ public class ABM_Calendario extends HttpServlet {
 
             if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
                 mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
-                System.err.println("Acceso no autorizado - " + this.getServletName());
+                System.err.println("Acceso no autorizado - " + this.getServletName() + " - Desde: " + utilidades.GetPaginaActual(referer));
                 out.println(utilidades.ObjetoToJson(mensaje));
             }
             else

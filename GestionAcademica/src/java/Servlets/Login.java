@@ -42,7 +42,6 @@ public class Login extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
             utiles = Utilidades.GetInstancia();
 
             String retorno  = "";
@@ -78,6 +77,7 @@ public class Login extends HttpServlet {
         if(loPersona.IniciarSesion(usr, seguridad.cryptWithMD5(psw)))
         {
             //Inicio correctamente
+            
             HttpSession session=request.getSession(); 
             session.setAttribute(NombreSesiones.USUARIO.getValor(), usr);
             
@@ -87,7 +87,8 @@ public class Login extends HttpServlet {
             session.setAttribute(NombreSesiones.USUARIO_ALU.getValor(), persona.getPerEsAlu());
             session.setAttribute(NombreSesiones.USUARIO_DOC.getValor(), persona.getPerEsDoc());
             session.setAttribute(NombreSesiones.USUARIO_PER.getValor(), persona.getPerCod());
-
+            
+            
             mensaje = new Mensajes("OK", TipoMensaje.MENSAJE);
         }
         else
@@ -113,6 +114,7 @@ public class Login extends HttpServlet {
         {
             if(!usuario.isEmpty())
             {
+                
                 session.removeAttribute(NombreSesiones.USUARIO.getValor());
                 session.removeAttribute(NombreSesiones.USUARIO_NOMBRE.getValor());
                 session.removeAttribute(NombreSesiones.USUARIO_ADM.getValor());

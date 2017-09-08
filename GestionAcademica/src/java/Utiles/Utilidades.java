@@ -174,7 +174,11 @@ public class Utilidades {
         if (!url.isEmpty()) {
             url = url.substring(url.lastIndexOf("/") + 1, url.length());
         }
-
+        
+        if(url.indexOf(".jsp")> 0)
+        {
+            url = url.substring(0, url.indexOf(".jsp") + 4);
+        }
         return url;
     }
 

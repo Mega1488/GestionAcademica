@@ -20,6 +20,7 @@
     String js_redirect = "window.location.replace('" + urlSistema + "');";
 
     Parametro param = LoParametro.GetInstancia().obtener();
+    
 
 %>
 

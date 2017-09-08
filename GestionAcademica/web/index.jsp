@@ -11,6 +11,10 @@
 
 <%
     String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+    
+    
+    session.setAttribute(NombreSesiones.SESSION_COD.getValor(), Utilidades.GetInstancia().GenerarToken(10));
+    
     String web = "login.jsp";
     if(usuario == null)
     {

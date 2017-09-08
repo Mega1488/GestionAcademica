@@ -70,7 +70,7 @@ public class ABM_Carrera extends HttpServlet {
 
             if (acceso.SurgioError() && !utiles.GetPaginaActual(referer).isEmpty()) {
                 mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
-                System.err.println("Acceso no autorizado - " + this.getServletName());
+                System.err.println("Acceso no autorizado - " + this.getServletName() + " - Desde: " + utiles.GetPaginaActual(referer));
                 out.println(utiles.ObjetoToJson(mensaje));
             }
             else

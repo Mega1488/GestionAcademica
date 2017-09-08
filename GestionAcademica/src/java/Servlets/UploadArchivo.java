@@ -69,7 +69,7 @@ public class UploadArchivo extends HttpServlet {
 
             if (acceso.SurgioError() && !utilidad.GetPaginaActual(referer).isEmpty()) {
                 Mensajes mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
-                System.err.println("Acceso no autorizado - " + this.getServletName());
+                System.err.println("Acceso no autorizado - " + this.getServletName() + " - Desde: " + utilidad.GetPaginaActual(referer));
                 out.println(utilidad.ObjetoToJson(mensaje));
             }
             else

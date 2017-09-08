@@ -16,7 +16,8 @@ public enum NombreSesiones {
     USUARIO_ADM("USUARIO_ADM"),
     USUARIO_PER("USUARIO_PER"),
     USUARIO_DOC("USUARIO_DOC"),
-    USUARIO_ALU("USUARIO_ALU");
+    USUARIO_ALU("USUARIO_ALU"),
+    SESSION_COD("SESSION_COD");
     
     NombreSesiones(){
         
