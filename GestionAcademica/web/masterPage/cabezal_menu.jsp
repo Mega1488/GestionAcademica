@@ -76,10 +76,10 @@
 <!DOCTYPE html>
 <input type="hidden" name="sga_url" id="sga_url" value="<% out.print(urlSistema); %>">
 <input type="hidden" name="sga_sitioactual" id="sga_sitioactual" value="<% out.print(sitioActual); %>">
-<input type="hidden" name="PerCod" id="PerCod" value="<%=PerCod%>">
+<input type="hidden" name="cbz_PerCod" id="cbz_PerCod" value="<%=PerCod%>">
 <script>
     $(document).ready(function () {
-       if($('#btn_guardar').val() == "")
+       if($('#cbz_PerCod').val() == "")
        {
            <%=js_redirect%>
        }
