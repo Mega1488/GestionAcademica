@@ -19,7 +19,8 @@
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
     LoCarrera loCar = LoCarrera.GetInstancia();
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    
+    String urlSistema = utilidad.GetUrlSistema();
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
     //----------------------------------------------------------------------------------------------------
@@ -38,7 +39,6 @@
     String CarCod = request.getParameter("pCarCod");
     List<PlanEstudio> lstPlanEstudio = new ArrayList<>();
     Carrera car = new Carrera();
-//    PlanEstudio plan = new PlanEstudio();
 
     Retorno_MsgObj retorno = (Retorno_MsgObj) loCar.obtener(Long.valueOf(CarCod));
     if (!retorno.SurgioErrorObjetoRequerido()) {
