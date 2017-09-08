@@ -10,7 +10,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <%
-    String urlSistema   = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    Utilidades utilidad = Utilidades.GetInstancia();
+    String urlSistema = utilidad.GetUrlSistema();
+    
     String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String CarCod       = request.getParameter("pCarCod");

@@ -46,7 +46,7 @@
                     <div class="modal-body">
 
                         <div>
-                            <table name="PopUpTblEvaluaciones" id="PopUpTblEvaluaciones" class="table table-striped" cellspacing="0" width="100%">
+                            <table name="PopUpTblEvaluaciones_" id="PopUpTblEvaluaciones_" class="table table-striped" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
                                         <th>Carrera / Curso</th>

@@ -6,8 +6,10 @@
 package Servlets;
 
 import Entidad.Carrera;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoCarrera;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -57,44 +59,51 @@ public class ABM_Carrera extends HttpServlet {
             //----------------------------------------------------------------------------------------------------
             //CONTROL DE ACCESO
             //----------------------------------------------------------------------------------------------------
-            HttpSession session=request.getSession(); 
-            String usuario = (String) session.getAttribute(Enumerado.NombreSesiones.USUARIO.getValor());
-            Boolean esAdm = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ADM.getValor());
-            Boolean esAlu = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_ALU.getValor());
-            Boolean esDoc = (Boolean) session.getAttribute(Enumerado.NombreSesiones.USUARIO_DOC.getValor());
-            Retorno_MsgObj acceso = Logica.Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utiles.GetPaginaActual(request));
-
-            if (acceso.SurgioError()) {
-                response.sendRedirect((String) acceso.getObjeto());
-            }
-            
-            System.out.println("ACTION: " + action);
-            switch(action)
-            {
-                case "INSERT":
-                    retorno = this.IngresarCarrera(request);
-                break;
-
-                case "UPDATE":
-                    retorno = this.ModificarCarrera(request);
-                break;
-
-                case "DELETE":
-                    retorno = this.EliminarCarrera(request);
-                break;
+            String referer = request.getHeader("referer");
                 
-                case "POPUP_OBTENER":
-                    retorno = this.PopUp_ObtenerDatos();
-                break;
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utiles.GetPaginaActual(referer));
 
-                case "POPUP_OBTENER_PLANES":
-                    retorno = this.PopUp_ObtenerPlanesDatos(request);
-                break;
-
-                default:
-                    break;
+            if (acceso.SurgioError() && !utiles.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utiles.ObjetoToJson(mensaje));
             }
-            out.println(retorno);
+            else
+            {
+            
+                System.out.println("ACTION: " + action);
+                switch(action)
+                {
+                    case "INSERT":
+                        retorno = this.IngresarCarrera(request);
+                    break;
+
+                    case "UPDATE":
+                        retorno = this.ModificarCarrera(request);
+                    break;
+
+                    case "DELETE":
+                        retorno = this.EliminarCarrera(request);
+                    break;
+
+                    case "POPUP_OBTENER":
+                        retorno = this.PopUp_ObtenerDatos();
+                    break;
+
+                    case "POPUP_OBTENER_PLANES":
+                        retorno = this.PopUp_ObtenerPlanesDatos(request);
+                    break;
+
+                    default:
+                        break;
+                }
+                out.println(retorno);
+            }
         }
     }
     

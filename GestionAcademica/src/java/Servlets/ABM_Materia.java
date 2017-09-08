@@ -9,10 +9,12 @@ import Entidad.Carrera;
 import Entidad.Materia;
 import Entidad.MateriaPrevia;
 import Entidad.PlanEstudio;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoAprobacion;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Logica.LoCarrera;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -26,6 +28,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -53,31 +56,53 @@ public class ABM_Materia extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
-            
-            switch(action)
-            {   
-                case "INSERT":
-                    retorno = this.AgregarDatos(request);
-                break;   
-                case "UPDATE":
-                    retorno = this.ActualizarDatos(request);
-                break;   
-                case "DELETE":
-                    retorno = this.EliminarDatos(request);
-                break;
-                case "AGREGAR_PREVIA":
-                    retorno = this.AgregarPreviaDatos(request);
-                break;
-                case "ELIMINAR_PREVIA":
-                    retorno = this.EliminarPreviaDatos(request);
-                break;
-                case "POPUP_OBTENER":
-                    retorno = this.POPUP_ObtenerDatos(request);
-                break;
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
+                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
+
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
-            out.println(retorno);
+            else
+            {
+            
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
+
+                switch(action)
+                {   
+                    case "INSERT":
+                        retorno = this.AgregarDatos(request);
+                    break;   
+                    case "UPDATE":
+                        retorno = this.ActualizarDatos(request);
+                    break;   
+                    case "DELETE":
+                        retorno = this.EliminarDatos(request);
+                    break;
+                    case "AGREGAR_PREVIA":
+                        retorno = this.AgregarPreviaDatos(request);
+                    break;
+                    case "ELIMINAR_PREVIA":
+                        retorno = this.EliminarPreviaDatos(request);
+                    break;
+                    case "POPUP_OBTENER":
+                        retorno = this.POPUP_ObtenerDatos(request);
+                    break;
+                }
+                out.println(retorno);
+                
+            }
         }
     }
     

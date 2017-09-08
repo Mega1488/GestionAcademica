@@ -23,7 +23,7 @@
     PlanEstudio plan = new PlanEstudio();
     LoCarrera loCar = LoCarrera.GetInstancia();
 
-    String urlSistema = (String) session.getAttribute(NombreSesiones.URL_SISTEMA.getValor());
+    String urlSistema = utilidad.GetUrlSistema();
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO
     //----------------------------------------------------------------------------------------------------

@@ -8,9 +8,11 @@ package Servlets;
 
 import Entidad.Periodo;
 import Enumerado.Modo;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Logica.LoPeriodo;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -48,34 +50,52 @@ public class ABM_Periodo extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            HttpSession session=request.getSession(); 
-            
-            String action   = request.getParameter("pAction");
-            Modo mode = Modo.valueOf(action);
-            String retorno  = "";
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
+                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-        
-            switch(mode)
-            {
-                
-                case INSERT:
-                    retorno = this.AgregarDatos(request);
-                break;
-                
-                case UPDATE:
-                    retorno = this.ActualizarDatos(request);
-                break;
-                
-                case DELETE:
-                    retorno = this.EliminarDatos(request);
-                break;
-                
-                
-                        
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
-
-            out.println(retorno);
+            else
+            {
             
+                String action   = request.getParameter("pAction");
+                Modo mode = Modo.valueOf(action);
+                String retorno  = "";
+
+
+                switch(mode)
+                {
+
+                    case INSERT:
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case UPDATE:
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case DELETE:
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+
+
+                }
+
+                out.println(retorno);
+            }
         }
         
     }

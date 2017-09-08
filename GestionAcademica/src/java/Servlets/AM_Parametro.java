@@ -7,11 +7,14 @@ package Servlets;
 
 import Entidad.Parametro;
 import Entidad.ParametroEmail;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
 import Logica.LoParametro;
 import Logica.LoParametroEmail;
+import Logica.Seguridad;
 import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -19,6 +22,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,25 +48,44 @@ public class AM_Parametro extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
          
-            
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
-
-            
-            switch(action)
-            {
-                case "OBTENER":
-                    retorno = this.ObtnerDatos(request);
-                break;
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
                 
-                case "ACTUALIZAR":
-                    retorno = this.ActualizarDatos(request);
-                break;
-                        
-            }
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-            out.println(retorno);
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                Mensajes mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
+            }
+            else
+            {
             
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
+
+
+                switch(action)
+                {
+                    case "OBTENER":
+                        retorno = this.ObtnerDatos(request);
+                    break;
+
+                    case "ACTUALIZAR":
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                }
+
+                out.println(retorno);
+            }
         }
     }
     

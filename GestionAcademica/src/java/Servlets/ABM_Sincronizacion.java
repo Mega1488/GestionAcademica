@@ -7,8 +7,10 @@ package Servlets;
 
 
 import Entidad.Sincronizacion;
+import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoSincronizacion;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -18,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -44,37 +47,56 @@ public class ABM_Sincronizacion extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
-
-            switch(action)
-            {
-
-                case "DEPURAR":
-                    retorno = this.Depurar();
-                break;
-
-                case "EJECUTAR":
-                    retorno = this.Ejecutar();
-                break;
-
-                case "DELETE":
-                    retorno = this.EliminarDatos(request);
-                break;
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
                 
-                case "INC_SELECCIONAR":
-                    retorno = this.IncSeleccionObjeto(request);
-                break;
-                
-                case "INC_PROCESAR":
-                    retorno = this.IncProcesar(request);
-                break;
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
-
-            out.println(retorno);
+            else
+            {
             
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
+
+                switch(action)
+                {
+
+                    case "DEPURAR":
+                        retorno = this.Depurar();
+                    break;
+
+                    case "EJECUTAR":
+                        retorno = this.Ejecutar();
+                    break;
+
+                    case "DELETE":
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+                    case "INC_SELECCIONAR":
+                        retorno = this.IncSeleccionObjeto(request);
+                    break;
+
+                    case "INC_PROCESAR":
+                        retorno = this.IncProcesar(request);
+                    break;
+
+                }
+
+                out.println(retorno);
+            }
         }
         
     }

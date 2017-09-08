@@ -15,6 +15,7 @@ import Enumerado.TipoMensaje;
 import Logica.LoCalendario;
 import Logica.LoEscolaridad;
 import Logica.LoPersona;
+import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
@@ -53,49 +54,67 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
-            
-            HttpSession session=request.getSession(); 
-            String usuario  = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());            
-            if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
+                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-            
-            switch(action)
-            {
-                
-                case "INSERT":
-                    retorno = this.AgregarDatos(request);
-                break;
-                
-                case "UPDATE":
-                    retorno = this.ActualizarDatos(request);
-                break;
-                
-                case "DELETE":
-                    retorno = this.EliminarDatos(request);
-                break;
-                
-                case "VALIDAR":
-                    retorno = this.ValidarCalificacion(request);
-                break;
-                
-                case "TO_VALIDAR":
-                    retorno = this.toValidacion(request);
-                break;
-                
-                case "TO_CORRECCION":
-                    retorno = this.toCorreccion(request);
-                break;
-                
-                case "OBTENER":
-                    retorno = this.ObtenerDatos(request);
-                break;
-                
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
+            else
+            {
+            
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
 
-            out.println(retorno);
+                if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
+
+
+                switch(action)
+                {
+
+                    case "INSERT":
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case "UPDATE":
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case "DELETE":
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+                    case "VALIDAR":
+                        retorno = this.ValidarCalificacion(request);
+                    break;
+
+                    case "TO_VALIDAR":
+                        retorno = this.toValidacion(request);
+                    break;
+
+                    case "TO_CORRECCION":
+                        retorno = this.toCorreccion(request);
+                    break;
+
+                    case "OBTENER":
+                        retorno = this.ObtenerDatos(request);
+                    break;
+
+                }
+
+                out.println(retorno);
+            }
             
         }
     }

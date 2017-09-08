@@ -6,13 +6,16 @@
 package Servlets;
 
 import Entidad.ParametroEmail;
+import Enumerado.NombreSesiones;
 import Enumerado.ProtocoloEmail;
 import Enumerado.TipoAutenticacion;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoSSL;
 import Logica.LoParametroEmail;
+import Logica.Seguridad;
 import Utiles.Mensajes;
+import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +24,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -48,38 +52,58 @@ public class ABM_ParametroEmail extends HttpServlet {
         
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
+        
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
+                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-            
-            switch(action)
-            {
-                
-                case "OBTENER":
-                    retorno = this.ObtnerDatos(request);
-                break;
-                
-                case "INSERTAR":
-                    retorno = this.AgregarDatos(request);
-                break;
-                
-                case "ACTUALIZAR":
-                    retorno = this.ActualizarDatos(request);
-                break;
-                
-                case "ELIMINAR":
-                    retorno = this.EliminarDatos(request);
-                break;
-                
-                case "POPUP_OBTENER":
-                    retorno = this.PopObtenerDatos();
-                break;
-                        
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
-
-            out.println(retorno);
+            else
+            {
             
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
+
+
+                switch(action)
+                {
+
+                    case "OBTENER":
+                        retorno = this.ObtnerDatos(request);
+                    break;
+
+                    case "INSERTAR":
+                        retorno = this.AgregarDatos(request);
+                    break;
+
+                    case "ACTUALIZAR":
+                        retorno = this.ActualizarDatos(request);
+                    break;
+
+                    case "ELIMINAR":
+                        retorno = this.EliminarDatos(request);
+                    break;
+
+                    case "POPUP_OBTENER":
+                        retorno = this.PopObtenerDatos();
+                    break;
+
+                }
+
+                out.println(retorno);
+            }
         }
     }
     

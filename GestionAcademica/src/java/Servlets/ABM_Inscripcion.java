@@ -62,53 +62,73 @@ public class ABM_Inscripcion extends HttpServlet {
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             
-            HttpSession session=request.getSession(); 
-            String usuario  = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());            
-            if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
             
-            String action   = request.getParameter("pAction");
-            String retorno  = "";
+            //----------------------------------------------------------------------------------------------------
+            //CONTROL DE ACCESO
+            //----------------------------------------------------------------------------------------------------
+            String referer = request.getHeader("referer");
+                
+            HttpSession session=request.getSession();
+            String usuario = (String) session.getAttribute(NombreSesiones.USUARIO.getValor());
+            Boolean esAdm = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ADM.getValor());
+            Boolean esAlu = (Boolean) session.getAttribute(NombreSesiones.USUARIO_ALU.getValor());
+            Boolean esDoc = (Boolean) session.getAttribute(NombreSesiones.USUARIO_DOC.getValor());
+            Retorno_MsgObj acceso = Seguridad.GetInstancia().ControlarAcceso(usuario, esAdm, esDoc, esAlu, utilidades.GetPaginaActual(referer));
 
-            
-            if(action.equals("REVALIDA_DELETE") || action.equals("REVALIDA_INSERT"))
-            {
-                if(action.equals("REVALIDA_INSERT"))
-                {
-                    retorno = this.RevalidaAgregarDatos(request);
-                }
-                
-                if(action.equals("REVALIDA_DELETE"))
-                {
-                    retorno = this.RevalidaEliminarDatos(request);
-                }
-                
+            if (acceso.SurgioError() && !utilidades.GetPaginaActual(referer).isEmpty()) {
+                mensaje = new Mensajes("Acceso no autorizado - " + this.getServletName(), TipoMensaje.ERROR);
+                System.err.println("Acceso no autorizado - " + this.getServletName());
+                out.println(utilidades.ObjetoToJson(mensaje));
             }
             else
             {
             
-                Modo mode = Modo.valueOf(action);
+            
+                if(usuario != null)  perUsuario = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usuario).getObjeto();
+
+                String action   = request.getParameter("pAction");
+                String retorno  = "";
 
 
-                switch(mode)
+                if(action.equals("REVALIDA_DELETE") || action.equals("REVALIDA_INSERT"))
                 {
+                    if(action.equals("REVALIDA_INSERT"))
+                    {
+                        retorno = this.RevalidaAgregarDatos(request);
+                    }
 
-                    case INSERT:
-                        retorno = this.AgregarDatos(request);
-                    break;
-
-                    case UPDATE:
-                        retorno = this.ActualizarDatos(request);
-                    break;
-
-                    case DELETE:
-                        retorno = this.EliminarDatos(request);
-                    break;
+                    if(action.equals("REVALIDA_DELETE"))
+                    {
+                        retorno = this.RevalidaEliminarDatos(request);
+                    }
 
                 }
-            }
+                else
+                {
 
-            out.println(retorno);
-            
+                    Modo mode = Modo.valueOf(action);
+
+
+                    switch(mode)
+                    {
+
+                        case INSERT:
+                            retorno = this.AgregarDatos(request);
+                        break;
+
+                        case UPDATE:
+                            retorno = this.ActualizarDatos(request);
+                        break;
+
+                        case DELETE:
+                            retorno = this.EliminarDatos(request);
+                        break;
+
+                    }
+                }
+
+                out.println(retorno);
+            }
         }
         
     }
