@@ -168,7 +168,14 @@ public abstract class SincHelper{
 
                     if(field.getType().equals(Date.class))
                     {
-                        field.set(this, dMy.parse(fldValue));
+                        try
+                        {
+                            field.set(this, dMy.parse(fldValue));
+                        }
+                        catch(ParseException ex)
+                        {
+                            field.set(this, yMd_HMS.parse(fldValue));
+                        }
                     }
                     
                     if(field.getType().equals(Boolean.class))

@@ -11,7 +11,10 @@ package Enumerado;
  */
 public enum TipoArchivo {
     PERIODO_DOCUMENTO("Periodo estudio - Documento"),
-    FOTO_PERFIL("Foto de perfil");
+    FOTO_PERFIL("Foto de perfil"),
+    IMP_ALUMNO_CARRERA("Importar alumno a carrera"),
+    IMP_ALUMNO_CURSO("Importar alumno a curso"),
+    IMP_ALUMNO_ESCOLARIDAD("Importar alumno a escolaridad");
     
     TipoArchivo(){
         

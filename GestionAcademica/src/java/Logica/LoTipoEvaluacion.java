@@ -79,4 +79,37 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
         return perManejador.obtenerLista("TipoEvaluacion.findAll", null);
     }
     
+    private String getReportColumns(){
+        return new TipoEvaluacion().GetReportColumns();
+    }
+    
+    private String getReportData(){
+        String data = "data: [";
+        
+        String contenido = "";
+        for(Object objeto : this.obtenerLista().getLstObjetos())
+        {
+            TipoEvaluacion tpoEvl = (TipoEvaluacion) objeto;
+            
+            if(contenido.isEmpty())
+            {
+                contenido = tpoEvl.GetReportData();
+            }
+            else
+            {
+                contenido += ", " + tpoEvl.GetReportData();
+            }
+            
+        }
+        
+        data += contenido;
+        data += "]";
+        return data;
+    }
+    
+    
+    public String getReportContent(){
+        return "{" + this.getReportColumns() + ", " + this.getReportData() + "}";
+    }
+    
 }

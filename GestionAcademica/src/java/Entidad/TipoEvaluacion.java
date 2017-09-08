@@ -178,4 +178,12 @@ import org.hibernate.annotations.GenericGenerator;
         return this.TpoEvlCod;
     }
     
+    public String GetReportColumns(){
+        return "columns: [{title: \"Código\"}, {title: \"Nombre\"}]";
+    }
+    
+    public String GetReportData(){
+        return "[\""+this.getTpoEvlCod()+"\", \""+this.getTpoEvlNom()+"\"]";
+    }
+    
 }

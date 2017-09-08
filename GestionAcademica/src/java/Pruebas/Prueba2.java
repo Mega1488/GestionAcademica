@@ -5,8 +5,10 @@
  */
 package Pruebas;
 
+import Logica.LoImportacion;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionNotification;
+import Utiles.Retorno_MsgObj;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -56,14 +58,16 @@ public class Prueba2 extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
-           /* 
+            
             LoImportacion imp = LoImportacion.GetInstancia();
             
             Retorno_MsgObj ret = imp.ImportarPersonasPlan(1L, "C:/tmp/imp.xlsx");
             
             
             out.println(Utiles.Utilidades.GetInstancia().ObjetoToJson(ret));
-            */
+            
+
+/*
            SimpleDateFormat dMy = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
            String mensaje ="";
            
@@ -86,7 +90,7 @@ public class Prueba2 extends HttpServlet {
            
            
            out.println(mensaje);
-           
+  */         
            
            
             

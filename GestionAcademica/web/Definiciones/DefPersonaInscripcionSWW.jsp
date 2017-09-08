@@ -252,7 +252,7 @@
                         $('#pop_FltrCarCod').empty();
 
                         $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                            pAccion: "POPUP_OBTENER"
+                            pAction: "POPUP_OBTENER"
                         }, function (responseText) {
                             var carreras = JSON.parse(responseText);
 
@@ -276,7 +276,7 @@
                         
                         $.post('<% out.print(urlSistema); %>ABM_Carrera', {
                             pCod: carrera.carCod,
-                            pAccion: "POPUP_OBTENER_PLANES"
+                            pAction: "POPUP_OBTENER_PLANES"
                         }, function (responseText) {
                             var planes = JSON.parse(responseText);
 
@@ -321,7 +321,7 @@
 
                         var CarCod = $('select[name=pop_FltrCarCod]').val();
                         $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                            pAccion: "POPUP_OBTENER"
+                            pAction: "POPUP_OBTENER"
                         }, function (responseText) {
                             var carreras = JSON.parse(responseText);
 

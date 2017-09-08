@@ -144,6 +144,7 @@ public class OpcionesDeMenu {
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/Importacion.jsp", "Importación", 6));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefWS_UserWW.jsp", "Web Services", 7));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefVersion.jsp", "Versión", 8));
+        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/BitacoraWW.jsp", "Bitácora", 9));
         
         lstAdministrador.add(sistema);
         

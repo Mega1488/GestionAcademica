@@ -386,7 +386,7 @@ public class ABM_Persona extends HttpServlet {
             if(PerBeca!= null)persona.setPerBeca(Double.valueOf(PerBeca));
 
             
-            if(PerFchNac!= null)persona.setPerFchNac(yMd.parse(PerFchNac));
+            if(PerFchNac!= null) if(!PerFchNac.isEmpty()) persona.setPerFchNac(yMd.parse(PerFchNac));
 
         }
         catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
@@ -396,6 +396,8 @@ public class ABM_Persona extends HttpServlet {
             
             mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
             error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
             

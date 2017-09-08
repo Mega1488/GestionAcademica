@@ -128,6 +128,8 @@ public class UploadArchivo extends HttpServlet {
                         {
                             archivo = (Archivo) retorno.getObjeto();
                             retorno.setObjeto(archivo.getArcCod());
+                            
+                            utilidad.eliminarArchivo(fichero.getAbsolutePath());
                         }
                     }
                     else

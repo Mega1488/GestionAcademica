@@ -197,6 +197,11 @@ public class LoImportacion {
         return retorno;
     }
     
+    public Retorno_MsgObj ImportarPersonasEscolaridad(String filePath){
+        
+        return null;
+    }
+    
     private Retorno_MsgObj ImportarPersonas(String filePath){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Importacion de personas", TipoMensaje.MENSAJE));
         
@@ -289,6 +294,12 @@ public class LoImportacion {
 	while (rowIterator.hasNext()){
 	    row = rowIterator.next();
             
+            if(row.getCell(0) == null)
+            {
+                return retorno;
+            }
+            
+            
             // Obtenemos el iterator que permite recorres todas las celdas de una fila
             Iterator<Cell> cellIterator = row.cellIterator();
             Cell celda;
@@ -306,33 +317,26 @@ public class LoImportacion {
                 switch(celda.getCellTypeEnum()) {
                 case NUMERIC:
                     if( DateUtil.isCellDateFormatted(celda) ){
-                       System.out.println(celda.getDateCellValue());
                        valorAux=celda.getDateCellValue();
                        value = yMd_HMS.format(valorAux);
                        
                     }else{
-                       System.out.println(celda.getNumericCellValue());
                        valorAux=celda.getNumericCellValue();
-                       
-                       System.err.println("Tpo: " + valorAux.getClass());
                        
                        value = valorAux.toString();
                        value = value.replace(".0", "");
                     }
                     break;
                 case STRING:
-                    System.out.println(celda.getStringCellValue());
                     value=celda.getStringCellValue();
                     break;
                 case BOOLEAN:
-                    System.out.println(celda.getBooleanCellValue());
                     valorAux=celda.getBooleanCellValue();
                     value = valorAux.toString();
                     break;
                 }
                 
-                
-                if(celda.getColumnIndex() == 0 && value == null)
+                if(celda.getColumnIndex() == 0 && (value == null || value.isEmpty()))
                 {
                     return retorno;
                 }
@@ -359,15 +363,14 @@ public class LoImportacion {
                 }
             }
 
-            System.err.println("-------------------------------");
-            System.err.println("Fila: " + row.getRowNum());
-            System.err.println("Personas: " + retorno.getLstObjetos().size());
-            
-            
             if(row.getRowNum() > 0)
             {
                 retorno.getLstObjetos().add(persona);
             }
+            
+            System.err.println("-------------------------------");
+            System.err.println("Fila: " + row.getRowNum());
+            System.err.println("Personas: " + retorno.getLstObjetos().size());
             
 	}
  
@@ -401,6 +404,11 @@ public class LoImportacion {
 	// Recorremos todas las filas para mostrar el contenido de cada celda
 	while (rowIterator.hasNext()){
 	    row = rowIterator.next();
+            
+            if(row.getCell(0) == null)
+            {
+                return retorno;
+            }
             
             Persona persona = new Persona();
  

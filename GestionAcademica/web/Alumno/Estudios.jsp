@@ -55,7 +55,7 @@
         <script type="text/javascript">
 
             $(document).ready(function () {
-
+/*
                 function getOffset(el) {
                     var _x = 0;
                     var _y = 0;
@@ -95,7 +95,7 @@
 
                     });
                 });
-                /*
+                
                  var fromPoint = getOffset($('#first')[0]);
                  var toPoint = getOffset($('#second')[0]);
                  
@@ -227,7 +227,7 @@
                                                     escolaridad += "</div>";
 
                                                     //-NOMBRE
-                                                    out.println("<div>" + materia.getMatNom() + "</div>");
+                                                    out.println("<div class='estudios_tituloMateria'>" + materia.getMatNom() + "</div>");
 
                                                     //-PROGRESO
                                                     out.println("<div>Progreso: <label>" + progreso + "</label></div>");

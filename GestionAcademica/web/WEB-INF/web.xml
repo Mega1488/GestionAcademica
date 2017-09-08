@@ -153,6 +153,14 @@
         <servlet-name>UploadArchivo</servlet-name>
         <servlet-class>Servlets.UploadArchivo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ABM_Importacion</servlet-name>
+        <servlet-class>Servlets.ABM_Importacion</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ABM_Bitacora</servlet-name>
+        <servlet-class>Servlets.ABM_Bitacora</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Prueba</servlet-name>
         <url-pattern>/Prueba</url-pattern>
@@ -350,6 +358,14 @@
     <servlet-mapping>
         <servlet-name>UploadArchivo</servlet-name>
         <url-pattern>/UploadArchivo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ABM_Importacion</servlet-name>
+        <url-pattern>/ABM_Importacion</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ABM_Bitacora</servlet-name>
+        <url-pattern>/ABM_Bitacora</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
