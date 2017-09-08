@@ -139,7 +139,6 @@ public class OpcionesDeMenu {
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametro.jsp", "Parámetros", 1));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefParametroEmailWW.jsp", "Parámetros de email", 2));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefNotificacionWW.jsp", "Notificaciones", 3));
-        sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/Reportes.jsp", "Reportes", 4));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefSincWW.jsp", "Sincronización", 5));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/Importacion.jsp", "Importación", 6));
         sistema.getLstSubMenu().add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Administracion/DefWS_UserWW.jsp", "Web Services", 7));

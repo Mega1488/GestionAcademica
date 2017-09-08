@@ -52,6 +52,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Calendario</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        <jsp:include page="/masterPage/head_tables.jsp"/>
+        
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -76,7 +78,7 @@
                                                 
                                                 <div class="panel-body">
                                                     <div class=" form">
-                                                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                                        <table name='tbl_ww' id='tbl_ww' style=' <% out.print(tblVisible); %>' class='table table-hover'>
                                                             <thead>
                                                                 <tr>
                                                                     <th></th>
@@ -88,6 +90,7 @@
                                                                     <th>Fecha</th>
                                                                     <th>Inscripción desde</th>
                                                                     <th>Inscripcion hasta</th>
+                                                                    <th></th>
                                                                     <th></th>
                                                                 </tr>
                                                             </thead>

@@ -64,6 +64,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Calendario | Docentes</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -84,7 +85,7 @@
                         </div>
                         <div class="panel-body">
                             <div class=" form">
-                                   <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                   <table id='tbl_ww' style=' <% out.print(tblVisible); %>' class='table table-hover'>
                                         <thead><tr>
                                                 <th></th>
                                                 <th>Código</th>

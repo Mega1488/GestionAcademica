@@ -93,7 +93,7 @@
 
                                         <h2 style=' <% out.print(tblSinTomVisible); %>'>Nuevas solicitudes</h2>
 
-                                        <table style=' <% out.print(tblSinTomVisible); %>' class='table table-hover'>
+                                        <table  style=' <% out.print(tblSinTomVisible); %>' class='table table-hover'>
                                             <thead>
                                                 <tr>
                                                     <th></th>

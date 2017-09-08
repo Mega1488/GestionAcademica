@@ -57,6 +57,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Destinatarios</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>
     <body>
         
@@ -88,7 +89,7 @@
                                                             <input type="hidden" name="NotCod" id="NotCod" value="<% out.print(NotCod); %>">
                                                         </div>
                                                         
-                                                        <table style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                                        <table id='tbl_ww' style=' <% out.print(tblVisible); %>' class='table table-hover'>
                                                             <thead>
                                                                 <tr>
                                                                     <th></th>

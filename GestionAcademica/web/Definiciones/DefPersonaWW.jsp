@@ -53,6 +53,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Personas</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -72,7 +73,7 @@
                         </header>
                         <div class="panel-body">
                             <div class=" form">
-                                <table class='table table-hover' style=' <% out.print(tblPersonaVisible); %>'>
+                                <table id='tbl_ww' class='table table-hover' style=' <% out.print(tblPersonaVisible); %>'>
                                     <thead>
                                         <tr>
                                             <th></th>

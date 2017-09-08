@@ -1278,6 +1278,24 @@ input[type=search]{
     padding-left:5px;
 }
 
+/* ACCIONES DATATABLES*/
+.accion_icon{
+    margin-right: 5px; 
+    margin-bottom: 10px;
+}
+
+.alert-warning {
+    background-color: #fcf8e3 !Important;
+}
+
+.alert-success {
+    background-color: #dff0d8 !Important;
+}
+
+.alert-danger {
+    background-color: #f2dede !Important;
+}
+
 
 /* MEDIA QUERIES */
 
