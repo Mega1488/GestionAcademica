@@ -145,7 +145,7 @@
 
 
                     $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                        pAccion: "POPUP_OBTENER"
+                        pAction: "POPUP_OBTENER"
                     }, function (responseText) {
                         var carreras = JSON.parse(responseText);
 
