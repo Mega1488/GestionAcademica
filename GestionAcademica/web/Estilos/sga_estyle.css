@@ -1219,7 +1219,6 @@ input[type=search]{
     width:25px !important;
     text-orientation: mixed;
     writing-mode: tb-rl;
-    background-color:#ff2a2a;
     color:white;
     text-align:center;
     padding:3px !important;
@@ -1255,7 +1254,6 @@ input[type=search]{
     color:#FFF;
     text-align: center;
     line-height:23px;
-    background-color: red;
     display:none;
 }
 
