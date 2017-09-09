@@ -1380,3 +1380,8 @@ input[type=search]{
       width:100%;
   }
 }
+
+
+@media (max-width: 600px) {
+  .modal-xs { width: 100%; }
+}

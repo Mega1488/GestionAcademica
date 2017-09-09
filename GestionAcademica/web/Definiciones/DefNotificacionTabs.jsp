@@ -11,7 +11,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <%
-    String urlSistema = utilidad.GetUrlSistema();
+    String urlSistema = Utilidades.GetInstancia().GetUrlSistema();
     String urlActual    = Utilidades.GetInstancia().GetPaginaActual(request);
     Modo Mode           = Modo.valueOf(request.getParameter("MODO"));
     String NotCod       = request.getParameter("pNotCod");

@@ -59,6 +59,13 @@
         <title>Sistema de Gestión Académica - Bitácora</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
+        <script>
+            $(document).ready(function() {
+               $('#tbl_ww').DataTable().column( '2:visible' )
+                .order( 'desc' )
+                .draw(); 
+            });
+        </script>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>

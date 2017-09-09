@@ -37,18 +37,22 @@
 
     //----------------------------------------------------------------------------------------------------
     String PeriEstCod = request.getParameter("pPeriEstCod");
-    Modo Mode = Modo.valueOf(request.getParameter("MODO"));
+    
+    String titulo = "";
 
     List<PeriodoEstudioAlumno> lstObjeto = new ArrayList<>();
 
     Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
     if (!retorno.SurgioErrorObjetoRequerido()) {
         lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstAlumno();
+        titulo = ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().TextoPeriodo()
+                + " - "
+                +((PeriodoEstudio) retorno.getObjeto()).getCarreraCursoNombre() 
+                + " - "
+                + ((PeriodoEstudio) retorno.getObjeto()).getEstudioNombre();
     } else {
         out.print(retorno.getMensaje().toString());
     }
-
-    String urlRetorno = urlSistema + "Definiciones/DefPeriodoEstudioSWW.jsp?MODO=" + Mode + "&pPeriCod=" + ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().getPeriCod();
 
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
@@ -60,7 +64,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Periodo Estudio | Alumnos</title>
+        <title>Sistema de Gestión Académica - Periodo Estudio <%=titulo%> | Alumnos</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
         <style>
@@ -157,7 +161,7 @@
             <!-- Modal -->
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <div class="modal-content">
+                <div class="modal-content modal-lg">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Personas</h4>
@@ -242,24 +246,15 @@
 
                             table = $('#PopUpTblPersona').DataTable({
                                 data: personas,
+                                responsive: true,
+                                processing: true,
                                 deferRender: true,
                                 bLengthChange: false, //thought this line could hide the LengthMenu
                                 pageLength: 10,
                                 language: {
-                                    "lengthMenu": "Mostrando _MENU_ registros por página",
-                                    "zeroRecords": "No se encontraron registros",
-                                    "info": "Página _PAGE_ de _PAGES_",
-                                    "infoEmpty": "No hay registros",
-                                    "search": "Buscar:",
-                                    "paginate": {
-                                        "first": "Primera",
-                                        "last": "Ultima",
-                                        "next": "Siguiente",
-                                        "previous": "Anterior"
-                                    },
-                                    "infoFiltered": "(Filtrado de _MAX_ registros)"
-                                }
-                                , search: {
+                                    "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
+                                },
+                                 search: {
                                     "search": "Alumno"
                                 }
                                 , columns: [

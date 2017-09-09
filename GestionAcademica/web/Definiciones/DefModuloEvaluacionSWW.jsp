@@ -36,6 +36,8 @@
     Modo Mode = Modo.valueOf(request.getParameter("MODO"));
     String CurCod = request.getParameter("pCurCod");
     String ModCod = request.getParameter("pModCod");
+    
+    String titulo = "";
 
     Curso curso = new Curso();
     Modulo modulo = new Modulo();
@@ -44,6 +46,9 @@
     if (retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR) {
         curso = (Curso) retorno.getObjeto();
         modulo = curso.getModuloById(Long.valueOf(ModCod));
+        titulo = curso.getCurNom() 
+                + " - "
+                + modulo.getModNom();
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -57,7 +62,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Modulo | Evaluación</title>
+        <title>Sistema de Gestión Académica - Modulo <%=titulo%> | Evaluación</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

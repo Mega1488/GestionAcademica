@@ -39,12 +39,14 @@
 
     //----------------------------------------------------------------------------------------------------
     String PeriCod = request.getParameter("pPeriCod");
+    String titulo = "";
 
     List<PeriodoEstudio> lstObjeto = new ArrayList<>();
 
     Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.obtener(Long.valueOf(PeriCod));
     if (!retorno.SurgioErrorObjetoRequerido()) {
         lstObjeto = ((Periodo) retorno.getObjeto()).getLstEstudio();
+        titulo = ((Periodo) retorno.getObjeto()).TextoPeriodo();
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -59,7 +61,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Estudios</title>
+        <title>Sistema de Gestión Académica - Periodo <%=titulo%> | Estudios</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

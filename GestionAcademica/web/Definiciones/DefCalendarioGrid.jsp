@@ -72,6 +72,15 @@
         <script src='<% out.print(urlSistema); %>JavaScript/calendario/fullcalendar.js'></script>
         <script src='<% out.print(urlSistema); %>JavaScript/calendario/locale/es.js'></script>
 
+        <script src="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+        <link href="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css"/>
+        
+        <style>
+            @media (min-width: 1024px) {
+                .modal-lg { width: 1000px; }
+              }
+        </style>
+        
         <script>
             $(document).ready(function () {
 
@@ -129,40 +138,23 @@
 
                         $('#PopUpTblEvaluaciones').DataTable({
                             data: evaluaciones,
+                            responsive: true,
+                            processing: true,
                             deferRender: true,
                             bLengthChange: false, //thought this line could hide the LengthMenu
                             pageLength: 10,
                             destroy: true,
                             select: {
-                                style: 'multi',
-                                selector: 'td:last-child'
+                                style: 'multi'
                             },
                             language: {
-                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                "zeroRecords": "No se encontraron registros",
-                                "info": "Página _PAGE_ de _PAGES_",
-                                "infoEmpty": "No hay registros",
-                                "search": "Buscar:",
-                                select: {
-                                    rows: {
-                                        _: "%d filas seleccionadas",
-                                        0: "",
-                                        1: "1 fila seleccionada"
-                                    }
-                                },
-                                "paginate": {
-                                    "first": "Primera",
-                                    "last": "Ultima",
-                                    "next": "Siguiente",
-                                    "previous": "Anterior"
-                                },
-                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
+                                "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
                             },
                             columns: [
                                 {"data": "carreraCursoNombre"},
                                 {"data": "estudioNombre"},
                                 {"data": "evlNom"},
-                                {"data": "inscripcionAutomatica"},
+                                
                                 {
                                     "orderable": false,
                                     "data": null,
@@ -494,7 +486,7 @@
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
-            <div class="modal-dialog modal-lg" style="width: 1000px;">
+            <div class="modal-dialog modal-lg" >
                 <!-- Modal content-->
                 <div class="modal-content">
                     <div class="modal-header">
@@ -512,7 +504,6 @@
                                         <th>Carrera / Curso</th>
                                         <th>Estudio</th>
                                         <th>Evaluación</th>
-                                        <th>Plazo</th>
                                         <th>Fecha</th>
                                         <th>Inscripción desde</th>
                                         <th>Inscripción hasta</th>

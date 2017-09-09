@@ -36,6 +36,7 @@
 
     //----------------------------------------------------------------------------------------------------
     String NotCod = request.getParameter("pNotCod");
+    Strinh titulo = "";
 
     List<NotificacionConsulta> lstObjeto = new ArrayList<>();
 
@@ -43,6 +44,7 @@
     if (!retorno.SurgioError()) {
         Notificacion notificacion = (Notificacion) retorno.getObjeto();
         lstObjeto = notificacion.getLstConsulta();
+        titulo = notificacion.getNotNom();
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -56,7 +58,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Consultas</title>
+        <title>Sistema de Gestión Académica - Notificación <%=titulo%> | Consultas</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

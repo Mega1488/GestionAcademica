@@ -41,6 +41,8 @@
     String PlaEstCod = request.getParameter("pPlaEstCod");
     String CarCod = request.getParameter("pCarCod");
     String MatCod = request.getParameter("pMatCod");
+    
+    String titulo = "";
 
     Carrera car = new Carrera();
     PlanEstudio plan = new PlanEstudio();
@@ -52,6 +54,11 @@
         car = (Carrera) retorno.getObjeto();
         plan = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
         mat = plan.getMateriaById(Long.valueOf(MatCod));
+        
+        titulo = plan.getCarreraPlanNombre() 
+                + " - " 
+                + mat.getMatNom();
+        
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -63,7 +70,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Materia | Evaluación</title>
+        <title>Sistema de Gestión Académica - Materia <%=titulo%> | Evaluación</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

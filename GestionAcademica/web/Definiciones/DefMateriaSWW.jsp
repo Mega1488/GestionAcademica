@@ -39,6 +39,8 @@
     //----------------------------------------------------------------------------------------------------
     String CarCod = request.getParameter("pCarCod");
     String PlaEstCod = request.getParameter("pPlaEstCod");
+    
+    String titulo ="";
 
     PlanEstudio plan = new PlanEstudio();
     Carrera car = new Carrera();
@@ -51,6 +53,7 @@
         car = (Carrera) retorno.getObjeto();
         plan = car.getPlanEstudioById(Long.valueOf(PlaEstCod));
         lstMaterias = plan.getLstMateria();
+        titulo = plan.getCarreraPlanNombre();
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -61,7 +64,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Materias</title>
+        <title>Sistema de Gestión Académica - Plan estudio <%=titulo%> | Materias</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

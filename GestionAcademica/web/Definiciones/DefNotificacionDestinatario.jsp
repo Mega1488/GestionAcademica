@@ -208,7 +208,15 @@
                                                         <form name="frm_general" id="frm_general" class="cmxform form-horizontal " >
                                                             <div class="form-group "><label for="NotDstCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="NotDstCod" name="NotDstCod" disabled value="<%=utilidad.NuloToVacio(destinatario.getNotDstCod())%>" ></div></div>
                                                             <div class="form-group "><label for="NotEmail" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="email" class=" form-control inputs_generales" id="NotEmail" name="NotEmail" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(destinatario.getNotEmail())%>" ></div></div>
-                                                            <div class="form-group "><label for="NotPerCod" class="control-label col-lg-3">Persona</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="NotPerCod" name="NotPerCod" <%=CamposActivos%> value="<% out.print(utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getPerCod() : ""))); %>" ></div></div>
+                                                            <div class="form-group ">
+                                                                <label for="NotPerCod" class="control-label col-lg-3">Persona</label>
+                                                                <div class="col-lg-4">
+                                                                    <input type="number" class=" form-control inputs_generales" id="NotPerCod" name="NotPerCod" <%=CamposActivos%> value="<% out.print(utilidad.NuloToVacio((destinatario.getPersona() != null ? destinatario.getPersona().getPerCod() : ""))); %>" >
+                                                                </div>
+                                                                <div class="col-lg-2">
+                                                                    <a href="#" id="btnPerCod" name="btnPerCod" class="glyphicon glyphicon-search" data-toggle="modal" data-target="#PopUpPersona"></a>
+                                                                </div>
+                                                            </div>
                                                             
                                                             <div class="form-group">
                                                                 <div class="col-lg-offset-3 col-lg-6">
@@ -257,6 +265,105 @@
                 </div>
             </div>
         </div> 
+        
+        <!-- PopUp para Agregar personas del calendario -->
+
+        <div id="PopUpPersona" class="modal fade" role="dialog">
+            <!-- Modal -->
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content modal-lg">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Personas</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <table id="PopUpTblPersona" name="PopUpTblPersona" class="table table-striped" cellspacing="0"  class="table" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Codigo</th>
+                                        <th>Nombre</th>
+                                        <th>Tipo</th>
+                                        <th>Documento</th>
+                                    </tr>
+                                </thead>
+
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <script type="text/javascript">
+
+                $(document).ready(function () {
+
+                    Buscar();
+
+
+                    $(document).on('click', ".PopPer_Seleccionar", function () {
+
+                                              
+                        $('#NotPerCod').val($(this).data("codigo"));
+
+                        $(function () {
+                            $('#PopUpPersona').modal('toggle');
+                        });
+                    });
+
+
+                    function Buscar()
+                    {
+                        var PerNom = $('#popPerNom').val();
+
+                        $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                            popPerNom: PerNom,
+                            pAction: "POPUP_OBTENER"
+                        }, function (responseText) {
+
+
+                            var personas = JSON.parse(responseText);
+
+                            $.each(personas, function (f, persona) {
+
+                                persona.perCod = "<td> <a href='#' data-codigo='" + persona.perCod + "' data-nombre='" + persona.perNom + "' class='PopPer_Seleccionar'>" + persona.perCod + " </a> </td>";
+                            });
+
+                            $('#PopUpTblPersona').DataTable({
+                                data: personas,
+                                responsive: true,
+                                processing: true,
+                                deferRender: true,
+                                bLengthChange: false, //thought this line could hide the LengthMenu
+                                pageLength: 10,
+                                language: {
+                                    "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
+                                }
+                                , search: {
+                                    "search": "Alumno"
+                                }
+                                , columns: [
+                                    {"data": "perCod"},
+                                    {"data": "nombreCompleto"},
+                                    {"data": "tipoPersona"},
+                                    {"data": "perDoc"}
+                                ]
+
+                            });
+
+                        });
+                    }
+
+
+                });
+            </script>
+        </div>
         
     </body>
 </html>

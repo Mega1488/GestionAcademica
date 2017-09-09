@@ -67,6 +67,7 @@
     switch (Mode) {
         case INSERT:
             CamposActivos = "enabled";
+            notInterna    = (notificacion.getNotInt() == true ? "disabled" : "");
             break;
         case DELETE:
             nameButton    = "ELIMINAR";
@@ -247,7 +248,7 @@
                                                             <div class="form-group "><label for="NotNom" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input required type="text" class=" form-control inputs_generales" id="NotNom" name="NotNom" <%=notInterna%> value="<%=utilidad.NuloToVacio(notificacion.getNotNom())%>" ></div></div>
                                                             <div class="form-group "><label for="NotDsc" class="control-label col-lg-3">Descripción</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="NotDsc" name="NotDsc" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(notificacion.getNotDsc())%>" ></div></div>
 
-                                                            <div class="form-group "><label for="NotInt" class="control-label col-lg-3">Notificación de sistema</label><div class="col-lg-6"><input type="checkbox"  id="NotInt" name="NotInt" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotInt())%> ></div></div>
+                                                            <div class="form-group "><label for="NotInt" class="control-label col-lg-3">Notificación de sistema</label><div class="col-lg-6"><input type="checkbox"  id="NotInt" name="NotInt" disabled <%=utilidad.BooleanToChecked(notificacion.getNotInt())%> ></div></div>
                                                             <div class="form-group "><label for="NotAct" class="control-label col-lg-3">Activa</label><div class="col-lg-6"><input type="checkbox"  id="NotAct" name="NotAct" <%=CamposActivos%> <%=utilidad.BooleanToChecked(notificacion.getNotAct())%> ></div></div>
                                                             
                                                             <div class="formulario_borde"></div>

@@ -13,6 +13,7 @@
 <%@page import="Utiles.Utilidades"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+
 <%
 
     Utilidades utilidad = Utilidades.GetInstancia();
@@ -35,9 +36,9 @@
 
 %>
 
-            <div class="modal-dialog modal-lg" style="width: 983px;">
+            <div class="modal-dialog" >
                 <!-- Modal content-->
-                <div class="modal-content">
+                <div class="modal-content modal-lg">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Evaluaciones</h4>
@@ -91,37 +92,17 @@
                                 evl.estudioNombre = "<a href='#' data-codigo='" + evl.evlCod + "' data-nombre='" + evl.evlNom + "' class='Pop_Seleccionar'>" + evl.estudioNombre + " </a> ";
                             });
 
-                        $('#PopUpTblEvaluaciones').DataTable({
+                        $('#PopUpTblEvaluaciones_').DataTable({
                             data: evaluaciones,
+                            responsive: true,
+                            processing: true,
                             deferRender: true,
                             bLengthChange: false, //thought this line could hide the LengthMenu
                             pageLength: 10,
                             destroy: true,
-                            select: {
-                                style: 'multi',
-                                selector: 'td:last-child'
-                            },
                             language: {
-                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                "zeroRecords": "No se encontraron registros",
-                                "info": "Página _PAGE_ de _PAGES_",
-                                "infoEmpty": "No hay registros",
-                                "search": "Buscar:",
-                                select: {
-                                    rows: {
-                                        _: "%d filas seleccionadas",
-                                        0: "",
-                                        1: "1 fila seleccionada"
-                                    }
+                                    "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
                                 },
-                                "paginate": {
-                                    "first": "Primera",
-                                    "last": "Ultima",
-                                    "next": "Siguiente",
-                                    "previous": "Anterior"
-                                },
-                                "infoFiltered": "(Filtrado de _MAX_ total de registros)"
-                            },
                             columns: [
                                 {"data": "carreraCursoNombre"},
                                 {"data": "estudioNombre"},

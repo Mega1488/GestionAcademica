@@ -33,6 +33,9 @@
             $('#tbl_ww').DataTable({
                 "responsive": true,
                 "processing": true,
+                deferRender: true,
+                "lengthMenu": [ [10, 20, 50, -1], [10, 20, 50, "Todos"] ],
+                pageLength: 20,
                 "fnInitComplete": function(oSettings, json) {
                         MostrarCargando(false);
                         $('#tbl_ww').show();

@@ -47,6 +47,8 @@
 
     PlanEstudio planEstudio = new PlanEstudio();
     Materia materia = new Materia();
+    
+    String titulo = "";
 
     List<MateriaPrevia> lstMatPrevia = new ArrayList<>();
 
@@ -55,6 +57,10 @@
         planEstudio = ((Carrera) retorno.getObjeto()).getPlanEstudioById(Long.valueOf(PlaEstCod));
         materia = planEstudio.getMateriaById(Long.valueOf(MatCod));
         lstMatPrevia = materia.getLstPrevias();
+        
+        titulo = planEstudio.getCarreraPlanNombre() 
+                + " - " 
+                + materia.getMatNom();
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -66,7 +72,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Materia | Previas</title>
+        <title>Sistema de Gestión Académica - Materia <%=titulo%> | Previas</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

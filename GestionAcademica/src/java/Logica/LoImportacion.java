@@ -8,7 +8,10 @@ package Logica;
 import Dominio.SincHelper;
 import Entidad.BitacoraProceso;
 import Entidad.Curso;
+import Entidad.Escolaridad;
 import Entidad.Inscripcion;
+import Entidad.Materia;
+import Entidad.Modulo;
 import Entidad.Persona;
 import Entidad.PlanEstudio;
 import Enumerado.Extensiones;
@@ -28,7 +31,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -57,6 +59,9 @@ public class LoImportacion {
         return instancia;
     }
     
+    //-------------------------------------------------------------------------
+    //PERSONAS - INSCRIPCION
+    //-------------------------------------------------------------------------
     
     public Retorno_MsgObj ImportarPersonasPlan(Long PlaEstCod, String filePath){
         Retorno_MsgObj retorno      = LoCarrera.GetInstancia().PlanEstudioObtener(PlaEstCod);
@@ -197,12 +202,8 @@ public class LoImportacion {
         return retorno;
     }
     
-    public Retorno_MsgObj ImportarPersonasEscolaridad(String filePath){
-        
-        return null;
-    }
-    
     private Retorno_MsgObj ImportarPersonas(String filePath){
+
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Importacion de personas", TipoMensaje.MENSAJE));
         
         File archivo = new File(filePath);
@@ -230,6 +231,10 @@ public class LoImportacion {
             }
             
             
+            Integer personasImportadas      = 0;
+            Integer personasExistentes      = 0;
+            Integer personasSinImportar     = 0;
+            
             //PROCESAR PERSONAS
             if(!retorno.SurgioError())
             {
@@ -237,11 +242,24 @@ public class LoImportacion {
                 {
                     Persona persona = (Persona) objeto;
                     
-                    Retorno_MsgObj perRet = (Retorno_MsgObj) LoPersona.GetInstancia().guardar(persona);
-                    
-                    if(!perRet.SurgioError())
+                    Retorno_MsgObj perRet = new Retorno_MsgObj(new Mensajes("", TipoMensaje.MENSAJE));
+                    if(persona.getPerCod() == null)
                     {
-                        persona = (Persona) perRet.getObjeto();
+                        perRet = (Retorno_MsgObj) LoPersona.GetInstancia().guardar(persona);
+                        
+                        if(!perRet.SurgioError())
+                        {
+                            personasImportadas +=1;
+                            persona = (Persona) perRet.getObjeto();
+                        }
+                        else
+                        {
+                            personasSinImportar += 1;
+                        }
+                    }
+                    else
+                    {
+                        personasExistentes +=1;
                     }
                     
                     //-MENSAJE PARA BITACORA
@@ -258,6 +276,12 @@ public class LoImportacion {
             }
             
             //archivo.delete();
+            
+            retorno.setMensaje(new Mensajes("Personas importadas: "
+                    + personasImportadas
+                    + ". Personas existentes: " + personasExistentes
+                    + ". Personas no ingresadas: " + personasSinImportar
+                    , TipoMensaje.MENSAJE));
             
         }
         else
@@ -482,6 +506,404 @@ public class LoImportacion {
         
         return retorno;
     }
+    
+    //-------------------------------------------------------------------------
+    //PERSONAS - ESCOLARIDAD
+    //-------------------------------------------------------------------------
+    
+    public Retorno_MsgObj ImportarPersonasEscolaridad(String filePath){
+        Retorno_MsgObj retorno = this.ImportarPersonas(filePath);
+        if(!retorno.SurgioError())
+        {
+            Mensajes msgImpPersonas = retorno.getMensaje();
+            retorno = this.ImportarEscolaridad(filePath);
+            retorno.getMensaje().setMensaje(msgImpPersonas.getMensaje() + "\n" + retorno.getMensaje().getMensaje());
+        }
+        
+        this.ImpactarEnBitacora(retorno);
+
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ImportarEscolaridad(String filePath){
+
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Importacion de escolaridades", TipoMensaje.MENSAJE));
+        
+        File archivo = new File(filePath);
+        
+        if(archivo.exists())
+        {
+            if(FilenameUtils.isExtension(archivo.getName(), Extensiones.XLS.getValor()))
+            {
+                try {
+                    retorno = this.ProcesarEscolaridadXLS(archivo);
+                } catch (IOException ex) {
+                    retorno.setMensaje(new Mensajes("Error al leer archivo: " + ex, TipoMensaje.ERROR));
+                    Logger.getLogger(LoImportacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            if(FilenameUtils.isExtension(archivo.getName(), Extensiones.XLSX.getValor()))
+            {
+                try {
+                    retorno = this.ProcesarEscolaridadXLSX(archivo);
+                } catch (IOException ex) {
+                    retorno.setMensaje(new Mensajes("Error al leer archivo: " + ex, TipoMensaje.ERROR));
+                    Logger.getLogger(LoImportacion.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
+            Integer escIngresada = 0;
+            Integer escSinIngresar = 0;
+            
+            //PROCESAR ESCOLARIDADES
+            if(!retorno.SurgioError())
+            {
+                for(Object objeto : retorno.getLstObjetos())
+                {
+                    Escolaridad escolaridad = (Escolaridad) objeto;
+                    
+                    Retorno_MsgObj escRet = (Retorno_MsgObj) LoEscolaridad.GetInstancia().guardar(escolaridad);
+                    
+                    if(!escRet.SurgioError())
+                    {
+                        escolaridad = (Escolaridad) escRet.getObjeto();
+                        escIngresada += 1;
+                    }
+                    else
+                    {
+                        escSinIngresar += 1;
+                    }
+                    
+                    //-MENSAJE PARA BITACORA
+                    retorno.getLstMensajes().add(new Mensajes("Registro de " 
+                            + escolaridad.getAlumno().getPerCod()
+                            + " - " + escolaridad.getAlumno().getNombreCompleto()
+                            + ". Escolaridad: " + escolaridad.getEscCod()
+                            + ". Resultado: " 
+                            + (escRet.SurgioError() ? "ERROR : " + escRet.getMensaje().getMensaje() : "CORRECTO")
+                            , escRet.getMensaje().getTipoMensaje()));
+                    
+                }
+            }
+            
+            //archivo.delete();
+            retorno.setMensaje(new Mensajes("Escolaridades ingresadas: "
+                    + escIngresada
+                    + " - Escolaridades sin ingresar: " + escSinIngresar
+                    , TipoMensaje.MENSAJE));
+            
+        }
+        else
+        {
+            retorno.setMensaje(new Mensajes("No existe el archivo", TipoMensaje.ERROR));
+        }
+        
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ProcesarEscolaridadXLSX(File archivo) throws FileNotFoundException, IOException{
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
+        
+        FileInputStream file = new FileInputStream(archivo);
+	// Crear el objeto que tendra el libro de Excel
+	XSSFWorkbook workbook;
+
+        workbook = new XSSFWorkbook(file);
+
+        /*
+	 * Obtenemos la primera pestaña a la que se quiera procesar indicando el indice.
+	 * Una vez obtenida la hoja excel con las filas que se quieren leer obtenemos el iterator
+	 * que nos permite recorrer cada una de las filas que contiene.
+	 */
+	XSSFSheet sheet = workbook.getSheetAt(0);
+	Iterator<Row> rowIterator = sheet.iterator();
+        
+        List<String> lstCampos  = new ArrayList<>();
+        
+	Row row;
+	// Recorremos todas las filas para mostrar el contenido de cada celda
+	while (rowIterator.hasNext()){
+	    row = rowIterator.next();
+            
+            if(row.getCell(0) == null)
+            {
+                return retorno;
+            }
+            
+            
+            // Obtenemos el iterator que permite recorres todas las celdas de una fila
+            Iterator<Cell> cellIterator = row.cellIterator();
+            Cell celda;
+            
+            Escolaridad esc = new Escolaridad();
+            
+            while (cellIterator.hasNext()){
+                celda = cellIterator.next();
+
+                // Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
+                
+                String value = null;
+                Object valorAux;
+
+                switch(celda.getCellTypeEnum()) {
+                case NUMERIC:
+                    if( DateUtil.isCellDateFormatted(celda) ){
+                       valorAux=celda.getDateCellValue();
+                       value = yMd_HMS.format(valorAux);
+                       
+                    }else{
+                       valorAux=celda.getNumericCellValue();
+                       
+                       value = valorAux.toString();
+                       value = value.replace(".0", "");
+                    }
+                    break;
+                case STRING:
+                    value=celda.getStringCellValue();
+                    break;
+                case BOOLEAN:
+                    valorAux=celda.getBooleanCellValue();
+                    value = valorAux.toString();
+                    break;
+                }
+                
+                if(celda.getColumnIndex() == 0 && (value == null || value.isEmpty()))
+                {
+                    return retorno;
+                }
+                
+                if(value!= null)
+                {
+                    if(row.getRowNum() == 0)
+                    {
+                        lstCampos.add((String) value);
+                    }
+                    else
+                    {
+
+                        String nameField = lstCampos.get(celda.getColumnIndex());
+
+                        Retorno_MsgObj setFieldRet;
+                        
+                        switch(nameField.toUpperCase())
+                        {
+                            case "PERCOD":
+                                setFieldRet = LoPersona.GetInstancia().obtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Persona persona = (Persona) setFieldRet.getObjeto();
+                                    esc.setAlumno(persona);
+                                }
+                            break;
+                            
+                            case "ESCCURCOD":
+                                setFieldRet = LoCurso.GetInstancia().obtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Curso curso = (Curso) setFieldRet.getObjeto();
+                                    esc.setCurso(curso);
+                                }
+                                break;
+                            case "ESCMODCOD":
+                                setFieldRet = LoCurso.GetInstancia().ModuloObtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Modulo modulo = (Modulo) setFieldRet.getObjeto();
+                                    esc.setModulo(modulo);
+                                }
+                                break;
+                            case "ESCMATCOD":
+                                setFieldRet = LoCarrera.GetInstancia().MateriaObtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Materia materia = (Materia) setFieldRet.getObjeto();
+                                    esc.setMateria(materia);
+                                }
+                                break;
+                            
+                            default:
+                                setFieldRet = esc.setField(nameField, value);
+                            break;
+                                    
+                        }
+                        
+                        if(setFieldRet.SurgioError())
+                        {
+                            retorno.getLstMensajes().add(setFieldRet.getMensaje());
+                            retorno.getMensaje().setTipoMensaje(TipoMensaje.ADVERTENCIA);
+                        }
+                    }
+                }
+            }
+
+            if(row.getRowNum() > 0)
+            {
+                retorno.getLstObjetos().add(esc);
+            }
+            
+            System.err.println("-------------------------------");
+            System.err.println("Fila: " + row.getRowNum());
+            System.err.println("Escolaridades: " + retorno.getLstObjetos().size());
+            
+	}
+ 
+	// cerramos el libro excel
+	workbook.close();
+        
+        return retorno;
+    }
+    
+    private Retorno_MsgObj ProcesarEscolaridadXLS(File archivo) throws FileNotFoundException, IOException{
+        
+        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
+        
+        FileInputStream file = new FileInputStream(archivo);
+	// Crear el objeto que tendra el libro de Excel
+	HSSFWorkbook workbook;
+        workbook = new HSSFWorkbook(file);
+ 
+	/*
+	 * Obtenemos la primera pestaña a la que se quiera procesar indicando el indice.
+	 * Una vez obtenida la hoja excel con las filas que se quieren leer obtenemos el iterator
+	 * que nos permite recorrer cada una de las filas que contiene.
+	 */
+        
+        List<String> lstCampos  = new ArrayList<>();
+       
+        HSSFSheet sheet = workbook.getSheetAt(0);
+	Iterator<Row> rowIterator = sheet.iterator();
+ 
+	Row row;
+	// Recorremos todas las filas para mostrar el contenido de cada celda
+	while (rowIterator.hasNext()){
+	    row = rowIterator.next();
+            
+            if(row.getCell(0) == null)
+            {
+                return retorno;
+            }
+            
+            Escolaridad esc = new Escolaridad();
+ 
+	    // Obtenemos el iterator que permite recorres todas las celdas de una fila
+	    Iterator<Cell> cellIterator = row.cellIterator();
+	    Cell celda;
+ 
+	    while (cellIterator.hasNext()){
+		celda = cellIterator.next();
+ 
+		// Dependiendo del formato de la celda el valor se debe mostrar como String, Fecha, boolean, entero...
+		String value = null;
+                Object valorAux;
+
+                switch(celda.getCellTypeEnum()) {
+                case NUMERIC:
+                    if( DateUtil.isCellDateFormatted(celda) ){
+                       valorAux=celda.getDateCellValue();
+                       value = yMd_HMS.format(valorAux);
+                       
+                    }else{
+                       valorAux=celda.getNumericCellValue();
+                       
+                       value = valorAux.toString();
+                       value = value.replace(".0", "");
+                    }
+                    break;
+                case STRING:
+                    value=celda.getStringCellValue();
+                    break;
+                case BOOLEAN:
+                    valorAux=celda.getBooleanCellValue();
+                    value = valorAux.toString();
+                    break;
+                }
+                
+                if(celda.getColumnIndex() == 0 && (value == null || value.isEmpty()))
+                {
+                    return retorno;
+                }
+                
+                if(value!= null)
+                {
+                    if(row.getRowNum() == 0)
+                    {
+                        lstCampos.add((String) value);
+                    }
+                    else
+                    {
+
+                        String nameField = lstCampos.get(celda.getColumnIndex());
+
+                        Retorno_MsgObj setFieldRet;
+                        
+                        switch(nameField.toUpperCase())
+                        {
+                            case "PERCOD":
+                                setFieldRet = LoPersona.GetInstancia().obtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Persona persona = (Persona) setFieldRet.getObjeto();
+                                    esc.setAlumno(persona);
+                                }
+                            break;
+                            
+                            case "ESCCURCOD":
+                                setFieldRet = LoCurso.GetInstancia().obtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Curso curso = (Curso) setFieldRet.getObjeto();
+                                    esc.setCurso(curso);
+                                }
+                                break;
+                            case "ESCMODCOD":
+                                setFieldRet = LoCurso.GetInstancia().ModuloObtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Modulo modulo = (Modulo) setFieldRet.getObjeto();
+                                    esc.setModulo(modulo);
+                                }
+                                break;
+                            case "ESCMATCOD":
+                                setFieldRet = LoCarrera.GetInstancia().MateriaObtener(Long.valueOf(value));
+                                if(!setFieldRet.SurgioErrorObjetoRequerido())
+                                {
+                                    Materia materia = (Materia) setFieldRet.getObjeto();
+                                    esc.setMateria(materia);
+                                }
+                                break;
+                            
+                            default:
+                                setFieldRet = esc.setField(nameField, value);
+                            break;
+                                    
+                        }
+                        
+                        if(setFieldRet.SurgioError())
+                        {
+                            retorno.getLstMensajes().add(setFieldRet.getMensaje());
+                            retorno.getMensaje().setTipoMensaje(TipoMensaje.ADVERTENCIA);
+                        }
+                    }
+                }
+            }
+            
+            retorno.getLstObjetos().add(esc);
+            
+	}
+ 
+	// cerramos el libro excel
+	workbook.close();
+        
+        return retorno;
+    }
+    
+    
+    //-------------------------------------------------------------------------
+    //GENERICO
+    //-------------------------------------------------------------------------
     
     private void ImpactarEnBitacora(Retorno_MsgObj retorno){
         BitacoraProceso bit = new BitacoraProceso();

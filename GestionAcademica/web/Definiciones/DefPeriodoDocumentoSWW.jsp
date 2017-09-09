@@ -82,6 +82,8 @@
 
     Modo Mode = Modo.valueOf(ModoTxt);
 
+    String titulo = "";
+
     if (Mode.equals(Modo.INSERT)) {
         Retorno_MsgObj retorno = AgregarDatos(fichero, Long.valueOf(PeriEstCod));
         if (!retorno.SurgioError()) {
@@ -96,6 +98,11 @@
     Retorno_MsgObj retorno = (Retorno_MsgObj) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod));
     if (!retorno.SurgioErrorObjetoRequerido()) {
         lstObjeto = ((PeriodoEstudio) retorno.getObjeto()).getLstDocumento();
+        titulo = ((PeriodoEstudio) retorno.getObjeto()).getPeriodo().TextoPeriodo()
+                + " - "
+                +((PeriodoEstudio) retorno.getObjeto()).getCarreraCursoNombre() 
+                + " - "
+                + ((PeriodoEstudio) retorno.getObjeto()).getEstudioNombre();
     } else {
         out.print(retorno.getMensaje().toString());
     }
@@ -111,7 +118,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Periodo Estudio | Documentos</title>
+        <title>Sistema de Gestión Académica - Periodo Estudio <%=titulo%> | Documentos</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

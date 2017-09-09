@@ -16,7 +16,6 @@
 
 <%
     Utilidades utilidad = Utilidades.GetInstancia();
-    String urlSistema = utilidad.GetUrlSistema();
 
     //----------------------------------------------------------------------------------------------------
     //CONTROL DE ACCESO

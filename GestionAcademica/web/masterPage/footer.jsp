@@ -40,7 +40,7 @@
           </div>
           <div class="modal-footer">
             <button name="ban_boton_confirmar" id="ban_boton_confirmar" type="button" class="btn btn-danger" data-codigo="">Eliminar</button>
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+            <button type="button" id="ban_boton_cancelar" name="ban_boton_cancelar" class="btn btn-default" >Cancelar</button>
           </div>
         </div>
     </div>
@@ -75,6 +75,10 @@
                 {
                     container.hide();
                 }
+            });
+            
+            $('#ban_boton_cancelar').on('click', function(e) {
+                location.reload();
             });
 
             $('.btn_ver_msg').on('click', function(e) {

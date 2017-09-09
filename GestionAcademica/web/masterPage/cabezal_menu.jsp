@@ -68,7 +68,7 @@
         persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
     }
     
-    Integer cantidad = lstBandeja.size() + lstVistos.size();
+    Integer cantidad = lstBandeja.size();
 
 %>
 

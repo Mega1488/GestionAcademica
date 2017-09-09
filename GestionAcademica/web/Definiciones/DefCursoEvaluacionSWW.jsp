@@ -39,29 +39,14 @@
     String CurCod = request.getParameter("pCurCod");
 
     Curso curso = new Curso();
+    String titulo = "";
 
     Retorno_MsgObj retorno = (Retorno_MsgObj) loCurso.obtener(Long.valueOf(CurCod));
     if (retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR) {
         curso = (Curso) retorno.getObjeto();
+        titulo = curso.getCurNom();
     } else {
         out.print(retorno.getMensaje().toString());
-    }
-
-    String CamposActivos = "disabled";
-
-    switch (Mode) {
-        case INSERT:
-            CamposActivos = "enabled";
-            break;
-        case DELETE:
-            CamposActivos = "disabled";
-            break;
-        case DISPLAY:
-            CamposActivos = "disabled";
-            break;
-        case UPDATE:
-            CamposActivos = "enabled";
-            break;
     }
 
     String tblVisible = (curso.getLstEvaluacion().size() > 0 ? "" : "display: none;");
@@ -73,7 +58,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Curso | Evaluación</title>
+        <title>Sistema de Gestión Académica - Curso <%=titulo%> | Evaluación</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

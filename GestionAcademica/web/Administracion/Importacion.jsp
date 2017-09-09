@@ -183,13 +183,11 @@
 
                                 if (resultado.mensaje.tipoMensaje != "ERROR")
                                 {
-                                    var PerCod = $('#PerCod').val();
                                     var ArcCod = resultado.objeto;
 
-                                    $.post('<%=urlSistema%>ABM_Persona', {
-                                        pPerCod: PerCod,
+                                    $.post('<%=urlSistema%>ABM_Importacion', {
                                         pArcCod: ArcCod,
-                                        pAction: "SUBIR_FOTO"
+                                        pAction: "IMP_AL_ESCOLARIDAD"
                                     }, function (responseText) {
                                         var obj = JSON.parse(responseText);
 

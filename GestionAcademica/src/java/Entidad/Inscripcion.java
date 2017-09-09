@@ -7,6 +7,7 @@ package Entidad;
 
 import Dominio.SincHelper;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -196,6 +197,7 @@ public class Inscripcion extends SincHelper implements Serializable {
     @JsonIgnore
     @XmlTransient
     public List<MateriaRevalida> getLstRevalidas() {
+        if(lstRevalidas == null) lstRevalidas = new ArrayList<>();
         return lstRevalidas;
     }
 

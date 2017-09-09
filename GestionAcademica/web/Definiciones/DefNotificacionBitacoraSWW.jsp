@@ -38,6 +38,7 @@
 
     //----------------------------------------------------------------------------------------------------
     String NotCod = request.getParameter("pNotCod");
+    String titulo = "";
 
     List<NotificacionBitacora> lstObjeto = new ArrayList<>();
 
@@ -45,6 +46,8 @@
     if (!retorno.SurgioError()) {
         Notificacion notificacion = (Notificacion) retorno.getObjeto();
         lstObjeto = notificacion.getLstBitacora();
+        
+        titulo = notificacion.getNotNom();
 
         Collections.sort(lstObjeto, new Comparator<NotificacionBitacora>() {
 
@@ -76,7 +79,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Bitacora</title>
+        <title>Sistema de Gestión Académica - Notificación <%=titulo%> | Bitacora</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>

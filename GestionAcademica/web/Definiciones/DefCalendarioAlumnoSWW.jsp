@@ -38,11 +38,17 @@
 
     //----------------------------------------------------------------------------------------------------
     String CalCod = request.getParameter("pCalCod");
+    String titulo = "";
 
     List<CalendarioAlumno> lstObjeto = new ArrayList<>();
 
     Retorno_MsgObj retorno = (Retorno_MsgObj) loCalendario.obtener(Long.valueOf(CalCod));
     if (!retorno.SurgioErrorObjetoRequerido()) {
+        titulo = ((Calendario) retorno.getObjeto()).getEvaluacion().getEstudioNombre() 
+                + " - " 
+                + ((Calendario) retorno.getObjeto()).getEvaluacion().getEvlNom()
+                + " - "
+                + ((Calendario) retorno.getObjeto()).getCalFch();
         lstObjeto = loCalendario.AlumnoObtenerListaPorUsuario((Calendario) retorno.getObjeto(), usuario);
     } else {
         out.print(retorno.getMensaje().toString());
@@ -50,14 +56,7 @@
 
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
 
-    String ret = request.getParameter("RET");
-    String urlRet = urlSistema + "Definiciones/DefCalendarioWW.jsp";
-    if (ret != null) {
-        if (!ret.isEmpty()) {
-            urlRet = urlSistema + "Definiciones/DefCalendarioGrid.jsp";
-        }
-    }
-
+   
 %>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -65,7 +64,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Sistema de Gestión Académica - Calendario | Alumnos</title>
+        <title>Sistema de Gestión Académica - Calendario <%=titulo%> | Alumnos</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
     </head>
@@ -102,6 +101,7 @@
                                         <th>Estado</th>
                                         <th>Validado por</th>
                                         <th>Fecha</th>
+                                        <th></th>
                                         <th></th>
                                         <th></th>
                                         <th></th>
@@ -161,7 +161,7 @@
             <!-- Modal -->
             <div class="modal-dialog">
                 <!-- Modal content-->
-                <div class="modal-content">
+                <div class="modal-content modal-lg">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal">&times;</button>
                         <h4 class="modal-title">Personas</h4>
@@ -243,22 +243,13 @@
 
                             $('#PopUpTblPersona').DataTable({
                                 data: personas,
+                                responsive: true,
+                                processing: true,
                                 deferRender: true,
                                 bLengthChange: false, //thought this line could hide the LengthMenu
                                 pageLength: 10,
                                 language: {
-                                    "lengthMenu": "Mostrando _MENU_ registros por página",
-                                    "zeroRecords": "No se encontraron registros",
-                                    "info": "Página _PAGE_ de _PAGES_",
-                                    "infoEmpty": "No hay registros",
-                                    "search": "Buscar:",
-                                    "paginate": {
-                                        "first": "Primera",
-                                        "last": "Ultima",
-                                        "next": "Siguiente",
-                                        "previous": "Anterior"
-                                    },
-                                    "infoFiltered": "(Filtrado de _MAX_ registros)"
+                                    "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
                                 }
                                 , search: {
                                     "search": "Alumno"
