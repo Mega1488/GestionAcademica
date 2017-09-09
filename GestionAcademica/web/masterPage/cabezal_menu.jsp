@@ -226,21 +226,19 @@
         {               
 
             out.println("<ul class='list-unstyled components menu_contenedor'>");
-           /* out.println("   <li class='active'><a href='#'><i class='material-icons'>dashboard</i><p>Inicio</p></a></li>");*/
 
             for(Menu menu : OpcionesDeMenu.GetInstancia().getLstAdministrador())
             {
                 if(menu.getMenIsParent())
                 {
-                    out.println("<li>");
-                        out.println("<li><a href='#sub_" + menu.getMenCod() + "' data-toggle='collapse' aria-expanded='false'>" + menu.getMenNom() + "<span class='ti-angle-right'></span></a>");
+                    out.println("<li><a href='#sub_" + menu.getMenCod() + "' data-toggle='collapse' aria-expanded='false'>" + menu.getMenNom() + "<span class='ti-angle-right'></span></a>");
                         
                         out.println("<ul class='collapse list-unstyled menu_submenu' id='sub_" + menu.getMenCod() + "'>");
                             for(Menu subMenu : menu.getLstSubMenu())
                             {
                                 out.println("<li><a href='" + subMenu.getMenUrl() + "'>" + subMenu.getMenNom() + "</a></li>");
                             }
-                        out.println("</li>");
+                        out.println("</ul>");
                         
                     out.println("</li>");
                 }

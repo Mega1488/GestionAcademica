@@ -425,7 +425,7 @@
         <jsp:include page="/masterPage/footer.jsp"/>
         
         
-        <!-- Ver alumno ---------------------------------------------------------------------------------------------------------------------------------------->
+        <!-- Ver alumno -->
 
         <div id="PopUpVerCalendario" class="modal fade" role="dialog">
             <!-- Modal -->
@@ -476,13 +476,13 @@
             </div>
         </div>
 
-        <!-- Evaluaciones ---------------------------------------------------------------------------------------------------------------------------------------->
+        <!-- Evaluaciones -->
         <div id="PopUpEvaluacion"  class="modal fade" role="dialog">
             <jsp:include page="/PopUps/PopUpEvaluacion.jsp"/>
         </div>
 
 
-        <!-- Agregar periodo ---------------------------------------------------------------------------------------------------------------------------------------->
+        <!-- Agregar periodo -->
 
         <div id="PopUpAgregar" class="modal fade" role="dialog">
             <!-- Modal -->
