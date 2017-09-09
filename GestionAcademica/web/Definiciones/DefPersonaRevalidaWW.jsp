@@ -36,6 +36,9 @@
     Inscripcion inscripcion = (Inscripcion) LoInscripcion.GetInstancia().obtener(Long.valueOf(InsCod)).getObjeto();
 
     String tblVisible = (inscripcion.getLstRevalidas().size() > 0 ? "" : "display: none;");
+    
+    String lstMaterias = utilidad.ObjetoToJson(inscripcion.getPlanEstudio().getLstMateria());
+    
 
 %>
 <!DOCTYPE html>
@@ -63,11 +66,11 @@
                             <span class="tools pull-right">
                                 <a href="<% out.print(urlSistema); %>Definiciones/DefPersonaInscripcionSWW.jsp?MODO=UPDATE&pPerCod=<% out.print(inscripcion.getAlumno().getPerCod()); %>">Regresar</a>
                             </span>
-                            
-                            <span class="contenedor_agregar">
-                                <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
-                            </span>
                         </header>
+                        <span class="contenedor_agregar">
+                            <a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>
+                        </span>
+                            
                         <div class="panel-body">
                             <div class=" form">
                                     <!-- CONTENIDO -->
@@ -144,58 +147,20 @@
             <script type="text/javascript">
                 $(document).ready(function () {
 
+                    var lstMateria = <%=lstMaterias%>;
 
-                    $.post('<% out.print(urlSistema); %>ABM_Carrera', {
-                        pAction: "POPUP_OBTENER"
-                    }, function (responseText) {
-                        var carreras = JSON.parse(responseText);
-
-                        var CarCod = $('#CarCod').val();
-                        var PlaEstCod = $('#PlaEstCod').val();
-
-                        $.each(carreras, function (i, objeto) {
-                            if (objeto.carCod == CarCod)
-                            {
-                                $.each(objeto.plan, function (i, pln) {
-
-                                    if (pln.plaEstCod == PlaEstCod)
-                                    {
-                                        CargarMaterias(pln);
-                                    }
-                                });
-                            }
-
-
-                        });
-                    });
-
-                    function CargarMaterias(plan)
-                    {
-
-
-                        $.each(plan.lstMateria, function (f, materia) {
+                        $.each(lstMateria, function (f, materia) {
                             materia.matCod = "<td> <a href='#' data-codigo='" + materia.matCod + "' data-nombre='" + materia.matNom + "' class='Pop_Seleccionar'>" + materia.matCod + " </a> </td>";
                         });
 
                         $('#PopUpTblEstudio').DataTable({
-                            data: plan.lstMateria,
+                            data: lstMateria,
                             deferRender: true,
                             destroy: true,
                             bLengthChange: false, //thought this line could hide the LengthMenu
                             pageLength: 10,
                             language: {
-                                "lengthMenu": "Mostrando _MENU_ registros por página",
-                                "zeroRecords": "No se encontraron registros",
-                                "info": "Página _PAGE_ de _PAGES_",
-                                "infoEmpty": "No hay registros",
-                                "search": "Buscar:",
-                                "paginate": {
-                                    "first": "Primera",
-                                    "last": "Ultima",
-                                    "next": "Siguiente",
-                                    "previous": "Anterior"
-                                },
-                                "infoFiltered": "(Filtrado de _MAX_ registros)"
+                                url: "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
                             }
                             , columns: [
                                 {"data": "matCod"},
@@ -204,7 +169,7 @@
 
                         });
 
-                    }
+                    
 
                     $(document).on('click', ".Pop_Seleccionar", function () {
 
