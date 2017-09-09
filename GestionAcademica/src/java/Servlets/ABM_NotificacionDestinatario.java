@@ -20,6 +20,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -198,7 +200,8 @@ public class ABM_NotificacionDestinatario extends HttpServlet {
         {
             destinatario   = new NotificacionDestinatario();
         }
-            
+        try
+        {
                 String NotDstCod= request.getParameter("pNotDstCod");
                 String NotEmail= request.getParameter("pNotEmail");
                 String NotCod= request.getParameter("pNotCod");
@@ -223,7 +226,17 @@ public class ABM_NotificacionDestinatario extends HttpServlet {
                 if(NotEmail != null) if(!NotEmail.isEmpty()) destinatario.setNotEmail(NotEmail);
                 
                 if(NotPerCod != null) if(!NotPerCod.isEmpty()) destinatario.setPersona((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(NotPerCod)).getObjeto());
-                
+            }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }     
                 return destinatario;
         }
 

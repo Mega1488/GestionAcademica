@@ -18,6 +18,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -204,9 +206,14 @@ public class AM_Parametro extends HttpServlet {
             }
             
         }
-        catch(Exception ex)
+        catch(NumberFormatException | UnsupportedOperationException  ex)
         {
-            ex.printStackTrace();
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         
         retorno = utilidades.ObjetoToJson(mensaje);

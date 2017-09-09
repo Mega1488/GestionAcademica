@@ -20,6 +20,8 @@ import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -262,6 +264,9 @@ public class ABM_ParametroEmail extends HttpServlet {
         {
             parametroEmail   = new ParametroEmail();
         }
+        
+        try
+        {
 
         String ParEmlNom    = request.getParameter("pParEmlNom");
         String ParEmlPro    = request.getParameter("pParEmlPro");
@@ -323,7 +328,17 @@ public class ABM_ParametroEmail extends HttpServlet {
         
         if(ParEmlDebug != null) parametroEmail.setParEmlDebug(Boolean.valueOf(ParEmlDebug));
         if(ParEmlReqConf != null) parametroEmail.setParEmlReqConf(Boolean.valueOf(ParEmlReqConf));
-        
+        }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } 
         return parametroEmail;
     }
 

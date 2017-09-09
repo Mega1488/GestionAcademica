@@ -8,8 +8,6 @@ package Servlets;
 import Entidad.Calendario;
 import Entidad.CalendarioDocente;
 import Entidad.Persona;
-import Enumerado.EstadoCalendarioEvaluacion;
-import Enumerado.Modo;
 import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
 import Logica.LoCalendario;
@@ -20,13 +18,13 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import org.apache.jasper.Constants;
 
 /**
  *
@@ -222,27 +220,38 @@ public class ABM_CalendarioDocente extends HttpServlet {
         {
             calDocente   = new CalendarioDocente();
         }
-
-        String CalDocCod    = request.getParameter("pCalDocCod");
-        String DocPerCod    = request.getParameter("pDocPerCod");
-        String CalCod       = request.getParameter("pCalCod");
         
-        //------------------------------------------------------------------------------------------
-        //Validaciones
-        //------------------------------------------------------------------------------------------
+        try {
 
-        //TIPO DE DATO
+            String CalDocCod    = request.getParameter("pCalDocCod");
+            String DocPerCod    = request.getParameter("pDocPerCod");
+            String CalCod       = request.getParameter("pCalCod");
+
+            //------------------------------------------------------------------------------------------
+            //Validaciones
+            //------------------------------------------------------------------------------------------
+
+            //TIPO DE DATO
 
 
 
-        //Sin validacion
-        if(CalCod != null) calDocente.setCalendario((Calendario) loCalendario.obtener(Long.valueOf(CalCod)).getObjeto());
+            //Sin validacion
+            if(CalCod != null) calDocente.setCalendario((Calendario) loCalendario.obtener(Long.valueOf(CalCod)).getObjeto());
+
+            if(CalDocCod != null)                calDocente.setCalDocCod(Long.valueOf(CalDocCod)); 
+            if(calDocente.getCalDocCod() != null) calDocente = calDocente.getCalendario().getDocenteById(calDocente.getCalDocCod());
+
+            if(DocPerCod != null) calDocente.setDocente((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(DocPerCod)).getObjeto());;
         
-        if(CalDocCod != null)                calDocente.setCalDocCod(Long.valueOf(CalDocCod)); 
-        if(calDocente.getCalDocCod() != null) calDocente = calDocente.getCalendario().getDocenteById(calDocente.getCalDocCod());
-        
-        if(DocPerCod != null) calDocente.setDocente((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(DocPerCod)).getObjeto());;
-        
+        } catch (NumberFormatException | UnsupportedOperationException ex) {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error = true;
+
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
         return calDocente;
     }
 

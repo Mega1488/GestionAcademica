@@ -18,6 +18,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -202,13 +204,15 @@ public class ABM_TipoEvaluacion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
-        private TipoEvaluacion ValidarTipoEvaluacion(HttpServletRequest request, TipoEvaluacion tpoEvaluacion)
-        {
+    private TipoEvaluacion ValidarTipoEvaluacion(HttpServletRequest request, TipoEvaluacion tpoEvaluacion)
+    {
             if(tpoEvaluacion == null)
             {
                 tpoEvaluacion   = new TipoEvaluacion();
             }
 
+            try
+            {
                 String TpoEvlNom= request.getParameter("pTpoEvlNom");
                 String TpoEvlExm= request.getParameter("pTpoEvlExm");
                 String TpoEvlInsAut= request.getParameter("pTpoEvlInsAut");
@@ -226,7 +230,17 @@ public class ABM_TipoEvaluacion extends HttpServlet {
                 tpoEvaluacion.setTpoEvlNom(TpoEvlNom);
                 tpoEvaluacion.setTpoEvlExm(Boolean.valueOf(TpoEvlExm));
                 tpoEvaluacion.setTpoEvlInsAut(Boolean.valueOf(TpoEvlInsAut));
-                
+              }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }  
                 
             return tpoEvaluacion;
         }

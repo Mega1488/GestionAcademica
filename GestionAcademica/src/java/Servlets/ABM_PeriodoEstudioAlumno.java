@@ -19,6 +19,8 @@ import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -248,23 +250,36 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         {
             periAlumno   = new PeriodoEstudioAlumno();
         }
-
-        String 	PeriEstCod	= request.getParameter("pPeriEstCod");
-        String 	PeriEstAluCod   = request.getParameter("pPeriEstAluCod");
-        String 	AluPerCod	= request.getParameter("pAluPerCod");
         
-        //------------------------------------------------------------------------------------------
-        //Validaciones
-        //------------------------------------------------------------------------------------------
+        try
+        {
 
-        //TIPO DE DATO
+            String 	PeriEstCod	= request.getParameter("pPeriEstCod");
+            String 	PeriEstAluCod   = request.getParameter("pPeriEstAluCod");
+            String 	AluPerCod	= request.getParameter("pAluPerCod");
 
-        if(PeriEstCod != null) periAlumno.setPeriodoEstudio(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
-        
-        if(PeriEstAluCod != null) periAlumno = periAlumno.getPeriodoEstudio().getAlumnoById(Long.valueOf(PeriEstAluCod));
-        
-        if(AluPerCod != null) periAlumno.setAlumno((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(AluPerCod)).getObjeto());
+            //------------------------------------------------------------------------------------------
+            //Validaciones
+            //------------------------------------------------------------------------------------------
+
+            //TIPO DE DATO
+
+            if(PeriEstCod != null) periAlumno.setPeriodoEstudio(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
+
+            if(PeriEstAluCod != null) periAlumno = periAlumno.getPeriodoEstudio().getAlumnoById(Long.valueOf(PeriEstAluCod));
+
+            if(AluPerCod != null) periAlumno.setAlumno((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(AluPerCod)).getObjeto());
+         }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
             
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }   
         return periAlumno;
     }
 

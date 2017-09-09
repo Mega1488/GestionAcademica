@@ -20,7 +20,6 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -329,6 +328,8 @@ public class ABM_Materia extends HttpServlet {
         {
             materia   = new Materia();
         }
+        
+        try{
             String CarCod       = request.getParameter("pCarCod");
             String PlaEstCod    = request.getParameter("pPlaEstCod");
             String MatCod       = request.getParameter("pMatCod");
@@ -363,14 +364,17 @@ public class ABM_Materia extends HttpServlet {
             if(MatPerVal != null) materia.setMatPerVal(Double.valueOf(MatPerVal));
             //Objetos
             
-           /* 
-            if(!PreMatCod.isEmpty())
-            {
-                Materia mat = new Materia();
-                mat.setMatCod(Long.valueOf(PreMatCod));
-                materia.setMateriaPrevia(mat);
-            }
-            */
+           }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
             
         return materia;
     }

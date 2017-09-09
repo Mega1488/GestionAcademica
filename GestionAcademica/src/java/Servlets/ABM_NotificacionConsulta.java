@@ -8,19 +8,19 @@ package Servlets;
 
 import Entidad.Notificacion;
 import Entidad.NotificacionConsulta;
-import Entidad.Persona;
 import Enumerado.Modo;
 import Enumerado.NombreSesiones;
 import Enumerado.TipoConsulta;
 import Enumerado.TipoMensaje;
 import Logica.LoNotificacion;
-import Logica.LoPersona;
 import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -199,7 +199,8 @@ public class ABM_NotificacionConsulta extends HttpServlet {
         {
             consulta   = new NotificacionConsulta();
         }
-            
+        try
+        {
                 String NotCnsCod= request.getParameter("pNotCnsCod");
                 String NotCnsSQL= request.getParameter("pNotCnsSQL");
                 String NotCnsTpo= request.getParameter("pNotCnsTpo");
@@ -224,7 +225,17 @@ public class ABM_NotificacionConsulta extends HttpServlet {
                 
                 if(NotCnsSQL != null) if(!NotCnsSQL.isEmpty()) consulta.setNotCnsSQL(NotCnsSQL);
                 if(NotCnsTpo != null) if(!NotCnsTpo.isEmpty()) consulta.setNotCnsTpo(TipoConsulta.fromCode(Integer.valueOf(NotCnsTpo)));
-                
+            }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }     
                 return consulta;
         }
 

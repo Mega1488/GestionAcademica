@@ -20,14 +20,14 @@ import Logica.LoBandeja;
 import Logica.LoNotificacion;
 import Logica.LoPersona;
 import Logica.Notificacion.AsyncNotificar;
-import Logica.Notificacion.ManejoNotificacion;
 import Logica.Seguridad;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -43,7 +43,7 @@ import javax.servlet.http.HttpSession;
 public class NotificationManager extends HttpServlet {
     private final LoNotificacion loNotificacion     = LoNotificacion.GetInstancia();
     private final Utilidades utilidades             = Utilidades.GetInstancia();
-    
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -167,7 +167,8 @@ public class NotificationManager extends HttpServlet {
             notificacion   = new Notificacion();
         }
 
-            
+        try
+        {
                 String NotCod= request.getParameter("pNotCod");
                 String NotAct= request.getParameter("pNotAct");
                 String NotApp= request.getParameter("pNotApp");
@@ -205,13 +206,19 @@ public class NotificationManager extends HttpServlet {
                 if(NotEmail != null) if(!NotEmail.isEmpty()) notificacion.setNotEmail(Boolean.valueOf(NotEmail));
                 if(NotNom != null) if(!NotNom.isEmpty()) notificacion.setNotNom(NotNom);
                 if(NotObtDest != null) if(!NotObtDest.isEmpty()) notificacion.setNotObtDest(ObtenerDestinatario.fromCode(Integer.valueOf(NotObtDest)));
-                if(NotRepHst != null) if(!NotRepHst.isEmpty()) notificacion.setNotRepHst(Date.valueOf(NotRepHst));
+                if(NotRepHst != null) if(!NotRepHst.isEmpty()) notificacion.setNotRepHst(yMd.parse(NotRepHst));
                 if(NotRepTpo != null) if(!NotRepTpo.isEmpty()) notificacion.setNotRepTpo(TipoRepeticion.fromCode(Integer.valueOf(NotRepTpo)));
                 if(NotRepVal != null) if(!NotRepVal.isEmpty()) notificacion.setNotRepVal(Integer.valueOf(NotRepVal));
                 if(NotTpo != null) if(!NotTpo.isEmpty()) notificacion.setNotTpo(TipoNotificacion.fromCode(Integer.valueOf(NotTpo)));
                 if(NotTpoEnv != null) if(!NotTpoEnv.isEmpty()) notificacion.setNotTpoEnv(TipoEnvio.fromCode(Integer.valueOf(NotTpoEnv)));
                 if(NotWeb != null) if(!NotWeb.isEmpty()) notificacion.setNotWeb(Boolean.valueOf(NotWeb));
-
+}
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
+        {
+            
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
                 return notificacion;
         }
 
@@ -219,7 +226,8 @@ public class NotificationManager extends HttpServlet {
         
         NotificacionBandeja bandeja   = new NotificacionBandeja();
         
-            
+        try
+        {
                 String NotBanCod= request.getParameter("pNotBanCod");
                 String NotBanAsu= request.getParameter("pNotBanAsu");
                 String NotBanEst= request.getParameter("pNotBanEst");
@@ -245,7 +253,14 @@ public class NotificationManager extends HttpServlet {
                 if(NotBanMen != null) if(!NotBanMen.isEmpty()) bandeja.setNotBanMen(NotBanMen);
                 if(NotBanTpo != null) if(!NotBanTpo.isEmpty()) bandeja.setNotBanTpo(BandejaTipo.fromCode(Integer.valueOf(NotBanTpo)));
                 if(NotBanPerCod != null) if(!NotBanPerCod.isEmpty()) bandeja.setDestinatario((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(NotBanPerCod)).getObjeto());
-                
+            }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            
+            
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }    
                 
                 return bandeja;
         }

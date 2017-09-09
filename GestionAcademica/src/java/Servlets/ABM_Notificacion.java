@@ -21,7 +21,10 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +40,7 @@ public class ABM_Notificacion extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -201,7 +205,8 @@ public class ABM_Notificacion extends HttpServlet {
             notificacion   = new Notificacion();
         }
 
-            
+        try
+        {
                 String NotCod= request.getParameter("pNotCod");
                 String NotAct= request.getParameter("pNotAct");
                 String NotApp= request.getParameter("pNotApp");
@@ -250,7 +255,7 @@ public class ABM_Notificacion extends HttpServlet {
                 {
                     if(!NotRepHst.isEmpty())
                     {
-                        notificacion.setNotRepHst(Date.valueOf(NotRepHst));
+                        notificacion.setNotRepHst(yMd.parse(NotRepHst));
                     }
                     else
                     {
@@ -269,7 +274,17 @@ public class ABM_Notificacion extends HttpServlet {
                         notificacion.setNotFchDsd(null);
                     }
                 }
-                
+            }
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }    
                 
                 return notificacion;
         }

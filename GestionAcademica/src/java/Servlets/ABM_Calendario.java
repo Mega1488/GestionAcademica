@@ -19,9 +19,6 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,6 +40,7 @@ public class ABM_Calendario extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -307,10 +305,15 @@ public class ABM_Calendario extends HttpServlet {
     }
         
     private Calendario ValidarCalendario(HttpServletRequest request, Calendario calendario){
-            if(calendario == null)
+            
+        
+        if(calendario == null)
             {
                 calendario   = new Calendario();
             }
+        
+        try
+        {
 
                 SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
             
@@ -336,23 +339,32 @@ public class ABM_Calendario extends HttpServlet {
                 
                 if(EvlCod !=null) calendario.setEvaluacion(evaluacion);
 
-                try {
+               
                     if(CalFch !=null) if(!CalFch.isEmpty()) calendario.setCalFch(sdf.parse(CalFch));
 
                     if(EvlInsFchDsd !=null)
                     {
-                        if(!EvlInsFchDsd.isEmpty()) calendario.setEvlInsFchDsd(Date.valueOf(EvlInsFchDsd));
+                        if(!EvlInsFchDsd.isEmpty()) calendario.setEvlInsFchDsd(yMd.parse(EvlInsFchDsd));
                         if(EvlInsFchDsd.isEmpty()) calendario.setEvlInsFchDsd(null);
                     }
 
                     if(EvlInsFchHst !=null) 
                     {
-                        if(!EvlInsFchHst.isEmpty()) calendario.setEvlInsFchHst(Date.valueOf(EvlInsFchHst));
+                        if(!EvlInsFchHst.isEmpty()) calendario.setEvlInsFchHst(yMd.parse(EvlInsFchHst));
                         if(EvlInsFchHst.isEmpty()) calendario.setEvlInsFchHst(null);
                     }
-                } catch (ParseException ex) {
-                    Logger.getLogger(ABM_Calendario.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
+        }        
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
                 
             return calendario;
         }

@@ -18,6 +18,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -145,7 +147,8 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
             periDocumento   = new PeriodoEstudioDocumento();
         }
         
-        
+        try
+        {
 
         String 	PeriEstCod  = request.getParameter("pPeriEstCod");
         String 	DocCod      = request.getParameter("pDocCod");
@@ -155,11 +158,22 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
         //------------------------------------------------------------------------------------------
 
         //TIPO DE DATO
+        
 
         if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
         
         if(DocCod != null) periDocumento = periDocumento.getPeriodo().getDocumentoById(Long.valueOf(DocCod));
-        
+        }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
         return periDocumento;
     }
     

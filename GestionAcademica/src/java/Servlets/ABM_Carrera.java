@@ -15,8 +15,6 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,7 +33,6 @@ public class ABM_Carrera extends HttpServlet {
     Mensajes mensaje    = new Mensajes("Error", TipoMensaje.ERROR);
     boolean error       = false; 
     String retorno;
-    Date fecha = new Date();
     LoCarrera loCarrera = LoCarrera.GetInstancia();
     private final Utilidades utiles = Utilidades.GetInstancia();
     

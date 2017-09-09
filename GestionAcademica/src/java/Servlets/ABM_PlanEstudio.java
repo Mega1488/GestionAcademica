@@ -6,7 +6,6 @@
 package Servlets;
 
 import Entidad.Carrera;
-import Entidad.Parametro;
 import Entidad.PlanEstudio;
 import Enumerado.NombreSesiones;
 import Enumerado.TipoMensaje;
@@ -232,7 +231,7 @@ public class ABM_PlanEstudio extends HttpServlet {
             
             plan.setPlaEstNom(PlaEstNom);
             plan.setPlaEstDsc(PlaEstDsc);
-            plan.setPlaEstCreNec(Double.valueOf(PlaEstCreNec).doubleValue());
+            plan.setPlaEstCreNec(Double.valueOf(PlaEstCreNec));
             plan.setCarrera((Carrera) LoCarrera.GetInstancia().obtener(Long.valueOf(CarCod)).getObjeto());
         }
         catch(NumberFormatException | UnsupportedOperationException  ex)

@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -242,7 +244,8 @@ public class ABM_Evaluacion extends HttpServlet {
             {
                 evaluacion   = new Evaluacion();
             }
-
+            
+            try{
           
                 String MatEvlCarCod= request.getParameter("pMatEvlCarCod");
                 String MatEvlPlaEstCod= request.getParameter("pMatEvlPlaEstCod");
@@ -302,6 +305,18 @@ public class ABM_Evaluacion extends HttpServlet {
                         evaluacion.setTpoEvl((TipoEvaluacion) retorno.getObjeto());
                     }
                 }
+                
+       }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
                 
             return evaluacion;
         }

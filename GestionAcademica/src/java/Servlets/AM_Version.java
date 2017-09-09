@@ -15,6 +15,8 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -109,7 +111,8 @@ public class AM_Version extends HttpServlet {
         Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         
         String retorno = "";
-        
+        try
+        {
         String SisVerCod    = request.getParameter("pSisVerCod");
         String SisCrgDat    = request.getParameter("pSisCrgDat");
         
@@ -117,16 +120,19 @@ public class AM_Version extends HttpServlet {
         Version version     = loVersion.obtener(Long.valueOf(SisVerCod));
         
         
-        try
-        {
             version.setSisCrgDat(Boolean.valueOf(SisCrgDat));
             loVersion.actualizar(version);
             
             mensaje    = new Mensajes("Cambios guardados correctamente", TipoMensaje.MENSAJE);
         }
-        catch(Exception ex)
+        catch(NumberFormatException | UnsupportedOperationException  ex)
         {
-            ex.printStackTrace();
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
         
         retorno = utilidades.ObjetoToJson(mensaje);

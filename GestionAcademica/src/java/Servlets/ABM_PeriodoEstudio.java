@@ -7,6 +7,7 @@ package Servlets;
 
 import Entidad.Carrera;
 import Entidad.Curso;
+import Entidad.Materia;
 import Entidad.Modulo;
 import Entidad.Periodo;
 import Entidad.PeriodoEstudio;
@@ -26,6 +27,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -288,26 +291,39 @@ public class ABM_PeriodoEstudio extends HttpServlet {
             periEstudio   = new PeriodoEstudio();
         }
         
-        String PeriCod      = request.getParameter("pPeriCod");
-        String PeriEstCod   = request.getParameter("pPeriEstCod");
-        String MatEstMatCod = request.getParameter("pMatEstMatCod");
-        String ModEstModCod = request.getParameter("pModEstModCod");
+        try
+        {
         
-        
+            String PeriCod      = request.getParameter("pPeriCod");
+            String PeriEstCod   = request.getParameter("pPeriEstCod");
+            String MatEstMatCod = request.getParameter("pMatEstMatCod");
+            String ModEstModCod = request.getParameter("pModEstModCod");
 
-        //------------------------------------------------------------------------------------------
-        //Validaciones
-        //------------------------------------------------------------------------------------------
 
-        //TIPO DE DATO
-        if(PeriCod != null) if(!PeriCod.isEmpty()) periEstudio.setPeriodo((Periodo) loPeriodo.obtener(Long.valueOf(PeriCod)).getObjeto());
 
-        if(PeriEstCod != null) if(!PeriEstCod.isEmpty()) periEstudio = (PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto();
-        
-        //if(MatEstMatCod != null) if(!MatEstMatCod.isEmpty()) periEstudio.setMateria(LoCarrera.GetInstancia().);
+            //------------------------------------------------------------------------------------------
+            //Validaciones
+            //------------------------------------------------------------------------------------------
 
-        if(ModEstModCod != null) if(!ModEstModCod.isEmpty()) periEstudio.setModulo( (Modulo) LoCurso.GetInstancia().ModuloObtener(Long.valueOf(ModEstModCod)).getObjeto());
-        
+            //TIPO DE DATO
+            if(PeriCod != null) if(!PeriCod.isEmpty()) periEstudio.setPeriodo((Periodo) loPeriodo.obtener(Long.valueOf(PeriCod)).getObjeto());
+
+            if(PeriEstCod != null) if(!PeriEstCod.isEmpty()) periEstudio = (PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto();
+
+            if(MatEstMatCod != null) if(!MatEstMatCod.isEmpty()) periEstudio.setMateria((Materia) LoCarrera.GetInstancia().MateriaObtener(Long.valueOf(MatEstMatCod)).getObjeto());
+
+            if(ModEstModCod != null) if(!ModEstModCod.isEmpty()) periEstudio.setModulo( (Modulo) LoCurso.GetInstancia().ModuloObtener(Long.valueOf(ModEstModCod)).getObjeto());
+        }
+        catch(NumberFormatException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
             
         return periEstudio;
     }

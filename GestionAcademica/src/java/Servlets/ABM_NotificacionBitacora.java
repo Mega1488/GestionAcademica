@@ -21,7 +21,10 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -37,6 +40,8 @@ public class ABM_NotificacionBitacora extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
+    
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -199,7 +204,7 @@ public class ABM_NotificacionBitacora extends HttpServlet {
         {
             bitacora   = new NotificacionBitacora();
         }
-            
+        try{    
                 String NotCod= request.getParameter("pNotCod");
                 String NotBitCod= request.getParameter("pNotBitCod");
                 String NotBitAsu= request.getParameter("pNotBitAsu");
@@ -231,9 +236,20 @@ public class ABM_NotificacionBitacora extends HttpServlet {
                 if(NotBitDet != null) if(!NotBitDet.isEmpty()) bitacora.setNotBitDet(NotBitDet);
                 if(NotBitDst != null) if(!NotBitDst.isEmpty()) bitacora.setNotBitDst(NotBitDst);
                 if(NotBitEst != null) if(!NotBitEst.isEmpty()) bitacora.setNotBitEst(NotificacionEstado.fromCode(Integer.valueOf(NotBitEst)));
-                if(NotBitFch != null) if(!NotBitFch.isEmpty()) bitacora.setNotBitFch(Date.valueOf(NotBitFch));
+                if(NotBitFch != null) if(!NotBitFch.isEmpty()) bitacora.setNotBitFch(yMd.parse(NotBitFch));
                 if(NotPerCod != null) if(!NotPerCod.isEmpty()) bitacora.setPersona((Persona) LoPersona.GetInstancia().obtener(Long.valueOf(NotPerCod)).getObjeto());
-                
+            
+                }
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }  
                 
                 return bitacora;
         }

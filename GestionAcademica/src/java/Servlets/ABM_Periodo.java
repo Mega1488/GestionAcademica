@@ -18,7 +18,10 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +37,7 @@ public class ABM_Periodo extends HttpServlet {
     private final Utilidades utilidades     = Utilidades.GetInstancia();
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
-    
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -101,7 +104,7 @@ public class ABM_Periodo extends HttpServlet {
     }
     
     private String AgregarDatos(HttpServletRequest request)
-        {
+    {
         
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -201,7 +204,8 @@ public class ABM_Periodo extends HttpServlet {
             periodo   = new Periodo();
         }
 
-            
+         try
+         {
                 String 	PeriCod      = request.getParameter("pPeriCod");
                 String 	PerTpo      = request.getParameter("pPerTpo");
                 String 	PerVal      = request.getParameter("pPerVal");
@@ -225,8 +229,18 @@ public class ABM_Periodo extends HttpServlet {
                 
                 if(PerVal != null) periodo.setPerVal(Double.valueOf(PerVal));
                 
-                if(PerFchIni != null) periodo.setPerFchIni(Date.valueOf(PerFchIni));
-                
+                if(PerFchIni != null) periodo.setPerFchIni(yMd.parse(PerFchIni));
+            }
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }     
                 return periodo;
         }
 

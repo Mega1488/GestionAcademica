@@ -27,7 +27,10 @@ import Utiles.Retorno_MsgObj;
 import Utiles.Utilidades;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +49,8 @@ public class ABM_Inscripcion extends HttpServlet {
     private Mensajes mensaje                = new Mensajes("Error", TipoMensaje.ERROR);
     private Boolean error                   = false;
     private Persona perUsuario;
+    
+    private final SimpleDateFormat yMd      = new SimpleDateFormat("yyyy-MM-dd");
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -313,7 +318,8 @@ public class ABM_Inscripcion extends HttpServlet {
             inscripcion   = new Inscripcion();
         }
 
-            
+        try
+        {
                 String 	InsCod          = request.getParameter("pInsCod");
                 String 	PerCod          = request.getParameter("pPerCod");
                 String 	CarCod          = request.getParameter("pCarCod");
@@ -351,10 +357,20 @@ public class ABM_Inscripcion extends HttpServlet {
                     if(TipoEstudio.equals("CURSO") && EstudioCodigo != null) inscripcion.setCurso((Curso) LoCurso.GetInstancia().obtener(Long.valueOf(EstudioCodigo)).getObjeto());
                 }
                 
-                if(AluFchCert != null) inscripcion.setAluFchCert(Date.valueOf(AluFchCert));
+                if(AluFchCert != null) inscripcion.setAluFchCert(yMd.parse(AluFchCert));
                 
                 if(InsGenAnio != null) inscripcion.setInsGenAnio(Integer.valueOf(InsGenAnio));
-                
+           }
+        catch(NumberFormatException | ParseException | UnsupportedOperationException  ex)
+        {
+            String texto = ex.getMessage().replace("For input string:", "Tipo de dato incorrecto: ");
+            texto = texto.replace("Unparseable date:", "Tipo de dato incorrecto: ");
+            
+            mensaje = new Mensajes("Error: " + texto, TipoMensaje.ERROR);
+            error   = true;
+            
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }     
                 return inscripcion;
         }
 
