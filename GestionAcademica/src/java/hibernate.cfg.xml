@@ -4,9 +4,9 @@
   <session-factory>
     <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
     <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="hibernate.connection.url">jdbc:mysql://alvarodb.cjzphvkmuuec.us-west-2.rds.amazonaws.com:3306/sga_ctc?zeroDateTimeBehavior=convertToNull</property>
-    <property name="hibernate.connection.username">sga_ctc</property>
-    <property name="hibernate.connection.password">sga_ctc_final</property>
+    <property name="hibernate.connection.url">jdbc:mysql://192.168.0.103:3306/sga_ctc_local?zeroDateTimeBehavior=convertToNull</property>
+    <property name="hibernate.connection.username">root</property>
+    <property name="hibernate.connection.password">admin</property>
     <property name="hibernate.connection.pool_size">10</property>
     <property name="hibernate.hbm2ddl.auto">update</property>
     <mapping class="Entidad.TipoEvaluacion"/>
