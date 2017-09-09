@@ -96,7 +96,7 @@ public class NotificationManager extends HttpServlet {
                         retorno = this.EliminarBandeja(request);
                         break;
 
-                    case "MENSAJE_VISTO":
+                    case "MENSAJE_OBTENER":
                         retorno = this.VerBandeja(request);
                         break;
                 }
@@ -157,7 +157,7 @@ public class NotificationManager extends HttpServlet {
         
         Retorno_MsgObj retorno = (Retorno_MsgObj) LoBandeja.GetInstancia().actualizar(bandeja);
         
-        return utilidades.ObjetoToJson(retorno.getMensaje());
+        return utilidades.ObjetoToJson(retorno);
     }    
     
     private Notificacion ValidarNotificacion(HttpServletRequest request, Notificacion notificacion){

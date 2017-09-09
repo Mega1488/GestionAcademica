@@ -82,29 +82,32 @@
             });
 
             $('.btn_ver_msg').on('click', function(e) {
-                var bandeja = $(this).data("objeto");
-                //var bandeja = JSON.parse(objeto);
-                var codigo = bandeja.notBanCod;
-                var asunto = bandeja.notBanAsu;
-                var mensaje = bandeja.notBanMen;
-
-                $('#pop_asunto').text(asunto);
-                $('#pop_mensaje').html(mensaje);
-                $('#ban_boton_confirmar').data('codigo', codigo);
-                
+                var BanCod = $(this).data("codigo");
                 $.post(url + 'NotificationManager', {
-                                pNotBanCod: codigo,
-                                pAction: "MENSAJE_VISTO"
+                                pNotBanCod: BanCod,
+                                pAction: "MENSAJE_OBTENER"
                              }, function (responseText) {
                                  var obj = JSON.parse(responseText);
 
-                                 if (obj.tipoMensaje == 'ERROR')
+                                 if (obj.mensaje.tipoMensaje == 'ERROR')
                                  {
-                                     MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+                                     MostrarMensaje(obj.mensaje.tipoMensaje, obj.mensaje.mensaje);
+                                 }
+                                 else
+                                 {
+                                    var bandeja = obj.objeto;
+                                    //var bandeja = JSON.parse(objeto);
+                                    var codigo = bandeja.notBanCod;
+                                    var asunto = bandeja.notBanAsu;
+                                    var mensaje = bandeja.notBanMen;
+
+                                    $('#pop_asunto').text(asunto);
+                                    $('#pop_mensaje').html(mensaje);
+                                    $('#ban_boton_confirmar').data('codigo', codigo);
+
                                  }
 
                              });
-
 
               });
 

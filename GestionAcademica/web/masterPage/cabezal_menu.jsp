@@ -120,7 +120,7 @@
                                       
                                       out.println("<li>");
                                         out.println("<a href='#'>");
-                                            out.println("<div data-toggle='modal' data-target='#PopUpMensaje' class='btn_ver_msg' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"'>");
+                                            out.println("<div data-toggle='modal' data-target='#PopUpMensaje' class='btn_ver_msg' data-codigo='"+ bandeja.getNotBanCod()+"'>");
                                                 out.println("<div class='cabezal_notificacionAsunto'>" + bandeja.getAsuntoRecortado(30) + "</div>");
                                                 out.println("<div class='cabezal_notificacionFecha'>" + bandeja.getNotBanFch() + "</div>");
                                             out.println("</div>");
@@ -139,7 +139,7 @@
                                        
                                       out.println("<li>");
                                         out.println("<a href='#'>");
-                                            out.println("<div data-toggle='modal' class='btn_ver_msg'  data-target='#PopUpMensaje' data-objeto='"+ Utilidades.GetInstancia().ObjetoToJson(bandeja)+"'>");
+                                            out.println("<div data-toggle='modal' class='btn_ver_msg'  data-target='#PopUpMensaje' data-codigo='"+ bandeja.getNotBanCod()+"'>");
                                                 out.println("<div class=''>" + bandeja.getAsuntoRecortado(30) + "</div>");
                                                 out.println("<div class='cabezal_notificacionFecha'>" + bandeja.getNotBanFch() + "</div>");
                                             out.println("</div>");

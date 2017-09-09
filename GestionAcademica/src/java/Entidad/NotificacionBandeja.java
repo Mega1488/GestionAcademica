@@ -108,6 +108,7 @@ public class NotificacionBandeja implements Serializable {
     }
 
     public String getNotBanAsu() {
+        if(NotBanAsu != null) NotBanAsu = NotBanAsu.replace("\"", "'");
         return NotBanAsu;
     }
 
