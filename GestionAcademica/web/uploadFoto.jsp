@@ -4,6 +4,8 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.Constantes"%>
+<%@page import="com.sun.tools.jxc.ap.Const"%>
 <%@page import="Enumerado.TipoArchivo"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Entidad.Persona"%>
@@ -34,6 +36,7 @@
     Persona persona = (Persona) LoPersona.GetInstancia().obtener(PerCod).getObjeto();
     
     String js_redirect = "location.replace('" + urlSistema + "');";
+    
 
 %>
 
@@ -47,6 +50,8 @@
         <script src="JavaScript/JQueryFileUpload/js/vendor/jquery.ui.widget.js" type="text/javascript"></script>
         <script src="JavaScript/JQueryFileUpload/js/jquery.iframe-transport.js" type="text/javascript"></script>
         <script src="JavaScript/JQueryFileUpload/js/jquery.fileupload.js" type="text/javascript"></script>
+        <script src="JavaScript/JQueryFileUpload/js/jquery.fileupload-process.js" type="text/javascript"></script>
+        <script src="JavaScript/JQueryFileUpload/js/jquery.fileupload-validate.js" type="text/javascript"></script>
         
         <link href="JavaScript/JQueryFileUpload/css/jquery.fileupload.css" rel="stylesheet" type="text/css"/>
         
@@ -54,6 +59,9 @@
             $(document).ready(function () {
                 $('#fileupload').fileupload({
                     dataType: 'json',
+                    maxFileSize: <%=Constantes.SIZE_FILE.getValor()%>,
+                    maxNumberOfFiles: 1,
+                    acceptFileTypes:  /(\.|\/)(gif|jpe?g|png)$/i,
                     done: function (e, data) {
                         if(data != null)
                         {
@@ -102,7 +110,21 @@
                             'width',
                             progress + '%'
                         );
-                    }
+                    },
+                    processfail:function(e, data){
+                         if (data.files.error)
+                         {
+                             $.each(data.files, function (f, fileErr) {
+                                MostrarMensaje("ERROR", fileErr.error);
+                            });
+                        }
+                    },
+                    messages : {
+                        maxNumberOfFiles: 'Sólo se permite subir un archivo',
+                        acceptFileTypes: 'Archivo invalido',
+                        maxFileSize: 'El tamaño del archivo es superior a lo permitido',
+                        minFileSize: 'El tamaño del archivo es inferior a lo permitido'
+                      }
                 });
             });
         </script>

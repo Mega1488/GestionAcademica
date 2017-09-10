@@ -3,6 +3,7 @@
     Created on : 18-ago-2017, 10:05:16
     Author     : alvar
 --%>
+<%@page import="Enumerado.Constantes"%>
 <%@page import="Entidad.Curso"%>
 <%@page import="Logica.LoCurso"%>
 <%@page import="Enumerado.TipoArchivo"%>
@@ -62,6 +63,9 @@
                 //-----------------------------------------------------------------------------
                 $('#imp_alumno_plan').fileupload({
                     dataType: 'json',
+                    maxFileSize: <%=Constantes.SIZE_FILE.getValor()%>,
+                    maxNumberOfFiles: 1,
+                    acceptFileTypes:  /(\.|\/)(xls|xlsx)$/i,
                     done: function (e, data) {
                         if (data != null)
                         {
@@ -108,7 +112,21 @@
                                 'width',
                                 progress + '%'
                                 );
-                    }
+                    },
+                    processfail:function(e, data){
+                         if (data.files.error)
+                         {
+                             $.each(data.files, function (f, fileErr) {
+                                MostrarMensaje("ERROR", fileErr.error);
+                            });
+                        }
+                    },
+                    messages : {
+                        maxNumberOfFiles: 'Sólo se permite subir un archivo',
+                        acceptFileTypes: 'Archivo invalido',
+                        maxFileSize: 'El tamaño del archivo es superior a lo permitido',
+                        minFileSize: 'El tamaño del archivo es inferior a lo permitido'
+                      }
                 });
 
                 //-----------------------------------------------------------------------------

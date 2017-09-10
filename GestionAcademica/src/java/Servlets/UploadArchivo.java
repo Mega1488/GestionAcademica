@@ -6,6 +6,7 @@
 package Servlets;
 
 import Entidad.Archivo;
+import Enumerado.Extensiones;
 import Enumerado.NombreSesiones;
 import Enumerado.TipoArchivo;
 import Enumerado.TipoMensaje;
@@ -17,6 +18,8 @@ import Utiles.Utilidades;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -30,6 +33,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  *
@@ -105,6 +109,18 @@ public class UploadArchivo extends HttpServlet {
                             } else {
                                 fichero = new File(utilidad.getPrivateTempStorage(), item.getName());
                                 item.write(fichero);
+                                
+                                if(!utilidad.ArchivoExtValida(item.getName()))
+                                {
+                                    retorno.setMensaje(new Mensajes("Extensión invalida", TipoMensaje.ERROR));
+                                }
+                                else
+                                {
+                                    if(!utilidad.ArchivoSizeValida(fichero.length()))
+                                    {
+                                        retorno.setMensaje(new Mensajes("El tamaño del archivo es superior a lo permitido", TipoMensaje.ERROR));
+                                    }
+                                }
                             }
                         }
                     } 
@@ -116,25 +132,28 @@ public class UploadArchivo extends HttpServlet {
                         Logger.getLogger(UploadArchivo.class.getName()).log(Level.SEVERE, null, ex);
                     }
 
-                    if(fichero!= null)
+                    if(!retorno.SurgioError())
                     {
-                        TipoArchivo tpoArch = TipoArchivo.valueOf(tipoArch);
-                        Archivo archivo = new Archivo();
-                        archivo.setArchivo(fichero, tpoArch);
-                        archivo.setArcFch(new Date());
-                        retorno = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(archivo);
-
-                        if(!retorno.SurgioError())
+                        if(fichero!= null )
                         {
-                            archivo = (Archivo) retorno.getObjeto();
-                            retorno.setObjeto(archivo.getArcCod());
-                            
-                            utilidad.eliminarArchivo(fichero.getAbsolutePath());
+                            TipoArchivo tpoArch = TipoArchivo.valueOf(tipoArch);
+                            Archivo archivo = new Archivo();
+                            archivo.setArchivo(fichero, tpoArch);
+                            archivo.setArcFch(new Date());
+                            retorno = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(archivo);
+
+                            if(!retorno.SurgioError())
+                            {
+                                archivo = (Archivo) retorno.getObjeto();
+                                retorno.setObjeto(archivo.getArcCod());
+
+                                utilidad.eliminarArchivo(fichero.getAbsolutePath());
+                            }
                         }
-                    }
-                    else
-                    {
-                        retorno.setMensaje(new Mensajes("Error: No se recibió archivo", TipoMensaje.ERROR));
+                        else
+                        {
+                            retorno.setMensaje(new Mensajes("Error: No se recibió archivo", TipoMensaje.ERROR));
+                        }
                     }
 
                 }

@@ -8,6 +8,7 @@ package Utiles;
 import Entidad.Parametro;
 import Enumerado.Constantes;
 import Enumerado.ExpresionesRegulares;
+import Enumerado.Extensiones;
 import Enumerado.RutaArchivos;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
@@ -25,12 +26,14 @@ import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.io.FilenameUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.DeserializationConfig;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -391,5 +394,22 @@ public class Utilidades {
         }
         
         return psw;
+    }
+    
+    public Boolean ArchivoExtValida(String nombre){
+        Collection<String> lstExt = new ArrayList<>();
+        
+        for(Extensiones ex : Extensiones.values())
+        {
+            lstExt.add(ex.getValor());
+        }
+
+        return FilenameUtils.isExtension(nombre, lstExt);
+    }
+    
+    public Boolean ArchivoSizeValida(Long size){
+        
+        size = size / 1024;
+        return size <= Long.valueOf(Constantes.SIZE_FILE.getValor());
     }
 }

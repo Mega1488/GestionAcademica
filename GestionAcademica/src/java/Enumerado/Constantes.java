@@ -24,7 +24,8 @@ public enum Constantes {
     WS_PSW_WEB("$.WSusWeb%"),
     METODO_GETPK("GetPrimaryKey"),
     METODO_GETINSQ("getInsertQuery"),
-    METODO_GETUPDQ("getUpdateQuery");
+    METODO_GETUPDQ("getUpdateQuery"),
+    SIZE_FILE("20971520");
 
     Constantes(){
         

@@ -62,15 +62,15 @@
 
         <style>
 
-            #calendar {
-                max-width: 900px;
-            }
-
+            
         </style>
 
         <script src='<% out.print(urlSistema); %>JavaScript/calendario/lib/moment.min.js'></script>
         <script src='<% out.print(urlSistema); %>JavaScript/calendario/fullcalendar.js'></script>
         <script src='<% out.print(urlSistema); %>JavaScript/calendario/locale/es.js'></script>
+
+        <script src='<%=request.getContextPath()%>/JavaScript/calendario/lib/jquery-ui.min.js'></script>
+        <link href="<%=request.getContextPath()%>/JavaScript/calendario/lib/cupertino/jquery-ui.min.css" rel="stylesheet" type="text/css"/>
 
         <script src="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/js/dataTables.responsive.min.js"></script>
         <link href="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css"/>
@@ -360,19 +360,40 @@
                 //---------------------------------------------------------------------------------------------------
                 //CARGAR CALENDARIO
                 //---------------------------------------------------------------------------------------------------
+                
+                var defaultView = 'month';
+                var header = {
+				left: 'prev,next today',
+				center: 'title',
+				right: 'month,basicWeek,basicDay'
+                            };
+                if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) 
+                {
+                    defaultView = 'basicDay';
+                    header = {
+                                left: 'prev,next today',
+				center: 'title',
+				right: 'basicWeek,basicDay'
+                            };
+                }
 
                 $('#calendar').fullCalendar({
                     // put your options and callbacks here
                     eventLimit: true,
+                    theme: true,
+                    defaultView: defaultView,
+                    aspectRatio: 2.1,
+                    themeSystem: 'jquery-ui',
+                    header: header,
                     locale: 'es',
                     events: {
-                        url: '<% out.print(urlSistema); %>ABM_Calendario',
+                        url: '<%=urlSistema%>ABM_Calendario',
                         type: 'POST',
                         data: {
                             pAction: 'OBTENER_EVENTO'
                         },
                         error: function () {
-                            alert('there was an error while fetching events!');
+                            alert('Error al recuperar eventos!');
                         }
                     },
                     eventClick: function (calEvent, jsEvent, view) {
@@ -384,8 +405,10 @@
                         MostrarAgregarEvaluacion(date);
 
                     }
-                })
-
+                });
+                
+                 
+                
             });
         </script>
     </head>
@@ -408,7 +431,7 @@
                                                 
                                                 <div class="panel-body">
                                                     <div class=" form">
-                                                        <div id="calendar" style="width: 80%; margin-top: 20px;"></div>
+                                                        <div id="calendar"></div>
                                                     </div>
                                                 </div>
                                             </section>

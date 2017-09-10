@@ -10,10 +10,17 @@ package Enumerado;
  * @author Alvaro
  */
 public enum Extensiones {
+    //ARCHIVOS DE IMPORTACION
     XLS("xls"), 
     XLSX("xlsx"),
     DOC("doc"),
-    DOCX("docx");
+    DOCX("docx"),
+    //FOTOS
+    JPG("jpg"),
+    JPEG("jpeg"),
+    GIF("gif"),
+    PNG("png")
+    ;
     
     Extensiones(){
         
