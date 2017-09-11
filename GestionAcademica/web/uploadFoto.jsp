@@ -143,17 +143,17 @@
                             FOTO DE PERFIL
                         </header>
                         <div class="panel-body">
-                            <div class=" form">
+                            <div class=" form"  style="text-align: center;">
                                 <!-- METER LA FOTO ACA-->
-                                <div name="foto_contenedor">
+                                <div name="foto_contenedor" style="width: ">
                                 <%
                                     if(persona.getFotoBase64() == null)
                                     {
-                                        out.println("<img class='' src='" + urlSistema + "Imagenes/avatar.png'/>");
+                                        out.println("<img class='foto_cambiar' src='" + urlSistema + "Imagenes/avatar.png'/>");
                                     }
                                     else
                                     {
-                                        out.println("<img class='' src='data:image/" + persona.getFotoExtension() + ";base64, " + persona.getFotoBase64() + "'/>");
+                                        out.println("<img class='foto_cambiar' src='data:image/" + persona.getFotoExtension() + ";base64, " + persona.getFotoBase64() + "'/>");
                                     }
 
                                 %>
@@ -170,11 +170,15 @@
                                         <!-- The file input field used as target for the file upload widget -->
                                         <input type="file" name="files[]" >
                                     </span>
+                                    
+                                    <div style="width:185px; margin: 10px auto; ">
+                                        <div id="progress" class="progress">
+                                            <div class="progress-bar progress-bar-success"></div>
+                                        </div>
+                                    </div>
                                 </form>
 
-                                <div id="progress" class="progress">
-                                    <div class="progress-bar progress-bar-success"></div>
-                                </div>
+                                
                             </div>
                         </div>
                     </section>

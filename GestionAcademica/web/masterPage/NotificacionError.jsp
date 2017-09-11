@@ -14,7 +14,7 @@
     </style>
     
     <div class="noscriptmsg">
-        <div id="msgError" name="msgError" class="alert alert-danger div_msg"> 
+        <div id="msgError" name="msgError" class="alert alert-danger div_msg "> 
             <label id="txtError" name="txtError">Debe tener activado JavaScript para utilizar el sistema</label>
         </div>
     </div>

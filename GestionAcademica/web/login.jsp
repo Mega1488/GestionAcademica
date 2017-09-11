@@ -4,6 +4,11 @@
     Author     : alvar
 --%>
 
+<%@page import="Entidad.Persona"%>
+<%@page import="Logica.Seguridad"%>
+<%@page import="Logica.LoPersona"%>
+<%@page import="Utiles.Mensajes"%>
+<%@page import="Enumerado.TipoMensaje"%>
 <%@page import="Entidad.Parametro"%>
 <%@page import="Logica.LoParametro"%>
 <%@page import="Utiles.Utilidades"%>
@@ -21,6 +26,58 @@
 
     Parametro param = LoParametro.GetInstancia().obtener();
     
+    
+    
+    /* LOGIN */
+    Mensajes mensaje    = new Mensajes("Error al iniciar sesión", TipoMensaje.ERROR);
+    Boolean mostrarMensaje  = false;
+    String usr              = request.getParameter("pUser");
+    if(usr!=null)
+    {
+        mostrarMensaje  = true;
+        String psw      = request.getParameter("pPass"); 
+
+       
+        LoPersona loPersona = LoPersona.GetInstancia();
+        Seguridad seguridad = Seguridad.GetInstancia();
+
+
+        if(loPersona.IniciarSesion(usr, seguridad.cryptWithMD5(psw)))
+        {
+            //Inicio correctamente
+            
+            session.setAttribute(NombreSesiones.USUARIO.getValor(), usr);
+            
+            Persona persona = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usr).getObjeto();
+            session.setAttribute(NombreSesiones.USUARIO_NOMBRE.getValor(), persona.getPerNom());
+            session.setAttribute(NombreSesiones.USUARIO_ADM.getValor(), persona.getPerEsAdm());
+            session.setAttribute(NombreSesiones.USUARIO_ALU.getValor(), persona.getPerEsAlu());
+            session.setAttribute(NombreSesiones.USUARIO_DOC.getValor(), persona.getPerEsDoc());
+            session.setAttribute(NombreSesiones.USUARIO_PER.getValor(), persona.getPerCod());
+            
+            String web = "login.jsp";
+            if(persona.getPerEsAdm())
+            {
+                web = "Definiciones/DefCalendarioGrid.jsp";
+            }else if(persona.getPerEsDoc())
+            {
+                web = "Docente/EstudiosDictados.jsp";
+            }else if(persona.getPerEsAlu())
+            { 
+                web = "Alumno/Evaluaciones.jsp";
+
+            }
+
+            request.getRequestDispatcher(web).forward(request, response);
+            
+        }
+        else
+        {
+
+            //No inicio correctamente
+            mensaje = new Mensajes("Usuario o contraseña incorrectos", TipoMensaje.ERROR);
+        }
+    }
 
 %>
 
@@ -50,13 +107,13 @@
                 <div class="login_contenedorImg"><img src="Imagenes/ctc.png" /></div>
                 <h1 class="login_titulo">LOGIN</h1>
                 <p class="login_texto">Bienvenido a Gestión, el servicio a estudiantes del Instituto CTC - Colonia.</p>
-                <form>
+                <form action="#" method="post">
                     <div class="login_form">
-                        <input type="text" class="form-control login_inputBorde login_inputNumero" id="username" name="username" placeholder="Usuario">
-                        <input type="password" class="form-control login_inputPass" id="password" name="password" placeholder="Contraseña">
+                        <input type="text" class="form-control login_inputBorde login_inputNumero" id="pUser" name="pUser" placeholder="Usuario">
+                        <input type="password" class="form-control login_inputPass" id="pPass" name="pPass" placeholder="Contraseña">
                     </div>
 
-                    <button type="button" name="btnLogin" id="btnLogin" class="login_boton">INGRESAR</button>
+                    <button type="submit" name="btnLogin" id="btnLogin" class="login_boton">INGRESAR</button>
                 </form>
 
 
@@ -80,39 +137,13 @@
             $(document).ready(function () {
                 MostrarCargando(false);
 
-                $('#btnLogin').click(function (event) {
-                    MostrarCargando(true);
-
-                    var userVar = $('#username').val();
-                    var passVar = $('#password').val();
-
-                    if (userVar == '' || passVar == '')
-                    {
-                        MostrarMensaje("ERROR", "Debe ingresar usuario y contraseña");
-                        MostrarCargando(false);
-                    } else
-                    {
-
-                        // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                        $.post('Login', {
-                            pUser: userVar,
-                            pPass: passVar,
-                            pAction: "INICIAR"
-                        }, function (responseText) {
-                            var obj = JSON.parse(responseText);
-
-                            if (obj.tipoMensaje == 'ERROR')
-                            {
-                                MostrarMensaje("ERROR", obj.mensaje);
-                                MostrarCargando(false);
-                            } else
-                            {
-                                <%=js_redirect%>
-                            }
-                        });
-                    }
-                });
-
+               <%
+                   if(mostrarMensaje)
+                   {
+                       out.println("MostrarMensaje('"+mensaje.getTipoMensaje()+"','"+mensaje.getMensaje()+"');");
+                   }
+               %>
+         
             });
         </script>
     </body>

@@ -462,9 +462,9 @@
                     <form id="frm_objeto" name="frm_objeto">
                         <div class="modal-body">
 
-                            <div>
-                                <a href="" id="enlace_alumno" name="enlace_alumno">Alumnos</a>
-                                <a href="" id="enlace_docente" name="enlace_docente">Docentes</a>
+                            <div style="margin-bottom: 20px;">
+                                <a style="padding: 5px 15px; background-color: #3a80af; color: #FFF; border-radius: 4px; margin-right: 5px;" href="" id="enlace_alumno" name="enlace_alumno">Alumnos</a>
+                                <a style="padding: 5px 15px; background-color: #3a80af; color: #FFF; border-radius: 4px;" href="" id="enlace_docente" name="enlace_docente">Docentes</a>
                             </div>
                             <input type="hidden" class="form-control" id="CalCod" name="CalCod" placeholder="CalCod" disabled value="" >
 

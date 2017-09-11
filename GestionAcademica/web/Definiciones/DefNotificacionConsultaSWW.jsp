@@ -36,7 +36,8 @@
 
     //----------------------------------------------------------------------------------------------------
     String NotCod = request.getParameter("pNotCod");
-    Strinh titulo = "";
+    
+    String titulo = "";
 
     List<NotificacionConsulta> lstObjeto = new ArrayList<>();
 
