@@ -9,6 +9,7 @@ import Entidad.Persona;
 import Entidad.Solicitud;
 import Enumerado.EstadoSolicitud;
 import Interfaz.InABMGenerico;
+import Logica.Notificacion.NotificacionesInternas;
 import Persistencia.PerManejador;
 import SDT.SDT_Parameters;
 import Utiles.Retorno_MsgObj;
@@ -52,6 +53,8 @@ public class LoSolicitud implements InABMGenerico{
         {
             solicitud.setSolCod((Long) retorno.getObjeto());
             retorno.setObjeto(solicitud);
+            NotificacionesInternas notInt = new NotificacionesInternas();
+            notInt.Notificar_NUEVA_SOLICITUD();
         }
             
         return retorno; 

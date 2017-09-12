@@ -65,6 +65,10 @@ public class NotificacionDestinatario implements Serializable {
     public NotificacionDestinatario() {
     }
     
+    public NotificacionDestinatario(Persona persona) {
+        this.persona = persona;
+    }
+    
     //-GETTERS Y SETTERS
 
     public Long getNotDstCod() {

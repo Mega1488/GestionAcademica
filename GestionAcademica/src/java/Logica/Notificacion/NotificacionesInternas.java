@@ -48,7 +48,6 @@ public class NotificacionesInternas {
         
         //CAMBIAR PASSWORD
         LoNotificacion.GetInstancia().guardar(this.CAMBIAR_PASSWORD());
-        
      }
     
     private Notificacion EVALUACION_HABILITADA_INSCRIPCION(){
@@ -268,6 +267,50 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    
+    private Notificacion NUEVA_SOLICITUD(){
+        Notificacion notificacion = new Notificacion();
+        notificacion.setNotNom(NotificacionSistema.NUEVA_SOLICITUD.name());
+        notificacion.setNotInt(Boolean.TRUE);       
+        notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+        notificacion.setNotRepTpo(TipoRepeticion.SIN_REPETICION);
+        notificacion.setNotRepVal(0);
+        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+
+        notificacion.setNotAct(Boolean.TRUE);
+        notificacion.setNotApp(Boolean.FALSE);
+        notificacion.setNotEmail(Boolean.TRUE);
+        notificacion.setNotWeb(Boolean.TRUE);
+        
+        notificacion.setNotDsc("Nueva solicitud");
+        notificacion.setNotAsu("Nueva solicitud");
+        notificacion.setNotCon("<p>Existe una nueva solicitud, ingrese al sistema para verla</p>");
+        
+        return notificacion;
+    }
+    
+    
+    private Notificacion NUEVA_INCONSISTENCIA(){
+        Notificacion notificacion = new Notificacion();
+        notificacion.setNotNom(NotificacionSistema.NUEVA_INCONSISTENCIA.name());
+        notificacion.setNotInt(Boolean.TRUE);       
+        notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+        notificacion.setNotRepTpo(TipoRepeticion.SIN_REPETICION);
+        notificacion.setNotRepVal(0);
+        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+
+        notificacion.setNotAct(Boolean.TRUE);
+        notificacion.setNotApp(Boolean.FALSE);
+        notificacion.setNotEmail(Boolean.TRUE);
+        notificacion.setNotWeb(Boolean.TRUE);
+        
+        notificacion.setNotDsc("Nueva Inconsistencia");
+        notificacion.setNotAsu("Nueva inconsistencia");
+        notificacion.setNotCon("<p>Existe una nueva inconsistencia en la sincronización, ingrese al sistema para resolverla</p>");
+        
+        return notificacion;
+    }
+    
     //--------------------------------------------------------------------------
     //EJECUTAR
     //--------------------------------------------------------------------------
@@ -455,6 +498,78 @@ public class NotificacionesInternas {
     }
     
     //--------------------------------------------------------------------------
+    
+    public void Notificar_NUEVA_SOLICITUD(){
+        
+        
+        Notificacion not = this.NUEVA_SOLICITUD();
+        
+        Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerLista();
+        
+        for(Object objeto : retorno.getLstObjetos())
+        {
+            Persona persona = (Persona) objeto;
+            if(persona.getPerEsAdm())
+            {
+                not.getLstDestinatario().add(new NotificacionDestinatario(persona));
+            }
+            
+        }
+        
+        AsyncNotificar xthread = null;
+        try {
+          xthread = new AsyncNotificar(not, TipoNotificacion.A_DEMANDA);
+          xthread.start();
+        } catch (Exception ex) {
+
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+        } finally {
+          if (xthread != null && xthread.isAlive()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+            xthread.interrupt();
+          }
+        }
+        
+    }
+    
+    //--------------------------------------------------------------------------
+
+    public void Notificar_NUEVA_INCONSISTENCIA(){
+        
+        
+        Notificacion not = this.NUEVA_INCONSISTENCIA();
+        
+        Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerLista();
+        
+        for(Object objeto : retorno.getLstObjetos())
+        {
+            Persona persona = (Persona) objeto;
+            if(persona.getPerEsAdm())
+            {
+                not.getLstDestinatario().add(new NotificacionDestinatario(persona));
+            }
+            
+        }
+        
+        AsyncNotificar xthread = null;
+        try {
+          xthread = new AsyncNotificar(not, TipoNotificacion.A_DEMANDA);
+          xthread.start();
+        } catch (Exception ex) {
+
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+        } finally {
+          if (xthread != null && xthread.isAlive()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+            xthread.interrupt();
+          }
+        }
+        
+    }
+    
+    //--------------------------------------------------------------------------
+    
+    
     
     private Notificacion ArmarDestinatario(Notificacion notificacion, Persona persona){
         NotificacionDestinatario dest = new NotificacionDestinatario();

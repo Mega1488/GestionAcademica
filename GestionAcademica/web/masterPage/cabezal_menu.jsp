@@ -170,6 +170,7 @@
                                     %>
                                 </div><div class="cabezal_nombre"><%=usuarioNombre%></div><span class="glyphicon glyphicon-triangle-bottom menu_alinearFlecha"></span></button>
                             <ul class="dropdown-menu cabezal_menuUsuario">
+                                <li><a href="<%=urlSistema%>Perfil.jsp"><span class="ti-user cabezal_menuUsuarioIconos"></span> Perfil</a></li>
                                 <li><a href="<%=urlSistema%>pswChange.jsp"><span class="ti-power-off cabezal_menuUsuarioIconos"></span> Cambiar contraseña</a></li>
                                 <li><a href="#" class="cerrar_sesion"><span class="ti-settings cabezal_menuUsuarioIconos"></span> Cerrar Sesión</a></li>	
                             </ul>
@@ -212,7 +213,7 @@
             </div>
         </div>
         <div class="menu_usuarioEnMenu">
-            <span class="menu_usuarioNombre"><%=usuarioNombre%></span>
+            <span class="menu_usuarioNombre"><a href="<%=urlSistema%>Perfil.jsp"><%=usuarioNombre%></a></span>
             <ul>
                 <li class="menu_usuarioListado"><a href="<%=urlSistema%>pswChange.jsp">Cambiar contraseña</a></li>
                 <li class="menu_usuarioListado"><a href="#" class="cerrar_sesion">Cerrar Sesión</a></li>

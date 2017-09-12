@@ -306,7 +306,7 @@ function procesarDatos(){
                                                                 <h2>Datos de Usuario</h2>
                                                             </div>
                                                             
-                                                            <div class="form-group "><label for="PerEml" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="email" class=" form-control inputs_generales" id="PerEml" name="PerEml" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerEml())%>" ></div></div>
+                                                            <div class="form-group "><label for="PerEml" class="control-label col-lg-3">Email</label><div class="col-lg-6"><input type="email" required class=" form-control inputs_generales" id="PerEml" name="PerEml" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerEml())%>" ></div></div>
                                                             <div class="form-group "><label for="PerUsrMod" class="control-label col-lg-3">Usuario</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="PerUsrMod" name="PerUsrMod" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(persona.getPerUsrMod())%>" ></div></div>
                                                             <div class="form-group "><label for="PerPass" class="control-label col-lg-3">Contraseña</label><div class="col-lg-6"><input type="password" class=" form-control inputs_generales" id="PerPass" name="PerPass" <%=CamposActivos%> value="" ></div></div>
                                                             

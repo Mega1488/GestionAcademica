@@ -17,6 +17,7 @@ import Enumerado.Objetos;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoRetorno;
 import Interfaz.InABMGenerico;
+import Logica.Notificacion.NotificacionesInternas;
 import Persistencia.PerManejador;
 import SDT.SDT_Parameters;
 import Utiles.Mensajes;
@@ -688,6 +689,9 @@ public class LoSincronizacion implements InABMGenerico{
     private Sincronizacion GenerarInconsistencias(Sincronizacion sincro, Retorno_MsgObj retorno){
         if(retorno.getMensaje().getMensaje().equals(TipoRetorno.INCONSISTENCIA.name()))
         {
+            NotificacionesInternas notInt = new NotificacionesInternas();
+            notInt.Notificar_NUEVA_INCONSISTENCIA();
+            
             sincro.addDetalle(dateFormat.format(new Date()) + " - Surgio error al sincronizar con el sistema online - Genero inconsistencias que deberan ser corregidas");
             
             if(retorno.getLstObjetos() != null)
