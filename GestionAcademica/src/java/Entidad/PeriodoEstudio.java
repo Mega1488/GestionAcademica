@@ -52,6 +52,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PeriodoEstudio.findModAfter",  query = "SELECT t FROM PeriodoEstudio t  WHERE t.ObjFchMod >= :ObjFchMod order by t.periodo.PerFchIni desc"),
+    @NamedQuery(name = "PeriodoEstudio.findByPersona",  query = "SELECT t FROM PeriodoEstudio t  WHERE ( :PerCod in (SELECT X.Alumno.PerCod FROM t.lstAlumno X) OR :PerCod IN (SELECT Y.Docente.PerCod FROM t.lstDocente Y)) order by t.periodo.PerFchIni desc"),
     @NamedQuery(name = "PeriodoEstudio.findAll",       query = "SELECT t FROM PeriodoEstudio t order by t.periodo.PerFchIni desc")
 })
 public class PeriodoEstudio extends SincHelper implements Serializable {
@@ -199,6 +200,7 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     @JsonIgnore
     @XmlTransient
     public List<PeriodoEstudioDocumento> getLstDocumento() {
+        if(lstDocumento ==  null) lstDocumento = new ArrayList();
         return lstDocumento;
     }
 

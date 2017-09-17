@@ -138,8 +138,10 @@ public class LoIniciar {
     
     private void CargarUrlSistema(HttpServletRequest request){
         
-        URI contextUrl = URI.create(request.getRequestURL().toString()).resolve(request.getContextPath());
-        String urlSistema = contextUrl.toString();
+        //URI contextUrl = URI.create(request.getRequestURL().toString()).resolve(request.getContextPath());
+        String urlSistema = request.getContextPath();
+        
+        if(urlSistema != null) if(urlSistema.length() > 1) urlSistema += "/";
         
         Parametro param = LoParametro.GetInstancia().obtener();
         param.setParUrlSis(urlSistema);

@@ -326,7 +326,7 @@
                                                                 </div>
                                                             </div>
                                                             
-                                                            <div class="form-group "><label for="ParEmlTmpEsp" class="control-label col-lg-3">Tiempo de espera en segundos</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ParEmlTmpEsp" name="ParEmlTmpEsp" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(paramEml.getParEmlTmpEsp())%>" ></div></div>
+                                                            <div class="form-group "><label for="ParEmlTmpEsp" class="control-label col-lg-3">Tiempo de espera en segundos</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="ParEmlTmpEsp" name="ParEmlTmpEsp" <%=CamposActivos%> value="<%=utilidad.NuloToCero(paramEml.getParEmlTmpEsp())%>" ></div></div>
                                                             
 
                                                             <div class="form-group "><label for="ParEmlUtlAut" class="control-label col-lg-3">Utiliza autenticación</label><div class="col-lg-6"><input type="checkbox" id="ParEmlUtlAut" name="ParEmlUtlAut" <%=CamposActivos%> <%=utilidad.BooleanToChecked(paramEml.getParEmlUtlAut())%> ></div></div>

@@ -173,7 +173,7 @@
                                                                     <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocNom())); %> </td>
                                                                     <td><% out.print(utilidad.NuloToVacio(periDocumento.getDocExt())); %> </td>
                                                                     <td><% out.print(utilidad.NuloToVacio(periDocumento.getObjFchMod())); %> </td>
-                                                                    <td><% out.print("<a  target='_blank' href='" + urlSistema + "DescargarArchivo?pPeriEstCod=" + PeriEstCod + "&pDocCod=" + periDocumento.getDocCod() + "' name='btn_descargar' id='btn_descargar' title='Descargar' class='glyphicon glyphicon-save btn_descargar'/>"); %> </td>
+                                                                    <td><% out.print("<a  target='_blank' href='" + urlSistema + "DescargarArchivo?pArcCod=" + periDocumento.getArcCod() + "' name='btn_descargar' id='btn_descargar' title='Descargar' class='glyphicon glyphicon-save btn_descargar'/>"); %> </td>
                                                                 </tr>
                                                                 <%
                                                                     }

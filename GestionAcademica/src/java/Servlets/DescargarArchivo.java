@@ -5,12 +5,16 @@
  */
 package Servlets;
 
+import Entidad.Archivo;
 import Entidad.PeriodoEstudio;
 import Entidad.PeriodoEstudioDocumento;
+import Logica.LoArchivo;
 import Logica.LoPeriodo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -40,26 +44,24 @@ public class DescargarArchivo extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
        try
        {
-            PeriodoEstudioDocumento  periDocumento   = new PeriodoEstudioDocumento();
-            LoPeriodo loPeriodo = LoPeriodo.GetInstancia();
+            Archivo  arch   = null;
+            LoArchivo loArchivo = LoArchivo.GetInstancia();
 
 
-            String 	PeriEstCod  = request.getParameter("pPeriEstCod");
-            String 	DocCod      = request.getParameter("pDocCod");
+            String 	ArcCod  = request.getParameter("pArcCod");
 
-            if(PeriEstCod != null) periDocumento.setPeriodo(((PeriodoEstudio) loPeriodo.EstudioObtener(Long.valueOf(PeriEstCod)).getObjeto()));
+            if(ArcCod != null) arch = (Archivo) loArchivo.obtener(Long.valueOf(ArcCod)).getObjeto();
 
-            if(DocCod != null) periDocumento = periDocumento.getPeriodo().getDocumentoById(Long.valueOf(DocCod));
         
             
             //------------------------------------------------------------------------------------------
             //Guardar cambios
             //------------------------------------------------------------------------------------------
 
-            if(periDocumento != null)
+            if(arch != null)
             {
                         
-                File fileToDownload = periDocumento.getArchivo();
+                File fileToDownload = arch.getArchivo();
                 FileInputStream fileInputStream = new FileInputStream(fileToDownload);
 
                 ServletOutputStream out = response.getOutputStream();   
@@ -67,7 +69,7 @@ public class DescargarArchivo extends HttpServlet {
 
                 response.setContentType(mimeType); 
                 response.setContentLength(fileInputStream.available());
-                response.setHeader( "Content-Disposition", "attachment; filename=\""+ periDocumento.getDocNom() + "." + periDocumento.getDocExt() + "\"" );
+                response.setHeader( "Content-Disposition", "attachment; filename=\""+ arch.getArcNom() + "." + arch.getArcExt() + "\"" );
 
                 int c;
                 while((c=fileInputStream.read()) != -1){
@@ -79,9 +81,9 @@ public class DescargarArchivo extends HttpServlet {
                 
             }
         }
-        catch(Exception ex)
+        catch(NumberFormatException | IOException ex)
         {
-            ex.printStackTrace();
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
         }
 
       

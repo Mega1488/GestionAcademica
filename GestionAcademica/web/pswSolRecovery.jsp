@@ -37,7 +37,7 @@
                         <input type="text" class="form-control login_inputNumero" required="true" name="usuario" id="usuario" placeholder="Usuario">
                     </div>
 
-                    <button type="submit" name="btnRecuperar" id="btnRecuperar" class="login_boton">RECUPERAR</button>
+                    <button type="button" name="btnRecuperar" id="btnRecuperar" class="login_boton">RECUPERAR</button>
                 </form>
 
 

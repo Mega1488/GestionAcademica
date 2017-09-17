@@ -6,8 +6,10 @@
 package Logica;
 
 import Entidad.Parametro;
+import Logica.Notificacion.NotificacionesInternas;
 import Persistencia.PerManejador;
 import Utiles.Retorno_MsgObj;
+import java.util.Date;
 
 /**
  *
@@ -20,6 +22,7 @@ public class LoParametro{
     private Parametro parametro;
 
     private LoParametro() {
+        
     }
     
     public static LoParametro GetInstancia(){
@@ -67,11 +70,24 @@ public class LoParametro{
             if(!retorno.SurgioErrorObjetoRequerido())
             {
                 parametro = (Parametro) retorno.getObjeto();
+                
+                if(parametro.getParUtlMdl())
+                {
+                    if(!Utiles.Utilidades.GetInstancia().ConexionValida(parametro.getParUrlMdl()))
+                    {
+                        NotificacionesInternas not = new NotificacionesInternas();
+                        not.Notificar_ErrorSistema("Se desactiva sincronización con Moodele. Motivo: No se puede conectar a url: " + parametro.getParUrlMdl());
+
+                        parametro.setParUtlMdl(Boolean.FALSE);
+                    }
+                }
             }
             else
             {
                 parametro = null;
             }
+            
+            
         }
         
         return parametro;

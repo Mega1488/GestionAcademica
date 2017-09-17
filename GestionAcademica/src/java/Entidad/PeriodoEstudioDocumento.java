@@ -84,12 +84,25 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
     
     //-GETTERS Y SETTERS
 
+    public Archivo getObjArchivo(){
+        return archivo;
+    }
+    
+    public void setObjArchivo(Archivo archivo){
+        this.archivo = archivo;
+    }
 
     @JsonIgnore
     @XmlTransient
     public File getArchivo(){
         if(this.archivo == null) return null;
         return this.archivo.getArchivo();
+    }
+    
+    public Long getArcCod(){
+        if(archivo == null) return null;
+        
+        return archivo.getArcCod();
     }
 
     public void setArchivo(File pArchivo) {

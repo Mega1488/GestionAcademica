@@ -249,7 +249,6 @@ public class ABM_Persona extends HttpServlet {
         String usuario    = request.getParameter("usuario");
         
         Retorno_MsgObj retorno = loPersona.SolicitaRestablecerPassword(usuario);
-        
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     

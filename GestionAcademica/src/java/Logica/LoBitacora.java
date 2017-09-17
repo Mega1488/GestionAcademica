@@ -10,8 +10,10 @@ import Enumerado.Proceso;
 import Interfaz.InABMGenerico;
 import Persistencia.PerManejador;
 import SDT.SDT_Parameters;
+import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -89,6 +91,9 @@ public class LoBitacora implements InABMGenerico{
     }
     
    
-    
+    public void NuevoMensaje(Mensajes mensaje, Proceso proceso){
+        BitacoraProceso bit =  new BitacoraProceso(proceso, new Date(), mensaje.getMensaje(), mensaje.getTipoMensaje());
+        this.guardar(bit);
+    }
    
 }

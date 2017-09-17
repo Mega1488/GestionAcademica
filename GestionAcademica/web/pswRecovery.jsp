@@ -64,7 +64,7 @@
                         <input type="password" class="form-control login_inputPass" required="true" name="pswConfirmacion" id="pswConfirmacion" placeholder="Confirmar contraseña">
                     </div>
 
-                    <button type="submit" name="btnRecuperar" id="btnRecuperar" class="login_boton">RECUPERAR</button>
+                    <button type="button" name="btnRecuperar" id="btnRecuperar" class="login_boton">RECUPERAR</button>
                 </form>
 
 

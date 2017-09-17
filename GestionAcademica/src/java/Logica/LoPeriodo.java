@@ -399,6 +399,16 @@ public class LoPeriodo implements InABMGenerico{
         return perManager.obtener(PeriEstCod, PeriodoEstudio.class);
     }
     
+    public Retorno_MsgObj EstudioObtenerByPersona(Long PerCod){
+        PerManejador perManager = new PerManejador();
+
+        ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
+        
+        lstParametros.add(new SDT_Parameters(PerCod, "PerCod"));
+        
+        return perManager.obtenerLista("PeriodoEstudio.findByPersona", lstParametros);
+    }
+    
     public Retorno_MsgObj EstudioObtenerTodos()
     {
         PerManejador perManager = new PerManejador();
@@ -616,17 +626,26 @@ public class LoPeriodo implements InABMGenerico{
                                                 if(fechaCreado.after(estudio.getFchSincMdl()))
                                                 {
                                                     PeriodoEstudioDocumento documento = loEstudio.Mdl_ObtenerEstudioArchivo(modContent);
-                                                    documento.setPeriodo(estudio);
-
-                                                    this.DocumentoAgregar(documento);
+                                                    
+                                                    Retorno_MsgObj ret = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(documento.getObjArchivo());
+                                                    if(!ret.SurgioError())
+                                                    {
+                                                        documento.setPeriodo(estudio);
+                                                        this.DocumentoAgregar(documento);
+                                                    }
+                                                    
                                                 }
                                             }
                                             else
                                             {
                                                 PeriodoEstudioDocumento documento = loEstudio.Mdl_ObtenerEstudioArchivo(modContent);
-                                                documento.setPeriodo(estudio);
-
-                                                this.DocumentoAgregar(documento);
+                                                
+                                                Retorno_MsgObj ret = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(documento.getObjArchivo());
+                                                if(!ret.SurgioError())
+                                                {
+                                                    documento.setPeriodo(estudio);
+                                                    this.DocumentoAgregar(documento);
+                                                }
                                                 
                                             }
                                             

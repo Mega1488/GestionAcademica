@@ -421,7 +421,7 @@
 
                         <p>Nombre: <label name="cal_nombre" id="cal_nombre"></label></p>
                         <p>Documento: <label name="cal_documento" id="cal_documento"></label></p>
-                        <p>Calificación: <input type="text" class="form-control" id="cal_EvlCalVal" name="cal_EvlCalVal" placeholder="Calificación"  value="" ></p>
+                        <p>Calificación: <input type="number" class="form-control" id="cal_EvlCalVal" name="cal_EvlCalVal" placeholder="Calificación"  value="" ></p>
                         <p>Observaciones: <textarea type="text" row="5" class="form-control" id="cal_EvlCalObs" name="cal_EvlCalObs" placeholder="Observaciones"  value="" ></textarea></p>
 
                     </div>

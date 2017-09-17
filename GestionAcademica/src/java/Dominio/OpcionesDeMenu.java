@@ -32,9 +32,9 @@ public class OpcionesDeMenu {
         
         Retorno_MsgObj retorno = LoMenu.GetInstancia().obtenerLista();
         
-        lstAdministrador = new ArrayList<>();
-        lstAlumno = new ArrayList<>();
-        lstDocente = new ArrayList<>();
+        lstAdministrador = new ArrayList();
+        lstAlumno = new ArrayList();
+        lstDocente = new ArrayList();
         
         if(retorno.SurgioErrorListaRequerida())
         {
@@ -100,7 +100,7 @@ public class OpcionesDeMenu {
     
     private void LevantarMenu(List<Object> lstMenu)
     {
-        if(lstMenu.size() < 14)
+        if(lstMenu.size() < 16)
         {
             for(Object objeto : lstMenu)
             {
@@ -154,11 +154,13 @@ public class OpcionesDeMenu {
         lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "Alumno/Evaluaciones.jsp", "Evaluaciones", 2));
         lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "Alumno/Solicitudes.jsp", "Solicitudes", 4));
         lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "Alumno/Escolaridad.jsp", "Escolaridad", 3));
+        lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "archivos.jsp", "Documentos", 5));
     }
 
     private void CargarDocente(){
         lstDocente.add(new Menu(TipoMenu.DOCENTE, urlSistema + "Docente/EstudiosDictados.jsp", "Estudios dictados", 1));
         lstDocente.add(new Menu(TipoMenu.DOCENTE, urlSistema + "Docente/EvalPendientes.jsp", "Evaluaciones Pendientes", 2));
+        lstDocente.add(new Menu(TipoMenu.DOCENTE, urlSistema + "archivos.jsp", "Documentos", 3));
     }
 
     public ArrayList<Menu> getLstAdministrador() {

@@ -9,9 +9,11 @@ import Entidad.Parametro;
 import Enumerado.Constantes;
 import Enumerado.ExpresionesRegulares;
 import Enumerado.Extensiones;
+import Enumerado.Proceso;
 import Enumerado.RutaArchivos;
 import Enumerado.TipoDato;
 import Enumerado.TipoMensaje;
+import Logica.LoBitacora;
 import Logica.LoParametro;
 import Logica.LoSincronizacion;
 import Logica.LoVersion;
@@ -21,6 +23,10 @@ import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.ConnectException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.text.ParseException;
@@ -411,5 +417,27 @@ public class Utilidades {
         
         size = size / 1024;
         return size <= Long.valueOf(Constantes.SIZE_FILE.getValor());
+    }
+    
+    public Boolean ConexionValida(String url){
+        
+        HttpURLConnection connection;
+        try {
+            connection = (HttpURLConnection) new URL(url).openConnection();
+            connection.setRequestMethod("HEAD");
+            int responseCode = connection.getResponseCode();
+            if (responseCode == 200) {
+                return true;
+            }
+        } catch (MalformedURLException | ConnectException  ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        System.err.println("Url no disponible: " + url);
+        LoBitacora.GetInstancia().NuevoMensaje(new Mensajes("Url no disponible: " + url, TipoMensaje.ERROR), Proceso.SISTEMA);
+        return false;
     }
 }

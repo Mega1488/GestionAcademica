@@ -19,9 +19,9 @@ public class Sitios {
     private final ArrayList<String> lstAlumno;
    
     private Sitios() {
-        lstSinSeguridad = new ArrayList<>();
-        lstAlumno = new ArrayList<>();
-        lstDocente = new ArrayList<>();
+        lstSinSeguridad = new ArrayList();
+        lstAlumno = new ArrayList();
+        lstDocente = new ArrayList();
         
         CargarSinSeguridad();
         CargarAlumno();
@@ -40,6 +40,9 @@ public class Sitios {
     private void CargarSinSeguridad(){
         lstSinSeguridad.add("index.jsp");
         lstSinSeguridad.add("Error.jsp");
+        lstSinSeguridad.add("pswSolRecovery.jsp");
+        lstSinSeguridad.add("pswChangeREST.jsp");
+        lstSinSeguridad.add("pswRecovery.jsp");
     }
     
     private void CargarAlumno(){
@@ -50,6 +53,7 @@ public class Sitios {
         lstAlumno.add("pswChange.jsp");
         lstAlumno.add("uploadFoto.jsp");
         lstAlumno.add("Perfil.jsp");
+        lstAlumno.add("archivos.jsp");
     }
 
     private void CargarDocente(){
@@ -60,6 +64,7 @@ public class Sitios {
         lstDocente.add("pswChange.jsp");
         lstDocente.add("uploadFoto.jsp");
         lstDocente.add("Perfil.jsp");
+        lstDocente.add("archivos.jsp");
     }
 
     public ArrayList<String> getLstSinSeguridad() {

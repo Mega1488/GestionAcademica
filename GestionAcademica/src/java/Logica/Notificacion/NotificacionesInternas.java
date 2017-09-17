@@ -267,7 +267,6 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
-    
     private Notificacion NUEVA_SOLICITUD(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.NUEVA_SOLICITUD.name());
@@ -289,7 +288,6 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
-    
     private Notificacion NUEVA_INCONSISTENCIA(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.NUEVA_INCONSISTENCIA.name());
@@ -307,6 +305,27 @@ public class NotificacionesInternas {
         notificacion.setNotDsc("Nueva Inconsistencia");
         notificacion.setNotAsu("Nueva inconsistencia");
         notificacion.setNotCon("<p>Existe una nueva inconsistencia en la sincronización, ingrese al sistema para resolverla</p>");
+        
+        return notificacion;
+    }
+   
+    private Notificacion ERROR_SISTEMA(){
+        Notificacion notificacion = new Notificacion();
+        notificacion.setNotNom(NotificacionSistema.ERROR_SISTEMA.name());
+        notificacion.setNotInt(Boolean.TRUE);       
+        notificacion.setNotObtDest(ObtenerDestinatario.UNICA_VEZ);
+        notificacion.setNotRepTpo(TipoRepeticion.SIN_REPETICION);
+        notificacion.setNotRepVal(0);
+        notificacion.setNotTpo(TipoNotificacion.A_DEMANDA);
+
+        notificacion.setNotAct(Boolean.TRUE);
+        notificacion.setNotApp(Boolean.FALSE);
+        notificacion.setNotEmail(Boolean.TRUE);
+        notificacion.setNotWeb(Boolean.TRUE);
+        
+        notificacion.setNotDsc("Error de sistema");
+        notificacion.setNotAsu("Error de sistema - SGA");
+        notificacion.setNotCon("<p>Surgió un error en el sistema, consulte la bitácora para más información</p>");
         
         return notificacion;
     }
@@ -538,6 +557,44 @@ public class NotificacionesInternas {
         
         
         Notificacion not = this.NUEVA_INCONSISTENCIA();
+        
+        Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerLista();
+        
+        for(Object objeto : retorno.getLstObjetos())
+        {
+            Persona persona = (Persona) objeto;
+            if(persona.getPerEsAdm())
+            {
+                not.getLstDestinatario().add(new NotificacionDestinatario(persona));
+            }
+            
+        }
+        
+        AsyncNotificar xthread = null;
+        try {
+          xthread = new AsyncNotificar(not, TipoNotificacion.A_DEMANDA);
+          xthread.start();
+        } catch (Exception ex) {
+
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Error" + ex);
+        } finally {
+          if (xthread != null && xthread.isAlive()) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, "[InterfacesAgent] Interrupting" );
+            xthread.interrupt();
+          }
+        }
+        
+    }
+    
+    //--------------------------------------------------------------------------
+    
+    
+    public void Notificar_ErrorSistema(String mensaje){
+        
+        
+        Notificacion not = this.ERROR_SISTEMA();
+        
+        not.setNotCon(not.getNotCon() + "<p>"+ mensaje + "</p>");
         
         Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerLista();
         

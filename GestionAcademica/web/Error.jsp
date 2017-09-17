@@ -17,26 +17,47 @@
     </head>
     <body>
         
-
-        <div class="container-fluid">
-            
-            <div id="cabezal" name="cabezal" class="row">
-            <jsp:include page="/masterPage/cabezal.jsp"/>
-        </div>
+        <jsp:include page="/masterPage/NotificacionError.jsp"/>
+        <jsp:include page="/masterPage/cabezal_menu.jsp"/>
+		<!-- CONTENIDO -->
+        <div class="contenido" id="contenedor">                
+            <div class="row">
+                <div class="col-lg-12">
+                    <section class="panel">
+                        <header class="panel-heading">
+                            <!-- TITULO -->
+                                ERROR
+                            <!-- BOTONES -->
+                        </header>
         
-        
-                <div class="col-sm-2">
-                    <jsp:include page="/masterPage/menu_izquierdo.jsp" />
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div id="inicio" class="tab-pane active">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <section class="panel">
+                                                
+                                                <div class="panel-body">
+                                                    <div class=" form">
+                                                        <div class="alert alert-danger">
+                                                            <strong>Error!</strong> <% out.print(mensaje); %>.
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-
-                <div id="contenido" name="contenido"  class="col-sm-8">
-                    <h1>Error</h1>
-
-                    <div class="alert alert-danger">
-                        <strong>Error!</strong> <% out.print(mensaje); %>.
-                    </div>
-                </div>
+            </div>
         </div>
+
+        <jsp:include page="/masterPage/footer.jsp"/>
+
+           
                 
     </body>
 </html>
