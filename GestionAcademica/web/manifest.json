@@ -1,0 +1,32 @@
+{
+  "short_name": "SGA",
+  "name": "Sistema de Gestión Academica - CTC",
+  "icons": [
+    {
+      "src": "Imagenes/ctc_ic.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "Imagenes/ctc_ic.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "Imagenes/ctc_ic.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+    ,
+    {
+      "src": "Imagenes/ctc_ic.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "login.jsp",
+  "background_color": "#628ec9",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#628ec9"
+}

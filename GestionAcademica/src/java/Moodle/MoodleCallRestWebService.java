@@ -349,9 +349,6 @@ public class MoodleCallRestWebService implements Serializable {
         NodeList elements = null;
         try {
             
-            if(ConexionValida(url))
-            {
-                
             
                 URL getUrl = new URL(url);
                 if (debug)
@@ -421,34 +418,11 @@ public class MoodleCallRestWebService implements Serializable {
                 }
                 connection.disconnect();
             
-            }
         } catch (XPathExpressionException | IOException ex) {
           Logger.getLogger(MoodleCallRestWebService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return elements;
     }
     
-    
-    
-    private Boolean ConexionValida(String url){
-        
-        HttpURLConnection connection;
-        try {
-            connection = (HttpURLConnection) new URL(url).openConnection();
-            connection.setRequestMethod("HEAD");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == 200) {
-                return true;
-            }
-        } catch (MalformedURLException | ConnectException  ex) {
-            Logger.getLogger(MoodleCallRestWebService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(MoodleCallRestWebService.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-        System.err.println("Error al consumir Moodle, url no disponible: " + url);
-        LoBitacora.GetInstancia().NuevoMensaje(new Mensajes("Error al consumir Moodle, url no disponible: " + url, TipoMensaje.ERROR), Proceso.SISTEMA);
-        return false;
-    }
+   
 }

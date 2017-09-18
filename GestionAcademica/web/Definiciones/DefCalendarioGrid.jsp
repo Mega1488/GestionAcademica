@@ -122,6 +122,13 @@
                 function MostrarAgregarEvaluacion(date)
                 {
                     var fechaAgregar = date.format();
+                    
+                    var fechaHasta  = new Date(fechaAgregar);
+                    
+                    fechaHasta = new Date(fechaHasta.setDate(fechaHasta.getDate() - 1));
+                    var fechaDesde = new Date(fechaHasta);
+                    fechaDesde.setDate(fechaDesde.getDate() - 7);
+                    
 
                     $(function () {
                         $('#PopUpAgregar').modal('show');
@@ -163,12 +170,12 @@
                                 {
                                     "orderable": false,
                                     "data": null,
-                                    "defaultContent": '<input type="date" name="cel_fecha_desde">'
+                                    "defaultContent": '<input type="date" name="cel_fecha_desde" value="' + fechaDesde.toISOString().substring(0,10) + '">'
                                 },
                                 {
                                     "orderable": false,
                                     "data": null,
-                                    "defaultContent": '<input type="date" name="cel_fecha_hasta" >'
+                                    "defaultContent": '<input type="date" name="cel_fecha_hasta" value="' + fechaHasta.toISOString().substring(0,10) + '">'
                                 },
                                 {
                                     "className": 'select-checkbox',

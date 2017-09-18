@@ -87,7 +87,7 @@
                                             <th>Código</th>
                                             <th>Nombre</th>
                                             <th>Exámen</th>
-                                            <th>Inscripción automática</th>
+                                            <th>Sin plazo de inscripción/th>
                                         </tr>
                                     </thead>
 
