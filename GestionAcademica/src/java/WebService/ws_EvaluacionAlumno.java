@@ -38,13 +38,12 @@ public class ws_EvaluacionAlumno {
 
     /**
      * This is a sample web service operation
-     * @param token parametro
      * @param AluPerCod parametro
      * @param AlIns parametro (SI/NO, para devolver evaluaciones a las que esté inscripto el alumno)
      * @return : Devuelve una lista para determinado alumno con evaluaciones que se encuentran pendientes para inscribirse
      */
     @WebMethod(operationName = "EvaluacionesParaInscripcion")
-    public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "AlIns") String AlIns)
+    public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "AlIns") String AlIns)
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         
@@ -54,11 +53,7 @@ public class ws_EvaluacionAlumno {
         List<Object> lstObjeto = new ArrayList<>();
         List<Object> lstCalendario = new ArrayList<>();
 
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió ningún valor token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(AluPerCod == null)
             {    
@@ -137,17 +132,13 @@ public class ws_EvaluacionAlumno {
      * @return : Metodo que devuelve la lista de evaluaciones de determinado alumno, que fueron finalizadas.
      */
     @WebMethod(operationName = "EvaluacionesFinalizadas")
-    public Retorno_MsgObj EvaluacionesFinalizadas(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
+    public Retorno_MsgObj EvaluacionesFinalizadas(@WebParam(name = "UsuAlumno") Long UsuAlumno)
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         
         LoCalendario loCalendario = LoCalendario.GetInstancia();
 
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió ningún valor token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(UsuAlumno == null)
             {    
@@ -163,22 +154,17 @@ public class ws_EvaluacionAlumno {
     
     /**
      *
-     * @param token parametro
      * @param UsuAlumno parametro
      * @return : Metodo que devuelve una lista de las evaluaciones que el alumno se encuentra inscripto pero estan pendientes para rendír la preuba
      */
     @WebMethod(operationName = "ListaPendiente")
-    public Retorno_MsgObj ListaPendiente(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
+    public Retorno_MsgObj ListaPendiente(@WebParam(name = "UsuAlumno") Long UsuAlumno)
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         
         LoCalendario loCalendario = LoCalendario.GetInstancia();
 
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió ningún valor token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(UsuAlumno == null)
             {    
@@ -195,24 +181,19 @@ public class ws_EvaluacionAlumno {
 
     /**
      *
-     * @param token parametro
      * @param AluPerCod parametro
      * @param CalCod parametro
      * @return : Metodo que Inscribe un alumno a la evaluacion
      */
     @WebMethod(operationName = "InscribirAlumno")
-    public Retorno_MsgObj InscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "CalCod") Long CalCod)
+    public Retorno_MsgObj InscribirAlumno(@WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "CalCod") Long CalCod)
     {
         Retorno_MsgObj retorno      = this.isAuthenticated();
         
         LoCalendario loCalendario   = LoCalendario.GetInstancia();
         LoPersona loPersona         = LoPersona.GetInstancia();
 
-        if(token.equals(""))
-        {
-            retorno.setMensaje(new Mensajes("No se recibió el token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(AluPerCod == null)
             {    
@@ -257,23 +238,18 @@ public class ws_EvaluacionAlumno {
     
     /**
      *
-     * @param token parametro
      * @param CalAlCod parametro
      * @param CalCod parametro
      * @return : Metodo que Borra un alumno de la evaluación a la que está inscripto
      */
     @WebMethod(operationName = "DesinscribirAlumno")
-    public Retorno_MsgObj DesinscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod, @WebParam(name = "CalCod") Long CalCod)
+    public Retorno_MsgObj DesinscribirAlumno(@WebParam(name = "PerCod") Long PerCod, @WebParam(name = "CalCod") Long CalCod)
     {
         Retorno_MsgObj retorno      = this.isAuthenticated();
         
         LoCalendario loCalendario   = LoCalendario.GetInstancia();
 
-        if(token.equals(""))
-        {
-            retorno.setMensaje(new Mensajes("No se recibió el token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(PerCod == null)
             {    

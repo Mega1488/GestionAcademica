@@ -41,20 +41,18 @@ public class ws_estudios {
     
     /**
      * This is a sample web service operation
+     * @param PerCod
+     * @return 
      */
     @WebMethod(operationName = "lstEstudiosPorAlumno")
-    public Retorno_MsgObj lstEstudiosPorAlumno(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod) 
+    public Retorno_MsgObj lstEstudiosPorAlumno(@WebParam(name = "PerCod") Long PerCod) 
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         
         LoPersona lopersona = LoPersona.GetInstancia();
         ArrayList<SDT_PersonaEstudio> lstEstudios = new ArrayList<>();
         
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió ningún valor token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(PerCod == null)
             {
@@ -73,18 +71,19 @@ public class ws_estudios {
         return retorno;
     }
     
+    /**
+     *
+     * @param PerCod
+     * @return
+     */
     @WebMethod(operationName = "lstEstudiosPreviosPorAlumno")
-    public Retorno_MsgObj lstEstudiosPreviosPorAlumno(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod)
+    public Retorno_MsgObj lstEstudiosPreviosPorAlumno(@WebParam(name = "PerCod") Long PerCod)
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         
         LoCalendario loCalendario = LoCalendario.GetInstancia();
         
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió ningún valor token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(PerCod == null)
             {

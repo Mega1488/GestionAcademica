@@ -40,13 +40,12 @@ public class ws_solicitudes {
 
     /**
      * This is a sample web service operation
-     * @param token
      * @param SolTpo
      * @param AluPerCod
      * @return 
      */
     @WebMethod(operationName = "realizarSolicitud")
-    public Retorno_MsgObj realizarSolicitud(@WebParam(name = "token") String token, @WebParam(name = "SolTpo") int SolTpo, @WebParam(name = "AluPerCod") Long AluPerCod)
+    public Retorno_MsgObj realizarSolicitud(@WebParam(name = "SolTpo") int SolTpo, @WebParam(name = "AluPerCod") Long AluPerCod)
     {
         Retorno_MsgObj retPer = this.isAuthenticated();
         Retorno_MsgObj retorno = this.isAuthenticated();
@@ -55,11 +54,7 @@ public class ws_solicitudes {
         LoSolicitud loSolicitud = LoSolicitud.GetInstancia();
         LoPersona loPersona = LoPersona.GetInstancia();
         
-        if(token == null)
-        {
-            retorno.setObjeto(new Mensajes("No se recibió Token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError() || !retPer.SurgioError())
         {
             if(AluPerCod == null)
             {
@@ -87,7 +82,7 @@ public class ws_solicitudes {
                             break;
                     }
                     sol.setAlumno((Persona) retPer.getObjeto());
-                    
+
                     loSolicitud.guardar(sol);
                     retorno.setMensaje(new Mensajes("Solicitud enviada", TipoMensaje.MENSAJE));
                 }
@@ -98,12 +93,11 @@ public class ws_solicitudes {
     
     /**
      * This is a sample web service operation
-     * @param token
      * @param PerCod
      * @return 
      */
     @WebMethod(operationName = "lstSolicitudesActivas")
-    public Retorno_MsgObj lstSolicitudesActivas(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod)
+    public Retorno_MsgObj lstSolicitudesActivas(@WebParam(name = "PerCod") Long PerCod)
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         Retorno_MsgObj ret = this.isAuthenticated();
@@ -112,11 +106,7 @@ public class ws_solicitudes {
         List<Object> lstSolicitud = new ArrayList<>();
         LoSolicitud loSolicitud = LoSolicitud.GetInstancia();
         
-        if(token == null)
-        {
-            retorno.setObjeto(new Mensajes("No se recibió Token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError() || !ret.SurgioError())
         {
             if(PerCod == null)
             {
@@ -150,9 +140,10 @@ public class ws_solicitudes {
     
     /**
      * This is a sample web service operation
+     * @return 
      */
     @WebMethod(operationName = "lstSolicitudesFinalizadas")
-    public Retorno_MsgObj lstSolicitudesFinalizadas(@WebParam(name = "token") String token)
+    public Retorno_MsgObj lstSolicitudesFinalizadas()
     {
         Retorno_MsgObj retorno = this.isAuthenticated();
         Retorno_MsgObj ret = this.isAuthenticated();
@@ -161,11 +152,8 @@ public class ws_solicitudes {
         List<Object> lstSolicitud = new ArrayList<>();
         LoSolicitud loSolicitud = LoSolicitud.GetInstancia(); 
         
-        if(token == null)
-        {
-            retorno.setObjeto(new Mensajes("No se recibió Token", TipoMensaje.ERROR));
-        }
-        else
+        
+        if(!retorno.SurgioError() || !ret.SurgioError())
         {
             ret = loSolicitud.obtenerLista();
             if (!ret.SurgioErrorListaRequerida()) {

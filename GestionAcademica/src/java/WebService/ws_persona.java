@@ -44,20 +44,15 @@ public class ws_persona {
 
     /**
      * Retorna usuario por codigo
-     * @param token token para validar consumo de servicio
      * @param pPerCod codigo de persona
      * @return objeto persona
      */
     @WebMethod(operationName = "ObtenerPersonaByCod")
-    public Retorno_MsgObj ObtenerPersonaByCod(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod) {
-        //Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerByMdlUsr("alumno1");
+    public Retorno_MsgObj ObtenerPersonaByCod(@WebParam(name = "pPerCod") Long pPerCod) {
+        
         Retorno_MsgObj retorno = this.isAuthenticated();
         
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(pPerCod == null)
             {
@@ -83,19 +78,14 @@ public class ws_persona {
     
     /**
      * Retorna usuario por codigo
-     * @param token token para validar consumo de servicio
      * @param pUser codigo de usuario
      * @return objeto persona
      */
     @WebMethod(operationName = "ObtenerPersonaByUser")
-    public Retorno_MsgObj ObtenerPersonaByUser(@WebParam(name = "token") String token, @WebParam(name = "pUser") String pUser) {
+    public Retorno_MsgObj ObtenerPersonaByUser(@WebParam(name = "pUser") String pUser) {
         Retorno_MsgObj retorno = this.isAuthenticated();
         
-        if(token == null)
-        {
-            retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
-        }
-        else
+        if(!retorno.SurgioError())
         {
             if(pUser == null)
             {
@@ -123,30 +113,32 @@ public class ws_persona {
 
     /**
      * Actualizar datos de la persona
-     * @param token token para validar consumo de servicio
      * @param pPerCod codigo de persona
      * @param PerAppTkn token de app
      * @return Resultado
      */
     @WebMethod(operationName = "PersonaActualizarToken")
-    public Retorno_MsgObj PersonaActualizarToken(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod, @WebParam(name = "pPerAppTkn") String PerAppTkn) {
+    public Retorno_MsgObj PersonaActualizarToken(@WebParam(name = "pPerCod") Long pPerCod, @WebParam(name = "pPerAppTkn") String PerAppTkn) {
         //TODO write your implementation code here:
         
         Retorno_MsgObj retorno = this.isAuthenticated();
         
-        if(pPerCod == null)
+        if(!retorno.SurgioError())
         {
-            retorno.setMensaje(new Mensajes("No se recibio persona", TipoMensaje.ERROR));
-        }
-        else
-        {
-            if(PerAppTkn == null)
+            if(pPerCod == null)
             {
-                retorno.setMensaje(new Mensajes("No se recibio parametro", TipoMensaje.ERROR));
+                retorno.setMensaje(new Mensajes("No se recibio persona", TipoMensaje.ERROR));
             }
             else
             {
-                retorno = LoPersona.GetInstancia().ActualizarToken(pPerCod, PerAppTkn);
+                if(PerAppTkn == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibio parametro", TipoMensaje.ERROR));
+                }
+                else
+                {
+                    retorno = LoPersona.GetInstancia().ActualizarToken(pPerCod, PerAppTkn);
+                }
             }
         }
         
