@@ -3,6 +3,7 @@
     Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
+<%@page import="Logica.LoParametro"%>
 <%@page import="org.apache.commons.fileupload.FileUploadException"%>
 <%@page import="org.apache.commons.fileupload.FileItem"%>
 <%@page import="java.io.File"%>
@@ -138,6 +139,14 @@
                         </jsp:include>
                         <span class="contenedor_agregar">
                             <!--<a href="#" title="Ingresar" class="glyphicon glyphicon-plus" data-toggle="modal" data-target="#PopUpAgregar"> </a>-->
+                           <%  
+                               if(LoParametro.GetInstancia().obtener().getParUtlMdl())
+                                {
+                            %>
+                                <a href="#" title="Sincronizar" class="glyphicon glyphicon-refresh" name="btn_sincronizar" id="btn_sincronizar"> </a>
+                            <%
+                                }
+                            %>
                         </span>
                         <div class="panel-body">
                             <div class="tab-content">
@@ -258,6 +267,28 @@
             </div>
             <script type="text/javascript">
                 $(document).ready(function () {
+                    
+                    
+                    $('#btn_sincronizar').on('click', function (e) {
+                        var PeriEstCod = $('#PeriEstCod').val();
+                        
+                        $.post('<% out.print(urlSistema); %>AB_PeriodoEstudioDocumento', {
+                            pPeriEstCod: PeriEstCod,
+                            pAction: "SINCRONIZAR"
+                        }, function (responseText) {
+                            var obj = JSON.parse(responseText);
+
+                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                            if (obj.tipoMensaje != 'ERROR')
+                            {
+                                location.reload();
+                            }
+
+                        });
+
+        
+                    });
 
                     $('.btn_eliminar').on('click', function (e) {
 

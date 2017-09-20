@@ -280,9 +280,9 @@
                         var objeto = rows.data()[i];
                         var fila = rows.nodes()[i];
 
-                        var fechaEvaluacion = fila.cells[4].lastChild.value;
-                        var fechaDesde = fila.cells[5].lastChild.value;
-                        var fechaHasta = fila.cells[6].lastChild.value;
+                        var fechaEvaluacion = fila.cells[3].lastChild.value;
+                        var fechaDesde = fila.cells[4].lastChild.value;
+                        var fechaHasta = fila.cells[5].lastChild.value;
 
                         if (fechaEvaluacion == "")
                         {
@@ -325,9 +325,9 @@
                                 var objeto = rows.data()[i];
                                 var fila = rows.nodes()[i];
 
-                                var fechaEvaluacion = fila.cells[4].lastChild.value;
-                                var fechaDesde = fila.cells[5].lastChild.value;
-                                var fechaHasta = fila.cells[6].lastChild.value;
+                                var fechaEvaluacion = fila.cells[3].lastChild.value;
+                                var fechaDesde = fila.cells[4].lastChild.value;
+                                var fechaHasta = fila.cells[5].lastChild.value;
 
                                 calendario.evaluacion.evlCod = objeto.evlCod;
                                 calendario.calFch = fechaEvaluacion;

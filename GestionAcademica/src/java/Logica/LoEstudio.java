@@ -179,7 +179,7 @@ public class LoEstudio {
             InputStream in = website.openStream();
             
             String carpeta = Utiles.Utilidades.GetInstancia().getPrivateTempStorage();
-            carpeta = carpeta.substring(1, carpeta.length());
+            //carpeta = carpeta.substring(1, carpeta.length());
             carpeta = carpeta + "/" + contenido.getFilename();
             
             Path path = Paths.get(carpeta);

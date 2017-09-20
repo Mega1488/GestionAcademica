@@ -670,6 +670,68 @@ public class LoPeriodo implements InABMGenerico{
         
         }
     }
+    
+    public void DocumentoImportarMoodle(PeriodoEstudio estudio){
+        if(estudio.getMdlCod() != null)
+                {
+                    MoodleCourseContent[] courseContent = loEstudio.Mdl_ObtenerEstudioContent(estudio.getMdlCod());
+                    
+                    //Busco archivos
+                    
+                    if(courseContent != null)
+                    {
+                        //Recorro cada contenido
+                        for(MoodleCourseContent content : courseContent) {
+                            if(content.getMoodleModules() != null)
+                            {
+                                //Recorro los modulos del curso
+                                for (MoodleModule modulo : content.getMoodleModules()) {
+                                    if(modulo.getContent() != null)
+                                    {
+                                        //Recorro el contenido de cada modulo
+                                        for (MoodleModuleContent modContent : modulo.getContent()) {
+                                            //Controlo fecha.
+                                            Date fechaCreado = new Date(modContent.getTimeCreated() * 1000);
+                                            if(estudio.getFchSincMdl() != null)
+                                            {
+                                                if(fechaCreado.after(estudio.getFchSincMdl()))
+                                                {
+                                                    PeriodoEstudioDocumento documento = loEstudio.Mdl_ObtenerEstudioArchivo(modContent);
+                                                    
+                                                    Retorno_MsgObj ret = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(documento.getObjArchivo());
+                                                    if(!ret.SurgioError())
+                                                    {
+                                                        documento.setPeriodo(estudio);
+                                                        this.DocumentoAgregar(documento);
+                                                    }
+                                                    
+                                                }
+                                            }
+                                            else
+                                            {
+                                                PeriodoEstudioDocumento documento = loEstudio.Mdl_ObtenerEstudioArchivo(modContent);
+                                                
+                                                Retorno_MsgObj ret = (Retorno_MsgObj) LoArchivo.GetInstancia().guardar(documento.getObjArchivo());
+                                                if(!ret.SurgioError())
+                                                {
+                                                    documento.setPeriodo(estudio);
+                                                    this.DocumentoAgregar(documento);
+                                                }
+                                                
+                                            }
+                                            
+                                            
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    
+                    estudio.setFchSincMdl(new Date());
+                    this.EstudioActualizar(estudio);
+                }
+    }
 
     
     

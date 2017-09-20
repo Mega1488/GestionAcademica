@@ -93,6 +93,10 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
                     case "OBTENER":
                         retorno = this.ObtenerDatos(request);
                     break;
+                    
+                    case "SINCRONIZAR":
+                        retorno = this.Sincronizar(request);
+                    break;
 
                }
 
@@ -139,6 +143,26 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
         }
 
        return utilidades.ObjetoToJson(periDocumento);
+    }
+    
+    
+    private String Sincronizar(HttpServletRequest request){
+        error       = false;
+        mensaje = new Mensajes("Sincronizando", TipoMensaje.MENSAJE);
+        try
+        {
+            PeriodoEstudioDocumento periDocumento = this.ValidarPeriodoEstudioDocumento(request, null);
+            
+            if(periDocumento.getPeriodo() != null) loPeriodo.DocumentoImportarMoodle(periDocumento.getPeriodo());
+            
+        }
+        catch(Exception ex)
+        {
+            mensaje = new Mensajes("Error al obtener: " + ex.getMessage(), TipoMensaje.ERROR);
+            throw ex;
+        }
+
+       return utilidades.ObjetoToJson(mensaje);
     }
     
     private PeriodoEstudioDocumento ValidarPeriodoEstudioDocumento(HttpServletRequest request, PeriodoEstudioDocumento periDocumento){
