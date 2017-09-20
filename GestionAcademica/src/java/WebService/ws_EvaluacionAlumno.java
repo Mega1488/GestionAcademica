@@ -8,16 +8,24 @@ package WebService;
 import Entidad.Calendario;
 import Entidad.CalendarioAlumno;
 import Entidad.Persona;
+import Enumerado.EstadoServicio;
+import Enumerado.ServicioWeb;
 import Enumerado.TipoMensaje;
 import Logica.LoCalendario;
 import Logica.LoPersona;
+import Logica.LoWS;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 /**
  *
@@ -25,6 +33,8 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "ws_EvaluacionAlumno")
 public class ws_EvaluacionAlumno {
+    
+    @Resource WebServiceContext context;
 
     /**
      * This is a sample web service operation
@@ -36,8 +46,9 @@ public class ws_EvaluacionAlumno {
     @WebMethod(operationName = "EvaluacionesParaInscripcion")
     public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "AlIns") String AlIns)
     {
+        Retorno_MsgObj retorno = this.isAuthenticated();
+        
         LoCalendario loCalendario = LoCalendario.GetInstancia();
-        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("ERROR", TipoMensaje.ERROR));
         Retorno_MsgObj retCal = new Retorno_MsgObj();
         Calendario cal = new Calendario();
         List<Object> lstObjeto = new ArrayList<>();
@@ -66,8 +77,9 @@ public class ws_EvaluacionAlumno {
                     {
                         retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
                         
-                        if (!retCal.SurgioErrorListaRequerida()) 
+                        if (!retCal.SurgioError()) 
                         {
+                            retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
                             lstObjeto = retCal.getLstObjetos();
                             for(Object obj : lstObjeto)
                             {
@@ -75,7 +87,6 @@ public class ws_EvaluacionAlumno {
                                 if(cal.existeAlumno(AluPerCod) == false)
                                 {
                                     lstCalendario.add(cal);
-                                    retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
                                 }
                             }
                             retorno.setLstObjetos(lstCalendario);
@@ -90,8 +101,9 @@ public class ws_EvaluacionAlumno {
                     {
                         retCal  = (Retorno_MsgObj) loCalendario.ObtenerListaParaInscripcion(AluPerCod); 
                         
-                        if (!retCal.SurgioErrorListaRequerida())
+                        if (!retCal.SurgioError())
                         {
+                            retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
                             lstObjeto = retCal.getLstObjetos();
                             for(Object obj : lstObjeto)
                             {
@@ -99,7 +111,6 @@ public class ws_EvaluacionAlumno {
                                 if(cal.existeAlumno(AluPerCod) == true)
                                 {
                                     lstCalendario.add(cal);
-                                    retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
                                 }
                             }
                             retorno.setLstObjetos(lstCalendario);
@@ -128,9 +139,9 @@ public class ws_EvaluacionAlumno {
     @WebMethod(operationName = "EvaluacionesFinalizadas")
     public Retorno_MsgObj EvaluacionesFinalizadas(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
     {
+        Retorno_MsgObj retorno = this.isAuthenticated();
         
         LoCalendario loCalendario = LoCalendario.GetInstancia();
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
 
         if(token == null)
         {
@@ -159,9 +170,9 @@ public class ws_EvaluacionAlumno {
     @WebMethod(operationName = "ListaPendiente")
     public Retorno_MsgObj ListaPendiente(@WebParam(name = "token") String token, @WebParam(name = "UsuAlumno") Long UsuAlumno)
     {
+        Retorno_MsgObj retorno = this.isAuthenticated();
         
         LoCalendario loCalendario = LoCalendario.GetInstancia();
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
 
         if(token == null)
         {
@@ -192,10 +203,10 @@ public class ws_EvaluacionAlumno {
     @WebMethod(operationName = "InscribirAlumno")
     public Retorno_MsgObj InscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "CalCod") Long CalCod)
     {
+        Retorno_MsgObj retorno      = this.isAuthenticated();
         
         LoCalendario loCalendario   = LoCalendario.GetInstancia();
         LoPersona loPersona         = LoPersona.GetInstancia();
-        Retorno_MsgObj retorno      = new Retorno_MsgObj();
 
         if(token.equals(""))
         {
@@ -227,6 +238,7 @@ public class ws_EvaluacionAlumno {
                             CalAlumno.setEvlCalFch(new java.util.Date());
                             
                             retorno = (Retorno_MsgObj) loCalendario.AlumnoAgregar(CalAlumno);
+                            retorno.setMensaje(new Mensajes("OK", TipoMensaje.MENSAJE));
                         }
                         else
                         {
@@ -253,9 +265,9 @@ public class ws_EvaluacionAlumno {
     @WebMethod(operationName = "DesinscribirAlumno")
     public Retorno_MsgObj DesinscribirAlumno(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod, @WebParam(name = "CalCod") Long CalCod)
     {
+        Retorno_MsgObj retorno      = this.isAuthenticated();
+        
         LoCalendario loCalendario   = LoCalendario.GetInstancia();
-        LoPersona loPersona         = LoPersona.GetInstancia();
-        Retorno_MsgObj retorno      = new Retorno_MsgObj();
 
         if(token.equals(""))
         {
@@ -285,7 +297,6 @@ public class ws_EvaluacionAlumno {
                             CalAlumno.setEvlCalFch(new java.util.Date());
                             
                             retorno = (Retorno_MsgObj) loCalendario.AlumnoEliminar(CalAlumno);
-                            
                             retorno.setMensaje(new Mensajes("Eliminado Correctamente", TipoMensaje.MENSAJE));
                         }
                         else
@@ -301,6 +312,53 @@ public class ws_EvaluacionAlumno {
             }
         }
         return retorno;
+    }
+    
+    private Retorno_MsgObj isAuthenticated() {
+        
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Autenticando", TipoMensaje.ERROR));
+
+        MessageContext messageContext = context.getMessageContext();
+        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
+        Map httpHeaders = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
+        
+        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+
+        List tknList = (List) httpHeaders.get("token");
+        
+        if (tknList != null)
+        {
+            if(tknList.size() > 0)
+            {
+                String token = (String) tknList.get(0);
+                
+                if(token == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+                    LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.EVALUACION_ALUMNO);
+                }
+                else
+                {
+                    if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.EVALUACION_ALUMNO, direccion))
+                    {
+                        retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("Token valido, puede consumir el servicio", TipoMensaje.MENSAJE));                        
+                    }
+                }
+            }
+        }
+        else
+        {
+           retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+           LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.EVALUACION_ALUMNO); 
+        }
+
+
+        return retorno;
+
     }
     
 }

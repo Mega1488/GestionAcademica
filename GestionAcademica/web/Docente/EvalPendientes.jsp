@@ -4,6 +4,9 @@
     Author     : aa
 --%>
 
+<%@page import="Entidad.PeriodoEstudio"%>
+<%@page import="Entidad.Periodo"%>
+<%@page import="Logica.LoPeriodo"%>
 <%@page import="Logica.LoCalendario"%>
 <%@page import="Logica.LoPersona"%>
 <%@page import="Entidad.Calendario"%>
@@ -20,6 +23,7 @@
 <%
     LoPersona lopersona = LoPersona.GetInstancia();
     LoCalendario loCalendario = LoCalendario.GetInstancia();
+    LoPeriodo loPeriodo = LoPeriodo.GetInstancia();
     Utilidades utilidad = Utilidades.GetInstancia();
     
     String urlSistema = utilidad.GetUrlSistema();
@@ -39,22 +43,76 @@
 
     //----------------------------------------------------------------------------------------------------
     Persona persona = new Persona();
-
+    Long pPeriEstCod = null;
+//    System.err.println("PERIESTCOD: " + request.getParameter("pPeriEstCod"));
+    if(request.getParameter("pPeriEstCod") != null) pPeriEstCod = Long.valueOf(request.getParameter("pPeriEstCod"));
+        
     Retorno_MsgObj retPersona = lopersona.obtenerByMdlUsr(usuario);
     persona = (Persona) retPersona.getObjeto();
 
     List<Object> lstObjeto = new ArrayList<>();
-
+    
+    
     Retorno_MsgObj retorno = loCalendario.ObtenerEvaluacionesDocentes(persona.getPerCod());
+    
+    if (!retorno.SurgioError() && !retPersona.SurgioErrorObjetoRequerido()) 
+    {
+        Long mat = 0L;
+        Long mod = 0L;
+        
+        if(pPeriEstCod != null)
+        {
+            Retorno_MsgObj retPeri =  loPeriodo.EstudioObtener(pPeriEstCod);
+            if(!retPeri.SurgioErrorObjetoRequerido())
+            {
+                PeriodoEstudio p = (PeriodoEstudio) retPeri.getObjeto();
 
-    if (!retorno.SurgioErrorListaRequerida()) {
-        lstObjeto = retorno.getLstObjetos();
-    } else {
-        out.print(retorno.getMensaje().toString());
+                if(p.getMateria() != null)
+                {
+                    mat = p.getMateria().getMatCod();
+                }
+                if(p.getModulo() != null)
+                {
+                    mod = p.getModulo().getModCod();
+                }
+
+                for(Object objc : retorno.getLstObjetos())
+                {
+                    Calendario c = (Calendario) objc;
+
+                    if(c.getEvaluacion().getMatEvl() != null && c.getEvaluacion().getMatEvl().getMatCod() == mat)
+                    {
+                        lstObjeto.add(c);
+                    }
+                    if(c.getEvaluacion().getModEvl() != null && c.getEvaluacion().getModEvl().getModCod() == mod)
+                    {
+                        lstObjeto.add(c);
+                    }
+                }
+            }
+            else
+            {
+                out.print(retPeri.getMensaje().toString());
+            }
+        }
+        else
+        {
+            lstObjeto = retorno.getLstObjetos();
+        }
+    } 
+    else 
+    {
+        if(retorno.getMensaje() != null)
+        {
+            out.print(retorno.getMensaje().toString());
+        }
+        else
+        {
+            out.print(retPersona.getMensaje().toString());
+        }
     }
 
     String tblVisible = (lstObjeto.size() > 0 ? "" : "display: none;");
-
 
 %>
 
@@ -101,7 +159,8 @@
                                     </thead>
 
                                     <tbody>
-                                        <% for (Object objeto : lstObjeto) {
+                                        <%
+                                            for (Object objeto : lstObjeto) {
                                                 Calendario calendario = (Calendario) objeto;
                                         %>
                                         <tr>

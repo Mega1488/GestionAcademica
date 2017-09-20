@@ -25,11 +25,10 @@
 <header class="panel-heading tab-bg-dark-navy-blue ">
     <ul class="nav nav-tabs">
         <% 
-            out.println("<li class='" + (urlActual.equals("DefMateria.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefMateria.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "&pMatCod=" + MatCod + "'>Materia</a></li>");
-
-            if(Mode.equals(Mode.UPDATE) || Mode.equals(Modo.DISPLAY)) out.println("<li class='" + (urlActual.equals("DefMateriaPreviaSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefMateriaPreviaSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "&pMatCod=" + MatCod + "'>Previas</a></li>");
-            if(Mode.equals(Mode.UPDATE) || Mode.equals(Modo.DISPLAY)) out.println("<li class='" + (urlActual.equals("DefMateriaEvaluacionSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefMateriaEvaluacionSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "&pMatCod=" + MatCod + "'>Evaluaciones</a></li>");
-
+            out.println("<li class='" + (urlActual.equals("DefMateria.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefMateria.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefMateria.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "&pMatCod=" + MatCod + "'>Materia</a></li>");
+            
+            if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefMateriaPreviaSWW.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefMateriaPreviaSWW.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefMateriaPreviaSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "&pMatCod=" + MatCod + "'>Previas</a></li>");
+            if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefMateriaEvaluacionSWW.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefMateriaEvaluacionSWW.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefMateriaEvaluacionSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "&pMatCod=" + MatCod + "'>Evaluaciones</a></li>");
         %>
     </ul>
 

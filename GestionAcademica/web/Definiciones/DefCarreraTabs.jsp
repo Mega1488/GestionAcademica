@@ -23,9 +23,9 @@
 <header class="panel-heading tab-bg-dark-navy-blue ">
     <ul class="nav nav-tabs">
         <%
-            out.println("<li class='" + (urlActual.equals("DefCarrera.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefCarrera.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "'>Carrera</a></li>");
-
-            if(Mode.equals(Mode.UPDATE) || Mode.equals(Modo.DISPLAY)) out.println("<li class='" + (urlActual.equals("DefPlanEstudioSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefPlanEstudioSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "'>Planes</a></li>");
+            out.println("<li class='" + (urlActual.equals("DefCarrera.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefCarrera.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefCarrera.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "'>Carrera</a></li>");
+            
+            if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefPlanEstudioSWW.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefCursoModuloSWW.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefPlanEstudioSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "'>Planes</a></li>");
         %>
     </ul>
     

@@ -24,9 +24,9 @@
 <header class="panel-heading tab-bg-dark-navy-blue ">
     <ul class="nav nav-tabs">
         <% 
-            out.println("<li class='" + (urlActual.equals("DefPlanEstudio.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefPlanEstudio.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "'>Plan</a></li>");
-
-            if(Mode.equals(Mode.UPDATE) || Mode.equals(Modo.DISPLAY)) out.println("<li class='" + (urlActual.equals("DefMateriaSWW.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefMateriaSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "'>Materias</a></li>");
+            out.println("<li class='" + (urlActual.equals("DefPlanEstudio.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefPlanEstudio.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefPlanEstudio.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "'>Plan</a></li>");
+            
+            if(!Mode.equals(Mode.INSERT)) out.println("<li class='" + (urlActual.equals("DefMateriaSWW.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefMateriaSWW.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefMateriaSWW.jsp?MODO=" + Mode + "&pCarCod=" + CarCod + "&pPlaEstCod=" + PlaEstCod + "'>Materias</a></li>");
         %>
     </ul>
     <span class="tools pull-right">

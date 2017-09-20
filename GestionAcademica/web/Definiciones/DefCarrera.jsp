@@ -70,6 +70,10 @@
             CamposActivos = "enabled";
             nameButton    = "MODIFICAR";
             break;
+        case DISPLAY:
+            CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
+            break;
     }
 %>
 
@@ -178,10 +182,6 @@
                                                             <!-- DATOS PERSONALES -->
                                                             <div style="display:none" id="datos_ocultos" name="datos_ocultos">
                                                                 <input type="hidden" name="MODO" id="MODO" value="<% out.print(mode); %>">
-                                                            </div>
-
-                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
-                                                                <h2 class="">Datos de la Carrera</h2>
                                                             </div>
 
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="CarCod" name="CarCod" disabled value="<%=utilidad.NuloToVacio(car.getCarCod())%>" ></div></div>

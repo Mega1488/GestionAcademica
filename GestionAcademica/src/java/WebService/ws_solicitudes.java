@@ -17,9 +17,17 @@ import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
+import java.util.Map;
+import Enumerado.EstadoServicio;
+import Enumerado.ServicioWeb;
+import Logica.LoWS;
 
 /**
  *
@@ -27,6 +35,8 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "ws_solicitudes")
 public class ws_solicitudes {
+    
+    @Resource WebServiceContext context;
 
     /**
      * This is a sample web service operation
@@ -38,9 +48,10 @@ public class ws_solicitudes {
     @WebMethod(operationName = "realizarSolicitud")
     public Retorno_MsgObj realizarSolicitud(@WebParam(name = "token") String token, @WebParam(name = "SolTpo") int SolTpo, @WebParam(name = "AluPerCod") Long AluPerCod)
     {
+        Retorno_MsgObj retPer = this.isAuthenticated();
+        Retorno_MsgObj retorno = this.isAuthenticated();
+        
         Solicitud sol = new Solicitud();
-        Retorno_MsgObj retPer = new Retorno_MsgObj();
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
         LoSolicitud loSolicitud = LoSolicitud.GetInstancia();
         LoPersona loPersona = LoPersona.GetInstancia();
         
@@ -94,8 +105,9 @@ public class ws_solicitudes {
     @WebMethod(operationName = "lstSolicitudesActivas")
     public Retorno_MsgObj lstSolicitudesActivas(@WebParam(name = "token") String token, @WebParam(name = "PerCod") Long PerCod)
     {
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
-        Retorno_MsgObj ret = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = this.isAuthenticated();
+        Retorno_MsgObj ret = this.isAuthenticated();
+        
         List<Object> lstObject = new ArrayList<>();
         List<Object> lstSolicitud = new ArrayList<>();
         LoSolicitud loSolicitud = LoSolicitud.GetInstancia();
@@ -142,8 +154,9 @@ public class ws_solicitudes {
     @WebMethod(operationName = "lstSolicitudesFinalizadas")
     public Retorno_MsgObj lstSolicitudesFinalizadas(@WebParam(name = "token") String token)
     {
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
-        Retorno_MsgObj ret = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = this.isAuthenticated();
+        Retorno_MsgObj ret = this.isAuthenticated();
+        
         List<Object> lstObject = new ArrayList<>();
         List<Object> lstSolicitud = new ArrayList<>();
         LoSolicitud loSolicitud = LoSolicitud.GetInstancia(); 
@@ -173,5 +186,52 @@ public class ws_solicitudes {
             }
         }
         return retorno;
+    }
+    
+    private Retorno_MsgObj isAuthenticated() {
+        
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Autenticando", TipoMensaje.ERROR));
+
+        MessageContext messageContext = context.getMessageContext();
+        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
+        Map httpHeaders = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
+        
+        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+
+        List tknList = (List) httpHeaders.get("token");
+        
+        if (tknList != null)
+        {
+            if(tknList.size() > 0)
+            {
+                String token = (String) tknList.get(0);
+                
+                if(token == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+                    LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SOLICITUDES);
+                }
+                else
+                {
+                    if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.SOLICITUDES, direccion))
+                    {
+                        retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("Token valido, puede consumir el servicio", TipoMensaje.MENSAJE));                        
+                    }
+                }
+            }
+        }
+        else
+        {
+           retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+           LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.SOLICITUDES); 
+        }
+
+
+        return retorno;
+
     }
 }

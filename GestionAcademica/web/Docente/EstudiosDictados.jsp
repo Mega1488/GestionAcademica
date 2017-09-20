@@ -116,7 +116,8 @@
                                     </thead>
 
                                     <tbody>
-                                        <% for (PeriodoEstudio perEstudio : lstObjeto) {
+                                        <% 
+                                            for (PeriodoEstudio perEstudio : lstObjeto) {
                                         %>
                                         <tr>
                                             <td><%out.print(utilidad.NuloToVacio(perEstudio.getPeriEstCod())); %> </td>

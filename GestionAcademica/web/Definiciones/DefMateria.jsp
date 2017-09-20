@@ -76,6 +76,10 @@
             CamposActivos = "enabled";
             nameButton    = "MODIFICAR";
             break;
+        case DISPLAY:
+            CamposActivos = "enabled";
+            nameButton    = "MODIFICAR";
+            break;
     }
 %>
 
@@ -188,18 +192,14 @@
                                                                 <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
                                                             </div>
 
-                                                            <div class="col-lg-offset-3 panel_contenedorTitulo">
-                                                                <h2 class="">Datos de la Materia</h2>
-                                                            </div>
-
-                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="MatCod" name="MatCod" placeholder="Código" disabled value="<% out.print( utilidad.NuloToVacio(mat.getMatCod())); %>"></div></div>
-                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" required class=" form-control inputs_generales" id="MatNom" name="MatName" placeholder="Nombre" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>"></div></div>
-                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Cantidad de horas</label><div class="col-lg-6"><input type="number" required step="0.5" class=" form-control inputs_generales" id="MatCntHor" name="MatCntHor" placeholder="Cantidad de horas" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatCntHor())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="MatCod" name="MatCod" disabled value="<% out.print( utilidad.NuloToVacio(mat.getMatCod())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="MatNom" name="MatName" required<% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Cantidad de horas</label><div class="col-lg-6"><input type="number" step="0.5" class=" form-control inputs_generales" id="MatCntHor" name="MatCntHor" required <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatCntHor())); %>"></div></div>
 
                                                             <div class="form-group ">
                                                                 <label for="cname" class="control-label col-lg-3">Tipo de aprobación</label>
                                                                 <div class="col-lg-6">
-                                                                    <select class="form-control" id="MatTpoApr" name="MatTpoApr" <%out.print(CamposActivos);%>>
+                                                                    <select class="form-control inputs_generales" id="MatTpoApr" name="MatTpoApr" <%out.print(CamposActivos);%>>
                                                                         <%
                                                                             for(TipoAprobacion tpoApr : TipoAprobacion.values())
                                                                             {
@@ -220,7 +220,7 @@
                                                             <div class="form-group ">
                                                                 <label for="cname" class="control-label col-lg-3">Tipo de Período</label>
                                                                 <div class="col-lg-6">
-                                                                    <select class="form-control" id="MatTpoPer" name="MatTpoPer" <%out.print(CamposActivos);%>>
+                                                                    <select class="form-control inputs_generales" id="MatTpoPer" name="MatTpoPer" <%out.print(CamposActivos);%>>
                                                                         <%
                                                                             for(TipoPeriodo tpoPer : TipoPeriodo.values())
                                                                             {
@@ -238,7 +238,7 @@
                                                                 </div>
                                                             </div>
 
-                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Valor del Período</label><div class="col-lg-6"><input type="number" required step="0.5" class="form-control" id="MatPerVal" name="MatPerVal" placeholder="Valor del Período" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Valor del Período</label><div class="col-lg-6"><input type="number" required step="0.5" class="form-control inputs_generales" id="MatPerVal" name="MatPerVal" <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatPerVal())); %>"></div></div>
 
                                                             <div class="form-group">
                                                                 <div class="col-lg-offset-3 col-lg-6">

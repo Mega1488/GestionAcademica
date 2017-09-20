@@ -8,21 +8,30 @@ package WebService;
 import Entidad.Periodo;
 import Entidad.PeriodoEstudioDocumento;
 import Entidad.Persona;
+import Enumerado.EstadoServicio;
+import Enumerado.ServicioWeb;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Logica.LoCalendario;
 import Logica.LoPersona;
+import Logica.LoWS;
 import Persistencia.PerManejador;
 import Utiles.Mensajes;
 import Utiles.Retorno_MsgObj;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.WebServiceContext;
+import javax.xml.ws.handler.MessageContext;
 
 /**
  *
@@ -30,6 +39,8 @@ import javax.jws.WebParam;
  */
 @WebService(serviceName = "ws_persona")
 public class ws_persona {
+    
+    @Resource WebServiceContext context;
 
     /**
      * Retorna usuario por codigo
@@ -40,7 +51,7 @@ public class ws_persona {
     @WebMethod(operationName = "ObtenerPersonaByCod")
     public Retorno_MsgObj ObtenerPersonaByCod(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod) {
         //Retorno_MsgObj retorno = LoPersona.GetInstancia().obtenerByMdlUsr("alumno1");
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = this.isAuthenticated();
         
         if(token == null)
         {
@@ -78,7 +89,7 @@ public class ws_persona {
      */
     @WebMethod(operationName = "ObtenerPersonaByUser")
     public Retorno_MsgObj ObtenerPersonaByUser(@WebParam(name = "token") String token, @WebParam(name = "pUser") String pUser) {
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = this.isAuthenticated();
         
         if(token == null)
         {
@@ -121,7 +132,7 @@ public class ws_persona {
     public Retorno_MsgObj PersonaActualizarToken(@WebParam(name = "token") String token, @WebParam(name = "pPerCod") Long pPerCod, @WebParam(name = "pPerAppTkn") String PerAppTkn) {
         //TODO write your implementation code here:
         
-        Retorno_MsgObj retorno = new Retorno_MsgObj();
+        Retorno_MsgObj retorno = this.isAuthenticated();
         
         if(pPerCod == null)
         {
@@ -165,5 +176,51 @@ public class ws_persona {
         return retorno;
     }
 
+    private Retorno_MsgObj isAuthenticated() {
+        
+        Retorno_MsgObj retorno  = new Retorno_MsgObj(new Mensajes("Autenticando", TipoMensaje.ERROR));
+
+        MessageContext messageContext = context.getMessageContext();
+        HttpServletRequest request = (HttpServletRequest) messageContext.get(MessageContext.SERVLET_REQUEST);
+        Map httpHeaders = (Map) messageContext.get(MessageContext.HTTP_REQUEST_HEADERS);
+        
+        String direccion           = "IP: "+request.getRemoteAddr()+", Port: "+request.getRemotePort()+", Host: "+request.getRemoteHost();
+
+        List tknList = (List) httpHeaders.get("token");
+        
+        if (tknList != null)
+        {
+            if(tknList.size() > 0)
+            {
+                String token = (String) tknList.get(0);
+                
+                if(token == null)
+                {
+                    retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+                    LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.PERSONA);
+                }
+                else
+                {
+                    if(!LoWS.GetInstancia().ValidarConsumo(token, ServicioWeb.PERSONA, direccion))
+                    {
+                        retorno.setMensaje(new Mensajes("Token invalido, no se puede consumir el servicio", TipoMensaje.ERROR));
+                    }
+                    else
+                    {
+                        retorno.setMensaje(new Mensajes("Token valido, puede consumir el servicio", TipoMensaje.MENSAJE));                        
+                    }
+                }
+            }
+        }
+        else
+        {
+           retorno.setMensaje(new Mensajes("No se recibió token", TipoMensaje.ERROR));
+           LoWS.GetInstancia().GuardarMensajeBitacora(null, direccion + "\n Token invalido", EstadoServicio.CON_ERRORES, ServicioWeb.PERSONA); 
+        }
+
+
+        return retorno;
+
+    }
 
 }
