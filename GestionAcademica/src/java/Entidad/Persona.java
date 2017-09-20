@@ -296,7 +296,7 @@ public class Persona extends SincHelper implements Serializable {
      * @param PerUsrMod Usuario en moodle
      */
     public void setPerUsrMod(String PerUsrMod) {
-        this.PerUsrMod = PerUsrMod;
+        this.PerUsrMod = PerUsrMod.toLowerCase();
     }
 
     /**
