@@ -240,7 +240,7 @@
 
                         if (InsGenAnio == '')
                         {
-                            MostrarMensaje("ERROR", "Completa los datos papa");
+                            MostrarMensaje("ERROR", "Complete los datos");
                         } else
                         {
 
@@ -253,13 +253,12 @@
                             }, function (responseText) {
                                 var obj = JSON.parse(responseText);
 
+                                MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
                                 if (obj.tipoMensaje != 'ERROR')
                                 {
                                     location.reload();
-                                } else
-                                {
-                                    MostrarMensaje(obj.tipoMensaje, obj.mensaje);
-                                }
+                                } 
 
                             });
 

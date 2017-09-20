@@ -117,7 +117,7 @@
                                                                             String dato = "<div class='col-lg-6'>"
                                                                                     + "<pre id='jquery_viewer_"+dat.getIncObjCod()+"'></pre>"
                                                                                     + "<input type='hidden' name='jquery_data_"+dat.getIncObjCod()+"' id='jquery_data_"+dat.getIncObjCod()+"' class='jquery_data' data-value='"+dat.getObjVal()+"' data-id='"+dat.getIncObjCod()+"'/>"
-                                                                                    + "<button data-id='"+dat.getIncObjCod()+"' class='btn btn-default jquery_select'>Seleccionar</button>"
+                                                                                    + "<input type='button' data-id='"+dat.getIncObjCod()+"' class='btn btn-default jquery_select' value='Seleccionar'/>"
                                                                                     + "</div>";
 
                                                                             out.println(dato);

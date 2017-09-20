@@ -481,6 +481,7 @@ public class LoPeriodo implements InABMGenerico{
     public Retorno_MsgObj GeneracionAgregar(Long PeriCod, Integer InsGenAnio)
     {
         boolean error           = false;
+        boolean existenAlumnos  = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), null);
         
         if(!error)
@@ -493,29 +494,33 @@ public class LoPeriodo implements InABMGenerico{
                 
                 if(periEst.getMateria() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByPlan(null, periEst.getMateria().getPlan().getPlaEstCod()).getLstObjetos();
                 if(periEst.getModulo() != null) inscripciones = LoInscripcion.GetInstancia().obtenerListaByCurso(null, periEst.getModulo().getCurso().getCurCod()).getLstObjetos();
-                
-                for(Object objeto : inscripciones )
+                if(inscripciones.size() > 0)
                 {
-                    Inscripcion inscripcion = (Inscripcion) objeto;
-                    
-                    if(inscripcion.getInsGenAnio().equals(InsGenAnio))
+                    for(Object objeto : inscripciones )
                     {
-                        boolean cargar = true;
-                        
-                        if(periEst.getMateria() != null)
-                        {
-                            cargar = !inscripcion.MateriaRevalidada(periEst.getMateria().getMatCod());
-                        }
-                        
-                        if(cargar)
-                        {
-                            PeriodoEstudioAlumno periEstAlu = new PeriodoEstudioAlumno();
-                            periEstAlu.setAlumno(inscripcion.getAlumno());
-                            periEstAlu.setPerInsFchInsc(new Date());
-                            periEstAlu.setPeriodoEstudio(periEst);
-                            retorno = (Retorno_MsgObj) this.AlumnoAgregar(periEstAlu);
+                        Inscripcion inscripcion = (Inscripcion) objeto;
 
-                            if(retorno.SurgioError()) return retorno;
+                        if(inscripcion.getInsGenAnio().equals(InsGenAnio))
+                        {
+                            boolean cargar = true;
+
+                            if(periEst.getMateria() != null)
+                            {
+                                cargar = !inscripcion.MateriaRevalidada(periEst.getMateria().getMatCod());
+                            }
+
+                            if(cargar)
+                            {
+                                existenAlumnos = true;
+                                
+                                PeriodoEstudioAlumno periEstAlu = new PeriodoEstudioAlumno();
+                                periEstAlu.setAlumno(inscripcion.getAlumno());
+                                periEstAlu.setPerInsFchInsc(new Date());
+                                periEstAlu.setPeriodoEstudio(periEst);
+                                retorno = (Retorno_MsgObj) this.AlumnoAgregar(periEstAlu);
+
+                                if(retorno.SurgioError()) return retorno;
+                            }
                         }
                     }
                 }
@@ -523,6 +528,7 @@ public class LoPeriodo implements InABMGenerico{
             
         }
        
+        if(!existenAlumnos) retorno = new Retorno_MsgObj(new Mensajes("No existen alumnos inscriptos a la generación indicada",TipoMensaje.ADVERTENCIA), null);
         
         return retorno;
     }

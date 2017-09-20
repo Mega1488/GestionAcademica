@@ -186,7 +186,7 @@
                             pPlaEstCod: PlaEstCod,
                             pMatCod: MatCod,
                             pMatPreCod: codigo,
-                            pAccion: "ELIMINAR_PREVIA"
+                            pAction: "ELIMINAR_PREVIA"
                         }, function (responseText) {
                             var obj = JSON.parse(responseText);
 

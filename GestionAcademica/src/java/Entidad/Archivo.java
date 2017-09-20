@@ -44,6 +44,7 @@ import org.hibernate.annotations.GenericGenerator;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Archivo.findAll",       query = "SELECT t FROM Archivo t "),
+    @NamedQuery(name = "Archivo.findModAfter",      query = "SELECT t FROM Archivo t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Archivo.findByTipo",    query = "SELECT t FROM Archivo t WHERE t.ArcTpo =:ArcTpo ")})
 
 public class Archivo implements Serializable {

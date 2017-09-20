@@ -245,7 +245,6 @@ public class LoCarrera implements Interfaz.InCarrera{
         
         if(!error)
         {
-            plan = (PlanEstudio) retorno.getObjeto();
             
             PerManejador perManejador   = new PerManejador();
             retorno = (Retorno_MsgObj) perManejador.eliminar(plan);
@@ -339,7 +338,6 @@ public class LoCarrera implements Interfaz.InCarrera{
         
         if(!error)
         {
-            mat = (Materia) retorno.getObjeto();
             
             PerManejador perManejador   = new PerManejador();
             retorno = (Retorno_MsgObj) perManejador.eliminar(mat);

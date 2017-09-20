@@ -257,7 +257,6 @@ public class LoCurso implements Interfaz.InCurso{
         
         if(!error)
         {
-            modulo = (Modulo) retorno.getObjeto();
             
             PerManejador perManejador   = new PerManejador();
             retorno = (Retorno_MsgObj) perManejador.eliminar(modulo);
@@ -311,36 +310,6 @@ public class LoCurso implements Interfaz.InCurso{
     {
         return loCategoria.Mdl_EliminarCategoria(mdlCod);
     }
-    
-    //--------------------------------------------------------------------------------------------------------    
-    
-    private Retorno_MsgObj dpr_Mdl_AgregarEstudio(Modulo pModulo){
-        Retorno_MsgObj retorno = loEstudio.Mdl_AgregarEstudio(pModulo.getCurso().getCurCatCod(), pModulo.getModNom(), pModulo.getModNom(), pModulo.getModDsc());
-        
-        if(retorno.getMensaje().getTipoMensaje() != TipoMensaje.ERROR)
-        {
-            MoodleCourse mdlEstudio = (MoodleCourse) retorno.getObjeto();
-            pModulo.setModEstCod(mdlEstudio.getId());
-        }
-        
-        retorno.setObjeto(pModulo);
-        return retorno;
-
-    }
-    
-    private Retorno_MsgObj dpr_Mdl_ActualizarEstudio(Modulo pModulo){
-        Retorno_MsgObj retorno = loEstudio.Mdl_ActualizarEstudio(pModulo.getModEstCod(), pModulo.getCurso().getCurCatCod(), pModulo.getModNom(), pModulo.getModNom(), pModulo.getModDsc());
-        retorno.setObjeto(pModulo);
-        return retorno;
-    }
-    
-    private Retorno_MsgObj dpr_Mdl_EliminarEstudio(Modulo pModulo){
-        Retorno_MsgObj retorno = loEstudio.Mdl_EliminarEstudio(pModulo.getModEstCod());
-        retorno.setObjeto(pModulo);
-        return retorno;
-    }
-    
-    //--------------------------------------------------------------------------------------------------------
     
     
 }
