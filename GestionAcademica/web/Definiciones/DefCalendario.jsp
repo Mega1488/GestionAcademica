@@ -214,7 +214,7 @@
                                                             
                                                             <div class="form-group "><label for="CalFch" class="control-label col-lg-3">Fecha</label><div class="col-lg-6"><input type="date" required class="form-control inputs_generales" id="CalFch" name="CalFch"<% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %>" ></div></div>
                                                             <div class="form-group "><label for="EvlInsFchDsd" class="control-label col-lg-3">Inscripcion desde</label><div class="col-lg-6"><input type="date" class="form-control inputs_generales" id="EvlInsFchDsd" name="EvlInsFchDsd"  <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %>" ></div></div>
-                                                            <div class="form-group "><label for="EvlInsFchHst" class="control-label col-lg-3">Inscripcion hasta</label><div class="col-lg-6"><input type="date" class="form-control inputs_generales" id="EvlInsFchHst" name="EvlInsFchHst"  <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %>" ></div></div>
+                                                            <div class="form-group "><label for="EvlInsFchHst" class="control-label col-lg-3">Inscripcion hasta</label><div class="col-lg-6"><input type="date" class="form-control inputs_generales" id="EvlInsFchHst" name="EvlInsFchHst"  <% out.print(CamposActivos); %> value="<% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %>" ></div></div>
 
 
                                                             <div class="form-group">
