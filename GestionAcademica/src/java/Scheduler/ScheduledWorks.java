@@ -49,16 +49,11 @@ public class ScheduledWorks implements SmartLifecycle{
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacionAutomaticamente();
         
-        NotificacionesInternas noInt = new NotificacionesInternas();
-        noInt.EjecutarNotificacionesInternas();
     }
     
     public void Tarea_NotificarInterno()
     {
         System.out.println("Notificar interno. Current time is :: "+ new Date());
-        
-        ManejoNotificacion notManager = new ManejoNotificacion();
-        notManager.EjecutarNotificacionAutomaticamente();
         
         NotificacionesInternas noInt = new NotificacionesInternas();
         noInt.EjecutarNotificacionesInternas();
