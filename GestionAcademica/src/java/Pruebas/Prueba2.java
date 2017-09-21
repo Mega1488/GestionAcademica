@@ -63,9 +63,13 @@ public class Prueba2 extends HttpServlet {
             
             
             
-            
+           /* 
             out.println(Utilidades.GetInstancia().ConexionValida("http://192.168.0.106"));
-            
+            */
+           
+           fulano();
+           
+           
             /*
             LoImportacion imp = LoImportacion.GetInstancia();
             
@@ -205,7 +209,13 @@ public class Prueba2 extends HttpServlet {
         }
     }
     
-    
+    public void fulano(){
+                   
+           ArrayList<String> lst = new ArrayList();
+           
+           lst.get(2);
+
+    }
    
     
     public void Probar(){

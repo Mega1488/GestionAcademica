@@ -5,6 +5,7 @@
  */
 package Entidad;
 
+import Dominio.SincHelper;
 import Enumerado.TipoArchivo;
 import java.io.File;
 import java.io.IOException;
@@ -47,7 +48,7 @@ import org.hibernate.annotations.GenericGenerator;
     @NamedQuery(name = "Archivo.findModAfter",      query = "SELECT t FROM Archivo t WHERE t.ObjFchMod >= :ObjFchMod"),
     @NamedQuery(name = "Archivo.findByTipo",    query = "SELECT t FROM Archivo t WHERE t.ArcTpo =:ArcTpo ")})
 
-public class Archivo implements Serializable {
+public class Archivo extends SincHelper  implements Serializable {
 
     private static final long serialVersionUID = 1L;
     

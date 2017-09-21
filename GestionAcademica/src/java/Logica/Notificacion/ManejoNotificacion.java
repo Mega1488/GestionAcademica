@@ -68,7 +68,7 @@ public class ManejoNotificacion {
             {
                 Notificacion notificacion = (Notificacion) objeto;
                 
-                if(notificacion.NotificarAutomaticamente())
+                if(notificacion.NotificarAutomaticamente() && !notificacion.getNotInt())
                 {
                     this.EjecutarNotificacion(notificacion);
                 }

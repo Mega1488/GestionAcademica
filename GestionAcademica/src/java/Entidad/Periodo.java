@@ -164,7 +164,7 @@ public class Periodo extends SincHelper implements Serializable {
     }
 
     public String TextoPeriodo(){
-        return this.getPerTpoNombre() + " - " + this.PerVal;
+        return this.getPerTpoNombre() + ": " + this.PerVal;
     }
 
     @Override

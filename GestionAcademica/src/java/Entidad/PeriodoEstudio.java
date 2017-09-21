@@ -7,6 +7,7 @@ package Entidad;
 
 import Dominio.SincHelper;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -58,6 +60,9 @@ import org.hibernate.annotations.GenericGenerator;
 public class PeriodoEstudio extends SincHelper implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    @Transient
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");
     
     //-ATRIBUTOS
     @Id
@@ -176,6 +181,26 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
+    
+    
+    //------------------------------------------------
+    //PARA MOODLE
+    //------------------------------------------------
+    
+    public String getMdlFullName(){
+        return this.getCarreraCursoNombre() + " - " + this.getPeriodo().TextoPeriodo() + " | Año: " + dateFormat.format(this.getPeriodo().getPerFchIni());
+    }
+    
+    public String getMdlShortName(){
+        return this.GetPrimaryKey() +"_"+ this.getPeriodo().getPerTpoNombre() +"_"+ this.getPeriodo().getPerVal(); 
+    }
+    
+    public String getMdlDscName(){
+        return this.getCarreraCursoNombre() + "\n" + this.getPeriodo().TextoPeriodo();
+    }
+    
+    //------------------------------------------------
+    
 
     @JsonIgnore
     @XmlTransient

@@ -141,7 +141,24 @@ public class LoPeriodo implements InABMGenerico{
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
-        return perManager.eliminar(pObjeto);
+        Retorno_MsgObj retorno = perManager.eliminar(pObjeto);
+        
+        if(param.getParUtlMdl() && !retorno.SurgioError() )
+        {
+            Periodo per = (Periodo) pObjeto;
+            if(per.getLstEstudio() != null)
+            {
+                for(PeriodoEstudio est : per.getLstEstudio())
+                {
+                    if(est.getMdlCod() != null)
+                    {
+                        this.Mdl_EliminarEstudio(est.getMdlCod());
+                    }
+                }
+            }
+        }
+        
+        return retorno;
     }
 
     @Override
@@ -310,17 +327,17 @@ public class LoPeriodo implements InABMGenerico{
             if(periEstudio.getMdlCod() == null)
             {
                 retorno = this.Mdl_AgregarEstudio(parent
-                        ,periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni() 
-                        ,periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal() 
-                        ,periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+                        ,periEstudio.getMdlFullName()
+                        ,periEstudio.getMdlShortName()
+                        ,periEstudio.getMdlDscName());
             }
             else
             {
                 retorno = this.Mdl_ActualizarEstudio(parent
                         , periEstudio.getMdlCod()
-                        , periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni()
-                        , periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal()
-                        , periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+                        , periEstudio.getMdlFullName()
+                        , periEstudio.getMdlShortName()
+                        , periEstudio.getMdlDscName());
             }
             
             periEstudio.setMdlCod((Long) retorno.getObjeto());
@@ -353,17 +370,17 @@ public class LoPeriodo implements InABMGenerico{
             if(periEstudio.getMdlCod() == null)
             {
                 retorno = this.Mdl_AgregarEstudio(parent
-                        ,periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni() 
-                        ,periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal() 
-                        ,periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+                        ,periEstudio.getMdlFullName()
+                        ,periEstudio.getMdlShortName()
+                        ,periEstudio.getMdlDscName());
             }
             else
             {
                 retorno = this.Mdl_ActualizarEstudio(parent
                         , periEstudio.getMdlCod()
-                        , periEstudio.getPeriodo().TextoPeriodo() + " - " + periEstudio.getPeriodo().getPerFchIni()
-                        , periEstudio.GetPrimaryKey() +"_"+ periEstudio.getPeriodo().getPerTpoNombre() +"_"+ periEstudio.getPeriodo().getPerVal()
-                        , periEstudio.getCarreraCursoNombre() + "\n" + periEstudio.getPeriodo().TextoPeriodo());
+                        , periEstudio.getMdlFullName()
+                        , periEstudio.getMdlShortName()
+                        , periEstudio.getMdlDscName());
             }
             
             periEstudio.setMdlCod((Long) retorno.getObjeto());
