@@ -231,7 +231,7 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
-    public Retorno_MsgObj ObtenerListaInscripcion(){
+    public Retorno_MsgObj ObtenerListaInscripcionHoy(){
         PerManejador perManejador   = new PerManejador();
         
         return perManejador.obtenerLista("Calendario.findInscripcion", null);

@@ -385,10 +385,12 @@ public class NotificacionesInternas {
             lstDstOriginal.add(dst);
         }
         
+        Retorno_MsgObj lstPersona = LoPersona.GetInstancia().obtenerLista();
+        
         String asunto = notificacion.getNotAsu();
         String conten = notificacion.getNotCon();
         
-        Retorno_MsgObj retorno = LoCalendario.GetInstancia().ObtenerListaInscripcion();
+        Retorno_MsgObj retorno = LoCalendario.GetInstancia().ObtenerListaInscripcionHoy();
         
         if(!retorno.SurgioErrorListaRequerida())
         {
@@ -396,7 +398,6 @@ public class NotificacionesInternas {
             {
                 Calendario calendar = (Calendario) objeto;
                 
-                Retorno_MsgObj lstPersona = LoPersona.GetInstancia().obtenerLista();
                 
                 if(!lstPersona.SurgioErrorListaRequerida())
                 {
