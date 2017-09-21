@@ -225,7 +225,7 @@ public class Prueba2 extends HttpServlet {
             notificacion.setTo("cluNmdH0708:APA91bHUZUrgE5ia18UIDxawwt_jnPwsP7bxbuyrAn7PT48x9eP3JmSUkavKe3q5yQq9PQOdqjePl0rcf47jxRtz2vLM50YUht5iEoz09V6idLX72oXIPhIxewQOwHSYvCvooOfILCTB");
             //notificacion.setData(new SDT_NotificacionDato("Esto es un mensaje"));
 
-            notificacion.setNotification(new SDT_NotificacionNotification("adasd", "titulo", "icon"));
+            notificacion.setNotification(new SDT_NotificacionNotification("adasd", "titulo", "icon", "default"));
             
           //  System.err.println(Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion));
                 

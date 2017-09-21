@@ -9,7 +9,6 @@
 <%@page import="Entidad.PeriodoEstudioDocente"%>
 <%@page import="Logica.LoPeriodo"%>
 <%@page import="Entidad.Periodo"%>
-<%@page import="java.time.Period"%>
 <%@page import="SDT.SDT_PersonaEstudio"%>
 <%@page import="Entidad.Persona"%>
 <%@page import="Logica.LoPersona"%>
@@ -94,11 +93,7 @@
                     <section class="panel">
                         <header class="panel-heading">
                             ESTUDIOS
-                            <span class="tools pull-right">
-                                <div class="hidden-xs">
-                                    <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>">Regresar</a></div>
-                                </div>
-                            </span>
+                            
                         </header>
                 
                         <div class="panel-body">

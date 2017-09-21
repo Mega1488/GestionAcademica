@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Logica.LoParametro"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.NombreSesiones"%>
 <%@page import="java.util.ArrayList"%>
@@ -54,6 +55,32 @@
         <title>Sistema de Gestión Académica - Personas</title>
         <jsp:include page="/masterPage/head.jsp"/>
         <jsp:include page="/masterPage/head_tables.jsp"/>
+        
+        <script>
+            $(document).ready(function () {
+                    
+                    
+                    $('#btn_sincronizar').on('click', function (e) {
+                        
+                        $.post('<% out.print(urlSistema); %>ABM_Persona', {
+                            pAction: "SINCRONIZAR_MOODLE"
+                        }, function (responseText) {
+                            var obj = JSON.parse(responseText);
+
+                            MostrarMensaje(obj.tipoMensaje, obj.mensaje);
+
+                            if (obj.tipoMensaje != 'ERROR')
+                            {
+                                location.reload();
+                            }
+
+                        });
+
+        
+                    });
+              });
+        </script>
+            
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -69,7 +96,16 @@
                             PERSONAS
                             <span class="tools pull-right">
                                 <a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                                <%  
+                                    if(LoParametro.GetInstancia().obtener().getParUtlMdl())
+                                     {
+                                 %>
+                                     <a href="#" title="Sincronizar" class="glyphicon glyphicon-refresh" name="btn_sincronizar" id="btn_sincronizar"> </a>
+                                 <%
+                                     }
+                                 %>
                             </span>
+                            
                         </header>
                         <div class="panel-body">
                             <div class=" form">

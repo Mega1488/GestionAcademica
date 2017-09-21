@@ -181,7 +181,7 @@
                                 BITACORA
                             <!-- BOTONES -->
                             <span class="tools pull-right">
-                                <a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionDestinatarioSWW.jsp?MODO=UPDATE&pNotCod=<% out.print(NotCod); %>">Regresar</a>
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefNotificacionBitacoraSWW.jsp?MODO=UPDATE&pNotCod=<% out.print(NotCod); %>">Regresar</a>
                             </span>
                         </header>
         

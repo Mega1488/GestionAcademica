@@ -133,12 +133,7 @@
                 <div class="col-lg-12">
                     <section class="panel">
                         <header class="panel-heading">
-                            CALENDARIO
-                            <span class="tools pull-right">
-                                <div class="hidden-xs">
-                                    <div class="" style="text-align: right;"><a href="<% out.print(urlSistema); %>">Regresar</a></div>
-                                </div>
-                            </span>
+                            EVALUACIONES
                         </header>
 
                         <div class="panel-body">

@@ -122,6 +122,10 @@ public class ABM_Persona extends HttpServlet {
                     case "SUBIR_FOTO":
                         retorno = this.SubirFoto(request);
                     break;
+                    
+                    case "SINCRONIZAR_MOODLE":
+                        retorno = this.SincronizarMoodle();
+                    break;
 
                 }
 
@@ -225,6 +229,14 @@ public class ABM_Persona extends HttpServlet {
         lstPersona = loPersona.obtenerPopUp().getLstObjetos();
 
         return utilidades.ObjetoToJson(lstPersona);
+    }
+    
+    private String SincronizarMoodle()
+    {
+        
+        loPersona.SincronizarUsuariosMoodleSistema();
+
+        return utilidades.ObjetoToJson(new Mensajes("Sincronizando", TipoMensaje.MENSAJE));
     }
     
     private String POPUP_ObtenerEstudiosDatos(HttpServletRequest request)
@@ -367,9 +379,11 @@ public class ABM_Persona extends HttpServlet {
                 }
             }
             
-            if(PerEsAdm!= null)persona.setPerEsAdm(Boolean.valueOf(PerEsAdm));
-            if(PerEsAlu!= null)persona.setPerEsAlu(Boolean.valueOf(PerEsAlu));
-            if(PerEsDoc!= null)persona.setPerEsDoc(Boolean.valueOf(PerEsDoc));
+            
+            
+            if(PerEsAdm!= null) persona.setPerEsAdm(Boolean.valueOf(PerEsAdm));
+            if(PerEsAlu!= null) persona.setPerEsAlu(Boolean.valueOf(PerEsAlu));
+            if(PerEsDoc!= null) persona.setPerEsDoc(Boolean.valueOf(PerEsDoc));
             
             if(PerNotApp!= null)persona.setPerNotApp(Boolean.valueOf(PerNotApp));
             if(PerNotEml!= null)persona.setPerNotEml(Boolean.valueOf(PerNotEml));

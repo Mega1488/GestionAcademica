@@ -555,6 +555,7 @@ public class LoPersona implements Interfaz.InPersona{
                     persona.setPerCntIntLgn((persona.getPerCntIntLgn() != null ? persona.getPerCntIntLgn() + 1 : 1));
                 }
 
+                
                 PerManejador perManager = new PerManejador();
                 perManager.actualizar(persona);
             }
@@ -809,12 +810,6 @@ public class LoPersona implements Interfaz.InPersona{
 
                         Persona persona = (Persona) this.obtenerByMdlUsr(mdlUsr.getUsername()).getObjeto();
                         
-                        if(!persona.getPerEsAdm())
-                        {
-                            persona.setPerEsAdm(Boolean.FALSE);
-                            persona.setPerEsDoc(Boolean.FALSE);
-                        }
-
                         for(UserRole userRole : roles)
                         {
                             switch(userRole.getRole())

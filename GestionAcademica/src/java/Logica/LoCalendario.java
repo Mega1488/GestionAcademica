@@ -368,6 +368,34 @@ public class LoCalendario implements InABMGenerico{
             }
         }
         
+        if(alumno.getCalendario().getEvaluacion().getTpoEvl().getTpoEvlExm() && !error)
+        {
+            Long perCod = alumno.getAlumno().getPerCod();
+            Materia mat = alumno.getCalendario().getEvaluacion().getMatEvl();
+            Modulo mod = alumno.getCalendario().getEvaluacion().getModEvl();
+            Curso cur = alumno.getCalendario().getEvaluacion().getCurEvl();
+            if(LoPersona.GetInstancia().PersonaAproboEstudio(perCod, mat, mod, cur) || LoPersona.GetInstancia().PersonaRevalidaMateria(perCod, mat))
+            {
+                retorno.setMensaje(new Mensajes("El alumno ya aprobó o revalida el estudio", TipoMensaje.ERROR));
+                error = true;                
+            }
+            else
+            {
+                if(!AlumnoAproboPrevias(perCod, mat))
+                {
+                    retorno.setMensaje(new Mensajes("El alumno no puede dar examen, no aprobo las materias previas", TipoMensaje.ERROR));
+                    error = true;
+                }
+                
+               if(!AlumnoPuedeDarExamen(perCod, mat, mod, cur) && !error)
+                {
+                    retorno.setMensaje(new Mensajes("El alumno no puede dar examen, no posee los creditos suficientes", TipoMensaje.ERROR));
+                    error = true;
+                }
+                
+            }
+        }
+        
         if(!error)
         {
             alumno.setObjFchMod(new Date());
@@ -505,11 +533,25 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    public Boolean AlumnoAproboPrevias(Long PerCod, Materia materia){
+        if(materia != null)
+        {
+            if(materia.getLstPrevias() != null)
+            {
+                for(MateriaPrevia matPrevia : materia.getLstPrevias())
+                {
+                    boolean agregar = LoPersona.GetInstancia().PersonaAproboEstudio(PerCod, matPrevia.getMateriaPrevia(), null, null);
+                    if(!agregar) return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public Boolean AlumnoPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         
         if(materia != null)
         {
-            
             Retorno_MsgObj retorno = this.obtenerByMateriaPersona(PerCod, materia);
             
             if(!retorno.SurgioErrorListaRequerida())

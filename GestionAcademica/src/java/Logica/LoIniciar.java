@@ -49,12 +49,14 @@ public class LoIniciar {
         {
             this.CargarDatosIniciales(request);
             param = LoParametro.GetInstancia().obtener();
+            
+            if(param.getParUtlMdl())
+            {
+                this.SincronizarConMoodle();
+            }
         }
         
-        if(param.getParUtlMdl())
-        {
-            this.SincronizarConMoodle();
-        }
+        
         
     }
     

@@ -13,11 +13,13 @@ public class SDT_NotificacionNotification {
     private String body;
     private String title;
     private String icon;
+    private String sound;
 
-    public SDT_NotificacionNotification(String body, String title, String icon) {
+    public SDT_NotificacionNotification(String body, String title, String icon, String sound) {
         this.body = body;
         this.title = title;
         this.icon = icon;
+        this.sound = sound;
     }
 
     public String getBody() {
@@ -42,6 +44,14 @@ public class SDT_NotificacionNotification {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getSound() {
+        return sound;
+    }
+
+    public void setSound(String sound) {
+        this.sound = sound;
     }
 
     

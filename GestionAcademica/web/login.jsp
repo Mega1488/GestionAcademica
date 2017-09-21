@@ -49,11 +49,14 @@
             session.setAttribute(NombreSesiones.USUARIO.getValor(), usr);
             
             Persona persona = (Persona) LoPersona.GetInstancia().obtenerByMdlUsr(usr).getObjeto();
+            
+            
             session.setAttribute(NombreSesiones.USUARIO_NOMBRE.getValor(), persona.getPerNom());
             session.setAttribute(NombreSesiones.USUARIO_ADM.getValor(), persona.getPerEsAdm());
             session.setAttribute(NombreSesiones.USUARIO_ALU.getValor(), persona.getPerEsAlu());
             session.setAttribute(NombreSesiones.USUARIO_DOC.getValor(), persona.getPerEsDoc());
             session.setAttribute(NombreSesiones.USUARIO_PER.getValor(), persona.getPerCod());
+            
             
             String web = "login.jsp";
             if(persona.getPerEsAdm())
@@ -65,9 +68,12 @@
             }else if(persona.getPerEsAlu())
             { 
                 web = "Alumno/Evaluaciones.jsp";
-
             }
-
+            else
+            {
+                web = "Error.jsp?pMensaje=No tiene definido un tipo de usuario, contacte con el administrador";
+            }
+            
             request.getRequestDispatcher(web).forward(request, response);
             
         }

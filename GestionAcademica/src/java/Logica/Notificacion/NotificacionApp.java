@@ -61,7 +61,7 @@ public class NotificacionApp {
             String asunto       = Utilidades.GetInstancia().QuitarTagHTML(notificacion.getAsunto());
             
             //notMobile.setData(new SDT_NotificacionDato(contenido, asunto));
-            notMobile.setNotification(new SDT_NotificacionNotification(contenido, asunto, "icon"));
+            notMobile.setNotification(new SDT_NotificacionNotification(contenido, asunto, "ic_launcher", "default"));
             
                 
             String input = Utiles.Utilidades.GetInstancia().ObjetoToJson(notMobile);

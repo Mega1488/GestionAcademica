@@ -304,6 +304,7 @@ public class Persona extends SincHelper implements Serializable {
      * @return Es docente
      */
     public Boolean getPerEsDoc() {
+        if(PerEsDoc == null) PerEsDoc = Boolean.FALSE;
         return PerEsDoc;
     }
 
@@ -320,6 +321,7 @@ public class Persona extends SincHelper implements Serializable {
      * @return Es administrador
      */
     public Boolean getPerEsAdm() {
+        if(PerEsAdm == null) PerEsAdm = Boolean.FALSE;
         return PerEsAdm;
     }
 
@@ -336,6 +338,7 @@ public class Persona extends SincHelper implements Serializable {
      * @return Es alumno
      */
     public Boolean getPerEsAlu() {
+        if(PerEsAlu == null) PerEsAlu = Boolean.FALSE;
         return PerEsAlu;
     }
 

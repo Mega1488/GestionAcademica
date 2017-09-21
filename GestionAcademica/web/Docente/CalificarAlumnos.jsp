@@ -90,11 +90,8 @@
                                             <th>Código</th>
                                             <th>Alumno</th>
                                             <th>Calificación</th>
-                                            <th>Calificado por</th>
                                             <th>Fecha</th>
                                             <th>Estado</th>
-                                            <th>Validado por</th>
-                                            <th>Fecha</th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -108,11 +105,8 @@
                                             <td><% out.print(utilidad.NuloToVacio(calAlumno.getCalAlCod())); %> </td>
                                             <td><% out.print(utilidad.NuloToVacio((calAlumno.getAlumno() != null ? calAlumno.getAlumno().getNombreCompleto() : ""))); %> </td>
                                             <td><% out.print(utilidad.NuloToVacio(calAlumno.getEvlCalVal())); %> </td>
-                                            <td><% out.print(utilidad.NuloToVacio((calAlumno.getEvlCalPor() != null ? calAlumno.getEvlCalPor().getNombreCompleto() : ""))); %> </td>
                                             <td><% out.print(utilidad.NuloToVacio(calAlumno.getEvlCalFch())); %> </td>
                                             <td><% out.print(utilidad.NuloToVacio(calAlumno.getEvlCalEst().getEstadoNombre())); %> </td>
-                                            <td><% out.print(utilidad.NuloToVacio((calAlumno.getEvlValPor() != null ? calAlumno.getEvlValPor().getNombreCompleto() : ""))); %> </td>
-                                            <td><% out.print(utilidad.NuloToVacio(calAlumno.getEvlValFch())); %> </td>
                                             <td><% if (calAlumno.puedeCalificarse()) {
                                                     out.print("<a href='#' data-codigo='" + calAlumno.getCalAlCod() + "' data-toggle='modal' data-target='#PopUpCalificarAlumno' name='btn_calificar' id='btn_calificar' title='Calificar' class='glyphicon glyphicon-edit btn_calificar'/>");
                                                 } %> </td>
