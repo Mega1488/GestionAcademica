@@ -188,7 +188,7 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     //------------------------------------------------
     
     public String getMdlFullName(){
-        return this.getCarreraCursoNombre() + " - " + this.getPeriodo().TextoPeriodo() + " | Año: " + dateFormat.format(this.getPeriodo().getPerFchIni());
+        return this.getEstudioNombre() + " | Año: " + dateFormat.format(this.getPeriodo().getPerFchIni());
     }
     
     public String getMdlShortName(){
