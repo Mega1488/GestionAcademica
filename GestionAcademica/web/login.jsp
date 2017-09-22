@@ -93,7 +93,24 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - CTC</title>
-        <jsp:include page="/masterPage/head.jsp"/>
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=9; IE=10; IE=11; IE=EDGE" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>	
+        <meta name="theme-color" content="#628ec9">
+
+        <link rel="manifest" href="<%=request.getContextPath()%>/manifest.json">
+        
+        <script src="<%=request.getContextPath()%>/JavaScript/jquery-3.2.1.min.js" type="text/javascript"></script>
+        <script src="<%=request.getContextPath()%>/Bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        
+        <link media="screen" href="<%=request.getContextPath()%>/Estilos/sga_estyle.min.css"  rel="stylesheet" type="text/css"/>
+        <link media="screen" href="<%=request.getContextPath()%>/Bootstrap/css/bootstrap.min.css"  rel="stylesheet">
+        
+        <link media="screen" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet">
+        <link media="screen" rel="stylesheet" href="<%=request.getContextPath()%>/JavaScript/FontAwesome/css/font-awesome.min.css">
+        <link rel="shortcut icon" type="image/png" href="<%=request.getContextPath()%>/Imagenes/ctc_ic.png"/>
+
+        
     </head>
     <body class="body_clase">
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
