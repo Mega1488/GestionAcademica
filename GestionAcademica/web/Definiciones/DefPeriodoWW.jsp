@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.Modo"%>
 <%@page import="Enumerado.TipoPeriodo"%>
 <%@page import="Entidad.Periodo"%>
 <%@page import="Logica.LoPeriodo"%>
@@ -103,7 +104,10 @@
                                         <td><% out.print(utilidad.NuloToVacio(periodo.getPerTpo().getTipoPeriodoNombre())); %> </td>
                                         <td><% out.print(utilidad.NuloToVacio(periodo.getPerVal())); %> </td>
                                         <td><% out.print(utilidad.NuloToVacio(periodo.getPerFchIni())); %> </td>
-                                        <td><% out.print("<a href='#' data-codigo='" + periodo.getPeriCod() + "' data-toggle='modal' data-target='#PopUpInscGeneracion' name='btn_generacion' id='btn_generacion' title='Agregar por generación' class='fa fa-group btn_generacion'/>"); %></td>
+                                        <td>
+                                            <a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoEstudioSWW.jsp?MODO=<%=Modo.UPDATE%>&pPeriCod=<%=periodo.getPeriCod()%>" title="Estudios" class="fa fa-book" style="margin-right: 15px;"/>
+                                            <% out.print("<a href='#' data-codigo='" + periodo.getPeriCod() + "' data-toggle='modal' data-target='#PopUpInscGeneracion' name='btn_generacion' id='btn_generacion' title='Agregar por generación' class='fa fa-group btn_generacion'/>"); %>
+                                        </td>
 
                                     </tr>
                                     <%
@@ -142,8 +146,8 @@
 
                             </select> 
                         </div>
-                        <div><label>Valor</label><input type="number" class="form-control" id="PerVal" name="PerVal" placeholder="PerVal" value="" ></div>
-                        <div><label>Fecha de inicio</label><input type="date" class="form-control" id="PerFchIni" name="PerFchIni" placeholder="PerFchIni" value="" ></div>
+                        <div><label>Valor</label><input type="number" class="form-control" id="PerVal" name="PerVal" value="" ></div>
+                        <div><label>Fecha de inicio</label><input type="date" class="form-control" id="PerFchIni" name="PerFchIni" value="" ></div>
                     </div>
                     <div class="modal-footer">
                         <input name="btn_guardar" id="btn_guardar" value="Guardar" class="btn btn-success" type="button" />
