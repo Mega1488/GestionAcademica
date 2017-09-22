@@ -41,7 +41,7 @@ import org.hibernate.annotations.GenericGenerator;
  * @author alvar
  */
 @Entity
-@Table(name = "ARCHIVOS")
+@Table(name = "ARCHIVO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Archivo.findAll",       query = "SELECT t FROM Archivo t "),

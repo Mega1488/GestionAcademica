@@ -7,7 +7,9 @@ package Persistencia;
 
 import Entidad.SincRegistroEliminado;
 import Enumerado.Objetos;
+import Enumerado.Proceso;
 import Enumerado.TipoMensaje;
+import Logica.LoBitacora;
 import Logica.LoParametro;
 import Logica.LoSincronizacion;
 import SDT.SDT_Parameters;
@@ -46,7 +48,7 @@ public class PerManejador{
     }
    
     private Retorno_MsgObj manejaExcepcion(HibernateException he, Retorno_MsgObj retorno) throws HibernateException {
-        tx.rollback();
+        
         String mensaje;
         
         Throwable cause = he.getCause();
@@ -72,6 +74,10 @@ public class PerManejador{
         retorno.setMensaje(new Mensajes("Error: " + mensaje, TipoMensaje.ERROR));
         
         Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, he);
+        
+        LoBitacora.GetInstancia().NuevoMensaje(new Mensajes("Error: " + mensaje + "\n" + he.getLocalizedMessage(), TipoMensaje.ERROR), Proceso.SISTEMA);
+        
+        tx.rollback();
         
         return retorno;
     }

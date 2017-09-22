@@ -90,11 +90,11 @@ public class CalendarioAlumno  extends SincHelper implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
-    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="EvlCalPerCod", referencedColumnName = "PerCod")
     private Persona EvlCalPor;
     
-    @ManyToOne(targetEntity = Persona.class, optional=true)
+    @ManyToOne(targetEntity = Persona.class)
     @JoinColumn(name="EvlValPerCod", referencedColumnName = "PerCod")
     private Persona EvlValPor;
 

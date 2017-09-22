@@ -5,8 +5,10 @@
  */
 package Pruebas;
 
+import Entidad.Persona;
 import Logica.LoImportacion;
 import Logica.LoPeriodo;
+import Persistencia.PerManejador;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionNotification;
 import Utiles.Retorno_MsgObj;
@@ -63,12 +65,21 @@ public class Prueba2 extends HttpServlet {
             
             
             
+            PerManejador perManager = new PerManejador();
+            
+           Retorno_MsgObj retorno = perManager.obtener(150L, Persona.class);
+           
+           
+           out.println(retorno.toString());
+          
+           out.println("<br>");
+           out.println(!perManager.obtener(1505L, Persona.class).SurgioErrorObjetoRequerido());
+            
+            
            /* 
             out.println(Utilidades.GetInstancia().ConexionValida("http://192.168.0.106"));
             */
-           
-           fulano();
-           
+        
            
             /*
             LoImportacion imp = LoImportacion.GetInstancia();
@@ -208,14 +219,7 @@ public class Prueba2 extends HttpServlet {
           //  System.err.println(app.getMulticast_id());
         }
     }
-    
-    public void fulano(){
-                   
-           ArrayList<String> lst = new ArrayList();
-           
-           lst.get(2);
-
-    }
+  
    
     
     public void Probar(){

@@ -7,6 +7,7 @@ package Logica;
 
 import Entidad.BitacoraProceso;
 import Enumerado.Proceso;
+import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
 import Persistencia.PerManejador;
 import SDT.SDT_Parameters;
@@ -89,7 +90,25 @@ public class LoBitacora implements InABMGenerico{
         
         return perManejador.obtenerLista("BitacoraProceso.findByProceso", lstParametros);
     }
-    
+   
+    public Retorno_MsgObj depurar(){
+        Retorno_MsgObj retorno = this.obtenerLista();
+        
+        if(!retorno.SurgioError())
+        {
+            Long regEliminados = 0L;
+            for(Object objeto : retorno.getLstObjetos())
+            {
+                this.eliminar(objeto);
+
+                regEliminados += 1;
+            }
+            
+            retorno.setMensaje(new Mensajes("Registros eliminados: " + regEliminados, TipoMensaje.MENSAJE));
+        }
+        
+        return retorno;
+    }
    
     public void NuevoMensaje(Mensajes mensaje, Proceso proceso){
         BitacoraProceso bit =  new BitacoraProceso(proceso, new Date(), mensaje.getMensaje(), mensaje.getTipoMensaje());

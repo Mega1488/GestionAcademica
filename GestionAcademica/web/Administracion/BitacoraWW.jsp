@@ -158,7 +158,7 @@
                     $('#boton_confirmar').click(function (event) {
 
                             // Si en vez de por post lo queremos hacer por get, cambiamos el $.post por $.get
-                            $.post('<% out.print(urlSistema); %>ABM_Sincronizacion', {
+                            $.post('<% out.print(urlSistema); %>ABM_Bitacora', {
                                 pAction: 'DEPURAR'
                             }, function (responseText) {
                                 var obj = JSON.parse(responseText);

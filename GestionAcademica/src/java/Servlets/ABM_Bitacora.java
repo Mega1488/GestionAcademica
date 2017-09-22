@@ -74,6 +74,10 @@ public class ABM_Bitacora extends HttpServlet {
                         case "DELETE":
                             retorno = this.EliminarDatos(request);
                         break;
+                        
+                        case "DEPURAR":
+                            retorno = this.Depurar();
+                        break;
 
 
                     
@@ -92,6 +96,10 @@ public class ABM_Bitacora extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    private String Depurar(){
+       Retorno_MsgObj retorno = (Retorno_MsgObj) LoBitacora.GetInstancia().depurar();
+       return utilidades.ObjetoToJson(retorno.getMensaje()); 
+    }
     
     private BitacoraProceso ValidarBitacora(HttpServletRequest request){
         BitacoraProceso bit = new BitacoraProceso();

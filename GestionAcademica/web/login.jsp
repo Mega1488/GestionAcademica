@@ -110,6 +110,60 @@
         <link media="screen" rel="stylesheet" href="<%=request.getContextPath()%>/JavaScript/FontAwesome/css/font-awesome.min.css">
         <link rel="shortcut icon" type="image/png" href="<%=request.getContextPath()%>/Imagenes/ctc_ic.png"/>
 
+        <script>
+    
+                    function MostrarMensaje(tipoMensaje, mensaje)
+                    {
+
+                        MostrarCargando(false);
+
+                        $('#txtError').text(mensaje);
+
+                        if(tipoMensaje == 'ERROR')
+                        {
+                            $("#msgError").attr('class', 'alert alert-danger div_msg');
+                        }
+
+                        if(tipoMensaje == 'ADVERTENCIA')
+                        {
+                            $("#msgError").attr('class', 'alert alert-warning div_msg');
+                        }
+
+                        if(tipoMensaje == 'MENSAJE')
+                        {
+                            $("#msgError").attr('class', 'alert alert-success div_msg');
+                        }
+
+                        $("#msgError").show();
+
+                        setTimeout(function(){
+                            //do what you need here
+                            $("#msgError").hide();
+                        }, 2000);
+                    }
+
+
+                    function MostrarCargando(mostrar)
+                    {
+                        if(mostrar)
+                        {
+                            $("#div_cargando").attr('class', 'div_cargando_load');
+                        }
+                        else
+                        {
+                            $("#div_cargando").attr('class', 'div_cargando');
+                        }
+                    }
+
+                    $(document).ready(function () {
+                        MostrarCargando(false);
+
+                        $('#sidebarCollapse').on('click', function () {
+                            $('#sidebar').toggleClass('active');
+                        });
+                    });
+
+    </script>
         
     </head>
     <body class="body_clase">
