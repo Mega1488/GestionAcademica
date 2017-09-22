@@ -810,6 +810,14 @@ public class Persona extends SincHelper implements Serializable {
         this.PerPassAux = PerPassAux;
     }
 
+    public Archivo getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(Archivo archivo) {
+        this.archivo = archivo;
+    }
+
     
     
     

@@ -6,10 +6,7 @@
 package Servlets;
 
 import Entidad.Archivo;
-import Entidad.PeriodoEstudio;
-import Entidad.PeriodoEstudioDocumento;
 import Logica.LoArchivo;
-import Logica.LoPeriodo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;

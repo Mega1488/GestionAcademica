@@ -6,17 +6,11 @@
 package Entidad;
 
 import Dominio.SincHelper;
-import Enumerado.RutaArchivos;
 import Enumerado.TipoArchivo;
 import java.io.File;
-import java.io.IOException;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Date;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -33,11 +27,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlInlineBinaryData;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
-import org.apache.tomcat.util.codec.binary.Base64;
 
 /**
  *
@@ -110,17 +101,6 @@ public class PeriodoEstudioDocumento extends SincHelper implements Serializable 
         this.archivo.setArchivo(pArchivo, TipoArchivo.PERIODO_DOCUMENTO);
     }
 
-    @XmlInlineBinaryData
-    public byte[] getDocAdj() {
-        if(this.archivo == null) return null;
-        return archivo.getDocAdj();
-    }
-
-    public void setDocAdj(byte[] DocAdj) {
-        archivo = new Archivo();
-        this.archivo.setArcAdj(DocAdj);
-    }
-    
     public Long getDocCod() {
         return DocCod;
     }

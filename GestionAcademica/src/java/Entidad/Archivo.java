@@ -134,7 +134,7 @@ public class Archivo extends SincHelper  implements Serializable {
     }
 
     @XmlInlineBinaryData
-    public byte[] getDocAdj() {
+    public byte[] getArcAdj() {
         return ArcAdj;
     }
 
