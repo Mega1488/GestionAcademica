@@ -3,30 +3,32 @@
   "name": "Sistema de Gestión Academica - CTC",
   "icons": [
     {
-      "src": "Imagenes/ctc_ic.png",
+      "src": "Imagenes/ctc_ic_48.png",
       "type": "image/png",
       "sizes": "48x48"
     },
     {
-      "src": "Imagenes/ctc_ic.png",
+      "src": "Imagenes/ctc_ic_96.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "Imagenes/ctc_ic.png",
+      "src": "Imagenes/ctc_ic_192.png",
       "type": "image/png",
       "sizes": "192x192"
     }
     ,
     {
-      "src": "Imagenes/ctc_ic.png",
+      "src": "Imagenes/ctc_ic_512.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": "login.jsp",
-  "background_color": "#628ec9",
+  "background_color": "#ffffff",
   "display": "standalone",
   "orientation": "portrait",
-  "theme_color": "#628ec9"
+  "lang": "es-ES",
+  "theme_color": "#628ec9",
+  "description": "Sistema de Gestión Académica - CTC Colonia"
 }
