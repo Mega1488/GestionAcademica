@@ -114,7 +114,6 @@
                                                                     <th>Código</th>
                                                                     <th>Alumno</th>
                                                                     <th>Fecha de inscripción</th>
-                                                                    <th>Calificación final</th>
                                                                     <th>Inscripcion forzada</th>
                                                                 </tr>
                                                             </thead>
@@ -128,7 +127,6 @@
                                                                     <td><% out.print(utilidad.NuloToVacio(periAlumno.getPeriEstAluCod())); %> </td>
                                                                     <td><% out.print(utilidad.NuloToVacio(periAlumno.getAlumno().getNombreCompleto())); %> </td>
                                                                     <td><% out.print(utilidad.NuloToVacio(periAlumno.getPerInsFchInsc())); %> </td>
-                                                                    <td><% out.print(utilidad.NuloToVacio(periAlumno.getPerInsCalFin())); %> </td>
                                                                     <td><% out.print(utilidad.BooleanToSiNo(periAlumno.getPerInsFrz())); %> </td>
                                                                 </tr>
                                                                 <%
