@@ -38,7 +38,7 @@
 <header class="panel-heading tab-bg-dark-navy-blue ">
     <ul class="nav nav-tabs">
         <% 
-            out.println("<li class='" + (urlActual.equals("DefPersona.jsp") ? "active" : "") + "'><a href='"+ urlSistema + "Definiciones/DefPersona.jsp?MODO=" + Mode + "&pPerCod=" + PerCod + "'>Persona</a></li>");
+            out.println("<li class='" + (urlActual.equals("DefPersona.jsp") ? "active" : "") + "'><a  class='tabs' aria-expanded='"+(urlActual.equals("DefPersona.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefPersona.jsp?MODO=" + Mode + "&pPerCod=" + PerCod + "'>Persona</a></li>");
 
             if(estudiosVisible) out.println("<li class='" + (urlActual.equals("DefPersonaInscripcionSWW.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefPersonaInscripcionSWW.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefPersonaInscripcionSWW.jsp?MODO=" + Mode + "&pPerCod=" + PerCod + "'>Inscripciones</a></li>");
             if(escolaridadVisible) out.println("<li class='" + (urlActual.equals("DefPersonaEscolaridadSWW.jsp") ? "active" : "") + "'><a class='tabs' aria-expanded='"+(urlActual.equals("DefPersonaEscolaridadSWW.jsp") ? "true" : "false")+"' href='"+ urlSistema + "Definiciones/DefPersonaEscolaridadSWW.jsp?MODO=" + Mode + "&pPerCod=" + PerCod + "'>Escolaridad</a></li>");

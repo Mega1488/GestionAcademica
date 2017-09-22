@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.IconClass"%>
 <%@page import="Logica.LoParametro"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.NombreSesiones"%>
@@ -95,12 +96,12 @@
                         <header class="panel-heading">
                             PERSONAS
                             <span class="tools pull-right">
-                                <a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="glyphicon glyphicon-plus"> </a>
+                                <a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.INSERT); %>" title="Ingresar" class="<%=IconClass.ADD.getValor()%>"> </a>
                                 <%  
                                     if(LoParametro.GetInstancia().obtener().getParUtlMdl())
                                      {
                                  %>
-                                     <a href="#" title="Sincronizar" class="glyphicon glyphicon-refresh" name="btn_sincronizar" id="btn_sincronizar"> </a>
+                                     <a href="#" title="Sincronizar" class="<%=IconClass.SYNC.getValor()%>" name="btn_sincronizar" id="btn_sincronizar"> </a>
                                  <%
                                      }
                                  %>
@@ -131,8 +132,8 @@
 
                                     %>
                                     <tr>
-                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_eliminar" id="btn_eliminar" class="glyphicon glyphicon-trash"></a></td>
-                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_editar" id="btn_editar" class="glyphicon glyphicon-edit"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.DELETE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_eliminar" id="btn_eliminar" class="<%=IconClass.DELETE.getValor()%>"></a></td>
+                                        <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersona.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPerCod=<% out.print(persona.getPerCod()); %>" name="btn_editar" id="btn_editar" class="<%=IconClass.EDIT.getValor()%>"></a></td>
                                         <td><% out.print(utilidad.NuloToCero(persona.getPerCod())); %> </td>
                                         <td><% out.print(utilidad.NuloToVacio(persona.getPerNom())); %></td>
                                         <td><% out.print(utilidad.NuloToVacio(persona.getPerApe())); %></td>

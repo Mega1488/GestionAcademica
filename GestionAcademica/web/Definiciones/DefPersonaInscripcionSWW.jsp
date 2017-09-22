@@ -106,7 +106,13 @@
                                             <td><% out.print(utilidad.NuloToVacio(insc.getAluFchInsc())); %> </td>
                                             <td><% out.print(utilidad.NuloToVacio(insc.getAluFchCert())); %> </td>
                                             <td><% out.print(utilidad.NuloToVacio(insc.getInsGenAnio())); %> </td>
-                                            <td><a href="<% out.print(urlSistema); %>Definiciones/DefPersonaRevalidaWW.jsp?pInsCod=<% out.print(insc.getInsCod()); %>" name="btn_revalida" id="btn_revalida" title="Revalidas" class="fa fa-flag"></a></td>
+                                            <td><%
+                                                    if(insc.getPlanEstudio() != null)
+                                                    {
+                                                        out.println("<a href='"+urlSistema+"Definiciones/DefPersonaRevalidaWW.jsp?pInsCod=" + insc.getInsCod()+ "' name='btn_revalida' id='btn_revalida' title='Revalidas' class='ti-book'></a>");
+                                                    }
+                                                %>
+                                            </td>
                                         </tr>
                                         <%
                                             }

@@ -3,6 +3,7 @@
     Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
+<%@page import="Enumerado.IconClass"%>
 <%@page import="Entidad.Periodo"%>
 <%@page import="Enumerado.EstadoCalendarioEvaluacion"%>
 <%@page import="Logica.Seguridad"%>
@@ -99,9 +100,7 @@
                                                                     <th>Carrera / Curso</th>
                                                                     <th>Estudio</th>
                                                                     <th>Alumnos</th>
-                                                                    <th></th>
                                                                     <th>Docentes</th>
-                                                                    <th></th>
                                                                     <th></th>
                                                                 </tr>
                                                             </thead>
@@ -114,11 +113,15 @@
                                                                     <td><% out.print(utilidad.NuloToVacio(periEst.getPeriEstCod())); %> </td>
                                                                     <td><% out.print(utilidad.NuloToVacio(periEst.getCarreraCursoNombre())); %> </td>
                                                                     <td><% out.print(utilidad.NuloToVacio(periEst.getEstudioNombre())); %> </td>
-                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCantidadAlumnos())); %> </td>
-                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_alm" id="btn_edit_alm" title="Alumnos" class="glyphicon glyphicon-edit"/></td>
-                                                                    <td><% out.print(utilidad.NuloToVacio(periEst.getCantidadDocente())); %> </td>
-                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocenteSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_dct" id="btn_edit_dct" title="Docentes" class="glyphicon glyphicon-edit"/></td>
-                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-file"/></td>
+                                                                    <td>
+                                                                        <% out.print(utilidad.NuloToVacio(periEst.getCantidadAlumnos())); %> 
+                                                                        <a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoAlumnoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_alm" id="btn_edit_alm" title="Alumnos" class="<%=IconClass.ALUMNO.getValor()%>" style="margin-left: 5PX;"/>
+                                                                    </td>
+                                                                    <td>
+                                                                        <% out.print(utilidad.NuloToVacio(periEst.getCantidadDocente())); %> 
+                                                                        <a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocenteSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_dct" id="btn_edit_dct" title="Docentes" class="<%=IconClass.DOCENTE.getValor()%>  style="margin-left: 5PX;""/>
+                                                                    </td>    
+                                                                    <td><a href="<% out.print(urlSistema); %>Definiciones/DefPeriodoDocumentoSWW.jsp?MODO=<% out.print(Enumerado.Modo.UPDATE); %>&pPeriEstCod=<% out.print(periEst.getPeriEstCod()); %>" name="btn_edit_doc" id="btn_edit_doc" title="Documentos" class="glyphicon glyphicon-paperclip"/></td>
 
                                                                 </tr>
                                                                 <%

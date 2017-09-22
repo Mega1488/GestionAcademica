@@ -3,6 +3,7 @@
     Created on : 03-jul-2017, 18:28:52
     Author     : alvar
 --%>
+<%@page import="Enumerado.IconClass"%>
 <%@page import="Logica.Seguridad"%>
 <%@page import="Enumerado.NombreSesiones"%>
 <%@page import="Enumerado.TipoMensaje"%>
@@ -108,8 +109,8 @@
                                                                 <td><% out.print(utilidad.NuloToVacio(calendario.getCalFch())); %> </td>
                                                                 <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchDsd())); %> </td>
                                                                 <td><% out.print(utilidad.NuloToVacio(calendario.getEvlInsFchHst())); %> </td>
-                                                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Alumnos' class='fa fa-group'/>"); %></td>
-                                                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioDocenteSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Docentes' class='fa fa-group'/>"); %></td>
+                                                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioAlumnoSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Alumnos' class='"+IconClass.ALUMNO.getValor() +"'/>"); %></td>
+                                                                <td><% out.print("<a href='" + urlSistema + "Definiciones/DefCalendarioDocenteSWW.jsp?MODO=UPDATE&pCalCod=" + calendario.getCalCod() + "' title='Docentes' class='"+IconClass.DOCENTE.getValor() +"'/>"); %></td>
 
                                                             </tr>
                                                             <%

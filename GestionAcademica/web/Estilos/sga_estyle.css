@@ -1299,6 +1299,9 @@ input[type=search]{
     background-color: #f2dede !Important;
 }
 
+table.dataTable.no-footer{
+    border-bottom: 1px solid #c7c7c7 !Important;
+}
 
 /* MEDIA QUERIES */
 

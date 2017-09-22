@@ -4,6 +4,7 @@
     Author     : alvar
 --%>
 
+<%@page import="Enumerado.IconClass"%>
 <!--
     ARCHIVOS NECESARIOS PARA REPORTES Y DATATABLES RESPONSIVE
 -->
@@ -52,24 +53,24 @@
                 buttons: [
                     {
                         extend: 'copyHtml5',
-                        className:'fa fa-files-o accion_icon',
+                        className:'<%=IconClass.COPY.getValor()%> accion_icon',
                         text:''
                     },
                     {
                         extend: 'csvHtml5',
-                        className:'fa fa-file accion_icon',
+                        className:'<%=IconClass.CSV.getValor()%> accion_icon',
                         text:''
                     },
                     {
                         extend: 'excelHtml5',
-                        className:'fa fa-file-excel-o accion_icon',
+                        className:'<%=IconClass.EXCEL.getValor()%> accion_icon',
                         text:''
                     },
                     {
                         extend: 'pdfHtml5',
                         orientation: 'landscape',
                         pageSize: 'LEGAL',
-                        className:'fa fa-file-pdf-o accion_icon',
+                        className:'<%=IconClass.PDF.getValor()%> accion_icon',
                         text:''
                     }
                 ],
