@@ -55,64 +55,7 @@
         <title>Sistema de Gestión Académica - Estudios</title>
         <jsp:include page="/masterPage/head.jsp"/>
 
-        <script type="text/javascript">
-
-            $(document).ready(function () {
-/*
-                function getOffset(el) {
-                    var _x = 0;
-                    var _y = 0;
-                    while (el && !isNaN(el.offsetLeft) && !isNaN(el.offsetTop))
-                    {
-                        _x += el.offsetLeft - el.scrollLeft;
-                        _y += el.offsetTop - el.scrollTop;
-                        el = el.offsetParent;
-                    }
-
-                    return {top: _y, left: _x};
-                }
-
-                $("#lines").attr("width", $("#cont_estudio").width());
-                $("#lines").attr("height", $("#cont_estudio").height());
-
-                $("[data-materia]").each(function () {
-                    var materia = "dv_mat_" + $(this).data("id");
-                    var previas = $(this).data("previas");
-
-                    $.each(previas, function (f, previa) {
-
-                        var previaCodigo = "dv_mat_" + previa;
-
-                        var fromPoint = getOffset($('#' + previaCodigo)[0]);
-                        var toPoint = getOffset($('#' + materia)[0]);
-
-                        var from = function () {},
-                                to = new String('to');
-                        from.y = fromPoint.top - 150;
-                        from.x = fromPoint.left;
-                        to.y = toPoint.top - 150;
-                        to.x = toPoint.left;
-
-                        //$("#lines").html("<svg><line x1='50' y1='50' x2='350' y2='350' stroke='black'/></svg>");
-                        $("#lines").html($("#lines").html() + "<line x1='" + from.x + "' y1='" + from.y + "' x2='" + to.x + "' y2='" + to.y + "' stroke='black' data-from='" + previaCodigo + "' data-to='" + materia + "'/>");
-
-                    });
-                });
-                
-                 var fromPoint = getOffset($('#first')[0]);
-                 var toPoint = getOffset($('#second')[0]);
-                 
-                 var from = function () {},
-                 to = new String('to');
-                 from.y = fromPoint.top+10;
-                 from.x = fromPoint.left+10;
-                 to.y = toPoint.top+10; 
-                 to.x = toPoint.left+10;
-                 
-                 $.line(from, to);
-                 */
-            });
-        </script>
+        
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -172,17 +115,18 @@
                                                             //--------------------------------------------------------------------------------------------------------
 
                                                             out.println("</div>");
+                                                            out.println("</div>");
                                                         }
 
                                                         //--------------------------------------------------------------------------------------------------------
                                                         //INICIAMOS DIV CONTENEDOR SEMESTRE
                                                         //--------------------------------------------------------------------------------------------------------
                                                         out.println("<div class='estudios_contenedorPrincipal'>");
-                                                        out.println("<div class='estudios_textoSemestre hidden-xs' style='background-color: "+color.getValor()+";'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
-                                                        out.println("<div name='div_semestre' class='estudios_contenedorSemestre col-lg-12'> ");
-                                                        out.println("<div class='estudios_semestreMobile' style='background-color: "+color.getValor()+";'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
-                                                        cerrarDivPeriodo = true;
-                                                        color = (color.ordinal() +1 == Colores.values().length ? Colores.PRIMERO : Colores.values()[color.ordinal() + 1]);
+                                                            out.println("<div class='estudios_textoSemestre hidden-xs' style='background-color: "+color.getValor()+";'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
+                                                            out.println("<div name='div_semestre' class='estudios_contenedorSemestre col-lg-12'> ");
+                                                                out.println("<div class='estudios_semestreMobile' style='background-color: "+color.getValor()+";'>" + materia.getMatTpoPer().getTipoPeriodoNombre() + ": " + materia.getMatPerVal() + "</div>");
+                                                                cerrarDivPeriodo = true;
+                                                                color = (color.ordinal() +1 == Colores.values().length ? Colores.PRIMERO : Colores.values()[color.ordinal() + 1]);
                                                     }
 
                                                     //--------------------------------------------------------------------------------------------------------
@@ -216,8 +160,8 @@
                                                                     //--------------------------------------------------------------------------------------------------------
                                                                     escolaridad += "<div name='una_escolaridad'>";
                                                                     escolaridad += "<div>Fecha: <label>" + esc.getEscFch() + "</label></div>\n";
-                                                                    escolaridad += "<div>Curso: <label>" + esc.getEscCurVal() + "</label></div>\n";
-                                                                    escolaridad += "<div>Examen: <label>" + esc.getEscCalVal() + "</label></div>\n";
+                                                                    escolaridad += "<div>Curso: <label>" + (esc.getEscCurVal() == null ? "" : esc.getEscCurVal()) + "</label></div>\n";
+                                                                    escolaridad += "<div>Examen: <label>" + (esc.getEscCalVal() == null ? "" : esc.getEscCalVal()) + "</label></div>\n";
                                                                     escolaridad += "<div>Estado: <label>" + esc.getAprobacion() + "</label></div>\n";
                                                                     escolaridad += "</div>";
                                                                 }
@@ -289,6 +233,7 @@
                                                             //--------------------------------------------------------------------------------------------------------
 
                                                             out.println("</div>");
+                                                            out.println("</div>");
                                                         }
 
                                                         //--------------------------------------------------------------------------------------------------------
@@ -333,8 +278,8 @@
                                                                     //--------------------------------------------------------------------------------------------------------
                                                                     escolaridad += "<div name='una_escolaridad'>";
                                                                     escolaridad += "<div>Fecha: <label>" + esc.getEscFch() + "</label></div>\n";
-                                                                    escolaridad += "<div>Curso: <label>" + esc.getEscCurVal() + "</label></div>\n";
-                                                                    escolaridad += "<div>Examen: <label>" + esc.getEscCalVal() + "</label></div>\n";
+                                                                    escolaridad += "<div>Curso: <label>" + (esc.getEscCurVal() == null ? "" : esc.getEscCurVal()) + "</label></div>\n";
+                                                                    escolaridad += "<div>Examen: <label>" + (esc.getEscCalVal() == null ? "" : esc.getEscCalVal()) + "</label></div>\n";
                                                                     escolaridad += "<div>Estado: <label>" + esc.getAprobacion() + "</label></div>\n";
                                                                     escolaridad += "</div>";
                                                                 }

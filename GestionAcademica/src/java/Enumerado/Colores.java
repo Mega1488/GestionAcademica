@@ -11,7 +11,7 @@ package Enumerado;
  */
 public enum Colores {
     PRIMERO("#1abc9c"),
-    SEGUNDO("#16a085"),
+    SEGUNDO("#15826d"),
     TERCERO("#f1c40f"),
     CUARTO("#f39c12"),
     QUINTO("#e74c3c"),
