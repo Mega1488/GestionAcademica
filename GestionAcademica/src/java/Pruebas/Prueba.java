@@ -5,12 +5,16 @@
  */
 package Pruebas;
 
-import Entidad.Notificacion;
-import Logica.Notificacion.ManejoNotificacion;
+import Entidad.TipoEvaluacion;
+import Logica.LoEstudio;
+import Logica.LoSincronizacion;
+import Moodle.MoodleCourse;
+import Moodle.MoodleCourseContent;
+import Moodle.MoodleModule;
+import Moodle.MoodleModuleContent;
 import SDT.SDT_Notificacion;
-import SDT.SDT_NotificacionApp;
-import SDT.SDT_NotificacionAppResultado;
 import SDT.SDT_NotificacionNotification;
+import Utiles.Retorno_MsgObj;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,9 +24,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -30,11 +35,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
 /**
  *
  * @author alvar
  */
 public class Prueba extends HttpServlet {
+    
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -57,49 +65,409 @@ public class Prueba extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Prueba at " + request.getContextPath() + "</h1>");
+
+
+             Retorno_MsgObj lstCursos = LoEstudio.GetInstancia().Mdl_ListaCursos();
+
             
-            Notificacion notificacion = new Notificacion();
+             for(Object objeto : lstCursos.getLstObjetos())
+             {
+                 MoodleCourse cru = (MoodleCourse) objeto;
+                        
+                MoodleCourseContent[] lalo = LoEstudio.GetInstancia().Mdl_ObtenerEstudioContent(cru.getId());
+
+                out.println("Cursos content: " + lalo.length);
+
+                if(lalo.length > 0)
+                {
+                    for(int i=0; i<lalo.length; i++)
+                    {
+                        MoodleCourseContent one = lalo[i];
+                        out.println("<br>");
+                        out.println(one.getName());
+                        out.println("<br>");
+
+
+                        if(one.getMoodleModules() != null)
+                        {
+                            out.println("Modulos: " + one.getMoodleModules().length);
+
+                            for(int f=0; f<one.getMoodleModules().length; f++)
+                            {
+                                MoodleModule modulo = one.getMoodleModules()[f];
+
+                                out.println("<br>");
+                                out.println(modulo.getModName());
+
+
+                                if(modulo.getContent() != null)
+                                {
+                                    out.println("<br>");
+                                    out.println("Contenidos: " + modulo.getContent().length);
+
+                                    for(int j=0; j<modulo.getContent().length; j++)
+                                    {
+                                        out.println("<br>");
+                                        MoodleModuleContent con = modulo.getContent()[j];
+                                        out.println("<br>");
+                                        out.println(con.getFilename());
+
+                                        out.println("<br>");
+                                        out.println(con.getFileURL());
+
+                                        
+                                        Timestamp stamp = new Timestamp(con.getTimeModified());
+                                        Date fechaMod = new Date(stamp.getTime());
+                                        
+                                        //fechaMod.setTime(con.getTimeModified());
+                                        
+                                        out.println("<br>" + con.getTimeModified());
+                                        out.println("<br>" + fechaMod);
+                                        
+                                        stamp = new Timestamp(con.getTimeCreated());
+                                        fechaMod = new Date(stamp.getTime());
+                                        
+                                        out.println("<br>" + con.getTimeCreated());
+                                        out.println("<br>" + fechaMod);
+                                        
+                                        //PeriodoEstudioDocumento pe = LoEstudio.GetInstancia().Mdl_ObtenerEstudioArchivo(con);
+
+                                        //---------------------------------------------------------------------------------
+                                        //POST REST WEBSERVICE
+                                        //---------------------------------------------------------------------------------
+                                       /*
+                                        Parametro param = LoParametro.GetInstancia().obtener();
+                                        String url = param.getParUrlMdl() + Constantes.URL_FOLDER_SERVICIO_MDL.getValor();
+
+                                        out.println("<br>Url servicio: " + url);
+
+                                        Client client = ClientBuilder.newClient();
+
+                                        WebTarget target = client.target(url);
+
+                                        Form form = new Form();
+                                        form.param("wstoken", param.getParMdlTkn());
+                                        form.param("wsfunction", "core_files_upload");
+                                        form.param("component", "user");
+                                        form.param("filearea", "draft");
+                                        form.param("itemid", "0");
+                                        form.param("filepath", "/");
+                                        form.param("filename", pe.getDocNom() + (new Date().getTime()) + "." + pe.getDocExt());
+                                        form.param("filecontent", pe.getFileBase64());
+                                        form.param("contextlevel", "course");
+                                        form.param("instanceid", "13");
+
+                                        String requestResult =
+                                        target.request(MediaType.APPLICATION_XML_TYPE)
+                                            .post(Entity.entity(form,MediaType.APPLICATION_FORM_URLENCODED_TYPE),
+                                                String.class);
+
+                                        out.println("<br>Resultado: " + requestResult);
+    */
+                                        //---------------------------------------------------------------------------------
+                                        /*    
+                                        pe.setDocNom("subidoPorWeb");
+
+                                        LoEstudio.GetInstancia().Mdl_SubirArchivoEstudio(pe);
+                                        */
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+             }
+ 
+            /*
+            Carrera car = new Carrera();
+
+            car.setCarNom("asdasd");
             
-            notificacion.setNotCon("<p>esto es una <b>cosa</b></p>");
+            out.println("<br>" + car.getUpdateQuery());
             
-            out.println("<input type='hidden' value='"+Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion).toString()+"'>");
+            out.println("<br>" + Utiles.Utilidades.GetInstancia().ObjetoToJson(car));
+            */
+
+            /*
+            TipoEvaluacion tpoEvl   = new TipoEvaluacion();
             
+            tpoEvl.setTpoEvlNom("Agregar");
+            Retorno_MsgObj retorno = (Retorno_MsgObj) LoTipoEvaluacion.GetInstancia().guardar(tpoEvl);
+
+            out.println("<br>Guardado");
+            out.println("<br>" + retorno.getMensaje().toString());
+            out.println("<br>" + retorno.getObjeto().toString());
+            
+            //--------------------------------------------------------
+            
+            tpoEvl = (TipoEvaluacion) retorno.getObjeto();
+            
+            retorno =  LoTipoEvaluacion.GetInstancia().obtener(tpoEvl.getTpoEvlCod());
+            
+            out.println("<br>Obtenido");
+            out.println("<br>" + retorno.getMensaje().toString());
+            out.println("<br>" + retorno.getObjeto().toString());
+            
+            //--------------------------------------------------------
+                    
+            tpoEvl.setTpoEvlNom("Modificado");
+            retorno = (Retorno_MsgObj) LoTipoEvaluacion.GetInstancia().actualizar(tpoEvl);
+            
+            out.println("<br>Modificado");
+            out.println("<br>" + retorno.getMensaje().toString());
+            out.println("<br>" + retorno.getObjeto().toString());
+            
+            //--------------------------------------------------------
+            
+            tpoEvl = (TipoEvaluacion) retorno.getObjeto();
+            
+            retorno = (Retorno_MsgObj) LoTipoEvaluacion.GetInstancia().eliminar(tpoEvl);
+            
+            out.println("<br>Eliminado");
+            out.println("<br>" + retorno.getMensaje().toString());
+            */
+            
+            
+            
+    /*
+            
+            WSExternalObjects.Sinc.Carrera carOne = new WSExternalObjects.Sinc.Carrera();
+            WSExternalObjects.Sinc.PlanEstudio planOne = new WSExternalObjects.Sinc.PlanEstudio();
+            
+            planOne.setPlaEstCod(44L);
+            planOne.setPlaEstNom("PlanOne");
+            carOne.getLstPlanEstudio().add(planOne);
+            
+            Entidad.Carrera carTwo = new Entidad.Carrera();
+      
+            carOne.setCarNom("asdasd");
+            carOne.setCarCod(33L);
+            
+            out.println("<br>" + carOne.toString());
+            
+            carTwo.CastFromObject(carOne);
+            
+            out.println("<br>" + carTwo.toString());
+            out.println("<br>" + carTwo.getPlan().toString());
+            
+            out.println("<br>" + carTwo.getPlan().getClass().getName());
+            
+            out.println("<p>------------------</p>");
+            
+            carOne = new WSExternalObjects.Sinc.Carrera();
+            carTwo = new Entidad.Carrera();
+            Entidad.PlanEstudio planTwo = new Entidad.PlanEstudio();
+            
+            
+            
+            planTwo.setPlaEstCod(44L);
+            planTwo.setPlaEstNom("PlanTwo");
+            carTwo.getPlan().add(planTwo);
+            
+            carTwo.setCarNom("asdasd");
+            carTwo.setCarCod(33L);
+            
+            out.println("<br>" + carTwo.toString());
+            
+            carOne.CastFromObject(carTwo);
+            
+            out.println("<br>" + carOne.toString());
+            out.println("<br>" + carOne.getLstPlanEstudio().toString());
+            
+            out.println("<br>" + carOne.getLstPlanEstudio().getClass().getName());
+      */      
+      
+            /*
+            Carrera carrera = (Carrera) LoCarrera.GetInstancia().obtener(1L).getObjeto();
+            
+            out.println(carrera.getInsertQuery());
+            out.println(carrera.getUpdateQuery());
+            
+            
+            for(Objetos ob : Objetos.values())
+            {
+                Object objeto = Utiles.Utilidades.GetInstancia().GetObjectByName(ob.getClassName());
+
+                out.println("<p>Objeto: " + objeto.getClass().getSimpleName() + "</p>");
+                out.println("<p>" + Utiles.Utilidades.GetInstancia().ObtenerInsertQuery(objeto) + "</p>");
+                out.println("<p>" + Utiles.Utilidades.GetInstancia().ObtenerUpdateQuery(objeto) + "</p>");
+                out.println("<p>------------------------------------------------------------------------------</p>");
+            }
+            */
+            
+            /*
+            
+            for (Field field : carrera.getClass().getDeclaredFields()) {
+                out.println("-------------------");
+                out.println("<br>Campo: " + field.getName());
+                out.println("<br>Tipo: " + field.getType());
+                
+                field.setAccessible(true); // You might want to set modifier to public first.
+                Object value = field.get(carrera); 
+                if (value != null) {
+                    out.println("<br>Valor: " + value);
+                }
+                
+                Annotation[] a = field.getAnnotations();
+                Annotation[] b = field.getDeclaredAnnotations();
+                
+                out.println("<p>Anotations a</p>");
+                if(a!= null)
+                {
+                 for(Annotation one : a)
+                 {
+                     out.println("<p>"+one.annotationType().toString()+ " " + (one.annotationType().equals(Column.class))  + "</p>");
+                 }
+                }
+                
+                out.println("<p>Anotations b</p>");
+                if(b!=null)
+                {
+                 for(Annotation one : b)
+                 {
+                     out.println("<p>"+one.annotationType().toString()+"</p>");
+                 }
+                }
+                
+                if(field.getType().equals(String.class))
+                {
+                    out.println("<p>Es string</p>");
+                }
+            }
+            */
+            
+            /*
+           Sincronizacion sin = new Sincronizacion();
+           
+           //-----INCONSISTENCIA UNO--------
+           SincronizacionInconsistencia inc = new SincronizacionInconsistencia();
+           
+           //SincInconsistenciaDatos dat      = new SincInconsistenciaDatos(inc, LoSincronizacion.GetInstancia().ObjetoObtenerByNombre(Objetos.TIPO_EVALUACION.name()), "{\\\"objFchMod\\\":1503169998000,\\\"tpoEvlInsAut\\\":true,\\\"tpoEvlExm\\\":false,\\\"tpoEvlCod\\\":2,\\\"tpoEvlNom\\\":\\\"Obligatorio -\\\"}");
+           //SincInconsistenciaDatos dat2     = new SincInconsistenciaDatos(inc, LoSincronizacion.GetInstancia().ObjetoObtenerByNombre(Objetos.TIPO_EVALUACION.name()), "{\\\"objFchMod\\\":1503169998000,\\\"tpoEvlInsAut\\\":true,\\\"tpoEvlExm\\\":false,\\\"tpoEvlCod\\\":2,\\\"tpoEvlNom\\\":\\\"Obligatorio -\\\"}");
+           
+           //inc.getLstDatos().add(dat);
+           //inc.getLstDatos().add(dat2);
+
+           inc.setIncEst(EstadoInconsistencia.CON_ERRORES);
+           //inc.setObjetoSeleccionado(dat);
+
+           inc.setSincronizacion(sin);
+
+           sin.getLstInconsistencia().add(inc);
+           
+           //-----INCONSISTENCIA DOS--------
+           inc = new SincronizacionInconsistencia();
+           //dat = new SincInconsistenciaDatos(inc, LoSincronizacion.GetInstancia().ObjetoObtenerByNombre(Objetos.TIPO_EVALUACION.name()), "{\\\"objFchMod\\\":1503169998000,\\\"tpoEvlInsAut\\\":true,\\\"tpoEvlExm\\\":false,\\\"tpoEvlCod\\\":2,\\\"tpoEvlNom\\\":\\\"Obligatorio -\\\"}");
+           
+          // inc.getLstDatos().add(dat);
+           
+           inc.setIncEst(EstadoInconsistencia.CORRECTO);
+         //  inc.setObjetoSeleccionado(dat);
+
+           inc.setSincronizacion(sin);
+
+           sin.getLstInconsistencia().add(inc);
+           
+           
+           
+           
+           sin.setSncFch(new Date());
+           sin.setSncDur("475 milisegundos");
+           sin.setSncEst(EstadoSincronizacion.CON_ERRORES);
+           sin.setSncObjDet("1503170016959 - Inicio el proceso de sincronización\nSat Aug 19 16:13:37 UYT 2017 - Surgio error al sincronizar con el sistema online - Genero inconsistencias que deberan ser corregidas\nSat Aug 19 16:13:37 UYT 2017 - Fin del proceso\n");
+           
+            System.err.println("Lst:_ " + sin.getLstInconsistencia().size());
+           
+            System.err.println("->" + Utiles.Utilidades.GetInstancia().ObjetoToJson(sin));
+            
+           LoSincronizacion.GetInstancia().guardar(sin);
+            
+            */
+          /*
+            tpoEvl.setTpoEvlNom("sasdas");
+            
+            String json = Utiles.Utilidades.GetInstancia().ObjetoToJson(tpoEvl);
+            
+            Class cls = this.GetClass(TipoEvaluacion.class.getName());
+            
+            
+            
+            out.println(cls.getName());
+            
+            
+            try {
+                //objeto = ;
+                
+                //Object objeto = Utiles.Utilidades.GetInstancia().JsonToObject(json, cls.getConstructor());
+            
+                
+                Object objeto = cls.getConstructor().newInstance();
+                
+                out.println(objeto.toString());
+                
+              //  objeto = Utiles.Utilidades.GetInstancia().JsonToObject(json, objeto);
+                
+              //  out.println(objeto.toString());
+              
+              PerManejador perManager = new PerManejador();
+              
+              out.println(perManager.GetPrimaryKeyFromObject(objeto));
+                
+            } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
+            }
+*/
+            
+
+           
+           //sinc.ActualizarFecha(new Date());
+           
+           
+           //LoSincronizacion.GetInstancia().Sincronizar();
+           
+           //Retorno_MsgObj cambios = new SincRetorno(new Mensajes("aca te va", TipoMensaje.MENSAJE));
+           
+         //  SincronizarWSClient cli = new SincronizarWSClient();
+         //  SincRetorno retorno = cli.Sincronizar(null);
+           
+         //  out.println(retorno.getMensaje().toString());
+           
             out.println("</body>");
             out.println("</html>");
             
             
-            //this.Probar();
             
-            //this.ProbarManejoNotificacion();
-            
-//            SDT_NotificacionApp app = new SDT_NotificacionApp();
-            /*SDT_NotificacionAppResultado resultado = new SDT_NotificacionAppResultado();
-            
-            //resultado.setError("asda");
-            resultado.setMessage_id("0:1502071602468440%6593fe6ff9fd7ecd");
-
-            ArrayList<SDT_NotificacionAppResultado> resuls = new ArrayList<>();
-            resuls.add(resultado);
-            
-            app.setResults(resuls);
-            
-            app.setCanonical_ids(0);
-            app.setFailure(0);
-            app.setMulticast_id(Long.valueOf("8141774776764165558"));
-            app.setSuccess(1);
-            
-            System.err.println("Resultado: " + Utiles.Utilidades.GetInstancia().ObjetoToJson(app));
-            */
-            
-       //     SDT_NotificacionApp app = new SDT_NotificacionApp();
-            
-        //    String auxi = "{\"multicast_id\":8141774776764165558,\"success\":1,\"failure\":0,\"canonical_ids\":0}";
-            
-         //   app =  (SDT_NotificacionApp) Utiles.Utilidades.GetInstancia().JsonToObject(auxi, app);
-            
-          //  System.err.println(app.getMulticast_id());
+        } catch (IllegalArgumentException ex) {
+            Logger.getLogger(Prueba.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+   public void lstAddUno(List<Object> lst){
+       this.lstAddDos(lst);
+   }
+   
+   public void lstAddDos(List<Object> lst){
+       TipoEvaluacion tpoEvl   = new TipoEvaluacion();
+       tpoEvl.setTpoEvlCod(Long.valueOf("2"));
+       tpoEvl.setTpoEvlNom("Dos");
+       
+       lst.add(tpoEvl);
+       
+       tpoEvl   = new TipoEvaluacion();
+       tpoEvl.setTpoEvlCod(Long.valueOf("1"));
+       tpoEvl.setTpoEvlNom("Uno");
+       
+       if(lst.contains(tpoEvl))
+       {
+           System.err.println("Existe el tipo evaluacion uno");
+       }
+       else
+       {
+           System.err.println("Una cagada");
+       }
+       
+   }
     
     public void Probar(){
 
@@ -118,9 +486,8 @@ public class Prueba extends HttpServlet {
             notificacion.setTo("cluNmdH0708:APA91bHUZUrgE5ia18UIDxawwt_jnPwsP7bxbuyrAn7PT48x9eP3JmSUkavKe3q5yQq9PQOdqjePl0rcf47jxRtz2vLM50YUht5iEoz09V6idLX72oXIPhIxewQOwHSYvCvooOfILCTB");
             //notificacion.setData(new SDT_NotificacionDato("Esto es un mensaje"));
 
-            notificacion.setNotification(new SDT_NotificacionNotification("adasd", "titulo", "icon"));
+            notificacion.setNotification(new SDT_NotificacionNotification("adasd", "titulo", "ic_launcher", "default"));
             
-          //  System.err.println(Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion));
                 
             String input = Utiles.Utilidades.GetInstancia().ObjetoToJson(notificacion);
             
@@ -268,4 +635,17 @@ public class Prueba extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    
+    private Class<?> GetClass(String nombre){
+        Class<?> act = null;
+        
+        try {
+            act = Class.forName(nombre);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(LoSincronizacion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return act;
+    }
+    
 }
