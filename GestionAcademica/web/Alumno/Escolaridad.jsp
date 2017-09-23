@@ -46,6 +46,40 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Escolaridad</title>
         <jsp:include page="/masterPage/head.jsp"/>
+        <script src="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+        <link href="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+        <script>
+            $('.tabla_responsive').hide();
+            MostrarCargando(true);
+
+            $(document).ready(function() {
+
+
+
+                    //---------------------------------------------------------
+                    //TABLA CON REPORTES
+                    //---------------------------------------------------------
+                    $('.tabla_responsive').DataTable({
+                        "responsive": true,
+                        "processing": true,
+                        deferRender: true,
+                        "lengthMenu": [ [10, 20, 50, -1], [10, 20, 50, "Todos"] ],
+                        pageLength: 20,
+                        "fnInitComplete": function(oSettings, json) {
+                                MostrarCargando(false);
+                                $('.tabla_responsive').show();
+                              },
+                        "ordering": false,
+                        dom: '',
+                        "language": {
+                                "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
+                            }
+                    });
+
+            } );
+        </script>
+
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -74,7 +108,7 @@
                                             }
 
                                             out.println("<div class='contenedor_tabla_escolaridad'>");
-                                            out.println("<table class='table table-hover eliminar_margen_tabla'>");
+                                            out.println("<table class='table table-hover eliminar_margen_tabla tabla_responsive'>");
                                             out.println("<thead><tr>");
                                             out.println("<th>Materia</th>");
                                             out.println("<th>Fecha</th>");
