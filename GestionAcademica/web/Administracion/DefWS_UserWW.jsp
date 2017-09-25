@@ -64,7 +64,37 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Sistema de Gestión Académica - Bitácora</title>
         <jsp:include page="/masterPage/head.jsp"/>
-        <jsp:include page="/masterPage/head_tables.jsp"/>
+        <script src="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/js/dataTables.responsive.min.js"></script>
+        <link href="<%=request.getContextPath()%>/JavaScript/DataTable/extensions/Responsive/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css"/>
+
+        <script>
+            $('.tabla_responsive').hide();
+            MostrarCargando(true);
+
+            $(document).ready(function() {
+
+
+
+                    //---------------------------------------------------------
+                    //TABLA CON REPORTES
+                    //---------------------------------------------------------
+                    $('.tabla_responsive').DataTable({
+                        "responsive": true,
+                        "processing": true,
+                        deferRender: true,
+                        "lengthMenu": [ [10, 20, 50, -1], [10, 20, 50, "Todos"] ],
+                        pageLength: 20,
+                        "fnInitComplete": function(oSettings, json) {
+                                MostrarCargando(false);
+                                $('.tabla_responsive').show();
+                              },
+                        "language": {
+                                "url": "<%=request.getContextPath()%>/JavaScript/DataTable/lang/spanish.json"
+                            }
+                    });
+
+            } );
+        </script>
     </head>
     <body>
         <jsp:include page="/masterPage/NotificacionError.jsp"/>
@@ -88,7 +118,7 @@
                             <div class=" form">
                                 <!-- CONTENIDO -->
                                 
-                                <table id='tbl_ww' style=' <% out.print(tblVisible); %>' class='table table-hover'>
+                                <table  style=' <% out.print(tblVisible); %>' class='table table-hover tabla_responsive'>
                                     <thead>
                                         <tr>
                                             <th>Código</th>
