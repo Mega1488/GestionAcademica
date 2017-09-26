@@ -46,6 +46,10 @@ public class LoCalendario implements InABMGenerico{
     private LoCalendario() {
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoCalendario GetInstancia(){
         if (instancia==null)
         {
@@ -55,6 +59,11 @@ public class LoCalendario implements InABMGenerico{
         return instancia;
     }
     
+    /**
+     * Guardar calendario 
+     * @param pObjeto Calendario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         Calendario calendario = (Calendario) pObjeto;
@@ -73,6 +82,11 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     * Actualizar calendario
+     * @param pObjeto Calendario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         Calendario calendario = (Calendario) pObjeto;
@@ -84,18 +98,32 @@ public class LoCalendario implements InABMGenerico{
         return perManejador.actualizar(calendario);
     }
 
+    /**
+     * Eliminar calendario
+     * @param pObjeto Calendario 
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener calendario
+     * @param pObjeto Long - CalCod
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
         return perManejador.obtener((Long) pObjeto, Calendario.class);
     }
 
+    /**
+     * Obtener lista de calendarios 
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManejador   = new PerManejador();
@@ -103,6 +131,11 @@ public class LoCalendario implements InABMGenerico{
         return perManejador.obtenerLista("Calendario.findAll", null);
     }
     
+    /**
+     * Guardar lista de calendarios. 
+     * @param lstCalendario Lista de calendarios
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj guardarLista(List<Object> lstCalendario){
         SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
         Retorno_MsgObj retornoObj = new Retorno_MsgObj();
@@ -160,6 +193,11 @@ public class LoCalendario implements InABMGenerico{
         return retornoObj;
     }
     
+    /**
+     * Elimina calendarios hasta cierto indice
+     * @param lstCalendario Lista de calendarios
+     * @param indice Indice hasta el cual se eliminan los calendarios.
+     */
     private void EliminarCalendariosHasta(List<Object> lstCalendario, int indice){
         for(Object objeto : lstCalendario)
         {
@@ -175,6 +213,12 @@ public class LoCalendario implements InABMGenerico{
         
     }
     
+    /**
+     * Retorna lista de calendarios donde la persona recibida sea 
+     * alumno, y su calificación haya sido validadada.
+     * @param PerCod Código de persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObtenerListaPorAlumno(Long PerCod){
          
         PerManejador perManager = new PerManejador();
@@ -203,6 +247,18 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Retorna una lista de calendario, donde la persona que se recibio
+     * pueda inscribirse.
+     * <p>El calendario debe cumplir con las siguientes condiciones:</p>
+     * <p>Evaluación de tipo examen</p>
+     * <p>Fecha de evaluación debe ser superior a fecha actual.</p>
+     * <p>Persona NO debe haber aprobado el estudio </p>
+     * <p>Persona puede dar el examen, ya sea por que tiene nota de curso suficiente, o la materia es sin ganancia.</p>
+     * 
+     * @param PerCod Código de persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObtenerListaParaInscripcion(Long PerCod){
         Retorno_MsgObj retorno  = this.obtenerLista();
         List<Object> lstRetorno = new ArrayList<>();
@@ -231,12 +287,22 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Retorna todas los calendarios, cuya fecha de inscripción incie hoy
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObtenerListaInscripcionHoy(){
         PerManejador perManejador   = new PerManejador();
         
         return perManejador.obtenerLista("Calendario.findInscripcion", null);
     }
     
+    /**
+     * Obtiene lista de calendarios donde una persona este
+     * inscrita, y su calificación haya sido validada.  
+     * @param PerCod
+     * @return
+     */
     public Retorno_MsgObj ObtenerListaPendiente(Long PerCod){
         PerManejador perManager = new PerManejador();
 
@@ -264,6 +330,10 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Retorna una colección de eventos, que el calendario pueda interpretar.
+     * @return Lista de eventos
+     */
     public ArrayList<SDT_Evento> ObtenerEventoTodosCalendario(){
         SimpleDateFormat sdf  = new SimpleDateFormat("yyyy-MM-dd");
         ArrayList<SDT_Evento> lstEvento = new ArrayList<>();
@@ -318,7 +388,13 @@ public class LoCalendario implements InABMGenerico{
         
         return lstEvento;
     }
-    
+
+    /**
+     * Retorna lista de calendarios para una determinada materia y persona
+     * @param PerCod Código de persona
+     * @param materia Código de materia
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj obtenerByMateriaPersona(Long PerCod, Materia materia){
         PerManejador perManager = new PerManejador();
         ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
@@ -327,7 +403,13 @@ public class LoCalendario implements InABMGenerico{
 
         return perManager.obtenerLista("Calendario.findMateriaAlumno", lstParametros);
     }
-    
+
+    /**
+     * Retorna lista de calendarios para un determinado modulo y persona
+     * @param PerCod Código de persona
+     * @param modulo Código de modulo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj obtenerByModuloPersona(Long PerCod, Modulo modulo){
         PerManejador perManager = new PerManejador();
         ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
@@ -337,6 +419,12 @@ public class LoCalendario implements InABMGenerico{
         return perManager.obtenerLista("Calendario.findModuloAlumno", lstParametros);
     }
     
+    /**
+     * Retorna lista de calendarios para un determinado curso y persona
+     * @param PerCod Código de persona
+     * @param curso Curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj obtenerByCursoPersona(Long PerCod, Curso curso){
         PerManejador perManager = new PerManejador();
         ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
@@ -349,6 +437,12 @@ public class LoCalendario implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE ALUMNOS
     //------------------------------------------------------------------------------------
+
+    /**
+     * Inscribe un alumno a un calendario
+     * @param alumno Alumno 
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Object AlumnoAgregar(CalendarioAlumno alumno){
         boolean error           = false;
@@ -415,6 +509,11 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualiza un alumno en un calendario
+     * @param alumno Alumno
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object AlumnoActualizar(CalendarioAlumno alumno){
         
         alumno.setObjFchMod(new Date());
@@ -423,11 +522,22 @@ public class LoCalendario implements InABMGenerico{
         
     }
     
+    /**
+     * Elimina un alumno de un calendario
+     * @param alumno Alumno
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object AlumnoEliminar(CalendarioAlumno alumno){
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(alumno);
     }
     
+    /**
+     * Obtiene una lista de alumnos para un calendario, a partir de un usuario
+     * @param calendario Calendario
+     * @param usuario Usuario que desea ver los alumnos
+     * @return Lista de alumnos
+     */
     public List<CalendarioAlumno> AlumnoObtenerListaPorUsuario(Calendario calendario, String usuario){
         
         List<CalendarioAlumno> retorno = new ArrayList<>();
@@ -461,6 +571,12 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Agrega alumnos a un calendario, a partir de un periodo
+     * @param CalCod Calendario
+     * @param PeriEstCod Periodo de estudio
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj AlumnoAgregarPorPeriodo(Long CalCod, Long PeriEstCod){
         
         int agregados   = 0;
@@ -533,6 +649,12 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Determina si un alumno aprobo una materia
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @return Aprobado
+     */
     public Boolean AlumnoAproboPrevias(Long PerCod, Materia materia){
         if(materia != null)
         {
@@ -548,6 +670,14 @@ public class LoCalendario implements InABMGenerico{
         return true;
     }
     
+    /**
+     * Determina en base al estudio y la persona, si el alumno puede dar el examen
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @param modulo Modulo
+     * @param curso Curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Boolean AlumnoPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         
         if(materia != null)
@@ -589,6 +719,14 @@ public class LoCalendario implements InABMGenerico{
         return false;
     }
     
+    /**
+     * Determina si el alumno exonera el estudio
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @param modulo Modulo
+     * @param curso Curso
+     * @return Exonera
+     */
     public Boolean AlumnoExonera(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         
         
@@ -630,6 +768,15 @@ public class LoCalendario implements InABMGenerico{
         return false;
     }
     
+    /**
+     * Obtener creditos parciales del alumno, suma de todas las evaluaciones
+     * de un estudio que no sean examen.
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @param modulo Modulo
+     * @param curso Curso
+     * @return Calificación
+     */
     public Double AlumnoCreditoParcial(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         Retorno_MsgObj retorno      = new Retorno_MsgObj();
         Double creditosParciales    = 0.0;
@@ -664,6 +811,14 @@ public class LoCalendario implements InABMGenerico{
         return creditosParciales;
     }
 
+    /**
+     * Retorna si un alumno se encuentra en un estudio
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @param modulo modulo
+     * @param curso Curso 
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Boolean AlumnoCursoEstudio(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         Retorno_MsgObj retorno      = new Retorno_MsgObj();
          
@@ -691,6 +846,12 @@ public class LoCalendario implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE DOCENTES
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar docente al calendario
+     * @param docente Docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Object DocenteAgregar(CalendarioDocente docente){
         docente.setObjFchMod(new Date());
@@ -699,6 +860,11 @@ public class LoCalendario implements InABMGenerico{
         return  perManejador.guardar(docente);
     }
     
+    /**
+     * Actualiza el docente a un calendario
+     * @param docente Docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object DocenteActualizar(CalendarioDocente docente){
         
         docente.setObjFchMod(new Date());
@@ -706,11 +872,22 @@ public class LoCalendario implements InABMGenerico{
         return  perManejador.actualizar(docente);
     }
     
+    /**
+     * Elimina un docente de un calendario
+     * @param docente Docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object DocenteEliminar(CalendarioDocente docente){
         PerManejador perManejador   = new PerManejador();
         return  perManejador.eliminar(docente);
     }
     
+    /**
+     * Agrega docentes a un calendario por período
+     * @param CalCod Código de calendario
+     * @param PeriEstCod Código del periodo de estudio
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj DocenteAgregarPorPeriodo(Long CalCod, Long PeriEstCod){
         
         int agregados   = 0;
@@ -744,6 +921,11 @@ public class LoCalendario implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Retorna lista de calendarios para un docente
+     * @param PerCod Código de docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObtenerEvaluacionesDocentes(Long PerCod)
     {
         PerManejador perManager = new PerManejador();

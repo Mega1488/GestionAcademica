@@ -50,6 +50,10 @@ public class LoImportacion {
     private LoImportacion() {
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoImportacion GetInstancia(){
         if (instancia==null)
         {
@@ -62,6 +66,13 @@ public class LoImportacion {
     //-------------------------------------------------------------------------
     //PERSONAS - INSCRIPCION
     //-------------------------------------------------------------------------
+
+    /**
+     * Importar personas a un plan de estudio
+     * @param PlaEstCod Código del plan
+     * @param filePath Ruta del archivo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj ImportarPersonasPlan(Long PlaEstCod, String filePath){
         Retorno_MsgObj retorno      = LoCarrera.GetInstancia().PlanEstudioObtener(PlaEstCod);
@@ -132,6 +143,12 @@ public class LoImportacion {
         return retorno;
     }
     
+    /**
+     * Importar personas a un curso
+     * @param CurCod Código del curso
+     * @param filePath Ruta de archivo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ImportarPersonasCurso(Long CurCod, String filePath){
         Retorno_MsgObj retorno          = LoCurso.GetInstancia().obtener(CurCod);
         Integer personasImportadas      = 0;
@@ -201,7 +218,12 @@ public class LoImportacion {
         
         return retorno;
     }
-    
+
+    /**
+     * Importar personas
+     * @param filePath Ruta de archivo
+     * @return   Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ImportarPersonas(String filePath){
 
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Importacion de personas", TipoMensaje.MENSAJE));
@@ -292,7 +314,14 @@ public class LoImportacion {
         
         return retorno;
     }
-    
+
+    /**
+     * Lee archivo xlsx y obtiene personas
+     * @param archivo Archivo
+     * @return Resultado: RETORNO_MSGOBJ
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private Retorno_MsgObj ProcesarXLSX(File archivo) throws FileNotFoundException, IOException{
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
@@ -404,6 +433,13 @@ public class LoImportacion {
         return retorno;
     }
     
+    /**
+     * Leer archivo XLS y obtiene personas
+     * @param archivo Archivo
+     * @return  Resultado: RETORNO_MSGOBJ
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private Retorno_MsgObj ProcesarXLS(File archivo) throws FileNotFoundException, IOException{
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
@@ -510,6 +546,12 @@ public class LoImportacion {
     //-------------------------------------------------------------------------
     //PERSONAS - ESCOLARIDAD
     //-------------------------------------------------------------------------
+
+    /**
+     * Importar escolaridad
+     * @param filePath ruta de archivo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj ImportarPersonasEscolaridad(String filePath){
         Retorno_MsgObj retorno = this.ImportarPersonas(filePath);
@@ -525,6 +567,11 @@ public class LoImportacion {
         return retorno;
     }
     
+    /**
+     * Importar escolaridad 
+     * @param filePath ruta de archivo
+     * @return   Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ImportarEscolaridad(String filePath){
 
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Importacion de escolaridades", TipoMensaje.MENSAJE));
@@ -602,7 +649,14 @@ public class LoImportacion {
         
         return retorno;
     }
-    
+
+    /**
+     * Leer archivo XLSX y obtener escolaridades
+     * @param archivo archivo
+     * @return  Resultado: RETORNO_MSGOBJ
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private Retorno_MsgObj ProcesarEscolaridadXLSX(File archivo) throws FileNotFoundException, IOException{
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
@@ -756,6 +810,13 @@ public class LoImportacion {
         return retorno;
     }
     
+    /**
+     * Leer archivo XLS y obtener escolaridades
+     * @param archivo archivo
+     * @return  Resultado: RETORNO_MSGOBJ
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     private Retorno_MsgObj ProcesarEscolaridadXLS(File archivo) throws FileNotFoundException, IOException{
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Leyendo archivo", TipoMensaje.MENSAJE));
@@ -905,6 +966,10 @@ public class LoImportacion {
     //GENERICO
     //-------------------------------------------------------------------------
     
+    /**
+     * Impactar mensajes en bitacora 
+     * @param retorno   Retorno
+     */
     private void ImpactarEnBitacora(Retorno_MsgObj retorno){
         BitacoraProceso bit = new BitacoraProceso();
         bit.fromRetorno(retorno, Proceso.IMPORTACION);

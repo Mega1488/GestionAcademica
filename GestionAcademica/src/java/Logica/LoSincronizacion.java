@@ -35,13 +35,17 @@ import java.util.List;
  */
 public class LoSincronizacion implements InABMGenerico{
 
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static LoSincronizacion instancia;
     private final Utilidades util = Utilidades.GetInstancia();
 
     private LoSincronizacion() {
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia de clase
+     */
     public static LoSincronizacion GetInstancia(){
         if (instancia==null)
         {
@@ -51,6 +55,11 @@ public class LoSincronizacion implements InABMGenerico{
         return instancia;
     }
 
+    /**
+     * Guardar sincronizacion
+     * @param pObjeto Sincronizacion
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         Sincronizacion sincro = (Sincronizacion) pObjeto;
@@ -68,6 +77,11 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno; 
     }
 
+    /**
+     * Actualizar sincronización
+     * @param pObjeto Sincronización
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -78,18 +92,32 @@ public class LoSincronizacion implements InABMGenerico{
         return perManager.actualizar(sincro);
     }
 
+    /**
+     * Eliminar sincronización
+     * @param pObjeto Sincronización
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener sincronización
+     * @param pObjeto Long - SincCod
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, Sincronizacion.class);        
     }
 
+    /**
+     * Obtener lista de sincronización
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         
@@ -98,6 +126,11 @@ public class LoSincronizacion implements InABMGenerico{
         return perManager.obtenerLista("Sincronizacion.findAll", null);
     }
     
+    /**
+     * Obtener lista de sincronziación por estado
+     * @param estado Estado
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerListaByEstado(EstadoSincronizacion estado){
         ArrayList<SDT_Parameters> lstParametros = new ArrayList<>();
         lstParametros.add(new SDT_Parameters(estado, "SncEst"));
@@ -107,6 +140,10 @@ public class LoSincronizacion implements InABMGenerico{
         return perManager.obtenerLista("Sincronizacion.findByEst", lstParametros);
     }
     
+    /**
+     * Existe sincronización sin corregir
+     * @return Existe
+     */
     public Boolean existenSincroSinCorregir(){
         Retorno_MsgObj retorno = this.obtenerListaByEstado(EstadoSincronizacion.CON_ERRORES);
         
@@ -122,6 +159,10 @@ public class LoSincronizacion implements InABMGenerico{
         
     }
     
+    /**
+     * Depurar, elimina todas las sincronizaciones
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Depurar(){
         Retorno_MsgObj lst = this.obtenerLista();
         
@@ -141,6 +182,13 @@ public class LoSincronizacion implements InABMGenerico{
         return lst;
     }
     
+    /**
+     * Seleccionar objeto valido de una inconsistencia
+     * @param sinc Sincronización
+     * @param IncCod Código de inconsistencia
+     * @param IncObjCod Código de objeto
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj InconsistenciaSeleccionarObjeto(Sincronizacion sinc, Long IncCod, Long IncObjCod){
         
         SincronizacionInconsistencia inc = sinc.GetInconsistencia(IncCod);
@@ -157,6 +205,12 @@ public class LoSincronizacion implements InABMGenerico{
     //------------------------------------------------------------------------
     //OBJETO
     //------------------------------------------------------------------------
+
+    /**
+     * Guardar objeto
+     * @param pObjeto Objeto
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Object ObjetoGuardar(Object pObjeto) {
         Objeto objeto = (Objeto) pObjeto;
@@ -167,6 +221,11 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno; 
     }
 
+    /**
+     * Actualizar objeto
+     * @param pObjeto Objeto
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object ObjetoActualizar(Object pObjeto) {
         
         Objeto objeto  = (Objeto) pObjeto;
@@ -177,16 +236,30 @@ public class LoSincronizacion implements InABMGenerico{
         
     }
 
+    /**
+     * Eliminar Objeto
+     * @param pObjeto Objeto
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object ObjetoEliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener objeto
+     * @param pObjeto Long - ObjCod
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObjetoObtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, Objeto.class);        
     }
 
+    /**
+     * Obtener lista de objetos
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObjetoObtenerLista() {
         
         PerManejador perManager = new PerManejador();
@@ -194,6 +267,11 @@ public class LoSincronizacion implements InABMGenerico{
         return perManager.obtenerLista("Objeto.findAll", null);
     }
     
+    /**
+     * Obtener objeto por nombre
+     * @param ObjNom Nombre
+     * @return Objeto
+     */
     public Objeto ObjetoObtenerByNombre(String ObjNom) {
         
         PerManejador perManager = new PerManejador();
@@ -214,6 +292,9 @@ public class LoSincronizacion implements InABMGenerico{
         return objeto;
     }
     
+    /**
+     * Carga inicial de objetos a sincronizar
+     */
     public void CargaInicialObjetos(){
         if(this.ObjetoObtenerByNombre(Objetos.TIPO_EVALUACION.name()) == null)
         {
@@ -332,6 +413,10 @@ public class LoSincronizacion implements InABMGenerico{
     //------------------------------------------------------------------------
     //SINCRONIZAR
     //------------------------------------------------------------------------
+
+    /**
+     * Inicia sincronización local
+     */
     public void Sincronizar(){
         Parametro param = LoParametro.GetInstancia().obtener();
         
@@ -397,6 +482,11 @@ public class LoSincronizacion implements InABMGenerico{
         
     }
     
+    /**
+     * Inicia sincronización online
+     * @param cambios Cambios de sistema local
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Sincronizar(Retorno_MsgObj cambios){
         Parametro param                 = LoParametro.GetInstancia().obtener();
         Retorno_MsgObj cambiosLocales   = this.ObtenerCambios(param.getParFchUltSinc());
@@ -430,7 +520,12 @@ public class LoSincronizacion implements InABMGenerico{
         
         return retorno;
     }
-    
+
+    /**
+     * Determina si existen cambios a partir de una fecha
+     * @param fecha Fecha
+     * @return Existen cambios
+     */
     private Boolean ExistenCambios(Date fecha){
         
         Retorno_MsgObj retorno = this.ObtenerCambios(fecha);
@@ -446,6 +541,11 @@ public class LoSincronizacion implements InABMGenerico{
         return false;
     }
     
+    /**
+     * Obtener cambios a partir de una fecha
+     * @param fecha Fecha
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ObtenerCambios(Date fecha){
         PerManejador perManager = new PerManejador();
         
@@ -513,12 +613,22 @@ public class LoSincronizacion implements InABMGenerico{
         
         return retorno;
     }
-    
+
+    /**
+     * Enviar y obtener cambios del sistema online 
+     * @param modificaciones Notificaciones
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj SincronizarSistemaOnline(Retorno_MsgObj modificaciones){
         SincronizarWSClient cliWS = new SincronizarWSClient();
         return cliWS.Sincronizar(modificaciones);
     }
     
+    /**
+     * Impactar cambios 
+     * @param cambios Cambios
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ImpactarCambios(Retorno_MsgObj cambios){
         
         ForeignKeyControl(false);
@@ -628,14 +738,25 @@ public class LoSincronizacion implements InABMGenerico{
         
         return retorno;
     }
-    
+
+    /**
+     * Determina si un registro ya existe en el sistema
+     * @param registro Registro
+     * @return Existe registro
+     */
     private Boolean ExisteRegistro(Object registro){
         
         PerManejador perManager = new PerManejador();
         return !perManager.obtener(util.ObtenerPrimaryKey(registro), registro.getClass()).SurgioErrorObjetoRequerido();
         
     }
-    
+
+    /**
+     * Determina si existe un objeto
+     * @param codigo Código
+     * @param objeto Objeto
+     * @return Existe registro
+     */
     private Boolean ExisteRegistro(Long codigo, Object objeto){
         
         PerManejador perManager = new PerManejador();
@@ -643,6 +764,11 @@ public class LoSincronizacion implements InABMGenerico{
         
     }
     
+    /**
+     * Activa o desactiva el control de claves foraneas.
+     * Se suele desactivar cuando se impactan los cambios, y se activa cuando finaliza
+     * @param activo Activar
+     */
     private void ForeignKeyControl(Boolean activo){
         
         String query = "SET foreign_key_checks = " + activo;
@@ -656,7 +782,11 @@ public class LoSincronizacion implements InABMGenerico{
         }
         
     }
-    
+
+    /**
+     * Eliminar registro
+     * @param objEliminado Registro
+     */
     private void EliminarRegistro(SincRegistroEliminado objEliminado){
         
         if(this.ExisteRegistro(objEliminado.getObjElimCod(), util.GetObjectByName(objEliminado.getObjeto().getObjClsNom())))
@@ -676,7 +806,11 @@ public class LoSincronizacion implements InABMGenerico{
         }
         
     }
-    
+
+    /**
+     * Actualizar fecha de sinronización
+     * @param param Parametros
+     */
     private void ActualizarFechaSincronizacion(Parametro param){
         param.setParFchUltSinc(new Date());
         LoParametro.GetInstancia().actualizar(param);
@@ -685,7 +819,13 @@ public class LoSincronizacion implements InABMGenerico{
         SincronizarWSClient cliWS = new SincronizarWSClient();
         cliWS.ActualizarFecha(param.getParFchUltSinc());
     }
-    
+
+    /**
+     * Generar inconsistencias
+     * @param sincro Sincronización
+     * @param retorno Resultado: RETORNO_MSGOBJ
+     * @return Retorna sincronización
+     */
     private Sincronizacion GenerarInconsistencias(Sincronizacion sincro, Retorno_MsgObj retorno){
         if(retorno.getMensaje().getMensaje().equals(TipoRetorno.INCONSISTENCIA.name()))
         {
@@ -712,6 +852,11 @@ public class LoSincronizacion implements InABMGenerico{
         return sincro;
     }
     
+    /**
+     * Calcular duración del proceso de sincronización
+     * @param inicioProceso Fecha de inicio del proceso
+     * @return Duración en lenguaje humano
+     */
     private String ObtenerDuracion(Date inicioProceso){
         Long tiempoMls  =  new Date().getTime() - inicioProceso.getTime();
         String duracion;
@@ -755,6 +900,12 @@ public class LoSincronizacion implements InABMGenerico{
         return duracion;
     }
     
+    /**
+     * Validar sincronización. Analiza que no existan inconsistencias
+     * @param cambiosLocales Cambios locales
+     * @param cambiosNuevos Cambios nuevos
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ValidarSincronizacion(Retorno_MsgObj cambiosLocales, Retorno_MsgObj cambiosNuevos){
         /*
         * Verifico que no existan inconsistencias.
@@ -824,6 +975,13 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Validar segundo nivel de sincronización
+     * @param objMod Objeto modificado
+     * @param registro Registro
+     * @param cambiosLocales Cambios locales
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ValidarSincronizacionNivelDos(Objeto objMod, Object registro, Retorno_MsgObj cambiosLocales){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Sin inconsistencia", TipoMensaje.MENSAJE));
         
@@ -891,11 +1049,23 @@ public class LoSincronizacion implements InABMGenerico{
     //INCONSISTENCIAS
     //------------------------------------------------------------------------
     
+    /**
+     * Determina si los dos objetos son inconsistentes
+     * @param objLocal Objeto local
+     * @param objNuevo Objeto nuevo
+     * @return Es inconsistencia
+     */
     private Boolean EsInconsistencia(Object objLocal, Object objNuevo){
         return objLocal.equals(objNuevo);
 
     }
-    
+
+    /**
+     * Crea objeto de inconsistencia para retorno
+     * @param cambiosLocales Cambios locales
+     * @param cambiosNuevos Cambios nuevos
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ArmarInconsistenciaRetorno(Retorno_MsgObj cambiosLocales, Retorno_MsgObj cambiosNuevos){
         /*
             Este procedimiento actua cuando se conoce una inconsistencia, por ello arma un registro de inconsistencias 
@@ -974,13 +1144,28 @@ public class LoSincronizacion implements InABMGenerico{
         
         return retorno;
     }
-    
+
+    /**
+     * Armar inconsistencia comun
+     * @param retorno Retorno
+     * @param lstObjModificados Objetos modificados
+     * @param cambiosLocales Cambios locales
+     * @param cambiosNuevos Cambios nuevos
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ArmarInconsistenciaComun(Retorno_MsgObj retorno, List<Object> lstObjModificados, Retorno_MsgObj cambiosLocales, Retorno_MsgObj cambiosNuevos){
         retorno = this.ArmarInconsistenciaAuxiliar(retorno, lstObjModificados, cambiosNuevos);
         retorno = this.ArmarInconsistenciaAuxiliar(retorno, lstObjModificados, cambiosLocales);
         return retorno;
     }
     
+    /**
+     * Metodo Auxiliar del armado de inconsistencia
+     * @param retorno Retorno
+     * @param lstObjModificados Objetos modificados
+     * @param cambios Cambios
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ArmarInconsistenciaAuxiliar(Retorno_MsgObj retorno, List<Object> lstObjModificados, Retorno_MsgObj cambios){
         
         if(cambios.getLstObjetos() != null)
@@ -1042,6 +1227,13 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Armar objeto inconsistencia
+     * @param objeto Objeto
+     * @param regUno Registro inconsistente uno
+     * @param regDos Registro inconsistente dos
+     * @return Inconsistencia
+     */
     private SincronizacionInconsistencia ArmarInconsistencia(Objeto objeto, Object regUno, Object regDos){
         
         SincronizacionInconsistencia inc = new SincronizacionInconsistencia(objeto);
@@ -1057,6 +1249,11 @@ public class LoSincronizacion implements InABMGenerico{
         return inc;
     }
     
+    /**
+     * Procesar inconsistencia
+     * @param sinc Sincronizacion
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ProcesarInconsistencia(Sincronizacion sinc){
         Retorno_MsgObj retorno = this.ValidarInconsistencias(sinc);
         Parametro param = LoParametro.GetInstancia().obtener();
@@ -1121,6 +1318,11 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Procesar inconsistencia
+     * @param objeto Objeto
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ProcesarInconsistencia(Retorno_MsgObj objeto){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Impactando inconsistencias recibidas por servicio web", TipoMensaje.MENSAJE));
         
@@ -1137,6 +1339,11 @@ public class LoSincronizacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Impactar inconsistencia 
+     * @param sinc Sincronización
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ImpactarInconsistencia(Sincronizacion sinc){
         ForeignKeyControl(false);
         
@@ -1191,7 +1398,12 @@ public class LoSincronizacion implements InABMGenerico{
         
         return retorno;
     }
-    
+
+    /**
+     * Validar inconsistencias, antes de procesarlas
+     * @param sinc Sincronización
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ValidarInconsistencias(Sincronizacion sinc){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Inconsistencias", TipoMensaje.MENSAJE));
         

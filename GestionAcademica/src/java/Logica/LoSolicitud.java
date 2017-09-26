@@ -27,6 +27,10 @@ public class LoSolicitud implements InABMGenerico{
     private LoSolicitud() {
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia
+     */
     public static LoSolicitud GetInstancia(){
         if (instancia==null)
         {
@@ -36,7 +40,11 @@ public class LoSolicitud implements InABMGenerico{
         return instancia;
     }
     
-
+    /**
+     * Guardar solicitud
+     * @param pObjeto Solicitud
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         Solicitud solicitud = (Solicitud) pObjeto;
@@ -60,6 +68,11 @@ public class LoSolicitud implements InABMGenerico{
         return retorno; 
     }
 
+    /**
+     * Actualizar solicitud
+     * @param pObjeto Solicitud
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -73,18 +86,32 @@ public class LoSolicitud implements InABMGenerico{
         
     }
 
+    /**
+     * Eliminar solicitud
+     * @param pObjeto Solicitud
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener solicitud
+     * @param pObjeto Long - SolCod
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, Solicitud.class);        
     }
 
+    /**
+     * Obtener lista de solicitudes
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         
@@ -93,6 +120,11 @@ public class LoSolicitud implements InABMGenerico{
         return perManager.obtenerLista("Solicitud.findAll", null);
     }
     
+    /**
+     * Obtener solicitudes por alumno
+     * @param PerCod Código de alumno 
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerListaByAlumno(Long PerCod) {
         
         PerManejador perManager = new PerManejador();
@@ -103,12 +135,23 @@ public class LoSolicitud implements InABMGenerico{
         return perManager.obtenerLista("Solicitud.findByAlumno", lstParametros);
     }
     
+    /**
+     * Usuario toma una solicitud
+     * @param solicitud Solicitud
+     * @param persona Usuario
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj tomarSolicitud(Solicitud solicitud, Persona persona){
         if(persona != null) solicitud.setFuncionario(persona); solicitud.setSolEst(EstadoSolicitud.TOMADA);
         solicitud.setSolFchPrc(new Date());
         return (Retorno_MsgObj) this.actualizar(solicitud);
     }
     
+    /**
+     * Usuario libera una solicitud
+     * @param solicitud Solicitud
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj liberarSolicitud(Solicitud solicitud){
         solicitud.setFuncionario(null); 
         solicitud.setSolEst(EstadoSolicitud.SIN_TOMAR);
@@ -116,6 +159,11 @@ public class LoSolicitud implements InABMGenerico{
         return (Retorno_MsgObj) this.actualizar(solicitud);
     }
     
+    /**
+     * Finalizar una solicitud
+     * @param solicitud Solicitud
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj finalizarSolicitud(Solicitud solicitud){
         solicitud.setSolFchFin(new Date()); 
         solicitud.setSolEst(EstadoSolicitud.FINALIZADA);

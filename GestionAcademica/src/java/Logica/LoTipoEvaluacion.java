@@ -23,6 +23,10 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
         System.err.println("Se crea instancia");
     }
     
+    /**
+     * Obtener instancia
+     * @return Inconsistencia de clase
+     */
     public static LoTipoEvaluacion GetInstancia(){
         if (instancia==null)
         {
@@ -32,7 +36,11 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
         return instancia;
     }
     
-
+    /**
+     * Guardar tipos de evaluación
+     * @param pTipoEvaluacion Tipo de evaluación
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(TipoEvaluacion pTipoEvaluacion) {
         PerManejador perManejador   = new PerManejador();
@@ -51,6 +59,11 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
         return retorno;
     }
 
+    /**
+     * Actualizar tipo de evaluacion
+     * @param pTipoEvaluacion Tipo de evaluacion
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(TipoEvaluacion pTipoEvaluacion) {
         PerManejador perManejador   = new PerManejador();
@@ -60,6 +73,11 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
         return perManejador.actualizar(pTipoEvaluacion);
     }
 
+    /**
+     * Eliminar tipo de evaluación
+     * @param pTipoEvaluacion Tipo de evaluación
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(TipoEvaluacion pTipoEvaluacion) {
         PerManejador perManejador   = new PerManejador();
@@ -67,49 +85,26 @@ public class LoTipoEvaluacion implements InTipoEvaluacion{
         return perManejador.eliminar(pTipoEvaluacion);
     }
 
+    /**
+     * Obtener tipo de evaluación
+     * @param pTpoEvlCod Long - Código
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Long pTpoEvlCod) {
         PerManejador perManejador   = new PerManejador();
         return perManejador.obtener(pTpoEvlCod, TipoEvaluacion.class);
     }
 
+    /**
+     * Obtener lista de tipos de evaluación
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManejador   = new PerManejador();
         return perManejador.obtenerLista("TipoEvaluacion.findAll", null);
     }
-    
-    private String getReportColumns(){
-        return new TipoEvaluacion().GetReportColumns();
-    }
-    
-    private String getReportData(){
-        String data = "data: [";
-        
-        String contenido = "";
-        for(Object objeto : this.obtenerLista().getLstObjetos())
-        {
-            TipoEvaluacion tpoEvl = (TipoEvaluacion) objeto;
-            
-            if(contenido.isEmpty())
-            {
-                contenido = tpoEvl.GetReportData();
-            }
-            else
-            {
-                contenido += ", " + tpoEvl.GetReportData();
-            }
-            
-        }
-        
-        data += contenido;
-        data += "]";
-        return data;
-    }
-    
-    
-    public String getReportContent(){
-        return "{" + this.getReportColumns() + ", " + this.getReportData() + "}";
-    }
+
     
 }

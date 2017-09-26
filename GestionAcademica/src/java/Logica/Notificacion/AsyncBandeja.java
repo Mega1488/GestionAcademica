@@ -5,7 +5,6 @@
  */
 package Logica.Notificacion;
 
-import Entidad.Notificacion;
 import Logica.LoBandeja;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +20,7 @@ public class AsyncBandeja extends Thread {
         /**
          * Constructor
          * 
-         * @param pNot - The agent to execute.
+     * @param pCod
          */
         public AsyncBandeja(Long pCod) {
             this.perCod = pCod;
@@ -40,4 +39,4 @@ public class AsyncBandeja extends Thread {
                 Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
             }
         }
-    }
+}

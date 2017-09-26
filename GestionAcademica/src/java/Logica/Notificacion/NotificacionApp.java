@@ -8,7 +8,6 @@ package Logica.Notificacion;
 import Enumerado.TipoMensaje;
 import SDT.SDT_Notificacion;
 import SDT.SDT_NotificacionApp;
-import SDT.SDT_NotificacionDato;
 import SDT.SDT_NotificacionEnvio;
 import SDT.SDT_NotificacionNotification;
 import Utiles.Mensajes;
@@ -31,10 +30,17 @@ import java.util.logging.Logger;
  */
 public class NotificacionApp {
 
+    /**
+     * Notificar a aplicacion android
+     */
     public NotificacionApp() {
     }
     
-    
+    /**
+     * Enviar notificacion a android
+     * @param notificacion  Notificacion
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Notificar(SDT_NotificacionEnvio notificacion)
     {
         

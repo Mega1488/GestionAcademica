@@ -22,6 +22,10 @@ public class LoEvaluacion implements InABMGenerico{
     private LoEvaluacion() {
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoEvaluacion GetInstancia(){
         if (instancia==null)
         {
@@ -31,7 +35,11 @@ public class LoEvaluacion implements InABMGenerico{
         return instancia;
     }
     
-
+    /**
+     * Guardar evaluacion
+     * @param pObjeto Evaluacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         
@@ -52,6 +60,11 @@ public class LoEvaluacion implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     * Actualizar evaluación
+     * @param pObjeto Evaluación
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         Evaluacion evl  = (Evaluacion) pObjeto;
@@ -63,18 +76,32 @@ public class LoEvaluacion implements InABMGenerico{
         return perManager.actualizar(evl);
     }
 
+    /**
+     * Eliminar evaluacion
+     * @param pObjeto Evaluacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener evaluacion
+     * @param pObjeto Código de evaluación
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, Evaluacion.class);
     }
 
+    /**
+     * Obtener lista de evaluación
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManager = new PerManejador();

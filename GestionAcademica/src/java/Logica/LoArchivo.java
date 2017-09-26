@@ -14,8 +14,8 @@ import Utiles.Retorno_MsgObj;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- *
+/** Lógica Archivos.
+ * <p>Logica para el manejo de archivos</p>.
  * @author alvar
  */
 public class LoArchivo implements InABMGenerico{
@@ -25,6 +25,10 @@ public class LoArchivo implements InABMGenerico{
     private LoArchivo() {
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoArchivo GetInstancia(){
         if (instancia==null)
         {
@@ -34,6 +38,11 @@ public class LoArchivo implements InABMGenerico{
         return instancia;
     }
     
+    /**
+     * Guardar archivo
+     * @param pObjeto Archvivo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         
@@ -53,6 +62,11 @@ public class LoArchivo implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     *Actualizar archivo
+     * @param pObjeto Archivo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -61,12 +75,22 @@ public class LoArchivo implements InABMGenerico{
         return perManejador.actualizar(pObjeto);
     }
 
+    /**
+     * Eliminar archivo
+     * @param pObjeto Archivo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(pObjeto);
     }
 
+    /**
+     * Retorna un archivo
+     * @param pObjeto Long - ArcCod
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         
@@ -75,6 +99,10 @@ public class LoArchivo implements InABMGenerico{
         return perManejador.obtener((Long) pObjeto, Archivo.class);
     }
 
+    /**
+     * Retorna una lista de archivos
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManejador   = new PerManejador();
@@ -82,6 +110,11 @@ public class LoArchivo implements InABMGenerico{
         return perManejador.obtenerLista("Archivo.findAll", null);
     }
     
+    /**
+     * Retorna una lista de archivos, a partir de un tipo de archivo
+     * @param tpoArch Tipo de archivo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerListaByTipo(TipoArchivo tpoArch) {
         PerManejador perManejador   = new PerManejador();
         

@@ -23,6 +23,10 @@ public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
     private LoMateriaRevalida() {
     }
     
+    /**
+     * Obtener instancia
+     * @return instancia de clase
+     */
     public static LoMateriaRevalida GetInstancia(){
         if (instancia==null)
         {
@@ -33,6 +37,11 @@ public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
         return instancia;
     }
 
+    /**
+     * Guardar materia revalida
+     * @param pObjeto Materia Revalida
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(MateriaRevalida pObjeto) {
         MateriaRevalida mat = (MateriaRevalida) pObjeto;
@@ -52,6 +61,10 @@ public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
         return retorno;
     }
 
+    /**
+     * Actualizar materia revalida
+     * @param pObjeto Materia revalida
+     */
     @Override
     public void actualizar(MateriaRevalida pObjeto) {
         MateriaRevalida mat = (MateriaRevalida) pObjeto;
@@ -63,12 +76,21 @@ public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
         perManager.actualizar(mat);
     }
 
+    /**
+     * Eliminar materia revalida
+     * @param pObjeto Materia revalida
+     */
     @Override
     public void eliminar(MateriaRevalida pObjeto) {
         PerManejador perManager = new PerManejador();
         perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener materia revalida
+     * @param pCodigo Codigo
+     * @return  Materia revalida
+     */
     @Override
     public MateriaRevalida obtener(Object pCodigo) {
         PerManejador perManager = new PerManejador();
@@ -84,6 +106,10 @@ public class LoMateriaRevalida implements Interfaz.InMateriaRevalida{
         return mat;
     }
 
+    /**
+     * Obtener lista de materias revalidas
+     * @return Lista de materias revalidas
+     */
     @Override
     public List<MateriaRevalida> obtenerLista() {
         PerManejador perManager = new PerManejador();

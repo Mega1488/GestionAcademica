@@ -7,7 +7,6 @@ package Interfaz;
 
 import Entidad.Carrera;
 import Utiles.Retorno_MsgObj;
-import java.util.List;
 
 /**
  * Interfaz InCarrera
@@ -20,5 +19,4 @@ public interface InCarrera {
     Object eliminar(Carrera pObjeto);
     Retorno_MsgObj obtener(Long pCarCod);
     Retorno_MsgObj obtenerLista();
-    Carrera obtenerByMdlUsr(String pMdlUsr);
 }

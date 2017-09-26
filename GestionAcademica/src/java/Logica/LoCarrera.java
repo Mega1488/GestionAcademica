@@ -36,6 +36,10 @@ public class LoCarrera implements Interfaz.InCarrera{
         loEstudio           = LoEstudio.GetInstancia();
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoCarrera GetInstancia(){
         if(instancia == null){
             instancia = new LoCarrera();
@@ -43,6 +47,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return instancia;
     }
     
+    /**
+     * Guardar carrera
+     * @param pCarrera Carrera
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Carrera pCarrera) 
     {
@@ -86,6 +95,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
 
+    /**
+     * Actualizar carrera
+     * @param pCarrera Carrera
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Carrera pCarrera) {
         boolean error       = false;
@@ -117,14 +131,17 @@ public class LoCarrera implements Interfaz.InCarrera{
             
             retorno = perManager.actualizar(pCarrera);
             
-            if(!retorno.SurgioErrorObjetoRequerido())
-            {
-                retorno = this.obtener(pCarrera.getCarCod());
-            }
+            retorno.setObjeto(pCarrera);
+            
         }
         return retorno;
     }
 
+    /**
+     * Eliminar carrera
+     * @param pCarrera Carrera
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Carrera pCarrera) {
         boolean error       = false;
@@ -143,17 +160,21 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
 
+    /**
+     * Obtener categoria
+     * @param pCarCod Código de Categoria
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Long pCarCod) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener(pCarCod, Carrera.class);
     }
 
-    @Override
-    public Carrera obtenerByMdlUsr(String pMdlUsr) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    /**
+     * Obtener lista de carreras
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         
@@ -166,6 +187,12 @@ public class LoCarrera implements Interfaz.InCarrera{
     //----------------------------------------------------------------------------------------------------
     //-Manejo de Plan Estudio
     //----------------------------------------------------------------------------------------------------
+
+    /**
+     * Agregar plan de estudio
+     * @param plan Plan
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     
     public Object PlanEstudioAgregar(PlanEstudio plan)
     {
@@ -199,6 +226,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Actualizar plan de estudio
+     * @param plan Plan
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object PlanEstudioActualizar(PlanEstudio plan)
     {
         boolean error           = false;
@@ -232,6 +264,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Eliminar plan de estudio
+     * @param plan Plan
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object PlanEstudioEliminar(PlanEstudio plan)
     {
         boolean error           = false;
@@ -252,6 +289,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Obtener plan de estudio
+     * @param pPlaEstCod Código del plan
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj PlanEstudioObtener(Long pPlaEstCod) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener(pPlaEstCod, PlanEstudio.class);
@@ -260,6 +302,12 @@ public class LoCarrera implements Interfaz.InCarrera{
     //----------------------------------------------------------------------------------------------------
     //-Manejo de Materia
     //----------------------------------------------------------------------------------------------------
+
+    /**
+     * Guardar materia
+     * @param mat Materia
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     
     public Object MateriaAgregar(Materia mat)
     {
@@ -293,6 +341,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Actualizar materia
+     * @param mat Materia
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object MateriaActualizar(Materia mat)
     {
         boolean error           = false;
@@ -325,6 +378,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Eliminar Materia
+     * @param mat Materia
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object MateriaEliminar(Materia mat)
     {
         boolean error           = false;
@@ -345,11 +403,21 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Obtener Materia
+     * @param pMatCod Código de materia
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj MateriaObtener(Long pMatCod) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener(pMatCod, Materia.class);
     }
     
+    /**
+     * Obtener materias para popup, en base a plan de estudio
+     * @param PlaEstCod Código del plan
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerPopUp(Long PlaEstCod)
     {
         PerManejador perManager = new PerManejador();
@@ -361,6 +429,13 @@ public class LoCarrera implements Interfaz.InCarrera{
         
     }
     
+    /**
+     * Materia por periodo
+     * @param PlaEstCod Código del plan
+     * @param tpoPer Tipo de período
+     * @param perVal Valor del periodo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj MateriaPorPeriodo(Long PlaEstCod, TipoPeriodo tpoPer, Double perVal)
     {
         
@@ -379,6 +454,13 @@ public class LoCarrera implements Interfaz.InCarrera{
     //Moodle
     //--------------------------------------------------------------------------------------------------------
     
+    /**
+     * Agrega nueva catetgoria en moodle
+     * @param parent Código del padre
+     * @param mdlNom Nombre
+     * @param mdlDsc Descripción
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_AgregarCategoria(Long parent, String mdlNom, String mdlDsc)
     {
         Retorno_MsgObj retorno = loCategoria.Mdl_AgregarCategoria(mdlDsc, mdlNom, Boolean.TRUE, parent);
@@ -395,6 +477,14 @@ public class LoCarrera implements Interfaz.InCarrera{
 
     }
     
+    /**
+     * Actualizar categoría en moodle
+     * @param parent Código del padre
+     * @param mdlCod Código de la categoría
+     * @param mdlNom Nombre
+     * @param mdlDsc Descripción
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_ActualizarCategoria(Long parent, Long mdlCod, String mdlNom, String mdlDsc)
     {
         Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(mdlCod, mdlDsc, mdlNom, Boolean.TRUE, parent);
@@ -405,6 +495,11 @@ public class LoCarrera implements Interfaz.InCarrera{
         return retorno;
     }
     
+    /**
+     * Eliminar categoría
+     * @param mdlCod Código de categoría
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_EliminarCategoria(Long mdlCod)
     {
         return loCategoria.Mdl_EliminarCategoria(mdlCod);

@@ -11,14 +11,8 @@ import Entidad.TipoEvaluacion;
 import Entidad.Version;
 import Enumerado.Constantes;
 import Enumerado.Filial;
-import Enumerado.NombreSesiones;
 import Logica.Notificacion.NotificacionesInternas;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URL;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -30,12 +24,17 @@ public class LoIniciar {
     private final LoVersion loVersion = LoVersion.GetInstancia();
     private Version version;
         
-        
-    
+    /**
+     *Inicia el sistema
+     */
     public LoIniciar() {
         version     = loVersion.obtener(Long.valueOf("1"));
     }
     
+    /**
+     * Inicia el sistema
+     * @param request HttpServletRequest
+     */
     public void Iniciar(HttpServletRequest request){
         
         Parametro param = LoParametro.GetInstancia().obtener();
@@ -60,6 +59,9 @@ public class LoIniciar {
         
     }
     
+    /**
+     * Cargar version
+     */
     private void CargarVersion(){
         version = new Version();
         version.setSisCrgDat(Boolean.FALSE);
@@ -68,6 +70,10 @@ public class LoIniciar {
         loVersion.guardar(version);
     }
     
+    /**
+     * Cargar datos iniciales
+     * @param request HttpServletRequest
+     */
     private void CargarDatosIniciales(HttpServletRequest request){
         CargarParametros();
         CargarTipoEvaluacion();
@@ -82,6 +88,9 @@ public class LoIniciar {
 
     }
     
+    /**
+     * Cargar tipos de evaluación
+     */
     private void CargarTipoEvaluacion(){
         LoTipoEvaluacion lTpoEval = LoTipoEvaluacion.GetInstancia();
         if(lTpoEval.obtenerLista().getLstObjetos().size() < 4)
@@ -115,6 +124,9 @@ public class LoIniciar {
         
    }
     
+    /**
+     * Cargar parametros
+     */
     private void CargarParametros(){
         
         Parametro parametro = LoParametro.GetInstancia().obtener();
@@ -138,6 +150,11 @@ public class LoIniciar {
         
     }
     
+    /**
+     * Cargar url de sistema
+     * @param request  HttpServletRequest
+     */
+    
     private void CargarUrlSistema(HttpServletRequest request){
         
         //URI contextUrl = URI.create(request.getRequestURL().toString()).resolve(request.getContextPath());
@@ -151,11 +168,17 @@ public class LoIniciar {
         
     }
     
+    /**
+     * Sincronizar personas con moodle
+     */
     private void SincronizarConMoodle(){
         LoPersona persona = LoPersona.GetInstancia();
         persona.SincronizarUsuariosMoodleSistema();
     }    
     
+    /**
+     * Cargar usuario administrador
+     */
     private void CargarUsuarioAdministrador(){
         LoPersona loPersona   = LoPersona.GetInstancia();
         Persona persona     = (Persona) loPersona.obtener(Long.valueOf("1")).getObjeto();
@@ -181,15 +204,25 @@ public class LoIniciar {
         }
     }
     
+    /**
+     * Cargar notificaciones
+     */
+    
     private void CargarNotificaciones(){
         NotificacionesInternas notInt = new NotificacionesInternas();
         notInt.CargarNotificaciones();
      }
     
+    /**
+     * Cargar usuarios de servicio web
+     */
+    
     private void CargarUsuariosWS(){
         LoWS.GetInstancia().CargarUsuariosWS();
     }
-    
+    /**
+     * Cargar sincronizar
+     */
     private void CargarObjetosSincronizar(){
         LoSincronizacion.GetInstancia().CargaInicialObjetos();
     }

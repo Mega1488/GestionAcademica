@@ -29,6 +29,10 @@ public class LoNotificacion implements InABMGenerico{
     private LoNotificacion() {
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia de clase
+     */
     public static LoNotificacion GetInstancia(){
         if (instancia==null)
         {
@@ -38,7 +42,11 @@ public class LoNotificacion implements InABMGenerico{
         return instancia;
     }
     
-
+    /**
+     * Guardar notificacion
+     * @param pObjeto Notificacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         Notificacion not = (Notificacion) pObjeto;
@@ -56,24 +64,43 @@ public class LoNotificacion implements InABMGenerico{
         return retorno; 
     }
 
+    /**
+     * Actualizar notificacion
+     * @param pObjeto Notificacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.actualizar(pObjeto);
     }
 
+    /**
+     * Eliminar notificacion
+     * @param pObjeto Notificacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener notificacion
+     * @param pObjeto Long - NotCod
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, Notificacion.class);
     }
 
+    /**
+     * Obtener lista de notificaciones
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManager = new PerManejador();
@@ -81,6 +108,11 @@ public class LoNotificacion implements InABMGenerico{
         return perManager.obtenerLista("Notificacion.findAll", null);
     }
     
+    /**
+     * Obtener por nombre
+     * @param nombre nombre
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerByNom(String nombre) {
         
         PerManejador perManager = new PerManejador();
@@ -100,6 +132,12 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Obtener lista por tipo y si esta activa
+     * @param NotAct Activa
+     * @param NotTpo Tipo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerListaByTipoActiva(Boolean NotAct, TipoNotificacion NotTpo) {
         
         PerManejador perManager = new PerManejador();
@@ -111,6 +149,11 @@ public class LoNotificacion implements InABMGenerico{
         return perManager.obtenerLista("Notificacion.findAutoActiva", lstParametros);
     }
     
+    /**
+     * Obtener resultados de consulta SQL
+     * @param query Sentencia SQL
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerResultadosQuery(String query){
         
         Retorno_MsgObj retorno = this.ValidarQuery(query);
@@ -124,6 +167,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Validar consulta SQL
+     * @param query Sentencia SQL
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ValidarQuery(String query){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
         
@@ -142,6 +190,12 @@ public class LoNotificacion implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE DESTINATARIOS
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar destinatario
+     * @param destinatario Destinatario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj DestinatarioAgregar(NotificacionDestinatario destinatario){
         Retorno_MsgObj retorno = this.ValidarDestinatario(destinatario);
@@ -157,6 +211,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualizar destinatario
+     * @param destinatario Destinatario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj DestinatarioActualizar(NotificacionDestinatario destinatario){
         
         Retorno_MsgObj retorno = this.ValidarDestinatario(destinatario);
@@ -173,6 +232,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Destinatario eliminar
+     * @param destinatario Destinatario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj DestinatarioEliminar(NotificacionDestinatario destinatario){
         Retorno_MsgObj retorno = this.ValidarDestinatario(destinatario);
         Boolean error = retorno.SurgioError();
@@ -188,6 +252,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Validar destinatario
+     * @param destinatario Destinatario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ValidarDestinatario(NotificacionDestinatario destinatario){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
         
@@ -223,6 +292,12 @@ public class LoNotificacion implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE CONSULTAS
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar consulta SQL
+     * @param consulta Consulta
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj ConsultaAgregar(NotificacionConsulta consulta){
         Retorno_MsgObj retorno = this.ValidarConsulta(consulta);
@@ -238,6 +313,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualizar consulta SQL
+     * @param consulta Consulta SQL
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ConsultaActualizar(NotificacionConsulta consulta){
         
         Retorno_MsgObj retorno = this.ValidarConsulta(consulta);
@@ -254,6 +334,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Eliminar consulta SQL
+     * @param consulta Consulta SQL
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ConsultaEliminar(NotificacionConsulta consulta){
         Retorno_MsgObj retorno = this.ValidarConsulta(consulta);
         Boolean error = retorno.SurgioError();
@@ -269,6 +354,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Validar consulta SQL
+     * @param consulta Consulta SQL
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ValidarConsulta(NotificacionConsulta consulta){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
         
@@ -311,6 +401,12 @@ public class LoNotificacion implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE BITACORA
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar bitacora
+     * @param bitacora Bitacora
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj BitacoraAgregar(NotificacionBitacora bitacora){
         Retorno_MsgObj retorno = this.ValidarBitacora(bitacora);
@@ -328,6 +424,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualizar bitacora
+     * @param bitacora Bitacora
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj BitacoraActualizar(NotificacionBitacora bitacora){
         
         Retorno_MsgObj retorno = this.ValidarBitacora(bitacora);
@@ -347,6 +448,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Eliminar Bitacora
+     * @param bitacora Bitacora
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj BitacoraEliminar(NotificacionBitacora bitacora){
         Retorno_MsgObj retorno = this.ValidarBitacora(bitacora);
         Boolean error = retorno.SurgioError();
@@ -362,6 +468,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Depurar bitacora
+     * @param notificacion Notificacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj BitacoraDepurar(Notificacion notificacion){
         
         notificacion.setLstBitacora(null);
@@ -371,6 +482,11 @@ public class LoNotificacion implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Validar bitacora
+     * @param bitacora bitacora
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ValidarBitacora(NotificacionBitacora bitacora){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Ok", TipoMensaje.MENSAJE));
         

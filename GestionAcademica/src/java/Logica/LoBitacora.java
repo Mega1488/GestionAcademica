@@ -27,6 +27,10 @@ public class LoBitacora implements InABMGenerico{
     private LoBitacora() {
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoBitacora GetInstancia(){
         if (instancia==null)
         {
@@ -36,6 +40,11 @@ public class LoBitacora implements InABMGenerico{
         return instancia;
     }
     
+    /**
+     * Guardar bitacora
+     * @param pObjeto Bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         
@@ -53,6 +62,11 @@ public class LoBitacora implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     * Actualizar bitacora
+     * @param pObjeto Bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -61,12 +75,22 @@ public class LoBitacora implements InABMGenerico{
         return perManejador.actualizar(pObjeto);
     }
 
+    /**
+     * Eliminar bitacora
+     * @param pObjeto Bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener bitacora
+     * @param pObjeto Long BitCod
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         
@@ -75,6 +99,10 @@ public class LoBitacora implements InABMGenerico{
         return perManejador.obtener((Long) pObjeto, BitacoraProceso.class);
     }
 
+    /**
+     * Obtener lista de bitacoras
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManejador   = new PerManejador();
@@ -82,6 +110,11 @@ public class LoBitacora implements InABMGenerico{
         return perManejador.obtenerLista("BitacoraProceso.findAll", null);
     }
     
+    /**
+     * Obtener lista de bitacoras, a partir del proceso de la misma
+     * @param proceso Proceso
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerListaByProceso(Proceso proceso) {
         PerManejador perManejador   = new PerManejador();
         
@@ -91,6 +124,10 @@ public class LoBitacora implements InABMGenerico{
         return perManejador.obtenerLista("BitacoraProceso.findByProceso", lstParametros);
     }
    
+    /**
+     * Depurar - Se eliminan todas las bitacoras guardadas
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj depurar(){
         Retorno_MsgObj retorno = this.obtenerLista();
         
@@ -110,6 +147,11 @@ public class LoBitacora implements InABMGenerico{
         return retorno;
     }
    
+    /**
+     * Guarda un nuevo mensaje en la bitacora
+     * @param mensaje Mensaje
+     * @param proceso Proceso
+     */
     public void NuevoMensaje(Mensajes mensaje, Proceso proceso){
         BitacoraProceso bit =  new BitacoraProceso(proceso, new Date(), mensaje.getMensaje(), mensaje.getTipoMensaje());
         this.guardar(bit);

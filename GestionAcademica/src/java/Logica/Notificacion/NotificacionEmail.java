@@ -36,9 +36,17 @@ import javax.mail.internet.MimeMultipart;
  */
 public class NotificacionEmail {
     
+    /**
+     * Notificar por email
+     */
     public NotificacionEmail() {
     }
     
+    /**
+     * Notificar
+     * @param notificacion Notificacion
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Notificar(SDT_NotificacionEnvio notificacion)
     {
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Notificar email", TipoMensaje.MENSAJE));
@@ -147,7 +155,16 @@ public class NotificacionEmail {
 
         return retorno;
     }
-    
+
+    /**
+     * Enviar email por SMTP
+     * @param retorno Retorno
+     * @param parEml Parametro Email
+     * @param notificacion Notificacion
+     * @param destinatario Destinatario Email
+     * @param destinatarioNombre Destinatario Nombre
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj EnviarMailSmtp(Retorno_MsgObj retorno, ParametroEmail parEml, SDT_NotificacionEnvio notificacion, String destinatario, String destinatarioNombre){
         final int timeout   = parEml.getParEmlTmpEsp() * 1000;
         final String user   = parEml.getParEmlUsr();
@@ -308,6 +325,15 @@ public class NotificacionEmail {
         return retorno;
     }
     
+    /**
+     *  Enviar email por EWS
+     * @param retorno Retorno
+     * @param parEml Parametro Email
+     * @param notificacion Notificacion
+     * @param destinatario Email Destinatario
+     * @param destinatarioNombre Destinatario nombre
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj EnviarMailEWS(Retorno_MsgObj retorno, ParametroEmail parEml, SDT_NotificacionEnvio notificacion, String destinatario, String destinatarioNombre){
         final int timeout   = parEml.getParEmlTmpEsp() * 1000;
         final String user   = parEml.getParEmlUsr();
@@ -402,7 +428,12 @@ public class NotificacionEmail {
         
         return retorno;
     }
-    
+
+    /**
+     * Escribir log
+     * @param retorno Retorno
+     * @param mensaje Mensaje
+     */
     private void EscribirLog(Retorno_MsgObj retorno, String mensaje){
         
         

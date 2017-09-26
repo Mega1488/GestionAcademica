@@ -21,6 +21,10 @@ public class LoMenu implements InABMGenerico{
     private LoMenu() {
     }
     
+    /**
+     * Obtener instancia
+     * @return instancia de clase
+     */
     public static LoMenu GetInstancia(){
         if (instancia==null)
         {
@@ -30,7 +34,11 @@ public class LoMenu implements InABMGenerico{
         return instancia;
     }
     
-
+    /**
+     * Guardar menu
+     * @param pObjeto Menu
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         
@@ -48,6 +56,11 @@ public class LoMenu implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     * Actualizar menu
+     * @param pObjeto menu
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -56,6 +69,11 @@ public class LoMenu implements InABMGenerico{
         return perManejador.actualizar(pObjeto);
     }
 
+    /**
+     * Eliminar menu
+     * @param pObjeto Menu
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
@@ -63,6 +81,11 @@ public class LoMenu implements InABMGenerico{
         return perManejador.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener menu
+     * @param pObjeto Long - MenCod 
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
@@ -70,6 +93,10 @@ public class LoMenu implements InABMGenerico{
         return perManejador.obtener((Long) pObjeto, Menu.class);
     }
 
+    /**
+     * Obtener lista de menu
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         

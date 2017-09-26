@@ -23,6 +23,7 @@ public class AsyncNotificar extends Thread {
          * Constructor
          * 
          * @param pNot - The agent to execute.
+            * @param tpoNotificacion
          */
         public AsyncNotificar(Notificacion pNot, TipoNotificacion tpoNotificacion) {
             this.not = pNot;

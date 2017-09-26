@@ -64,6 +64,10 @@ public class LoPersona implements Interfaz.InPersona{
     
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia de clase
+     */
     public static LoPersona GetInstancia(){
         if (instancia==null)
         {
@@ -74,6 +78,11 @@ public class LoPersona implements Interfaz.InPersona{
         return instancia;
     }
 
+    /**
+     * Guardar persona
+     * @param pObjeto Persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Persona pObjeto) {
         boolean error           = false;
@@ -126,6 +135,11 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
 
+    /**
+     * Actualizar persona
+     * @param pObjeto Persona
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Persona pObjeto) {
         boolean error           = false;
@@ -174,6 +188,11 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
 
+    /**
+     * Eliminar Persona
+     * @param pObjeto Persona 
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Persona pObjeto) {
         
@@ -193,12 +212,22 @@ public class LoPersona implements Interfaz.InPersona{
        return retorno;
     }
 
+    /**
+     * Obtener persona
+     * @param pCodigo Long - PerCod
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pCodigo) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pCodigo, Persona.class);
     }
     
+    /**
+     * Obtener persona por usuario
+     * @param pMdlUsr Usuario
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerByMdlUsr(String pMdlUsr) {
         PerManejador perManager = new PerManejador();
@@ -221,6 +250,10 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
 
+    /**
+     * Obtener lista de personas
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManager = new PerManejador();
@@ -228,6 +261,10 @@ public class LoPersona implements Interfaz.InPersona{
         return perManager.obtenerLista("Persona.findAll", null);
     }
     
+    /**
+     * Obtener lista de personas para popup
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerPopUp(){
         
         Retorno_MsgObj retorno = this.obtenerLista();
@@ -247,6 +284,11 @@ public class LoPersona implements Interfaz.InPersona{
         
     }
     
+    /**
+     * Obtener persona por email
+     * @param pEmail Email
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerByEmail(String pEmail) {
         PerManejador perManager = new PerManejador();
 
@@ -268,6 +310,11 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
+    /**
+     * Obtener persona por token de aplicación
+     * @param PerAppTkn token
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ObtenerPersonaByAppTkn(String PerAppTkn){
         PerManejador perManager = new PerManejador();
                 
@@ -282,6 +329,12 @@ public class LoPersona implements Interfaz.InPersona{
     }
     
     //----------------------------------------------------------------------------------------------------
+
+    /**
+     * Obtener estudios de una persona
+     * @param PerCod Código de Persona
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     
     public ArrayList<SDT_PersonaEstudio> ObtenerEstudios(Long PerCod){
         ArrayList<SDT_PersonaEstudio> lstEstudios = new ArrayList<>();;
@@ -317,7 +370,14 @@ public class LoPersona implements Interfaz.InPersona{
         
         return lstEstudios;
     }
-    
+
+    /**
+     * Agrega estudio a la lista
+     * @param lstEstudio Lista de estudio
+     * @param escolaridad Escolaridad
+     * @param inscripcion Inscripción
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private ArrayList<SDT_PersonaEstudio> PersonaAgregarEstudio(ArrayList<SDT_PersonaEstudio> lstEstudio, Escolaridad escolaridad, Inscripcion inscripcion){
         boolean existe = false;
         
@@ -382,6 +442,14 @@ public class LoPersona implements Interfaz.InPersona{
         return lstEstudio;
     }
     
+    /**
+     * Retorna si una persona aprobo un estudio
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @param modulo Modulo
+     * @param curso Curso
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public boolean PersonaAproboEstudio(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         
         ArrayList<SDT_PersonaEstudio> lstEstudio = this.ObtenerEstudios(PerCod);
@@ -402,6 +470,12 @@ public class LoPersona implements Interfaz.InPersona{
         return estudioAprobado;
     }
     
+    /**
+     * Determinar si una persona revalida una materia
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public boolean PersonaRevalidaMateria(Long PerCod, Materia materia){
         if(materia == null)
         {
@@ -421,12 +495,27 @@ public class LoPersona implements Interfaz.InPersona{
         return false;
     }
     
+    /**
+     * Determinar si una persona puede dar un examen
+     * @param PerCod Código de persona
+     * @param materia Materia
+     * @param modulo Modulo
+     * @param curso Curso
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Boolean PersonaPuedeDarExamen(Long PerCod, Materia materia, Modulo modulo, Curso curso){
         return LoCalendario.GetInstancia().AlumnoPuedeDarExamen(PerCod, materia, modulo, curso);
         
     }
 
     //----------------------------------------------------------------------------------------------------
+
+    /**
+     * Actualizar token de aplicación android
+     * @param PerCod Código de persona
+     * @param PerAppTkn Token de aplicación android
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj ActualizarToken(Long PerCod, String PerAppTkn){
         
@@ -493,6 +582,12 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
+    /**
+     * Limpia el token aplicación movil de una persona, esto se hace cuando 
+     * cierra sesion en el dispositivo
+     * @param PerCod Código de persona
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj LimpiarToken(Long PerCod){
         
         Retorno_MsgObj retorno  = this.obtener(PerCod);
@@ -511,6 +606,13 @@ public class LoPersona implements Interfaz.InPersona{
     }
     
     //----------------------------------------------------------------------------------------------------
+
+    /**
+     * Inicar sesión
+     * @param usuario Usuario
+     * @param password Contraseña (MD5)
+     * @return Inicio correcto
+     */
     
     public Boolean IniciarSesion(String usuario, String password){
         boolean resultado = false;
@@ -564,6 +666,14 @@ public class LoPersona implements Interfaz.InPersona{
         return resultado;
     }
     
+    /**
+     * Cambiar contraseña
+     * @param usuario Usuario
+     * @param pswActual Contraseña actual (Sin MD5)
+     * @param pswNueva Contraseña nueva (Sin MD5)
+     * @param pswConf Confirmación de contraseña (Sin MD5)
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj CambiarPassword(String usuario, String pswActual, String pswNueva, String pswConf){
         
 
@@ -611,6 +721,12 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
+    /**
+     * Validar cambio de contraseña externo
+     * @param usr Usuario
+     * @param tkn Token
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ValCambiarPasswordExterno(String usr, String tkn){
 
         String usuario = seguridad.decrypt(usr
@@ -633,6 +749,11 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
+    /**
+     * Usuario solicita restablecer contraseña
+     * @param usuario Usuario
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj SolicitaRestablecerPassword(String usuario){
         Retorno_MsgObj retorno = this.obtenerByMdlUsr(usuario);
         if(!retorno.SurgioErrorObjetoRequerido())
@@ -674,6 +795,14 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
+    /**
+     * Usuario restablece contraseña
+     * @param PerCod Código de persona
+     * @param tkn Token
+     * @param pswNueva Contraseña nueva (Sin MD5)
+     * @param pswConf Confirmación de contraseña (Sin MD5   )
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj RestablecerPassword(Long PerCod, String tkn, String pswNueva, String pswConf){
         Retorno_MsgObj retorno = this.obtener(PerCod);
         if(!retorno.SurgioErrorObjetoRequerido())
@@ -718,10 +847,21 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
+    /**
+     * Generar nueva contraseña aleatoria
+     * @param longitud Longitud
+     * @return Contraseña
+     */
     private String GenerarPassword(Integer longitud){
         return Utiles.Utilidades.GetInstancia().GenerarToken(longitud);
     }
-    
+
+    /**
+     * Valida que el email no exista en otra persona que la original
+     * @param email Email
+     * @param idOriginal Código de persona original
+     * @return Email valido
+     */
     private boolean ValidarEmail(String email, Long idOriginal){
         boolean error = false;
 
@@ -741,7 +881,13 @@ public class LoPersona implements Interfaz.InPersona{
         
         return error;
     }
-    
+
+    /**
+     * Validar que el usuario no exista en otra persona que la original
+     * @param usuario Usuario
+     * @param idOriginal Código de persona original
+     * @return Usuario valido
+     */
     private boolean ValidarUsuario(String usuario, Long idOriginal){
         boolean error = false;
 
@@ -766,6 +912,10 @@ public class LoPersona implements Interfaz.InPersona{
     //----------------------------------------------------------------------------------------------------
     //-Modle
     //----------------------------------------------------------------------------------------------------
+
+    /**
+     * Obtener usuarios de moodle, y crearlo como personas
+     */
     
     public void SincronizarUsuariosMoodleSistema()
     {
@@ -791,6 +941,10 @@ public class LoPersona implements Interfaz.InPersona{
         SincronizarTipoUsuarioMdl();
     }
     
+    /**
+     * Analiza los roles de usuario en moodle, y actualiza
+     * el tipo de usuario en la persona
+     */
     private void SincronizarTipoUsuarioMdl()
     {
         try {
@@ -839,6 +993,10 @@ public class LoPersona implements Interfaz.InPersona{
         
     }
     
+    /**
+     * Obtener usuarios de moodle
+     * @return Lista de personas
+     */
     private List<Persona> MdlObtenerUsuarios()
     {
         List<Persona> lstPersonas = new ArrayList<>();
@@ -870,6 +1028,11 @@ public class LoPersona implements Interfaz.InPersona{
         return lstPersonas;
     }
     
+    /**
+     * Castea el usuario de moodle a persona
+     * @param usuario Usuario
+     * @return Persona
+     */
     private Persona Mdl_UsuarioToPersona(MoodleUser usuario)
     {
         Persona persona = (Persona) this.obtenerByMdlUsr(usuario.getUsername()).getObjeto();
@@ -888,6 +1051,11 @@ public class LoPersona implements Interfaz.InPersona{
     
     //----------------------------------------------------------------------------------------------------
     
+    /**
+     * Agregar persona como usuario a Moodle
+     * @param persona Persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_AgregarUsuario(Persona persona)
     {
         Retorno_MsgObj retorno;
@@ -916,7 +1084,12 @@ public class LoPersona implements Interfaz.InPersona{
         
         return retorno;
     }
-    
+
+    /**
+     * Actualizar persona como usuario en Moodle
+     * @param persona Persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_ActualizarUsuario(Persona persona)
     {
         Retorno_MsgObj retorno = Mdl_ObtenerUsuarioByID(persona.getPerUsrModID());
@@ -945,7 +1118,12 @@ public class LoPersona implements Interfaz.InPersona{
         
         return retorno;
     }
-    
+
+    /**
+     * Eliminar usuario en Moodle, en base a persona
+     * @param persona Persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_EliminarUsuario(Persona persona)
     {
         Retorno_MsgObj retorno;
@@ -967,7 +1145,11 @@ public class LoPersona implements Interfaz.InPersona{
         return retorno;
     }
     
-    
+    /**
+     * Obtener usuario en moodle, en base a el ID
+     * @param id Código de usuario en Moodle
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_ObtenerUsuarioByID(Long id)
     {
         Retorno_MsgObj retorno;

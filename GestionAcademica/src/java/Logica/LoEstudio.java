@@ -11,7 +11,6 @@ import Enumerado.Constantes;
 import Enumerado.TipoMensaje;
 import Moodle.MoodleCourse;
 import Moodle.MoodleCourseContent;
-import Moodle.MoodleEnrolUser;
 import Moodle.MoodleFileContent;
 import Moodle.MoodleModuleContent;
 import Moodle.MoodleRestCourse;
@@ -20,9 +19,7 @@ import Moodle.MoodleRestException;
 import Moodle.MoodleRestFile;
 import Moodle.MoodleRestUserEnrolment;
 import Moodle.MoodleRestUserEnrolmentException;
-import Moodle.MoodleUser;
 import Moodle.MoodleUserEnrolment;
-import Moodle.MoodleUserRoleException;
 import Moodle.Role;
 import Moodle.UserList;
 import Utiles.Mensajes;
@@ -40,7 +37,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.tomcat.jni.File;
 
 /**
  *
@@ -58,6 +54,10 @@ public class LoEstudio {
         param               = LoParametro.GetInstancia().obtener();
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoEstudio GetInstancia(){
         if (instancia==null)
         {
@@ -68,7 +68,14 @@ public class LoEstudio {
         return instancia;
     }
     
-    
+    /**
+     * Agregar estudio a moodle
+     * @param pCategory Código de categoría
+     * @param pFullName Nombre largo
+     * @param pShortName Nombre corto
+     * @param pDescripcion Descripción
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_AgregarEstudio(Long pCategory, String pFullName, String pShortName, String pDescripcion)
     {
         Mensajes mensaje;
@@ -95,6 +102,15 @@ public class LoEstudio {
 
     }
     
+    /**
+     * Actualizar estudio de moodle
+     * @param pCodigo Código de estudio
+     * @param pCategory Código de categoría
+     * @param pFullName Nombre largo
+     * @param pShortName Nombre corto
+     * @param pDescripcion Descripción
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_ActualizarEstudio(Long pCodigo, Long pCategory, String pFullName, String pShortName, String pDescripcion)
     {
         Mensajes mensaje;
@@ -122,6 +138,11 @@ public class LoEstudio {
 
     }
     
+    /**
+     * Eliminar estudio de moodle
+     * @param codigo Código de estudio 
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_EliminarEstudio(Long codigo)
     {
         Mensajes mensaje;
@@ -140,6 +161,11 @@ public class LoEstudio {
 
     }
     
+    /**
+     * Obtener estudio de moodle
+     * @param codigo Código de moodle
+     * @return  Curso
+     */
     public MoodleCourse Mdl_ObtenerEstudio(Long codigo){
 
         try {
@@ -153,6 +179,11 @@ public class LoEstudio {
        return null;
     }
     
+    /**
+     * Obtener contenido de curso
+     * @param curso Código de curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public MoodleCourseContent[] Mdl_ObtenerEstudioContent(Long curso){
 
         try {
@@ -170,6 +201,11 @@ public class LoEstudio {
        return null; 
     }
     
+    /**
+     * Obtener archivo de contenido de curso
+     * @param contenido Contenido de curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public PeriodoEstudioDocumento Mdl_ObtenerEstudioArchivo(MoodleModuleContent contenido){
         try {
 
@@ -225,6 +261,10 @@ public class LoEstudio {
         return null;
     }
     
+    /**
+     * Subir archivo a moodle
+     * @param pe Documento de estudio
+     */
     public void Mdl_SubirArchivoEstudio(PeriodoEstudioDocumento pe){
         try {
             MoodleRestFile restFile = new MoodleRestFile();
@@ -247,6 +287,13 @@ public class LoEstudio {
         }
     }
     
+    /**
+     * Asigna rol a usuario en un curso
+     * @param perModId ID del usuario en moodle
+     * @param mdlCod Código del curso
+     * @param mdlRol Rol
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_AsignUserCourse(Long perModId, Long mdlCod, Role mdlRol){
         Retorno_MsgObj retorno = new Retorno_MsgObj();
         
@@ -317,6 +364,13 @@ public class LoEstudio {
     }
     */
     
+    /**
+     * Quitar usuario de un curso 
+     * @param perModId ID del usuario en moodle
+     * @param mdlCod Codigo del curso
+     * @param mdlRol Rol
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_UnAsignUserCourse(Long perModId, Long mdlCod, Role mdlRol){
         Retorno_MsgObj retorno = new Retorno_MsgObj();
         
@@ -349,6 +403,10 @@ public class LoEstudio {
         return retorno;
     }
     
+    /**
+     * Retorno lista de cursos
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_ListaCursos(){
         MoodleRestCourse crs = new MoodleRestCourse();
         

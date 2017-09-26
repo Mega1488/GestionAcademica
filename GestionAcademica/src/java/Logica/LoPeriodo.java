@@ -46,6 +46,10 @@ public class LoPeriodo implements InABMGenerico{
         param     = LoParametro.GetInstancia().obtener();
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia
+     */
     public static LoPeriodo GetInstancia(){
         if (instancia==null)
         {
@@ -55,7 +59,11 @@ public class LoPeriodo implements InABMGenerico{
         return instancia;
     }
     
-
+    /**
+     * Guardar periodo
+     * @param pObjeto Periodo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         Periodo periodo = (Periodo) pObjeto;
@@ -126,6 +134,11 @@ public class LoPeriodo implements InABMGenerico{
         
     }
 
+    /**
+     * Actualizar periodo
+     * @param pObjeto Periodo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -138,6 +151,11 @@ public class LoPeriodo implements InABMGenerico{
         return perManager.actualizar(periodo);
     }
 
+    /**
+     * Eliminar periodo
+     * @param pObjeto Periodo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
@@ -161,12 +179,21 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     * Obtener periodo
+     * @param pObjeto Long - PerCod
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, Periodo.class);
     }
 
+    /**
+     * Obtener lista periodo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManager = new PerManejador();
@@ -174,6 +201,13 @@ public class LoPeriodo implements InABMGenerico{
         return perManager.obtenerLista("Periodo.findAll", null);
     }
     
+    /**
+     * Guardar por estudio
+     * @param periodo Periodo 
+     * @param curso Curso
+     * @param plan Plan de estudio
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj guardarPorEstudio(Periodo periodo, Curso curso, PlanEstudio plan) {
         int modAgregados = 0;
         int matAgregadas = 0;
@@ -248,6 +282,11 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
  
+    /**
+     * Obtener Ultimo Periodo Estudio por Materia
+     * @param MatCod Código de materia
+     * @return  Periodo Estudio
+     */
     public PeriodoEstudio obtenerLastPeriodoEstudioByMateria(Long MatCod) {
         
        
@@ -278,6 +317,11 @@ public class LoPeriodo implements InABMGenerico{
         return null;
     }
     
+    /**
+     * Obtener Ultimo Periodo Estudio Por Modulo
+     * @param ModCod Código de Modulo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public PeriodoEstudio obtenerLastPeriodoEstudioByModulo(Long ModCod) {
         
         PerManejador perManager = new PerManejador();
@@ -311,6 +355,12 @@ public class LoPeriodo implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE ESTUDIO
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar estudio
+     * @param periEstudio Periodo Estudio 
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     
     public Object EstudioAgregar(PeriodoEstudio periEstudio)
     {
@@ -356,6 +406,11 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
+    /** 
+     * Actualizar periodo estudio
+     * @param periEstudio Periodo Estudio
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object EstudioActualizar(PeriodoEstudio periEstudio)
     {
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Actualizando estudio", TipoMensaje.MENSAJE), periEstudio);
@@ -399,6 +454,11 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Eliminar Periodo Estudio
+     * @param periEstudio Periodo Estudio
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object EstudioEliminar(PeriodoEstudio periEstudio)
     {
         if(param.getParUtlMdl() && periEstudio.getMdlCod() != null)
@@ -411,11 +471,21 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.eliminar(periEstudio);
     }
     
+    /**
+     * Obtener Periodo Estudio 
+     * @param PeriEstCod Long - PeriEstCod 
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj EstudioObtener(Long PeriEstCod){
         PerManejador perManager = new PerManejador();
         return perManager.obtener(PeriEstCod, PeriodoEstudio.class);
     }
     
+    /**
+     * Obtener Estudio Por Persona
+     * @param PerCod Código de persona
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj EstudioObtenerByPersona(Long PerCod){
         PerManejador perManager = new PerManejador();
 
@@ -426,6 +496,10 @@ public class LoPeriodo implements InABMGenerico{
         return perManager.obtenerLista("PeriodoEstudio.findByPersona", lstParametros);
     }
     
+    /**
+     * Obtener todos los estudios
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj EstudioObtenerTodos()
     {
         PerManejador perManager = new PerManejador();
@@ -435,6 +509,12 @@ public class LoPeriodo implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE ALUMNO
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar alumno
+     * @param alumno Alumno
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Object AlumnoAgregar(PeriodoEstudioAlumno alumno)
     {
@@ -477,6 +557,11 @@ public class LoPeriodo implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualizar alumno
+     * @param alumno Alumno
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object AlumnoActualizar(PeriodoEstudioAlumno alumno)
     {
         alumno.setObjFchMod(new Date());
@@ -484,6 +569,11 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.actualizar(alumno);
     }
     
+    /**
+     * Eliminar Alumno
+     * @param alumno Alumno
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object AlumnoEliminar(PeriodoEstudioAlumno alumno)
     {
         Retorno_MsgObj retorno = loEstudio.Mdl_UnAsignUserCourse(alumno.getAlumno().getPerUsrModID(), 
@@ -495,6 +585,12 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.eliminar(alumno);
     }
    
+    /**
+     * Agregar generacion
+     * @param PeriCod Codigo de periodo
+     * @param InsGenAnio Anio de generacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj GeneracionAgregar(Long PeriCod, Integer InsGenAnio)
     {
         boolean error           = false;
@@ -553,6 +649,12 @@ public class LoPeriodo implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE DOCENTES
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar docente
+     * @param docente Docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Object DocenteAgregar(PeriodoEstudioDocente docente)
     {
@@ -571,6 +673,11 @@ public class LoPeriodo implements InABMGenerico{
 
     }
     
+    /**
+     * Actualizar docente
+     * @param docente Docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object DocenteActualizar(PeriodoEstudioDocente docente)
     {
         
@@ -579,6 +686,11 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.actualizar(docente);
     }
     
+    /**
+     * Eliminar docente
+     * @param docente Docente
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object DocenteEliminar(PeriodoEstudioDocente docente)
     {
         Retorno_MsgObj retorno = loEstudio.Mdl_UnAsignUserCourse(docente.getDocente().getPerUsrModID(), 
@@ -593,6 +705,12 @@ public class LoPeriodo implements InABMGenerico{
     //------------------------------------------------------------------------------------
     //-MANEJO DE DOCUMENTO
     //------------------------------------------------------------------------------------
+
+    /**
+     * Agregar documento
+     * @param documento Documento
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Object DocumentoAgregar(PeriodoEstudioDocumento documento)
     {
@@ -601,6 +719,11 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.guardar(documento);
     }
     
+    /**
+     * Actualizar documento
+     * @param documento documento
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object DocumentoActualizar(PeriodoEstudioDocumento documento)
     {
         
@@ -609,12 +732,20 @@ public class LoPeriodo implements InABMGenerico{
         return perManejador.actualizar(documento);
     }
     
+    /**
+     * Eliminar documento
+     * @param documento documento
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object DocumentoEliminar(PeriodoEstudioDocumento documento)
     {
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(documento);
     }
     
+    /**
+     * Importar documentos de moodle
+     */
     public void DocumentoImportarMoodle(){
         if(param.getParUtlMdl())
         {
@@ -688,6 +819,10 @@ public class LoPeriodo implements InABMGenerico{
         }
     }
     
+    /**
+     * Importar documento de moodle, a partir de un periodo de estudio
+     * @param estudio Periodo de Estudio
+     */
     public void DocumentoImportarMoodle(PeriodoEstudio estudio){
         if(estudio.getMdlCod() != null)
                 {

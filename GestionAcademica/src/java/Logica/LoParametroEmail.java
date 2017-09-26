@@ -23,6 +23,10 @@ public class LoParametroEmail implements Interfaz.InParametroEmail{
         
     }
     
+    /**
+     * Obtener instancia
+     * @return instancia de clase
+     */
     public static LoParametroEmail GetInstancia(){
         if (instancia==null)
         {
@@ -33,6 +37,11 @@ public class LoParametroEmail implements Interfaz.InParametroEmail{
         return instancia;
     }
 
+    /**
+     * Guardar parametro de email
+     * @param pObjeto Parametro de email
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(ParametroEmail pObjeto) {
         ParametroEmail eml = (ParametroEmail) pObjeto;
@@ -50,18 +59,31 @@ public class LoParametroEmail implements Interfaz.InParametroEmail{
         //return perParametroEmail.guardar(pObjeto);
     }
 
+    /**
+     * Actualizar parametro email
+     * @param pObjeto parametro email
+     */
     @Override
     public void actualizar(ParametroEmail pObjeto) {
         PerManejador perManager = new PerManejador();
         perManager.actualizar(pObjeto);
     }
 
+    /**
+     * Eliminar parametro de email
+     * @param pObjeto Parametro de email
+     */
     @Override
     public void eliminar(ParametroEmail pObjeto) {
         PerManejador perManager = new PerManejador();
         perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener Parametro de email
+     * @param pCodigo Long - ParEmlCod 
+     * @return Parametro de Email
+     */
     @Override
     public ParametroEmail obtener(Object pCodigo) {
         PerManejador perManager = new PerManejador();
@@ -77,7 +99,10 @@ public class LoParametroEmail implements Interfaz.InParametroEmail{
         return eml;
     }
     
-
+    /**
+     * Obtener lista de parametros email
+     * @return Lista Parametro Email
+     */
     @Override
     public List<ParametroEmail> obtenerLista() {
         

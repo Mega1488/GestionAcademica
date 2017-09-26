@@ -31,6 +31,10 @@ public class LoBandeja implements InABMGenerico{
     private LoBandeja() {
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoBandeja GetInstancia(){
         if (instancia==null)
         {
@@ -40,6 +44,11 @@ public class LoBandeja implements InABMGenerico{
         return instancia;
     }
     
+    /**
+     * Guardar Bandeja
+     * @param pObjeto Bandeja
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         
@@ -59,6 +68,11 @@ public class LoBandeja implements InABMGenerico{
         return retorno;
     }
 
+    /**
+     * Actualizar bandeja
+     * @param pObjeto Bandeja
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -67,12 +81,22 @@ public class LoBandeja implements InABMGenerico{
         return perManejador.actualizar(pObjeto);
     }
 
+    /**
+     * Eliminar bandeja
+     * @param pObjeto Bandeja
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManejador   = new PerManejador();
         return perManejador.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener bandeja 
+     * @param pObjeto Long - NotBanCod
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         
@@ -81,6 +105,10 @@ public class LoBandeja implements InABMGenerico{
         return perManejador.obtener((Long) pObjeto, NotificacionBandeja.class);
     }
 
+    /**
+     * Obtener lista de bandejas
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManejador   = new PerManejador();
@@ -88,6 +116,13 @@ public class LoBandeja implements InABMGenerico{
         return perManejador.obtenerLista("NotificacionBandeja.findAll", null);
     }
     
+    /**
+     * Obtener lista de bandejas, a partir del tipo, persona y estado
+     * @param PerCod Código de persona
+     * @param NotBanTpo Tipo de bandeja
+     * @param NotBanEst Estado
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerListaByTipoEstado(Long PerCod, BandejaTipo NotBanTpo, BandejaEstado NotBanEst) {
         PerManejador perManejador   = new PerManejador();
         
@@ -99,6 +134,10 @@ public class LoBandeja implements InABMGenerico{
         return perManejador.obtenerLista("NotificacionBandeja.findByTpoEst", lstParametros);
     }
     
+    /** Notificar pendientes.
+     * <p>Cuando una persona inicia sesión, se buscan sus notificaciones pendientes y se las envia a  su dispositivo</p>      
+     * @param PerCod Código de la persona que inicia sesión
+     */
     public void NotificarPendientes(Long PerCod){
         Retorno_MsgObj retorno = this.obtenerListaByTipoEstado(PerCod, BandejaTipo.APP, BandejaEstado.SIN_LEER);
         

@@ -20,6 +20,10 @@ public class LoVersion{
     private LoVersion() {
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia
+     */
     public static LoVersion GetInstancia(){
         if (instancia==null)
         {
@@ -30,6 +34,11 @@ public class LoVersion{
         return instancia;
     }
 
+    /**
+     * Guardar version
+     * @param pObjeto Version
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object guardar(Version pObjeto) {
         
         pObjeto.setSisVerCod(Long.valueOf("1"));
@@ -47,11 +56,20 @@ public class LoVersion{
                 
     }
 
+    /**
+     * Actualizar version
+     * @param pObjeto Version
+     */
     public void actualizar(Version pObjeto) {
         PerManejador perManejador   = new PerManejador();
         perManejador.actualizar(pObjeto);
     }
 
+    /**
+     * Obtener version
+     * @param pCodigo Long - VerCod
+     * @return Version
+     */
     public Version obtener(Object pCodigo) {
         Version version             = new Version();
         PerManejador perManejador   = new PerManejador();

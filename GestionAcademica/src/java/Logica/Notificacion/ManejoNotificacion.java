@@ -45,6 +45,9 @@ public class ManejoNotificacion {
     private final NotificacionEmail notEmail;
     private final NotificacionWeb notWeb;
     
+    /**
+     * Manejo de notificaciones
+     */
     public ManejoNotificacion() {
         loNotificacion = LoNotificacion.GetInstancia();
         
@@ -56,6 +59,12 @@ public class ManejoNotificacion {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //MANEJO DE NOTIFICACIONES
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Ejecutar notificaciones automaticamente. 
+     * Se obtienen desde la base de datos
+     * No contempla las notificaciones internas.
+     */
     
     public void EjecutarNotificacionAutomaticamente(){
     
@@ -77,6 +86,10 @@ public class ManejoNotificacion {
         
     }
     
+    /**
+     * Ejecuta una notificación
+     * @param notificacion Notificación
+     */
     public void EjecutarNotificacion(Notificacion notificacion){
         Retorno_MsgObj retorno      = new Retorno_MsgObj(new Mensajes("Ejecutar notificacion", TipoMensaje.MENSAJE));
         
@@ -126,12 +139,27 @@ public class ManejoNotificacion {
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //ENVIO DE NOTIFICACIONES
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Armar envio
+     * @param notificacion Notificacion
+     * @param destinatario Destinatario
+     * @param contenido Contenido
+     * @param asunto Asunto
+     * @return Notificacion armada
+     */
     
     public SDT_NotificacionEnvio ArmarEnvio(Notificacion notificacion, NotificacionDestinatario destinatario, String contenido, String asunto){
         SDT_NotificacionEnvio envio = new SDT_NotificacionEnvio(notificacion.getNotApp(), notificacion.getNotWeb(), notificacion.getNotEmail(), destinatario, contenido, asunto, false);
         return envio;
     }
     
+    /**
+     * Notificar una lista
+     * @param notificacion Notificacion
+     * @param lstMensajes Lista de Mensajes
+     * @param destExcluir Destinatarios a excluir
+     */
     public void NotificarLista(Notificacion notificacion, List<SDT_NotificacionEnvio> lstMensajes, List<SDT_Destinatario> destExcluir){
         
         for(SDT_NotificacionEnvio mensaje : lstMensajes)
@@ -141,6 +169,12 @@ public class ManejoNotificacion {
         
     }
     
+    /**
+     * Notificar
+     * @param notificacion Notificacion
+     * @param sdtNotificacion Notificacion armada
+     * @param destExcluir Destinatarios a excluir
+     */
     public void Notificar(Notificacion notificacion, SDT_NotificacionEnvio sdtNotificacion, List<SDT_Destinatario> destExcluir){
         //ACA IRIA PARA CADA CLASE A NOTIFICAR, DEPENDIENDO DE A DONDE ESTA ESTIPULADA LA NOTIFICACION, Y SI EL DESTINATARIO ES UNA PERSONA, QUE TIENE CONFIGURADO RECIBIR.
         if(sdtNotificacion.getDestinatario() == null)
@@ -401,6 +435,12 @@ public class ManejoNotificacion {
     //PROCESO MENSAJE
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
+    /**
+     * Procesar notificación, donde el destinatario se obtiene una unica vez
+     * @param notificacion Notificacion
+     * @param destExcluir Destinatarios a excluir
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesarUnicaVez(Notificacion notificacion, List<SDT_Destinatario> destExcluir){
         
         
@@ -509,6 +549,12 @@ public class ManejoNotificacion {
         return retorno;
     }
     
+    /**
+     * Procesar notificación, donde el destinatario se obtiene por cada registro
+     * @param notificacion Notificacion
+     * @param destExcluir Destinatarios a excluir
+     * @return   Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesarPorCadaRegistro(Notificacion notificacion, List<SDT_Destinatario> destExcluir){
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Procesar por cada registro", TipoMensaje.MENSAJE));
@@ -590,6 +636,13 @@ public class ManejoNotificacion {
         return retorno;
     }
     
+    /**
+     * Procesar notificacion, donde el mensaje es individual
+     * @param notificacion Notificacion
+     * @param destinatario Destinatario
+     * @param registros Registros
+     * @return   Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesoMensajeIndividual(Notificacion notificacion, NotificacionDestinatario destinatario, List registros){
         
         List<NotificacionDestinatario> lstDestinatarioOriginal = new ArrayList<>();
@@ -676,7 +729,14 @@ public class ManejoNotificacion {
         return retorno;
         
     }
-    
+
+    /**
+     * Procesar notificacion, donde el mensaje es agrupado
+     * @param notificacion Notificacion
+     * @param destinatario Destinatario
+     * @param registros Registros
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesoMensajeAgrupado(Notificacion notificacion, NotificacionDestinatario destinatario, List registros){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Proceso Mensaje Agrupado", TipoMensaje.MENSAJE));
         
@@ -776,6 +836,12 @@ public class ManejoNotificacion {
         return retorno;
     }
     
+    /**
+     * Procesar tags en los mensajes
+     * @param mensaje Mensaje
+     * @param registro Registro de base de datos
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private String ProcesoTags(String mensaje, Object registro){
         List<String> tags = this.ObtenerTags(mensaje);
         
@@ -791,7 +857,12 @@ public class ManejoNotificacion {
             
         return mensaje;
     }
-    
+
+    /**
+     * Obtener tags en los mensajes
+     * @param mensaje Mensajes
+     * @return Lista de tags
+     */
     private List<String> ObtenerTags(String mensaje){
         List<String> tags = new ArrayList<>();
         
@@ -822,6 +893,11 @@ public class ManejoNotificacion {
     //DESTINATARIOS
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
+    /**
+     * Procesar destinatarios de una notificacion
+     * @param notificacion Notificacion
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesarDestinatarios(Notificacion notificacion){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Procesar destinatarios", TipoMensaje.MENSAJE));
         
@@ -882,6 +958,12 @@ public class ManejoNotificacion {
         return retorno;
     }
     
+    /**
+     * Procesar destinatarios por cada registro
+     * @param notificacion Notificacion
+     * @param query Consulta SQL
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesarDestinatariosPorRegistro(Notificacion notificacion, String query){
         
         Retorno_MsgObj retorno = loNotificacion.obtenerResultadosQuery(query);
@@ -934,7 +1016,13 @@ public class ManejoNotificacion {
         
         return retorno;
     }
-    
+
+    /**
+     * Procesar destinatarios a excluir
+     * @param lstDestinatario Lista de destinatarios
+     * @param query Consulta SQL
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj ProcesarDestinatariosExcluir(List<SDT_Destinatario> lstDestinatario, String query){
         
         Retorno_MsgObj retorno = loNotificacion.obtenerResultadosQuery(query);
@@ -1002,6 +1090,17 @@ public class ManejoNotificacion {
     //BITACORA
     //------------------------------------------------------------------------------------------------------------------------------------------------------------------
     
+    /**
+     * Procesar bitacora
+     * @param bitacora Bitacora
+     * @param notificacion Notificacion
+     * @param asunto Asunto
+     * @param contenido Contenido
+     * @param destinatario Destinatario
+     * @param estado Estado
+     * @param mensaje Mensaje
+     * @return Bitacora
+     */
     private NotificacionBitacora ProcesoBitacora(NotificacionBitacora bitacora, Notificacion notificacion, String asunto, String contenido, String destinatario, NotificacionEstado estado, String mensaje){
         bitacora = this.CrearMensajeBitacora(bitacora, notificacion, asunto, contenido, destinatario, estado, mensaje);
 
@@ -1020,6 +1119,17 @@ public class ManejoNotificacion {
         return bitacora;
     }
     
+    /**
+     * Crear mensaje
+     * @param bitacora Bitacora
+     * @param notificacion Notificacion
+     * @param asunto Asunto 
+     * @param contenido Contenido
+     * @param destinatario Destinatario 
+     * @param estado Estado
+     * @param mensaje Mensaje
+     * @return  Bitacora
+     */
     private NotificacionBitacora CrearMensajeBitacora(NotificacionBitacora bitacora, Notificacion notificacion, String asunto, String contenido, String destinatario, NotificacionEstado estado, String mensaje){
         
         
@@ -1042,11 +1152,20 @@ public class ManejoNotificacion {
         return bitacora;
     }
     
+    /**
+     * Agregar bitacora
+     * @param bitacora Bitacora
+     * @return Bitacora
+     */
     private NotificacionBitacora AgregoBitacora(NotificacionBitacora bitacora){
         bitacora = (NotificacionBitacora) loNotificacion.BitacoraAgregar(bitacora).getObjeto();
         return bitacora;
     }
     
+    /**
+     * Actualizar bitacora
+     * @param bitacora  Bitacora
+     */
     private void ActualizoBitacora(NotificacionBitacora bitacora){
         loNotificacion.BitacoraActualizar(bitacora);
     }

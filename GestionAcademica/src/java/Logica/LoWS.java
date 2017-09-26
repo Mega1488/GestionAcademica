@@ -5,14 +5,11 @@
  */
 package Logica;
 
-import Entidad.Persona;
-import Entidad.Solicitud;
 import Entidad.WS_Bit;
 import Entidad.WS_User;
 import Entidad.WS_UserServicio;
 import Enumerado.Constantes;
 import Enumerado.EstadoServicio;
-import Enumerado.EstadoSolicitud;
 import Enumerado.ServicioWeb;
 import Enumerado.TipoMensaje;
 import Interfaz.InABMGenerico;
@@ -36,6 +33,10 @@ public class LoWS implements InABMGenerico{
     private LoWS() {
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia
+     */
     public static LoWS GetInstancia(){
         if (instancia==null)
         {
@@ -45,7 +46,11 @@ public class LoWS implements InABMGenerico{
         return instancia;
     }
     
-
+    /**
+     * Guardar servicio
+     * @param pObjeto Servicio
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Object pObjeto) {
         WS_User wsUser = (WS_User) pObjeto;
@@ -63,6 +68,11 @@ public class LoWS implements InABMGenerico{
         return retorno; 
     }
 
+    /**
+     * Actualizar servicio
+     * @param pObjeto Servicio
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Object pObjeto) {
         
@@ -73,18 +83,32 @@ public class LoWS implements InABMGenerico{
         
     }
 
+    /**
+     * Eliminar WS
+     * @param pObjeto Servicio
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.eliminar(pObjeto);
     }
 
+    /**
+     * Obtener WS
+     * @param pObjeto Código 
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Object pObjeto) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener((Long) pObjeto, WS_User.class);        
     }
 
+    /**
+     * Obtener lista de WS
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         
@@ -93,6 +117,11 @@ public class LoWS implements InABMGenerico{
         return perManager.obtenerLista("WS_User.findAll", null);
     }
     
+    /**
+     * Obtener por WS User
+     * @param usr WS User
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj obtenerByUsrNom(String usr){
         PerManejador perManager = new PerManejador();
 
@@ -113,6 +142,13 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Validar consumo de servicio
+     * @param token Token
+     * @param ws_metodo Metodo
+     * @param direccion Direccion
+     * @return Autorizado
+     */
     public Boolean ValidarConsumo(String token, ServicioWeb ws_metodo, String direccion){
         String tokenDes = Seguridad.GetInstancia().decrypt(token, Constantes.ENCRYPT_VECTOR_INICIO.getValor(), Constantes.ENCRYPT_SEMILLA.getValor());
         
@@ -178,6 +214,13 @@ public class LoWS implements InABMGenerico{
         return false;
     }
     
+    /**
+     * Guardar mensaje en bitacora
+     * @param usuario Usuario
+     * @param msg Mensaje
+     * @param estado Estado
+     * @param servicio Servicio
+     */
     public void GuardarMensajeBitacora(WS_User usuario, String msg, EstadoServicio estado, ServicioWeb servicio){
         if(usuario == null)
         {
@@ -187,6 +230,9 @@ public class LoWS implements InABMGenerico{
         this.BitacoraAgregar(new WS_Bit(usuario, servicio, new Date(), estado, msg));
     }
     
+    /**
+     * Carga inicial de WS Usuarios
+     */
     public void CargarUsuariosWS(){
         //-Moodle
         WS_User usuario = new WS_User();
@@ -230,6 +276,9 @@ public class LoWS implements InABMGenerico{
         
     }
     
+    /**
+     * Eliminar bitacora
+     */
     public void EliminarBitacoraBeforeDate(){
         Retorno_MsgObj usuarios = this.obtenerLista();
         
@@ -255,6 +304,12 @@ public class LoWS implements InABMGenerico{
     //-------------------------------------------------------------------------
     //SERVICIOS
     //-------------------------------------------------------------------------
+
+    /**
+     * Agregar servicio
+     * @param usuarioServicio Servicio
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object ServicioAgregar(WS_UserServicio usuarioServicio){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al agregar",TipoMensaje.ERROR), usuarioServicio);
@@ -270,6 +325,11 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualizar servicio
+     * @param usuarioServicio Servicio
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object ServicioActualizar(WS_UserServicio usuarioServicio){
         
         WS_User usr = usuarioServicio.getUsuario();
@@ -281,6 +341,11 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Eliminar servicio
+     * @param usuarioServicio Servicio
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object ServicioEliminar(WS_UserServicio usuarioServicio){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), usuarioServicio);
@@ -296,6 +361,11 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Obtener servicio
+     * @param WsSrvCod Codigo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ServicioObtener(Long WsSrvCod){
         PerManejador perManager = new PerManejador();
         return perManager.obtener(WsSrvCod, WS_UserServicio.class);
@@ -304,6 +374,12 @@ public class LoWS implements InABMGenerico{
     //-------------------------------------------------------------------------
     //BITACORA
     //-------------------------------------------------------------------------
+
+    /**
+     * Agregar bitacora
+     * @param bitacora Bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
 
     public Object BitacoraAgregar(WS_Bit bitacora){
         boolean error           = false;
@@ -320,6 +396,11 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Actualizar bitacora
+     * @param bitacora bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object BitacoraActualizar(WS_Bit bitacora){
         
         WS_User usr = bitacora.getUsuario();
@@ -331,6 +412,11 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Eliminar bitacora
+     * @param bitacora Bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object BitacoraEliminar(WS_Bit bitacora){
         boolean error           = false;
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al eliminar", TipoMensaje.ERROR), bitacora);
@@ -346,11 +432,20 @@ public class LoWS implements InABMGenerico{
         return retorno;
     }
     
+    /**
+     * Obtener bitacora
+     * @param WsBitCod Codigo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj BitacoraObtener(Long WsBitCod){
         PerManejador perManager = new PerManejador();
         return perManager.obtener(WsBitCod, WS_Bit.class);
     }
     
+    /**
+     * Obtener lista de bitacora
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj BitacoraObtenerLista(){
         PerManejador perManager = new PerManejador();
         return perManager.obtenerLista("WS_Bit.findAll", null);

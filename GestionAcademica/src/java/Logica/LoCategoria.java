@@ -34,6 +34,10 @@ public class LoCategoria {
         param               = loParam.obtener();
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoCategoria GetInstancia(){
         if (instancia==null)
         {
@@ -44,7 +48,14 @@ public class LoCategoria {
         return instancia;
     }
     
-    
+    /**
+     * Agregar categoría en Moodle
+     * @param pDsc Descripcion
+     * @param pNom Nombre
+     * @param pVisible Visible
+     * @param parent Padre
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_AgregarCategoria(String pDsc, String pNom, Boolean pVisible, Long parent)
     {
         Mensajes mensaje;
@@ -70,7 +81,15 @@ public class LoCategoria {
 
     }
     
-    
+    /**
+     * Actualizar categoría en moodle
+     * @param codigo Código
+     * @param pDsc Descripción
+     * @param pNom Nombre
+     * @param pVisible Visible
+     * @param parent Padre
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_ActualizarCategoria(Long codigo, String pDsc, String pNom, Boolean pVisible, Long parent)
     {
         Mensajes mensaje;
@@ -96,6 +115,11 @@ public class LoCategoria {
 
     }
     
+    /**
+     * Elimina categoría de moodle
+     * @param codigo Código
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Mdl_EliminarCategoria(Long codigo)
     {
         Mensajes mensaje;
@@ -115,7 +139,10 @@ public class LoCategoria {
 
     }
     
-    
+    /**
+     * Retorna lista de categorías de moodle
+     * @return Categorias
+     */
     public MoodleCategory[] Mdl_ObtenerListaCategorias(){
         
         try {
@@ -129,6 +156,11 @@ public class LoCategoria {
         return null;
     }
     
+    /**
+     * Obtiene una categoría de moodle
+     * @param codigo Código
+     * @return Categoría
+     */
     public MoodleCategory Mdl_ObtenerCategoria(Long codigo){
 
         try {

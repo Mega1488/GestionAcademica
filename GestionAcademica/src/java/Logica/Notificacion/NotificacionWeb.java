@@ -20,9 +20,17 @@ import Utiles.Retorno_MsgObj;
  */
 public class NotificacionWeb {
 
+    /**
+     * Notificar por web
+     */
     public NotificacionWeb() {
     }
     
+    /**
+     * Crea notificacion web
+     * @param notificacion Notificacion
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj Notificar(SDT_NotificacionEnvio notificacion)
     {
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Web", TipoMensaje.MENSAJE));

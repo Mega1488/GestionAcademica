@@ -11,8 +11,6 @@ import Entidad.Parametro;
 import Enumerado.TipoMensaje;
 import Enumerado.TipoPeriodo;
 import Moodle.MoodleCategory;
-import Moodle.MoodleCourse;
-import Moodle.MoodleRestCourse;
 import Persistencia.PerManejador;
 import SDT.SDT_Parameters;
 import Utiles.Mensajes;
@@ -36,6 +34,10 @@ public class LoCurso implements Interfaz.InCurso{
         loEstudio           = LoEstudio.GetInstancia();
     }
     
+    /**
+     * Obtener instancia de la clase
+     * @return Instancia de la clase
+     */
     public static LoCurso GetInstancia(){
         if (instancia==null)
         {
@@ -46,6 +48,11 @@ public class LoCurso implements Interfaz.InCurso{
         return instancia;
     }
 
+    /** 
+     * Guardar curso
+     * @param pCurso Curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object guardar(Curso pCurso) {
         boolean error           = false;
@@ -90,6 +97,11 @@ public class LoCurso implements Interfaz.InCurso{
         
     }
 
+    /**
+     * Actualizar curso
+     * @param pCurso Curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object actualizar(Curso pCurso) {
         boolean error           = false;
@@ -132,6 +144,11 @@ public class LoCurso implements Interfaz.InCurso{
         return retorno;
     }
 
+    /**
+     * Eliminar curso
+     * @param pCurso Curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Object eliminar(Curso pCurso) {
         boolean error           = false;
@@ -152,12 +169,21 @@ public class LoCurso implements Interfaz.InCurso{
        return retorno;
     }
 
+    /**
+     * Obtener curso
+     * @param pCurCod Código del curso
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtener(Long pCurCod) {
         PerManejador perManager = new PerManejador();
         return perManager.obtener(pCurCod, Curso.class);
     }
 
+    /**
+     * Obtener lista de cursos
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     @Override
     public Retorno_MsgObj obtenerLista() {
         PerManejador perManager = new PerManejador();
@@ -168,6 +194,12 @@ public class LoCurso implements Interfaz.InCurso{
     //------------------------------------------------------------------------------------
     //-MANEJO DE MODULO
     //------------------------------------------------------------------------------------
+
+    /**
+     * Obtener modulo
+     * @param ModCod Código del módulo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     
     public Retorno_MsgObj ModuloObtener(Long ModCod)
     {
@@ -175,6 +207,11 @@ public class LoCurso implements Interfaz.InCurso{
         return perManager.obtener(ModCod, Modulo.class);
     }
     
+    /**
+     * Agregar modulo
+     * @param modulo Modulo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object ModuloAgregar(Modulo modulo)
     {
         boolean error           = false;
@@ -210,6 +247,11 @@ public class LoCurso implements Interfaz.InCurso{
         return retorno;
     }
     
+    /**
+     * Actualizar modulo
+     * @param modulo Modulo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object ModuloActualizar(Modulo modulo)
     {
         boolean error           = false;
@@ -244,6 +286,11 @@ public class LoCurso implements Interfaz.InCurso{
         return retorno;
     }
     
+    /**
+     * Eliminar modulo
+     * @param modulo Modulo
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Object ModuloEliminar(Modulo modulo)
     {
         boolean error           = false;
@@ -264,6 +311,13 @@ public class LoCurso implements Interfaz.InCurso{
         return retorno;
     }
     
+    /**
+     * Obtener modulos por periodo
+     * @param CurCod Código del curso
+     * @param tpoPer Tipo de periodo
+     * @param perVal Valor de periodo
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ModuloPorPeriodo(Long CurCod, TipoPeriodo tpoPer, Double perVal) {
         
         PerManejador perManager = new PerManejador();
@@ -280,6 +334,13 @@ public class LoCurso implements Interfaz.InCurso{
     //Moodle
     //--------------------------------------------------------------------------------------------------------
     
+    /**
+     * Agregar categoría a moodle
+     * @param parent Código del padre
+     * @param mdlNom Nombre
+     * @param mdlDsc Descripción
+     * @return   Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_AgregarCategoria(Long parent, String mdlNom, String mdlDsc)
     {
         Retorno_MsgObj retorno = loCategoria.Mdl_AgregarCategoria(mdlDsc, mdlNom, Boolean.TRUE, parent);
@@ -296,6 +357,14 @@ public class LoCurso implements Interfaz.InCurso{
 
     }
     
+    /**
+     * Actualizar categoría en moodle
+     * @param parent Código del padre
+     * @param mdlCod Código de la categoría
+     * @param mdlNom Nombre
+     * @param mdlDsc Descripción
+     * @return   Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_ActualizarCategoria(Long parent, Long mdlCod, String mdlNom, String mdlDsc)
     {
         Retorno_MsgObj retorno = loCategoria.Mdl_ActualizarCategoria(mdlCod, mdlDsc, mdlNom, Boolean.TRUE, parent);
@@ -306,6 +375,11 @@ public class LoCurso implements Interfaz.InCurso{
         return retorno;
     }
     
+    /**
+     * Eliminar categoría
+     * @param mdlCod Código de la categoría
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     private Retorno_MsgObj Mdl_EliminarCategoria(Long mdlCod)
     {
         return loCategoria.Mdl_EliminarCategoria(mdlCod);

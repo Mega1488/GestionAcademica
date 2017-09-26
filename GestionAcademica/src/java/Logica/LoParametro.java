@@ -9,7 +9,6 @@ import Entidad.Parametro;
 import Logica.Notificacion.NotificacionesInternas;
 import Persistencia.PerManejador;
 import Utiles.Retorno_MsgObj;
-import java.util.Date;
 
 /**
  *
@@ -25,6 +24,10 @@ public class LoParametro{
         
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia de clase
+     */
     public static LoParametro GetInstancia(){
         if (instancia==null)
         {
@@ -35,6 +38,11 @@ public class LoParametro{
         return instancia;
     }
 
+    /**
+     * Guardar parametro
+     * @param pObjeto parametro
+     * @return  Resultado: RETORNO_MSGOBJ
+     */
     public Object guardar(Parametro pObjeto) {
         
         pObjeto.setParCod(Long.valueOf("1"));
@@ -53,12 +61,20 @@ public class LoParametro{
         
     }
 
+    /**
+     * actualizar parametro
+     * @param pObjeto parametro
+     */
     public void actualizar(Parametro pObjeto) {
         this.parametro = pObjeto;
         PerManejador perManejador   = new PerManejador();
         perManejador.actualizar(pObjeto);
     }
 
+    /**
+     * Obtener parametro
+     * @return Parametro
+     */
     public Parametro obtener() {
         
         if(this.parametro == null)

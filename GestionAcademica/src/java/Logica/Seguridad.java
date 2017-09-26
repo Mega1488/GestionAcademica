@@ -39,6 +39,10 @@ public class Seguridad {
     private Seguridad() {
     }
     
+    /**
+     * Obtener instancia
+     * @return Instancia
+     */
     public static Seguridad GetInstancia(){
         if (instancia==null)
         {
@@ -49,6 +53,12 @@ public class Seguridad {
         return instancia;
     }
     
+    /**
+     * Encriptar con MD5
+     * @param input Texto a encriptar
+     * @return Texto encriptado
+     * @throws NoSuchAlgorithmException
+     */
     public String md5(String input) throws NoSuchAlgorithmException {
         MessageDigest md = MessageDigest.getInstance("MD5");
 
@@ -57,6 +67,13 @@ public class Seguridad {
         return number.toString(16);
     }
 
+    /**
+     * Desencriptar
+     * @param encryptedData Dato encriptado
+     * @param initialVectorString Vector de encriptacion
+     * @param secretKey Semilla de encriptacion
+     * @return Texto desencritpado
+     */
     public String decrypt(String encryptedData, String initialVectorString, String secretKey) {
         String decryptedData = null;
         try {
@@ -79,6 +96,11 @@ public class Seguridad {
         return decryptedData;
     }
 
+    /**
+     * Encriptar con MD5
+     * @param pass Texto a encriptar
+     * @return Texto encriptado
+     */
     public String cryptWithMD5(String pass){
        MessageDigest md;
         try {
@@ -99,6 +121,14 @@ public class Seguridad {
 
        }
    
+    /**
+     * Determina si el usuario tiene permiso para el sitio que esta visualizando
+     * @param sitioActual Sitio actual
+     * @param esAdm Es administrador
+     * @param esDoc Es docente 
+     * @param esAlu Es alumno
+     * @return  Tiene permiso
+     */
     private boolean PermisoSitio(String sitioActual, Boolean esAdm, Boolean esDoc, Boolean esAlu)
     {
         if(Sitios.GetInstancia().getLstSinSeguridad().contains(sitioActual)) return true;
@@ -118,6 +148,15 @@ public class Seguridad {
         return false;
     }
     
+    /**
+     * Controlar acceso al sitio
+     * @param usuario Usuario
+     * @param esAdm Es administrador
+     * @param esDoc Es docente
+     * @param esAlu Es alumno
+     * @param sitioActual Sitio actual
+     * @return Resultado: RETORNO_MSGOBJ
+     */
     public Retorno_MsgObj ControlarAcceso(String usuario, Boolean esAdm, Boolean esDoc, Boolean esAlu, String sitioActual)
     {
         
@@ -153,6 +192,11 @@ public class Seguridad {
 
     }
    
+    /**
+     * Obtener token WebService
+     * @param servicioWeb Servicio web
+     * @return token
+     */
     public String getTokenWS(ServicioWeb servicioWeb){
 
         String token = "INVALIDO";
@@ -175,6 +219,12 @@ public class Seguridad {
         return token;
     }
 
+    /**
+     * Encriptar
+     * @param text Texto
+     * @return Texto encriptado
+     * @throws Exception
+     */
     public String crypt(String text) throws Exception {
 
         SecretKeySpec skeySpec          = new SecretKeySpec(Constantes.ENCRYPT_SEMILLA.getValor().getBytes(), "AES");

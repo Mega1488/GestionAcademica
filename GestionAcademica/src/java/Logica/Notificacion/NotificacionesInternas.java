@@ -29,6 +29,9 @@ import java.util.logging.Logger;
  */
 public class NotificacionesInternas {
     
+    /**
+     * Cargar notificaciones
+     */
     public void CargarNotificaciones(){
         
         //EVALUACION HABILITADA A INSCRIPCION
@@ -49,7 +52,11 @@ public class NotificacionesInternas {
         //CAMBIAR PASSWORD
         LoNotificacion.GetInstancia().guardar(this.CAMBIAR_PASSWORD());
      }
-    
+
+    /**
+     * Armar notificacion: Evaluacion habilitada para inscripcion
+     * @return Notificacion
+     */
     private Notificacion EVALUACION_HABILITADA_INSCRIPCION(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.EVALUACION_HABILITADA_INSCRIPCION.name());
@@ -71,6 +78,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Evaluacion proxima
+     * @return Notificacion
+     */
     private Notificacion EVALUACION_PROXIMA(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.EVALUACION_PROXIMA.name());
@@ -126,6 +137,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Escolaridad actualizada
+     * @return  Notificacion
+     */
     private Notificacion ESCOLARIDAD_ACTUALIZADA(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.ESCOLARIDAD_ACTUALIZADA.name());
@@ -174,6 +189,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Alumnos inactivos
+     * @return Notificacion
+     */
     private Notificacion ALUMNOS_INACTIVOS(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.ALUMNOS_INACTIVOS.name());
@@ -225,6 +244,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Restablecer password
+     * @return Notificacion
+     */
     private Notificacion RESTABLECER_PASSWORD(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.PASSWORD_RESTABLECER.name());
@@ -246,6 +269,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Cambiar contraseña
+     * @return Notificacion
+     */
     private Notificacion CAMBIAR_PASSWORD(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.PASSWORD_CAMBIAR.name());
@@ -267,6 +294,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Nueva solicitud
+     * @return Notificacion
+     */
     private Notificacion NUEVA_SOLICITUD(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.NUEVA_SOLICITUD.name());
@@ -288,6 +319,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
     
+    /**
+     * Armar notificacion: Nueva inconsistencia
+     * @return Notificacion
+     */
     private Notificacion NUEVA_INCONSISTENCIA(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.NUEVA_INCONSISTENCIA.name());
@@ -309,6 +344,10 @@ public class NotificacionesInternas {
         return notificacion;
     }
    
+    /**
+     * Armar notificacion: Error en el sistema
+     * @return Notificacion
+     */
     private Notificacion ERROR_SISTEMA(){
         Notificacion notificacion = new Notificacion();
         notificacion.setNotNom(NotificacionSistema.ERROR_SISTEMA.name());
@@ -333,6 +372,10 @@ public class NotificacionesInternas {
     //--------------------------------------------------------------------------
     //EJECUTAR
     //--------------------------------------------------------------------------
+
+    /**
+     * Ejecutar notificaciones internas
+     */
     
     public void EjecutarNotificacionesInternas(){
         Retorno_MsgObj retorno = LoNotificacion.GetInstancia().obtenerLista();
@@ -376,6 +419,10 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
     
+    /**
+     * Enviar notificacion: Evaluacion habilitada a inscripcion
+     * @param notificacion Notificacion
+     */
     private void Notificar_EVALUACION_HABILITADA_INSCRIPCION(Notificacion notificacion){
         ManejoNotificacion notManager = new ManejoNotificacion();
         
@@ -445,6 +492,10 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
     
+    /**
+     * Enviar notificacion: Evaluacion proxima
+     * @param notificacion  Notificacion
+     */
     private void Notificar_EVALUACION_PROXIMA(Notificacion notificacion){
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacion(notificacion);
@@ -452,6 +503,10 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
     
+    /**
+     * Enviar notificación: Escolaridad actualizada
+     * @param notificacion Notificacion
+     */
     private void Notificar_ESCOLARIDAD_ACTUALIZADA(Notificacion notificacion){
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacion(notificacion);
@@ -459,12 +514,21 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
     
+    /**
+     * Enviar notificacion: Alumnos inactivos
+     * @param notificacion  Notificacion
+     */
     private void Notificar_ALUMNOS_INACTIVOS(Notificacion notificacion){
         ManejoNotificacion notManager = new ManejoNotificacion();
         notManager.EjecutarNotificacion(notificacion);
     }
     
     //--------------------------------------------------------------------------
+
+    /**
+     * Enviar notificacion: Cambiar contraseña
+     * @param persona Persona
+     */
 
     public void Notificar_CAMBIAR_PASSWORD(Persona persona){
         
@@ -492,6 +556,13 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
 
+    /**
+     * Enviar notificacion: Restablecer contrsaeña
+     * @param persona Persona
+     * @param enlaceCorto Enlace corto
+     * @param enlaceLargo Enlace largo
+     */
+
     public void Notificar_RESTABLECER_PASSWORD(Persona persona, String enlaceCorto, String enlaceLargo){
         Retorno_MsgObj retorno = LoNotificacion.GetInstancia().obtenerByNom(NotificacionSistema.PASSWORD_RESTABLECER.name());
         
@@ -518,6 +589,10 @@ public class NotificacionesInternas {
     }
     
     //--------------------------------------------------------------------------
+
+    /**
+     * Enviar notificacion: Nueva solicitud
+     */
     
     public void Notificar_NUEVA_SOLICITUD(){
         
@@ -554,6 +629,10 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
 
+    /**
+     * Enviar notificacion: Nueva inconsistencia
+     */
+
     public void Notificar_NUEVA_INCONSISTENCIA(){
         
         
@@ -589,7 +668,10 @@ public class NotificacionesInternas {
     
     //--------------------------------------------------------------------------
     
-    
+    /**
+     * Enviar notificacion: Error de sistema
+     * @param mensaje Mensaje
+     */
     public void Notificar_ErrorSistema(String mensaje){
         
         
@@ -628,7 +710,12 @@ public class NotificacionesInternas {
     //--------------------------------------------------------------------------
     
     
-    
+    /**
+     * Armar destinatario
+     * @param notificacion Notificacion
+     * @param persona Persona
+     * @return Notificacion
+     */
     private Notificacion ArmarDestinatario(Notificacion notificacion, Persona persona){
         NotificacionDestinatario dest = new NotificacionDestinatario();
         
