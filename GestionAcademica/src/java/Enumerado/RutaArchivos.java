@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado RutaArchivos
  *
  * @author Alvaro
  */
@@ -22,6 +23,10 @@ public enum RutaArchivos {
         this.vRuta = pRuta;
     }
 
+    /**
+     *
+     * @return Retorna la ruta de RutaArchivos
+     */
     public String getRuta() {
         return vRuta;
     }

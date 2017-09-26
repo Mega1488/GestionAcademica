@@ -25,6 +25,7 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
 /**
+ * Servicio Login
  *
  * @author alvar
  */
@@ -37,7 +38,7 @@ public class ws_login {
      * Inicia sesión
      * @param pUser usuario
      * @param pPassword contraseña
-     * @return 
+     * @return Retorna el resultado de loguarse en el sistema
      */
     @WebMethod(operationName = "Login")
     public String Login(@WebParam(name = "pUser") String pUser, @WebParam(name = "pPassword") String pPassword) {

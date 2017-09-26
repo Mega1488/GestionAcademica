@@ -38,6 +38,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad PeriodoEstudio
  *
  * @author alvar
  */
@@ -114,7 +115,6 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     
 
     //-CONSTRUCTOR
-
     public PeriodoEstudio() {
         this.lstAlumno = new ArrayList<>();
         this.lstDocente = new ArrayList<>();
@@ -123,61 +123,114 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código del Período Estudio
+     */
     public Long getPeriEstCod() {
         return PeriEstCod;
     }
 
+    /**
+     *
+     * @param PeriEstCod Recibe el código del Período Estudio
+     */
     public void setPeriEstCod(Long PeriEstCod) {
         this.PeriEstCod = PeriEstCod;
     }
 
+    /**
+     *
+     * @return Retorno el período del Período Estudio
+     */
     public Periodo getPeriodo() {
         return periodo;
     }
 
+    /**
+     *
+     * @param Periodo Recibe el período del Período Estudio
+     */
     public void setPeriodo(Periodo Periodo) {
         this.periodo = Periodo;
     }
 
+    /**
+     *
+     * @return Retorna la Materia del Período Estudio
+     */
     public Materia getMateria() {
         return Materia;
     }
 
+    /**
+     *
+     * @param Materia Recibe la Materia del Período Estudio
+     */
     public void setMateria(Materia Materia) {
         this.Materia = Materia;
     }
 
+    /**
+     *
+     * @return Retorna el módulo del Período Estudio
+     */
     public Modulo getModulo() {
         return Modulo;
     }
 
+    /**
+     *
+     * @param Modulo Recibe el módulo del Período Estudio
+     */
     public void setModulo(Modulo Modulo) {
         this.Modulo = Modulo;
     }
 
+    /**
+     *
+     * @return retorna el código de mooldle del Período Estudio
+     */
     public Long getMdlCod() {
         return MdlCod;
     }
 
+    /**
+     *
+     * @param MdlCod Recibe el código de moodle del Período Estudio
+     */
     public void setMdlCod(Long MdlCod) {
         this.MdlCod = MdlCod;
     }
 
+    /**
+     *
+     * @return retorna la fecha de sincronización con moodle
+     */
     public Date getFchSincMdl() {
         return FchSincMdl;
     }
 
+    /**
+     *
+     * @param FchSincMdl Recibe la fecha de sincronización con moodle
+     */
     public void setFchSincMdl(Date FchSincMdl) {
         this.FchSincMdl = FchSincMdl;
     }
     
-    
-    
-
+    /**
+     *
+     * @return Retorno la fecha de modificación del Período Estudio
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación del Período Estudio
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
@@ -186,42 +239,73 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
     //------------------------------------------------
     //PARA MOODLE
     //------------------------------------------------
-    
+
+    /**
+     *
+     * @return Retorna el nombre completo (EstudioNombre + Año)
+     */
     public String getMdlFullName(){
         return this.getEstudioNombre() + " | Año: " + dateFormat.format(this.getPeriodo().getPerFchIni());
     }
     
+    /**
+     *
+     * @return Retorna nombre corto (GetPrimaryKey + Nombre de Persona + Valor del período)
+     */
     public String getMdlShortName(){
         return this.GetPrimaryKey() +"_"+ this.getPeriodo().getPerTpoNombre() +"_"+ this.getPeriodo().getPerVal(); 
     }
     
+    /**
+     *
+     * @return Retorna descripcion de nombre 
+     */
     public String getMdlDscName(){
         return this.getCarreraCursoNombre() + "\n" + this.getPeriodo().TextoPeriodo();
     }
     
     //------------------------------------------------
     
-
+    /**
+     *
+     * @return Retorna la lista de alumnos
+     */
     @JsonIgnore
     @XmlTransient
     public List<PeriodoEstudioAlumno> getLstAlumno() {
         return lstAlumno;
     }
 
+    /**
+     *
+     * @param lstAlumno Recibe lista de alumnos
+     */
     public void setLstAlumno(List<PeriodoEstudioAlumno> lstAlumno) {
         this.lstAlumno = lstAlumno;
     }
 
+    /**
+     *
+     * @return Retorna lista de docentes
+     */
     @JsonIgnore
     @XmlTransient
     public List<PeriodoEstudioDocente> getLstDocente() {
         return lstDocente;
     }
 
+    /**
+     *
+     * @param lstDocente Recibe lista de docentess
+     */
     public void setLstDocente(List<PeriodoEstudioDocente> lstDocente) {
         this.lstDocente = lstDocente;
     }
 
+    /**
+     *
+     * @return Retorna lista Documentos
+     */
     @JsonIgnore
     @XmlTransient
     public List<PeriodoEstudioDocumento> getLstDocumento() {
@@ -229,10 +313,18 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return lstDocumento;
     }
 
+    /**
+     *
+     * @param lstDocumento Recibe lista Documentos
+     */
     public void setLstDocumento(List<PeriodoEstudioDocumento> lstDocumento) {
         this.lstDocumento = lstDocumento;
     }
 
+    /**
+     *
+     * @return Retorna EstudioNombre de (Materia o Módulo)
+     */
     public String getEstudioNombre()
     {
         if(this.Materia != null) return this.Materia.getMatNom();
@@ -242,6 +334,10 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return "";
     }
     
+    /**
+     *
+     * @return retorna Cantidad de Alumnos
+     */
     public int getCantidadAlumnos()
     {
         if(this.lstAlumno != null) return this.lstAlumno.size();
@@ -249,6 +345,10 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return 0;
     }
     
+    /**
+     *
+     * @return retorna cantidad de docentes
+     */
     public int getCantidadDocente()
     {
         if(this.lstDocente != null) return this.lstDocente.size();
@@ -256,8 +356,12 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return 0;
     }
     
-    
-     public PeriodoEstudioAlumno getAlumnoById(Long PeriEstAluCod){
+    /**
+     *
+     * @param PeriEstAluCod Recibe el código de Periodo de Estudio Alumno
+     * @return Retorna el alumno dado el código recibido
+     */
+    public PeriodoEstudioAlumno getAlumnoById(Long PeriEstAluCod){
         
         PeriodoEstudioAlumno pAlumno = new PeriodoEstudioAlumno();
         
@@ -273,6 +377,11 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return pAlumno;
     }
     
+    /**
+     *
+     * @param PeriEstDocCod Recibe el código del período de estudio del docente
+     * @return Retorna el docente dado el código recibido
+     */
     public PeriodoEstudioDocente getDocenteById(Long PeriEstDocCod){
         
         PeriodoEstudioDocente pDocente = new PeriodoEstudioDocente();
@@ -289,6 +398,11 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return pDocente;
     }
     
+    /**
+     *
+     * @param DocCod Recibe el código de documento
+     * @return Retorna si existe el documento dado el código recibido
+     */
     public boolean getExisteDocente(Long DocCod){
         
         boolean error;
@@ -305,6 +419,11 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return false;
     }
     
+    /**
+     *
+     * @param DocCod Recibe el código de documento
+     * @return Retorna el documento dado el código recibido
+     */
     public PeriodoEstudioDocumento getDocumentoById(Long DocCod){
         
         PeriodoEstudioDocumento pDocumento = new PeriodoEstudioDocumento();
@@ -321,6 +440,10 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return pDocumento;
     }
     
+    /**
+     *
+     * @return Retorna el tipo estudio (Materia o Módulo)
+     */
     public String getEstudioTipo()
     {
         if(this.Materia != null)
@@ -336,6 +459,10 @@ public class PeriodoEstudio extends SincHelper implements Serializable {
         return "";
     }
     
+    /**
+     *
+     * @return retorna el nombre de la Materia o el Módulo
+     */
     public String getCarreraCursoNombre()
     {
         if(this.getModulo() != null)

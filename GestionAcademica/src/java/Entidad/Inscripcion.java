@@ -107,76 +107,143 @@ public class Inscripcion extends SincHelper implements Serializable {
     private List<MateriaRevalida> lstRevalidas;
     
     //-CONSTRUCTOR
-
     public Inscripcion() {
     }
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de la Inscripción
+     */
     public Long getInsCod() {
         return InsCod;
     }
 
+    /**
+     *
+     * @param InsCod Recibe el código de la Inscripción
+     */
     public void setInsCod(Long InsCod) {
         this.InsCod = InsCod;
     }
 
+    /**
+     *
+     * @return Retorna el alumno
+     */
     public Persona getAlumno() {
         return Alumno;
     }
 
+    /**
+     *
+     * @param Alumno Recibe el alumno
+     */
     public void setAlumno(Persona Alumno) {
         this.Alumno = Alumno;
     }
 
+    /**
+     *
+     * @return Retorna la Persona
+     */
     public Persona getPersonaInscribe() {
         return PersonaInscribe;
     }
 
+    /**
+     *
+     * @param PersonaInscribe Recobe la persona
+     */
     public void setPersonaInscribe(Persona PersonaInscribe) {
         this.PersonaInscribe = PersonaInscribe;
     }
 
+    /**
+     *
+     * @return Retorna el plan de estudio de la Inscripción
+     */
     public PlanEstudio getPlanEstudio() {
         return PlanEstudio;
     }
 
+    /**
+     *
+     * @param PlanEstudio Recibe el Plan de Estudio de la Inscripción
+     */
     public void setPlanEstudio(PlanEstudio PlanEstudio) {
         this.PlanEstudio = PlanEstudio;
     }
 
+    /**
+     *
+     * @return Retorna el curso de la Inscripción
+     */
     public Curso getCurso() {
         return Curso;
     }
 
+    /**
+     *
+     * @param Curso Recibe el curso de la Inscripción
+     */
     public void setCurso(Curso Curso) {
         this.Curso = Curso;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de certificación
+     */
     public Date getAluFchCert() {
         return AluFchCert;
     }
 
+    /**
+     *
+     * @param AluFchCert Recibe la fecha de certificación
+     */
     public void setAluFchCert(Date AluFchCert) {
         this.AluFchCert = AluFchCert;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de Inscripción
+     */
     public Date getAluFchInsc() {
         return AluFchInsc;
     }
 
+    /**
+     *
+     * @param AluFchInsc Recibe la fecha de inscripción
+     */
     public void setAluFchInsc(Date AluFchInsc) {
         this.AluFchInsc = AluFchInsc;
     }
 
+    /**
+     *
+     * @return Retorno la fecha de modificación
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
     
+    /**
+     *
+     * @return Retorno el nombre del estudio
+     */
     public String getNombreEstudio()
     {
         
@@ -186,14 +253,26 @@ public class Inscripcion extends SincHelper implements Serializable {
         return "";
     }
 
+    /**
+     *
+     * @return Retorno el año de la generación a inscribir
+     */
     public Integer getInsGenAnio() {
         return InsGenAnio;
     }
 
+    /**
+     *
+     * @param InsGenAnio Recibo el año de la generación a inscribir
+     */
     public void setInsGenAnio(Integer InsGenAnio) {
         this.InsGenAnio = InsGenAnio;
     }
 
+    /**
+     *
+     * @return Retorna la lista de Materias Revalidas
+     */
     @JsonIgnore
     @XmlTransient
     public List<MateriaRevalida> getLstRevalidas() {
@@ -201,10 +280,19 @@ public class Inscripcion extends SincHelper implements Serializable {
         return lstRevalidas;
     }
 
+    /**
+     *
+     * @param lstRevalidas Recibe la lista de materias revalidas
+     */
     public void setLstRevalidas(List<MateriaRevalida> lstRevalidas) {
         this.lstRevalidas = lstRevalidas;
     }
     
+    /**
+     *
+     * @param MatCod Recibe el código de la materia
+     * @return Retorna la materia revalidas dado el código recibido
+     */
     public boolean MateriaRevalidada(Long MatCod)
     {
         for(MateriaRevalida matRvl : this.lstRevalidas)

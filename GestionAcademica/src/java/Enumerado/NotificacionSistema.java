@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado NotificacionSistema
  *
  * @author alvar
  */

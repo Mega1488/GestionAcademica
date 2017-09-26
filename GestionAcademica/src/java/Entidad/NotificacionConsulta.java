@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad Notificación Consulta
  *
  * @author alvar
  */
@@ -67,34 +68,66 @@ public class NotificacionConsulta implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código
+     */
     public Long getNotCnsCod() {
         return NotCnsCod;
     }
 
+    /**
+     *
+     * @param NotCnsCod Recibe el código
+     */
     public void setNotCnsCod(Long NotCnsCod) {
         this.NotCnsCod = NotCnsCod;
     }
 
+    /**
+     *
+     * @return Retorna la nofiricación
+     */
     public Notificacion getNotificacion() {
         return notificacion;
     }
 
+    /**
+     *
+     * @param notificacion Recibe la notificación
+     */
     public void setNotificacion(Notificacion notificacion) {
         this.notificacion = notificacion;
     }
 
+    /**
+     *
+     * @return Retorna el tipo NotificacionConsulta
+     */
     public TipoConsulta getNotCnsTpo() {
         return NotCnsTpo;
     }
 
+    /**
+     *
+     * @param NotCnsTpo Recibe el tipo NotificacionConsulta
+     */
     public void setNotCnsTpo(TipoConsulta NotCnsTpo) {
         this.NotCnsTpo = NotCnsTpo;
     }
 
+    /**
+     *
+     * @return Retorna la sentencia SQL de NotificacionConsulta
+     */
     public String getNotCnsSQL() {
         return NotCnsSQL;
     }
 
+    /**
+     *
+     * @param NotCnsSQL Recibe la sentencia SQL de NotificacionConsulta
+     */
     public void setNotCnsSQL(String NotCnsSQL) {
         this.NotCnsSQL = NotCnsSQL;
     }

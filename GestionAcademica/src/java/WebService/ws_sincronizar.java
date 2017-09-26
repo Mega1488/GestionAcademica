@@ -18,7 +18,7 @@ import Utiles.Retorno_MsgObj;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Resource;
+import javax.annotation.Resource; 
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -27,6 +27,8 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
 /**
+ * Servicio Sincronizar
+ * 
  *
  * @author alvar
  */

@@ -38,6 +38,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Inscriopcion
  *
  * @author alvar
  */
@@ -138,6 +139,11 @@ public class ABM_Inscripcion extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Inscriopcion
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -171,6 +177,11 @@ public class ABM_Inscripcion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Inscriopcion
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -205,6 +216,11 @@ public class ABM_Inscripcion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Inscriopcion
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -230,6 +246,11 @@ public class ABM_Inscripcion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @return Método agregar revalida
+     */
     private String RevalidaAgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -270,6 +291,11 @@ public class ABM_Inscripcion extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar revalida
+     */
     private String RevalidaEliminarDatos(HttpServletRequest request){
         error      = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -311,6 +337,12 @@ public class ABM_Inscripcion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @param inscripcion
+     * @return Método Validar Inscriopcion
+     */
     private Inscripcion ValidarInscripcion(HttpServletRequest request, Inscripcion inscripcion){
         
         if(inscripcion == null)

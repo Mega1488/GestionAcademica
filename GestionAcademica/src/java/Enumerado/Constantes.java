@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado Constantes
  *
  * @author Alvaro
  */
@@ -37,6 +38,10 @@ public enum Constantes {
         this.vValor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de Constantes
+     */
     public String getValor() {
         return vValor;
     }

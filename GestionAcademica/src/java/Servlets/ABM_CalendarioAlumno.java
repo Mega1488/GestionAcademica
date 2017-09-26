@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de CalendarioAlumno
  *
  * @author alvar
  */
@@ -119,6 +120,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         }
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método agregar CalendarioAlumno
+     */
     private String AgregarDatos(HttpServletRequest request) {
         mensaje = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -145,6 +151,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar CalendarioAlumno
+     */
     private String EliminarDatos(HttpServletRequest request) {
         error = false;
         mensaje = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -163,6 +174,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar CalendarioAlumno
+     */
     private String ActualizarDatos(HttpServletRequest request) {
         mensaje = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -195,6 +211,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método obtener datos CalendarioAlumno
+     */
     private String ObtenerDatos(HttpServletRequest request) {
         error = false;
         CalendarioAlumno calAlumno = new CalendarioAlumno();
@@ -211,6 +232,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
         return utilidades.ObjetoToJson(calAlumno);
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método validar calificación CalendarioAlumno
+     */
     private String ValidarCalificacion(HttpServletRequest request) {
         mensaje = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -288,6 +314,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
 
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método toValudación CalendarioAlumno
+     */
     private String toValidacion(HttpServletRequest request) {
         mensaje = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -328,6 +359,11 @@ public class ABM_CalendarioAlumno extends HttpServlet {
 
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método toCorreccion CalendarioAlumno
+     */
     private String toCorreccion(HttpServletRequest request) {
         mensaje = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -367,6 +403,12 @@ public class ABM_CalendarioAlumno extends HttpServlet {
 
     }
 
+    /**
+     * 
+     * @param request
+     * @param calAlumno
+     * @return Método validar CalendarioAlumno
+     */
     private CalendarioAlumno ValidarCalendarioAlumno(HttpServletRequest request, CalendarioAlumno calAlumno) {
         if (calAlumno == null) {
             calAlumno = new CalendarioAlumno();

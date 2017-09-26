@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento PeriodoEstudio
  *
  * @author alvar
  */
@@ -117,7 +118,11 @@ public class ABM_PeriodoEstudio extends HttpServlet {
     }
     
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método agregar PeriodoEstudio
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -209,6 +214,11 @@ public class ABM_PeriodoEstudio extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar PeriodoEstudio
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -230,6 +240,11 @@ public class ABM_PeriodoEstudio extends HttpServlet {
        return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar PeriodoEstudio
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -262,6 +277,10 @@ public class ABM_PeriodoEstudio extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @return Método obtener datos PopUp PeriodoEstudio
+     */
     private String PopObtenerDatos(){
         error           = false;
         
@@ -285,6 +304,12 @@ public class ABM_PeriodoEstudio extends HttpServlet {
        return utilidades.ObjetoToJson(lstPeriodoEstudio);
     }
     
+    /**
+     * 
+     * @param request
+     * @param periEstudio
+     * @return Método validar PeriodoEstudio
+     */
     private PeriodoEstudio ValidarPeriodoEstudio(HttpServletRequest request, PeriodoEstudio periEstudio){
         if(periEstudio == null)
         {

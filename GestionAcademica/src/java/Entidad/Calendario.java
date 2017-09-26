@@ -35,8 +35,9 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
- * @author alvar
+ *  Entidad Calendario
+ * 
+ * @author aa
  */
 @Entity
 @Table(name = "CALENDARIO")
@@ -101,76 +102,145 @@ public class Calendario  extends SincHelper implements Serializable {
         this.lstDocentes = new ArrayList<>();
     } 
 
+    
     //-GETTERS Y SETTERS
-
+    /**
+     * 
+     * @return Retorna el código del calendario
+     */
     public Long getCalCod() {
         return CalCod;
     }
 
+    /**
+     *
+     * @param CalCod Recibe el código del Calendario
+     */
     public void setCalCod(Long CalCod) {
         this.CalCod = CalCod;
     }
 
+    /**
+     *
+     * @return Retorna la Evaluación del Calendario
+     */
     public Evaluacion getEvaluacion() {
         return evaluacion;
     }
 
+    /**
+     *
+     * @param evaluacion Recibe una evaluación
+     */
     public void setEvaluacion(Evaluacion evaluacion) {
         this.evaluacion = evaluacion;
     }
 
+    /**
+     *
+     * @return Retorna la fecha del calendario
+     */
     public Date getCalFch() {
         return CalFch;
     }
 
+    /**
+     *
+     * @param CalFch Recibe la fecha del calendario
+     */
     public void setCalFch(Date CalFch) {
         this.CalFch = CalFch;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de inscripción Desde
+     */
     public Date getEvlInsFchDsd() {
         return EvlInsFchDsd;
     }
 
+    /**
+     *
+     * @param EvlInsFchDsd Recibe la fecha de inscripción Desde
+     */
     public void setEvlInsFchDsd(Date EvlInsFchDsd) {
         this.EvlInsFchDsd = EvlInsFchDsd;
     }
 
+    /**
+     *
+     * @return Retorna la Fecha de Inscripción Hasta
+     */
     public Date getEvlInsFchHst() {
         return EvlInsFchHst;
     }
 
+    /**
+     *
+     * @param EvlInsFchHst Recibe la Fecha de Inscripción Hasta
+     */
     public void setEvlInsFchHst(Date EvlInsFchHst) {
         this.EvlInsFchHst = EvlInsFchHst;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación del calendario
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación del calendario
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna la lista de alumnos
+     */
     @JsonIgnore
     @XmlTransient
     public List<CalendarioAlumno> getLstAlumnos() {
         return lstAlumnos;
     }
 
+    /**
+     *
+     * @param lstAlumnos Recibe una lista de alumnos
+     */
     public void setLstAlumnos(List<CalendarioAlumno> lstAlumnos) {
         this.lstAlumnos = lstAlumnos;
     }
 
+    /**
+     *
+     * @return Retorna la lista de Docentes
+     */
     @JsonIgnore
     @XmlTransient
     public List<CalendarioDocente> getLstDocentes() {
         return lstDocentes;
     }
 
+    /**
+     *
+     * @param lstDocentes Recibe una lista de Docentes
+     */
     public void setLstDocentes(List<CalendarioDocente> lstDocentes) {
         this.lstDocentes = lstDocentes;
     }
     
+    /**
+     *
+     * @param CalAlCod Recibe el código del CalendarioAlumno
+     * @return Retorna un Calendario del Alumno
+     */
     public CalendarioAlumno getAlumnoById(Long CalAlCod){
         
         CalendarioAlumno pAlumno = new CalendarioAlumno();
@@ -187,6 +257,11 @@ public class Calendario  extends SincHelper implements Serializable {
         return pAlumno;
     }
     
+    /**
+     *
+     * @param PerCod Recibe el código de la Persona
+     * @return Retorna el Calendario de la Persona
+     */
     public CalendarioAlumno getAlumnoByPersona(Long PerCod){
         
         CalendarioAlumno pAlumno = new CalendarioAlumno();
@@ -203,6 +278,11 @@ public class Calendario  extends SincHelper implements Serializable {
         return pAlumno;
     }
     
+    /**
+     *
+     * @param CalDocCod Recibe el Código de CalendarioDocente
+     * @return Retorna el calendario del docente
+     */
     public CalendarioDocente getDocenteById(Long CalDocCod){
         
         CalendarioDocente pDocente = new CalendarioDocente();
@@ -219,6 +299,11 @@ public class Calendario  extends SincHelper implements Serializable {
         return pDocente;
     }
     
+    /**
+     *
+     * @param PerCod Recibe un código de Persona
+     * @return Retorna un Calendario de Docente
+     */
     public CalendarioDocente getDocenteByPersona(Long PerCod){
         
         CalendarioDocente pDocente = new CalendarioDocente();
@@ -235,6 +320,11 @@ public class Calendario  extends SincHelper implements Serializable {
         return pDocente;
     }
     
+    /**
+     *
+     * @param PerCod Recibe el código de la persona
+     * @return Retorna si existe o no el Alumno
+     */
     public Boolean existeAlumno(Long PerCod){
         for(CalendarioAlumno calAlumno : this.lstAlumnos)
         {
@@ -247,6 +337,11 @@ public class Calendario  extends SincHelper implements Serializable {
         return false;
     }
     
+    /**
+     *
+     * @param PerCod Recibe el código de la persona
+     * @return Retorna si existe o no el Docente
+     */
     public Boolean existeDocente(Long PerCod){
         for(CalendarioDocente calDocente : this.lstDocentes)
         {
@@ -258,8 +353,12 @@ public class Calendario  extends SincHelper implements Serializable {
         return false;
     }
     
-    public Double getAlumnoCalificacion(Long PerCod)
-    {
+    /**
+     *
+     * @param PerCod Recibe el código de una persona
+     * @return Retorna la calificación del alumno
+     */
+    public Double getAlumnoCalificacion(Long PerCod){
         Double retorno = 0.0;
         
         for(CalendarioAlumno calAlumno : this.lstAlumnos)
@@ -304,13 +403,9 @@ public class Calendario  extends SincHelper implements Serializable {
         return "Calendario{" + "CalCod=" + CalCod + ", evaluacion=" + evaluacion + ", CalFch=" + CalFch + ", EvlInsFchDsd=" + EvlInsFchDsd + ", EvlInsFchHst=" + EvlInsFchHst + ", ObjFchMod=" + ObjFchMod + '}';
     }
 
-
     @Override
     public Long GetPrimaryKey() {
         return this.CalCod;
     }
-    
-
-    
 }
 

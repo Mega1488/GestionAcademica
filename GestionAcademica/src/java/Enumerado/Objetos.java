@@ -8,6 +8,7 @@ package Enumerado;
 import Entidad.*;
 
 /**
+ * Enumerado Objetos
  *
  * @author Alvaro
  */
@@ -59,18 +60,35 @@ public enum Objetos {
         this.className = pClassName;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNamedQuery() {
         return namedQuery;
     }
     
+    /**
+     *
+     * @return
+     */
     public String getPrimaryKey() {
         return primaryKey;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getClassName() {
         return className;
     }
     
+    /**
+     *
+     * @param name
+     * @return
+     */
     public static Boolean contains(String name){
         for (Objetos objeto  : Objetos.values()){
             if (objeto.name().toUpperCase().equals(name)){
@@ -80,7 +98,12 @@ public enum Objetos {
         return false;
     }
     
-   public static Objetos fromQueryName(String upperQueryName) {
+    /**
+     *
+     * @param upperQueryName
+     * @return
+     */
+    public static Objetos fromQueryName(String upperQueryName) {
         for (Objetos objeto  : Objetos.values()){
             if (objeto.getNamedQuery().toUpperCase().equals(upperQueryName)){
                 return objeto;

@@ -75,10 +75,6 @@
             CamposActivos   = "enabled";
             nameButton      = "MODIFICAR";
             break;
-        case DISPLAY:
-            CamposActivos = "enabled";
-            nameButton    = "MODIFICAR";
-            break;
     }
 %>
 

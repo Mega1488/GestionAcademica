@@ -24,6 +24,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad SincInconsistenciaDatos
  *
  * @author alvar
  */
@@ -72,35 +73,67 @@ public class SincInconsistenciaDatos implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de SincInconsistenciaDatos
+     */
     public Long getIncObjCod() {
         return IncObjCod;
     }
 
+    /**
+     *
+     * @param IncObjCod recibe el código de SincInconsistenciaDatos
+     */
     public void setIncObjCod(Long IncObjCod) {
         this.IncObjCod = IncObjCod;
     }
 
+    /**
+     *
+     * @return Retorna la inconsistencia
+     */
     @XmlTransient
     public SincronizacionInconsistencia getInconsistencia() {
         return inconsistencia;
     }
 
+    /**
+     *
+     * @param inconsistencia Recibe la inconsistencia
+     */
     public void setInconsistencia(SincronizacionInconsistencia inconsistencia) {
         this.inconsistencia = inconsistencia;
     }
 
+    /**
+     *
+     * @return Retorna el valor de objeto
+     */
     public String getObjVal() {
         return ObjVal;
     }
 
+    /**
+     *
+     * @param ObjVal Recibe el valor de Objeto
+     */
     public void setObjVal(String ObjVal) {
         this.ObjVal = ObjVal;
     }
 
+    /**
+     *
+     * @return Retorna el seleccionado
+     */
     public Boolean getObjSel() {
         return ObjSel;
     }
 
+    /**
+     *
+     * @param ObjSel Recibe el objeto seleccionado
+     */
     public void setObjSel(Boolean ObjSel) {
         this.ObjSel = ObjSel;
     }

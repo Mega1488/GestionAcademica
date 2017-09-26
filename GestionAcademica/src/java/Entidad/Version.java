@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * Entidad Versión
  *
  * @author alvar
  */
@@ -42,32 +43,57 @@ public class Version implements Serializable {
     private Boolean SisCrgDat;
     
     //-CONSTRUCTOR
+
     public Version() {
     }
     
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de versión
+     */
     public Long getSisVerCod() {
         return SisVerCod;
     }
 
+    /**
+     *
+     * @param SisVerCod Recibe el código de versión
+     */
     public void setSisVerCod(Long SisVerCod) {
         this.SisVerCod = SisVerCod;
     }
 
+    /**
+     *
+     * @return Retorna la version actual
+     */
     public String getSisVer() {
         return SisVer;
     }
 
+    /**
+     *
+     * @param SisVer Recibe la version actual
+     */
     public void setSisVer(String SisVer) {
         this.SisVer = SisVer;
     }
 
+    /**
+     *
+     * @return Retorna si hace o no hace la carga inicial
+     */
     public Boolean getSisCrgDat() {
         return SisCrgDat;
     }
 
+    /**
+     *
+     * @param SisCrgDat Recibe si hace o no hace la carga inicial
+     */
     public void setSisCrgDat(Boolean SisCrgDat) {
         this.SisCrgDat = SisCrgDat;
     }

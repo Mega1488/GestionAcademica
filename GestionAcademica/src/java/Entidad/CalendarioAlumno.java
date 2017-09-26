@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad CalendarioAlumno
  * @author alvar
  */
 
@@ -101,123 +101,234 @@ public class CalendarioAlumno  extends SincHelper implements Serializable {
     
 
     //-CONSTRUCTOR
-
     public CalendarioAlumno() {
     }
 
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el Código de CalendarioAlumno
+     */
     public Long getCalAlCod() {
         return CalAlCod;
     }
 
+    /**
+     *
+     * @param CalAlCod Recibe el Código de CalendarioAlumno
+     */
     public void setCalAlCod(Long CalAlCod) {
         this.CalAlCod = CalAlCod;
     }
     
+    /**
+     *
+     * @return Retorna el CalendarioAlumno
+     */
     public Calendario getCalendario() {
         return calendario;
     }
 
+    /**
+     *
+     * @param calendario Recibe el CalendarioAlumno
+     */
     public void setCalendario(Calendario calendario) {
         this.calendario = calendario;
     }
 
+    /**
+     *
+     * @return Retorna el Alumno del CalendarioAlumno
+     */
     public Persona getAlumno() {
         return Alumno;
     }
 
+    /**
+     *
+     * @param Alumno Recibe el Alumno del CalendarioAlumno
+     */
     public void setAlumno(Persona Alumno) {
         this.Alumno = Alumno;
     }
 
+    /**
+     *
+     * @return Retorna la calificación de la evaluación
+     */
     public Double getEvlCalVal() {
         return EvlCalVal;
     }
 
+    /**
+     *
+     * @param EvlCalVal Recibe la calificación de la evaluacion
+     */
     public void setEvlCalVal(Double EvlCalVal) {
         this.EvlCalVal = EvlCalVal;
     }
 
+    /**
+     *
+     * @return Retorna el estado de la evaluación (Estado: sin calificar, calificado, validado)
+     */
     public EstadoCalendarioEvaluacion getEvlCalEst() {
         return EvlCalEst;
     }
 
+    /**
+     *
+     * @param EvlCalEst Recibe el estado de la evaluación (Estado: sin calificar, calificado, validado)
+     */
     public void setEvlCalEst(EstadoCalendarioEvaluacion EvlCalEst) {
         this.EvlCalEst = EvlCalEst;
     }
 
+    /**
+     *
+     * @return Retorna las Observaciónes de la evaluación
+     */
     public String getEvlCalObs() {
         return EvlCalObs;
     }
 
+    /**
+     *
+     * @param EvlCalObs Recibe las Observaciones de la evaluación
+     */
     public void setEvlCalObs(String EvlCalObs) {
         this.EvlCalObs = EvlCalObs;
     }
 
+    /**
+     *
+     * @return Retorna las Observaciones de la validación
+     */
     public String getEvlValObs() {
         return EvlValObs;
     }
 
+    /**
+     *
+     * @param EvlValObs Recibe las Observaciones de la valicación
+     */
     public void setEvlValObs(String EvlValObs) {
         this.EvlValObs = EvlValObs;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de calificación
+     */
     public Date getEvlCalFch() {
         return EvlCalFch;
     }
 
+    /**
+     *
+     * @param EvlCalFch Recibe la fecha de calificación
+     */
     public void setEvlCalFch(Date EvlCalFch) {
         this.EvlCalFch = EvlCalFch;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de valicación
+     */
     public Date getEvlValFch() {
         return EvlValFch;
     }
 
+    /**
+     *
+     * @param EvlValFch Recibe la fecha de Validación
+     */
     public void setEvlValFch(Date EvlValFch) {
         this.EvlValFch = EvlValFch;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna el código de la persona que calificó
+     */
     public Persona getEvlCalPor() {
         return EvlCalPor;
     }
 
+    /**
+     *
+     * @param EvlCalPor Recibe el código de la persona que calificó
+     */
     public void setEvlCalPor(Persona EvlCalPor) {
         this.EvlCalPor = EvlCalPor;
     }
 
+    /**
+     *
+     * @return Retorna el código de la persona que validó
+     */
     public Persona getEvlValPor() {
         return EvlValPor;
     }
 
+    /**
+     *
+     * @param EvlValPor Recibe el código de la persona que validó
+     */
     public void setEvlValPor(Persona EvlValPor) {
         this.EvlValPor = EvlValPor;
     }
     
+    /**
+     *
+     * @return Retorna si se puede calificar la evaluación o no
+     */
     public boolean puedeCalificarse()
     {
         return (this.EvlCalEst.equals(EstadoCalendarioEvaluacion.CALIFICADO) || this.EvlCalEst.equals(EstadoCalendarioEvaluacion.PENDIENTE_CORRECCION) || this.EvlCalEst.equals(EstadoCalendarioEvaluacion.SIN_CALIFICAR));
     }
     
+    /**
+     *
+     * @return Retorna si se puede enviar a validar
+     */
     public boolean puedeEnviarToValidar()
     {
         return (this.EvlCalEst.equals(EstadoCalendarioEvaluacion.CALIFICADO));
     }
     
+    /**
+     *
+     * @return Retorna si se puede validar o no.
+     */
     public boolean puedeValidarse()
     {
         return (this.EvlCalEst.equals(EstadoCalendarioEvaluacion.PENDIENTE_VALIDACION));
     }
     
+    /**
+     *
+     * @return Retorna si se puede editar o no.
+     */
     public boolean puedeEditarlo()
     {
         return (!this.EvlCalEst.equals(EstadoCalendarioEvaluacion.VALIDADO));
@@ -257,7 +368,6 @@ public class CalendarioAlumno  extends SincHelper implements Serializable {
     public Long GetPrimaryKey() {
         return this.CalAlCod;
     }
-    
 }
 
 

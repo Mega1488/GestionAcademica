@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Servlet Mantenimiento de NotificacionDestinatario
  *
  * @author alvar
  */
@@ -104,6 +105,11 @@ public class ABM_NotificacionDestinatario extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request 
+     * @return Método Agregar NotificacionDestinatario
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -135,6 +141,11 @@ public class ABM_NotificacionDestinatario extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método Actualizar NotificacionDestinatario
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -169,6 +180,11 @@ public class ABM_NotificacionDestinatario extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método Eliminar NotificacionDestinatario
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -194,6 +210,12 @@ public class ABM_NotificacionDestinatario extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @param destinatario
+     * @return Método Validar NotificacionDestinatario
+     */
     private NotificacionDestinatario ValidarNotificacionDestinatario(HttpServletRequest request, NotificacionDestinatario destinatario){
         
         if(destinatario == null)

@@ -27,6 +27,7 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad de Evaluación
  *
  * @author alvar
  */
@@ -84,87 +85,161 @@ public class Evaluacion extends SincHelper implements Serializable {
     private Date ObjFchMod;
 
     //-CONSTRUCTOR
-
     public Evaluacion() {
     }
     
     
     //-GETTERS Y SETTERS
-    
+
+    /**
+     *
+     * @return Retorno el código de la Evaluación
+     */
     public Long getEvlCod() {
         return EvlCod;
     }
 
+    /**
+     *
+     * @param EvlCod Recibo el código de la Evaluación
+     */
     public void setEvlCod(Long EvlCod) {
         this.EvlCod = EvlCod;
     }
     
+    /**
+     *
+     * @return Retorno la materia de la Evaluación
+     */
     public Materia getMatEvl() {
         return MatEvl;
     }
     
+    /**
+     *
+     * @param MatEvl recibo la materia de la Evaluación
+     */
     public void setMatEvl(Materia MatEvl) {
         this.MatEvl = MatEvl;
     }
     
+    /**
+     *
+     * @return Retorno el módulo de la Evaluación
+     */
     public Modulo getModEvl() {
         return ModEvl;
     }
 
+    /**
+     *
+     * @param ModEvl Recibo el módulo de la Evaluación
+     */
     public void setModEvl(Modulo ModEvl) {
         this.ModEvl = ModEvl;
     }
 
+    /**
+     *
+     * @return Retorno el nombre de la Evaluación
+     */
     public String getEvlNom() {
         return EvlNom;
     }
 
+    /**
+     *
+     * @param EvlNom Recibo el nombre de la Evaluación
+     */
     public void setEvlNom(String EvlNom) {
         this.EvlNom = EvlNom;
     }
 
+    /**
+     *
+     * @return Retorno la descripción de la Evaluación
+     */
     public String getEvlDsc() {
         return EvlDsc;
     }
 
+    /**
+     *
+     * @param EvlDsc Recibo la descripción de la Evaluación
+     */
     public void setEvlDsc(String EvlDsc) {
         this.EvlDsc = EvlDsc;
     }
 
+    /**
+     *
+     * @return Retorno la nota Total
+     */
     public Double getEvlNotTot() {
         return EvlNotTot;
     }
 
+    /**
+     *
+     * @param EvlNotTot Recibo la nota total
+     */
     public void setEvlNotTot(Double EvlNotTot) {
         this.EvlNotTot = EvlNotTot;
     }
 
+    /**
+     *
+     * @return Retorno el tipo de evaluación
+     */
     public TipoEvaluacion getTpoEvl() {
         if(tipoEvaluacion == null)  tipoEvaluacion = new TipoEvaluacion();
         return tipoEvaluacion;
     }
 
+    /**
+     *
+     * @param TpoEvl Recibo el tipo de evaluación
+     */
     public void setTpoEvl(TipoEvaluacion TpoEvl) {
         this.tipoEvaluacion = TpoEvl;
     }
 
+    /**
+     *
+     * @return Retorno la fecha de modificación de la evaluación
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
     
+    /**
+     *
+     * @return Retorno la evaluación del curso
+     */
     public Curso getCurEvl() {
         return CurEvl;
     }
 
+    /**
+     *
+     * @param CurEvl Recibo la evaluación del curso
+     */
     public void setCurEvl(Curso CurEvl) {
         this.CurEvl = CurEvl;
     }
 
-    
+    /**
+     *
+     * @param ObjFchMod Recibo la fecha de modificación de la evaluación
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorno el tipo de estudio (Curso, Mateira o Modulo)
+     */
     public String getEstudioTipo()
     {
         if(this.getCurEvl() != null)
@@ -185,11 +260,20 @@ public class Evaluacion extends SincHelper implements Serializable {
         return "";
     }
     
+    /**
+     *
+     * @return Retorno Inscripción automatica o no
+     * 
+     */
     public String getInscripcionAutomatica()
     {
         return (this.tipoEvaluacion.getTpoEvlInsAut() ? "Si" :  "No");
     }
     
+    /**
+     *
+     * @return Retorno el nombre del estudio (Curso, Mateira o Modulo)
+     */
     public String getEstudioNombre()
     {
         if(this.getCurEvl() != null)
@@ -210,6 +294,10 @@ public class Evaluacion extends SincHelper implements Serializable {
         return "";
     }
     
+    /**
+     *
+     * @return Retorno El nombre del Curso, Mateira o Modulo
+     */
     public String getCarreraCursoNombre()
     {
         if(this.getCurEvl() != null)

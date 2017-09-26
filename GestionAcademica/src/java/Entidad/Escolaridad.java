@@ -26,7 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad Escolaridad
+ * 
  * @author alvar
  */
 @Entity
@@ -91,88 +92,170 @@ public class Escolaridad extends SincHelper implements Serializable {
 
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorno el código de la Escolaridad
+     */
     public Long getEscCod() {
         return EscCod;
     }
 
+    /**
+     *
+     * @param EscCod Recibo el código de la Escolaridad
+     */
     public void setEscCod(Long EscCod) {
         this.EscCod = EscCod;
     }
 
+    /**
+     *
+     * @return Retorno la materia de la Escolaridad
+     */
     public Materia getMateria() {
         return materia;
     }
 
+    /**
+     *
+     * @param materia Recibo la materia de la Escolaridad
+     */
     public void setMateria(Materia materia) {
         this.materia = materia;
     }
 
+    /**
+     *
+     * @return Retorno el módulo de la Escolaridad
+     */
     public Modulo getModulo() {
         return modulo;
     }
 
+    /**
+     *
+     * @param modulo Recibo el módulo de la Escolaridad
+     */
     public void setModulo(Modulo modulo) {
         this.modulo = modulo;
     }
 
+    /**
+     *
+     * @return Retorno la persona que ingreso la escolaridad
+     */
     public Persona getIngresadaPor() {
         return IngresadaPor;
     }
 
+    /**
+     *
+     * @param IngresadaPor Recibo la persona que ingreso la escolaridad
+     */
     public void setIngresadaPor(Persona IngresadaPor) {
         this.IngresadaPor = IngresadaPor;
     }
 
+    /**
+     *
+     * @return Retorno el valor de la calificación de la Escolaridad
+     */
     public Double getEscCalVal() {
         return EscCalVal;
     }
 
+    /**
+     *
+     * @param EscCalVal Recibo le valor de la calificación de la Escolaridad
+     */
     public void setEscCalVal(Double EscCalVal) {
         this.EscCalVal = EscCalVal;
     }
 
+    /**
+     *
+     * @return Retorno la fecha de la Escolaridad
+     */
     public Date getEscFch() {
         return EscFch;
     }
 
+    /**
+     *
+     * @param EscFch Recibo la fecha de la Escolaridad
+     */
     public void setEscFch(Date EscFch) {
         this.EscFch = EscFch;
     }
 
+    /**
+     *
+     * @return Retorno la fecha de modificación de la Escolaridad
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibo la fecha de modificación de la Escolaridad
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorno el curso de la Escolaridad
+     */
     public Curso getCurso() {
         return curso;
     }
 
+    /**
+     *
+     * @param curso Recibo el curso de la Escolaridad
+     */
     public void setCurso(Curso curso) {
         this.curso = curso;
     }
 
+    /**
+     *
+     * @return Retorno el alumno de la Escolaridad
+     */
     public Persona getAlumno() {
         return alumno;
     }
 
+    /**
+     *
+     * @param alumno Recibo el alumno de la Escolaridad
+     */
     public void setAlumno(Persona alumno) {
         this.alumno = alumno;
     }
 
+    /**
+     *
+     * @return Retorno el valor del Curso de la Escolaridad
+     */
     public Double getEscCurVal() {
         return EscCurVal;
     }
 
+    /**
+     *
+     * @param EscCurVal Recibo el valor del Curso de la Escolaridad
+     */
     public void setEscCurVal(Double EscCurVal) {
         this.EscCurVal = EscCurVal;
     }
     
-    
-
+    /**
+     *
+     * @return Retorno si la materia o curso es Revalida, Aprobado o Eliminado
+     */
     public String getAprobacion() 
     {
         if(this.Revalida()) return "Revalida";
@@ -184,17 +267,29 @@ public class Escolaridad extends SincHelper implements Serializable {
         return "";
     }
     
+    /**
+     *
+     * @return Retorno el estado de la materia o curso es Aprobada o no
+     */
     public Boolean getAprobado() {
         if(this.EscCalVal != null) if(this.EscCalVal >= 70) return true;
         if(this.EscCurVal != null && this.materia != null) if(this.materia.MateriaExonera(EscCurVal)) if(this.EscCurVal >= 70) return true;
         return false;
     }
     
+    /**
+     *
+     * @return Retorno si la materia o curso es revalida o no
+     */
     public Boolean Revalida(){
         if(this.EscCalVal == null) return false;
         return this.EscCalVal.equals(Double.NaN);
     }
     
+    /**
+     *
+     * @return Retirbi el nombre del estudio dependiendo de si es Curso, Materia o Módulo
+     */
     public String getNombreEstudio()
     {
         

@@ -28,7 +28,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ *  Mantenimiento de NotificarConsulta
+ * 
  * @author alvar
  */
 public class ABM_NotificacionConsulta extends HttpServlet {
@@ -103,6 +104,11 @@ public class ABM_NotificacionConsulta extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar NotificarConsulta
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -134,6 +140,11 @@ public class ABM_NotificacionConsulta extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar NotificarConsulta
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -168,6 +179,11 @@ public class ABM_NotificacionConsulta extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar NotificarConsulta
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -193,6 +209,12 @@ public class ABM_NotificacionConsulta extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @param consulta
+     * @return Método Validar NotificarConsulta
+     */
     private NotificacionConsulta ValidarNotificacionConsulta(HttpServletRequest request, NotificacionConsulta consulta){
         
         if(consulta == null)

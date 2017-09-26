@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad SincRegistroEliminado
  *
  * @author alvar
  */
@@ -65,34 +66,66 @@ public class SincRegistroEliminado implements Serializable {
         
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de SincRegistroEliminado
+     */
     public Long getSncObjElimCod() {
         return SncObjElimCod;
     }
 
+    /**
+     * 
+     * @param SncObjElimCod Recibe el código de SincRegistroEliminado
+     */
     public void setSncObjElimCod(Long SncObjElimCod) {
         this.SncObjElimCod = SncObjElimCod;
     }
 
+    /**
+     *
+     * @return Retorna el objeto de SincRegistroEliminado
+     */
     public Objeto getObjeto() {
         return objeto;
     }
 
+    /**
+     *
+     * @param objeto Recibe el Objeto de SincRegistroEliminado
+     */
     public void setObjeto(Objeto objeto) {
         this.objeto = objeto;
     }
 
+    /**
+     *
+     * @return Retorna la fecha del objeto SincRegistroEliminado eliminado
+     */
     public Date getSncObjElimFch() {
         return SncObjElimFch;
     }
 
+    /**
+     *
+     * @param SncObjElimFch Recibe la fecha del objeto SincRegistroEliminado aliminado
+     */
     public void setSncObjElimFch(Date SncObjElimFch) {
         this.SncObjElimFch = SncObjElimFch;
     }
 
+    /**
+     *
+     * @return Retorna el código del objeto eliminado
+     */
     public Long getObjElimCod() {
         return ObjElimCod;
     }
 
+    /**
+     *
+     * @param ObjElimCod Recibe el código del objeto eliminado
+     */
     public void setObjElimCod(Long ObjElimCod) {
         this.ObjElimCod = ObjElimCod;
     }

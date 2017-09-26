@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Versión
  *
  * @author alvar
  */
@@ -88,6 +89,11 @@ public class AM_Version extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Obtener datos Versión
+     */
     private String ObtnerDatos(HttpServletRequest request)
     {
         String retorno = "";
@@ -106,6 +112,11 @@ public class AM_Version extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar datos DescargarArchivo
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);

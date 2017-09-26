@@ -5,7 +5,8 @@
  */
 package Enumerado;
 
-/**
+/** 
+ * Enumerado Genero
  *
  * @author Alvaro
  */
@@ -24,11 +25,19 @@ public enum Genero {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el genero
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recibe el código
+     * @return Retorna el genero
+     */
     public static Genero fromCode(String pCod) {
         for (Genero objeto  : Genero.values()){
             if (objeto.getValor().equals(pCod)){

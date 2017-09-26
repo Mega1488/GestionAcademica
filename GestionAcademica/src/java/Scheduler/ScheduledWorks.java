@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import org.springframework.context.SmartLifecycle;
 
 /**
+ * Scheduler ScheduledWorks
  *
  * @author alvar
  */
@@ -25,23 +26,31 @@ public class ScheduledWorks implements SmartLifecycle{
     
     private Integer diasBefore;
 
+    /**
+     *
+     * @return Retorna Dias antes
+     */
     public Integer getDiasBefore() {
         return diasBefore;
     }
 
+    /**
+     *
+     * @param diasBefore Recibe Días antes
+     */
     public void setDiasBefore(Integer diasBefore) {
         this.diasBefore = diasBefore;
     }
     
-    
-
     public ScheduledWorks() {
         
     }
     
     private boolean isRunning = false;
     
-    
+    /**
+     *  Método Notificar
+     */
     public void Tarea_Notificar()
     {
         System.out.println("Notificar. Current time is :: "+ new Date());
@@ -51,6 +60,9 @@ public class ScheduledWorks implements SmartLifecycle{
         
     }
     
+    /**
+     *  Método Notificar Interno
+     */
     public void Tarea_NotificarInterno()
     {
         System.out.println("Notificar interno. Current time is :: "+ new Date());
@@ -59,23 +71,35 @@ public class ScheduledWorks implements SmartLifecycle{
         noInt.EjecutarNotificacionesInternas();
     }
     
+    /**
+     * Método Borrar WS Bitácora
+     */
     public void Tarea_BorrarWSBitacora()
     {
         System.out.println("Borrar WSBitacora. Current time is :: "+ new Date());
         LoWS.GetInstancia().EliminarBitacoraBeforeDate();
     }
     
+    /**
+     *  Método Sincronizar
+     */
     public void Tarea_Sincronizar()
     {
         System.out.println("Sincronizar. Current time is :: "+ new Date());
         LoSincronizacion.GetInstancia().Sincronizar();
     }
     
+    /**
+     *  Método Importar Adjuntos
+     */
     public void Tarea_ImportarAdjuntos(){
         System.out.println("Importar adjuntos de moodle. Current time is :: "+ new Date());
         LoPeriodo.GetInstancia().DocumentoImportarMoodle();
     }
 
+    /**
+     *  Método Comienzo
+     */
     @Override
     public void start() {
         System.err.println("Iniciando scheduler");
@@ -83,12 +107,19 @@ public class ScheduledWorks implements SmartLifecycle{
         this.isRunning = true;
     }
  
+    /**
+     *  Método Detener
+     */
     @Override
     public void stop() {
         System.err.println("Deteniendo scheduler");
         isRunning = false;
     }
  
+    /**
+     *
+     * @param callback
+     */
     @Override
     public void stop(final Runnable callback) {
         System.err.println("Deteniendo scheduler callback");
@@ -114,17 +145,26 @@ public class ScheduledWorks implements SmartLifecycle{
      * This is the most important method. 
      * Returning Integer.MAX_VALUE only suggests that 
      * we will be the first bean to shutdown.
+     * @return 
      */
     @Override
     public int getPhase() {
         return Integer.MAX_VALUE;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isAutoStartup() {
         return false;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public boolean isRunning() {
         return isRunning;

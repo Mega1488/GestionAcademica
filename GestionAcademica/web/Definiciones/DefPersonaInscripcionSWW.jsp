@@ -163,7 +163,7 @@
                                 <table id="PopUpTblEstudio" name="PopUpTblEstudio" class="table table-striped" cellspacing="0"  class="table" width="100%">
                                     <thead>
                                         <tr>
-                                            <th>Codigo</th>
+                                            <th>Código</th>
                                             <th>Nombre</th>
                                         </tr>
                                     </thead>

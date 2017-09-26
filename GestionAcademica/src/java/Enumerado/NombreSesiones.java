@@ -6,12 +6,14 @@
 package Enumerado;
 
 /**
+ * Enumerado Nombre Sesiones
  *
  * @author Alvaro
  */
 public enum NombreSesiones {
-    USUARIO("SGA_USUARIO"), 
-    TOKEN("SGA_TOKEN"), 
+
+    USUARIO("SGA_USUARIO"),
+    TOKEN("SGA_TOKEN"),
     USUARIO_NOMBRE("USUARIO_NOMBRE"),
     USUARIO_ADM("USUARIO_ADM"),
     USUARIO_PER("USUARIO_PER"),
@@ -20,7 +22,6 @@ public enum NombreSesiones {
     SESSION_COD("SESSION_COD");
     
     NombreSesiones(){
-        
     }
     
     private String vValor;
@@ -29,6 +30,10 @@ public enum NombreSesiones {
         this.vValor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor del tipo de usuario logueado
+     */
     public String getValor() {
         return vValor;
     }

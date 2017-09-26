@@ -37,6 +37,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * NotificationManager
  *
  * @author alvar
  */
@@ -106,6 +107,11 @@ public class NotificationManager extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Notificar
+     */
     private String Notificar(HttpServletRequest request){
         Notificacion notificacion = this.ValidarNotificacion(request, null);
         
@@ -134,6 +140,11 @@ public class NotificationManager extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Depurar Bitacora
+     */
     private String DepurarBitacora(HttpServletRequest request){
         Notificacion notificacion = this.ValidarNotificacion(request, null);
         
@@ -142,6 +153,11 @@ public class NotificationManager extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Eliminar Bandeja
+     */
     private String EliminarBandeja(HttpServletRequest request){
         NotificacionBandeja bandeja = this.ValidarBandeja(request);
         
@@ -150,6 +166,11 @@ public class NotificationManager extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método ver Bandeja
+     */
     private String VerBandeja(HttpServletRequest request){
         NotificacionBandeja bandeja = this.ValidarBandeja(request);
         
@@ -160,6 +181,12 @@ public class NotificationManager extends HttpServlet {
         return utilidades.ObjetoToJson(retorno);
     }    
     
+    /**
+     * 
+     * @param request
+     * @param notificacion
+     * @return Método validar NotificationManager
+     */
     private Notificacion ValidarNotificacion(HttpServletRequest request, Notificacion notificacion){
         
         if(notificacion == null)
@@ -222,6 +249,11 @@ public class NotificationManager extends HttpServlet {
                 return notificacion;
         }
 
+    /**
+     * 
+     * @param request
+     * @return Método validar bandeja
+     */
     private NotificacionBandeja ValidarBandeja(HttpServletRequest request){
         
         NotificacionBandeja bandeja   = new NotificacionBandeja();

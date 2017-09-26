@@ -25,6 +25,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 /**
+ * WSRest.Resourse ws_persona
  *
  * @author alvar
  */
@@ -34,6 +35,13 @@ public class ws_persona {
 
     @Context HttpServletRequest requestContext;
             
+    /**
+     *
+     * @param tkn
+     * @param usr
+     * @param psw
+     * @return
+     */
     @GET
     //@Path("login/{tkn}/{usr}/{psw}")
     @Path("login")
@@ -88,6 +96,12 @@ public class ws_persona {
         return retorno;
     }
     
+    /**
+     *
+     * @param tkn
+     * @param usr
+     * @return
+     */
     @GET
     @Path("token")
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})

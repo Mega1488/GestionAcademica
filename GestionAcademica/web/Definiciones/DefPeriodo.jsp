@@ -181,7 +181,7 @@
                                                             <div class="form-group "><label for="PeriCod" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="PeriCod" name="PeriCod" disabled value="<%=utilidad.NuloToVacio(periodo.getPeriCod())%>" ></div></div>
                                                             <div class="form-group "><label for="PerFchIni" class="control-label col-lg-3">Inicio</label><div class="col-lg-6"><input type="date" required class=" form-control inputs_generales" id="PerFchIni" name="PerFchIni" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(periodo.getPerFchIni())%>" ></div></div>
                                                             <div class="form-group ">
-                                                                <label for="PerVal" class="control-label col-lg-3">Periodo</label>
+                                                                <label for="PerVal" class="control-label col-lg-3">Período</label>
                                                                 <div class="col-lg-2">
                                                                     <input type="number" required step="0.1" class=" form-control inputs_generales" id="PerVal" name="PerVal" <%=CamposActivos%> value="<%=utilidad.NuloToVacio(periodo.getPerVal())%>" >
                                                                 </div>

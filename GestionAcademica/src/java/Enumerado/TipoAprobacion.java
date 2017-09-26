@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TupoAprobacion
  *
  * @author Alvaro
  */
@@ -51,16 +52,29 @@ public enum TipoAprobacion{
         this.vTpoAprNom = tpoAprNom;
     }
 
+    /**
+     *
+     * @return Retorna el código de TupoAprobacion
+     */
     public int getTipoAprobacionC()
     {
         return vTpoAprCod;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de TupoAprobacion
+     */
     public String getTipoAprobacionN()
     {
         return vTpoAprNom;
     }
     
+    /**
+     *
+     * @param tpoAprCod Recibe el código de TupoAprobacion
+     * @return Retorna TupoAprobacion dado el código recibido
+     */
     public static TipoAprobacion fromCode(int tpoAprCod)
     {
         for(TipoAprobacion tipoApr :TipoAprobacion.values())

@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado MoodleAuth
  *
  * @author Alvaro
  */
@@ -25,11 +26,19 @@ public enum MoodleAuth {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor MoodleAuth
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recibe el código de MoodleAuth
+     * @return Retorna el MoodleAuth
+     */
     public static MoodleAuth fromCode(String pCod) {
         for (MoodleAuth objeto  : MoodleAuth.values()){
             if (objeto.getValor().equals(pCod)){

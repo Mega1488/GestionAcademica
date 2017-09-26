@@ -35,7 +35,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad de Módulo
+ * 
  * @author alvar
  */
 
@@ -93,19 +94,33 @@ public class Modulo extends SincHelper implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     private List<Evaluacion> lstEvaluacion;
     
+    //CONSTRUCTORES
     public Modulo() {
     }
 
+    /**
+     *
+     * @return Retorna la lista de Evaluación
+     */
     @JsonIgnore
     @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
     }
 
+    /**
+     *
+     * @param lstEvaluacion Recibe la lista de Evaluación
+     */
     public void setLstEvaluacion(List<Evaluacion> lstEvaluacion) {
         this.lstEvaluacion = lstEvaluacion;
     }
     
+    /**
+     *
+     * @param EvlCod Recibe el código de la Evaluación
+     * @return Retorna la evaluación dado el código recibido
+     */
     public Evaluacion getEvaluacionById(Long EvlCod){
         
         Evaluacion evaluacion = new Evaluacion();
@@ -122,79 +137,149 @@ public class Modulo extends SincHelper implements Serializable {
         return evaluacion;
     }
     
+    /**
+     *
+     * @return Retorna el codigo del módulo
+     */
     public Long getModCod() {
         return this.ModCod;
     }
 
+    /**
+     *
+     * @param pModCod Recibe el código del Módulo
+     */
     public void setModCod(Long pModCod) {
         this.ModCod = pModCod;
     }
 
+    /**
+     *
+     * @return Retorna el codigo de MóduloEstudio
+     */
     public Long getModEstCod() {
         return ModEstCod;
     }
 
+    /**
+     *
+     * @param ModEstCod Recibe el codigo de MóduloEstudio
+     */
     public void setModEstCod(Long ModEstCod) {
         this.ModEstCod = ModEstCod;
     }
 
+    /**
+     *
+     * @return Retorna el Curso
+     */
     public Curso getCurso() {
         return this.curso;
     }
 
+    /**
+     *
+     * @param pCurso Rcibe el Curso
+     */
     public void setCurso(Curso pCurso) {
         this.curso = pCurso;
     }
 
+    /**
+     *
+     * @return Retorna el Nombre del Módulo
+     */
     public String getModNom() {
         return ModNom;
     }
 
+    /**
+     *
+     * @param ModNom Recibe el Nombre del Módulo
+     */
     public void setModNom(String ModNom) {
         this.ModNom = ModNom;
     }
 
+    /**
+     *
+     * @return Retorna la descripción del módulo
+     */
     public String getModDsc() {
         return ModDsc;
     }
 
+    /**
+     *
+     * @param ModDsc Recibe la descripción del módulo
+     */
     public void setModDsc(String ModDsc) {
         this.ModDsc = ModDsc;
     }
 
+    /**
+     *
+     * @return retorno el Tipo Período del módulo
+     */
     public TipoPeriodo getModTpoPer() {
         return ModTpoPer;
     }
 
+    /**
+     *
+     * @param ModTpoPer Recibe el Tipo Período del módulo
+     */
     public void setModTpoPer(TipoPeriodo ModTpoPer) {
         this.ModTpoPer = ModTpoPer;
     }
 
+    /**
+     *
+     * @return Retorna el valor del período
+     */
     public Double getModPerVal() {
         return ModPerVal;
     }
 
+    /**
+     *
+     * @param ModPerVal Recibe el valor del período
+     */
     public void setModPerVal(Double ModPerVal) {
         this.ModPerVal = ModPerVal;
     }
 
+    /**
+     *
+     * @return Retorna la Cantidad de horas del módulo
+     */
     public Double getModCntHor() {
         return ModCntHor;
     }
 
+    /**
+     *
+     * @param ModCntHor Recibe la Cantidad de horas del módulo
+     */
     public void setModCntHor(Double ModCntHor) {
         this.ModCntHor = ModCntHor;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación del módulo
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación del módulo
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -228,13 +313,10 @@ public class Modulo extends SincHelper implements Serializable {
     public String toString() {
         return "Modulo{" + "ModCod=" + ModCod + ", curso=" + curso + ", ModNom=" + ModNom + ", ModDsc=" + ModDsc + ", ModTpoPer=" + ModTpoPer + ", ModPerVal=" + ModPerVal + ", ModCntHor=" + ModCntHor + ", ModEstCod=" + ModEstCod + ", ObjFchMod=" + ObjFchMod + ", lstEvaluacion=" + lstEvaluacion + '}';
     }
-
     
     @Override
     public Long GetPrimaryKey() {
         return this.ModCod;
     }
-    
-    
 }
 

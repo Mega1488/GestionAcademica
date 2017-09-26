@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento Solicitudes
  *
  * @author alvar
  */
@@ -117,6 +118,11 @@ public class ABM_Solicitud extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Solicitudes
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -149,6 +155,11 @@ public class ABM_Solicitud extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Solicitudes
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -183,6 +194,11 @@ public class ABM_Solicitud extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Solicitudes
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -208,6 +224,11 @@ public class ABM_Solicitud extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Tomar Solicitudes
+     */
     private String TomarSolicitud(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -242,6 +263,11 @@ public class ABM_Solicitud extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Liberar Solicitudes
+     */
     private String LiberarSolicitud(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -276,6 +302,11 @@ public class ABM_Solicitud extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método finalizar Solicitudes
+     */
     private String FinalizarSolicitud(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -310,6 +341,12 @@ public class ABM_Solicitud extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @param solicitud
+     * @return Método validar Solicitudes
+     */
     private Solicitud ValidarSolicitud(HttpServletRequest request, Solicitud solicitud){
         
         if(solicitud == null)

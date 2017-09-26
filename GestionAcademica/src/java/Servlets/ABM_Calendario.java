@@ -32,7 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *sys
+ * Mantenimiento de Calendario
+ *
  * @author alvar
  */
 public class ABM_Calendario extends HttpServlet {
@@ -134,6 +135,11 @@ public class ABM_Calendario extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método guardar lista Calendario
+     */
     private String GuardarLista(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -155,6 +161,11 @@ public class ABM_Calendario extends HttpServlet {
         return  utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Calendario
+     */
     private String AgregarDatos(HttpServletRequest request){
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -187,6 +198,11 @@ public class ABM_Calendario extends HttpServlet {
             return retorno;
         }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Calendario
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -228,6 +244,11 @@ public class ABM_Calendario extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Calendario
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -258,6 +279,11 @@ public class ABM_Calendario extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Inscribir Período Calendario
+     */
     private String InscribirPeriodo(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -294,16 +320,31 @@ public class ABM_Calendario extends HttpServlet {
             return retorno;
     }
     
+    /**
+     * 
+     * @return Método Obtener Evento Calendario
+     */
     private String ObtenerEvento(){
         return utilidades.ObjetoToJson(loCalendario.ObtenerEventoTodosCalendario());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Obtener datos Calendario
+     */
     private String ObtenerDatos(HttpServletRequest request)
     {
         Calendario calendario = this.ValidarCalendario(request, null);
         return utilidades.ObjetoToJson(calendario);
     }
         
+    /**
+     * 
+     * @param request
+     * @param calendario
+     * @return Método validar Calendario
+     */
     private Calendario ValidarCalendario(HttpServletRequest request, Calendario calendario){
             
         

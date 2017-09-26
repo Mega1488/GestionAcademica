@@ -33,7 +33,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad Curso
+ * 
  * @author alvar
  */
 @Entity
@@ -85,82 +86,159 @@ public class Curso extends SincHelper implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     private List<Evaluacion> lstEvaluacion;
 
+    /**
+     *
+     * @return Retorna el código del Curso
+     */
     public Long getCurCod() {
         return CurCod;
     }
 
+    /**
+     *
+     * @param CurCod Recibe el código del curso
+     */
     public void setCurCod(Long CurCod) {
         this.CurCod = CurCod;
     }
 
+    /**
+     *
+     * @return Retorna el Nombre del curso
+     */
     public String getCurNom() {
         return CurNom;
     }
 
+    /**
+     *
+     * @param CurNom Recibe el Nombre del curso
+     */
     public void setCurNom(String CurNom) {
         this.CurNom = CurNom;
     }
 
+    /**
+     *
+     * @return Retorna la Descripción del Curso
+     */
     public String getCurDsc() {
         return CurDsc;
     }
 
+    /**
+     *
+     * @param CurDsc Recibe la Descripción del Curso
+     */
     public void setCurDsc(String CurDsc) {
         this.CurDsc = CurDsc;
     }
 
+    /**
+     *
+     * @return Retorna la Facultad del Curso
+     */
     public String getCurFac() {
         return CurFac;
     }
 
+    /**
+     *
+     * @param CurFac Recibe la Facultad del Curso
+     */
     public void setCurFac(String CurFac) {
         this.CurFac = CurFac;
     }
 
+    /**
+     *
+     * @return Retorna la certificación del Curso
+     */
     public String getCurCrt() {
         return CurCrt;
     }
 
+    /**
+     *
+     * @param CurCrt Recibe la certificación del Curso
+     */
     public void setCurCrt(String CurCrt) {
         this.CurCrt = CurCrt;
     }
 
+    /**
+     *
+     * @return Retorna el código de la categoría del curso (El curso en moodle se define como categoría)
+     */
     public Long getCurCatCod() {
         return CurCatCod;
     }
 
+    /**
+     *
+     * @param CurCatCod recibe el código de la categoría del curso (El curso en moodle se define como categoría)
+     */
     public void setCurCatCod(Long CurCatCod) {
         this.CurCatCod = CurCatCod;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación del Curso
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod recibe la fecha de modificación del Curso
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna la lista de módulos
+     */
     @JsonIgnore
     @XmlTransient
     public List<Modulo> getLstModulos() {
         return lstModulos;
     }
 
+    /**
+     *
+     * @param lstModulos Recibe la lista de módulos
+     */
     public void setLstModulos(List<Modulo> lstModulos) {
         this.lstModulos = lstModulos;
     }
 
+    /**
+     *
+     * @return Retorna la lista de evaluaciones
+     */
     @JsonIgnore
     @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
     }
 
+    /**
+     *
+     * @param lstEvaluacion Recibe la lista de evaluaciones
+     */
     public void setLstEvaluacion(List<Evaluacion> lstEvaluacion) {
         this.lstEvaluacion = lstEvaluacion;
     }
     
+    /**
+     *
+     * @param EvlCod Recibe el código de la Evaluación
+     * @return Retorna la Evaluación dado el código recibido
+     */
     public Evaluacion getEvaluacionById(Long EvlCod){
         
         Evaluacion evaluacion = new Evaluacion();
@@ -178,6 +256,11 @@ public class Curso extends SincHelper implements Serializable {
         return evaluacion;
     }
     
+    /**
+     *
+     * @param ModCod Recibe el código del módulo
+     * @return Retorna el módulo dado el código recibido
+     */
     public Modulo getModuloById(Long ModCod){
         
         Modulo pModulo = new Modulo();
@@ -222,6 +305,5 @@ public class Curso extends SincHelper implements Serializable {
    @Override
     public Long GetPrimaryKey() {
         return this.CurCod;
-    }
-    
+    }  
 }

@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado ServicioWeb
  *
  * @author Alvaro
  */
@@ -27,6 +28,10 @@ public enum ServicioWeb {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de ServicioWeb
+     */
     public int getValor() {
         return valor;
     }

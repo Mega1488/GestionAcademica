@@ -29,6 +29,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad WS_User
  *
  * @author alvar
  */
@@ -80,46 +81,86 @@ public class WS_User implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de WS_User
+     */
     public Long getWsUsrCod() {
         return WsUsrCod;
     }
 
+    /**
+     *
+     * @param WsUsrCod Recibe el código de WS_User
+     */
     public void setWsUsrCod(Long WsUsrCod) {
         this.WsUsrCod = WsUsrCod;
     }
 
+    /**
+     *
+     * @return Retorno el nick de usuario
+     */
     public String getWsUsr() {
         return WsUsr;
     }
 
+    /**
+     *
+     * @param WsUsr Recibe el nick de usuario
+     */
     public void setWsUsr(String WsUsr) {
         this.WsUsr = WsUsr;
     }
 
+    /**
+     *
+     * @return Retorno el password
+     */
     public String getWsUsrPsw() {
         return WsUsrPsw;
     }
 
+    /**
+     *
+     * @param WsUsrPsw Recibe el password
+     */
     public void setWsUsrPsw(String WsUsrPsw) {
         this.WsUsrPsw = WsUsrPsw;
     }
 
+    /**
+     *
+     * @return Retorna la lista de servicio
+     */
     @XmlTransient
     @JsonIgnore
     public List<WS_UserServicio> getLstServicio() {
         return lstServicio;
     }
 
+    /**
+     *
+     * @param lstServicio Recibe la lista de servicio
+     */
     public void setLstServicio(List<WS_UserServicio> lstServicio) {
         this.lstServicio = lstServicio;
     }
 
+    /**
+     *
+     * @return Retorna la lista de Bitacora
+     */
     @XmlTransient
     @JsonIgnore
     public List<WS_Bit> getLstBitacora() {
         return lstBitacora;
     }
 
+    /**
+     *
+     * @param lstBitacora Recibe la lista de Bitacora
+     */
     public void setLstBitacora(List<WS_Bit> lstBitacora) {
         this.lstBitacora = lstBitacora;
     }

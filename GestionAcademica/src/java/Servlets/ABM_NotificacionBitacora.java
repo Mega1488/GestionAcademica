@@ -32,7 +32,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
- *
+ *  Mantenimiento de NotificacionesBitacora
+ * 
  * @author alvar
  */
 public class ABM_NotificacionBitacora extends HttpServlet {
@@ -108,6 +109,11 @@ public class ABM_NotificacionBitacora extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar NotificacionesBitacora
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -139,6 +145,11 @@ public class ABM_NotificacionBitacora extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar NotificacionesBitacora
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -173,6 +184,11 @@ public class ABM_NotificacionBitacora extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar NotificacionesBitacora
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -198,6 +214,12 @@ public class ABM_NotificacionBitacora extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @param bitacora
+     * @return Método Validar NotificacionesBitacora
+     */
     private NotificacionBitacora ValidarNotificacionBitacora(HttpServletRequest request, NotificacionBitacora bitacora){
         
         if(bitacora == null)

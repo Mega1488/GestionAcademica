@@ -35,6 +35,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad PlanEstudio
  *
  * @author alvar
  */
@@ -94,72 +95,141 @@ public class PlanEstudio extends SincHelper implements Serializable {
 
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código del Periodo de Estudio
+     */
     public Long getPlaEstCod() {
         return PlaEstCod;
     }
 
+    /**
+     *
+     * @param PlaEstCod Recibe el código del Periodo de Estudio
+     */
     public void setPlaEstCod(Long PlaEstCod) {
         this.PlaEstCod = PlaEstCod;
     }
 
+    /**
+     *
+     * @return Retorna la carrera del Periodo de Estudio
+     */
     public Carrera getCarrera() {
         return carrera;
     }
 
+    /**
+     *
+     * @param carrera Recibe la carrera del Periodo de Estudio
+     */
     public void setCarrera(Carrera carrera) {
         this.carrera = carrera;
     }
 
+    /**
+     *
+     * @return Retorna el nombre del Periodo de Estudio
+     */
     public String getPlaEstNom() {
         return PlaEstNom;
     }
 
+    /**
+     *
+     * @param PlaEstNom Recibe el nombre del Periodo de Estudio
+     */
     public void setPlaEstNom(String PlaEstNom) {
         this.PlaEstNom = PlaEstNom;
     }
 
+    /**
+     *
+     * @return Retorna la descripción del Periodo de Estudio
+     */
     public String getPlaEstDsc() {
         return PlaEstDsc;
     }
 
+    /**
+     *
+     * @param PlaEstDsc recibe la descripción del Periodo de Estudio
+     */
     public void setPlaEstDsc(String PlaEstDsc) {
         this.PlaEstDsc = PlaEstDsc;
     }
 
+    /**
+     *
+     * @return Retorna los creditos necesarios del Periodo de Estudio
+     */
     public Double getPlaEstCreNec() {
         return PlaEstCreNec;
     }
 
+    /**
+     *
+     * @param PlaEstCreNec Recibe los creditos necesarios del Periodo de Estudio
+     */
     public void setPlaEstCreNec(Double PlaEstCreNec) {
         this.PlaEstCreNec = PlaEstCreNec;
     }
 
+    /**
+     *
+     * @return Retorna la código de categoría del Periodo de Estudio
+     */
     public Long getPlaEstCatCod() {
         return PlaEstCatCod;
     }
 
+    /**
+     *
+     * @param PlaEstCatCod Recibe el código de categoría del Periodo de Estudio
+     */
     public void setPlaEstCatCod(Long PlaEstCatCod) {
         this.PlaEstCatCod = PlaEstCatCod;
     }
 
+    /**
+     * 
+     * @return Retorna la fecha de modificación del Periodo de Estudio
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación del Periodo de Estudio
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna la lista de materias del Periodo de Estudio
+     */
     @JsonIgnore
     @XmlTransient
     public List<Materia> getLstMateria() {
         return lstMateria;
     }
 
+    /**
+     *
+     * @param lstMateria Recibe la lista de materias del Periodo de Estudio
+     */
     public void setLstMateria(List<Materia> lstMateria) {
         this.lstMateria = lstMateria;
     }
     
+    /**
+     *
+     * @param MatCod Recibe el código de la materia
+     * @return retorna la materia dado el código recibido
+     */
     public Materia getMateriaById(Long MatCod){
         
         Materia pMat = new Materia();
@@ -176,6 +246,10 @@ public class PlanEstudio extends SincHelper implements Serializable {
         return pMat;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de la carrera + el del Periodo de Estudio
+     */
     public String getCarreraPlanNombre()
     {
         if(this.getCarrera() == null) return this.getPlaEstNom();

@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoEnvio
  *
  * @author Alvaro
  */
@@ -25,14 +26,27 @@ public enum TipoEnvio {
         this.nombre = pNom;
     }
 
+    /**
+     *
+     * @return
+     */
     public int getValor() {
         return valor;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de TipoEnvio
+     */
     public String getNombre() {
         return nombre;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de TipoEnvio
+     * @return Retorna TipoEnvio dado el código recibido
+     */
     public static TipoEnvio fromCode(int pCod) {
         for (TipoEnvio tpoEnv  : TipoEnvio.values()){
             if (tpoEnv.getValor() == pCod){

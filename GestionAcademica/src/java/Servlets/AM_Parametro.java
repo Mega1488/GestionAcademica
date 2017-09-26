@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento Parámetro
  *
  * @author alvar
  */
@@ -91,6 +92,11 @@ public class AM_Parametro extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método obtener datos Parámetro
+     */
     private String ObtnerDatos(HttpServletRequest request)
     {
         String retorno = "";
@@ -108,6 +114,11 @@ public class AM_Parametro extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar datos Parámetro
+     */
     private String ActualizarDatos(HttpServletRequest request){
         Mensajes mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         

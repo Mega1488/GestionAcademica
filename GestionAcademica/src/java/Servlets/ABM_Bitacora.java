@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Bitacora
  *
  * @author alvar
  */
@@ -89,18 +90,31 @@ public class ABM_Bitacora extends HttpServlet {
         }
     }
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método eliminar datos Bitácora
+     */
     private String EliminarDatos(HttpServletRequest request){
         BitacoraProceso bit = this.ValidarBitacora(request);
         Retorno_MsgObj retorno = (Retorno_MsgObj) LoBitacora.GetInstancia().eliminar(bit);
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @return Método Depurar Bitácora
+     */
     private String Depurar(){
        Retorno_MsgObj retorno = (Retorno_MsgObj) LoBitacora.GetInstancia().depurar();
        return utilidades.ObjetoToJson(retorno.getMensaje()); 
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Validar Bitácora
+     */
     private BitacoraProceso ValidarBitacora(HttpServletRequest request){
         BitacoraProceso bit = new BitacoraProceso();
         

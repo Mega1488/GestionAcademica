@@ -16,7 +16,8 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- *
+ *  Crea o levanta las Opciones de Menú
+ * 
  * @author alvar
  */
 public class OpcionesDeMenu {
@@ -26,7 +27,7 @@ public class OpcionesDeMenu {
     private final ArrayList<Menu> lstDocente;
     private final ArrayList<Menu> lstAlumno;
     private final String urlSistema;
-   
+    
     private OpcionesDeMenu() {
         urlSistema = Utilidades.GetInstancia().GetUrlSistema();
         
@@ -68,6 +69,11 @@ public class OpcionesDeMenu {
         
     }
     
+    /**
+     * Crear la Instancia de Opciones de Menú
+     * 
+     * @return Retorna la Instancia
+     */
     public static OpcionesDeMenu GetInstancia(){
         if (instancia==null)
         {
@@ -77,6 +83,10 @@ public class OpcionesDeMenu {
         return instancia;
     }
     
+    /**
+     * Crea los menú dependiendo de que tipo de usuario sea
+     *
+     */
     private void CrearMenu()
     {
         
@@ -98,6 +108,10 @@ public class OpcionesDeMenu {
         }
     }
     
+    /**
+     * Levanta el menú dependiendo del tipo de usuario
+     *
+     */
     private void LevantarMenu(List<Object> lstMenu)
     {
         if(lstMenu.size() < 16)
@@ -124,6 +138,10 @@ public class OpcionesDeMenu {
         }
     }
     
+    /**
+     *  Carga la lista de menú correspondiente al usuario administrador
+     *
+     */
     private void CargarAdministrador(){
         
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefPersonaWW.jsp", "Personas", 1));
@@ -131,7 +149,7 @@ public class OpcionesDeMenu {
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefCursoWW.jsp", "Cursos", 3));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefCalendarioGrid.jsp", "Calendario", 5));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefTipoEvaluacionWW.jsp", "Tipos de evaluación", 6));
-        lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefPeriodoWW.jsp", "Periodos", 4));
+        lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefPeriodoWW.jsp", "Períodos", 4));
         lstAdministrador.add(new Menu(TipoMenu.ADMINISTRADOR, urlSistema + "Definiciones/DefSolicitudWW.jsp", "Solicitudes", 7));
         
         Menu sistema = new Menu(TipoMenu.ADMINISTRADOR, "#", "Sistema", 100);
@@ -149,6 +167,10 @@ public class OpcionesDeMenu {
         
     }
     
+    /**
+     *  Carga la lista de menú correspondiente al usuario alumno
+     *
+     */
     private void CargarAlumno(){
         lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "Alumno/Estudios.jsp", "Estudios", 1));
         lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "Alumno/Evaluaciones.jsp", "Evaluaciones", 2));
@@ -157,21 +179,39 @@ public class OpcionesDeMenu {
         lstAlumno.add(new Menu(TipoMenu.ALUMNO, urlSistema + "archivos.jsp", "Documentos", 5));
     }
 
+    /**
+     *  Carga la lista de menú correspondiente al usuario docente
+     *
+     */
     private void CargarDocente(){
         lstDocente.add(new Menu(TipoMenu.DOCENTE, urlSistema + "Docente/EstudiosDictados.jsp", "Estudios dictados", 1));
         lstDocente.add(new Menu(TipoMenu.DOCENTE, urlSistema + "Docente/EvalPendientes.jsp", "Evaluaciones Pendientes", 2));
         lstDocente.add(new Menu(TipoMenu.DOCENTE, urlSistema + "archivos.jsp", "Documentos", 3));
     }
 
+    /**
+     * Obtener la lista correspondiente al administrador
+     * 
+     * @return Retorna lista de menú del administrador
+     */
     public ArrayList<Menu> getLstAdministrador() {
         return lstAdministrador;
     }
 
+    /**
+     * Obtener la lista correspondiente al docente
+     * 
+     * @return Retorna la lista de menú del docente
+     */
     public ArrayList<Menu> getLstDocente() {
         return lstDocente;
     }
 
-
+    /**
+     * Obtener la lista correspondiente al alumno
+     * 
+     * @return Retorna la lista de menú del alumno
+     */
     public ArrayList<Menu> getLstAlumno() {
         return lstAlumno;
     }

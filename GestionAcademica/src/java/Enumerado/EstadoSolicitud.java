@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado EstadoSolicitud
  *
  * @author Alvaro
  */
@@ -25,14 +26,27 @@ public enum EstadoSolicitud {
         this.vEstSolNom = pEstSolNom;
     }
 
+    /**
+     *
+     * @return Retirba el valor de EstadoSolicitud
+     */
     public int getEstadoSolicitud() {
         return vEstSol;
     }
     
+    /**
+     *
+     * @return Retorna el nombre del EstadoSolicitud
+     */
     public String getNombre() {
         return vEstSolNom;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de EstadoSolicitud
+     * @return Retorna el EstadoSolicitud dado el codigo recibido
+     */
     public static EstadoSolicitud fromCode(int pCod) {
         for (EstadoSolicitud estSol :EstadoSolicitud.values()){
             if (estSol.getEstadoSolicitud() == pCod){

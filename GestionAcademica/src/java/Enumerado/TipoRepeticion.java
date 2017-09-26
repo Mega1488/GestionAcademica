@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoRepeticion
  *
  * @author Alvaro
  */
@@ -30,14 +31,27 @@ public enum TipoRepeticion {
         this.nombre = pNombre;
     }
 
+    /**
+     *
+     * @return Retorno valor TipoRepeticion
+     */
     public int getValor() {
         return valor;
     }
     
+    /**
+     *
+     * @return Retorno el nombre TipoRepeticion
+     */
     public String getNombre() {
         return nombre;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de TipoRepeticion
+     * @return Retorna TipoRepeticion dado el código recibido
+     */
     public static TipoRepeticion fromCode(int pCod) {
         for (TipoRepeticion tpoRep  : TipoRepeticion.values()){
             if (tpoRep.getValor() == pCod){

@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoDestinatario
  *
  * @author Alvaro
  */
@@ -25,14 +26,27 @@ public enum TipoDestinatario {
         this.nombre = pNombre;
     }
 
+    /**
+     *
+     * @return Retorna el valor TipoDestinatario
+     */
     public int getValor() {
         return valor;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de TipoDestinatario
+     */
     public String getNombre() {
         return nombre;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de TipoDestinatario
+     * @return Retorna TipoDestinatario dado el código recibido
+     */
     public static TipoDestinatario fromCode(int pCod) {
         for (TipoDestinatario objeto  : TipoDestinatario.values()){
             if (objeto.getValor() == pCod){

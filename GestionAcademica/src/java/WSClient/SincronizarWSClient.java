@@ -27,6 +27,7 @@ import javax.xml.ws.BindingProvider;
 import javax.xml.ws.handler.MessageContext;
 
 /**
+ * WSClient SincronizarWSClient
  *
  * @author alvar
  */
@@ -43,14 +44,28 @@ public class SincronizarWSClient {
         */
     }
     
+    /**
+     *
+     * @param cambios
+     * @return
+     */
     public Retorno_MsgObj Sincronizar(Retorno_MsgObj cambios){
         return sincronizar(token, cambios);
     }
     
+    /**
+     *
+     * @param cambios
+     * @return
+     */
     public Retorno_MsgObj ImpactarInconsistencia(Retorno_MsgObj cambios){
         return impactar_inconsistencia(token, cambios);
     }
     
+    /**
+     *
+     * @param fecha
+     */
     public void ActualizarFecha(Date fecha){
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(fecha);

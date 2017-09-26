@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Curso
  *
  * @author alvar
  */
@@ -107,6 +108,11 @@ public class ABM_Curso extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Curso
+     */
     private String AgregarDatos(HttpServletRequest request)
         {
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -139,6 +145,11 @@ public class ABM_Curso extends HttpServlet {
             return retorno;
         }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Curso
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -181,6 +192,11 @@ public class ABM_Curso extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Curso
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error       = false;
@@ -211,6 +227,10 @@ public class ABM_Curso extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
 
+    /**
+     * 
+     * @return Método obtener datos PopUp Curso
+     */
     private String PopUpObtenerDatos()
     {
         List<Object> lstObjeto = new ArrayList<>();
@@ -225,6 +245,12 @@ public class ABM_Curso extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @param curso
+     * @return Método validar Curso
+     */
     private Curso ValidarCurso(HttpServletRequest request, Curso curso)
     {
         if(curso == null)

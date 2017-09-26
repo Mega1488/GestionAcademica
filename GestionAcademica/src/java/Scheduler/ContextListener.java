@@ -15,6 +15,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
+ *  Scheduler ContextListener
  *
  * @author alvar
  */
@@ -23,7 +24,10 @@ public class ContextListener implements ServletContextListener {
     ConfigurableApplicationContext applicationContext = null;
     ScheduledWorks scheduler = null;
     
-    
+    /**
+     *
+     * @param sce
+     */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
        
@@ -59,6 +63,10 @@ public class ContextListener implements ServletContextListener {
 
     }
 
+    /**
+     *
+     * @param sce
+     */
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
         

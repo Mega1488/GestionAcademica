@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad NotificaciónDestinatario
  *
  * @author alvar
  */
@@ -71,38 +72,74 @@ public class NotificacionDestinatario implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el Código Identificador
+     */
     public Long getNotDstCod() {
         return NotDstCod;
     }
 
+    /**
+     *
+     * @param NotDstCod Recibe el código Identificador
+     */
     public void setNotDstCod(Long NotDstCod) {
         this.NotDstCod = NotDstCod;
     }
 
+    /**
+     *
+     * @return Retorna la notificación
+     */
     public Notificacion getNotificacion() {
         return notificacion;
     }
 
+    /**
+     *
+     * @param notificacion Recibe la notificación
+     */
     public void setNotificacion(Notificacion notificacion) {
         this.notificacion = notificacion;
     }
 
+    /**
+     *
+     * @return Retorna la persona
+     */
     public Persona getPersona() {
         return persona;
     }
 
+    /**
+     *
+     * @param persona Recibe la persona
+     */
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
 
+    /**
+     *
+     * @return Retorna el email
+     */
     public String getNotEmail() {
         return NotEmail;
     }
 
+    /**
+     *
+     * @param NotEmail Recibe el email
+     */
     public void setNotEmail(String NotEmail) {
         this.NotEmail = NotEmail;
     }
     
+    /**
+     *
+     * @return Retorna el texto destinatario
+     */
     public String GetTextoDestinatario(){
         String retorno = "";
         
@@ -113,6 +150,10 @@ public class NotificacionDestinatario implements Serializable {
         return retorno;
     }
     
+    /**
+     *
+     * @return Retorno email
+     */
     public String getEmail(){
         if(this.NotEmail != null) return this.NotEmail;
         if(this.persona != null) return this.persona.getPerEml();
@@ -120,6 +161,10 @@ public class NotificacionDestinatario implements Serializable {
         return null;
     }
     
+    /**
+     *
+     * @return Retorno el nombre
+     */
     public String getNombre(){
         if(this.NotEmail != null) return this.NotEmail;
         if(this.persona != null) return this.persona.getNombreCompleto();

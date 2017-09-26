@@ -30,6 +30,7 @@ import Enumerado.ServicioWeb;
 import Logica.LoWS;
 
 /**
+ * Servicio Solicitudes
  *
  * @author aa
  */
@@ -39,10 +40,10 @@ public class ws_solicitudes {
     @Resource WebServiceContext context;
 
     /**
-     * This is a sample web service operation
-     * @param SolTpo
-     * @param AluPerCod
-     * @return 
+     * 
+     * @param SolTpo Recibe el tipo de solicitud
+     * @param AluPerCod Recibe el código de persona
+     * @return Realiza una solicitud
      */
     @WebMethod(operationName = "realizarSolicitud")
     public Retorno_MsgObj realizarSolicitud(@WebParam(name = "SolTpo") int SolTpo, @WebParam(name = "AluPerCod") Long AluPerCod)
@@ -92,9 +93,9 @@ public class ws_solicitudes {
     }
     
     /**
-     * This is a sample web service operation
-     * @param PerCod
-     * @return 
+     * 
+     * @param PerCod Recibe un código de persona
+     * @return Retorna una lista de solicitudes activas dado el código recibido
      */
     @WebMethod(operationName = "lstSolicitudesActivas")
     public Retorno_MsgObj lstSolicitudesActivas(@WebParam(name = "PerCod") Long PerCod)
@@ -139,8 +140,9 @@ public class ws_solicitudes {
     }
     
     /**
-     * This is a sample web service operation
-     * @return 
+     * 
+     * 
+     * @return Retorna la lista de solicitudes finalizadas
      */
     @WebMethod(operationName = "lstSolicitudesFinalizadas")
     public Retorno_MsgObj lstSolicitudesFinalizadas()

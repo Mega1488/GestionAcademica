@@ -36,6 +36,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Evaluacion
  *
  * @author alvar
  */
@@ -110,7 +111,11 @@ public class ABM_Evaluacion extends HttpServlet {
         }
     }
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método agregar Evaluacion
+     */
     private String AgregarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -143,6 +148,11 @@ public class ABM_Evaluacion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Evaluacion
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -174,6 +184,11 @@ public class ABM_Evaluacion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Evaluacion
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error       = false;
@@ -203,6 +218,11 @@ public class ABM_Evaluacion extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Listar Datos PopUp
+     */
     private String PopUp_ListarDatos(HttpServletRequest request)
     {
 
@@ -238,6 +258,12 @@ public class ABM_Evaluacion extends HttpServlet {
                 
     }
 
+    /**
+     * 
+     * @param request
+     * @param evaluacion
+     * @return Método validar Evaluacion
+     */
     private Evaluacion ValidarEvaluacion(HttpServletRequest request, Evaluacion evaluacion)
     {
             if(evaluacion == null)

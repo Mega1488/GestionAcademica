@@ -25,7 +25,8 @@ import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
-/**
+/** 
+ * Entidad WS_Bit
  *
  * @author alvar
  */
@@ -68,7 +69,6 @@ public class WS_Bit implements Serializable {
     
     
     //-CONSTRUCTOR
-    
     public WS_Bit() {    
     }
 
@@ -84,50 +84,98 @@ public class WS_Bit implements Serializable {
 
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de WS_Bit
+     */
     public Long getWsBitCod() {
         return WsBitCod;
     }
 
+    /**
+     *
+     * @param WsBitCod Recibe el código de WS_Bit
+     */
     public void setWsBitCod(Long WsBitCod) {
         this.WsBitCod = WsBitCod;
     }
 
+    /**
+     *
+     * @return Retorna el usuario de WS_Bit
+     */
     public WS_User getUsuario() {
         return usuario;
     }
 
+    /**
+     *
+     * @param usuario recibe el usuario de WS_Bit
+     */
     public void setUsuario(WS_User usuario) {
         this.usuario = usuario;
     }
 
+    /**
+     *
+     * @return
+     */
     public ServicioWeb getWsSrv() {
         return WsSrv;
     }
 
+    /**
+     *
+     * @param WsSrv
+     */
     public void setWsSrv(ServicioWeb WsSrv) {
         this.WsSrv = WsSrv;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de WS_Bit
+     */
     public Date getWsBitFch() {
         return WsBitFch;
     }
 
+    /**
+     *
+     * @param WsBitFch Recibe la fecha de WS_Bit
+     */
     public void setWsBitFch(Date WsBitFch) {
         this.WsBitFch = WsBitFch;
     }
 
+    /**
+     *
+     * @return retorna el estado de WS_Bit
+     */
     public EstadoServicio getWsBitEst() {
         return WsBitEst;
     }
 
+    /**
+     *
+     * @param WsBitEst Recibe el estado de WS_Bit
+     */
     public void setWsBitEst(EstadoServicio WsBitEst) {
         this.WsBitEst = WsBitEst;
     }
 
+    /**
+     *
+     * @return 
+     */
     public String getWsBitDet() {
         return WsBitDet;
     }
 
+    /**
+     *
+     * @param WsBitDet
+     */
     public void setWsBitDet(String WsBitDet) {
         this.WsBitDet = WsBitDet;
     }

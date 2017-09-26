@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento TipoEvaluacion
  *
  * @author alvar
  */
@@ -101,6 +102,11 @@ public class ABM_TipoEvaluacion extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar TipoEvaluacion
+     */
     private String AgregarDatos(HttpServletRequest request)
         {
             mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -133,6 +139,11 @@ public class ABM_TipoEvaluacion extends HttpServlet {
             return retorno;
         }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar TipoEvaluacion
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -174,6 +185,11 @@ public class ABM_TipoEvaluacion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar TipoEvaluacion
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error       = false;
@@ -204,6 +220,12 @@ public class ABM_TipoEvaluacion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @param tpoEvaluacion
+     * @return Método Validar TipoEvaluacion
+     */
     private TipoEvaluacion ValidarTipoEvaluacion(HttpServletRequest request, TipoEvaluacion tpoEvaluacion)
     {
             if(tpoEvaluacion == null)

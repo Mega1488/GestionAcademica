@@ -39,6 +39,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad Notificacion
  *
  * @author alvar
  */
@@ -158,168 +159,330 @@ public class Notificacion implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el Código Notificacion
+     */
     public Long getNotCod() {
         return NotCod;
     }
 
+    /**
+     *
+     * @param NotCod Recibe el código Notificacion
+     */
     public void setNotCod(Long NotCod) {
         this.NotCod = NotCod;
     }
 
+    /**
+     *
+     * @return Retorna el nombre Notificacion
+     */
     public String getNotNom() {
         return NotNom;
     }
 
+    /**
+     *
+     * @param NotNom Recibe el nombre Notificacion
+     */ 
     public void setNotNom(String NotNom) {
         this.NotNom = NotNom;
     }
 
+    /**
+     *
+     * @return Retorna la descripción Notificacion
+     */
     public String getNotDsc() {
         return NotDsc;
     }
 
+    /**
+     *
+     * @param NotDsc Recibe la descripción Notificacion
+     */
     public void setNotDsc(String NotDsc) {
         this.NotDsc = NotDsc;
     }
 
+    /**
+     *
+     * @return Retorna el contenido de Notificacion
+     */
     public String getNotCon() {
         return NotCon;
     }
 
+    /**
+     *
+     * @param NotCon Recibe el contenido de Notificacion
+     */
     public void setNotCon(String NotCon) {
         this.NotCon = NotCon;
     }
 
+    /**
+     *
+     * @return Retorna el asunto de Notificacion
+     */
     public String getNotAsu() {
         return NotAsu;
     }
 
+    /**
+     *
+     * @param NotAsu Recibe el asunto de Notificacion
+     */
     public void setNotAsu(String NotAsu) {
         this.NotAsu = NotAsu;
     }
 
+    /**
+     *
+     * @return Retorna el tipo Notificacion
+     */
     public TipoNotificacion getNotTpo() {
         return NotTpo;
     }
 
+    /**
+     *
+     * @param NotTpo Recibe el tipo Notificacion
+     */
     public void setNotTpo(TipoNotificacion NotTpo) {
         this.NotTpo = NotTpo;
     }
 
+    /**
+     *
+     * @return Retorna el tipo envío Notificacion
+     */
     public TipoEnvio getNotTpoEnv() {
         return NotTpoEnv;
     }
 
+    /**
+     *
+     * @param NotTpoEnv Recibe el tipo envío Notificacion
+     */
     public void setNotTpoEnv(TipoEnvio NotTpoEnv) {
         this.NotTpoEnv = NotTpoEnv;
     }
 
+    /**
+     *
+     * @return Retorna ObtenerDestinatario (por unica ves o por cada registro)
+     */
     public ObtenerDestinatario getNotObtDest() {
         return NotObtDest;
     }
 
+    /**
+     *
+     * @param NotObtDest Recibe obtener destinatario (por unica ves o por cada registro)
+     */
     public void setNotObtDest(ObtenerDestinatario NotObtDest) {
         this.NotObtDest = NotObtDest;
     }
 
+    /**
+     *
+     * @return Retorna el Tipo de repetición: minutos, horas, dias, semanas, meses, años
+     */
     public TipoRepeticion getNotRepTpo() {
         return NotRepTpo;
     }
 
+    /**
+     *
+     * @param NotRepTpo Recibe el Tipo de repetición: minutos, horas, dias, semanas, meses, años
+     */
     public void setNotRepTpo(TipoRepeticion NotRepTpo) {
         this.NotRepTpo = NotRepTpo;
     }
 
+    /**
+     *
+     * @return Retorna la ejecución de alerta por tipo de repetición
+     */
     public Integer getNotRepVal() {
         return NotRepVal;
     }
 
+    /**
+     *
+     * @param NotRepVal Recibe el valor de la ejecución de alerta por tipo de repetición
+     */
     public void setNotRepVal(Integer NotRepVal) {
         this.NotRepVal = NotRepVal;
     }
 
+    /**
+     *
+     * @return Retorna la fecha hasta  que define hasta cuando se tiene que ejecutar la alerta
+     */
     public Date getNotRepHst() {
         return NotRepHst;
     }
 
+    /**
+     *
+     * @param NotRepHst Recibe la fecha hasta  que define hasta cuando se tiene que ejecutar la alerta
+     */
     public void setNotRepHst(Date NotRepHst) {
         this.NotRepHst = NotRepHst;
     }
 
+    /**
+     *
+     * @return Retorna el Email de la notificación
+     */
     public Boolean getNotEmail() {
         return NotEmail;
     }
 
+    /**
+     *
+     * @param NotEmail Recibe el email de la notificación
+     */
     public void setNotEmail(Boolean NotEmail) {
         this.NotEmail = NotEmail;
     }
 
+    /**
+     *
+     * @return Retorna si debe o no notificar a la aplicación android
+     */
     public Boolean getNotApp() {
         return NotApp;
     }
 
+    /**
+     *
+     * @param NotApp Recibe si debe o no notificar a la aplicación android
+     */
     public void setNotApp(Boolean NotApp) {
         this.NotApp = NotApp;
     }
 
+    /**
+     *
+     * @return Retorna si debe o no notificar a la web
+     */
     public Boolean getNotWeb() {
         return NotWeb;
     }
 
+    /**
+     *
+     * @param NotWeb Recibe si debe o no notificar a la web
+     */
     public void setNotWeb(Boolean NotWeb) {
         this.NotWeb = NotWeb;
     }
 
+    /**
+     *
+     * @return Retorno si la notificación esta activa o no
+     */
     public Boolean getNotAct() {
         return NotAct;
     }
 
+    /**
+     *
+     * @param NotAct Recibe si la notificación esta activa o no
+     */
     public void setNotAct(Boolean NotAct) {
         this.NotAct = NotAct;
     }
 
+    /**
+     *
+     * @return Retorna la lista de bitacora
+     */
     public List<NotificacionBitacora> getLstBitacora() {
         return lstBitacora;
     }
 
+    /**
+     *
+     * @param lstBitacora Recibe la lista de bitacora
+     */
     public void setLstBitacora(List<NotificacionBitacora> lstBitacora) {
         this.lstBitacora = lstBitacora;
     }
 
+    /**
+     *
+     * @return Retorna la lista de consulta
+     */
     public List<NotificacionConsulta> getLstConsulta() {
         return lstConsulta;
     }
 
+    /**
+     *
+     * @param lstConsulta Recibe la lista de consulta
+     */
     public void setLstConsulta(List<NotificacionConsulta> lstConsulta) {
         this.lstConsulta = lstConsulta;
     }
 
+    /**
+     *
+     * @return Retorna la lista de destinatarios
+     */
     public List<NotificacionDestinatario> getLstDestinatario() {
         return lstDestinatario;
     }
 
+    /**
+     *
+     * @param lstDestinatario Recibe la lista de destinatarios
+     */
     public void setLstDestinatario(List<NotificacionDestinatario> lstDestinatario) {
         this.lstDestinatario = lstDestinatario;
     }
 
+    /**
+     *
+     * @return 
+     */
     public Boolean getNotInt() {
         return NotInt;
     }
 
+    /**
+     *
+     * @param NotInt
+     */
     public void setNotInt(Boolean NotInt) {
         this.NotInt = NotInt;
     }
 
+    /**
+     *
+     * @return Retorna la fecha desde de notificación
+     */
     public Date getNotFchDsd() {
         return NotFchDsd;
     }
 
+    /**
+     *
+     * @param NotFchDsd Recibe la fecha desde de notificación
+     */
     public void setNotFchDsd(Date NotFchDsd) {
         this.NotFchDsd = NotFchDsd;
     }
     
-    
-
+    /**
+     *
+     * @return Retorna el medio (Aplicacion, email o web)
+     */
     public String getMedio(){
         String medio = "";
         
@@ -330,6 +493,10 @@ public class Notificacion implements Serializable {
         return medio;
     }
     
+    /**
+     *
+     * @return Retorna los destinatarios agrupados
+     */
     public String ObtenerDestinatariosAgrupados(){
         String destinatarios = "";
         
@@ -346,6 +513,11 @@ public class Notificacion implements Serializable {
         return destinatarios;
     }
     
+    /**
+     *
+     * @param NotDstCod Recibe el código de la NotificaciónDestinatario
+     * @return Retorna el destinatario dado el código recibido
+     */
     public NotificacionDestinatario ObtenerDestinatarioByCod(Long NotDstCod){
         for(NotificacionDestinatario destinatario : this.lstDestinatario)
         {
@@ -355,6 +527,11 @@ public class Notificacion implements Serializable {
         return null;
     }
     
+    /**
+     *
+     * @param NotBitCod Recibe el código de NotificacionBitacora
+     * @return Retorna la bitacora dado el código recibido
+     */
     public NotificacionBitacora ObtenerBitacoraByCod(Long NotBitCod){
         for(NotificacionBitacora bitacora : this.lstBitacora)
         {
@@ -364,6 +541,11 @@ public class Notificacion implements Serializable {
         return null;
     }
     
+    /**
+     *
+     * @param NotCnsCod Recibe el código de NotificacionConsulta
+     * @return Retorna la consulta dado el código recibido
+     */
     public NotificacionConsulta ObtenerConsultaByCod(Long NotCnsCod){
         for(NotificacionConsulta consulta : this.lstConsulta)
         {
@@ -373,6 +555,10 @@ public class Notificacion implements Serializable {
         return null;
     }
     
+    /**
+     *
+     * @return Retorna si la notificación es automatica o no
+     */
     public Boolean NotificarAutomaticamente(){
         Boolean notificar   = false;
         
@@ -416,6 +602,10 @@ public class Notificacion implements Serializable {
         return notificar;
     }
     
+    /**
+     *
+     * @return Retorna el rango de la notificación automatica
+     */
     private Boolean NotificarAutomaticamenteRango()
     {
         Boolean notificar               = false;
@@ -462,6 +652,10 @@ public class Notificacion implements Serializable {
         return notificar;
     }
     
+    /**
+     *
+     * @return Retorna la fecha de la ultima notificación
+     */
     private Date GetLastNotification(){
         Date fecha = null;
         

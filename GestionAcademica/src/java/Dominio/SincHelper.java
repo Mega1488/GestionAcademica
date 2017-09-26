@@ -26,19 +26,23 @@ import javax.persistence.OneToOne;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-/**
- *
- * @author alvar
- */
-
 //@JsonIgnoreProperties({"insertQuery", "updateQuery"})
 
+/**
+ * Clase abstracta que se usa para ayudar en la sincronización
+ * 
+ * @author alvar
+ */
 public abstract class SincHelper{
     
     private final SimpleDateFormat dtFrmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
     private final SimpleDateFormat dMy = new SimpleDateFormat("dd/MM/yyyy");
     private final SimpleDateFormat yMd_HMS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
+    /**
+     *
+     * @return
+     */
     public String GetNamePrimaryKey(){
         for (Field field : this.getClass().getDeclaredFields()) 
         {
@@ -52,6 +56,10 @@ public abstract class SincHelper{
         return null;
     }
     
+    /**
+     *
+     * @return
+     */
     public Long GetPrimaryKey(){
         for (Field field : this.getClass().getDeclaredFields()) 
         {
@@ -77,6 +85,10 @@ public abstract class SincHelper{
         return null;
     }
     
+    /**
+     *
+     * @return
+     */
     @JsonIgnore
     public String getInsertQuery(){
         String insert = "INSERT INTO " + Objetos.fromQueryName(this.getClass().getSimpleName().toUpperCase()).name() + "(";
@@ -111,6 +123,10 @@ public abstract class SincHelper{
         return insert;
     }
     
+    /**
+     *
+     * @return
+     */
     @JsonIgnore
     public String getUpdateQuery(){
         String update = "UPDATE " + Objetos.fromQueryName(this.getClass().getSimpleName().toUpperCase()).getNamedQuery() + " SET ";
@@ -139,7 +155,6 @@ public abstract class SincHelper{
         return update;
     }
     
-    @JsonIgnore
     /**
      * Funcion para setear campos de manera dinamica. 
      * Recibe campo y valor, realiza la validacion del tipo de dato, y si 
@@ -149,6 +164,7 @@ public abstract class SincHelper{
      * @param fldValue Valor del campo
      * @return Retorna el resultado y un mensaje
      */
+    @JsonIgnore
     public Retorno_MsgObj setField(String fldName, String fldValue){
        Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Set field success", TipoMensaje.MENSAJE));
        
@@ -229,6 +245,10 @@ public abstract class SincHelper{
        return retorno;
     }
     
+    /**
+     *
+     *
+     */
     private Boolean fieldIsColumn(Field campo){
         Annotation[] lstAnot = campo.getAnnotations();
         for(Annotation anot : lstAnot)
@@ -242,6 +262,10 @@ public abstract class SincHelper{
         
     }
 
+    /**
+     *
+     *
+     */
     private Boolean fieldIsJoinColumn(Field campo){
         Annotation[] lstAnot = campo.getAnnotations();
         
@@ -255,6 +279,10 @@ public abstract class SincHelper{
         return false;
     }
     
+    /**
+     *
+     *
+     */
     private String fieldJoinColumnName(Field campo){
         
         JoinColumn j = campo.getAnnotation(JoinColumn.class);
@@ -263,6 +291,10 @@ public abstract class SincHelper{
         
     }
         
+    /**
+     *
+     *
+     */
     private Boolean fieldIsPrimaryKey(Field campo){
         Annotation[] lstAnot = campo.getAnnotations();
         for(Annotation anot : lstAnot)
@@ -276,6 +308,10 @@ public abstract class SincHelper{
         
     }
     
+    /**
+     *
+     *
+     */
     private String getParsedValue(Field campo){
         String value = null;
 
@@ -330,6 +366,10 @@ public abstract class SincHelper{
         return value;
     }
     
+    /**
+     *
+     * @param fromObjeto
+     */
     public void CastFromObject(Object fromObjeto){
         Object toObject = this;
         

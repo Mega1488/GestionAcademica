@@ -36,7 +36,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad persona
+ * 
  * @author alvar
  */
 @Entity

@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Notificación
  *
  * @author alvar
  */
@@ -108,6 +109,11 @@ public class ABM_Notificacion extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Notificación
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -139,6 +145,11 @@ public class ABM_Notificacion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Notificación
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
         try
@@ -173,6 +184,11 @@ public class ABM_Notificacion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Notificación
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -198,6 +214,12 @@ public class ABM_Notificacion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @param notificacion
+     * @return Método validar Notificación
+     */
     private Notificacion ValidarNotificacion(HttpServletRequest request, Notificacion notificacion){
         
         if(notificacion == null)

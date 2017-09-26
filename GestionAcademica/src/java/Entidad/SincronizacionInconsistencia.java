@@ -33,6 +33,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad de SincronizacionInconsistencia
  *
  * @author alvar
  */
@@ -77,6 +78,10 @@ public class SincronizacionInconsistencia implements Serializable {
     public SincronizacionInconsistencia() {
     }
 
+    /**
+     *
+     * @param objeto
+     */
     public SincronizacionInconsistencia(Objeto objeto) {
         this.objeto = objeto;
     }
@@ -85,31 +90,59 @@ public class SincronizacionInconsistencia implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de SincronizacionInconsistencia
+     */
     public Long getIncCod() {
         return IncCod;
     }
 
+    /**
+     *
+     * @param IncCod Recibe el código de SincronizacionInconsistencia
+     */
     public void setIncCod(Long IncCod) {
         this.IncCod = IncCod;
     }
 
+    /**
+     *
+     * @return Retorna la Sincronización
+     */
     @XmlTransient
     public Sincronizacion getSincronizacion() {
         return sincronizacion;
     }
 
+    /**
+     *
+     * @param sincronizacion Recibe la Sincronización
+     */
     public void setSincronizacion(Sincronizacion sincronizacion) {
         this.sincronizacion = sincronizacion;
     }
 
+    /**
+     *
+     * @return Retorna el estado de la Sincronización
+     */
     public EstadoInconsistencia getIncEst() {
         return IncEst;
     }
 
+    /**
+     *
+     * @param IncEst Recibe el estado de la Sincronización
+     */
     public void setIncEst(EstadoInconsistencia IncEst) {
         this.IncEst = IncEst;
     }
 
+    /**
+     *
+     * @return Retorna la lista de datos de la Sincronización
+     */
     public List<SincInconsistenciaDatos> getLstDatos() {
         if(this.lstDatos == null)
         {
@@ -118,18 +151,35 @@ public class SincronizacionInconsistencia implements Serializable {
         return lstDatos;
     }
 
+    /**
+     *
+     * @param lstDatos Recibe la lista de datos de la Sincronización
+     */
     public void setLstDatos(List<SincInconsistenciaDatos> lstDatos) {
         this.lstDatos = lstDatos;
     }
 
+    /**
+     *
+     * @return Retorna el objeto
+     */
     public Objeto getObjeto() {
         return objeto;
     }
 
+    /**
+     *
+     * @param objeto Recibe el objeto
+     */
     public void setObjeto(Objeto objeto) {
         this.objeto = objeto;
     }
     
+    /**
+     *
+     * @param IncObjCod Recibe el código de Objeto
+     * @return retorna el dato inconsistente
+     */
     public SincInconsistenciaDatos GetIncDato(Long IncObjCod){
         for(SincInconsistenciaDatos dat : lstDatos)
         {
@@ -142,6 +192,10 @@ public class SincronizacionInconsistencia implements Serializable {
         return  null;
     }
     
+    /**
+     *
+     * @return Retorna el objeto seleccionado
+     */
     public SincInconsistenciaDatos getObjetoSeleccionado(){
         for(SincInconsistenciaDatos dat : lstDatos)
         {
@@ -154,6 +208,10 @@ public class SincronizacionInconsistencia implements Serializable {
         return  null;
     }
 
+    /**
+     *
+     * @return Retorna si tiene objeto seleccionado o no
+     */
     public Boolean TieneObjetoSeleccionado(){
         for(SincInconsistenciaDatos dat : lstDatos)
         {

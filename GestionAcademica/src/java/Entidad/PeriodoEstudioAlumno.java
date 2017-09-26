@@ -27,7 +27,8 @@ import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
-/**
+/** 
+ * Entidad PeriodoEstudioAlumno
  *
  * @author alvar
  */
@@ -87,66 +88,130 @@ public class PeriodoEstudioAlumno extends SincHelper implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de PeriodoEstudioAlumno
+     */
     public Long getPeriEstAluCod() {
         return PeriEstAluCod;
     }
 
+    /**
+     *
+     * @param PeriEstAluCod Recibe el código de PeriodoEstudioAlumno
+     */
     public void setPeriEstAluCod(Long PeriEstAluCod) {
         this.PeriEstAluCod = PeriEstAluCod;
     }
 
+    /**
+     *
+     * @return Retorna el período de estudio
+     */
     public PeriodoEstudio getPeriodoEstudio() {
         return periodoEstudio;
     }
 
+    /**
+     *
+     * @param PeriodoEstudio Recibe el período de estudio
+     */
     public void setPeriodoEstudio(PeriodoEstudio PeriodoEstudio) {
         this.periodoEstudio = PeriodoEstudio;
     }
 
+    /**
+     *
+     * @return Retorna el alumno de PeriodoEstudioAlumno
+     */
     public Persona getAlumno() {
         return Alumno;
     }
 
+    /**
+     *
+     * @param Alumno Recibe el alumno de PeriodoEstudioAlumno
+     */
     public void setAlumno(Persona Alumno) {
         this.Alumno = Alumno;
     }
 
+    /**
+     *
+     * @return Retorna si es inscripto por alguien mas
+     */
     public Persona getInscritoPor() {
         return InscritoPor;
     }
 
+    /**
+     *
+     * @param InscritoPor Recibe si es inscripto por alguien mas
+     */
     public void setInscritoPor(Persona InscritoPor) {
         this.InscritoPor = InscritoPor;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de inscripción
+     */
     public Date getPerInsFchInsc() {
         return PerInsFchInsc;
     }
 
+    /**
+     *
+     * @param PerInsFchInsc Recibe la fecha de iscripción
+     */
     public void setPerInsFchInsc(Date PerInsFchInsc) {
         this.PerInsFchInsc = PerInsFchInsc;
     }
 
+    /**
+     *
+     * @return Retorna la calificación final
+     */ 
     public Double getPerInsCalFin() {
         return PerInsCalFin;
     }
 
+    /**
+     *
+     * @param PerInsCalFin Recibe la calificación final
+     */
     public void setPerInsCalFin(Double PerInsCalFin) {
         this.PerInsCalFin = PerInsCalFin;
     }
 
+    /**
+     *
+     * @return Retorna la inscripción Forzada
+     */
     public Boolean getPerInsFrz() {
         return PerInsFrz;
     }
 
+    /**
+     *
+     * @param PerInsFrz Recibe la inscripción Forzada
+     */
     public void setPerInsFrz(Boolean PerInsFrz) {
         this.PerInsFrz = PerInsFrz;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación de PeriodoEstudioAlumno
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación de PeriodoEstudioAlumno
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }

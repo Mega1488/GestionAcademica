@@ -38,7 +38,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad de Materia
+ * 
  * @author alvar
  */
 
@@ -97,7 +98,6 @@ public class Materia extends SincHelper implements Serializable {
     
    
     //-CONSTRUCTOR
-
     public Materia() {
         lstPrevias = new ArrayList<>();
     }
@@ -105,100 +105,191 @@ public class Materia extends SincHelper implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorno el código de la Materia
+     */
     public Long getMatCod() {
         return MatCod;
     }
 
+    /**
+     *
+     * @param MatCod Recibe el código de la Materia
+     */
     public void setMatCod(Long MatCod) {
         this.MatCod = MatCod;
     }
 
+    /**
+     *
+     * @return Retorna el plan de la Materia
+     */
     public PlanEstudio getPlan() {
         return plan;
     }
 
+    /**
+     *
+     * @param plan Recibe el plan de la Materia
+     */
     public void setPlan(PlanEstudio plan) {
         this.plan = plan;
     }
 
+    /**
+     *
+     * @return Retorno el nombre de la Materia
+     */
     public String getMatNom() {
         return MatNom;
     }
 
+    /**
+     *
+     * @param MatNom Recibe el nombre de la Materia
+     */
     public void setMatNom(String MatNom) {
         this.MatNom = MatNom;
     }
 
+    /**
+     *
+     * @return Retorna la cantidad de horas de la Materia
+     */
     public Double getMatCntHor() {
         return MatCntHor;
     }
 
+    /**
+     *
+     * @param MatCntHor Recibe la cantidad de horas de la Materia
+     */
     public void setMatCntHor(Double MatCntHor) {
         this.MatCntHor = MatCntHor;
     }
 
+    /**
+     *
+     * @return Retorna el tipo de aprobación de la Materia
+     */
     public TipoAprobacion getMatTpoApr() {
         return MatTpoApr;
     }
 
+    /**
+     *
+     * @param MatTpoApr Recibe el tipo de aprobación de la Materia
+     */
     public void setMatTpoApr(TipoAprobacion MatTpoApr) {
         this.MatTpoApr = MatTpoApr;
     }
 
+    /**
+     *
+     * @return Retorna el tipo de período de la Materia
+     */
     public TipoPeriodo getMatTpoPer() {
         return MatTpoPer;
     }
 
+    /**
+     *
+     * @param MatTpoPer Recibe el tipo de período de la Materia
+     */
     public void setMatTpoPer(TipoPeriodo MatTpoPer) {
         this.MatTpoPer = MatTpoPer;
     }
 
+    /**
+     *
+     * @return Retorna el valor del período de la Materia
+     */
     public Double getMatPerVal() {
         return MatPerVal;
     }
 
+    /**
+     *
+     * @param MatPerVal Recibe el tipo de período de la Materia
+     */
     public void setMatPerVal(Double MatPerVal) {
         this.MatPerVal = MatPerVal;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación de la Materia
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna el código del de moodle (Las materias se definen en moodle como SubCategorías)
+     */
     public Long getMdlCod() {
         return MdlCod;
     }
 
+    /**
+     *
+     * @param MdlCod Recibe el código de de moodle (Las materias se definen en moodle como SubCategorías)
+     */
     public void setMdlCod(Long MdlCod) {
         this.MdlCod = MdlCod;
     }
     
-    
-
+    /**
+     *
+     * @param ObjFchMod Recibo la fecha de modificación de la materia
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorno la lista de Previas de la materia
+     */
     @JsonIgnore
     @XmlTransient
     public List<MateriaPrevia> getLstPrevias() {
         return lstPrevias;
     }
 
+    /**
+     *
+     * @param lstPrevias Recibe la lista de Previas de la materia
+     */
     public void setLstPrevias(List<MateriaPrevia> lstPrevias) {
         this.lstPrevias = lstPrevias;
     }
 
+    /**
+     *
+     * @return Retorna la lista de Evaluaciones de la materia
+     */
     @JsonIgnore
     @XmlTransient
     public List<Evaluacion> getLstEvaluacion() {
         return lstEvaluacion;
     }
 
+    /**
+     *
+     * @param lstEvaluacion Recibe la lista de evaluaciones de la materia
+     */
     public void setLstEvaluacion(List<Evaluacion> lstEvaluacion) {
         this.lstEvaluacion = lstEvaluacion;
     }
 
+    /**
+     *
+     * @param EvaCod Recibe el código de la Evaluación
+     * @return Retorna la evaluación dado el código recibido
+     */
     public Evaluacion getEvaluacionById(Long EvaCod){
         
         Evaluacion pEva = new Evaluacion();
@@ -215,6 +306,11 @@ public class Materia extends SincHelper implements Serializable {
         return pEva;
     }
     
+    /**
+     *
+     * @param MatPreCod Recibe el codigo de la materia previa
+     * @return Retorna la materia previa dado el código recibido
+     */
     public MateriaPrevia getPreviaById(Long MatPreCod){
         
         
@@ -226,6 +322,11 @@ public class Materia extends SincHelper implements Serializable {
         return null;
     }
     
+    /**
+     *
+     * @param calificacion Recibe la calificación
+     * @return Retorna si puede o no puede rendir el exámen
+     */
     public boolean MateriaPuedeDarExamen(Double calificacion){
         boolean puede = false;
         switch(this.MatTpoApr)
@@ -247,6 +348,11 @@ public class Materia extends SincHelper implements Serializable {
         return puede;
     }
     
+    /**
+     *
+     * @param calificacion Recibe la calificación
+     * @return Retorna si Exonera o no la materia
+     */
     public boolean MateriaExonera(Double calificacion){
         boolean puede = false;
         switch(this.MatTpoApr)
@@ -262,6 +368,10 @@ public class Materia extends SincHelper implements Serializable {
         return puede;
     }
     
+    /**
+     *
+     * @return Retorna los códigos de las materias previas
+     */
     public String ObtenerPreviasCodigos(){
         List<Long> lstRetorno = new ArrayList<>();
 

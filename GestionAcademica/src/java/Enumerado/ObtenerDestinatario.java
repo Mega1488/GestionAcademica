@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado ObtenerDestinatario
  *
  * @author Alvaro
  */
@@ -25,14 +26,27 @@ public enum ObtenerDestinatario {
         this.nombre = pNom;
     }
 
+    /**
+     *
+     * @return Retorna el valor de ObtenerDestinatario
+     */
     public int getValor() {
         return valor;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de ObtenerDestinatario
+     */
     public String getNombre() {
         return nombre;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de ObtenerDestinatario
+     * @return Retorna ObtenerDestinatario dado el código recibido
+     */
     public static ObtenerDestinatario fromCode(int pCod) {
         for (ObtenerDestinatario obtDest  : ObtenerDestinatario.values()){
             if (obtDest.getValor() == pCod){

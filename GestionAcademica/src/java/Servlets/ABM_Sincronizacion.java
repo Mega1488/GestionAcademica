@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento Sincronisación
  *
  * @author alvar
  */
@@ -103,6 +104,10 @@ public class ABM_Sincronizacion extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @return Método Depurar Sincronisación
+     */
     private String Depurar(){
         Retorno_MsgObj retornoObj = (Retorno_MsgObj) loSincronizacion.Depurar();
         if(!retornoObj.SurgioError())
@@ -118,12 +123,21 @@ public class ABM_Sincronizacion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @return Método Ejecutar Sincronisación
+     */
     private String Ejecutar(){
         loSincronizacion.Sincronizar();
         mensaje    = new Mensajes("Se inició la sincronización", TipoMensaje.MENSAJE);
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Selección Objeto
+     */
     private String IncSeleccionObjeto(HttpServletRequest request){
         mensaje    = new Mensajes("Error al seleccionar objeto", TipoMensaje.ERROR);
         try
@@ -155,6 +169,11 @@ public class ABM_Sincronizacion extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Sincronisación
+     */
     private String EliminarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al eliminar datos", TipoMensaje.ERROR);
 
@@ -186,6 +205,11 @@ public class ABM_Sincronizacion extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Procesar Sincronisación
+     */
     private String IncProcesar(HttpServletRequest request){
         mensaje    = new Mensajes("Error al procesar datos", TipoMensaje.ERROR);
 
@@ -217,6 +241,12 @@ public class ABM_Sincronizacion extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @param sincronizacion
+     * @return Método validar Sincronisación
+     */
     private Sincronizacion ValidarSincronizacion(HttpServletRequest request, Sincronizacion sincronizacion){
         
         if(sincronizacion == null)

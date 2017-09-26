@@ -28,6 +28,7 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
 /**
+ * Servicio Evaluaciones
  *
  * @author aa
  */
@@ -37,10 +38,10 @@ public class ws_EvaluacionAlumno {
     @Resource WebServiceContext context;
 
     /**
-     * This is a sample web service operation
-     * @param AluPerCod parametro
+     * 
+     * @param AluPerCod Recibo el código de una persona
      * @param AlIns parametro (SI/NO, para devolver evaluaciones a las que esté inscripto el alumno)
-     * @return : Devuelve una lista para determinado alumno con evaluaciones que se encuentran pendientes para inscribirse
+     * @return : Devuelve una lista para determinado alumno con evaluaciones que se encuentran pendientes para inscribirse o para borrarse
      */
     @WebMethod(operationName = "EvaluacionesParaInscripcion")
     public Retorno_MsgObj EvaluacionesParaInscripcion(@WebParam(name = "AluPerCod") Long AluPerCod, @WebParam(name = "AlIns") String AlIns)
@@ -127,8 +128,7 @@ public class ws_EvaluacionAlumno {
     
     /**
      *
-     * @param token parametro
-     * @param UsuAlumno parametro
+     * @param UsuAlumno Recibo el código de una persona
      * @return : Metodo que devuelve la lista de evaluaciones de determinado alumno, que fueron finalizadas.
      */
     @WebMethod(operationName = "EvaluacionesFinalizadas")
@@ -154,7 +154,7 @@ public class ws_EvaluacionAlumno {
     
     /**
      *
-     * @param UsuAlumno parametro
+     * @param UsuAlumno Recibo el código de una persona
      * @return : Metodo que devuelve una lista de las evaluaciones que el alumno se encuentra inscripto pero estan pendientes para rendír la preuba
      */
     @WebMethod(operationName = "ListaPendiente")
@@ -181,8 +181,8 @@ public class ws_EvaluacionAlumno {
 
     /**
      *
-     * @param AluPerCod parametro
-     * @param CalCod parametro
+     * @param AluPerCod Recibo el código de una persona
+     * @param CalCod Recibe el código de calendario
      * @return : Metodo que Inscribe un alumno a la evaluacion
      */
     @WebMethod(operationName = "InscribirAlumno")
@@ -238,8 +238,8 @@ public class ws_EvaluacionAlumno {
     
     /**
      *
-     * @param CalAlCod parametro
-     * @param CalCod parametro
+     * @param CalAlCod Recibo el código de una persona
+     * @param CalCod Recibe el código de calendario
      * @return : Metodo que Borra un alumno de la evaluación a la que está inscripto
      */
     @WebMethod(operationName = "DesinscribirAlumno")

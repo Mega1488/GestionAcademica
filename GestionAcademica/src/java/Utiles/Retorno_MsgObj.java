@@ -15,6 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 
 /**
+ * Utilidad Retorno_MsgObj
  *
  * @author alvar
  */
@@ -32,27 +33,48 @@ public class Retorno_MsgObj implements Serializable{
     public Retorno_MsgObj() {
     }
 
+    /**
+     *
+     * @param mensaje Recibe un mensaje
+     * @param objeto Recibe un Objeto
+     */
     public Retorno_MsgObj(Mensajes mensaje, Object objeto) {
         this.mensaje = mensaje;
         this.objeto = objeto;
     }
 
+    /**
+     *
+     * @param lstMensajes Recibe una lista de mensajes
+     * @param objeto Recibe un objeto
+     */
     public Retorno_MsgObj(ArrayList<Mensajes> lstMensajes, Object objeto) {
         this.lstMensajes = lstMensajes;
         this.objeto = objeto;
     }
     
+    /**
+     *
+     * @param mensaje Recibe un mensaje
+     * @param lstObjetos Recibe una lista de objetos
+     */
     public Retorno_MsgObj(Mensajes mensaje, ArrayList<Object> lstObjetos) {
         this.mensaje = mensaje;
         this.lstObjetos = lstObjetos;
     }
 
+    /**
+     *
+     * @param mensaje Recibe un mensaje
+     */
     public Retorno_MsgObj(Mensajes mensaje) {
         this.mensaje = mensaje;
     }
     
-    
-
+    /**
+     *
+     * @return Retorna una lista de mensajes
+     */
     public ArrayList<Mensajes> getLstMensajes() {
         if (lstMensajes == null) {
             lstMensajes = new ArrayList<>();
@@ -60,32 +82,59 @@ public class Retorno_MsgObj implements Serializable{
         return lstMensajes;
     }
 
+    /**
+     *
+     * @param lstMensajes Recibe una lista de mensajes 
+     */
     public void setLstMensajes(ArrayList<Mensajes> lstMensajes) {
         this.lstMensajes = lstMensajes;
     }
     
+    /**
+     *
+     * @param mensaje Recibe un mensaje y lo agrega a la lista
+     */
     public void addMensaje(Mensajes mensaje)
     {
         this.lstMensajes.add(mensaje);
     }
     
-
+    /**
+     *
+     * @return Retorna un mensaje
+     */
     public Mensajes getMensaje() {
         return mensaje;
     }
 
+    /**
+     *
+     * @param mensaje Recibe un mensaje
+     */
     public void setMensaje(Mensajes mensaje) {
         this.mensaje = mensaje;
     }
 
+    /**
+     *
+     * @return Retorna un objeto
+     */
     public Object getObjeto() {
         return objeto;
     }
 
+    /**
+     *
+     * @param objeto Recibe un objeto
+     */
     public void setObjeto(Object objeto) {
         this.objeto = objeto;
     }
 
+    /**
+     *
+     * @return Retorna una lista de objetos
+     */
     public List<Object> getLstObjetos() {
         if (lstObjetos == null) {
             lstObjetos = new ArrayList<>();
@@ -93,22 +142,38 @@ public class Retorno_MsgObj implements Serializable{
         return lstObjetos;
     }
 
+    /**
+     *
+     * @param lstObjetos Recibe una lista de Objetos
+     */
     public void setLstObjetos(List<Object> lstObjetos) {
         this.lstObjetos = lstObjetos;
     }
 
+    /**
+     *
+     * @return Retorna si el mensaje es de tipo error
+     */
     public boolean SurgioError()
     {
         if(this.getMensaje() == null) return true;
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR;
     }
     
+    /**
+     *
+     * @return Retorna si el objeto requerido tiene un mensaje de tipo error o si es nulo
+     */
     public boolean SurgioErrorObjetoRequerido()
     {
         if(this.getMensaje() == null) return true;
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getObjeto() == null;
     }
  
+    /**
+     *
+     * @return Retorna si la lista es nula o el tipo de mensaje que contiene es de tipo error
+     */
     public boolean SurgioErrorListaRequerida()
     {
         if(this.getMensaje() == null) return true;
@@ -116,6 +181,10 @@ public class Retorno_MsgObj implements Serializable{
         return this.getMensaje().getTipoMensaje() == TipoMensaje.ERROR || this.getLstObjetos() == null;
     }
     
+    /**
+     *
+     * @return Retorna si la lista contiene un tipo de mensaje Error o no
+     */
     public boolean SurgioErrorListaMensajes(){
         for(Mensajes msg : getLstMensajes())
         {

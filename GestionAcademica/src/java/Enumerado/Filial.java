@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado Filial
  *
  * @author Alvaro
  */
@@ -24,15 +25,28 @@ public enum Filial {
         this.vFilialCod = pFil;
    }
 
+    /**
+     *
+     * @return Retorna la filial
+     */
     public int getFilial() {
         return vFilialCod;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de la filial
+     */
     public String getFilialNom()
     {
         return this.vFilialNom;
     }
     
+    /**
+     *
+     * @param filCod Recibe un código de filial
+     * @return Retorna la filial definida al inicio de la clase
+     */
     public static Filial fromCode(int filCod) {
         for (Filial filial :Filial.values()){
             if (filial.getFilial() == filCod){

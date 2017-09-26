@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado Colores
  *
  * @author Alvaro
  */
@@ -31,11 +32,19 @@ public enum Colores {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de Colores
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recibe el código de Colores
+     * @return Retorna Colores dado el código recibido
+     */
     public static Colores fromCode(String pCod) {
         for (Colores objeto  : Colores.values()){
             if (objeto.getValor().equals(pCod)){

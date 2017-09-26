@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ * SDT SDT_PersonaEstudio
  *
  * @author alvar
  */
@@ -24,23 +25,42 @@ public class SDT_PersonaEstudio implements Serializable{
         this.escolaridad = new ArrayList<>();
     }
 
-
+    /**
+     *
+     * @return Retorna la instancia de SDT_PersonaEstudio
+     */
     public Inscripcion getInscripcion() {
         return inscripcion;
     }
 
+    /**
+     *
+     * @param inscripcion Recibe la inscripción
+     */
     public void setInscripcion(Inscripcion inscripcion) {
         this.inscripcion = inscripcion;
     }
 
+    /**
+     *
+     * @return Retorna la escolaridad
+     */
     public ArrayList<Escolaridad> getEscolaridad() {
         return escolaridad;
     }
 
+    /**
+     *
+     * @param escolaridad Recibe la escolaridad
+     */
     public void setEscolaridad(ArrayList<Escolaridad> escolaridad) {
         this.escolaridad = escolaridad;
     }
 
+    /**
+     *
+     * @return Retorna el Titulo del Estudio
+     */
     public String getTituloEstudio()
     {
         String retorno = "";

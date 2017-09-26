@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Carrera
  *
  * @author aa
  */
@@ -104,6 +105,11 @@ public class ABM_Carrera extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Carrera
+     */
     private String IngresarCarrera(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -135,6 +141,11 @@ public class ABM_Carrera extends HttpServlet {
         return retorno;
     } 
     
+    /**
+     * 
+     * @param request
+     * @return Método modificar Carrera
+     */
     private String ModificarCarrera(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -169,6 +180,11 @@ public class ABM_Carrera extends HttpServlet {
        
     } 
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Carrera
+     */
     private String EliminarCarrera(HttpServletRequest request)
     {   
         error       = false;
@@ -192,6 +208,10 @@ public class ABM_Carrera extends HttpServlet {
         return utiles.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @return Método Obtener datos PopUp Carrera
+     */
     private String PopUp_ObtenerDatos()
     {
         String retorno = "";
@@ -209,12 +229,23 @@ public class ABM_Carrera extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Obtener Planes Popup Carrera
+     */
     private String PopUp_ObtenerPlanesDatos(HttpServletRequest request)
     {
         Carrera car = this.ValidarCarrera(request, null);
         return utiles.ObjetoToJson(car.getPlan());
     }
     
+    /**
+     * 
+     * @param request
+     * @param car
+     * @return Método Validar Carrera
+     */
     private Carrera ValidarCarrera(HttpServletRequest request, Carrera car)
     {
         if(car == null)

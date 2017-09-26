@@ -31,7 +31,7 @@
     </ul>
     <span class="tools pull-right">
         <div class="hidden-xs">
-            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<%out.print(Enumerado.Modo.DISPLAY);%>&pCarCod=<%out.print(CarCod);%>">Regresar</a>
+            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefPlanEstudioSWW.jsp?MODO=<%out.print(Enumerado.Modo.UPDATE);%>&pCarCod=<%out.print(CarCod);%>">Regresar</a>
         </div>
     </span>
 </header>

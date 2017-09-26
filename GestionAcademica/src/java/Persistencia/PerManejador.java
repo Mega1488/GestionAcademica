@@ -30,6 +30,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 
 /**
+ * Persistencia PerManejador
  *
  * @author alvar
  */
@@ -82,6 +83,11 @@ public class PerManejador{
         return retorno;
     }
 
+    /**
+     *
+     * @param pObjeto Recibe un objeto
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método Guardar
+     */
     public Retorno_MsgObj guardar(Object pObjeto) {
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), pObjeto);
@@ -105,6 +111,11 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param pObjeto Recibe un objeto
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método guardarPKManual
+     */
     public Retorno_MsgObj guardarPkManual(Object pObjeto) {
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al guardar", TipoMensaje.ERROR), pObjeto);
@@ -128,6 +139,11 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param pObjeto Recibe un objeto
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método actualizar
+     */
     public Retorno_MsgObj actualizar(Object pObjeto) {
         
         //Notificacion notificacion = (Notificacion) pObjeto;
@@ -152,6 +168,11 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param pObjeto Recibe un objeto
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método merge
+     */
     public Retorno_MsgObj merge(Object pObjeto) {
         
         //Notificacion notificacion = (Notificacion) pObjeto;
@@ -176,6 +197,11 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param pObjeto Recibe un Objeto
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método eliminar
+     */
     public Retorno_MsgObj eliminar(Object pObjeto) {
         
         //Notificacion notificacion = (Notificacion) pObjeto;
@@ -203,6 +229,12 @@ public class PerManejador{
         return retorno;
     }
 
+    /**
+     *
+     * @param pCodigo Recibe un objeto
+     * @param clase Recibe la clase
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método obtener
+     */
     public Retorno_MsgObj obtener(Long pCodigo, Class clase) {
         
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener", TipoMensaje.ERROR), null);
@@ -227,6 +259,12 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param namedQuery Recibe la query
+     * @param parametros Recibe los parametros
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método obtenerLista
+     */
     public Retorno_MsgObj obtenerLista(String namedQuery, ArrayList<SDT_Parameters> parametros) {
 
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
@@ -262,6 +300,11 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param sentencia Recibe la sentencia
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método obtenerResultadosQuery
+     */
     public Retorno_MsgObj obtenerResultadosQuery(String sentencia) {
 
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al obtener lista", TipoMensaje.ERROR), null);
@@ -288,6 +331,11 @@ public class PerManejador{
         return retorno;
     }
     
+    /**
+     *
+     * @param sentencia Recibe la sentencia
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método ejecutarUpdateQuery
+     */
     public Retorno_MsgObj ejecutarUpdateQuery(String sentencia){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al ejecutar custom query", TipoMensaje.ERROR), null);
         
@@ -313,6 +361,11 @@ public class PerManejador{
         
     }
     
+    /**
+     *
+     * @param sentencia Recibe la sentencia
+     * @return Retorna el objeto Retorno_MsgObj con la información que haya retornado el método ejecutarQuery
+     */
     public Retorno_MsgObj ejecutarQuery(String sentencia){
         Retorno_MsgObj retorno = new Retorno_MsgObj(new Mensajes("Error al ejecutar custom query", TipoMensaje.ERROR), null);
         
@@ -337,6 +390,11 @@ public class PerManejador{
         
     }
     
+    /**
+     *
+     * @param objeto recibe el objeto
+     * @return Retorna el nombre de la tabla del objeto
+     */
     public String GetTableNameFromObject(Object objeto){
         Table table = objeto.getClass().getAnnotation(Table.class);
         return table.name();

@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado BandejaTipo
  *
  * @author Alvaro
  */
@@ -24,14 +25,27 @@ public enum BandejaTipo {
     private BandejaTipo() {
     }
     
+    /**
+     *
+     * @return Retorna el código de BandejaTipo
+     */
     public int getCod() {
         return vCod;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de BandejaTipo
+     */
     public String getNom() {
         return vNom;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de BandejaTipo
+     * @return Retorna BandejaTipo dado el código recibido
+     */
     public static BandejaTipo fromCode(int pCod) {
         for (BandejaTipo objeto :BandejaTipo.values()){
             if (objeto.getCod() == pCod){

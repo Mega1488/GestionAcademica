@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ *  Entidad ParámetroEmail
  *
  * @author alvar
  */
@@ -104,16 +105,15 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Código
+     * @return Retorna el Código de Parámetro envío Email
      */
-
     public Long getParEmlCod() {
         return ParEmlCod;
     }
 
     /**
      *
-     * @param ParEmlCod Código
+     * @param ParEmlCod Recibe Código de Parámetro envío Email
      */
     public void setParEmlCod(Long ParEmlCod) {
         this.ParEmlCod = ParEmlCod;
@@ -121,7 +121,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Nombre
+     * @return retorna Nombre de Parámetro envío Email
      */
     public String getParEmlNom() {
         return ParEmlNom;
@@ -129,7 +129,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlNom Nombre
+     * @param ParEmlNom Recibe Nombre de Parámetro envío Email
      */
     public void setParEmlNom(String ParEmlNom) {
         this.ParEmlNom = ParEmlNom;
@@ -137,7 +137,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Protocolo
+     * @return Retorna el Protocolo de Parámetro envío Email
      */
     public ProtocoloEmail getParEmlPro() {
         return ParEmlPro;
@@ -145,7 +145,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlPro Protocolo
+     * @param ParEmlPro Recibo el Protocolo de Parámetro envío Email
      */
     public void setParEmlPro(ProtocoloEmail ParEmlPro) {
         this.ParEmlPro = ParEmlPro;
@@ -153,7 +153,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Servidor - Host
+     * @return Retorna Servidor - Host de Parámetro envío Email
      */
     public String getParEmlSrv() {
         return ParEmlSrv;
@@ -161,7 +161,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlSrv Servidor - Host
+     * @param ParEmlSrv Recibe Servidor - Host de Parámetro envío Email
      */
     public void setParEmlSrv(String ParEmlSrv) {
         this.ParEmlSrv = ParEmlSrv;
@@ -169,7 +169,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Puerto
+     * @return Retorna Puerto de Parámetro envío Email
      */
     public Integer getParEmlPrt() {
         return ParEmlPrt;
@@ -177,7 +177,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlPrt Puerto
+     * @param ParEmlPrt Recibe el Puerto de Parámetro envío Email
      */
     public void setParEmlPrt(Integer ParEmlPrt) {
         this.ParEmlPrt = ParEmlPrt;
@@ -185,7 +185,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Remitente nombre 
+     * @return Retorna el Remitente nombre de Parámetro envío Email
      */
     public String getParEmlDeNom() {
         return ParEmlDeNom;
@@ -193,7 +193,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlDeNom Remitente nombre
+     * @param ParEmlDeNom Recibe el Remitente nombre de Parámetro envío Email
      */
     public void setParEmlDeNom(String ParEmlDeNom) {
         this.ParEmlDeNom = ParEmlDeNom;
@@ -201,7 +201,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Remitente email
+     * @return Retorno el Remitente email de Parámetro envío Email
      */
     public String getParEmlDeEml() {
         return ParEmlDeEml;
@@ -209,7 +209,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlDeEml Remitente email
+     * @param ParEmlDeEml Recibe el Remitente email de Parámetro envío Email
      */
     public void setParEmlDeEml(String ParEmlDeEml) {
         this.ParEmlDeEml = ParEmlDeEml;
@@ -217,7 +217,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Utiliza autenticacion
+     * @return Retorna Utiliza autenticacion
      */
     public Boolean getParEmlUtlAut() {
         return ParEmlUtlAut;
@@ -225,7 +225,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlUtlAut Utiliza autenticacion
+     * @param ParEmlUtlAut Recibe Utiliza autenticacion
      */
     public void setParEmlUtlAut(Boolean ParEmlUtlAut) {
         this.ParEmlUtlAut = ParEmlUtlAut;
@@ -233,7 +233,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Tipo de autenticacion
+     * @return Retorna Tipo de autenticacion
      */
     public TipoAutenticacion getParEmlTpoAut() {
         return ParEmlTpoAut;
@@ -241,7 +241,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlTpoAut Tipo de autenticacion
+     * @param ParEmlTpoAut Recibe Tipo de autenticacion
      */
     public void setParEmlTpoAut(TipoAutenticacion ParEmlTpoAut) {
         this.ParEmlTpoAut = ParEmlTpoAut;
@@ -249,7 +249,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Dominio
+     * @return Retorna Dominio
      */
     public String getParEmlDom() {
         return ParEmlDom;
@@ -257,7 +257,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlDom Dominio
+     * @param ParEmlDom Recibe Dominio
      */
     public void setParEmlDom(String ParEmlDom) {
         this.ParEmlDom = ParEmlDom;
@@ -265,7 +265,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Usuario
+     * @return Retorna Usuario
      */
     public String getParEmlUsr() {
         return ParEmlUsr;
@@ -273,7 +273,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlUsr Usuario
+     * @param ParEmlUsr Recibe Usuario
      */
     public void setParEmlUsr(String ParEmlUsr) {
         this.ParEmlUsr = ParEmlUsr;
@@ -281,7 +281,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Contraseña
+     * @return Retorna Contraseña
      */
     public String getParEmlPsw() {
         return ParEmlPsw;
@@ -289,7 +289,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlPsw Contraseña
+     * @param ParEmlPsw Recibe Contraseña
      */
     public void setParEmlPsw(String ParEmlPsw) {
         this.ParEmlPsw = ParEmlPsw;
@@ -297,7 +297,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Tipo de SSL
+     * @return Retorna Tipo de SSL
      */
     public TipoSSL getParEmlSSL() {
         return ParEmlSSL;
@@ -305,7 +305,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlSSL Tipo de SSL
+     * @param ParEmlSSL Recibe Tipo de SSL
      */
     public void setParEmlSSL(TipoSSL ParEmlSSL) {
         this.ParEmlSSL = ParEmlSSL;
@@ -313,7 +313,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Tiempo de espera
+     * @return Retorna Tiempo de espera
      */
     public Integer getParEmlTmpEsp() {
         return ParEmlTmpEsp;
@@ -321,7 +321,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlTmpEsp Tiempo de espera
+     * @param ParEmlTmpEsp Recibe Tiempo de espera
      */
     public void setParEmlTmpEsp(Integer ParEmlTmpEsp) {
         this.ParEmlTmpEsp = ParEmlTmpEsp;
@@ -329,7 +329,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Debug
+     * @return Retorna Debug
      */
     public Boolean getParEmlDebug() {
         return ParEmlDebug;
@@ -337,7 +337,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlDebug Debug
+     * @param ParEmlDebug Recibe Debug
      */
     public void setParEmlDebug(Boolean ParEmlDebug) {
         this.ParEmlDebug = ParEmlDebug;
@@ -345,7 +345,7 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @return Solicitar confirmacion
+     * @return Retorna Solicitar confirmacion
      */
     public Boolean getParEmlReqConf() {
         return ParEmlReqConf;
@@ -353,15 +353,11 @@ public class ParametroEmail implements Serializable {
 
     /**
      *
-     * @param ParEmlReqConf Solicitar confirmacion
+     * @param ParEmlReqConf Recibe Solicitar confirmacion
      */
     public void setParEmlReqConf(Boolean ParEmlReqConf) {
         this.ParEmlReqConf = ParEmlReqConf;
     }
-    
-    
-    
-    
     
     @Override
     public int hashCode() {

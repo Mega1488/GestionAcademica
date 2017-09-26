@@ -37,7 +37,8 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ *  Entidad Archivos
+ * 
  * @author alvar
  */
 @Entity
@@ -83,22 +84,33 @@ public class Archivo extends SincHelper  implements Serializable {
     
     
     //-CONSTRUCTOR
-    
     public Archivo() {
     }
 
     
     
     //-GETTERS Y SETTERS
-    
+
+    /**
+     *
+     * @return Retorna un valor fecha
+     */
     public Date getArcFch() {
         return ArcFch;
     }
 
+    /**
+     *
+     * @param ArcFch Recibe un valor fecha
+     */
     public void setArcFch(Date ArcFch) {
         this.ArcFch = ArcFch;
     }
 
+    /**
+     *
+     * @return
+     */
     @JsonIgnore
     @XmlTransient
     public File getArchivo(){
@@ -121,6 +133,11 @@ public class Archivo extends SincHelper  implements Serializable {
        return null;
     }
 
+    /**
+     *
+     * @param pArchivo
+     * @param tpoArchivo
+     */
     public void setArchivo(File pArchivo, TipoArchivo tpoArchivo) {
         try{
             this.ArcAdj = Files.readAllBytes(pArchivo.toPath());
@@ -133,47 +150,91 @@ public class Archivo extends SincHelper  implements Serializable {
         }
     }
 
+    /**
+     *
+     * @return Retorna el archivo adjunto
+     */
     @XmlInlineBinaryData
     public byte[] getArcAdj() {
         return ArcAdj;
     }
 
+    /**
+     *
+     * @param ArcAdj Recibe el archivo adjunto
+     */
     public void setArcAdj(byte[] ArcAdj) {
         this.ArcAdj = ArcAdj;
     }
     
+    /**
+     *
+     * @return Retorna el Código identificador del archivo
+     */
     public Long getArcCod() {
         return ArcCod;
     }
 
+    /**
+     *
+     * @param ArcCod Recibe el Código identificador del archivo
+     */
     public void setArcCod(Long ArcCod) {
         this.ArcCod = ArcCod;
     }
 
+    /**
+     *
+     * @return Retorna el Nombre del archivo
+     */
     public String getArcNom() {
         return ArcNom;
     }
 
+    /**
+     *
+     * @param ArcNom Recibe el nombre del archivo
+     */
     public void setArcNom(String ArcNom) {
         this.ArcNom = ArcNom;
     }
 
+    /**
+     *
+     * @return Retorna la Extención del Archivo
+     */
     public String getArcExt() {
         return ArcExt;
     }
 
+    /**
+     *
+     * @param ArcExt Recibe la Extención del Archivo
+     */
     public void setArcExt(String ArcExt) {
         this.ArcExt = ArcExt;
     }
 
+    /**
+     *
+     * @return Retorna la Fecha de Modificación
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la Fecha de Modificación
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getFileBase64(){
         if(this.ArcAdj != null)
         {
@@ -182,10 +243,18 @@ public class Archivo extends SincHelper  implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @return Retorna Tipo de Archivo
+     */
     public TipoArchivo getArcTpo() {
         return ArcTpo;
     }
 
+    /**
+     *  
+     * @param ArcTpo Recibe Tipo de Archivo
+     */
     public void setArcTpo(TipoArchivo ArcTpo) {
         this.ArcTpo = ArcTpo;
     }

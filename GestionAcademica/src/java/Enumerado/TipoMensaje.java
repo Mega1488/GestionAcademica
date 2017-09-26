@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoMensaje
  *
  * @author Alvaro
  */
@@ -24,6 +25,10 @@ public enum TipoMensaje {
         this.vValor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de TipoMensaje
+     */
     public String getValor() {
         return vValor;
     }

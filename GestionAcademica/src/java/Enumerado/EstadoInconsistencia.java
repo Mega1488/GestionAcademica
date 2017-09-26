@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado EstadoInconsistencia
  *
  * @author Alvaro
  */
@@ -22,6 +23,10 @@ public enum EstadoInconsistencia {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de EstadoInconsistencia
+     */
     public int getValor() {
         return valor;
     }

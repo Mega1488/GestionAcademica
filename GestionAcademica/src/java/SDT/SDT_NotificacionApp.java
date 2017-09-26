@@ -11,6 +11,7 @@ import java.util.List;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
+ * SDT SDT_NotificacionApp
  *
  * @author alvar
  */
@@ -33,42 +34,82 @@ public class SDT_NotificacionApp implements Serializable{
     public SDT_NotificacionApp() {
     }
 
+    /**
+     *
+     * @return Retorna multicast_id
+     */
     public Long getMulticast_id() {
         return multicast_id;
     }
 
+    /**
+     *
+     * @param multicast_id Recibe multicast_id
+     */
     public void setMulticast_id(Long multicast_id) {
         this.multicast_id = multicast_id;
     }
 
+    /**
+     *
+     * @return Retorna Correcto
+     */
     public Integer getSuccess() {
         return success;
     }
 
+    /**
+     *
+     * @param success Recibe Correcto
+     */
     public void setSuccess(Integer success) {
         this.success = success;
     }
 
+    /**
+     *
+     * @return Retorna Fallo
+     */
     public Integer getFailure() {
         return failure;
     }
 
+    /**
+     *
+     * @param failure Recibe Fallo
+     */
     public void setFailure(Integer failure) {
         this.failure = failure;
     }
 
+    /**
+     *
+     * @return Retorna canonical_ids
+     */
     public Integer getCanonical_ids() {
         return canonical_ids;
     }
 
+    /**
+     *
+     * @param canonical_ids Recibe canonical_ids
+     */
     public void setCanonical_ids(Integer canonical_ids) {
         this.canonical_ids = canonical_ids;
     }
 
+    /**
+     *
+     * @return Retorna Resultados
+     */
     public List<SDT_NotificacionAppResultado> getResults() {
         return results;
     }
 
+    /**
+     *
+     * @param results Recibe Resultados
+     */
     public void setResults(List<SDT_NotificacionAppResultado> results) {
         this.results = results;
     }

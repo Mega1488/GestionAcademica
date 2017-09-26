@@ -29,6 +29,7 @@ import javax.servlet.http.HttpSession;
 
 
 /**
+ * Mantenimiento PeriodoEstudioDocumento
  *
  * @author alvar
  */
@@ -106,7 +107,11 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
     }
     
     
-     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar PeriodoEstudioDocumento
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -128,6 +133,11 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
        return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método obtener datos PeriodoEstudioDocumento
+     */
     private String ObtenerDatos(HttpServletRequest request){
         error       = false;
         PeriodoEstudioDocumento periDocumento = new PeriodoEstudioDocumento();
@@ -145,7 +155,11 @@ public class AB_PeriodoEstudioDocumento extends HttpServlet {
        return utilidades.ObjetoToJson(periDocumento);
     }
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método sincronizar
+     */
     private String Sincronizar(HttpServletRequest request){
         error       = false;
         mensaje = new Mensajes("Sincronizando", TipoMensaje.MENSAJE);

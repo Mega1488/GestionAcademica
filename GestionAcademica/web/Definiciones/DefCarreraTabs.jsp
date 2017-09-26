@@ -31,7 +31,7 @@
     
     <span class="tools pull-right">
         <div class="hidden-xs">
-            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp?MODE=<%out.print(Enumerado.Modo.DISPLAY);%>">Regresar</a>
+            <a class="tabs_regresar" href="<% out.print(urlSistema); %>Definiciones/DefCarreraWW.jsp?MODE=<%out.print(Enumerado.Modo.UPDATE);%>">Regresar</a>
         </div>
     </span>
 </header>

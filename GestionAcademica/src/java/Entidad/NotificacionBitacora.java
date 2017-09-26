@@ -29,7 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad NotificacionBitacora
+ * 
  * @author alvar
  */
 @Entity
@@ -87,74 +88,146 @@ public class NotificacionBitacora implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorno el código de NotificacionBitacora
+     */
     public Long getNotBitCod() {
         return NotBitCod;
     }
 
+    /**
+     *
+     * @param NotBitCod Recibo el código de NotificacionBitacora
+     */
     public void setNotBitCod(Long NotBitCod) {
         this.NotBitCod = NotBitCod;
     }
 
+    /**
+     *
+     * @return Retorna la notificación
+     */
     public Notificacion getNotificacion() {
         return notificacion;
     }
 
+    /**
+     *
+     * @param notificacion Recibe la notificación
+     */
     public void setNotificacion(Notificacion notificacion) {
         this.notificacion = notificacion;
     }
 
+    /**
+     *
+     * @return Retorna la persona
+     */
     public Persona getPersona() {
         return persona;
     }
 
+    /**
+     *
+     * @param persona Recibe la persona
+     */
     public void setPersona(Persona persona) {
         this.persona = persona;
     }
 
+    /**
+     *
+     * @return Retorna al asunto de NotificacionBitacora
+     */
     public String getNotBitAsu() {
         return NotBitAsu;
     }
 
+    /**
+     *
+     * @param NotBitAsu Recibe el asunto de NotificacionBitacora
+     */
     public void setNotBitAsu(String NotBitAsu) {
         this.NotBitAsu = NotBitAsu;
     }
 
+    /**
+     *
+     * @return 
+     */
     public String getNotBitCon() {
         return NotBitCon;
     }
 
+    /**
+     *
+     * @param NotBitCon
+     */
     public void setNotBitCon(String NotBitCon) {
         this.NotBitCon = NotBitCon;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNotBitDst() {
         return NotBitDst;
     }
 
+    /**
+     *
+     * @param NotBitDst
+     */
     public void setNotBitDst(String NotBitDst) {
         this.NotBitDst = NotBitDst;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getNotBitDet() {
         return NotBitDet;
     }
 
+    /**
+     *
+     * @param NotBitDet
+     */
     public void setNotBitDet(String NotBitDet) {
         this.NotBitDet = NotBitDet;
     }
 
+    /**
+     *
+     * @return Retorna el estado de la NotificacionBitacora
+     */
     public NotificacionEstado getNotBitEst() {
         return NotBitEst;
     }
 
+    /**
+     *
+     * @param NotBitEst Recibe el estado de la NotificacionBitacora
+     */
     public void setNotBitEst(NotificacionEstado NotBitEst) {
         this.NotBitEst = NotBitEst;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de NotificacionBitacora
+     */
     public Date getNotBitFch() {
         return NotBitFch;
     }
 
+    /**
+     *
+     * @param NotBitFch Recibe la fecha de NotificacionBitacora
+     */
     public void setNotBitFch(Date NotBitFch) {
         this.NotBitFch = NotBitFch;
     }

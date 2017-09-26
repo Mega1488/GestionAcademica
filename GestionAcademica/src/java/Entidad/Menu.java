@@ -31,7 +31,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad Menu
+ * 
  * @author alvar
  */
 @Entity
@@ -75,49 +76,90 @@ public class Menu implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     private List<Menu> lstSubMenu;
 
+    /**
+     *
+     * @return Retorna el código de Menú
+     */
     public Long getMenCod() {
         return MenCod;
     }
 
+    /**
+     *
+     * @param menCod Recibe el código de Menú
+     */
     public void setMenCod(Long menCod) {
         this.MenCod = menCod;
     }
 
+    /**
+     *
+     * @return Retorna el Tipo de Menú
+     */
     public TipoMenu getMenTpo() {
         return MenTpo;
     }
 
+    /**
+     *
+     * @param MenTpo Recibe el tipo de Menú
+     */
     public void setMenTpo(TipoMenu MenTpo) {
         this.MenTpo = MenTpo;
     }
 
+    /**
+     *
+     * @return Retorna la URL del Menú
+     */
     public String getMenUrl() {
         return MenUrl;
     }
 
+    /**
+     *
+     * @param MenUrl Recibe la URL del Menú
+     */
     public void setMenUrl(String MenUrl) {
         this.MenUrl = MenUrl;
     }
 
+    /**
+     *
+     * @return Retorna el nombre del Menú
+     */
     public String getMenNom() {
         return MenNom;
     }
 
+    /**
+     *
+     * @param MenNom Recibe el nombre del Menú
+     */
     public void setMenNom(String MenNom) {
         this.MenNom = MenNom;
     }
 
+    /**
+     *
+     * @return Retorna el Orden del Menú
+     */
     public Integer getMenOrd() {
         return MenOrd;
     }
 
+    /**
+     *
+     * @param MenOrd Recibe el Orden del Menú
+     */
     public void setMenOrd(Integer MenOrd) {
         this.MenOrd = MenOrd;
     }
 
+    //CONSTRUCTOR
     public Menu() {
     }
-
+    
     public Menu(TipoMenu MenTpo, String MenUrl, String MenNom, Integer MenOrd) {
         this.MenTpo = MenTpo;
         this.MenUrl = MenUrl;
@@ -125,26 +167,39 @@ public class Menu implements Serializable {
         this.MenOrd = MenOrd;
     }
 
+    /**
+     *
+     * @return Retorna la lista de SubMenu
+     */
     public List<Menu> getLstSubMenu() {
         if(this.lstSubMenu == null) lstSubMenu = new ArrayList<>();
         return lstSubMenu;
     }
 
+    /**
+     *
+     * @param lstSubMenu Recibe la lista de SubMenu
+     */
     public void setLstSubMenu(List<Menu> lstSubMenu) {
         this.lstSubMenu = lstSubMenu;
     }
 
+    /**
+     *
+     * @return 
+     */
     public Boolean getMenIsParent() {
         if(MenIsParent == null) MenIsParent = false;
         return MenIsParent;
     }
 
+    /**
+     *
+     * @param MenIsParent
+     */
     public void setMenIsParent(Boolean MenIsParent) {
         this.MenIsParent = MenIsParent;
     }
-    
-    
-    
 
     @Override
     public int hashCode() {
@@ -169,6 +224,5 @@ public class Menu implements Serializable {
     @Override
     public String toString() {
         return "Entidad.Menu[ MenCod=" + MenCod + " ]";
-    }
-    
+    }   
 }

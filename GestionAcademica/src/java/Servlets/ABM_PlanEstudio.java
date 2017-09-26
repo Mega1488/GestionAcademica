@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento Plan de Estudio
  *
  * @author aa
  */
@@ -93,6 +94,11 @@ public class ABM_PlanEstudio extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Plan de Estudio
+     */
     private String IngresarPlanEstudio(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -121,6 +127,11 @@ public class ABM_PlanEstudio extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método modificar Plan de Estudio
+     */
     private String ModificarPlanEstudio(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -173,6 +184,11 @@ public class ABM_PlanEstudio extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Plan de Estudio
+     */
     private String EliminarPlanEstudio(HttpServletRequest request)
     {
         error      = false;
@@ -211,6 +227,12 @@ public class ABM_PlanEstudio extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @param plan
+     * @return Método validar Plan de Estudio
+     */
     private PlanEstudio ValidarPlanEstudio(HttpServletRequest request, PlanEstudio plan)
     {
         if(plan == null)

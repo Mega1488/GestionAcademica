@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoAutenticacion
  *
  * @author Alvaro
  */
@@ -27,14 +28,27 @@ public enum TipoAutenticacion {
         this.vNom = pNom;
     }
 
+    /**
+     *
+     * @return Retorna el código de TipoAutenticacion 
+    */
     public int getCod() {
         return vCod;
     }
 
+    /**
+     *
+     * @return Retorna el nombre de TipoAutenticacion
+     */
     public String getNom() {
         return vNom;
     }
      
+    /**
+     *
+     * @param pCod Recibe el código de TipoAutenticacion
+     * @return Retorna TipoAutenticacion dado el código recibidos
+     */
     public static TipoAutenticacion fromCode(int pCod) {
         for (TipoAutenticacion tpoAut :TipoAutenticacion.values()){
             if (tpoAut.getCod() == pCod){

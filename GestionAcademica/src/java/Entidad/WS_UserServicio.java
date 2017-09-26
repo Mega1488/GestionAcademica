@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad WS_UserServicio
  *
  * @author alvar
  */
@@ -54,7 +55,7 @@ public class WS_UserServicio implements Serializable {
     @Column(name = "WsSrv")
     private ServicioWeb WsSrv;
 
-    //-CONSTRUCTOR
+    //-CONSTRUCTORES
     public WS_UserServicio() {
     }
 
@@ -67,26 +68,51 @@ public class WS_UserServicio implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de WS_UserServicio
+     */
+
     public Long getWsSrvCod() {
         return WsSrvCod;
     }
 
+    /**
+     *
+     * @param WsSrvCod Recibe el código de WS_UserServicio
+     */
     public void setWsSrvCod(Long WsSrvCod) {
         this.WsSrvCod = WsSrvCod;
     }
 
+    /**
+     *
+     * @return Retorna el usuario
+     */
     public WS_User getUsuario() {
         return usuario;
     }
 
+    /**
+     *
+     * @param usuario Recibe el usuario
+     */
     public void setUsuario(WS_User usuario) {
         this.usuario = usuario;
     }
 
+    /**
+     *
+     * @return
+     */
     public ServicioWeb getWsSrv() {
         return WsSrv;
     }
 
+    /**
+     *
+     * @param WsSrv
+     */
     public void setWsSrv(ServicioWeb WsSrv) {
         this.WsSrv = WsSrv;
     }

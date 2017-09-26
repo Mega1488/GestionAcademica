@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoCampo
  *
  * @author Alvaro
  */
@@ -22,6 +23,10 @@ public enum TipoCampo {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de TipoCampo
+     */
     public int getValor() {
         return valor;
     }

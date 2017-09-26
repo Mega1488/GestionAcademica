@@ -6,6 +6,7 @@
 package SDT;
 
 /**
+ * SDT SDT_NotificacionDato
  *
  * @author alvar
  */
@@ -16,22 +17,43 @@ public class SDT_NotificacionDato {
     public SDT_NotificacionDato() {
     }
 
+    /**
+     *
+     * @return Retorna mensaje
+     */
     public String getMessage() {
         return message;
     }
 
+    /**
+     *
+     * @param message recibe Mensaje
+     */
     public void setMessage(String message) {
         this.message = message;
     }
 
+    /**
+     *
+     * @return Retorna el Titulo
+     */
     public String getTitulo() {
         return titulo;
     }
 
+    /**
+     *
+     * @param titulo Recibe el titulo
+     */
     public void setTitulo(String titulo) {
         this.titulo = titulo;
     }
 
+    /**
+     *
+     * @param message Recibe el mensaje
+     * @param titulo Recibe el titulo
+     */
     public SDT_NotificacionDato(String message, String titulo) {
         this.message = message;
         this.titulo = titulo;

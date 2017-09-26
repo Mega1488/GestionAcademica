@@ -8,6 +8,7 @@ package Utiles;
 import Enumerado.TipoMensaje;
 
 /**
+ * Utilidades Mensajes
  *
  * @author alvar
  */
@@ -15,6 +16,11 @@ public class Mensajes {
     private String mensaje;
     private TipoMensaje tipoMensaje;
 
+    /**
+     *
+     * @param mensaje
+     * @param tipoMensaje
+     */
     public Mensajes(String mensaje, TipoMensaje tipoMensaje) {
         this.mensaje = mensaje;
         this.tipoMensaje = tipoMensaje;
@@ -23,18 +29,34 @@ public class Mensajes {
     public Mensajes() {
     }
 
+    /**
+     *
+     * @return Retorno un mensaje
+     */
     public String getMensaje() {
         return mensaje;
     }
 
+    /**
+     *
+     * @param mensaje Recibe un mensaje
+     */
     public void setMensaje(String mensaje) {
         this.mensaje = mensaje;
     }
 
+    /**
+     *
+     * @return Retorna el tipo de mensaje
+     */
     public TipoMensaje getTipoMensaje() {
         return tipoMensaje;
     }
 
+    /**
+     *
+     * @param tipoMensaje Recibe el tipo de mensaje
+     */
     public void setTipoMensaje(TipoMensaje tipoMensaje) {
         this.tipoMensaje = tipoMensaje;
     }

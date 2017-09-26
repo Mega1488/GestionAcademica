@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento ParametroEmail
  *
  * @author alvar
  */
@@ -109,6 +110,11 @@ public class ABM_ParametroEmail extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Obtner datos ParametroEmail
+     */
     private String ObtnerDatos(HttpServletRequest request)
     {
         String retorno = "";
@@ -127,6 +133,10 @@ public class ABM_ParametroEmail extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @return Método Obtener datos PopUp ParametroEmail
+     */
     private String PopObtenerDatos()
     {
         String retorno = "";
@@ -144,6 +154,11 @@ public class ABM_ParametroEmail extends HttpServlet {
         return retorno;
     }
      
+    /**
+     * 
+     * @param request
+     * @return Método agregar ParametroEmail
+     */
     private String AgregarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -175,6 +190,11 @@ public class ABM_ParametroEmail extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar ParametroEmail
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -218,6 +238,11 @@ public class ABM_ParametroEmail extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar ParametroEmail
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error      = false;
@@ -257,7 +282,12 @@ public class ABM_ParametroEmail extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
      
-    
+    /**
+     * 
+     * @param request
+     * @param parametroEmail
+     * @return Método validar ParametroEmail
+     */
     private ParametroEmail ValidarObjeto(HttpServletRequest request, ParametroEmail parametroEmail)
     {
         if(parametroEmail == null)

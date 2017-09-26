@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado Proceso
  *
  * @author Alvaro
  */
@@ -23,11 +24,19 @@ public enum Proceso {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de Proceso
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recube el código de Proceso
+     * @return Retorna Proceso dado el código recibido
+     */
     public static Proceso fromCode(String pCod) {
         for (Proceso objeto  : Proceso.values()){
             if (objeto.getValor().equals(pCod)){

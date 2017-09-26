@@ -34,7 +34,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad Período
+ * 
  * @author alvar
  */
 
@@ -91,60 +92,117 @@ public class Periodo extends SincHelper implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorno el código del período
+     */
     public Long getPeriCod() {
         return PeriCod;
     }
 
+    /**
+     *
+     * @param PeriCod Recibe el código del período
+     */
     public void setPeriCod(Long PeriCod) {
         this.PeriCod = PeriCod;
     }
 
+    /**
+     *
+     * @return Retorno el tipo de período
+     */
     public TipoPeriodo getPerTpo() {
         return PerTpo;
     }
 
+    /**
+     *
+     * @param PerTpo Recibo el tipo de período
+     */
     public void setPerTpo(TipoPeriodo PerTpo) {
         this.PerTpo = PerTpo;
     }
 
+    /**
+     *
+     * @return Retorno el valor del período
+     */
     public Double getPerVal() {
         return PerVal;
     }
 
+    /**
+     *
+     * @param PerVal Recibo el valor del período
+     */
     public void setPerVal(Double PerVal) {
         this.PerVal = PerVal;
     }
 
+    /**
+     *
+     * @return Retorno la fecha de inicio del período
+     */
     public Date getPerFchIni() {
         return PerFchIni;
     }
 
+    /**
+     *
+     * @param PerFchIni Recibo la fecha de inicio del período
+     */
     public void setPerFchIni(Date PerFchIni) {
         this.PerFchIni = PerFchIni;
     }
 
+    /**
+     *
+     * @return Retorno la fecha de modificación del período
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibo la fecha de modificación del período
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorno la lista de estudios
+     */
     @JsonIgnore
     @XmlTransient
     public List<PeriodoEstudio> getLstEstudio() {
         return lstEstudio;
     }
 
+    /**
+     *
+     * @param lstEstudio Recibe la lista de estudios
+     */
     public void setLstEstudio(List<PeriodoEstudio> lstEstudio) {
         this.lstEstudio = lstEstudio;
     }
     
+    /**
+     *
+     * @return Retorna el nombre del tipo de período
+     */
     public String getPerTpoNombre() {
         return PerTpo.getTipoPeriodoNombre();
     }
     
+    /**
+     *
+     * @param ModCod Recibo el código de módulo
+     * @return Retorna si el período posee módulo o no dado el código recibido
+     */
     public Boolean PeriodoPoseeModulo(Long ModCod)
     {
         for(PeriodoEstudio est : this.lstEstudio)
@@ -154,6 +212,11 @@ public class Periodo extends SincHelper implements Serializable {
         return false;
     }
     
+    /**
+     *
+     * @param MatCod Recibe el código de de la materia
+     * @return Retorna si el período posee materia dado el código recibido
+     */
     public Boolean PeriodoPoseeMateria(Long MatCod)
     {
         for(PeriodoEstudio est : this.lstEstudio)
@@ -163,6 +226,10 @@ public class Periodo extends SincHelper implements Serializable {
         return false;
     }
 
+    /**
+     *
+     * @return Retorna TextoPeríodo con PerVal
+     */
     public String TextoPeriodo(){
         return this.getPerTpoNombre() + ": " + this.PerVal;
     }

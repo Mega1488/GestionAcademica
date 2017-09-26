@@ -25,7 +25,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad ObjetoCampo
+ * 
  * @author alvar
  */
 
@@ -59,9 +60,20 @@ public class ObjetoCampo implements Serializable {
     private Boolean ObjCmpPK;
     
     //-CONSTRUCTOR
+
+    /**
+     *
+     */
     public ObjetoCampo() {
     }
 
+    /**
+     *
+     * @param objeto
+     * @param ObjCmpNom
+     * @param ObjCmpTpoDat
+     * @param ObjCmpPK
+     */
     public ObjetoCampo(Objeto objeto, String ObjCmpNom, TipoCampo ObjCmpTpoDat, Boolean ObjCmpPK) {
         this.objeto = objeto;
         this.ObjCmpNom = ObjCmpNom;
@@ -73,35 +85,68 @@ public class ObjetoCampo implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna Objeto
+     */
+
     @XmlTransient
     public Objeto getObjeto() {
         return objeto;
     }
 
+    /**
+     *
+     * @param objeto Recibe Objeto
+     */
     public void setObjeto(Objeto objeto) {
         this.objeto = objeto;
     }
 
+    /**
+     *
+     * @return Retorna Nombre Objeto Campo
+     */
     public String getObjCmpNom() {
         return ObjCmpNom;
     }
 
+    /**
+     *
+     * @param ObjCmpNom Recibe Nombre Objeto Campo
+     */
     public void setObjCmpNom(String ObjCmpNom) {
         this.ObjCmpNom = ObjCmpNom;
     }
 
+    /**
+     *
+     * @return Retorna Tipo de dato Objeto Campo
+     */
     public TipoCampo getObjCmpTpoDat() {
         return ObjCmpTpoDat;
     }
 
+    /**
+     *
+     * @param ObjCmpTpoDat Recibe Tipo de dato Objeto Campo
+     */
     public void setObjCmpTpoDat(TipoCampo ObjCmpTpoDat) {
         this.ObjCmpTpoDat = ObjCmpTpoDat;
     }
 
+    /**
+     *
+     * @return
+     */
     public Boolean getObjCmpPK() {
         return ObjCmpPK;
     }
 
+    /**
+     *
+     * @param ObjCmpPK
+     */
     public void setObjCmpPK(Boolean ObjCmpPK) {
         this.ObjCmpPK = ObjCmpPK;
     }

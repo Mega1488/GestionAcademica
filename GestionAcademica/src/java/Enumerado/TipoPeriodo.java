@@ -6,11 +6,12 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoPeriodo
  *
  * @author Alvaro
  */
 public enum TipoPeriodo {
-    MENSUAL("Mes", 1), SEMESTRAL("Semestre", 2), ANUAL("Año", 3), MODULAR("Modulo", 4);
+    MENSUAL("Mes", 1), SEMESTRAL("Semestre", 2), ANUAL("Año", 3), MODULAR("Módulo", 4);
     
     TipoPeriodo(){
         
@@ -24,14 +25,27 @@ public enum TipoPeriodo {
         this.vTpoPerNom = tpoPerNom;
     }
 
+    /**
+     *
+     * @return Retorna el TipoPeriodo
+     */
     public int getTipoPeriodo() {
         return vTpoPerCod;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de TipoPeriodo
+     */
     public String getTipoPeriodoNombre() {
         return vTpoPerNom;
     }
     
+    /**
+     *
+     * @param tpoPerCod Recibe el código de TipoPeriodo
+     * @return Retorna TipoPeriodo dado el código recibido
+     */
     public static TipoPeriodo fromCode(int tpoPerCod) {
         for (TipoPeriodo tipoPeriodo :TipoPeriodo.values()){
             if (tipoPeriodo.getTipoPeriodo() == tpoPerCod){

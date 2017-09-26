@@ -34,6 +34,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Persona
  *
  * @author alvar
  */
@@ -135,6 +136,11 @@ public class ABM_Persona extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Persona
+     */
     private String AgregarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -165,6 +171,11 @@ public class ABM_Persona extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Persona
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -195,6 +206,11 @@ public class ABM_Persona extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Persona
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error      = false;
@@ -221,6 +237,10 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @return Método obtener datos PopUp Persona
+     */
     private String POPUP_ObtenerDatos()
     {
         List<Object> lstPersona;
@@ -231,6 +251,10 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(lstPersona);
     }
     
+    /**
+     * 
+     * @return Método sincronizar con moodle
+     */
     private String SincronizarMoodle()
     {
         
@@ -239,6 +263,11 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(new Mensajes("Sincronizando", TipoMensaje.MENSAJE));
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método obtener estudios PopUp
+     */
     private String POPUP_ObtenerEstudiosDatos(HttpServletRequest request)
     {
         Persona persona = this.ValidarPersona(request, null);
@@ -246,6 +275,11 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(persona.getLstEstudios());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método cambiar pasword Persona
+     */
     private String CambiarPsw(HttpServletRequest request){
         String usuario    = request.getParameter("usuario");
         String pswActual  = request.getParameter("pswActual");
@@ -257,6 +291,11 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método solicitud recuperar Pasword
+     */
     private String SolRecoveryPsw(HttpServletRequest request){
         String usuario    = request.getParameter("usuario");
         
@@ -264,6 +303,11 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Recuperar Pasword
+     */
     private String RecoveryPsw(HttpServletRequest request){
         String PerCod       = request.getParameter("PerCod");
         String tkn          = request.getParameter("tkn");
@@ -275,6 +319,11 @@ public class ABM_Persona extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Subir Foto
+     */
     private String SubirFoto(HttpServletRequest request){
         Persona persona = this.ValidarPersona(request, null);
         
@@ -288,7 +337,13 @@ public class ABM_Persona extends HttpServlet {
         
         return utilidades.ObjetoToJson(mensaje);
     }
-
+    
+    /**
+     * 
+     * @param request
+     * @param persona
+     * @return Método validar Persona
+     */
     private Persona ValidarPersona(HttpServletRequest request, Persona persona)
     {
         if(persona == null)

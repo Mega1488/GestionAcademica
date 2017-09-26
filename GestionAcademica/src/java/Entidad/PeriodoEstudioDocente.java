@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad PeriodoEstudioDocente
  *
  * @author alvar
  */
@@ -81,50 +82,98 @@ public class PeriodoEstudioDocente extends SincHelper implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de PeriodoEstudioDocente
+     */
     public Long getPeriEstDocCod() {
         return PeriEstDocCod;
     }
 
+    /**
+     *
+     * @param PeriEstDocCod Recibe el código de PeriodoEstudioDocente
+     */
     public void setPeriEstDocCod(Long PeriEstDocCod) {
         this.PeriEstDocCod = PeriEstDocCod;
     }
 
+    /**
+     *
+     * @return Retorna el período de estudio
+     */
     public PeriodoEstudio getPeriodoEstudio() {
         return periodoEstudio;
     }
 
+    /**
+     *
+     * @param periodoEstudio Recibe el período de estudio
+     */
     public void setPeriodoEstudio(PeriodoEstudio periodoEstudio) {
         this.periodoEstudio = periodoEstudio;
     }
 
+    /**
+     *
+     * @return Retorna el docente
+     */
     public Persona getDocente() {
         return Docente;
     }
 
+    /**
+     *
+     * @param Docente Recibe el docente
+     */
     public void setDocente(Persona Docente) {
         this.Docente = Docente;
     }
 
+    /**
+     *
+     * @return Retorna el si fue inscripto por alguien mas
+     */
     public Persona getInscritoPor() {
         return InscritoPor;
     }
 
+    /**
+     *
+     * @param InscritoPor Recibe si es inscripto por alguien mas
+     */
     public void setInscritoPor(Persona InscritoPor) {
         this.InscritoPor = InscritoPor;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de inscripción de docente
+     */
     public Date getDocFchInsc() {
         return DocFchInsc;
     }
 
+    /**
+     *
+     * @param DocFchInsc Recibe la fecha de inscripción del docente
+     */
     public void setDocFchInsc(Date DocFchInsc) {
         this.DocFchInsc = DocFchInsc;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación de PeriodoEstudioDocente
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación de PeriodoEstudioDocente
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }

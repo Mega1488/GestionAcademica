@@ -23,6 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad TipoEvaluacion
  *
  * @author alvar
  */

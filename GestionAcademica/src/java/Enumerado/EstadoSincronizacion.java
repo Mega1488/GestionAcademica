@@ -5,7 +5,8 @@
  */
 package Enumerado;
 
-/**
+/** 
+ * Enumerado EstadoSincronizacion
  *
  * @author Alvaro
  */
@@ -22,6 +23,10 @@ public enum EstadoSincronizacion {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor EstadoSincronizacion
+     */
     public int getValor() {
         return valor;
     }

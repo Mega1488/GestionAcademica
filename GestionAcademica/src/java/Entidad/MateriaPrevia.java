@@ -26,7 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad MateriaPrevia
+ * 
  * @author alvar
  */
 
@@ -65,37 +66,70 @@ public class MateriaPrevia extends SincHelper implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ObjFchMod;
 
+    /**
+     *
+     * @return Retorna el código de la materia previa
+     */
     public Long getMatPreCod() {
         return MatPreCod;
     }
 
+    /**
+     *
+     * @param MatPreCod Recibe el código de la materia previa
+     */
     public void setMatPreCod(Long MatPreCod) {
         this.MatPreCod = MatPreCod;
     }
 
+    /**
+     *
+     * @return Retorna la Materia de la materia previa
+     */
     public Materia getMateria() {
         return materia;
     }
 
+    /**
+     *
+     * @param materia Recibe la Materia de la materia previa
+     */
     public void setMateria(Materia materia) {
         this.materia = materia;
     }
 
+    /**
+     *
+     * @return Retorna la Materia Previa
+     */
     public Materia getMateriaPrevia() {
         return materiaPrevia;
     }
 
+    /**
+     *
+     * @param materiaPrevia Recibe la Materia Previa
+     */
     public void setMateriaPrevia(Materia materiaPrevia) {
         this.materiaPrevia = materiaPrevia;
     }
 
+    //CONSTRUCTOR
     public MateriaPrevia() {
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación de la materia previa
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación de la materia previa
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }

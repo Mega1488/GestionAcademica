@@ -29,7 +29,8 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 /**
- *
+ *  Entidad Objeto
+ * 
  * @author alvar
  */
 @Entity
@@ -64,8 +65,7 @@ public class Objeto implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     private List<ObjetoCampo> lstCampo;
     
-    //-CONSTRUCTOR
-
+    //-CONSTRUCTORES
     public Objeto() {
         this.lstCampo = new ArrayList<>();
     }
@@ -87,38 +87,75 @@ public class Objeto implements Serializable {
     
 
     //-GETTERS Y SETTERS
+
+    /**
+     *
+     * @return Retorna el nombre del objeto
+     */
     public String getObjNom() {
         return ObjNom;
     }
 
+    /**
+     *
+     * @param ObjNom Recibe el nombre del objeto
+     */
     public void setObjNom(String ObjNom) {
         this.ObjNom = ObjNom;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación del objeto
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación del objeto
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna la lista de Campo
+     */
     public List<ObjetoCampo> getLstCampo() {
         return lstCampo;
     }
 
+    /**
+     *
+     * @param lstCampo Recibe la lista de Campo
+     */
     public void setLstCampo(List<ObjetoCampo> lstCampo) {
         this.lstCampo = lstCampo;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getObjNmdQry() {
         return ObjNmdQry;
     }
 
+    /**
+     *
+     * @param ObjNmdQry
+     */
     public void setObjNmdQry(String ObjNmdQry) {
         this.ObjNmdQry = ObjNmdQry;
     }
 
+    /**
+     *
+     * @return 
+     */
     public ObjetoCampo getPrimaryKey(){
         for(ObjetoCampo objCmp : this.getLstCampo())
         {
@@ -131,10 +168,18 @@ public class Objeto implements Serializable {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getObjClsNom() {
         return ObjClsNom;
     }
 
+    /**
+     *
+     * @param ObjClsNom
+     */
     public void setObjClsNom(String ObjClsNom) {
         this.ObjClsNom = ObjClsNom;
     }

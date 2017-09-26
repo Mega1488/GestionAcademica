@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de CalendarioDocente
  *
  * @author alvar
  */
@@ -105,8 +106,12 @@ public class ABM_CalendarioDocente extends HttpServlet {
     }
     
     
-    
-     private String AgregarDatos(HttpServletRequest request)
+    /**
+     * 
+     * @param request
+     * @return Método agregar CalendarioDocente
+     */
+    private String AgregarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -140,6 +145,11 @@ public class ABM_CalendarioDocente extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar CalendarioDocente
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error       = false;
@@ -162,6 +172,11 @@ public class ABM_CalendarioDocente extends HttpServlet {
        return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar CalendarioDocente
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -194,6 +209,11 @@ public class ABM_CalendarioDocente extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Obtener Datos CalendarioDocente
+     */
     private String ObtenerDatos(HttpServletRequest request)
     {
         error       = false;
@@ -214,6 +234,12 @@ public class ABM_CalendarioDocente extends HttpServlet {
        return utilidades.ObjetoToJson(calDocente);
     }
     
+    /**
+     * 
+     * @param request
+     * @param calDocente
+     * @return Método validar CalendarioDocente
+     */
     private CalendarioDocente ValidarCalendarioDocente(HttpServletRequest request, CalendarioDocente calDocente)
     {
         if(calDocente == null)

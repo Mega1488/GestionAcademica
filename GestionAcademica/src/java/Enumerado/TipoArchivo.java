@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoArchivo
  *
  * @author Alvaro
  */
@@ -26,11 +27,19 @@ public enum TipoArchivo {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor TipoArchivo
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recibe el código de TipoArchivo
+     * @return Retorna TipoArchivo dado el código recibido
+     */
     public static TipoArchivo fromCode(String pCod) {
         for (TipoArchivo objeto  : TipoArchivo.values()){
             if (objeto.getValor().equals(pCod)){

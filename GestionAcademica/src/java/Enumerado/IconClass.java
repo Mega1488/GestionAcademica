@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado IconClass
  *
  * @author Alvaro
  */
@@ -38,11 +39,19 @@ public enum IconClass {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor IconClass
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recibe el código de IconClass
+     * @return Retorna el dato requerido definido al inicio de la clase
+     */
     public static IconClass fromCode(String pCod) {
         for (IconClass objeto  : IconClass.values()){
             if (objeto.getValor().equals(pCod)){

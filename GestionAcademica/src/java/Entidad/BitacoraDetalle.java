@@ -23,7 +23,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ *  Entidad BitacoraDetalle
+ * 
  * @author alvar
  */
 @Entity
@@ -56,8 +57,7 @@ public class BitacoraDetalle implements Serializable {
     private TipoMensaje BitDetEst;
     
     
-    //-CONSTRUCTOR
-    
+    //-CONSTRUCTORES
     public BitacoraDetalle() {    
     }
 
@@ -67,39 +67,69 @@ public class BitacoraDetalle implements Serializable {
         this.BitDetEst = BitDetEst;
     }
 
-    
-    
-
     //-GETTERS Y SETTERS
+
+    /**
+     *
+     * @return Retorna código del detalle de la bitácora
+     */
 
     public Long getBitDetCod() {
         return BitDetCod;
     }
 
+    /**
+     *
+     * @param BitDetCod Recibe el código del detalle de la bitácora
+     */
     public void setBitDetCod(Long BitDetCod) {
         this.BitDetCod = BitDetCod;
     }
 
+    /**
+     *
+     * @return Retorna el proceso de bitacora
+     */
     public BitacoraProceso getBitacora() {
         return bitacora;
     }
 
+    /**
+     *
+     * @param bitacora Recibe el proceso de bitacora
+     */
     public void setBitacora(BitacoraProceso bitacora) {
         this.bitacora = bitacora;
     }
 
+    /**
+     *
+     * @return Retorna un mensaje con el detalle de la bitacora
+     */
     public String getBitDetMsg() {
         return BitDetMsg;
     }
 
+    /**
+     *
+     * @param BitDetMsg Recibe un mensaje con el detalle de la bitacora
+     */
     public void setBitDetMsg(String BitDetMsg) {
         this.BitDetMsg = BitDetMsg;
     }
 
+    /**
+     *
+     * @return Retorna el estado del detalle de Bitacora
+     */
     public TipoMensaje getBitDetEst() {
         return BitDetEst;
     }
 
+    /**
+     *
+     * @param BitDetEst Recibe el estado del detalle de bitacora
+     */
     public void setBitDetEst(TipoMensaje BitDetEst) {
         this.BitDetEst = BitDetEst;
     }
@@ -133,7 +163,4 @@ public class BitacoraDetalle implements Serializable {
     public String toString() {
         return "BitacoraDetalle{" + "BitDetCod=" + BitDetCod + ", BitDetMsg=" + BitDetMsg + ", BitDetEst=" + BitDetEst + '}';
     }
-
-    
-    
 }

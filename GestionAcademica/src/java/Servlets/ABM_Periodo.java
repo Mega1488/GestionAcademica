@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Periodos
  *
  * @author alvar
  */
@@ -103,6 +104,11 @@ public class ABM_Periodo extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Periodos
+     */
     private String AgregarDatos(HttpServletRequest request)
     {
         
@@ -135,6 +141,11 @@ public class ABM_Periodo extends HttpServlet {
             return retorno;
         }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Periodos
+     */
     private String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -170,6 +181,11 @@ public class ABM_Periodo extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Periodos
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error       = false;
@@ -196,6 +212,12 @@ public class ABM_Periodo extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
         
+    /**
+     * 
+     * @param request
+     * @param periodo
+     * @return Método validar Periodos
+     */
     private Periodo ValidarPeriodo(HttpServletRequest request, Periodo periodo)
     {
         

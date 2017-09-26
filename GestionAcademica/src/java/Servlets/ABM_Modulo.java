@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Módulo
  *
  * @author alvar
  */
@@ -96,6 +97,11 @@ public class ABM_Modulo extends HttpServlet {
         
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Módulo
+     */
     private String AgregarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -127,6 +133,11 @@ public class ABM_Modulo extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Módulo
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -184,6 +195,11 @@ public class ABM_Modulo extends HttpServlet {
         return retorno;
     }
 
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Módulo
+     */
     private String EliminarDatos(HttpServletRequest request)
     {
         error      = false;
@@ -228,6 +244,12 @@ public class ABM_Modulo extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
 
+    /**
+     * 
+     * @param request
+     * @param modulo
+     * @return Método validar Módulo
+     */
     private Modulo ValidarModulo(HttpServletRequest request, Modulo modulo)
     {
         if(modulo == null)

@@ -23,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import Utiles.Utilidades;
 
 /**
+ * Mantenimiento Importacion
  *
  * @author alvar
  */
@@ -94,7 +95,11 @@ public class ABM_Importacion extends HttpServlet {
         
     }
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método Importar al Plan
+     */
     private String ImpAlPlan(HttpServletRequest request){
         Archivo archivo = this.ValidarArchivo(request);
         
@@ -107,6 +112,11 @@ public class ABM_Importacion extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Importar al Curso
+     */
     private String ImpAlCurso(HttpServletRequest request){
         Archivo archivo = this.ValidarArchivo(request);
         
@@ -119,6 +129,11 @@ public class ABM_Importacion extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Importar Escolaridad
+     */
     private String ImpAlEscolaridad(HttpServletRequest request){
         Archivo archivo = this.ValidarArchivo(request);
         
@@ -129,6 +144,11 @@ public class ABM_Importacion extends HttpServlet {
         return utilidades.ObjetoToJson(retorno.getMensaje());
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método validar archivo
+     */
     private Archivo ValidarArchivo(HttpServletRequest request){
         Archivo archivo = new Archivo();
         

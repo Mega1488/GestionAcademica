@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Servlet Login
  *
  * @author alvar
  */
@@ -63,7 +64,11 @@ public class Login extends HttpServlet {
         }
     }
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método Iniciar sesión
+     */
     private String IniciarSesion(HttpServletRequest request){
         String retorno  = "";
         String usr      = request.getParameter("pUser");
@@ -103,6 +108,11 @@ public class Login extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Cerrar Sesión
+     */
     private String CerrarSesion(HttpServletRequest request){
         String retorno  = "";
         

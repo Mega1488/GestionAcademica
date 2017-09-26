@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado EstadoCalendarioEvaluacion
  *
  * @author Alvaro
  */
@@ -28,15 +29,28 @@ public enum EstadoCalendarioEvaluacion {
         this.vEstadoNom = estadoNom;
     }
 
+    /**
+     *
+     * @return Retorna el valor de EstadoCalendarioEvaluacion
+     */
     public int getEstado() {
         return vEstado;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de EstadoCalendarioEvaluacion
+     */
     public String getEstadoNombre() {
         return vEstadoNom;
     }
     
-     public static EstadoCalendarioEvaluacion fromCode(int cod) {
+    /**
+     *
+     * @param cod Recibe el código de EstadoCalendarioEvaluacion
+     * @return Retorna el EstadoCalendarioEvaluacion dado el código recibido
+     */
+    public static EstadoCalendarioEvaluacion fromCode(int cod) {
         for (EstadoCalendarioEvaluacion estado :EstadoCalendarioEvaluacion.values()){
             if (estado.getEstado() == cod){
                 return estado;

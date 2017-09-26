@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado Expresiones regulares
  *
  * @author Alvaro
  */
@@ -25,6 +26,10 @@ public enum ExpresionesRegulares {
         this.vValor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de la expresión regular
+     */
     public String getValor() {
         return vValor;
     }

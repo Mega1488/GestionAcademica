@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento de Materia
  *
  * @author aa
  */
@@ -105,6 +106,11 @@ public class ABM_Materia extends HttpServlet {
         }
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar Materia
+     */
     public String AgregarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -132,6 +138,11 @@ public class ABM_Materia extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar Materia
+     */
     public String ActualizarDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -190,6 +201,11 @@ public class ABM_Materia extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar Materia
+     */
     public String EliminarDatos(HttpServletRequest request)
     {
         error      = false;
@@ -232,6 +248,11 @@ public class ABM_Materia extends HttpServlet {
         return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método Obtener Datos PopUp
+     */
     private String POPUP_ObtenerDatos(HttpServletRequest request)
     {
         List<Object> lstMateria;
@@ -244,6 +265,11 @@ public class ABM_Materia extends HttpServlet {
         return utilidades.ObjetoToJson(lstMateria);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método agregar previas de Materia
+     */
     private String AgregarPreviaDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -285,6 +311,11 @@ public class ABM_Materia extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar previas de Materia
+     */
     private String EliminarPreviaDatos(HttpServletRequest request)
     {
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
@@ -322,6 +353,12 @@ public class ABM_Materia extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @param materia
+     * @return Método validar Materia
+     */
     private Materia ValidarMateria(HttpServletRequest request, Materia materia)
     {
         if(materia == null)

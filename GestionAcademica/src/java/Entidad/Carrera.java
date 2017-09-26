@@ -35,7 +35,8 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad Carrera
+ * 
  * @author alvar
  */
 
@@ -79,6 +80,7 @@ public class Carrera extends SincHelper implements Serializable {
     @Fetch(FetchMode.SUBSELECT)
     private List<PlanEstudio> lstPlanEstudio;
     
+   //CONSTRUCTOR
     public Carrera() {
         this.lstPlanEstudio = new ArrayList<>();
     }
@@ -93,62 +95,122 @@ public class Carrera extends SincHelper implements Serializable {
         this.ObjFchMod = ObjFchMod;
     }
     
+    /**
+     *
+     * @return Retorna el código de la carrera
+     */
     public Long getCarCod() {
         return CarCod;
     }
 
+    /**
+     *
+     * @param CarCod Recibe el código de la Carrera
+     */
     public void setCarCod(Long CarCod) {
         this.CarCod = CarCod;
     }
 
+    /**
+     *
+     * @return Retorna el nombre de la Carrera
+     */
     public String getCarNom() {
         return CarNom;
     }
 
+    /**
+     *
+     * @param CarNom Recibe el nombre de la Carrera
+     */
     public void setCarNom(String CarNom) {
         this.CarNom = CarNom;
     }
 
+    /**
+     *
+     * @return Retorna la descripción de la Carrera
+     */
     public String getCarDsc() {
         return CarDsc;
     }
 
+    /**
+     *
+     * @param CarDsc Recibe la descripción de la Carrera
+     */
     public void setCarDsc(String CarDsc) {
         this.CarDsc = CarDsc;
     }
 
+    /**
+     *
+     * @return Retorna la Facultad de la Carrera
+     */
     public String getCarFac() {
         return CarFac;
     }
 
+    /**
+     *
+     * @param CarFac Recibe la Facultad de la Carrera
+     */
     public void setCarFac(String CarFac) {
         this.CarFac = CarFac;
     }
 
+    /**
+     *
+     * @return Retorna la Certificación de la Carrera
+     */
     public String getCarCrt() {
         return CarCrt;
     }
 
+    /**
+     *
+     * @param CarCrt Recibe la Certificación de la Carrera
+     */
     public void setCarCrt(String CarCrt) {
         this.CarCrt = CarCrt;
     }
 
+    /**
+     *
+     * @return Retorna el codigo de la categoría de moodle, la carrera en moodle se define como Categoría
+     */
     public Long getCarCatCod() {
         return CarCatCod;
     }
 
+    /**
+     *
+     * @param CarCatCod Recibe el codigo de la categoría de moodle, la carrera en moodle se define como Categoría
+     */
     public void setCarCatCod(Long CarCatCod) {
         this.CarCatCod = CarCatCod;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación de la Carrera
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación de la Carrera
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }
 
+    /**
+     *
+     * @return Retorna el plan de la Carrera
+     */
     @JsonIgnore
     @XmlTransient
     public List<PlanEstudio> getPlan() {
@@ -156,10 +218,19 @@ public class Carrera extends SincHelper implements Serializable {
         return lstPlanEstudio;
     }
 
+    /**
+     *
+     * @param lstPlanEstudio Recibe el plan de la Carrera
+     */
     public void setPlan(List<PlanEstudio> lstPlanEstudio) {
         this.lstPlanEstudio = lstPlanEstudio;
     }
     
+    /**
+     *
+     * @param PlaEstCod Recibe el código del Plan
+     * @return Retorna el Plan de Estudio
+     */
     public PlanEstudio getPlanEstudioById(Long PlaEstCod){
         
         PlanEstudio pPlan = new PlanEstudio();
@@ -204,8 +275,5 @@ public class Carrera extends SincHelper implements Serializable {
     @Override
     public String toString() {
         return "Carrera{" + "CarCod=" + CarCod + ", CarNom=" + CarNom + ", CarDsc=" + CarDsc + ' ' + (lstPlanEstudio!= null ? lstPlanEstudio.size() : "") + '}';
-    }
-
-    
-   
+    } 
 }

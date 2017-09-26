@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoSSL
  *
  * @author Alvaro
  */
@@ -25,14 +26,27 @@ public enum TipoSSL {
     private TipoSSL() {
     }
     
+    /**
+     *
+     * @return Retorna el codigo de TipoSSL
+     */
     public int getCod() {
         return vCod;
     }
     
+    /**
+     *
+     * @return Retorna el nombre de TipoSSL
+     */
     public String getNom() {
         return vNom;
     }
     
+    /**
+     *
+     * @param pCod Recibe el código de TipoSSL
+     * @return Retorna TipoSSL dado el código recibido
+     */
     public static TipoSSL fromCode(int pCod) {
         for (TipoSSL tpoSSL :TipoSSL.values()){
             if (tpoSSL.getCod() == pCod){

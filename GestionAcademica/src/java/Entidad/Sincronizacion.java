@@ -31,6 +31,7 @@ import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * Entidad Sincronización
  *
  * @author alvar
  */
@@ -82,54 +83,106 @@ public class Sincronizacion implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return retorna el código de la Sincronización
+     */
     public Long getSncCod() {
         return SncCod;
     }
 
+    /**
+     *
+     * @param SncCod Recibe el código de la Sincronización
+     */
     public void setSncCod(Long SncCod) {
         this.SncCod = SncCod;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de Sincronización
+     */
     public Date getSncFch() {
         return SncFch;
     }
 
+    /**
+     *
+     * @param SncFch recibe la fecha de Sincronización
+     */
     public void setSncFch(Date SncFch) {
         this.SncFch = SncFch;
     }
 
+    /**
+     *
+     * @return Retorna el estado de Sincronización
+     */
     public EstadoSincronizacion getSncEst() {
         return SncEst;
     }
 
+    /**
+     *
+     * @param SncEst Recibe el estado de Sincronización
+     */
     public void setSncEst(EstadoSincronizacion SncEst) {
         this.SncEst = SncEst;
     }
 
+    /**
+     *
+     * @return Retorna la cantidad de objetos sincronizados
+     */
     public Integer getSncObjCnt() {
         return SncObjCnt;
     }
 
+    /**
+     *
+     * @param SncObjCnt Recibe la cantidad de objetos sincronizados
+     */
     public void setSncObjCnt(Integer SncObjCnt) {
         this.SncObjCnt = SncObjCnt;
     }
 
+    /**
+     *
+     * @return retorna el detalle de los objetos sincronizados
+     */
     public String getSncObjDet() {
         return SncObjDet;
     }
 
+    /**
+     *
+     * @param SncObjDet Recibe el detalle de los objetos sincronizados
+     */
     public void setSncObjDet(String SncObjDet) {
         this.SncObjDet = SncObjDet;
     }
 
+    /**
+     *
+     * @return Retorna la duración del proceso de Sincronización
+     */
     public String getSncDur() {
         return SncDur;
     }
 
+    /**
+     *
+     * @param SncDur Recibe la duración del proceso de Sincronización
+     */
     public void setSncDur(String SncDur) {
         this.SncDur = SncDur;
     }
 
+    /**
+     *
+     * @return Retorna la lista de inconsistencias
+     */
     public List<SincronizacionInconsistencia> getLstInconsistencia() {
         if(this.lstInconsistencia == null)
         {
@@ -138,10 +191,18 @@ public class Sincronizacion implements Serializable {
         return lstInconsistencia;
     }
 
+    /**
+     *
+     * @param lstInconsistencia Recibe la lista de inconsistencias
+     */
     public void setLstInconsistencia(List<SincronizacionInconsistencia> lstInconsistencia) {
         this.lstInconsistencia = lstInconsistencia;
     }
 
+    /**
+     *
+     * @param msg Setea el detalle
+     */
     public void addDetalle(String msg){
         if(this.SncObjDet == null)
         {
@@ -151,6 +212,11 @@ public class Sincronizacion implements Serializable {
         this.SncObjDet += msg + "\n";
     }
     
+    /**
+     *
+     * @param IncCod Recibe el código de inconsistencia
+     * @return retora la inconsistencia dado el codigo recibido
+     */
     public SincronizacionInconsistencia GetInconsistencia(Long IncCod){
         for(SincronizacionInconsistencia inc : lstInconsistencia)
         {

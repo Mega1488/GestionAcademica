@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado Extensiones
  *
  * @author Alvaro
  */
@@ -32,11 +33,19 @@ public enum Extensiones {
         this.valor = pValor;
     }
 
+    /**
+     *
+     * @return Retorna el valor de Extenciones
+     */
     public String getValor() {
         return valor;
     }
     
-    
+    /**
+     *
+     * @param pCod Recibe un codigo de Extenciones
+     * @return Retorna la extención dado el código recibido
+     */
     public static Extensiones fromCode(String pCod) {
         for (Extensiones objeto  : Extensiones.values()){
             if (objeto.getValor().equals(pCod)){

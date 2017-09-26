@@ -34,6 +34,7 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
 /**
+ * Servicio persona
  *
  * @author alvar
  */

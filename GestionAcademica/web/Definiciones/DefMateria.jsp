@@ -76,10 +76,6 @@
             CamposActivos = "enabled";
             nameButton    = "MODIFICAR";
             break;
-        case DISPLAY:
-            CamposActivos = "enabled";
-            nameButton    = "MODIFICAR";
-            break;
     }
 %>
 
@@ -192,8 +188,8 @@
                                                                 <input type="hidden" name="CarCod" id="CarCod" value="<% out.print(CarCod); %>">
                                                             </div>
 
-                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="MatCod" name="MatCod" disabled value="<% out.print( utilidad.NuloToVacio(mat.getMatCod())); %>"></div></div>
-                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="MatNom" name="MatName" required<% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Código</label><div class="col-lg-6"><input type="number" class=" form-control inputs_generales" id="MatCod" name="MatCod" required disabled value="<% out.print( utilidad.NuloToVacio(mat.getMatCod())); %>"></div></div>
+                                                            <div class="form-group "><label for="cname" class="control-label col-lg-3">Nombre</label><div class="col-lg-6"><input type="text" class=" form-control inputs_generales" id="MatNom" name="MatName" required <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatNom())); %>"></div></div>
                                                             <div class="form-group "><label for="cname" class="control-label col-lg-3">Cantidad de horas</label><div class="col-lg-6"><input type="number" step="0.5" class=" form-control inputs_generales" id="MatCntHor" name="MatCntHor" required <% out.print(CamposActivos); %> value="<% out.print( utilidad.NuloToVacio(mat.getMatCntHor())); %>"></div></div>
 
                                                             <div class="form-group ">

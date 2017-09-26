@@ -27,7 +27,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- *
+ * Entidad MateriaRevalida
+ * 
  * @author alvar
  */
 
@@ -73,34 +74,66 @@ public class MateriaRevalida extends SincHelper implements Serializable {
     
     //-GETTERS Y SETTERS
 
+    /**
+     *
+     * @return Retorna el código de la materia revalida
+     */
     public Long getMatRvlCod() {
         return MatRvlCod;
     }
 
+    /**
+     *
+     * @param MatRvlCod Recibe el código de la materia revalida
+     */
     public void setMatRvlCod(Long MatRvlCod) {
         this.MatRvlCod = MatRvlCod;
     }
 
+    /**
+     *
+     * @return Retorna la Inscripción de la materia revalida
+     */
     public Inscripcion getInscripcion() {
         return inscripcion;
     }
 
+    /**
+     *
+     * @param inscripcion recibe la Inscripción de la materia revalida
+     */
     public void setInscripcion(Inscripcion inscripcion) {
         this.inscripcion = inscripcion;
     }
 
+    /**
+     *
+     * @return Retorna la materia de la materia revalida
+     */
     public Materia getMateria() {
         return materia;
     }
 
+    /**
+     *
+     * @param materia Recibe la materia de la materia revalida
+     */
     public void setMateria(Materia materia) {
         this.materia = materia;
     }
 
+    /**
+     *
+     * @return Retorna la fecha de modificación de la materia revalida
+     */
     public Date getObjFchMod() {
         return ObjFchMod;
     }
 
+    /**
+     *
+     * @param ObjFchMod Recibe la fecha de modificación de la materia revalida
+     */
     public void setObjFchMod(Date ObjFchMod) {
         this.ObjFchMod = ObjFchMod;
     }

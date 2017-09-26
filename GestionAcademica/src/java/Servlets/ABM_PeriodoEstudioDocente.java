@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento PeriodoEstudiosDocente
  *
  * @author alvar
  */
@@ -107,7 +108,11 @@ public class ABM_PeriodoEstudioDocente extends HttpServlet {
     }
     
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método agregar PeriodoEstudiosDocente
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -141,6 +146,11 @@ public class ABM_PeriodoEstudioDocente extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar PeriodoEstudiosDocente
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -162,6 +172,11 @@ public class ABM_PeriodoEstudioDocente extends HttpServlet {
        return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar PeriodoEstudiosDocente
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -194,6 +209,11 @@ public class ABM_PeriodoEstudioDocente extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método obtener datos PeriodoEstudiosDocente
+     */
     private String ObtenerDatos(HttpServletRequest request){
         error       = false;
         PeriodoEstudioDocente periDocente = new PeriodoEstudioDocente();
@@ -211,6 +231,12 @@ public class ABM_PeriodoEstudioDocente extends HttpServlet {
        return utilidades.ObjetoToJson(periDocente);
     }
     
+    /**
+     * 
+     * @param request
+     * @param periDocente
+     * @return Método validar PeriodoEstudiosDocente
+     */
     private PeriodoEstudioDocente ValidarPeriodoEstudioDocente(HttpServletRequest request, PeriodoEstudioDocente periDocente){
         if(periDocente == null)
         {

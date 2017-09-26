@@ -31,6 +31,7 @@ import javax.xml.ws.WebServiceContext;
 import javax.xml.ws.handler.MessageContext;
 
 /**
+ * Servicio estudios
  *
  * @author aa
  */
@@ -40,9 +41,9 @@ public class ws_estudios {
     @Resource WebServiceContext context;
     
     /**
-     * This is a sample web service operation
-     * @param PerCod
-     * @return 
+     * 
+     * @param PerCod Recibe un código de persona
+     * @return Retorna una lista de estudios dado el código recibido
      */
     @WebMethod(operationName = "lstEstudiosPorAlumno")
     public Retorno_MsgObj lstEstudiosPorAlumno(@WebParam(name = "PerCod") Long PerCod) 
@@ -73,8 +74,8 @@ public class ws_estudios {
     
     /**
      *
-     * @param PerCod
-     * @return
+     * @param PerCod Recibe un código de persona
+     * @return Retorna una lista de estudios previos dado el código recibido
      */
     @WebMethod(operationName = "lstEstudiosPreviosPorAlumno")
     public Retorno_MsgObj lstEstudiosPreviosPorAlumno(@WebParam(name = "PerCod") Long PerCod)

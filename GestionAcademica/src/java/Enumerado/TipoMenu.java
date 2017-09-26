@@ -6,6 +6,7 @@
 package Enumerado;
 
 /**
+ * Enumerado TipoMenu
  *
  * @author alvar
  */

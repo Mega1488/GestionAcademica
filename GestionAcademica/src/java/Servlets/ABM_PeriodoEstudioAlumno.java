@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
+ * Mantenimiento PeriodoEstudioAlumno
  *
  * @author alvar
  */
@@ -110,7 +111,11 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
     }
     
     
-    
+    /**
+     * 
+     * @param request
+     * @return Método agregar PeriodoEstudioAlumno
+     */
     private String AgregarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -144,6 +149,11 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método eliminar PeriodoEstudioAlumno
+     */
     private String EliminarDatos(HttpServletRequest request){
         error       = false;
         mensaje    = new Mensajes("Error al eliminar", TipoMensaje.ERROR);
@@ -165,6 +175,11 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
        return utilidades.ObjetoToJson(mensaje);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método actualizar PeriodoEstudioAlumno
+     */
     private String ActualizarDatos(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -197,6 +212,11 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método obtener datos PeriodoEstudioAlumno
+     */
     private String ObtenerDatos(HttpServletRequest request){
         error       = false;
         PeriodoEstudioAlumno periAlumno = new PeriodoEstudioAlumno();
@@ -214,6 +234,11 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
        return utilidades.ObjetoToJson(periAlumno);
     }
     
+    /**
+     * 
+     * @param request
+     * @return Método ingresar generación PeriodoEstudioAlumno
+     */
     private String IngresarGeneracion(HttpServletRequest request){
         mensaje    = new Mensajes("Error al guardar datos", TipoMensaje.ERROR);
 
@@ -245,6 +270,12 @@ public class ABM_PeriodoEstudioAlumno extends HttpServlet {
         return retorno;
     }
     
+    /**
+     * 
+     * @param request
+     * @param periAlumno
+     * @return Método validar PeriodoEstudioAlumno
+     */
     private PeriodoEstudioAlumno ValidarPeriodoEstudioAlumno(HttpServletRequest request, PeriodoEstudioAlumno periAlumno){
         if(periAlumno == null)
         {
