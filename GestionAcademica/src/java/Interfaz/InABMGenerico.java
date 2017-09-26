@@ -6,7 +6,8 @@
 package Interfaz;
 
 /**
- *
+ *  Interfaz InABMGenerico
+ *  
  * @author alvar
  */
 public interface InABMGenerico {

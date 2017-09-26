@@ -10,6 +10,7 @@ import Utiles.Retorno_MsgObj;
 import java.util.List;
 
 /**
+ * Entidad InTipoEvaluacion
  *
  * @author alvar
  */

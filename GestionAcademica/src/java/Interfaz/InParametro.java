@@ -8,6 +8,7 @@ package Interfaz;
 import Entidad.Parametro;
 
 /**
+ * Interfaz InParametro
  *
  * @author alvar
  */

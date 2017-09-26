@@ -9,6 +9,7 @@ import Entidad.MateriaRevalida;
 import java.util.List;
 
 /**
+ * Interfaz InMateriaRevalida
  *
  * @author alvar
  */

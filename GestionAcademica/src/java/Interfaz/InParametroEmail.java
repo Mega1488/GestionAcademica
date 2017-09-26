@@ -10,6 +10,7 @@ import Entidad.Version;
 import java.util.List;
 
 /**
+ * Interfaz InParametroEmail
  *
  * @author alvar
  */

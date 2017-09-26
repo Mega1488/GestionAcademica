@@ -10,6 +10,7 @@ import Utiles.Retorno_MsgObj;
 import java.util.List;
 
 /**
+ * Interfaz InPersona
  *
  * @author alvar
  */
